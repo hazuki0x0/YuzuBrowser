@@ -12,6 +12,7 @@ public class SoftButtonActionArrayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_base);
 
         Intent intent = getIntent();
         if (intent != null) {
