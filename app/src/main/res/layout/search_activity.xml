@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BB000000"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/search_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@android:color/background_dark"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:ems="10"
+            android:hint="@string/search_editText_hint"
+            android:imeOptions="actionGo"
+            android:inputType="text">
+
+            <requestFocus />
+        </EditText>
+
+        <jp.hazuki.yuzubrowser.search.SearchButton
+            android:id="@+id/searchButton"
+            style="@style/ToolbarImageButton"
+            android:layout_width="@dimen/general_default_size"
+            android:layout_height="@dimen/general_default_size"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/search"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_search_white_24dp"
+            android:tint="@color/white" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/listview_background"
+        tools:listitem="@layout/search_activity_list_item"></ListView>
+
+</LinearLayout>

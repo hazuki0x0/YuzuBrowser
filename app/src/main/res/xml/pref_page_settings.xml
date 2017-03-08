@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser">
+
+    <PreferenceCategory android:title="@string/useragent">
+        <jp.hazuki.yuzubrowser.settings.preference.UserAgentListPreference
+            android:key="user_agent"
+            android:title="@string/pref_user_agent" />
+
+        <jp.hazuki.yuzubrowser.settings.preference.UserAgentListSettingsPreference android:title="@string/action_useragent_setting" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/pref_text_encoding">
+        <jp.hazuki.yuzubrowser.settings.preference.WebTextEncodeListPreference
+            android:key="default_encoding"
+            android:defaultValue="UTF-8"
+            android:title="@string/pref_default_encoding" />
+
+        <Preference
+            android:key="web_encode_list"
+            android:title="@string/action_web_encode_setting" />
+    </PreferenceCategory>
+
+    <SwitchPreference
+        android:key="javascript"
+        android:title="@string/pref_javascript" />
+
+    <SwitchPreference
+        android:key="load_overview"
+        android:title="@string/pref_load_overview" />
+    <SwitchPreference
+        android:key="web_wideview"
+        android:title="@string/pref_web_wideview" />
+    <SwitchPreference
+        android:key="web_popup"
+        android:title="@string/pref_web_popup" />
+    <SwitchPreference
+        android:key="show_zoom_button"
+        android:title="@string/pref_show_zoom_button" />
+    <SwitchPreference
+        android:key="fast_back"
+        android:title="@string/pref_fast_back" />
+
+    <SwitchPreference
+        android:key="pull_to_refresh"
+        android:title="@string/pref_pull_to_refresh" />
+    <!--<CheckBoxPreference-->
+    <!--android:enabled="false"-->
+    <!--android:key="force_scalable"-->
+    <!--android:title="@string/pref_force_scalable" />-->
+    <!--<CheckBoxPreference-->
+    <!--android:enabled="false"-->
+    <!--android:key="invert_rendering"-->
+    <!--android:title="@string/pref_invert_rendering" />-->
+
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+        android:key="minimum_font"
+        android:title="@string/pref_minimum_font"
+        app:seekMax="72"
+        app:seekMin="1" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog
+        android:key="text_size"
+        android:title="@string/pref_text_size" />
+
+    <!--<jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference-->
+    <!--android:enabled="false"-->
+    <!--android:entries="@array/pref_wifi_depend_bool_list"-->
+    <!--android:entryValues="@array/pref_wifi_depend_bool_values"-->
+    <!--android:key="link_prefetch"-->
+    <!--android:title="@string/pref_link_prefetch" />-->
+
+    <ListPreference
+        android:entries="@array/pref_layout_algorithm_list"
+        android:entryValues="@array/pref_layout_algorithm_values"
+        android:key="layout_algorithm"
+        android:title="@string/pref_layout_algorithm" />
+
+
+</PreferenceScreen>

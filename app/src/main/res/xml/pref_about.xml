@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:title="@string/app_name"
+        android:summary="@string/copyright" />
+    <Preference
+        android:key="version"
+        android:title="@string/version" />
+    <Preference
+        android:key="build"
+        android:title="@string/build" />
+    <Preference
+        android:key="build_time"
+        android:title="@string/build_time" />
+    <Preference
+        android:key="osl"
+        android:title="@string/open_source_license" />
+    <PreferenceCategory android:title="@string/pref_log">
+        <SwitchPreference
+            android:key="detailed_log"
+            android:title="@string/pref_detailed_log" />
+        <Preference
+            android:key="delete_log"
+            android:title="@string/pref_delete_all_logs" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

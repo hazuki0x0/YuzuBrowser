@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="translate_language_values" translatable="false">
+        <item>af</item>
+        <item>sq</item>
+        <item>ar</item>
+        <item>az</item>
+        <item>eu</item>
+        <item>bn</item>
+        <item>be</item>
+        <item>bg</item>
+        <item>ca</item>
+        <item>zh-CN</item>
+        <item>zh-TW</item>
+        <item>hr</item>
+        <item>cs</item>
+        <item>da</item>
+        <item>nl</item>
+        <item>en</item>
+        <item>eo</item>
+        <item>et</item>
+        <item>tl</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>gl</item>
+        <item>ka</item>
+        <item>de</item>
+        <item>el</item>
+        <item>gu</item>
+        <item>ht</item>
+        <item>iw</item>
+        <item>hi</item>
+        <item>hu</item>
+        <item>is</item>
+        <item>id</item>
+        <item>ga</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>kn</item>
+        <item>ko</item>
+        <item>la</item>
+        <item>lv</item>
+        <item>lt</item>
+        <item>mk</item>
+        <item>ms</item>
+        <item>mt</item>
+        <item>no</item>
+        <item>fa</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>sr</item>
+        <item>sk</item>
+        <item>sl</item>
+        <item>es</item>
+        <item>sw</item>
+        <item>sv</item>
+        <item>ta</item>
+        <item>te</item>
+        <item>th</item>
+        <item>tr</item>
+        <item>uk</item>
+        <item>ur</item>
+        <item>vi</item>
+        <item>cy</item>
+        <item>yi</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,3538 @@
+package jp.hazuki.yuzubrowser;
+
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.gesture.Gesture;
+import android.gesture.GestureOverlayView;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.net.http.SslError;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Process;
+import android.os.Vibrator;
+import android.print.PrintManager;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Intents.Insert;
+import android.speech.RecognizerResultsIntent;
+import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.print.PrintHelper;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
+import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
+import android.webkit.GeolocationPermissions;
+import android.webkit.HttpAuthHandler;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
+import android.webkit.SslErrorHandler;
+import android.webkit.URLUtil;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebView.WebViewTransport;
+import android.webkit.WebViewDatabase;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import jp.hazuki.yuzubrowser.action.Action;
+import jp.hazuki.yuzubrowser.action.ActionCallback;
+import jp.hazuki.yuzubrowser.action.ActionList;
+import jp.hazuki.yuzubrowser.action.ActionNameArray;
+import jp.hazuki.yuzubrowser.action.SingleAction;
+import jp.hazuki.yuzubrowser.action.item.CloseAutoSelectAction;
+import jp.hazuki.yuzubrowser.action.item.CloseTabSingleAction;
+import jp.hazuki.yuzubrowser.action.item.CustomMenuSingleAction;
+import jp.hazuki.yuzubrowser.action.item.CustomSingleAction;
+import jp.hazuki.yuzubrowser.action.item.FinishSingleAction;
+import jp.hazuki.yuzubrowser.action.item.GoBackSingleAction;
+import jp.hazuki.yuzubrowser.action.item.LeftRightTabSingleAction;
+import jp.hazuki.yuzubrowser.action.item.MousePointerSingleAction;
+import jp.hazuki.yuzubrowser.action.item.OpenUrlSingleAction;
+import jp.hazuki.yuzubrowser.action.item.PasteGoSingleAction;
+import jp.hazuki.yuzubrowser.action.item.SaveScreenshotSingleAction;
+import jp.hazuki.yuzubrowser.action.item.ShareScreenshotSingleAction;
+import jp.hazuki.yuzubrowser.action.item.StartActivitySingleAction;
+import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
+import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
+import jp.hazuki.yuzubrowser.action.item.VibrationSingleAction;
+import jp.hazuki.yuzubrowser.action.item.WebScrollSingleAction;
+import jp.hazuki.yuzubrowser.action.manager.FlickActionManager;
+import jp.hazuki.yuzubrowser.action.manager.HardButtonActionManager;
+import jp.hazuki.yuzubrowser.action.manager.LongPressActionManager;
+import jp.hazuki.yuzubrowser.action.manager.MenuActionManager;
+import jp.hazuki.yuzubrowser.action.manager.QuickControlActionManager;
+import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
+import jp.hazuki.yuzubrowser.action.manager.WebSwipeActionManager;
+import jp.hazuki.yuzubrowser.action.view.ActionListViewAdapter;
+import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
+import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity;
+import jp.hazuki.yuzubrowser.browser.BrowserManager;
+import jp.hazuki.yuzubrowser.browser.FinishAlertDialog;
+import jp.hazuki.yuzubrowser.browser.HttpAuthRequestDialog;
+import jp.hazuki.yuzubrowser.browser.SafeFileProvider;
+import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable;
+import jp.hazuki.yuzubrowser.debug.DebugActivity;
+import jp.hazuki.yuzubrowser.download.DownloadDialog;
+import jp.hazuki.yuzubrowser.download.DownloadListActivity;
+import jp.hazuki.yuzubrowser.gesture.GestureManager;
+import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
+import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
+import jp.hazuki.yuzubrowser.menuwindow.MenuWindow;
+import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
+import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager;
+import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager;
+import jp.hazuki.yuzubrowser.resblock.ResourceChecker;
+import jp.hazuki.yuzubrowser.search.SearchActivity;
+import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
+import jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity;
+import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.settings.data.ThemeData;
+import jp.hazuki.yuzubrowser.settings.preference.ClearBrowserDataAlertDialog;
+import jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog;
+import jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog;
+import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
+import jp.hazuki.yuzubrowser.speeddial.SpeedDialAsyncManager;
+import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
+import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.TabData;
+import jp.hazuki.yuzubrowser.tab.TabList;
+import jp.hazuki.yuzubrowser.tab.TabListLayout;
+import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
+import jp.hazuki.yuzubrowser.toolbar.sub.GeolocationPermissionToolbar;
+import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialog;
+import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialogFactory;
+import jp.hazuki.yuzubrowser.toolbar.sub.WebViewPageFastScroller;
+import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity;
+import jp.hazuki.yuzubrowser.userjs.UserScript;
+import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase;
+import jp.hazuki.yuzubrowser.userjs.UserScriptListActivity;
+import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
+import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.Logger;
+import jp.hazuki.yuzubrowser.utils.MathUtils;
+import jp.hazuki.yuzubrowser.utils.PackageUtils;
+import jp.hazuki.yuzubrowser.utils.PermissionUtils;
+import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
+import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.WebViewUtils;
+import jp.hazuki.yuzubrowser.utils.content.BundleDatabase;
+import jp.hazuki.yuzubrowser.utils.util.ArrayDequeCompat;
+import jp.hazuki.yuzubrowser.utils.util.DequeCompat;
+import jp.hazuki.yuzubrowser.utils.view.CopyableTextView;
+import jp.hazuki.yuzubrowser.utils.view.CustomCoordinatorLayout;
+import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
+import jp.hazuki.yuzubrowser.utils.view.PointerView;
+import jp.hazuki.yuzubrowser.utils.view.pie.PieControlBase;
+import jp.hazuki.yuzubrowser.utils.view.pie.PieMenu;
+import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout;
+import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity;
+import jp.hazuki.yuzubrowser.webkit.CacheWebView;
+import jp.hazuki.yuzubrowser.webkit.CustomOnCreateContextMenuListener;
+import jp.hazuki.yuzubrowser.webkit.CustomWebBackForwardList;
+import jp.hazuki.yuzubrowser.webkit.CustomWebChromeClient;
+import jp.hazuki.yuzubrowser.webkit.CustomWebHistoryItem;
+import jp.hazuki.yuzubrowser.webkit.CustomWebView;
+import jp.hazuki.yuzubrowser.webkit.CustomWebView.OnWebStateChangeListener;
+import jp.hazuki.yuzubrowser.webkit.CustomWebViewClient;
+import jp.hazuki.yuzubrowser.webkit.SwipeWebView;
+import jp.hazuki.yuzubrowser.webkit.TabType;
+import jp.hazuki.yuzubrowser.webkit.WebBrowser;
+import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
+import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
+import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageCopyUrlHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageLoadUrlHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenBackgroundHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenNewTabHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenOtherAppHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightBgTabHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
+
+public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener {
+    private static final String TAG = "BrowserActivity";
+
+    private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
+    private static final int RESULT_REQUEST_SEARCHBOX = 2;
+    private static final int RESULT_REQUEST_BOOKMARK = 3;
+    private static final int RESULT_REQUEST_HISTORY = 4;
+    private static final int RESULT_REQUEST_SETTING = 5;
+    private static final int RESULT_REQUEST_USERAGENT = 6;
+    private static final int RESULT_REQUEST_USERJS_SETTING = 7;
+    private static final int RESULT_REQUEST_WEB_ENCODE_SETTING = 8;
+
+    private static final String APPDATA_EXTRA_TARGET = "BrowserActivity.target";
+    private static final String TAB_TYPE = "tabType";
+    public static final String ACTION_FINISH = BrowserActivity.class.getName() + ".finish";
+    public static final String ACTION_NEW_TAB = BrowserActivity.class.getName() + ".newTab";
+
+    private final MyActionCallback mActionCallback = new MyActionCallback();
+    private final MyWebViewClient mWebViewClient = new MyWebViewClient();
+    private final MyOnWebStateChangeListener mOnWebStateChangeListener = new MyOnWebStateChangeListener();
+    private final MyOnCreateContextMenuListener mOnCreateContextMenuListener = new MyOnCreateContextMenuListener();
+    private final TabList mTabList = new TabList();
+    private Toolbar mToolbar;
+    private PieControl mPieControl;
+    private WebUploadHandler mWebUploadHandler;
+    private WebCustomViewHandler mWebCustomViewHandler;
+    private PatternUrlManager mPatternManager;
+    private BrowserHistoryAsyncManager mBrowserHistoryManager;
+    private SpeedDialAsyncManager mSpeedDialAsyncManager;
+    private HardButtonActionManager mHardButtonManager;
+    private ArrayList<UserScript> mUserScriptList;
+    private ArrayList<ResourceChecker> mResourceCheckerList;
+    private View mVideoLoadingProgressView;
+    private boolean mIsBackLongPressed = false;
+    private boolean mIsFullScreenMode = false;
+    private boolean mIsActivityPaused = true;
+    private boolean mIsImeShown = false;
+    private boolean mIsPullToRefresh = true;
+    private GestureManager mWebGestureManager;
+    private WebViewFindDialog mWebViewFindDialog;
+    private WebViewPageFastScroller mWebViewPageFastScroller;
+    private DequeCompat<Bundle> mClosedTabs;
+    private MultiTouchGestureDetector mGestureDetector;
+    private PointerView mCursorView;
+    private Handler mHandler;
+    private boolean mIsDestroyed;
+
+    private IntentFilter mNetworkStateChangedFilter;
+    private BroadcastReceiver mNetworkStateBroadcastReceiver;
+    private boolean mIsNetworkUp;
+
+    private final Runnable mSaveTabsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            BrowserManager.getLastTabListDatabase(BrowserActivity.this).writeList(BrowserActivity.this);
+
+            int delay = AppData.auto_tab_save_delay.get();
+            if (delay > 0)
+                mHandler.postDelayed(mSaveTabsRunnable, delay * 1000);
+        }
+    };
+
+    private TabListLayout mTabListView;
+    private FrameLayout webFrameLayout;
+    private GestureOverlayView webGestureOverlayView, mSubGestureView;
+    private RootLayout superFrameLayout;
+    private CustomCoordinatorLayout coordinatorLayout;
+
+    private MenuWindow menuWindow;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setFullScreenMode(AppData.fullscreen.get());
+
+        setContentView(R.layout.browser_activity);
+
+        PermissionUtils.checkFirst(this);
+
+        mHandler = new Handler();
+
+        webFrameLayout = (FrameLayout) findViewById(R.id.webFrameLayout);
+        webGestureOverlayView = (GestureOverlayView) findViewById(R.id.webGestureOverlayView);
+        coordinatorLayout = (CustomCoordinatorLayout) findViewById(R.id.coordinator);
+        superFrameLayout = (RootLayout) findViewById(R.id.superFrameLayout);
+        superFrameLayout.setOnImeShownListener(new RootLayout.OnImeShownListener() {
+            @Override
+            public void onImeVisibilityChanged(boolean visible) {
+                if (mIsImeShown != visible) {
+                    mIsImeShown = visible;
+                    if (mToolbar != null) {
+                        MainTabData tab = mTabList.getCurrentTabData();
+                        if (tab != null)
+                            mToolbar.notifyChangeWebState(tab);
+                        mToolbar.onImeChanged(visible);
+                    }
+                }
+            }
+        });
+
+        findViewById(R.id.topToolbarLayout).getViewTreeObserver()
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        coordinatorLayout.setToolbarHeight(findViewById(R.id.topToolbarLayout).getHeight());
+                    }
+                });
+
+        final Context appContext = getApplicationContext();
+
+        mHardButtonManager = HardButtonActionManager.getInstance(appContext);
+
+        mPatternManager = new PatternUrlManager(appContext);
+
+        mToolbar = new Toolbar();
+        mToolbar.addToolbarView(getResources());
+
+        mGestureDetector = new MultiTouchGestureDetector(appContext, new MyGestureListener());
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            mIsNetworkUp = networkInfo.isAvailable();
+        }
+        mNetworkStateChangedFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        mNetworkStateBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (!ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()))
+                    return;
+                boolean networkUp = !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+                if (mIsNetworkUp != networkUp) {
+                    for (TabData tab : mTabList) {
+                        tab.mWebView.setNetworkAvailable(networkUp);
+                    }
+                }
+            }
+        };
+
+        mSpeedDialAsyncManager = new SpeedDialAsyncManager(getApplicationContext());
+
+        onPreferenceReset();
+
+        if (savedInstanceState != null) {
+            restoreWebState(savedInstanceState);
+        } else {
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeSessionCookies(null);
+
+            BundleDatabase lasttabs_db = BrowserManager.getLastTabListDatabase(appContext);
+            lasttabs_db.readList(this);
+            lasttabs_db.clear();
+
+            handleIntent(getIntent());
+        }
+
+        if (mTabList.isEmpty()) {
+            MainTabData first_tab = addNewTab(TabType.DEFAULT);
+            setCurrentTab(0);
+            loadUrl(first_tab, AppData.home_page.get());
+        }
+        MenuActionManager action_manager = MenuActionManager.getInstance(appContext);
+        menuWindow = new MenuWindow(this, action_manager.browser_activity.list, mActionCallback);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (AppData.auto_tab_save_delay.get() > 0)
+            mHandler.post(mSaveTabsRunnable);
+
+        if (mIsActivityPaused) {
+            mIsActivityPaused = false;
+            MainTabData tab = mTabList.getCurrentTabData();
+            if (tab != null) {
+                tab.mWebView.onResume();
+                resumeWebViewTimers(tab);
+            }
+        } else {
+            Logger.w(TAG, "Activity is already started");
+        }
+
+
+        WebViewUtils.enablePlatformNotifications();
+        WebViewProxy.setProxy(getApplicationContext(), AppData.proxy_set.get(), AppData.proxy_address.get());
+
+        registerReceiver(mNetworkStateBroadcastReceiver, mNetworkStateChangedFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BrowserManager.getLastTabListDatabase(getApplicationContext()).writeList(this);
+        mHandler.removeCallbacks(mSaveTabsRunnable);
+
+        if (mIsActivityPaused) {
+            Logger.w(TAG, "Activity is already stopped");
+            return;
+        }
+
+        if (AppData.pause_web_background.get()) {
+            mIsActivityPaused = true;
+
+            MainTabData tab = mTabList.getCurrentTabData();
+            if (tab != null) {
+                tab.mWebView.onPause();
+                pauseWebViewTimers(tab);
+            }
+        }
+
+        WebViewProxy.resetProxy(getApplicationContext());
+        WebViewUtils.disablePlatformNotifications();
+
+        unregisterReceiver(mNetworkStateBroadcastReceiver);
+    }
+
+    private boolean pauseWebViewTimers(MainTabData tab) {
+        Logger.d(TAG, "pauseWebViewTimers");
+        if (tab == null) return true;
+        if (!tab.isInPageLoad()) {
+            Logger.d(TAG, "pauseTimers");
+            tab.mWebView.pauseTimers();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean resumeWebViewTimers(MainTabData tab) {
+        Logger.d(TAG, "resumeWebViewTimers");
+        if (tab == null) return true;
+        boolean inLoad = tab.isInPageLoad();
+        if ((!mIsActivityPaused && !inLoad) || (mIsActivityPaused && inLoad)) {
+            Logger.d(TAG, "resumeTimers");
+            tab.mWebView.resumeTimers();
+            return true;
+        }
+        return false;
+    }
+
+    private void destroy() {
+        if (mIsDestroyed)
+            return;
+
+        if (mWebCustomViewHandler != null) {
+            mWebCustomViewHandler.hideCustomView(this);
+            mWebCustomViewHandler = null;
+        }
+        if (mWebUploadHandler != null) {
+            mWebUploadHandler.destroy();
+            mWebUploadHandler = null;
+        }
+        webFrameLayout.removeAllViews();
+        mTabList.destroy();
+        if (mBrowserHistoryManager != null) {
+            mBrowserHistoryManager.destroy();
+            mBrowserHistoryManager = null;
+        }
+        mSpeedDialAsyncManager.destroy();
+        mIsDestroyed = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Logger.d(TAG, "onDestroy()");
+        super.onDestroy();
+        destroy();
+        if (AppData.kill_process.get())
+            Process.killProcess(Process.myPid());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        saveWebState(bundle);
+    }
+
+    @Override
+    public boolean saveWebState(Bundle bundle) {
+        if (mIsDestroyed)
+            return false;
+        mTabList.saveInstanceState(bundle);
+        return true;
+    }
+
+    @Override
+    public void restoreWebState(Bundle bundle) {
+        mTabList.restoreInstanceState(bundle).restoreWebViewState(this);
+        if (!mTabList.isEmpty())
+            mToolbar.scrollTabTo(mTabList.getCurrentTabNo());
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mToolbar != null)
+            mToolbar.onActivityConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mVideoLoadingProgressView = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RESULT_REQUEST_WEB_UPLOAD:
+                if (mWebUploadHandler != null)
+                    mWebUploadHandler.onActivityResult(resultCode, data);
+                break;
+            case RESULT_REQUEST_SEARCHBOX: {
+                if (resultCode != RESULT_OK || data == null) break;
+                String query = data.getStringExtra(SearchActivity.EXTRA_QUERY);
+
+                if (TextUtils.isEmpty(query)) break;
+
+                String url;
+                switch (data.getIntExtra(SearchActivity.EXTRA_SEARCH_MODE, SearchActivity.SEARCH_MODE_AUTO)) {
+                    case SearchActivity.SEARCH_MODE_URL:
+                        url = WebUtils.makeUrl(query);
+                        break;
+                    case SearchActivity.SEARCH_MODE_WORD:
+                        url = WebUtils.makeSearchUrlFromQuery(query, AppData.search_url.get(), "%s");
+                        break;
+                    //case SearchActivity.SEARCH_MODE_AUTO:
+                    default:
+                        url = WebUtils.makeUrlFromQuery(query, AppData.search_url.get(), "%s");
+                        break;
+                }
+                Bundle appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA);
+                int target = appdata.getInt(APPDATA_EXTRA_TARGET, -1);
+                MainTabData tab = mTabList.get(target);
+                if (tab == null)
+                    openInNewTab(url, TabType.DEFAULT);
+                else
+                    loadUrl(tab, url);
+            }
+            break;
+            case RESULT_REQUEST_BOOKMARK:
+            case RESULT_REQUEST_HISTORY: {
+                if (resultCode != RESULT_OK || data == null) break;
+                BrowserOpenable openable = data.getParcelableExtra(BrowserManager.EXTRA_OPENABLE);
+                if (openable == null)
+                    break;
+                openable.open(this);
+            }
+            break;
+            case RESULT_REQUEST_SETTING:
+                AppData.load(getApplicationContext());
+                onPreferenceReset();
+                break;
+            case RESULT_REQUEST_USERAGENT: {
+                if (resultCode != RESULT_OK || data == null) break;
+                String ua = data.getStringExtra(Intent.EXTRA_TEXT);
+                if (ua == null) return;
+                MainTabData tab = mTabList.getCurrentTabData();
+                tab.mWebView.getSettings().setUserAgentString(ua);
+                tab.mWebView.reload();
+            }
+            break;
+            case RESULT_REQUEST_USERJS_SETTING:
+                resetUserScript(AppData.userjs_enable.get());
+                break;
+            case RESULT_REQUEST_WEB_ENCODE_SETTING: {
+                if (resultCode != RESULT_OK || data == null) break;
+                String encoding = data.getStringExtra(Intent.EXTRA_TEXT);
+                if (encoding == null) return;
+                MainTabData tab = mTabList.getCurrentTabData();
+                tab.mWebView.getSettings().setDefaultTextEncodingName(encoding);
+                tab.mWebView.reload();
+            }
+            break;
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    private void showSpeedDial(MainTabData tab) {
+        List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
+        String html = new SpeedDialHtml(getApplicationContext(), speedDials).getSpeedDialHtml();
+        if (tab == null) {
+            tab = addNewTab(TabType.DEFAULT);
+        }
+        tab.mWebView.loadDataWithBaseURL("yuzu:speeddial", html, "text/html", "UTF-8", null);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
+                    if (mActionCallback.run(mHardButtonManager.volume_up.action))
+                        return true;
+                }
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
+                    if (mActionCallback.run(mHardButtonManager.volume_down.action))
+                        return true;
+                }
+                break;
+            case KeyEvent.KEYCODE_BACK:
+                if (event.getRepeatCount() == 0) {
+                    event.startTracking();
+                    return true;
+                } else if (event.isLongPress()) {
+                    if (mActionCallback.run(mHardButtonManager.back_lpress.action)) {
+                        mIsBackLongPressed = true;
+                    }
+                }
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
+                    if (!mHardButtonManager.volume_up.action.isEmpty())
+                        return true;
+                }
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
+                    if (!mHardButtonManager.volume_down.action.isEmpty())
+                        return true;
+                }
+                break;
+            case KeyEvent.KEYCODE_CAMERA:
+                if (!event.isCanceled() && mActionCallback.run(mHardButtonManager.camera_press.action)) {
+                    return true;
+                }
+                break;
+            case KeyEvent.KEYCODE_BACK:
+                if (mIsBackLongPressed) {
+                    mIsBackLongPressed = false;
+                    return true;
+                }
+                if (event.isTracking() && !event.isCanceled()) {
+                    if (mWebCustomViewHandler != null && mWebCustomViewHandler.isCustomViewShowing()) {
+                        mWebCustomViewHandler.hideCustomView(this);
+                    } else if (mSubGestureView != null) {
+                        superFrameLayout.removeView(mSubGestureView);
+                        mSubGestureView = null;
+                    } else if (mCursorView != null && mCursorView.getBackFinish()) {
+                        mCursorView.setView(null);
+                        webFrameLayout.removeView(mCursorView);
+                        mCursorView = null;
+                    } else if (mTabListView != null) {
+                        mTabListView.close();
+                    } else if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible()) {
+                        mWebViewFindDialog.hide();
+                    } else if (mWebViewPageFastScroller != null) {
+                        mWebViewPageFastScroller.close();
+                    } else if (mTabList.getCurrentTabData().mWebView.canGoBack()) {
+                        mTabList.getCurrentTabData().mWebView.goBack();
+                    } else {
+                        mActionCallback.run(mHardButtonManager.back_press.action);
+                    }
+                    return true;
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        mActionCallback.run(mHardButtonManager.search_press.action);
+        return true;
+    }
+
+    private void setFullScreenMode(boolean enable) {
+        if (mIsFullScreenMode == enable) return;
+
+        mIsFullScreenMode = enable;
+
+        if (enable) {
+            getWindow().addFlags(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        }
+    }
+
+    private boolean handleIntent(Intent intent) {
+
+        if (intent == null) return false;
+        String action = intent.getAction();
+        setIntent(new Intent());
+        if (action == null) return false;
+        if (ACTION_FINISH.equals(action)) {
+            finish();
+            return false;
+        }
+        if (ACTION_NEW_TAB.equals(action)) {
+            openNewTab(TabType.DEFAULT);
+            return false;
+        }
+        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
+            return false;
+        }
+        if (Intent.ACTION_VIEW.equals(action)) {
+            String url = intent.getDataString();
+            if (TextUtils.isEmpty(url))
+                url = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (!TextUtils.isEmpty(url))
+                openInNewTab(url, TabType.INTENT);
+            else {
+                Logger.w(TAG, "ACTION_VIEW : url is null or empty.");
+                return false;
+            }
+        } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {
+            String url = WebUtils.makeSearchUrlFromQuery(intent.getStringExtra(SearchManager.QUERY), AppData.search_url.get(), "%s");
+            if (!TextUtils.isEmpty(url))
+                openInNewTab(url, TabType.INTENT);
+            else {
+                Logger.w(TAG, "WEB_SEARCH : url is null or empty.");
+                return false;
+            }
+        } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS.equals(action)) {//API10
+            ArrayList<String> urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS);
+            if (urls == null || urls.isEmpty()) {
+                Logger.w(TAG, "VOICE_SEARCH : urls is null or empty.");
+                return false;
+            } else {
+                openInNewTab(urls.get(0), TabType.INTENT);
+            }
+        } else if (Intent.ACTION_SEND.equals(action)) {
+            String text = WebUtils.extractionUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
+            if (!TextUtils.isEmpty(text))
+                openInNewTab(text, TabType.INTENT);
+            return false;
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private void onPreferenceReset() {
+        mToolbar.onPreferenceReset();
+        mPatternManager.load(getApplicationContext());
+
+        if (ThemeData.createInstance(getApplicationContext(), AppData.theme_setting.get()) != null) {
+            ThemeData themedata = ThemeData.getInstance();
+            mToolbar.onThemeChanged(themedata);
+            if (mPieControl != null)
+                mPieControl.onThemeChanged(themedata);
+            mToolbar.notifyChangeWebState();
+
+            if (themedata.statusBarColor != 0) {
+                Window window = getWindow();
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(themedata.statusBarColor);
+            }
+        }
+
+        mIsPullToRefresh = AppData.pull_to_refresh.get();
+
+        if (!AppData.private_mode.get() && AppData.save_history.get()) {
+            if (mBrowserHistoryManager == null)
+                mBrowserHistoryManager = new BrowserHistoryAsyncManager(getApplicationContext());
+        } else {
+            if (mBrowserHistoryManager != null)
+                mBrowserHistoryManager.destroy();
+            mBrowserHistoryManager = null;
+        }
+
+        if (AppData.resblock_enable.get())
+            mResourceCheckerList = new ResourceBlockManager(getApplicationContext()).getList();
+        else
+            mResourceCheckerList = null;
+
+        for (MainTabData tabdata : mTabList) {
+            initWebSetting(tabdata.mWebView);
+        }
+
+        MainTabData tab = mTabList.getCurrentTabData();
+        if (tab != null)
+            mToolbar.notifyChangeWebState(tab);
+
+        setQuickControlEnabled(AppData.qc_enable.get());
+
+        setRequestedOrientation(AppData.oritentation.get());
+        setFullScreenMode(AppData.fullscreen.get());
+
+        if (AppData.keep_screen_on.get())
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        boolean cookie = !AppData.private_mode.get() && AppData.accept_cookie.get();
+
+        CookieManager.getInstance().setAcceptCookie(cookie);
+
+        if (cookie) {
+            boolean thirdCookie = AppData.accept_third_cookie.get();
+            for (MainTabData tabData : mTabList) {
+                CookieManager.getInstance().setAcceptThirdPartyCookies(tabData.mWebView.getWebView(), thirdCookie);
+            }
+        }
+
+        if (AppData.gesture_enable_web.get()) {
+            mWebGestureManager = GestureManager.getInstance(getApplicationContext(), GestureManager.GESTURE_TYPE_WEB);
+            mWebGestureManager.load();
+
+            webGestureOverlayView.setEnabled(true);
+            webGestureOverlayView.setGestureVisible(AppData.gesture_line_web.get());
+
+            webGestureOverlayView.removeAllOnGestureListeners();
+            webGestureOverlayView.removeAllOnGesturePerformedListeners();
+
+            webGestureOverlayView.addOnGestureListener(this);
+            webGestureOverlayView.addOnGesturePerformedListener(this);
+        } else {
+            if (mWebGestureManager != null)
+                mWebGestureManager = null;
+
+            webGestureOverlayView.removeAllOnGestureListeners();
+            webGestureOverlayView.removeAllOnGesturePerformedListeners();
+            webGestureOverlayView.setEnabled(false);
+        }
+
+        resetUserScript(AppData.userjs_enable.get());
+
+
+        MenuActionManager action_manager = MenuActionManager.getInstance(getApplicationContext());
+        menuWindow = new MenuWindow(this, action_manager.browser_activity.list, mActionCallback);
+
+        ErrorReport.setDetailedLog(AppData.detailed_log.get());
+    }
+
+    @Override
+    public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
+        if (mToolbar.isContainsWebToolbar(event))
+            overlay.cancelGesture();
+    }
+
+    @Override
+    public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+    }
+
+    @Override
+    public void onGestureCancelled(GestureOverlayView overlay, MotionEvent event) {
+    }
+
+    @Override
+    public void onGesture(GestureOverlayView overlay, MotionEvent event) {
+        if (event.getPointerCount() > 1)
+            overlay.cancelGesture();//multiple touch is disabled
+    }
+
+    @Override
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        Action action = mWebGestureManager.recognize(gesture);
+        if (action != null) {
+            mActionCallback.run(action);
+        }
+    }
+
+    private void resetUserScript(boolean enable) {
+        if (enable) {
+            mUserScriptList = new UserScriptDatabase(getApplicationContext()).getEnableJsDataList();
+        } else {
+            if (mUserScriptList != null)
+                mUserScriptList = null;
+        }
+    }
+
+    private void applyUserScript(CustomWebView web, String url) {
+        if (mUserScriptList != null) {
+            SCRIPT_LOOP:
+            for (UserScript script : mUserScriptList) {
+                if (script.getExclude() != null)
+                    for (Pattern pattern : script.getExclude()) {
+                        if (pattern.matcher(url).find())
+                            continue SCRIPT_LOOP;
+                    }
+
+                if (script.getInclude() != null)
+                    for (Pattern pattern : script.getInclude()) {
+                        if (pattern.matcher(url).find()) {
+                            web.evaluateJavascript(script.getRunnable(), null);
+
+                            continue SCRIPT_LOOP;
+                        }
+                    }
+            }
+        }
+    }
+
+    private void setQuickControlEnabled(boolean enable) {
+        if (enable) {
+            if (mPieControl == null) {
+                mPieControl = new PieControl(this, mActionCallback);
+                mPieControl.attachToLayout(webFrameLayout);
+            }
+            mPieControl.onPreferenceReset();
+        } else {
+            if (mPieControl != null) {
+                mPieControl.detachFromLayout(webFrameLayout);
+                mPieControl = null;
+            }
+        }
+    }
+
+    private boolean getQuickControlEnabled() {
+        return mPieControl != null;
+    }
+
+    private boolean checkPatternMatch(MainTabData tab, String url) {
+        for (PatternUrlChecker pattern : mPatternManager.getList()) {
+            if (!pattern.isMatchUrl(url)) continue;
+            if (pattern.getAction().run(this, tab, url))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean checkNewTabLink(int perform, WebViewTransport transport) {
+        switch (perform) {
+            case BrowserManager.LOAD_URL_TAB_NEW:
+                openInNewTab(transport);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_BG:
+                openInBackground(transport);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_NEW_RIGHT:
+                openInRightNewTab(transport);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_BG_RIGHT:
+                openInRightBgTab(transport);
+                return true;
+            default:
+                throw new IllegalArgumentException("Unknown perform:" + perform);
+        }
+    }
+
+    private boolean checkNewTabLinkUser(int perform, String url, @TabType int type) {
+        if (perform < 0)
+            return false;
+
+        if (perform == BrowserManager.LOAD_URL_TAB_CURRENT)
+            return false;
+
+        return !WebViewUtils.shouldLoadSameTabUser(url) && performNewTabLink(perform, null, url, type);
+
+    }
+
+    private boolean checkNewTabLinkAuto(int perform, MainTabData tab, String url) {
+        if (tab.isNavLock() && !WebViewUtils.shouldLoadSameTabAuto(url)) {
+            performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW);
+            return true;
+        }
+
+        if (perform == BrowserManager.LOAD_URL_TAB_CURRENT)
+            return false;
+
+        if (WebViewUtils.shouldLoadSameTabAuto(url))
+            return false;
+
+        return !(TextUtils.equals(url, tab.mUrl) || tab.mWebView.isBackForwardListEmpty()) && performNewTabLink(perform, tab, url, TabType.WINDOW);
+
+    }
+
+    private boolean performNewTabLink(int perform, MainTabData tab, String url, @TabType int type) {
+        switch (perform) {
+            case BrowserManager.LOAD_URL_TAB_CURRENT:
+                loadUrl(tab, url);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_NEW:
+                openInNewTab(url, type);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_BG:
+                openInBackground(url, type);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_NEW_RIGHT:
+                openInRightNewTab(url, type);
+                return true;
+            case BrowserManager.LOAD_URL_TAB_BG_RIGHT:
+                openInRightBgTab(url, type);
+                return true;
+            default:
+                throw new IllegalArgumentException("Unknown perform:" + perform);
+        }
+    }
+
+    @Override
+    public CustomWebView makeWebView(boolean cacheType) {
+        CustomWebView web = (cacheType) ? new CacheWebView(this) : new SwipeWebView(this);
+        initWebSetting(web);
+        if (!AppData.private_mode.get() && AppData.accept_cookie.get())
+            CookieManager.getInstance()
+                    .setAcceptThirdPartyCookies(web.getWebView(), AppData.accept_third_cookie.get());
+        return web;
+    }
+
+    @Override
+    public MainTabData addNewTab(@TabType int type) {
+        return addNewTab(AppData.fast_back.get(), type);
+    }
+
+    @Override
+    public MainTabData addNewTab(boolean cacheType, @TabType int type) {
+        CustomWebView web = makeWebView(cacheType);
+        if (AppData.pause_web_tab_change.get())
+            web.onPause();
+        MainTabData tabdata = mTabList.add(web, mToolbar.addNewTabView());
+        tabdata.setTabType(type);
+        if (ThemeData.isEnabled())
+            tabdata.onMoveTabToBackground(getResources(), getTheme());
+        return tabdata;
+    }
+
+    @Override
+    public MainTabData addNewTab(boolean cacheType, @TabType int type, long id) {
+        CustomWebView web = makeWebView(cacheType);
+        if (AppData.pause_web_tab_change.get())
+            web.onPause();
+        web.setIdentityId(id);
+        MainTabData tabdata = mTabList.add(web, mToolbar.addNewTabView());
+        tabdata.setTabType(type);
+        if (ThemeData.isEnabled())
+            tabdata.onMoveTabToBackground(getResources(), getTheme());
+        return tabdata;
+    }
+
+    private MainTabData openNewTab(@TabType int type) {
+        MainTabData tab_data = addNewTab(type);
+        setCurrentTab(mTabList.getLastTabNo());
+        mToolbar.scrollTabRight();
+        return tab_data;
+    }
+
+    private MainTabData openNewTab(boolean cacheType, @TabType int type) {
+        MainTabData tab_data = addNewTab(cacheType, type);
+        setCurrentTab(mTabList.getLastTabNo());
+        mToolbar.scrollTabRight();
+        return tab_data;
+    }
+
+    @Override
+    public void openInNewTab(String url, @TabType int type) {
+        loadUrl(openNewTab(type), url);
+    }
+
+    private void openInNewTab(WebViewTransport web_transport) {
+        web_transport.setWebView(openNewTab(TabType.WINDOW).mWebView.getWebView());
+    }
+
+    private void openInNewTab(Bundle state) {
+        openNewTab(CacheWebView.isBundleCacheWebView(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
+    }
+
+    private void openInNewTabPost(final String url, @TabType int type) {
+        openInNewTab(url, type);
+    }
+
+    @Override
+    public void openInBackground(String url, @TabType int type) {
+        loadUrl(addNewTab(type), url);
+    }
+
+    private void openInBackground(WebViewTransport web_transport) {
+        web_transport.setWebView(addNewTab(TabType.WINDOW).mWebView.getWebView());
+    }
+
+    private MainTabData openRightNewTab(@TabType int type) {
+        MainTabData tab_data = addNewTab(type);
+        int from = mTabList.getLastTabNo();
+        int to = mTabList.getCurrentTabNo() + 1;
+        setCurrentTab(from);
+        if (!moveTab(from, to))//maybe already right-most
+            mToolbar.scrollTabRight();
+        return tab_data;
+    }
+
+    @Override
+    public void openInRightNewTab(String url, @TabType int type) {
+        loadUrl(openRightNewTab(type), url);
+    }
+
+    private void openInRightNewTab(WebViewTransport web_transport) {
+        WebView webView = openRightNewTab(TabType.WINDOW).mWebView.getWebView();
+        web_transport.setWebView(webView);
+    }
+
+    private void openInRightNewTabPost(final String url, @TabType int type) {
+        openInRightNewTab(url, type);
+    }
+
+    private MainTabData openRightBgTab(@TabType int type) {
+        MainTabData tab_data = addNewTab(type);
+        int from = mTabList.getLastTabNo();
+        int to = mTabList.getCurrentTabNo() + 1;
+        moveTab(from, to);
+        return tab_data;
+    }
+
+    @Override
+    public void openInRightBgTab(String url, @TabType int type) {
+        loadUrl(openRightBgTab(type), url);
+    }
+
+    private void openInRightBgTab(WebViewTransport web_transport) {
+        web_transport.setWebView(openRightBgTab(TabType.WINDOW).mWebView.getWebView());
+    }
+
+    private void loadUrl(MainTabData tab, String url) {
+        if (tab.isNavLock() && !WebViewUtils.shouldLoadSameTabUser(url)) {
+            performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.DEFAULT);
+            return;
+        }
+        if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
+            url = SafeFileProvider.convertToSaferUrl(url);
+        if (!checkPatternMatch(tab, url))
+            tab.mWebView.loadUrl(url);
+    }
+
+    @Override
+    public void loadUrl(String url, int target) {
+        loadUrl(mTabList.getCurrentTabData(), url, target, TabType.DEFAULT);
+    }
+
+    private void loadUrl(MainTabData tab, String url, int target, @TabType int type) {
+        if (!checkNewTabLinkUser(target, url, type))
+            loadUrl(tab, url);
+    }
+
+    @Override
+    public void setCurrentTab(int no) {
+        MainTabData old_data = mTabList.getCurrentTabData();
+        MainTabData new_data = mTabList.get(no);
+
+        mTabList.setCurrentTab(no);
+        mToolbar.changeCurrentTab(no, old_data, new_data);
+
+        if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible())
+            mWebViewFindDialog.hide();
+
+        if (mWebViewPageFastScroller != null)
+            mWebViewPageFastScroller.close();
+
+        if (old_data != null) {
+            old_data.mWebView.setOnMyCreateContextMenuListener(null);
+            old_data.mWebView.setGestureDetector(null);
+            webFrameLayout.removeView(old_data.mWebView.getView());
+
+            if (AppData.pause_web_tab_change.get())
+                old_data.mWebView.onPause();
+        }
+
+        CustomWebView new_web = new_data.mWebView;
+        new_web.onResume();
+        webFrameLayout.addView(new_web.getView(), 0);
+
+        new_web.setOnMyCreateContextMenuListener(mOnCreateContextMenuListener);
+        new_web.setGestureDetector(mGestureDetector);
+
+        if (mCursorView != null)
+            mCursorView.setView(new_web.getView());
+
+        if (!new_web.hasFocus())
+            new_web.requestFocus();
+    }
+
+    @Override
+    public int getCurrentTab() {
+        return mTabList.getCurrentTabNo();
+    }
+
+    @Override
+    public int getTabCount() {
+        return mTabList.size();
+    }
+
+    private boolean removeTab(int no) {
+        if (mTabList.size() <= 1) {
+            //Last tab
+            return false;
+        }
+
+        MainTabData old_data = mTabList.get(no);
+        CustomWebView old_web = old_data.mWebView;
+
+        if (AppData.save_closed_tab.get()) {
+            Bundle outState = new Bundle();
+            old_web.saveState(outState);
+            outState.putInt(TAB_TYPE, old_data.getTabType());
+            if (mClosedTabs == null)
+                mClosedTabs = ArrayDequeCompat.makeDeque();
+            mClosedTabs.push(outState);
+        }
+
+        old_web.setEmbeddedTitleBarMethod(null);
+        webFrameLayout.removeView(mTabList.getCurrentTabData().mWebView.getView());
+
+        mTabList.remove(no);
+        mToolbar.removeTab(no);
+
+        int new_current_no = mTabList.getCurrentTabNo();
+        int last_tab_no = mTabList.getLastTabNo();
+
+        old_web.destroy();
+
+        if (no < new_current_no) {
+            --new_current_no;
+        }
+
+        if (last_tab_no < new_current_no) {
+            new_current_no = last_tab_no;
+        }
+
+        mTabList.setCurrentTab(-1);
+        setCurrentTab(new_current_no);
+
+        return true;
+    }
+
+    private boolean moveTab(int from, int to) {
+        if (from == to)
+            return false;
+
+        int current = mTabList.getCurrentTabNo();
+        int new_curernt = mTabList.move(from, to);
+        mToolbar.moveTab(from, to, new_curernt);
+        if (current == from)
+            mToolbar.scrollTabTo(to);
+        return true;
+    }
+
+    private void swapTab(int a, int b) {
+        if (a == b)
+            return;
+        int old_current_tab = mTabList.getCurrentTabNo();
+        int new_current_tab = (a == old_current_tab) ? b : (b == old_current_tab) ? a : -1;
+
+        if (new_current_tab >= 0) {
+            mTabList.setCurrentTab(new_current_tab);
+        }
+        mTabList.swap(a, b);
+        mToolbar.swapTab(a, b);
+    }
+
+    private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (e1 == null || e2 == null)
+                return false;
+
+            MainTabData tab = mTabList.getCurrentTabData();
+            if (tab != null) {
+                mToolbar.onWebViewScroll(tab.mWebView, e1, e2, distanceX, distanceY);
+
+                tab.mWebView.getSwipeRefresh().setEnabled(mIsPullToRefresh && tab.mWebView.getScrollY() == 0);
+            }
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (e1 == null || e2 == null)
+                return false;
+
+            MainTabData tab = mTabList.getCurrentTabData();
+            if (tab == null)
+                return false;
+
+            if (e1.getPointerCount() <= 1 || e2.getPointerCount() <= 1) {
+                if (!AppData.flick_enable.get())
+                    return false;
+
+                final float dx = Math.abs(velocityX);
+                final float dy = Math.abs(velocityY);
+                final float dist = e2.getX() - e1.getX();
+
+                if (dy > dx)
+                    return false;
+                if (dx < AppData.flick_sensitivity_speed.get() * 100)
+                    return false;
+                if (Math.abs(dist) < AppData.flick_sensitivity_distance.get() * 10)
+                    return false;
+
+                if (AppData.flick_edge.get()) {
+                    float x = e1.getX();
+                    int slop = (int) getResources().getDimension(R.dimen.flick_slop);
+
+                    if (x <= tab.mWebView.getView().getWidth() - slop && x >= slop) {
+                        return false;
+                    }
+                }
+
+                FlickActionManager manager = FlickActionManager.getInstance(getApplicationContext());
+
+                if (dist < 0)
+                    mActionCallback.run(manager.flick_left.action);
+                else
+                    mActionCallback.run(manager.flick_right.action);
+            } else {
+                if (!AppData.webswipe_enable.get())
+                    return false;
+
+                WebSwipeActionManager manager = WebSwipeActionManager.getInstance(getApplicationContext());
+
+                final float distX0 = e2.getX(0) - e1.getX(0);
+                final float distX1 = e2.getX(1) - e1.getX(1);
+                final float distY0 = e2.getY(0) - e1.getY(0);
+                final float distY1 = e2.getY(1) - e1.getY(1);
+
+                int sense_speed = AppData.webswipe_sensitivity_speed.get() * 100;
+                int sense_dist = AppData.webswipe_sensitivity_distance.get() * 10;
+
+                if (checkWebSwipe(sense_speed, sense_dist, velocityX, distX0, distX1)) {
+                    if (checkWebSwipe(sense_speed, sense_dist, velocityY, distY0, distY1))
+                        return false;
+                    if (distX0 < 0)
+                        mActionCallback.run(manager.double_left.action);
+                    else
+                        mActionCallback.run(manager.double_right.action);
+                    return false;
+                }
+
+                if (checkWebSwipe(sense_speed, sense_dist, velocityY, distY0, distY1)) {
+                    if (checkWebSwipe(sense_speed, sense_dist, velocityX, distX0, distX1))
+                        return false;
+                    if (distY0 < 0)
+                        mActionCallback.run(manager.double_up.action);
+                    else
+                        mActionCallback.run(manager.double_down.action);
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        private boolean checkWebSwipe(int sense_speed, int sense_dist, float velocity, float dist0, float dist1) {
+            return Math.abs(velocity) >= sense_speed && MathUtils.equalsSign(dist0, dist1) && Math.abs(dist0) >= sense_dist && Math.abs(dist1) >= sense_dist;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onPointerDown(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onPointerUp(MotionEvent e) {
+            return false;
+        }
+    }
+
+    private void initWebSetting(final CustomWebView web) {
+        web.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        web.setOverScrollModeMethod(View.OVER_SCROLL_NEVER);
+
+        web.setMyWebChromeClient(new MyWebChromeClient());
+        web.setMyWebViewClient(mWebViewClient);
+
+        web.setDownloadListener(new DownloadListener() {
+            @Override
+            public void onDownloadStart(final String url, final String userAgent, final String contentDisposition, final String mimetype, final long contentLength) {
+                switch (AppData.download_action.get()) {
+                    case PreferenceConstants.DOWNLOAD_DO_NOTHING:
+                        break;
+                    case PreferenceConstants.DOWNLOAD_AUTO:
+                        if (WebDownloadUtils.shouldOpen(contentDisposition)) {
+                            actionOpen(url, userAgent, contentDisposition, mimetype, contentLength);
+                        } else {
+                            actionDownload(url, userAgent, contentDisposition, mimetype, contentLength);
+                        }
+                        break;
+                    case PreferenceConstants.DOWNLOAD_DOWNLOAD:
+                        actionDownload(url, userAgent, contentDisposition, mimetype, contentLength);
+                        break;
+                    case PreferenceConstants.DOWNLOAD_OPEN:
+                        actionOpen(url, userAgent, contentDisposition, mimetype, contentLength);
+                        break;
+                    case PreferenceConstants.DOWNLOAD_SHARE:
+                        actionShare(url);
+                        break;
+                    case PreferenceConstants.DOWNLOAD_SELECT: {
+
+                        new AlertDialog.Builder(BrowserActivity.this)
+                                .setTitle(R.string.download)
+                                .setItems(
+                                        new String[]{getString(R.string.download), getString(R.string.open), getString(R.string.share)},
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                switch (which) {
+                                                    case 0:
+                                                        actionDownload(url, userAgent, contentDisposition, mimetype, contentLength);
+                                                        break;
+                                                    case 1:
+                                                        actionOpen(url, userAgent, contentDisposition, mimetype, contentLength);
+                                                        break;
+                                                    case 2:
+                                                        actionShare(url);
+                                                        break;
+                                                }
+                                            }
+                                        })
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show();
+                    }
+                    break;
+                }
+
+                if (web.isBackForwardListEmpty()) {
+                    removeTab(mTabList.indexOf(web));
+                }
+            }
+
+            private void actionDownload(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                DownloadDialog.showDownloadDialog(BrowserActivity.this, url, userAgent, contentDisposition, mimetype, contentLength, null);
+            }
+
+            private void actionOpen(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                if (!WebDownloadUtils.openFile(BrowserActivity.this, url, mimetype)) {
+                    //application not found
+                    Toast.makeText(getApplicationContext(), R.string.app_notfound, Toast.LENGTH_SHORT).show();
+                    actionDownload(url, userAgent, contentDisposition, mimetype, contentLength);
+                }
+            }
+
+            private void actionShare(String url) {
+                WebUtils.shareWeb(BrowserActivity.this, url, null, null, null);
+            }
+        });
+
+        web.setOnCustomWebViewStateChangeListener(mOnWebStateChangeListener);
+
+        WebSettings setting = web.getSettings();
+        setting.setNeedInitialFocus(false);
+        setting.setDefaultFontSize(16);
+        setting.setDefaultFixedFontSize(13);
+        setting.setMinimumLogicalFontSize(AppData.minimum_font.get());
+        setting.setMinimumFontSize(AppData.minimum_font.get());
+
+        setting.setSupportMultipleWindows(AppData.newtab_blank.get() != BrowserManager.LOAD_URL_TAB_CURRENT);
+        WebViewUtils.setTextSize(setting, AppData.text_size.get());
+        setting.setJavaScriptEnabled(AppData.javascript.get());
+
+
+        setting.setAllowContentAccess(AppData.allow_content_access.get());
+        setting.setAllowFileAccess(AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_ENABLE);
+        setting.setDefaultTextEncodingName(AppData.default_encoding.get());
+        setting.setUserAgentString(AppData.user_agent.get());
+        setting.setLoadWithOverviewMode(AppData.load_overview.get());
+        setting.setUseWideViewPort(AppData.web_wideview.get());
+        WebViewUtils.setDisplayZoomButtons(setting, AppData.show_zoom_button.get());
+        setting.setCacheMode(AppData.web_cache.get());
+        setting.setJavaScriptCanOpenWindowsAutomatically(AppData.web_popup.get());
+        setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.valueOf(AppData.layout_algorithm.get()));
+
+        boolean noPrivate = !AppData.private_mode.get();
+        setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
+        setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());
+        setting.setDomStorageEnabled(noPrivate && AppData.web_dom_db.get());
+        setting.setGeolocationEnabled(noPrivate && AppData.web_geolocation.get());
+        setting.setAppCacheEnabled(noPrivate && AppData.web_app_cache.get());
+        setting.setAppCachePath(BrowserManager.getAppCacheFilePath(getApplicationContext()));
+
+        SwipeRefreshLayout refreshLayout = web.getSwipeRefresh();
+
+        if (ThemeData.getInstance() != null) {
+            refreshLayout.setColorSchemeColors(ThemeData.getInstance().progressColor);
+            if (ThemeData.getInstance().refreshUseDark) {
+                refreshLayout.setProgressBackgroundColorSchemeColor(R.color.deep_gray);
+            }
+        } else {
+            refreshLayout.setColorSchemeResources(R.color.accent);
+        }
+        refreshLayout.setEnabled(mIsPullToRefresh);
+
+        //if add to this, should also add to CacheWebView#settingWebView
+    }
+
+
+    private void finishQuick(int clearTabNo) {
+        finishQuick(clearTabNo, AppData.finish_alert_default.get());
+    }
+
+    private void finishQuick(int clearTabNo, int finish_clear) {
+        if (clearTabNo >= 0) {
+            if (mTabList.size() >= 2)
+                removeTab(clearTabNo);
+            else
+                destroy();
+        }
+
+        if ((finish_clear & 0x01) != 0) {
+            mTabList.clearCache(true);
+        }
+        if ((finish_clear & 0x02) != 0) {
+            CookieManager.getInstance().removeAllCookies(null);
+        }
+        if ((finish_clear & 0x04) != 0) {
+            BrowserManager.clearWebDatabase();
+        }
+        if ((finish_clear & 0x08) != 0) {
+            WebViewDatabase.getInstance(getApplicationContext()).clearHttpAuthUsernamePassword();
+        }
+        if ((finish_clear & 0x10) != 0) {
+            WebViewDatabase.getInstance(getApplicationContext()).clearFormData();
+        }
+
+        mHandler.removeCallbacks(mSaveTabsRunnable);
+        if (AppData.save_last_tabs.get() && (finish_clear & 0x1000) == 0) {
+            BrowserManager.getLastTabListDatabase(getApplicationContext()).writeList(this);
+        } else {
+            BrowserManager.getLastTabListDatabase(getApplicationContext()).clear();
+        }
+
+        destroy();
+        finish();
+    }
+
+    private void finishAlert(final int clearTabNo) {
+        new FinishAlertDialog(this)
+                .setPositiveButton(android.R.string.yes, new FinishAlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, int new_value) {
+                        finishQuick(clearTabNo, new_value);//TODO dialog memory leak
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setNeutralButton(R.string.minimize, new FinishAlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, int new_value) {
+                        if (clearTabNo >= 0 && mTabList.size() >= 2)
+                            removeTab(clearTabNo);
+                        moveTaskToBack(true);
+                    }
+                })
+                .show();
+    }
+
+    private void showSearchBox(String query, int target) {
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(SearchActivity.EXTRA_QUERY, query);
+
+        Bundle appdata = new Bundle();
+        appdata.putInt(APPDATA_EXTRA_TARGET, target);
+        intent.putExtra(SearchActivity.EXTRA_APP_DATA, appdata);
+
+        startActivityForResult(intent, RESULT_REQUEST_SEARCHBOX);
+    }
+
+    private void showTabHistory(int target) {
+        final MainTabData tab = mTabList.get(target);
+        final CustomWebBackForwardList history_list = tab.mWebView.copyMyBackForwardList();
+
+        ArrayAdapter<CustomWebHistoryItem> adapter = new ArrayAdapter<CustomWebHistoryItem>(getApplicationContext(), 0, history_list) {
+            @Override
+            @NonNull
+            public View getView(int position, View view, @NonNull ViewGroup parent) {
+                if (view == null) {
+                    view = getLayoutInflater().inflate(R.layout.tab_history_list_item, null);
+                }
+                CustomWebHistoryItem item = getItem(position);
+                if (item != null) {
+                    ((TextView) view.findViewById(R.id.siteTitleText)).setText(item.getTitle());
+                    ((TextView) view.findViewById(R.id.siteUrlText)).setText(item.getUrl());
+                    ((ImageView) view.findViewById(R.id.siteIconImageView)).setImageBitmap(item.getFavicon());
+                }
+                return view;
+            }
+        };
+
+        ListView listview = new ListView(this);
+        listview.setAdapter(adapter);
+
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.tab_history)
+                .setView(listview)
+                .show();
+
+        listview.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int next = position - history_list.getCurrent();
+                if (tab.mWebView.canGoBackOrForward(next)) {
+                    if (tab.isNavLock()) {
+                        CustomWebHistoryItem item = history_list.getBackOrForward(next);
+                        if (item != null)
+                            performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
+                        else
+                            tab.mWebView.goBackOrForward(next);
+                    } else {
+                        tab.mWebView.goBackOrForward(next);
+                    }
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void setPrivateMode(boolean isPrivate) {
+        boolean noPrivate = !isPrivate;
+        boolean cookie = AppData.accept_cookie.get();
+
+        if (noPrivate && AppData.save_history.get()) {
+            if (mBrowserHistoryManager == null)
+                mBrowserHistoryManager = new BrowserHistoryAsyncManager(getApplicationContext());
+        } else {
+            if (mBrowserHistoryManager != null)
+                mBrowserHistoryManager.destroy();
+            mBrowserHistoryManager = null;
+        }
+        CookieManager.getInstance().setAcceptCookie(noPrivate && cookie);
+
+        WebSettings setting;
+
+        for (MainTabData tabData : mTabList) {
+            setting = tabData.mWebView.getSettings();
+            if (cookie)
+                CookieManager.getInstance()
+                        .setAcceptThirdPartyCookies(tabData.mWebView.getWebView(),
+                                noPrivate && AppData.accept_third_cookie.get());
+
+            setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
+            setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());
+            setting.setDomStorageEnabled(noPrivate && AppData.web_dom_db.get());
+            setting.setGeolocationEnabled(noPrivate && AppData.web_geolocation.get());
+            setting.setAppCacheEnabled(noPrivate && AppData.web_app_cache.get());
+            setting.setAppCachePath(BrowserManager.getAppCacheFilePath(getApplicationContext()));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        String permission;
+        int grantResult;
+        for (int i = 0; permissions.length > i; i++) {
+            permission = permissions[i];
+            grantResult = grantResults[i];
+            switch (permission) {
+                case Manifest.permission.ACCESS_FINE_LOCATION:
+                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                        AppData.web_geolocation.set(false);
+                        AppData.commit(BrowserActivity.this, AppData.web_geolocation);
+                    }
+                    break;
+                case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                        PermissionUtils.requestStorage(this);
+                        PermissionUtils.setNoNeed(this, false);
+                    } else {
+                        PermissionUtils.setNoNeed(this, true);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private class Toolbar extends ToolbarManager implements TabLayout.OnTabClickListener {
+        private final ActionCallback.TargetInfo mTargetInfoCache = new ActionCallback.TargetInfo();
+        private final TabActionManager mTabActionManager;
+
+        public Toolbar() {
+            super(BrowserActivity.this, mActionCallback, new ToolbarManager.RequestCallback() {
+                @Override
+                public boolean shouldShowToolbar(ToolbarVisibilityContainter visibility, MainTabData tabdata) {
+                    return shouldShowToolbar(visibility, tabdata, null);
+                }
+
+                @Override
+                public boolean shouldShowToolbar(ToolbarVisibilityContainter visibility, MainTabData tabdata, Configuration newConfig) {
+                    if (!visibility.isVisible())
+                        return false;
+
+                    if (mIsFullScreenMode && visibility.isHideWhenFullscreen())
+                        return false;
+
+                    Configuration configuration = (newConfig != null) ? newConfig : getResources().getConfiguration();
+                    int orientation = configuration.orientation;
+                    if (visibility.isHideWhenPortrait() && orientation == Configuration.ORIENTATION_PORTRAIT)
+                        return false;
+
+                    if (visibility.isHideWhenLandscape() && orientation == Configuration.ORIENTATION_LANDSCAPE)
+                        return false;
+
+                    if (visibility.isHideWhenLayoutShrink() && mIsImeShown)
+                        return false;
+
+                    if (tabdata == null) {
+                        tabdata = mTabList.getCurrentTabData();
+                        if (tabdata == null)
+                            return true;
+                    }
+
+                    return !(visibility.isHideWhenEndLoading() && !tabdata.isInPageLoad());
+
+                }
+            });
+
+            mTabActionManager = TabActionManager.getInstance(getApplicationContext());
+            setOnTabClickListener(this);
+        }
+
+        @Override
+        public boolean onTabTouch(View v, MotionEvent ev, int id, boolean selected) {
+            return false;
+        }
+
+        @Override
+        public void onTabSwipeUp(int id) {
+            mTargetInfoCache.setTarget(id);
+            mActionCallback.run(mTabActionManager.tab_up.action, mTargetInfoCache);
+        }
+
+        @Override
+        public void onTabSwipeDown(int id) {
+            mTargetInfoCache.setTarget(id);
+            mActionCallback.run(mTabActionManager.tab_down.action, mTargetInfoCache);
+        }
+
+        @Override
+        public void onTabLongClick(int id) {
+            mTargetInfoCache.setTarget(id);
+            mActionCallback.run(mTabActionManager.tab_lpress.action, mTargetInfoCache);
+        }
+
+        @Override
+        public void onTabDoubleClick(int id) {
+            mTargetInfoCache.setTarget(id);
+            mActionCallback.run(mTabActionManager.tab_press.action, mTargetInfoCache);
+        }
+
+        @Override
+        public void onTabChangeClick(int from, int to) {
+            setCurrentTab(to);
+        }
+
+        @Override
+        public void onChangeCurrentTab(int from, int to) {
+            MainTabData from_data = mTabList.get(from);
+            MainTabData to_data = mTabList.get(to);
+
+            Resources res = getResources();
+
+            if (from_data != null)
+                from_data.onMoveTabToBackground(res, getTheme());
+
+            to_data.onMoveTabToForeground(res, getTheme());
+        }
+    }
+
+    private class MyWebViewClient extends CustomWebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(CustomWebView web, String url, Uri uri) {
+            MainTabData data = mTabList.get(web);
+            if (data == null)
+                return true;
+
+            if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url)) {
+                url = SafeFileProvider.convertToSaferUrl(url);
+                loadUrl(data, url);
+                return true;
+            }
+            if (checkPatternMatch(data, url) || checkNewTabLinkAuto(AppData.newtab_link.get(), data, url)) {
+                if (web.getUrl() == null || data.mWebView.isBackForwardListEmpty()) {
+                    removeTab(mTabList.indexOf(data));
+                }
+                return true;
+            }
+
+            if (uri.getScheme().toLowerCase().equals("intent")) {
+                try {
+                    Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+
+                    if (intent != null) {
+                        PackageManager packageManager = getPackageManager();
+                        ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                        if (info != null) {
+                            startActivity(intent);
+                        } else {
+                            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                            return !TextUtils.isEmpty(fallbackUrl) && shouldOverrideUrlLoading(web, fallbackUrl, Uri.parse(fallbackUrl));
+                        }
+
+                        return true;
+                    }
+                } catch (URISyntaxException e) {
+                    Logger.e(TAG, "Can't resolve intent://", e);
+                }
+            }
+
+            if (uri.getScheme().toLowerCase().equals("yuzu")) {
+
+                String action = uri.getSchemeSpecificPart();
+
+                if (action.startsWith("//")) {
+                    action = action.substring(2);
+                }
+                Intent intent;
+                if (TextUtils.isEmpty(action)) {
+                    return false;
+                } else switch (action.toLowerCase()) {
+                    case "settings":
+                    case "setting":
+                        intent = new Intent(BrowserActivity.this, MainSettingsActivity.class);
+                        break;
+                    case "histories":
+                    case "history":
+                        intent = new Intent(BrowserActivity.this, BrowserHistoryActivity.class);
+                        intent.putExtra(SearchActivity.EXTRA_QUERY, web.getUrl());
+                        startActivityForResult(intent, RESULT_REQUEST_HISTORY);
+                        return true;
+                    case "downloads":
+                    case "download":
+                        intent = new Intent(BrowserActivity.this, DownloadListActivity.class);
+                        break;
+                    case "debug":
+                        intent = new Intent(BrowserActivity.this, DebugActivity.class);
+                        break;
+                    case "bookmarks":
+                    case "bookmark":
+                        intent = new Intent(BrowserActivity.this, BookmarkActivity.class);
+                        intent.putExtra(SearchActivity.EXTRA_QUERY, web.getUrl());
+                        startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
+                        return true;
+                    case "search":
+                        showSearchBox("", mTabList.indexOf(data));
+                        return true;
+                    case "speeddial":
+                        showSpeedDial(data);
+                        return true;
+                    default:
+                        return false;
+                }
+                startActivity(intent);
+                return true;
+            }
+
+            if (AppData.share_unknown_scheme.get()) {
+                if (WebUtils.isOverrideScheme(uri)) {
+                    try {
+                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+
+                        if (intent != null) {
+                            ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                            if (info != null) {
+                                startActivity(intent);
+                            } else {
+                                String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                                return !TextUtils.isEmpty(fallbackUrl) && shouldOverrideUrlLoading(web, fallbackUrl, Uri.parse(fallbackUrl));
+                            }
+                            return true;
+                        }
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void onPageStarted(CustomWebView web, String url, Bitmap favicon) {
+            MainTabData data = mTabList.get(web);
+            if (data == null) return;
+
+            data.onPageStarted(url, favicon);
+
+            if (data == mTabList.getCurrentTabData()) {
+                mToolbar.notifyChangeWebState(data);
+            }
+
+            if (mIsActivityPaused) {
+                resumeWebViewTimers(data);
+            }
+        }
+
+        @Override
+        public void onPageFinished(CustomWebView web, String url) {
+            MainTabData data = mTabList.get(web);
+            if (data == null) return;
+
+            applyUserScript(web, url);
+
+            if (mIsActivityPaused) {
+                pauseWebViewTimers(data);
+            }
+
+            data.onPageFinished(web, url);
+
+            SwipeRefreshLayout swipeRefresh = data.mWebView.getSwipeRefresh();
+
+            if (swipeRefresh.isRefreshing())
+                swipeRefresh.setRefreshing(false);
+
+            if (data == mTabList.getCurrentTabData()) {
+                mToolbar.notifyChangeWebState(data);
+            }
+        }
+
+        @Override
+        public void onFormResubmission(CustomWebView view, final Message dontResend, final Message resend) {
+            (new AlertDialog.Builder(BrowserActivity.this))
+                    .setTitle(view.getUrl())
+                    .setMessage(R.string.form_resubmit)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            resend.sendToTarget();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dontResend.sendToTarget();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dontResend.sendToTarget();
+                        }
+                    })
+                    .show();
+        }
+
+        @Override
+        public void doUpdateVisitedHistory(CustomWebView view, String url, boolean isReload) {
+            MainTabData data = mTabList.get(view);
+            if (data == null) return;
+
+            if (mBrowserHistoryManager != null)
+                mBrowserHistoryManager.add(data.getOriginalUrl());
+        }
+
+        @Override
+        public void onReceivedHttpAuthRequest(CustomWebView view, HttpAuthHandler handler, String host, String realm) {
+            new HttpAuthRequestDialog(BrowserActivity.this).requestHttpAuth(view, handler, host, realm);
+        }
+
+        @Override
+        public void onReceivedSslError(CustomWebView view, final SslErrorHandler handler, SslError error) {
+            if (!AppData.ssl_error_alert.get()) {
+                handler.cancel();
+                return;
+            }
+
+            (new AlertDialog.Builder(BrowserActivity.this))
+                    .setTitle(R.string.ssl_error_title)
+                    .setMessage(R.string.ssl_error_mes)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            handler.proceed();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            handler.cancel();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            handler.cancel();
+                        }
+                    })
+                    .show();
+        }
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(CustomWebView view, WebResourceRequest request) {
+            if (mResourceCheckerList != null) {
+                for (ResourceChecker checker : mResourceCheckerList) {
+                    switch (checker.check(request.getUrl())) {
+                        case ResourceChecker.SHOULD_RUN:
+                            return checker.getResource(getApplicationContext());
+                        case ResourceChecker.SHOULD_BREAK:
+                            return null;
+                        case ResourceChecker.SHOULD_CONTINUE:
+                            continue;
+                        default:
+                            throw new RuntimeException("unknown : " + checker.check(request.getUrl()));
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    private class MyWebChromeClient extends CustomWebChromeClient {
+        private GeolocationPermissionToolbar geoView = null;
+
+        @Override
+        public void onProgressChanged(CustomWebView web, int newProgress) {
+            MainTabData data = mTabList.get(web);
+            if (data == null) return;
+
+            data.onProgressChanged(newProgress);
+            if (newProgress == 100) {
+                CookieManager.getInstance().flush();
+            }
+
+            if (data == mTabList.getCurrentTabData()) {
+                if (data.isInPageLoad())
+                    mToolbar.notifyChangeProgress(data);
+                else
+                    mToolbar.notifyChangeWebState(data);
+            }
+        }
+
+        @Override
+        public void onReceivedTitle(CustomWebView web, String title) {
+            MainTabData data = mTabList.get(web);
+            if (data == null) return;
+
+            data.onReceivedTitle(title);
+
+            if (mBrowserHistoryManager != null)
+                mBrowserHistoryManager.update(data.getOriginalUrl(), title);
+        }
+
+        @Override
+        public void onReceivedIcon(CustomWebView web, Bitmap icon) {
+            if (!AppData.save_history.get())
+                return;
+
+            MainTabData data = mTabList.get(web);
+            if (data == null) return;
+
+            mSpeedDialAsyncManager.update(data.getOriginalUrl(), icon);
+
+            if (mBrowserHistoryManager != null)
+                mBrowserHistoryManager.update(data.getOriginalUrl(), icon);
+        }
+
+        @Override
+        public void onRequestFocus(CustomWebView web) {
+            int i = mTabList.indexOf(web);
+            if (i >= 0)
+                setCurrentTab(i);
+        }
+
+
+        @Override
+        public boolean onCreateWindow(CustomWebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+            checkNewTabLink(AppData.newtab_blank.get(), (WebViewTransport) resultMsg.obj);
+            resultMsg.sendToTarget();
+            return true;
+        }
+
+        @Override
+        public void onCloseWindow(CustomWebView web) {
+            int i = mTabList.indexOf(web);
+            if (i >= 0)
+                removeTab(i);
+        }
+
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+            if (mWebUploadHandler == null)
+                mWebUploadHandler = new WebUploadHandler();
+
+            try {
+                startActivityForResult(mWebUploadHandler.onShowFileChooser(filePathCallback, fileChooserParams), RESULT_REQUEST_WEB_UPLOAD);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), R.string.app_notfound, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onJsAlert(CustomWebView view, String url, String message, final JsResult result) {
+            (new AlertDialog.Builder(BrowserActivity.this))
+                    .setTitle(url)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            result.confirm();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            result.cancel();
+                        }
+                    })
+                    .show();
+            return true;
+        }
+
+        @Override
+        public boolean onJsConfirm(CustomWebView view, String url, String message, final JsResult result) {
+            (new AlertDialog.Builder(BrowserActivity.this))
+                    .setTitle(url)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            result.confirm();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            result.cancel();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            result.cancel();
+                        }
+                    })
+                    .show();
+            return true;
+        }
+
+        @Override
+        public boolean onJsPrompt(CustomWebView view, String url, String message, String defaultValue, final JsPromptResult result) {
+            final EditText edit_text = new EditText(BrowserActivity.this);
+            edit_text.setText(defaultValue);
+            (new AlertDialog.Builder(BrowserActivity.this))
+                    .setTitle(url)
+                    .setMessage(message)
+                    .setView(edit_text)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            result.confirm(edit_text.getText().toString());
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            result.cancel();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            result.cancel();
+                        }
+                    })
+                    .show();
+            return true;
+        }
+
+
+        @Override
+        public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+            if (mWebCustomViewHandler == null)
+                mWebCustomViewHandler = new WebCustomViewHandler((ViewGroup) findViewById(R.id.fullscreenLayout));
+            mWebCustomViewHandler.showCustomView(BrowserActivity.this, view, AppData.web_customview_oritentation.get(), callback);
+        }
+
+        @Override
+        public void onHideCustomView() {
+            if (mWebCustomViewHandler != null)
+                mWebCustomViewHandler.hideCustomView(BrowserActivity.this);
+        }
+
+        @Override
+        public View getVideoLoadingProgressView() {
+            if (mVideoLoadingProgressView == null) {
+                mVideoLoadingProgressView = getLayoutInflater().inflate(R.layout.video_loading, null);
+            }
+            return mVideoLoadingProgressView;
+        }
+
+        @Override
+        public void onGeolocationPermissionsHidePrompt() {
+            if (geoView != null) {
+                mToolbar.hideGeolocationPrmissionPrompt(geoView);
+                geoView = null;
+            }
+        }
+
+        @Override
+        public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
+            if (geoView == null) {
+                geoView = new GeolocationPermissionToolbar(BrowserActivity.this) {
+                    public void onHideToolbar() {
+                        mToolbar.hideGeolocationPrmissionPrompt(geoView);
+                        geoView = null;
+                    }
+                };
+                mToolbar.showGeolocationPrmissionPrompt(geoView);
+            }
+            geoView.onGeolocationPermissionsShowPrompt(origin, callback);
+        }
+    }
+
+    private class MyOnWebStateChangeListener implements OnWebStateChangeListener {
+        @Override
+        public void onStateChanged(CustomWebView web, TabData tabdata) {
+            MainTabData tab = mTabList.get(web);
+            if (tab == null)
+                return;
+
+            tab.onStateChanged(tabdata);
+
+            if (tab == mTabList.getCurrentTabData()) {
+                mToolbar.notifyChangeWebState(tab);
+            }
+        }
+    }
+
+    private class MyOnCreateContextMenuListener extends CustomOnCreateContextMenuListener {
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, final CustomWebView webview, ContextMenuInfo menuInfo) {
+            WebView.HitTestResult result = webview.getHitTestResult();
+            if (result == null) return;
+
+            LongPressActionManager manager = LongPressActionManager.getInstance(getApplicationContext());
+
+            switch (result.getType()) {
+                case WebView.HitTestResult.SRC_ANCHOR_TYPE:
+                    mActionCallback.run(manager.link.action, new HitTestResultTargetInfo(webview, result));
+                    break;
+                case WebView.HitTestResult.IMAGE_TYPE:
+                    mActionCallback.run(manager.image.action, new HitTestResultTargetInfo(webview, result));
+                    break;
+                case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
+                    mActionCallback.run(manager.image_link.action, new HitTestResultTargetInfo(webview, result));
+                    break;
+                case WebView.HitTestResult.PHONE_TYPE: {
+                    final String extra = result.getExtra();
+                    menu.setHeaderTitle(Uri.decode(extra));
+                    menu.add(R.string.dial).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_TEL + extra)));
+                            return false;
+                        }
+                    });
+                    menu.add(R.string.add_contact).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                            intent.putExtra(Insert.PHONE, Uri.decode(extra));
+                            intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                            startActivity(intent);
+                            return false;
+                        }
+                    });
+                    menu.add(R.string.copy_phone_num).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            ClipboardUtils.setClipboardText(getApplicationContext(), Uri.decode(extra));
+                            return false;
+                        }
+                    });
+                }
+                break;
+
+                case WebView.HitTestResult.EMAIL_TYPE: {
+                    final String extra = result.getExtra();
+                    menu.setHeaderTitle(extra);
+                    menu.add(R.string.email).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_MAILTO + extra)));
+                            return false;
+                        }
+                    });
+                    menu.add(R.string.add_contact).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                            intent.putExtra(Insert.EMAIL, extra);
+                            intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                            startActivity(intent);
+                            return false;
+                        }
+                    });
+                    menu.add(R.string.copy_email_address).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                            return false;
+                        }
+                    });
+                }
+                break;
+
+                case WebView.HitTestResult.GEO_TYPE: {
+                    final String extra = result.getExtra();
+                    menu.setHeaderTitle(extra);
+                    menu.add(R.string.open_map).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_GEO + URLEncoder.encode(extra, "UTF-8"))));
+                            } catch (UnsupportedEncodingException e) {
+                                ErrorReport.printAndWriteLog(e);
+                            }
+                            return false;
+                        }
+                    });
+                    menu.add(R.string.copy_map_address).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem arg0) {
+                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                            return false;
+                        }
+                    });
+                }
+                break;
+
+                case WebView.HitTestResult.UNKNOWN_TYPE:
+                    mActionCallback.run(manager.others.action);
+                    break;
+            }
+        }
+    }
+
+    private static class PieControl extends PieControlBase {
+        public PieControl(Context context, ActionCallback actionCallback) {
+            super(context, actionCallback);
+        }
+
+        @Override
+        protected void makeItems() {
+            QuickControlActionManager mananger = QuickControlActionManager.getInstance(getContext());
+
+            for (Action action : mananger.level1.list)
+                addItem(action, 1);
+            for (Action action : mananger.level2.list)
+                addItem(action, 2);
+            for (Action action : mananger.level3.list)
+                addItem(action, 3);
+        }
+
+        public void onPreferenceReset() {
+            float density = DisplayUtils.getDensity(getContext());
+            PieMenu pie = getPieMenu();
+            pie.setRadiusStart((int) (AppData.qc_rad_start.get() * density + 0.5f));
+            pie.setRadiusIncrement((int) (AppData.qc_rad_inc.get() * density + 0.5f));
+            pie.setSlop((int) (AppData.qc_slop.get() * density + 0.5f));
+        }
+
+        public void onThemeChanged(ThemeData themedata) {
+            PieMenu pie = getPieMenu();
+
+            if (themedata != null && themedata.qcItemBackgroundColorNormal != 0)
+                pie.setNormalColor(themedata.qcItemBackgroundColorNormal);
+            else
+                pie.setNormalColor(ResourcesCompat.getColor(getContext().getResources(), R.color.qc_normal, getContext().getTheme()));
+
+            if (themedata != null && themedata.qcItemBackgroundColorSelect != 0)
+                pie.setSelectedColor(themedata.qcItemBackgroundColorSelect);
+            else
+                pie.setSelectedColor(ResourcesCompat.getColor(getContext().getResources(), R.color.qc_selected, getContext().getTheme()));
+
+            if (themedata != null && themedata.qcItemColor != 0)
+                pie.setColorFilterToItems(themedata.qcItemColor);
+            else
+                pie.setColorFilterToItems(0);
+        }
+    }
+
+    private static class WebImageHandler extends WebSrcImageHandler {
+        private final WeakReference<BrowserActivity> refBrowserActivity;
+
+        public WebImageHandler(BrowserActivity activity) {
+            refBrowserActivity = new WeakReference<>(activity);
+        }
+
+
+        @Override
+        public void handleUrl(String url) {
+            BrowserActivity activity = refBrowserActivity.get();
+            if (activity != null)
+                DownloadDialog.showDownloadDialog(activity, url);//TODO referer
+        }
+    }
+
+    private static class HitTestResultTargetInfo extends ActionCallback.TargetInfo {
+        private final CustomWebView mWebView;
+        private final WebView.HitTestResult mResult;
+        private ActionNameArray mActionNameArray;
+
+        public HitTestResultTargetInfo(CustomWebView webview, WebView.HitTestResult result) {
+            this.mWebView = webview;
+            this.mResult = result;
+        }
+
+        public CustomWebView getWebView() {
+            return mWebView;
+        }
+
+        public WebView.HitTestResult getResult() {
+            return mResult;
+        }
+
+        public ActionNameArray getActionNameArray() {
+            Context context = mWebView.getView().getContext();
+
+            if (mActionNameArray == null) {
+                switch (mResult.getType()) {
+                    case WebView.HitTestResult.SRC_ANCHOR_TYPE:
+                        mActionNameArray = new ActionNameArray(context, R.array.pref_lpress_link_list, R.array.pref_lpress_link_values);
+                        break;
+                    case WebView.HitTestResult.IMAGE_TYPE:
+                        mActionNameArray = new ActionNameArray(context, R.array.pref_lpress_image_list, R.array.pref_lpress_image_values);
+                        break;
+                    case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
+                        mActionNameArray = new ActionNameArray(context, R.array.pref_lpress_linkimage_list, R.array.pref_lpress_linkimage_values);
+                        break;
+                }
+            }
+            return mActionNameArray;
+        }
+    }
+
+    private class MyActionCallback extends ActionCallback {
+        public boolean run(Action list, HitTestResultTargetInfo target) {
+            if (list.isEmpty()) return false;
+            for (SingleAction action : list) {
+                run(action, target);
+            }
+            return true;
+        }
+
+        public boolean run(SingleAction action, HitTestResultTargetInfo target) {
+            WebView.HitTestResult result = target.getResult();
+            final CustomWebView webview = target.getWebView();
+
+            switch (result.getType()) {
+                case WebView.HitTestResult.SRC_ANCHOR_TYPE: {
+                    final String extra = result.getExtra();//URL
+                    switch (action.id) {
+                        case SingleAction.LPRESS_OPEN:
+                            webview.loadUrl(extra);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_NEW:
+                            openInNewTabPost(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_BG:
+                            openInBackground(extra, TabType.DEFAULT);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_NEW_RIGHT:
+                            openInRightNewTabPost(extra, TabType.DEFAULT);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_BG_RIGHT:
+                            openInRightBgTab(extra, TabType.DEFAULT);
+                            return true;
+                        case SingleAction.LPRESS_SHARE:
+                            WebUtils.shareWeb(BrowserActivity.this, extra, null, null, null);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_OTHERS:
+                            startActivity(PackageUtils.createChooser(BrowserActivity.this, extra, getText(R.string.open_other_app)));
+                            return true;
+                        case SingleAction.LPRESS_COPY_URL:
+                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                            return true;
+                        case SingleAction.LPRESS_SAVE_PAGE:
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra);//TODO referer
+                            return true;
+                        default:
+                            return run(action, target, null);
+                    }
+                }
+                case WebView.HitTestResult.IMAGE_TYPE: {
+                    final String extra = result.getExtra();//image URL
+                    switch (action.id) {
+                        case SingleAction.LPRESS_OPEN_IMAGE:
+                            webview.loadUrl(extra);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_NEW:
+                            openInNewTabPost(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_BG:
+                            openInBackground(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_NEW_RIGHT:
+                            openInRightNewTabPost(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_BG_RIGHT:
+                            openInRightBgTab(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_SHARE_IMAGE:
+                            WebUtils.shareWeb(BrowserActivity.this, extra, null, null, null);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_OTHERS:
+                            startActivity(PackageUtils.createChooser(BrowserActivity.this, extra, getText(R.string.open_other_app)));
+                            return true;
+                        case SingleAction.LPRESS_COPY_IMAGE_URL:
+                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                            return true;
+                        case SingleAction.LPRESS_SAVE_IMAGE:
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl());
+                            return true;
+                        default:
+                            return run(action, target, null);
+                    }
+                }
+                case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE: {
+                    final String extra = result.getExtra();//image URL
+                    switch (action.id) {
+                        case SingleAction.LPRESS_OPEN:
+                            webview.requestFocusNodeHref(new WebSrcImageLoadUrlHandler(webview).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_OPEN_NEW:
+                            webview.requestFocusNodeHref(new WebSrcImageOpenNewTabHandler(BrowserActivity.this).obtainMessage());//TODO check stratActionMode's Nullpo exception
+                            return true;
+                        case SingleAction.LPRESS_OPEN_BG:
+                            webview.requestFocusNodeHref(new WebSrcImageOpenBackgroundHandler(BrowserActivity.this).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_OPEN_NEW_RIGHT:
+                            webview.requestFocusNodeHref(new WebSrcImageOpenRightNewTabHandler(BrowserActivity.this).obtainMessage());//TODO check stratActionMode's Nullpo exception
+                            return true;
+                        case SingleAction.LPRESS_OPEN_BG_RIGHT:
+                            webview.requestFocusNodeHref(new WebSrcImageOpenRightBgTabHandler(BrowserActivity.this).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_SHARE:
+                            webview.requestFocusNodeHref(new WebSrcImageShareWebHandler(BrowserActivity.this).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_OPEN_OTHERS:
+                            webview.requestFocusNodeHref(new WebSrcImageOpenOtherAppHandler(BrowserActivity.this).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_COPY_URL:
+                            webview.requestFocusNodeHref(new WebSrcImageCopyUrlHandler(getApplicationContext()).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_SAVE_PAGE:
+                            webview.requestFocusNodeHref(new WebImageHandler(BrowserActivity.this).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE:
+                            webview.loadUrl(extra);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_NEW:
+                            openInNewTabPost(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_BG:
+                            openInBackground(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_NEW_RIGHT:
+                            openInRightNewTabPost(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_BG_RIGHT:
+                            openInRightBgTab(extra, TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_SHARE_IMAGE:
+                            WebUtils.shareWeb(BrowserActivity.this, extra, null, null, null);
+                            return true;
+                        case SingleAction.LPRESS_OPEN_IMAGE_OTHERS:
+                            startActivity(PackageUtils.createChooser(BrowserActivity.this, extra, getText(R.string.open_other_app)));
+                            return true;
+                        case SingleAction.LPRESS_COPY_IMAGE_URL:
+                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                            return true;
+                        case SingleAction.LPRESS_SAVE_IMAGE:
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl());
+                            return true;
+                        default:
+                            return run(action, target, null);
+                    }
+                }
+            }
+            return false;
+        }
+
+        public boolean checkAndRun(Action action, TargetInfo def_target) {
+            if (def_target != null && def_target instanceof HitTestResultTargetInfo)
+                return run(action, (HitTestResultTargetInfo) def_target);
+            else
+                return run(action, def_target);
+        }
+
+        @Override
+        public boolean run(SingleAction action, final TargetInfo def_target, View button) {
+            final int target = (def_target != null && def_target.getTarget() >= 0) ? def_target.getTarget() : mTabList.getCurrentTabNo();
+
+            switch (action.id) {
+                case SingleAction.GO_BACK: {
+                    MainTabData tab = mTabList.get(target);
+                    if (tab.mWebView.canGoBack()) {
+                        if (tab.isNavLock()) {
+                            CustomWebHistoryItem item = tab.mWebView.copyMyBackForwardList().getPrev();
+                            if (item != null) {
+                                performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
+                                break;
+                            }
+                        }
+                        tab.mWebView.goBack();
+                    } else {
+                        checkAndRun(((GoBackSingleAction) action).getDefaultAction(), def_target);
+                    }
+                }
+                break;
+                case SingleAction.GO_FORWARD: {
+                    MainTabData tab = mTabList.get(target);
+                    if (tab.mWebView.canGoForward()) {
+                        if (tab.isNavLock()) {
+                            CustomWebHistoryItem item = tab.mWebView.copyMyBackForwardList().getNext();
+                            if (item != null) {
+                                performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
+                                break;
+                            }
+                        }
+                        tab.mWebView.goForward();
+                    }
+                }
+                break;
+                case SingleAction.WEB_RELOAD_STOP: {
+                    MainTabData tab = mTabList.get(target);
+                    if (tab.isInPageLoad())
+                        tab.mWebView.stopLoading();
+                    else
+                        tab.mWebView.reload();
+                }
+                break;
+                case SingleAction.WEB_RELOAD:
+                    mTabList.get(target).mWebView.reload();
+                    break;
+                case SingleAction.WEB_STOP:
+                    mTabList.get(target).mWebView.stopLoading();
+                    break;
+                case SingleAction.GO_HOME:
+                    loadUrl(mTabList.get(target), AppData.home_page.get());
+                    break;
+                case SingleAction.ZOOM_IN:
+                    mTabList.get(target).mWebView.zoomIn();
+                    break;
+                case SingleAction.ZOOM_OUT:
+                    mTabList.get(target).mWebView.zoomOut();
+                    break;
+                case SingleAction.PAGE_UP:
+                    mTabList.get(target).mWebView.pageUp(false);
+                    break;
+                case SingleAction.PAGE_DOWN:
+                    mTabList.get(target).mWebView.pageDown(false);
+                    break;
+                case SingleAction.PAGE_TOP:
+                    mTabList.get(target).mWebView.pageUp(true);
+                    break;
+                case SingleAction.PAGE_BOTTOM:
+                    mTabList.get(target).mWebView.pageDown(true);
+                    break;
+                case SingleAction.PAGE_SCROLL:
+                    ((WebScrollSingleAction) action).scrollWebView(getApplicationContext(), mTabList.get(target).mWebView);
+                    break;
+                case SingleAction.PAGE_FAST_SCROLL: {
+                    if (mWebViewPageFastScroller == null) {
+                        mWebViewPageFastScroller = new WebViewPageFastScroller(BrowserActivity.this);
+                        mToolbar.getBottomToolbarLayout().addView(mWebViewPageFastScroller);
+                        mWebViewPageFastScroller.show(mTabList.get(target).mWebView);
+                        mWebViewPageFastScroller.setOnEndListener(new WebViewPageFastScroller.OnEndListener() {
+                            @Override
+                            public boolean onEnd() {
+                                mToolbar.getBottomToolbarLayout().removeView(mWebViewPageFastScroller);
+                                mWebViewPageFastScroller = null;
+                                return true;
+                            }
+                        });
+                    } else {
+                        mWebViewPageFastScroller.close();
+                    }
+                }
+                break;
+                case SingleAction.FOCUS_UP:
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP));
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_UP));
+                    break;
+                case SingleAction.FOCUS_DOWN:
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN));
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN));
+                    break;
+                case SingleAction.FOCUS_LEFT:
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT));
+                    break;
+                case SingleAction.FOCUS_RIGHT:
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT));
+                    break;
+                case SingleAction.FOCUS_CLICK:
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_CENTER));
+                    dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER));
+                    break;
+                case SingleAction.TOGGLE_JS: {
+                    CustomWebView web = mTabList.get(target).mWebView;
+                    boolean to = !web.getSettings().getJavaScriptEnabled();
+                    Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                    web.getSettings().setJavaScriptEnabled(to);
+                    web.reload();
+                }
+                break;
+                case SingleAction.TOGGLE_IMAGE: {
+                    CustomWebView web = mTabList.get(target).mWebView;
+                    boolean to = !web.getSettings().getLoadsImagesAutomatically();
+                    Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                    web.getSettings().setLoadsImagesAutomatically(to);
+                    web.reload();
+                }
+                break;
+                case SingleAction.TOGGLE_USERJS: {
+                    boolean to = mUserScriptList == null;
+                    Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                    resetUserScript(to);
+                    MainTabData tab = mTabList.get(target);
+                    if (to) {
+                        if (!tab.isInPageLoad())
+                            applyUserScript(tab.mWebView, tab.mUrl);
+                        mToolbar.notifyChangeWebState();//icon change
+                    } else {
+                        tab.mWebView.reload();
+                    }
+                }
+                break;
+                case SingleAction.TOGGLE_NAV_LOCK: {
+                    MainTabData tab = mTabList.get(target);
+                    tab.setNavLock(!tab.isNavLock());
+                    tab.invalidateView(target == mTabList.getCurrentTabNo(), getResources(), getTheme());
+                    mToolbar.notifyChangeWebState();//icon change
+                }
+                break;
+                case SingleAction.PAGE_INFO: {
+                    MainTabData tab = mTabList.get(target);
+
+                    View view = getLayoutInflater().inflate(R.layout.page_info_dialog, null);
+                    final CopyableTextView titleTextView = (CopyableTextView) view.findViewById(R.id.titleTextView);
+                    final CopyableTextView urlTextView = (CopyableTextView) view.findViewById(R.id.urlTextView);
+
+                    titleTextView.setText(tab.mTitle);
+                    urlTextView.setText(tab.mUrl);
+
+                    new AlertDialog.Builder(BrowserActivity.this)
+                            .setTitle(R.string.page_info)
+                            .setView(view)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
+                }
+                break;
+                case SingleAction.COPY_URL:
+                    ClipboardUtils.setClipboardText(getApplicationContext(), mTabList.get(target).mUrl);
+                    break;
+                case SingleAction.COPY_TITLE:
+                    ClipboardUtils.setClipboardText(getApplicationContext(), mTabList.get(target).mTitle);
+                    break;
+                case SingleAction.COPY_TITLE_URL: {
+                    MainTabData tab = mTabList.get(target);
+                    String url = tab.mUrl;
+                    String title = tab.mTitle;
+                    if (url == null)
+                        ClipboardUtils.setClipboardText(getApplicationContext(), title);
+                    else if (title == null)
+                        ClipboardUtils.setClipboardText(getApplicationContext(), url);
+                    else
+                        ClipboardUtils.setClipboardText(getApplicationContext(), title + " " + url);
+                }
+                break;
+                case SingleAction.TAB_HISTORY:
+                    showTabHistory(target);
+                    break;
+                case SingleAction.MOUSE_POINTER:
+                    if (mCursorView == null) {
+                        mCursorView = new PointerView(getApplicationContext());
+                        mCursorView.setBackFinish(((MousePointerSingleAction) action).isBackFinish());
+                        mCursorView.setView(mTabList.getCurrentTabData().mWebView.getView());
+                        webFrameLayout.addView(mCursorView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else {
+                        mCursorView.setView(null);
+                        webFrameLayout.removeView(mCursorView);
+                        mCursorView = null;
+                    }
+                    break;
+                case SingleAction.FIND_ON_PAGE:
+                    if (mWebViewFindDialog == null)
+                        mWebViewFindDialog = WebViewFindDialogFactory.createInstance(BrowserActivity.this, mToolbar.getFindOnPage());
+                    if (mWebViewFindDialog.isVisible())
+                        mWebViewFindDialog.hide();
+                    else
+                        mWebViewFindDialog.show(mTabList.get(target).mWebView);
+                    break;
+                case SingleAction.SAVE_SCREENSHOT: {
+                    SaveScreenshotSingleAction saveSsAction = (SaveScreenshotSingleAction) action;
+                    File file = new File(saveSsAction.getFolder(), "ss_" + System.currentTimeMillis() + ".png");
+                    int type = saveSsAction.getType();
+                    try {
+                        switch (type) {
+                            case SaveScreenshotSingleAction.SS_TYPE_ALL:
+                                WebViewUtils.savePictureOverall(mTabList.get(target).mWebView.getWebView(), file);
+                                Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                break;
+                            case SaveScreenshotSingleAction.SS_TYPE_PART:
+                                WebViewUtils.savePicturePart(mTabList.get(target).mWebView.getWebView(), file);
+                                Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    } catch (IOException e) {
+                        ErrorReport.printAndWriteLog(e);
+                        Toast.makeText(getApplicationContext(), "IOException : " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+                case SingleAction.SHARE_SCREENSHOT: {
+                    File file = new File(getExternalCacheDir(), "ss_" + System.currentTimeMillis() + ".png");
+                    int type = ((ShareScreenshotSingleAction) action).getType();
+                    try {
+                        switch (type) {
+                            case ShareScreenshotSingleAction.SS_TYPE_ALL:
+                                WebViewUtils.savePictureOverall(mTabList.get(target).mWebView.getWebView(), file);
+                                break;
+                            case ShareScreenshotSingleAction.SS_TYPE_PART:
+                                WebViewUtils.savePicturePart(mTabList.get(target).mWebView.getWebView(), file);
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show();
+                                break;
+                        }
+
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("image/png");
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                        try {
+                            startActivity(PackageUtils.createChooser(BrowserActivity.this, intent, null));
+                        } catch (ActivityNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
+                        ErrorReport.printAndWriteLog(e);
+                        Toast.makeText(getApplicationContext(), "IOException : " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+                case SingleAction.SAVE_PAGE: {
+                    MainTabData tab = mTabList.get(target);
+                    DownloadDialog.showArchiveDownloadDialog(BrowserActivity.this, tab.mUrl, tab.mWebView);
+                }
+                break;
+                case SingleAction.OPEN_URL: {
+                    OpenUrlSingleAction openUrlAction = (OpenUrlSingleAction) action;
+                    loadUrl(mTabList.get(target), openUrlAction.getUrl(), openUrlAction.getTargetTab(), TabType.DEFAULT);
+                }
+                break;
+                case SingleAction.TRANSLATE_PAGE: {
+                    TranslatePageSingleAction translateAction = (TranslatePageSingleAction) action;
+                    final MainTabData tab = mTabList.get(target);
+                    final String from = translateAction.getTranslateFrom();
+                    String to = translateAction.getTranslateTo();
+                    if (TextUtils.isEmpty(to)) {
+                        new AlertDialog.Builder(BrowserActivity.this)
+                                .setItems(R.array.translate_language_list, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String to = getResources().getStringArray(R.array.translate_language_values)[which];
+                                        String url = URLUtil.composeSearchUrl(tab.mUrl, "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
+                                        loadUrl(tab, url);
+                                    }
+                                })
+                                .show();
+                    } else {
+                        String url = URLUtil.composeSearchUrl(tab.mUrl, "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
+                        loadUrl(tab, url);
+                    }
+                }
+                break;
+                case SingleAction.NEW_TAB:
+                    openInNewTab(AppData.home_page.get(), TabType.DEFAULT);
+                    break;
+                case SingleAction.CLOSE_TAB:
+                    if (!removeTab(target)) {
+                        checkAndRun(((CloseTabSingleAction) action).getDefaultAction(), def_target);
+                    }
+                    break;
+                case SingleAction.CLOSE_ALL:
+                    openInBackground(AppData.home_page.get(), TabType.DEFAULT);
+                    while (mTabList.size() > 1) {
+                        removeTab(0);
+                    }
+                    break;
+                case SingleAction.CLOSE_OTHERS:
+                    for (int i = mTabList.getLastTabNo(); i > target; --i) {
+                        removeTab(i);
+                    }
+                    for (int i = 0; i < target; ++i) {
+                        removeTab(0);
+                    }
+                    break;
+                case SingleAction.CLOSE_AUTO_SELECT:
+                    int type = mTabList.get(target).getTabType();
+
+                    switch (type) {
+                        case TabType.DEFAULT:
+                            checkAndRun(((CloseAutoSelectAction) action).getDefaultAction(), def_target);
+                            break;
+                        case TabType.INTENT:
+                            checkAndRun(((CloseAutoSelectAction) action).getIntentAction(), def_target);
+                            break;
+                        case TabType.WINDOW:
+                            checkAndRun(((CloseAutoSelectAction) action).getWindowAction(), def_target);
+                            break;
+                    }
+
+                    break;
+                case SingleAction.LEFT_TAB:
+                    if (mTabList.isFirst()) {
+                        if (((LeftRightTabSingleAction) action).isTabLoop()) {
+                            setCurrentTab(mTabList.getLastTabNo());
+                            mToolbar.scrollTabRight();
+                        }
+                    } else {
+                        int to = mTabList.getCurrentTabNo() - 1;
+                        setCurrentTab(to);
+                        mToolbar.scrollTabTo(to);
+                    }
+                    break;
+                case SingleAction.RIGHT_TAB:
+                    if (mTabList.isLast()) {
+                        if (((LeftRightTabSingleAction) action).isTabLoop()) {
+                            setCurrentTab(0);
+                            mToolbar.scrollTabLeft();
+                        }
+                    } else {
+                        int to = mTabList.getCurrentTabNo() + 1;
+                        setCurrentTab(to);
+                        mToolbar.scrollTabTo(to);
+                    }
+                    break;
+                case SingleAction.SWAP_LEFT_TAB:
+                    if (!mTabList.isFirst(target)) {
+                        int to = target - 1;
+                        swapTab(to, target);
+                        mToolbar.scrollTabTo(to);
+                    }
+                    break;
+                case SingleAction.SWAP_RIGHT_TAB:
+                    if (!mTabList.isLast(target)) {
+                        int to = target + 1;
+                        swapTab(to, target);
+                        mToolbar.scrollTabTo(to);
+                    }
+                    break;
+                case SingleAction.TAB_LIST: {
+                    if (mTabListView != null)
+                        break;
+
+                    mTabListView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).isReverse());
+                    mTabListView.setList(mTabList);
+                    mTabListView.setCallback(new TabListLayout.Callback() {
+                        @Override
+                        public void requestTabListClose() {
+                            superFrameLayout.removeView(mTabListView);
+                            mTabListView = null;
+                        }
+
+                        @Override
+                        public void requestShowTabHistory(int no) {
+                            showTabHistory(no);
+                        }
+
+                        @Override
+                        public void requestSelectTab(int no) {
+                            setCurrentTab(no);
+                            mToolbar.scrollTabTo(no);
+                        }
+
+                        @Override
+                        public void requestRemoveTab(int no) {
+                            removeTab(no);
+                        }
+
+                        @Override
+                        public void requestRemoveAllTab() {
+                            while (mTabList.size() > 1) {
+                                removeTab(0);
+                            }
+                        }
+
+                        @Override
+                        public void requestAddTab() {
+                            openInNewTab(AppData.home_page.get(), TabType.DEFAULT);
+                        }
+
+                        @Override
+                        public void requestMoveTab(int positionFrom, int positionTo) {
+                            moveTab(positionFrom, positionTo);
+                        }
+                    });
+                    superFrameLayout.addView(mTabListView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                }
+                break;
+                case SingleAction.CLOSE_ALL_LEFT:
+                    for (int i = 0; i < target; ++i) {
+                        removeTab(0);
+                    }
+                    break;
+                case SingleAction.CLOSE_ALL_RIGHT:
+                    for (int i = mTabList.getLastTabNo(); i > target; --i) {
+                        removeTab(i);
+                    }
+                    break;
+                case SingleAction.RESTORE_TAB: {
+                    Bundle bundle;
+
+                    if (mClosedTabs == null || (bundle = mClosedTabs.poll()) == null) {
+                        if (AppData.save_closed_tab.get())
+                            Toast.makeText(getApplicationContext(), R.string.tab_restored_failed, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getApplicationContext(), R.string.tab_restored_setting_error, Toast.LENGTH_LONG).show();
+                    } else {
+                        openInNewTab(bundle);
+                        Toast.makeText(getApplicationContext(), R.string.tab_restored_succeed, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+                case SingleAction.REPLICATE_TAB: {
+                    Bundle outState = new Bundle();
+                    mTabList.get(target).mWebView.saveState(outState);
+                    openInNewTab(outState);
+                }
+                break;
+                case SingleAction.SHOW_SEARCHBOX:
+                    showSearchBox(mTabList.get(target).mUrl, target);
+                    break;
+                case SingleAction.PASTE_SEARCHBOX:
+                    showSearchBox(ClipboardUtils.getClipboardText(getApplicationContext()), target);
+                    break;
+                case SingleAction.PASTE_GO: {
+                    String text = ClipboardUtils.getClipboardText(getApplicationContext());
+                    if (TextUtils.isEmpty(text)) {
+                        Toast.makeText(getApplicationContext(), R.string.clipboard_empty, Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    loadUrl(mTabList.get(target), WebUtils.makeUrlFromQuery(text, AppData.search_url.get(), "%s"), ((PasteGoSingleAction) action).getTargetTab(), TabType.WINDOW);
+                }
+                break;
+                case SingleAction.SHOW_BOOKMARK: {
+                    Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
+                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabList.get(target).mUrl);
+                    startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
+                }
+                break;
+                case SingleAction.SHOW_HISTORY: {
+                    Intent intent = new Intent(getApplicationContext(), BrowserHistoryActivity.class);
+                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabList.get(target).mUrl);
+                    startActivityForResult(intent, RESULT_REQUEST_HISTORY);
+                }
+                break;
+                case SingleAction.SHOW_DOWNLOADS: {
+                    Intent intent = new Intent(getApplicationContext(), DownloadListActivity.class);
+                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabList.get(target).mUrl);
+                    startActivity(intent);
+                }
+                break;
+                case SingleAction.SHOW_SETTINGS: {
+                    Intent intent = new Intent(getApplicationContext(), MainSettingsActivity.class);
+                    startActivityForResult(intent, RESULT_REQUEST_SETTING);
+                }
+                break;
+                case SingleAction.ADD_BOOKMARK: {
+                    MainTabData tab = mTabList.get(target);
+                    new AddBookmarkSiteDialog(BrowserActivity.this, tab.mTitle, tab.mUrl).show();
+                }
+                break;
+                case SingleAction.SUB_GESTURE: {
+                    final GestureManager manager = GestureManager.getInstance(getApplicationContext(), GestureManager.GESTURE_TYPE_SUB);
+
+                    mSubGestureView = new GestureOverlayView(BrowserActivity.this);
+                    mSubGestureView.setEventsInterceptionEnabled(true);
+                    mSubGestureView.setGestureStrokeType(GestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
+                    mSubGestureView.setGestureStrokeWidth(8.0f);
+                    mSubGestureView.setBackgroundColor(0x70000000);
+                    mSubGestureView.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
+                        @Override
+                        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+                            Action action = manager.recognize(gesture);
+                            if (action != null) {
+                                mActionCallback.run(action);
+                                superFrameLayout.removeView(mSubGestureView);
+                                mSubGestureView = null;
+                            }
+                        }
+                    });
+                    superFrameLayout.addView(mSubGestureView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                }
+                break;
+                case SingleAction.CLEAR_DATA:
+                    new ClearBrowserDataAlertDialog(BrowserActivity.this, mTabList).show();
+                    break;
+                case SingleAction.SHOW_PROXY_SETTING:
+                    new ProxySettingDialog(BrowserActivity.this).show();
+                    break;
+                case SingleAction.ORIENTATION_SETTING:
+                    new AlertDialog.Builder(BrowserActivity.this)
+                            .setItems(R.array.pref_oritentation_list, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int which) {
+                                    setRequestedOrientation(getResources().getIntArray(R.array.pref_oritentation_values)[which]);
+                                }
+                            })
+                            .show();
+                    break;
+                case SingleAction.OPEN_LINK_SETTING:
+                    new AlertDialog.Builder(BrowserActivity.this)
+                            .setItems(R.array.pref_newtab_list, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int which) {
+                                    AppData.newtab_link.set(getResources().getIntArray(R.array.pref_newtab_values)[which]);
+                                }
+                            })
+                            .show();
+                    break;
+                case SingleAction.USERAGENT_SETTING:
+                    Intent uaIntent = new Intent(getApplicationContext(), UserAgentListActivity.class);
+                    uaIntent.putExtra(Intent.EXTRA_TEXT, mTabList.get(target).mWebView.getSettings().getUserAgentString());
+                    startActivityForResult(uaIntent, RESULT_REQUEST_USERAGENT);
+                    break;
+                case SingleAction.TEXTSIZE_SETTING: {
+                    final WebSettings setting = mTabList.get(target).mWebView.getSettings();
+                    new WebTextSizeDialog(BrowserActivity.this, WebViewUtils.getTextSize(setting)) {
+                        @Override
+                        public void onClick(int value) {
+                            WebViewUtils.setTextSize(setting, value);
+                        }
+                    }.show();
+                }
+                break;
+                case SingleAction.USERJS_SETTING:
+                    startActivityForResult(new Intent(getApplicationContext(), UserScriptListActivity.class), RESULT_REQUEST_USERJS_SETTING);
+                    break;
+                case SingleAction.WEB_ENCODE_SETTING:
+                    Intent webEncode = new Intent(getApplicationContext(), WebTextEncodeListActivity.class);
+                    webEncode.putExtra(Intent.EXTRA_TEXT, mTabList.get(target).mWebView.getSettings().getDefaultTextEncodingName());
+                    startActivityForResult(webEncode, RESULT_REQUEST_WEB_ENCODE_SETTING);
+                    break;
+                case SingleAction.TOGGLE_VISIBLE_TAB:
+                    mToolbar.getTabBar().toggleVisibility();
+                    break;
+                case SingleAction.TOGGLE_VISIBLE_URL:
+                    mToolbar.getUrlBar().toggleVisibility();
+                    break;
+                case SingleAction.TOGGLE_VISIBLE_PROGRESS:
+                    mToolbar.getProgressToolBar().toggleVisibility();
+                    break;
+                case SingleAction.TOGGLE_VISIBLE_CUSTOM:
+                    mToolbar.getCustomBar().toggleVisibility();
+                    break;
+                case SingleAction.TOGGLE_WEB_TITLEBAR:
+                    mToolbar.setWebViewTitlebar(mTabList.getCurrentTabData().mWebView, false);
+                    break;
+                case SingleAction.TOGGLE_WEB_GESTURE:
+                    webGestureOverlayView.setEnabled(!webGestureOverlayView.isEnabled());
+                    mToolbar.notifyChangeWebState();//icon change
+                    break;
+                case SingleAction.TOGGLE_FLICK: {
+                    boolean to = !AppData.flick_enable.get();
+                    Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                    AppData.flick_enable.set(to);
+                    mToolbar.notifyChangeWebState();//icon change
+                }
+                break;
+                case SingleAction.TOGGLE_QUICK_CONTROL: {
+                    boolean to = !getQuickControlEnabled();
+                    Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                    setQuickControlEnabled(to);
+                    mToolbar.notifyChangeWebState();//icon change
+                }
+                break;
+                case SingleAction.SHARE_WEB: {
+                    MainTabData tab = mTabList.get(target);
+                    WebUtils.shareWeb(BrowserActivity.this, tab.mUrl, tab.mTitle, tab.mWebView.getFavicon(), null);//TODO thumbnail
+                }
+                break;
+                case SingleAction.OPEN_OTHER:
+                    WebUtils.openInOtherApp(BrowserActivity.this, mTabList.get(target).mUrl);
+                    break;
+                case SingleAction.START_ACTIVITY: {
+                    Intent intent = ((StartActivitySingleAction) action).getIntent(mTabList.get(target));
+                    if (intent != null)
+                        startActivity(intent);
+                }
+                break;
+                case SingleAction.TOGGLE_FULL_SCREEN:
+                    setFullScreenMode(!mIsFullScreenMode);
+                    break;
+                case SingleAction.OPEN_OPTIONS_MENU:
+                    if (button != null)
+                        menuWindow.showAsDropDown(button);
+                    else
+                        menuWindow.show(findViewById(R.id.superFrameLayout));
+                    break;
+                case SingleAction.CUSTOM_MENU: {
+                    MainTabData tab = mTabList.get(target);
+                    final ActionList actionList = ((CustomMenuSingleAction) action).getActionList();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BrowserActivity.this);
+                    if (def_target instanceof HitTestResultTargetInfo) {
+                        HitTestResultTargetInfo web_target = (HitTestResultTargetInfo) def_target;
+                        builder.setTitle(web_target.getResult().getExtra())
+                                .setAdapter(new ActionListViewAdapter(BrowserActivity.this, actionList, web_target.getActionNameArray()), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkAndRun(actionList.get(which), def_target);
+                                    }
+                                });
+                    } else {
+                        builder.setTitle(tab.mUrl)
+                                .setAdapter(new ActionListViewAdapter(BrowserActivity.this, actionList, null), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkAndRun(actionList.get(which), def_target);
+                                    }
+                                });
+                    }
+
+                    builder.show();
+                }
+                break;
+                case SingleAction.FINISH: {
+                    FinishSingleAction finishAction = (FinishSingleAction) action;
+                    int closeTabTarget = (finishAction.isCloseTab()) ? target : -1;
+                    if (finishAction.isShowAlert())
+                        finishAlert(closeTabTarget);
+                    else
+                        finishQuick(closeTabTarget);
+                    break;
+                }
+                case SingleAction.MINIMIZE:
+                    moveTaskToBack(true);
+                    break;
+                case SingleAction.CUSTOM_ACTION:
+                    return run(((CustomSingleAction) action).getAction());
+                case SingleAction.VIBRATION:
+                    Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                    vibrator.vibrate(((VibrationSingleAction) action).getTime());
+                    break;
+                case SingleAction.PRIVATE:
+                    boolean privateMode = !AppData.private_mode.get();
+                    AppData.private_mode.set(privateMode);
+                    AppData.commit(BrowserActivity.this, AppData.private_mode);
+                    setPrivateMode(privateMode);
+                    break;
+                case SingleAction.VIEW_SOURCE: {
+                    CustomWebView webView = mTabList.get(target).mWebView;
+                    webView.loadUrl("view-source:" + webView.getUrl());
+                    break;
+                }
+                case SingleAction.PRINT:
+                    if (PrintHelper.systemSupportsPrint()) {
+                        MainTabData tab = mTabList.get(target);
+                        PrintManager manager = (PrintManager) getSystemService(PRINT_SERVICE);
+                        manager.print(tab.mUrl, tab.mWebView.createPrintDocumentAdapter(tab.mTitle), null);
+                    } else {
+                        Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                default:
+                    Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
+                    return false;
+            }
+            return true;
+        }
+
+        @Override
+        public Drawable getIcon(SingleAction action) {
+            Resources res = getResources();
+
+            switch (action.id) {
+                case SingleAction.GO_BACK: {
+                    MainTabData tab = mTabList.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.mWebView.canGoBack())
+                        return res.getDrawable(R.drawable.ic_arrow_back_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_arrow_back_disable_white_24dp, getTheme());
+                }
+                case SingleAction.GO_FORWARD: {
+                    MainTabData tab = mTabList.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.mWebView.canGoForward())
+                        return res.getDrawable(R.drawable.ic_arrow_forward_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_arrow_forward_disable_white_24dp, getTheme());
+                }
+                case SingleAction.WEB_RELOAD_STOP: {
+                    MainTabData tab = mTabList.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.isInPageLoad())
+                        return res.getDrawable(R.drawable.ic_clear_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_refresh_white_24px, getTheme());
+                }
+                case SingleAction.WEB_RELOAD:
+                    return res.getDrawable(R.drawable.ic_refresh_white_24px, getTheme());
+                case SingleAction.WEB_STOP:
+                    return res.getDrawable(R.drawable.ic_clear_white_24dp, getTheme());
+                case SingleAction.GO_HOME:
+                    return res.getDrawable(R.drawable.ic_home_white_24dp, getTheme());
+                case SingleAction.ZOOM_IN:
+                    return res.getDrawable(R.drawable.ic_zoom_in_white_24dp, getTheme());
+                case SingleAction.ZOOM_OUT:
+                    return res.getDrawable(R.drawable.ic_zoom_out_white_24dp, getTheme());
+                case SingleAction.PAGE_UP:
+                    return res.getDrawable(R.drawable.ic_arrow_upward_white_24dp, getTheme());
+                case SingleAction.PAGE_DOWN:
+                    return res.getDrawable(R.drawable.ic_arrow_downward_white_24dp, getTheme());
+                case SingleAction.PAGE_TOP:
+                    return res.getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp, getTheme());
+                case SingleAction.PAGE_BOTTOM:
+                    return res.getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp, getTheme());
+                case SingleAction.PAGE_SCROLL: {
+                    int id = ((WebScrollSingleAction) action).getIconResourceId();
+                    if (id > 0)
+                        return res.getDrawable(((WebScrollSingleAction) action).getIconResourceId(), getTheme());
+                    else
+                        return null;
+                }
+                case SingleAction.PAGE_FAST_SCROLL:
+                    return res.getDrawable(R.drawable.ic_scroll_white_24dp, getTheme());
+                case SingleAction.FOCUS_UP:
+                    return res.getDrawable(R.drawable.ic_label_up_white_24px, getTheme());
+                case SingleAction.FOCUS_DOWN:
+                    return res.getDrawable(R.drawable.ic_label_down_white_24px, getTheme());
+                case SingleAction.FOCUS_LEFT:
+                    return res.getDrawable(R.drawable.ic_label_left_white_24px, getTheme());
+                case SingleAction.FOCUS_RIGHT:
+                    return res.getDrawable(R.drawable.ic_label_right_white_24px, getTheme());
+                case SingleAction.FOCUS_CLICK:
+                    return res.getDrawable(R.drawable.ic_fiber_manual_record_white_24dp, getTheme());
+                case SingleAction.TOGGLE_JS: {
+                    MainTabData tab = mTabList.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.mWebView.getSettings().getJavaScriptEnabled())
+                        return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_memory_white_disable_24px, getTheme());
+                }
+                case SingleAction.TOGGLE_IMAGE: {
+                    MainTabData tab = mTabList.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.mWebView.getSettings().getLoadsImagesAutomatically())
+                        return res.getDrawable(R.drawable.ic_crop_original_white_24px, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_crop_original_disable_white_24px, getTheme());
+                }
+                case SingleAction.TOGGLE_USERJS: {
+                    if (mUserScriptList != null)
+                        return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_memory_white_disable_24px, getTheme());
+                }
+                case SingleAction.TOGGLE_NAV_LOCK: {
+                    MainTabData tab = mTabList.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.isNavLock())
+                        return res.getDrawable(R.drawable.ic_lock_outline_white_24px, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_lock_open_white_24px, getTheme());
+                }
+                case SingleAction.PAGE_INFO:
+                    return res.getDrawable(R.drawable.ic_info_white_24dp, getTheme());
+                case SingleAction.COPY_URL:
+                    return res.getDrawable(R.drawable.ic_mode_edit_white_24dp, getTheme());
+                case SingleAction.COPY_TITLE:
+                    return res.getDrawable(R.drawable.ic_mode_edit_white_24dp, getTheme());
+                case SingleAction.COPY_TITLE_URL:
+                    return res.getDrawable(R.drawable.ic_mode_edit_white_24dp, getTheme());
+                case SingleAction.TAB_HISTORY:
+                    return res.getDrawable(R.drawable.ic_undo_white_24dp, getTheme());
+                case SingleAction.MOUSE_POINTER:
+                    return res.getDrawable(R.drawable.ic_mouse_white_24dp, getTheme());
+                case SingleAction.FIND_ON_PAGE:
+                    return res.getDrawable(R.drawable.ic_find_in_page_white_24px, getTheme());
+                case SingleAction.SAVE_SCREENSHOT:
+                    return res.getDrawable(R.drawable.ic_photo_white_24dp, getTheme());
+                case SingleAction.SHARE_SCREENSHOT:
+                    return res.getDrawable(R.drawable.ic_photo_white_24dp, getTheme());
+                case SingleAction.SAVE_PAGE:
+                    return res.getDrawable(R.drawable.ic_save_white_24dp, getTheme());
+                case SingleAction.OPEN_URL:
+                    return res.getDrawable(R.drawable.ic_book_white_24dp, getTheme());
+                case SingleAction.TRANSLATE_PAGE:
+                    return res.getDrawable(R.drawable.ic_g_translate_white_24px, getTheme());
+                case SingleAction.NEW_TAB:
+                    return res.getDrawable(R.drawable.ic_add_box_white_24dp, getTheme());
+                case SingleAction.CLOSE_TAB:
+                    return res.getDrawable(R.drawable.ic_minas_box_white_24dp, getTheme());
+                case SingleAction.CLOSE_ALL:
+                    return res.getDrawable(R.drawable.ic_minas_box_white_24dp, getTheme());
+                case SingleAction.CLOSE_AUTO_SELECT:
+                    return res.getDrawable(R.drawable.ic_minas_box_white_24dp, getTheme());
+                case SingleAction.CLOSE_OTHERS:
+                    return res.getDrawable(R.drawable.ic_minas_box_white_24dp, getTheme());
+                case SingleAction.LEFT_TAB:
+                    return res.getDrawable(R.drawable.ic_chevron_left_white_24dp, getTheme());
+                case SingleAction.RIGHT_TAB:
+                    return res.getDrawable(R.drawable.ic_chevron_right_white_24dp, getTheme());
+                case SingleAction.SWAP_LEFT_TAB:
+                    return res.getDrawable(R.drawable.ic_fast_rewind_white_24dp, getTheme());
+                case SingleAction.SWAP_RIGHT_TAB:
+                    return res.getDrawable(R.drawable.ic_fast_forward_white_24dp, getTheme());
+                case SingleAction.TAB_LIST:
+                    return res.getDrawable(R.drawable.ic_layers_white_24dp, getTheme());
+                case SingleAction.CLOSE_ALL_LEFT:
+                    return res.getDrawable(R.drawable.ic_skip_previous_white_24dp, getTheme());
+                case SingleAction.CLOSE_ALL_RIGHT:
+                    return res.getDrawable(R.drawable.ic_skip_next_white_24dp, getTheme());
+                case SingleAction.RESTORE_TAB:
+                    return res.getDrawable(R.drawable.ic_redo_white_24dp, getTheme());
+                case SingleAction.REPLICATE_TAB:
+                    return res.getDrawable(R.drawable.ic_content_copy_white_24dp, getTheme());
+                case SingleAction.SHOW_SEARCHBOX:
+                    return res.getDrawable(R.drawable.ic_search_white_24dp, getTheme());
+                case SingleAction.PASTE_SEARCHBOX:
+                    return res.getDrawable(R.drawable.ic_content_paste_white_24dp, getTheme());
+                case SingleAction.PASTE_GO:
+                    return res.getDrawable(R.drawable.ic_content_paste_white_24dp, getTheme());
+                case SingleAction.SHOW_BOOKMARK:
+                    return res.getDrawable(R.drawable.ic_collections_bookmark_white_24dp, getTheme());
+                case SingleAction.SHOW_HISTORY:
+                    return res.getDrawable(R.drawable.ic_history_white_24dp, getTheme());
+                case SingleAction.SHOW_DOWNLOADS:
+                    return res.getDrawable(R.drawable.ic_file_download_white_24dp, getTheme());
+                case SingleAction.SHOW_SETTINGS:
+                    return res.getDrawable(R.drawable.ic_settings_white_24dp, getTheme());
+                case SingleAction.ADD_BOOKMARK:
+                    return res.getDrawable(R.drawable.ic_star_white_24px, getTheme());
+                case SingleAction.SUB_GESTURE:
+                    return res.getDrawable(R.drawable.ic_gesture_white_24dp, getTheme());
+                case SingleAction.CLEAR_DATA:
+                    return res.getDrawable(R.drawable.ic_delete_sweep_white_24px, getTheme());
+                case SingleAction.SHOW_PROXY_SETTING:
+                    return res.getDrawable(R.drawable.ic_import_export_white_24dp, getTheme());
+                case SingleAction.ORIENTATION_SETTING:
+                    return res.getDrawable(R.drawable.ic_stay_current_portrait_white_24dp, getTheme());
+                case SingleAction.OPEN_LINK_SETTING:
+                    return res.getDrawable(R.drawable.ic_layers_white_24dp, getTheme());
+                case SingleAction.USERAGENT_SETTING:
+                    return res.getDrawable(R.drawable.ic_group_white_24dp, getTheme());
+                case SingleAction.TEXTSIZE_SETTING:
+                    return res.getDrawable(R.drawable.ic_format_size_white_24dp, getTheme());
+                case SingleAction.USERJS_SETTING:
+                    return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
+                case SingleAction.WEB_ENCODE_SETTING:
+                    return res.getDrawable(R.drawable.ic_format_shapes_white_24dp, getTheme());
+                case SingleAction.TOGGLE_VISIBLE_TAB:
+                    return res.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, getTheme());
+                case SingleAction.TOGGLE_VISIBLE_URL:
+                    return res.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, getTheme());
+                case SingleAction.TOGGLE_VISIBLE_PROGRESS:
+                    return res.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, getTheme());
+                case SingleAction.TOGGLE_VISIBLE_CUSTOM:
+                    return res.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, getTheme());
+                case SingleAction.TOGGLE_WEB_TITLEBAR:
+                    return res.getDrawable(R.drawable.ic_web_asset_white_24dp, getTheme());
+                case SingleAction.TOGGLE_WEB_GESTURE: {
+                    if (webGestureOverlayView.isEnabled())
+                        return res.getDrawable(R.drawable.ic_gesture_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_gesture_white_disable_24px, getTheme());
+                }
+                case SingleAction.TOGGLE_FLICK: {
+                    if (AppData.flick_enable.get())
+                        return res.getDrawable(R.drawable.ic_gesture_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_gesture_white_disable_24px, getTheme());
+                }
+                case SingleAction.TOGGLE_QUICK_CONTROL: {
+                    if (getQuickControlEnabled())
+                        return res.getDrawable(R.drawable.ic_pie_chart_outlined_white_24px, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_pie_chart_outlined_disable_white_24px, getTheme());
+                }
+                case SingleAction.SHARE_WEB:
+                    return res.getDrawable(R.drawable.ic_share_white_24dp, getTheme());
+                case SingleAction.OPEN_OTHER:
+                    return res.getDrawable(R.drawable.ic_public_white_24dp, getTheme());
+                case SingleAction.START_ACTIVITY:
+                    return ((StartActivitySingleAction) action).getIconDrawable(getApplicationContext());
+                case SingleAction.TOGGLE_FULL_SCREEN:
+                    return res.getDrawable(R.drawable.ic_fullscreen_white_24dp, getTheme());
+                case SingleAction.OPEN_OPTIONS_MENU:
+                    return res.getDrawable(R.drawable.ic_more_vert_white_24dp, getTheme());
+                case SingleAction.CUSTOM_MENU:
+                    return res.getDrawable(R.drawable.ic_more_vert_white_24dp, getTheme());
+                case SingleAction.FINISH:
+                    return res.getDrawable(R.drawable.ic_power_settings_white_24dp, getTheme());
+                case SingleAction.MINIMIZE:
+                    return res.getDrawable(R.drawable.ic_fullscreen_exit_white_24dp, getTheme());
+                case SingleAction.CUSTOM_ACTION:
+                    return getIcon(((CustomSingleAction) action).getAction());
+                case SingleAction.VIBRATION:
+                    return null;
+                case SingleAction.PRIVATE:
+                    if (AppData.private_mode.get())
+                        return res.getDrawable(R.drawable.ic_private_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_private_white_disable_24dp, getTheme());
+                case SingleAction.VIEW_SOURCE:
+                    return res.getDrawable(R.drawable.ic_view_source_white_24dp, getTheme());
+                case SingleAction.PRINT:
+                    return res.getDrawable(R.drawable.ic_print_white_24dp, getTheme());
+                default:
+                    Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
+                    return null;
+            }
+        }
+    }
+}

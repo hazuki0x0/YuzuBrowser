@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="jp.hazuki.yuzubrowser">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <permission
+        android:name="jp.hazuki.yuzubrowser.permission.myapp.signature"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="jp.hazuki.yuzubrowser.permission.myapp.signature" />
+
+    <application
+        android:name=".BrowserApplication"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_settings"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/CustomThemeBlack">
+        <activity
+            android:name=".BrowserActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/CustomThemeBlack.NoTitle">
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="text/html" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/xhtml+xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="text/html" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/xhtml+xml" />
+                <data android:mimeType="application/x-webarchive-xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.WEB_SEARCH" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.speech.action.VOICE_SEARCH_RESULTS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".settings.activity.MainSettingsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true"
+            android:label="@string/pref_settings" />
+        <activity
+            android:name=".action.view.ActionActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/pref_settings" />
+        <activity
+            android:name=".action.view.ActionListActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".action.view.ActionListManagerActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".search.SearchActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/CustomTransparentTheme" />
+        <activity
+            android:name=".pattern.url.PatternUrlActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".debug.DebugActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true" />
+        <activity
+            android:name=".debug.DebugFileListActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".debug.TextEditActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".debug.ActivityListActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".debug.EnvironmentActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".action.view.ActionStringActivity"
+            android:configChanges="keyboardHidden|orientation" />
+
+        <provider
+            android:name=".search.SuggestProvider"
+            android:authorities="jp.hazuki.yuzubrowser.search.SuggestProvider"
+            android:exported="false"
+            android:permission="jp.hazuki.yuzubrowser.permission.myapp.signature"
+            android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
+            android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
+
+        <service
+            android:name=".download.DownloadService"
+            android:exported="false" />
+
+        <activity
+            android:name=".download.DownloadListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/download" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <provider
+            android:name=".browser.SafeFileProvider"
+            android:authorities="jp.hazuki.yuzubrowser.browser.SafeFileProvider"
+            android:exported="false"
+            android:permission="jp.hazuki.yuzubrowser.permission.myapp.signature"
+            android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
+            android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
+
+        <activity
+            android:name=".history.BrowserHistoryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/history" />
+        <activity
+            android:name=".bookmark.view.BookmarkActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/bookmark" />
+        <activity
+            android:name=".gesture.AddGestureActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".gesture.GestureListActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".gesture.GestureTestActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".utils.view.applist.ApplicationListActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".action.item.StartActivityPreferenceActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/action_start_activity_setting" />
+        <activity
+            android:name=".action.item.CustomPreferenceActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/action_custom_setting"
+            android:theme="@style/CustomTransparentTheme" />
+        <activity
+            android:name=".useragent.UserAgentListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/action_useragent_setting"
+            android:theme="@style/CustomTransparentTheme" />
+        <activity
+            android:name=".webencode.WebTextEncodeListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/action_web_encode_setting"
+            android:theme="@style/CustomTransparentTheme" />
+        <activity
+            android:name=".userjs.UserScriptListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/pref_userjs_manage" />
+        <activity
+            android:name=".userjs.UserScriptEditActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/userjs_edit" />
+        <activity
+            android:name=".utils.view.filelist.FileListActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".resblock.ResourceBlockListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/pref_resblock_manage" />
+        <activity
+            android:name=".action.view.SoftButtonActionArrayActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".action.view.SoftButtonActionActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".useragent.UserAgentSettingActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/action_useragent_setting" />
+        <activity
+            android:name=".webencode.WebTextEncodeSettingActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/action_web_encode_setting" />
+        <activity
+            android:name=".action.view.CloseAutoSelectActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/pref_close_auto_select" />
+        <activity
+            android:name=".speeddial.view.SpeedDialSettingActivity"
+            android:label="@string/pref_speed_dial_setting" />
+    </application>
+
+</manifest>

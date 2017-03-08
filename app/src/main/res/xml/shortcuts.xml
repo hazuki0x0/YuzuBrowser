@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="new_tab"
+        android:enabled="true"
+        android:icon="@mipmap/ic_new_tab"
+        android:shortcutShortLabel="@string/new_tab">
+
+        <intent
+            android:action="jp.hazuki.yuzubrowser.BrowserActivity.newTab"
+            android:targetPackage="jp.hazuki.yuzubrowser"
+            android:targetClass="jp.hazuki.yuzubrowser.BrowserActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="settings"
+        android:enabled="true"
+        android:icon="@mipmap/ic_settings"
+        android:shortcutShortLabel="@string/pref_settings">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="jp.hazuki.yuzubrowser"
+            android:targetClass="jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity" />
+    </shortcut>
+</shortcuts>
