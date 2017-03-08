@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/findEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/general_default_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:background="#00000000"
+        android:hint="@string/find_on_page"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/howMatchTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/toolbar_text_color" />
+
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="?android:attr/listDivider" />
+
+    <ImageButton
+        android:id="@+id/buttonLeft"
+        style="@style/ToolbarImageButton"
+        android:layout_width="@dimen/general_default_size"
+        android:layout_height="@dimen/general_default_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+        android:tint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/buttonRight"
+        style="@style/ToolbarImageButton"
+        android:layout_width="@dimen/general_default_size"
+        android:layout_height="@dimen/general_default_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+        android:tint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/buttonEnd"
+        style="@style/ToolbarImageButton"
+        android:layout_width="@dimen/general_default_size"
+        android:layout_height="@dimen/general_default_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_close_black_24dp"
+        android:tint="@color/white" />
+
+
+</LinearLayout>

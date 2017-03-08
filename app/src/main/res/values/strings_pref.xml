@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="pref_settings">Settings</string>
+    <string name="pref_about">About</string>
+    <string name="pref_ui_settings">UI settings</string>
+    <string name="pref_toolbar_settings">Toolbar settings</string>
+    <string name="pref_tab_bar">Tab bar</string>
+    <string name="pref_url_bar">Url bar</string>
+    <string name="pref_progress_bar">Progress bar</string>
+    <string name="pref_tab_type">Tab type</string>
+
+    <string-array name="pref_tab_type_list">
+        <item>Scrollable</item>
+        <item>Full</item>
+    </string-array>
+
+    <integer-array name="pref_tab_type_values">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string name="pref_page_settings">Page settings</string>
+    <string name="pref_toolbar_location">Position (portrait)</string>
+    <string name="pref_toolbar_location_landscape">Position (landscape)</string>
+    <string name="pref_toolbar_location_priority">Priority of positioning (portrait)</string>
+    <string name="pref_toolbar_location_priority_landscape">Priority of positioning (landscape)</string>
+    <string name="pref_toolbar_location_undefine">Undefined</string>
+    <string name="pref_toolbar_location_top">Top bar</string>
+    <string name="pref_toolbar_location_top_always">Top bar(Always display)</string>
+    <string name="pref_toolbar_location_bottom">Bottom bar</string>
+    <string name="pref_toolbar_location_bottom_always">Bottom bar(Always display)</string>
+    <string name="pref_toolbar_location_web">Web bar</string>
+    <string name="pref_toolbar_location_web_fix">Web bar (fixed)</string>
+    <string name="pref_toolbar_location_left">Left bar</string>
+    <string name="pref_toolbar_location_right">Right bar</string>
+
+    <string-array name="pref_toolbar_location_list">
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_values">
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_custom_list">
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+        <item>@string/pref_toolbar_location_left</item>
+        <item>@string/pref_toolbar_location_right</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_custom_values">
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>6</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_landscape_list">
+        <item>@string/pref_toolbar_location_undefine</item>
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_landscape_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_custom_landscape_list">
+        <item>@string/pref_toolbar_location_undefine</item>
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+        <item>@string/pref_toolbar_location_left</item>
+        <item>@string/pref_toolbar_location_right</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_custom_landscape_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>6</item>
+    </integer-array>
+
+    <integer-array name="pref_toolbar_location_priority_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_landscape_priority_list" translatable="false">
+        <item>@string/pref_toolbar_location_undefine</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_landscape_priority_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string name="pref_allow_content_access">Allow content access</string>
+    <string name="pref_default_encoding">Default text encoding</string>
+    <string name="pref_text_encoding">Text encoding</string>
+    <string name="pref_softbtn_settings">Software button settings</string>
+    <string name="pref_btn_tab_left">Tab left button</string>
+    <string name="pref_btn_tab_right">Tab right button</string>
+    <string name="pref_btn_url_left">URL left button</string>
+    <string name="pref_btn_url_right">URL right button</string>
+    <string name="pref_btn_url_center">URL center button</string>
+    <string name="pref_btn_action_press">Press</string>
+    <string name="pref_btn_action_lpress">Long press</string>
+    <string name="pref_btn_action_up">Swipe up</string>
+    <string name="pref_btn_action_down">Swipe down</string>
+    <string name="pref_btn_action_left">Swipe left</string>
+    <string name="pref_btn_action_right">Swipe right</string>
+    <string name="pref_toolbar_size">Size</string>
+    <string name="pref_toolbar_text_size">Text size</string>
+    <string name="pref_text_size">Text size</string>
+
+    <string-array name="pref_text_size_list">
+        <item>Smallest</item>
+        <item>Smaller</item>
+        <item>Normal</item>
+        <item>Larger</item>
+        <item>Largest</item>
+    </string-array>
+
+    <integer-array name="pref_text_size_values">
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+        <item>150</item>
+        <item>200</item>
+    </integer-array>
+
+    <string name="pref_private_mode">Private mode</string>
+    <string name="pref_javascript">Enable JavaScript</string>
+    <string name="pref_web_db">Enable database</string>
+    <string name="pref_web_dom_db">Enable DOM storage</string>
+    <string name="pref_menu_settings">Menu settings</string>
+    <string name="pref_user_agent">UserAgent</string>
+    <string name="pref_list_user_agent">UserAgent list</string>
+
+    <string name="pref_text_zoom">Text zoom</string>
+
+    <string name="pref_sensitivity_distance">Sensitivity (distance)</string>
+    <string name="pref_browser_settings">Browser settings</string>
+    <string name="pref_pattern_match">Pattern match</string>
+    <string name="pref_home_page">Homepage</string>
+    <string name="pref_hardbtn_settings">Hardware button settings</string>
+    <string name="pref_btn_back_press">Back press</string>
+    <string name="pref_btn_back_lpress">Back long press</string>
+    <string name="pref_btn_serach_press">Search press</string>
+    <string name="pref_btn_volume_up">Volume up</string>
+    <string name="pref_btn_volume_down">Volume down</string>
+    <string name="pref_btn_camera_press">Camera press</string>
+    <string name="pref_load_overview">Load with overview mode</string>
+    <string name="pref_web_wideview">Use wideview port</string>
+    <string name="pref_oritentation">Oritentation</string>
+    <string name="pref_web_customview_oritentation">Oritentation of full screen video</string>
+    <string name="pref_oritentation_unspecified">Unspecified</string>
+    <string name="pref_oritentation_landscape">Landscape</string>
+    <string name="pref_oritentation_portrait">Portrait</string>
+    <string name="pref_oritentation_reverse_landscape">Reverse landscape</string>
+    <string name="pref_oritentation_reverse_portrait">Reverse portrait</string>
+    <string name="pref_oritentation_sensor_landscape">Sensor landscape</string>
+    <string name="pref_oritentation_sensor_portrait">Sensor portrait</string>
+    <string name="pref_oritentation_sensor">Sensor</string>
+    <string name="pref_oritentation_full_sensor">Full sensor</string>
+    <string name="pref_oritentation_no_sensor">No sensor</string>
+
+    <string-array name="pref_oritentation_list">
+        <item>@string/pref_oritentation_unspecified</item>
+        <item>@string/pref_oritentation_landscape</item>
+        <item>@string/pref_oritentation_portrait</item>
+        <item>@string/pref_oritentation_sensor</item>
+        <item>@string/pref_oritentation_no_sensor</item>
+    </string-array>
+
+    <integer-array name="pref_oritentation_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
+
+    <string name="pref_search_url">Search engine URL</string>
+    <string name="pref_lpress_settings">Long press settings</string>
+    <string name="pref_lpress_link">Link</string>
+    <string name="pref_lpress_image">Image</string>
+    <string name="pref_lpress_linkimage">Image link</string>
+
+    <string-array name="pref_lpress_link_list">
+        <item>@string/open</item>
+        <item>@string/open_new</item>
+        <item>@string/open_bg</item>
+        <item>@string/open_new_right</item>
+        <item>@string/open_bg_right</item>
+        <item>@string/share_link</item>
+        <item>@string/open_link_other_app</item>
+        <item>@string/copy_link_url</item>
+        <item>@string/save_link</item>
+    </string-array>
+
+    <integer-array name="pref_lpress_link_values">
+        <item>-10</item>
+        <item>-11</item>
+        <item>-12</item>
+        <item>-13</item>
+        <item>-14</item>
+        <item>-50</item>
+        <item>-51</item>
+        <item>-52</item>
+        <item>-53</item>
+    </integer-array>
+
+    <string-array name="pref_lpress_image_list">
+        <item>@string/open_image</item>
+        <item>@string/open_image_new</item>
+        <item>@string/open_image_bg</item>
+        <item>@string/open_image_new_right</item>
+        <item>@string/open_image_bg_right</item>
+        <item>@string/share_image</item>
+        <item>@string/open_image_other_app</item>
+        <item>@string/copy_image_url</item>
+        <item>@string/save_image</item>
+    </string-array>
+
+    <integer-array name="pref_lpress_image_values">
+        <item>-110</item>
+        <item>-111</item>
+        <item>-112</item>
+        <item>-113</item>
+        <item>-114</item>
+        <item>-150</item>
+        <item>-151</item>
+        <item>-152</item>
+        <item>-153</item>
+    </integer-array>
+
+    <string-array name="pref_lpress_linkimage_list">
+        <item>@string/open</item>
+        <item>@string/open_new</item>
+        <item>@string/open_bg</item>
+        <item>@string/open_new_right</item>
+        <item>@string/open_bg_right</item>
+        <item>@string/share_link</item>
+        <item>@string/open_link_other_app</item>
+        <item>@string/copy_link_url</item>
+        <item>@string/save_link</item>
+        <item>@string/open_image</item>
+        <item>@string/open_image_new</item>
+        <item>@string/open_image_bg</item>
+        <item>@string/open_image_new_right</item>
+        <item>@string/open_image_bg_right</item>
+        <item>@string/share_image</item>
+        <item>@string/open_image_other_app</item>
+        <item>@string/copy_image_url</item>
+        <item>@string/save_image</item>
+    </string-array>
+
+    <integer-array name="pref_lpress_linkimage_values">
+        <item>-10</item>
+        <item>-11</item>
+        <item>-12</item>
+        <item>-13</item>
+        <item>-14</item>
+        <item>-50</item>
+        <item>-51</item>
+        <item>-52</item>
+        <item>-53</item>
+        <item>-110</item>
+        <item>-111</item>
+        <item>-112</item>
+        <item>-113</item>
+        <item>-114</item>
+        <item>-150</item>
+        <item>-151</item>
+        <item>-152</item>
+        <item>-153</item>
+    </integer-array>
+
+    <string name="pref_tab_size_x">Tab size</string>
+    <string name="pref_action_settings">Action settings</string>
+    <string name="pref_tab_action">Tab action</string>
+    <string name="pref_show_zoom_button">Display zoom buttons</string>
+    <string name="pref_fullscreen">Fullscreen</string>
+    <string name="pref_keep_screen_on">Keep screen on</string>
+    <string name="pref_accept_cookie">Accept cookie</string>
+    <string name="pref_accept_third_cookie">Accept third party cookies</string>
+    <string name="pref_web_cache">Cache mode</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>Default</item>
+        <item>No cache</item>
+        <item>Load cache preferentially</item>
+        <item>Load cache only</item>
+    </string-array>
+
+    <integer-array name="pref_web_cache_values">
+        <item>-1</item>
+        <item>2</item>
+        <item>1</item>
+        <item>3</item>
+    </integer-array>
+
+    <string name="pref_web_popup">Enable popup window</string>
+    <string name="pref_download_action">Download action</string>
+
+    <string-array name="pref_download_action_list">
+        <item>Do nothing</item>
+        <item>Auto</item>
+        <item>Always download</item>
+        <item>Always open</item>
+        <item>Share</item>
+        <item>Select</item>
+    </string-array>
+
+    <integer-array name="pref_download_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>4</item>
+    </integer-array>
+
+    <string name="pref_download_folder">Download directory</string>
+    <string name="pref_pause_web_background">Pause web in background</string>
+    <string name="pref_pause_web_tab_change">Pause web on changing tab</string>
+    <string name="pref_btn_custom">Custom button</string>
+    <string name="pref_custom_bar">Custom bar</string>
+    <string name="pref_save_formdata">Save data of web forms</string>
+    <string name="pref_web_app_cache">Enable application cache</string>
+    <string name="pref_web_geolocation">Enable geolocation</string>
+    <string name="pref_privacy_settings">Privacy settings</string>
+    <string name="pref_clear_browser_data">Clear data</string>
+    <string name="pref_layout_algorithm">Layout algorithm</string>
+
+    <string-array name="pref_layout_algorithm_list">
+        <item>Normal</item>
+        <item>Text autosizing</item>
+        <item>Single column (deprecated)</item>
+        <item>Narrow columns (deprecated)</item>
+    </string-array>
+    <string-array name="pref_layout_algorithm_values" translatable="false">
+        <item><xliff:g>NORMAL</xliff:g></item>
+        <item><xliff:g>TEXT_AUTOSIZING</xliff:g></item>
+        <item><xliff:g>SINGLE_COLUMN</xliff:g></item>
+        <item><xliff:g>NARROW_COLUMNS</xliff:g></item>
+    </string-array>
+
+    <string name="pref_save_history">Save history</string>
+    <string name="pref_newtab_settings">New tab settings</string>
+
+    <string-array name="pref_newtab_list">
+        <item>Current tab</item>
+        <item>New tab</item>
+        <item>Background tab</item>
+        <item>Right new tab</item>
+        <item>Right background tab</item>
+    </string-array>
+
+    <integer-array name="pref_newtab_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string name="pref_newtab_link">Link</string>
+    <string name="pref_newtab_bookmark">Bookmark</string>
+    <string name="pref_newtab_history">History</string>
+    <string name="pref_newtab_blank">target="_blank"</string>
+    <string name="pref_proxy_settings">Proxy settings</string>
+    <string name="pref_ssl_error_alert">Show security warnings</string>
+    <string name="pref_gesture_settings">Gesture settings</string>
+    <string name="pref_web_gesture_settings">Web gesture settings</string>
+    <string name="pref_sub_gesture_settings">Sub gesture settings</string>
+    <string name="pref_gesture_enable">Enable gesture</string>
+    <string name="pref_gesture_line">Show gesture line</string>
+    <string name="pref_gesture_score">Gesture score</string>
+    <string name="pref_lpress_others">Others</string>
+    <string name="pref_clear_data_at_finish">Clear data at finish</string>
+    <string name="pref_security_settings">Security settings</string>
+    <string name="pref_file_access">Local file access settings</string>
+
+    <string-array name="pref_file_access_list">
+        <item>Disable (safest)</item>
+        <item>Enable in sandbox (safer)</item>
+        <item>Enable (unsafe)</item>
+    </string-array>
+
+    <integer-array name="pref_file_access_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <string name="pref_toolbar_visibility">Visibility</string>
+
+    <integer name="pref_toolbar_visibility_count">6</integer>
+
+    <string-array name="pref_toolbar_visibility_list">
+        <item>Visible</item>
+        <item>Hide on fullscreen</item>
+        <item>Hide on finishing loading</item>
+        <item>Hide on portrait screen</item>
+        <item>Hide on landscape screen</item>
+        <item>Hide on layout shrinking</item>
+    </string-array>
+
+    <string name="pref_web_swipe_settings">Two-finger swipe settings</string>
+    <string name="pref_web_swipe_enable">Enable two-finger swipe action</string>
+    <string name="pref_flick_settings">Flick settings</string>
+    <string name="pref_flick_left">Flick left action</string>
+    <string name="pref_flick_right">Flick right action</string>
+    <string name="pref_sensitivity_speed">Sensitivity (speed)</string>
+    <string name="pref_flick_enable">Enable flick action</string>
+    <string name="pref_qc_settings">Quick control settings</string>
+    <string name="pref_qc_enable">Enable quick control</string>
+    <string name="pref_qc_rad_start">Radius</string>
+    <string name="pref_qc_rad_inc">Radius increment</string>
+    <string name="pref_qc_slop">Slop</string>
+    <string name="pref_qc_level1">Level 1</string>
+    <string name="pref_qc_level2">Level 2</string>
+    <string name="pref_qc_level3">Level 3</string>
+    <string name="pref_overlay_bottom_alpha">Alpha channel of bottom bar</string>
+    <string name="pref_save_last_tabs">Save tabs on exit</string>
+    <string name="pref_save_closed_tab">Save closed tabs</string>
+    <string name="pref_flick_edge">Edge check</string>
+    <string name="pref_import_export">Import/Export</string>
+    <string name="pref_import_bookmark">Restore bookmarks</string>
+    <string name="pref_import_bookmark_confirm">Are you sure you want to restore bookmarks?</string>
+    <string name="pref_import_sd_bookmark">Import from external storage</string>
+    <string name="pref_export_bookmark">Backup bookmarks</string>
+    <string name="pref_export_bookmark_confirm">Are you sure you want to backup bookmarks?</string>
+    <string name="pref_export_sd_bookmark">Export to external storage</string>
+    <string name="pref_fast_back">Fast going back and forward</string>
+    <string name="pref_userjs_settings">UserScript settings</string>
+    <string name="pref_userjs_enable">Enable UserScript</string>
+    <string name="pref_userjs_manage">Manage UserScript</string>
+    <string name="pref_force_scalable">Force user scalable</string>
+    <string name="pref_invert_rendering">Invert rendering</string>
+    <string name="pref_auto_tab_save_delay">Auto save interval (sec.)</string>
+    <string name="pref_resblock_settings">Resource interrupt settings</string>
+    <string name="pref_resblock_enable">Enable resource interrupt</string>
+    <string name="pref_resblock_manage">Manage resource interrupt</string>
+    <string name="pref_minimum_font">Minimum font size</string>
+    <string name="pref_render_priority">Priority of render thread</string>
+
+    <string-array name="pref_render_priority_values" translatable="false">
+        <item><xliff:g>NORMAL</xliff:g></item>
+        <item><xliff:g>HIGH</xliff:g></item>
+        <item><xliff:g>LOW</xliff:g></item>
+    </string-array>
+
+    <string name="pref_link_prefetch">Link prefetching</string>
+
+    <string-array name="pref_wifi_depend_bool_list">
+        <item>Enable</item>
+        <item>Only on Wi-Fi</item>
+        <item>Disable</item>
+    </string-array>
+
+    <integer-array name="pref_wifi_depend_bool_values">
+        <item>0</item>
+        <item>2</item>
+        <item>1</item>
+    </integer-array>
+
+    <string name="pref_kill_process">Kill process on exit (deprecated)</string>
+    <string name="pref_app_settings">Application settings</string>
+    <string name="pref_search_suggest">Search suggest type</string>
+
+    <string-array name="pref_search_suggest_list">
+        <item>Network</item>
+        <item>Recent queries</item>
+        <item>Both</item>
+    </string-array>
+
+    <integer-array name="pref_search_suggest_values">
+        <item>1</item>
+        <item>2</item>
+        <item>0</item>
+    </integer-array>
+
+    <string name="pref_history_settings">History settings</string>
+    <string name="pref_history_max_day">Keep history duration (day)</string>
+    <string name="pref_history_max_count">Max history count</string>
+
+    <string name="open_source_license">Open source license</string>
+    <string name="pref_log">Log</string>
+    <string name="pref_detailed_log">Output detailed log</string>
+    <string name="pref_delete_all_logs">Delete all logs</string>
+    <string name="pref_delete_log_mes">Are you sure you want to delete all logs?</string>
+
+    <string name="backup_settings">Backup settings</string>
+    <string name="restore_settings">Restore settings</string>
+    <string name="pref_backup_settings_confirm">Are you sure you want to backup settings?</string>
+    <string name="pref_restore_settings_confirm">All current settings will be lost, but are you sure to restore?</string>
+
+    <string name="copyright" translatable="false">©2017 Hazuki</string>
+    <string name="version">Version</string>
+    <string name="build">Build</string>
+    <string name="build_time">Build time</string>
+
+    <string name="theme_setting">Theme settings</string>
+    <string name="pref_theme_setting_restart_mes">Restart the application to change the theme.</string>
+
+    <string name="reflect_setting">Reflect setting now</string>
+    <string name="reflect_setting_mes">Some changes will not take effect until you restart the application.</string>
+
+    <string name="pref_close_auto_select">Distinction tab finish settings</string>
+    <string name="pref_close_default">Default</string>
+    <string name="pref_close_intent">From intent</string>
+    <string name="pref_close_window">New window (target=_blank)</string>
+
+    <string name="pref_pull_to_refresh">Pull to refresh</string>
+
+    <string name="pref_share_unkown_scheme">Share unknown scheme</string>
+    <string name="pref_share_unkown_scheme_summary">Open an unknown URL scheme with another application</string>
+
+    <string name="pref_speed_dial_setting">SpeedDial settings</string>
+</resources>

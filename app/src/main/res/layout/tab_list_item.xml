@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tab_list_item_background"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <!--
+         <ImageView
+        android:id="@+id/webImageView"
+        android:drawable="@null"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+    -->
+
+    <LinearLayout
+        android:id="@+id/selectLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/urlTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/tabHistoryImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/tab_history"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_history_white_24dp" />
+
+    <ImageButton
+        android:id="@+id/closeImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_close_black_24dp"
+        android:tint="@color/white" />
+
+</LinearLayout>

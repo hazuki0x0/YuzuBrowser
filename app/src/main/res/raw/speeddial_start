@@ -1,0 +1,119 @@
+<html>
+<head>
+<style type="text/css">
+<!--
+
+.outer {
+  width:100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.browserName {
+  font-weight: 300;
+  font-size: x-large;
+  color: #666666;
+  text-align: center;
+  margin: 20px 0px 30px;
+}
+
+.search {
+  width:calc(100% - 20px);
+  border: 1px solid #999999;
+  padding: 8px 5px;
+  color: #aaaaaa;
+  margin: 20px 5px;
+  box-shadow:2px 2px 2px;
+  background-color: #ffffff;
+}
+
+search:hover {
+  background-color: #eeeeee;
+}
+
+.linkBox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  justify-content: space-between;
+  width:100%;
+  margin: 40px 0px 0px;
+}
+
+.linkBox::before{
+  content:"";
+  display: block;
+  width: calc(33.3% - 10px);
+  max-width: 100px;
+  margin: 5px;
+  order:1;
+}
+
+.linkBox::after{
+  content:"";
+  display: block;
+  width: calc(33.3% - 10px);
+  max-width: 100px;
+  margin: 5px;
+}
+
+.box {
+  width: calc(33.3% - 12px);
+  max-width: 98px;
+  margin: 5px;
+  background-color: #f2f2f2;
+  box-shadow:2px 2px 2px rgba(0,0,0,0.4);
+  border: 1px solid #d5d5d5;
+  border-radius: 3px;
+}
+
+.inner {
+  width:100%;
+  height:100%;
+}
+
+.name {
+  color: #000000;
+  overflow: hidden;
+  width: 80%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  margin: 0 auto;
+}
+
+body {
+  background-color: #eeeeee;
+  -webkit-text-size-adjust: 100%;
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 3px 3px 0px 0px;
+}
+
+a {
+  text-decoration:none;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  -webkit-touch-callout:none;
+}
+//-->
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+<title>Yuzu Browser</title>
+</head>
+<body onContextmenu="return false">
+<div class="outer">
+    <div class="browserName">
+        Yuzu Browser
+    </div>
+    <a href="yuzu://search">
+    <div class="search">
+        Search
+    </div>
+    </a>
+    <div class="linkBox">

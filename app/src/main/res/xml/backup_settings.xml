@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+
+    <exclude
+        domain="sharedpref"
+        path="permission.xml" />
+    <exclude
+        domain="file"
+        path="last_url_2.dat" />
+    <exclude
+        domain="file"
+        path="instant-run" />
+    <exclude
+        domain="root"
+        path="appcache" />
+
+</full-backup-content>

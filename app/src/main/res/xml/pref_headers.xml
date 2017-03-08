@@ -1,0 +1,42 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.BrowserSettingsFragment"
+        android:title="@string/pref_browser_settings" />
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.PageSettingFragment"
+        android:title="@string/pref_page_settings" />
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.PrivacyFragment"
+        android:title="@string/pref_privacy_settings" />
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.UiSettingFragment"
+        android:title="@string/pref_ui_settings" />
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.ActionSettingsFragment"
+        android:title="@string/pref_action_settings" />
+
+    <header android:title="@string/pref_speed_dial_setting">
+        <intent
+            android:targetPackage="jp.hazuki.yuzubrowser"
+            android:targetClass="jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity" />
+    </header>
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.ApplicationSettingsFragment"
+        android:title="@string/pref_app_settings" />
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.ImportExportFragment"
+        android:title="@string/pref_import_export" />
+
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.AboutFragment"
+        android:title="@string/pref_about" />
+
+</preference-headers>

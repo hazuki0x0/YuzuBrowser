@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/inner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/uaCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/useragent" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+
+            <EditText
+                android:id="@+id/uaEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/useragent"
+                android:inputType="text"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_add_white_24dp"
+                android:id="@+id/uaButton" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/jsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/javascript" />
+
+        <Spinner
+            android:id="@+id/jsSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:entries="@array/enable_disable" />
+    </LinearLayout>
+
+</ScrollView>

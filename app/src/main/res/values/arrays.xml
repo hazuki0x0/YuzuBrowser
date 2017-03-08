@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="clear_browser_data">
+        <item>Caches</item>
+        <item>Cookies</item>
+        <item>Passwords</item>
+        <item>Form data</item>
+        <item>HTML5 Databases</item>
+        <item>Geolocation permissions</item>
+        <item>History</item>
+        <item>Recent search queries</item>
+    </string-array>
+    <string-array name="enable_disable">
+        <item>Enable</item>
+        <item>Disable</item>
+    </string-array>
+    <string-array name="resblock_res_type_list">
+        <item>Empty string</item>
+        <item>Empty PNG image</item>
+    </string-array>
+    <string-array name="edit_user_agent">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+
+    <string-array name="new_speed_dial_mode">
+        <item>Direct input</item>
+        <item>Bookmarks</item>
+        <item>Histories</item>
+        <item>Apps list</item>
+        <item>Shortcuts list</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_tab_loop">Tab loop</string>
+    <string name="action_action_cant_back">Action on no histories</string>
+    <string name="action_finish_alert">Show alert</string>
+    <string name="action_finish_close_tab">Close tab on finish</string>
+    <string name="action_action_cant_close_tab">Action on last tab</string>
+    <string name="action_select_menu">Select menu</string>
+    <string name="action_target_tab">Target tab</string>
+    <string name="action_tablist_reverse">Reverse list</string>
+
+    <string-array name="action_start_activity_template">
+        <item>Application</item>
+        <item>Shortcut</item>
+        <item>Share page</item>
+        <item>Open in other app</item>
+    </string-array>
+
+    <string name="action_start_activity_edit_intent">Edit intent</string>
+    <string name="action_start_activity_edit_url">Edit query URL</string>
+    <string name="action_screenshot_all">Capture all</string>
+    <string name="action_screenshot_path">Save directory</string>
+    <string name="action_mousepointer_backfinish">Finish when back button is pressed</string>
+    <string name="action_translate_from">From</string>
+    <string name="action_translate_to">To</string>
+    <string name="action_translate_auto_select">Auto select</string>
+    <string name="action_translate_select_each">Select each time</string>
+    <string name="action_web_scroll_x_coordinate">X-coordinate</string>
+    <string name="action_web_scroll_y_coordinate">Y-coordinate</string>
+    <string name="action_web_scroll_x_y_zero">Error : X or Y must not be 0</string>
+
+    <string-array name="action_web_scroll_type_list">
+        <item>Fast scroll</item>
+        <item>Fling scroll</item>
+    </string-array>
+
+    <integer-array name="action_web_scroll_type_values">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string name="action_custom_base">Base action</string>
+    <string name="action_custom_name">Action name</string>
+    <string name="action_useragent_setting">UserAgent setting</string>
+    <string name="action_custom_setting">Custom action setting</string>
+    <string name="action_start_activity_setting">Activity setting</string>
+    <string name="action_web_encode_setting">Text encoding setting</string>
+    <string name="action_vibration_setting">Period of time (ms.)</string>
+
+</resources>

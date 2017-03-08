@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser">
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.IntentPreference
+        android:title="@string/pref_pattern_match"
+        app:intent="jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity" />
+
+    <PreferenceScreen android:title="@string/pref_userjs_settings">
+        <CheckBoxPreference
+            android:key="userjs_enable"
+            android:title="@string/pref_userjs_enable" />
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.IntentPreference
+            android:title="@string/pref_userjs_manage"
+            app:intent="jp.hazuki.yuzubrowser.userjs.UserScriptListActivity" />
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:key="resblock_settings"
+        android:title="@string/pref_resblock_settings">
+        <CheckBoxPreference
+            android:key="resblock_enable"
+            android:title="@string/pref_resblock_enable" />
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.IntentPreference
+            android:title="@string/pref_resblock_manage"
+            app:intent="jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity" />
+    </PreferenceScreen>
+
+    <EditTextPreference
+        android:key="home_page"
+        android:singleLine="true"
+        android:title="@string/pref_home_page" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_download_action_list"
+        android:entryValues="@array/pref_download_action_values"
+        android:key="download_action"
+        android:title="@string/pref_download_action" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
+
+    <SwitchPreference
+        android:key="save_last_tabs"
+        android:title="@string/pref_save_last_tabs" />
+    <SwitchPreference
+        android:key="save_closed_tab"
+        android:title="@string/pref_save_closed_tab" />
+
+    <PreferenceScreen android:title="@string/pref_newtab_settings">
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_newtab_list"
+            android:entryValues="@array/pref_newtab_values"
+            android:key="newtab_link"
+            android:title="@string/pref_newtab_link" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_newtab_list"
+            android:entryValues="@array/pref_newtab_values"
+            android:key="newtab_bookmark"
+            android:title="@string/pref_newtab_bookmark" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_newtab_list"
+            android:entryValues="@array/pref_newtab_values"
+            android:key="newtab_history"
+            android:title="@string/pref_newtab_history" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_newtab_list"
+            android:entryValues="@array/pref_newtab_values"
+            android:key="newtab_blank"
+            android:title="@string/pref_newtab_blank" />
+    </PreferenceScreen>
+
+    <EditTextPreference
+        android:key="search_url"
+        android:singleLine="true"
+        android:title="@string/pref_search_url" />
+
+    <SwitchPreference
+        android:key="pause_web_tab_change"
+        android:title="@string/pref_pause_web_tab_change" />
+    <SwitchPreference
+        android:key="pause_web_background"
+        android:title="@string/pref_pause_web_background" />
+
+    <SwitchPreference
+        android:key="share_unknown_scheme"
+        android:title="@string/pref_share_unkown_scheme"
+        android:summary="@string/pref_share_unkown_scheme_summary" />
+
+    <EditTextPreference
+        android:key="download_folder"
+        android:singleLine="true"
+        android:title="@string/pref_download_folder" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+        android:key="auto_tab_save_delay"
+        android:title="@string/pref_auto_tab_save_delay"
+        app:seekMax="3600"
+        app:seekMin="0" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_search_suggest_list"
+        android:entryValues="@array/pref_search_suggest_values"
+        android:key="search_suggest"
+        android:title="@string/pref_search_suggest" />
+</PreferenceScreen>
