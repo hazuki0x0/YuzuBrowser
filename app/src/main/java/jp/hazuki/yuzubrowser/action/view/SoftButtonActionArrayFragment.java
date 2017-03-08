@@ -47,6 +47,7 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
         initData();
         ActionNameArray mActionNameArray = new ActionNameArray(getActivity());
         adapter = new ActionListAdapter(getActivity(), mActionArray.list, mActionNameArray, this);
+        setRecyclerViewAdapter(adapter);
         checkMax();
         return getRootView();
     }
