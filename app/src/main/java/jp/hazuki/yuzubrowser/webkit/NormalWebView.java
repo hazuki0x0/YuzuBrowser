@@ -24,6 +24,7 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
     private View mTitleBar;
 
     private int mLastY;
+    private ScrollController mScrollController;
     private final int[] mScrollOffset = new int[2];
     private final int[] mScrollConsumed = new int[2];
     private int mNestedOffsetY;
@@ -246,6 +247,9 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
                     nestedScrolled = false;
                 }
 
+                if (mScrollController != null) {
+                    mScrollController.onMove(getScrollY());
+                }
                 break;
             case MotionEvent.ACTION_DOWN:
                 returnValue = super.onTouchEvent(event);
@@ -259,6 +263,7 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
                 break;
             case MotionEvent.ACTION_UP:
+                /* no break */
             case MotionEvent.ACTION_CANCEL:
                 returnValue = super.onTouchEvent(event);
                 // end NestedScroll
@@ -344,5 +349,9 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
     @Override
     public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
         return mChildHelper.dispatchNestedPreFling(velocityX, velocityY);
+    }
+
+    public void setScrollController(ScrollController controller) {
+        mScrollController = controller;
     }
 }

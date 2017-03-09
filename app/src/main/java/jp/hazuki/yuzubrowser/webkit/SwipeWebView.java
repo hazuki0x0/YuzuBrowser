@@ -32,14 +32,16 @@ import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
  * Created by hazuki on 17/02/24.
  */
 
-public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, SwipeRefreshLayout.OnRefreshListener {
+public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, SwipeRefreshLayout.OnRefreshListener, ScrollController.OnScrollEnable {
     private static final int TIMEOUT = 7500;
 
     private long id = System.currentTimeMillis();
     private NormalWebView webView;
+    private ScrollController controller;
 
     private CustomWebChromeClient mWebChromeClient;
     private CustomWebViewClient mWebViewClient;
+
     private final CustomWebChromeClient mWebChromeClientWrapper = new CustomWebChromeClient() {
         @Override
         public void onReceivedTouchIconUrl(CustomWebView view, String url, boolean precomposed) {
@@ -184,11 +186,13 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
         @Override
         public void onPageFinished(CustomWebView view, String url) {
+            controller.onPageChange();
             if (mWebViewClient != null) mWebViewClient.onPageFinished(SwipeWebView.this, url);
         }
 
         @Override
         public void onPageStarted(CustomWebView view, String url, Bitmap favicon) {
+            controller.onPageChange();
             if (mWebViewClient != null)
                 mWebViewClient.onPageStarted(SwipeWebView.this, url, favicon);
         }
@@ -218,9 +222,12 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         }
     };
 
+
     public SwipeWebView(Context context) {
         super(context);
         webView = new NormalWebView(context);
+        controller = new ScrollController(this);
+        webView.setScrollController(controller);
         addView(webView);
 
         setOnRefreshListener(this);
@@ -583,5 +590,10 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
                 setRefreshing(false);
             }
         }, TIMEOUT);
+    }
+
+    @Override
+    public void onScrollEnable(boolean enable) {
+        setEnabled(enable);
     }
 }
