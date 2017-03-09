@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
-import jp.hazuki.yuzubrowser.speeddial.view.appdata.AppData;
-import jp.hazuki.yuzubrowser.speeddial.view.appdata.AppDataListAdapter;
-import jp.hazuki.yuzubrowser.speeddial.view.appdata.AppListTask;
+import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppInfo;
+import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppInfoListAdapter;
+import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppListTask;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragment;
 
 /**
  * Created by hazuki on 16/12/14.
  */
 
-public class SelectAppDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<ArrayList<AppData>> {
+public class SelectAppDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<ArrayList<AppInfo>> {
 
-    private AppDataListAdapter adapter;
+    private AppInfoListAdapter adapter;
     private ListView listView;
     private ProgressDialogFragment progressDialog;
 
@@ -45,12 +45,12 @@ public class SelectAppDialog extends DialogFragment implements LoaderManager.Loa
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AppData appData = adapter.getItem(i);
+                AppInfo appInfo = adapter.getItem(i);
                 Intent intent = new Intent();
-                intent.setClassName(appData.getPackageName(), appData.getClassName());
+                intent.setClassName(appInfo.getPackageName(), appInfo.getClassName());
                 if (getActivity() instanceof SpeedDialSettingActivityController) {
-                    WebIcon webIcon = WebIcon.createIcon(((BitmapDrawable) appData.getIcon()).getBitmap());
-                    SpeedDial speedDial = new SpeedDial(intent.toUri(Intent.URI_INTENT_SCHEME), appData.getAppName(), webIcon, false);
+                    WebIcon webIcon = WebIcon.createIcon(((BitmapDrawable) appInfo.getIcon()).getBitmap());
+                    SpeedDial speedDial = new SpeedDial(intent.toUri(Intent.URI_INTENT_SCHEME), appInfo.getAppName(), webIcon, false);
                     ((SpeedDialSettingActivityController) getActivity()).goEdit(speedDial);
                 }
                 dismiss();
@@ -63,7 +63,7 @@ public class SelectAppDialog extends DialogFragment implements LoaderManager.Loa
     }
 
     @Override
-    public Loader<ArrayList<AppData>> onCreateLoader(int i, Bundle args) {
+    public Loader<ArrayList<AppInfo>> onCreateLoader(int i, Bundle args) {
         Intent target = new Intent(Intent.ACTION_MAIN);
         target.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -73,8 +73,8 @@ public class SelectAppDialog extends DialogFragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<AppData>> loader, ArrayList<AppData> data) {
-        adapter = new AppDataListAdapter(getActivity(), data);
+    public void onLoadFinished(Loader<ArrayList<AppInfo>> loader, ArrayList<AppInfo> data) {
+        adapter = new AppInfoListAdapter(getActivity(), data);
         listView.setAdapter(adapter);
         if (progressDialog.getDialog() != null) {
             progressDialog.dismiss();
@@ -82,6 +82,6 @@ public class SelectAppDialog extends DialogFragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<AppData>> loader) {
+    public void onLoaderReset(Loader<ArrayList<AppInfo>> loader) {
     }
 }

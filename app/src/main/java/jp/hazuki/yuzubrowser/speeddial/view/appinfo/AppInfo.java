@@ -1,4 +1,4 @@
-package jp.hazuki.yuzubrowser.speeddial.view.appdata;
+package jp.hazuki.yuzubrowser.speeddial.view.appinfo;
 
 import android.graphics.drawable.Drawable;
 
@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
  * Created by hazuki on 16/12/10.
  */
 
-public class AppData {
+public class AppInfo {
     private String appName;
     private String packageName;
     private String className;
