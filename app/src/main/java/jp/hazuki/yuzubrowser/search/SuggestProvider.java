@@ -55,7 +55,7 @@ public class SuggestProvider extends ContentProvider {
     private static final String SUGGEST_URL_BASE = "http://suggestqueries.google.com/complete/search?output=firefox&oe=utf-8&hl={{LANG}}&qu={{TERMS}}";
 
     private static final String[] yuzuPrefix = {
-            "yuzu:bookmarks", "yuzu:debug", "yuzu:downloads", "yuzu:history", "yuzu:settings", "yuzu:speeddial"
+            "yuzu:bookmarks", "yuzu:debug", "yuzu:downloads", "yuzu:history", "yuzu:home", "yuzu:settings", "yuzu:speeddial"
     };
 
     private static final int COL_ID = 0;
