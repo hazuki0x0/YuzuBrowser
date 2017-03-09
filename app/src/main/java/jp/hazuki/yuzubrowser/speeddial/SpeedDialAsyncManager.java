@@ -25,8 +25,7 @@ public class SpeedDialAsyncManager extends SpeedDialManager {
         sdThread.interrupt();
     }
 
-    @Override
-    public void update(final String url, final Bitmap icon) {
+    public void updateAsync(String url, Bitmap icon) {
         sdThread.addQueue(new SDItem(url, icon));
     }
 
