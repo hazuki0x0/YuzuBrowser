@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def gitHash = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX")
 
 android {
     compileSdkVersion 25
