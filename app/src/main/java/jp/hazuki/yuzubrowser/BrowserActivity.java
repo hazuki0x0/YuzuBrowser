@@ -1859,6 +1859,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     case "speeddial":
                         showSpeedDial(data);
                         return true;
+                    case "home":
+                        loadUrl(data, AppData.home_page.get());
+                        return true;
                     default:
                         return false;
                 }
