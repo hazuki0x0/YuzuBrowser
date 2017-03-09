@@ -1,4 +1,4 @@
-package jp.hazuki.yuzubrowser.speeddial.view.appdata;
+package jp.hazuki.yuzubrowser.speeddial.view.appinfo;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -17,7 +17,7 @@ import java.util.List;
  * Created by hazuki on 16/10/20.
  */
 
-public class AppListTask extends AsyncTaskLoader<ArrayList<AppData>> {
+public class AppListTask extends AsyncTaskLoader<ArrayList<AppInfo>> {
 
     private PackageManager pm;
     private Intent mIntent;
@@ -32,19 +32,19 @@ public class AppListTask extends AsyncTaskLoader<ArrayList<AppData>> {
     }
 
     @Override
-    public ArrayList<AppData> loadInBackground() {
-        ArrayList<AppData> appDataList = new ArrayList<>();
+    public ArrayList<AppInfo> loadInBackground() {
+        ArrayList<AppInfo> appInfoList = new ArrayList<>();
 
         if (allApp) {
             List<PackageInfo> list = pm.getInstalledPackages(PackageManager.GET_META_DATA);
-            AppData appData;
+            AppInfo appInfo;
             for (PackageInfo packageInfo : list) {
-                appData = new AppData();
-                appData.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
-                appData.setPackageName(packageInfo.packageName);
-                appData.setIcon(packageInfo.applicationInfo.loadIcon(pm));
-                appData.setClassName(packageInfo.applicationInfo.className);
-                appDataList.add(appData);
+                appInfo = new AppInfo();
+                appInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
+                appInfo.setPackageName(packageInfo.packageName);
+                appInfo.setIcon(packageInfo.applicationInfo.loadIcon(pm));
+                appInfo.setClassName(packageInfo.applicationInfo.className);
+                appInfoList.add(appInfo);
             }
         } else {
             int flag = 0;
@@ -52,20 +52,20 @@ public class AppListTask extends AsyncTaskLoader<ArrayList<AppData>> {
                 flag = PackageManager.MATCH_ALL;
             List<ResolveInfo> list = pm.queryIntentActivities(mIntent, flag);
 
-            AppData appData;
+            AppInfo appInfo;
             for (ResolveInfo info : list) {
-                appData = new AppData();
+                appInfo = new AppInfo();
                 //アプリ名取得
-                appData.setAppName(info.loadLabel(pm).toString());
-                appData.setPackageName(info.activityInfo.packageName);
-                appData.setIcon(info.loadIcon(pm));
-                appData.setClassName(info.activityInfo.name);
-                appDataList.add(appData);
+                appInfo.setAppName(info.loadLabel(pm).toString());
+                appInfo.setPackageName(info.activityInfo.packageName);
+                appInfo.setIcon(info.loadIcon(pm));
+                appInfo.setClassName(info.activityInfo.name);
+                appInfoList.add(appInfo);
             }
         }
 
-        Collections.sort(appDataList, new AppDataCollator());
-        return appDataList;
+        Collections.sort(appInfoList, new AppInfoCollator());
+        return appInfoList;
     }
 
     @Override

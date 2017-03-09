@@ -18,21 +18,21 @@ import java.util.ArrayList;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
-import jp.hazuki.yuzubrowser.speeddial.view.appdata.AppData;
-import jp.hazuki.yuzubrowser.speeddial.view.appdata.AppDataListAdapter;
-import jp.hazuki.yuzubrowser.speeddial.view.appdata.AppListTask;
+import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppInfo;
+import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppInfoListAdapter;
+import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppListTask;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragment;
 
 /**
  * Created by hazuki on 16/12/14.
  */
 
-public class SelectShortcutDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<ArrayList<AppData>> {
+public class SelectShortcutDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<ArrayList<AppInfo>> {
 
     private static final int REQUEST_SHORTCUT = 1;
     private static final String APP_ICON = "icon";
 
-    private AppDataListAdapter adapter;
+    private AppInfoListAdapter adapter;
     private ListView listView;
     private ProgressDialogFragment progressDialog;
 
@@ -52,11 +52,11 @@ public class SelectShortcutDialog extends DialogFragment implements LoaderManage
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AppData appData = adapter.getItem(i);
+                AppInfo appInfo = adapter.getItem(i);
                 getArguments().putSerializable(APP_ICON,
-                        WebIcon.createIcon(((BitmapDrawable) appData.getIcon()).getBitmap()));
+                        WebIcon.createIcon(((BitmapDrawable) appInfo.getIcon()).getBitmap()));
                 Intent intent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
-                intent.setClassName(appData.getPackageName(), appData.getClassName());
+                intent.setClassName(appInfo.getPackageName(), appInfo.getClassName());
                 startActivityForResult(intent, REQUEST_SHORTCUT);
             }
         });
@@ -81,7 +81,7 @@ public class SelectShortcutDialog extends DialogFragment implements LoaderManage
     }
 
     @Override
-    public Loader<ArrayList<AppData>> onCreateLoader(int i, Bundle args) {
+    public Loader<ArrayList<AppInfo>> onCreateLoader(int i, Bundle args) {
         Intent intent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
 
         progressDialog = ProgressDialogFragment.newInstance(getString(R.string.now_loading));
@@ -90,8 +90,8 @@ public class SelectShortcutDialog extends DialogFragment implements LoaderManage
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<AppData>> loader, ArrayList<AppData> data) {
-        adapter = new AppDataListAdapter(getActivity(), data);
+    public void onLoadFinished(Loader<ArrayList<AppInfo>> loader, ArrayList<AppInfo> data) {
+        adapter = new AppInfoListAdapter(getActivity(), data);
         listView.setAdapter(adapter);
         if (progressDialog.getDialog() != null) {
             progressDialog.getDialog().dismiss();
@@ -99,6 +99,6 @@ public class SelectShortcutDialog extends DialogFragment implements LoaderManage
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<AppData>> loader) {
+    public void onLoaderReset(Loader<ArrayList<AppInfo>> loader) {
     }
 }
