@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.NinePatch;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +26,7 @@ import java.io.InputStream;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 
 public class ThemeData {
@@ -166,6 +168,12 @@ public class ThemeData {
                     }
                     continue;
                 }
+                if (parser.getCurrentToken() != JsonToken.START_OBJECT
+                        && parser.getCurrentToken() != JsonToken.START_ARRAY) {
+                    parser.nextValue();
+                } else {
+                    parser.skipChildren();
+                }
             }
 
             toolbarImageColor = 0xFF000000 | toolbarImageColor;
@@ -175,9 +183,11 @@ public class ThemeData {
     }
 
 
-    private static Drawable getColorOrBitmapDrawable(Context context, File folder, JsonParser parser) throws IOException {
+    private Drawable getColorOrBitmapDrawable(Context context, File folder, JsonParser parser) throws IOException {
         String value;
         Rect expandArea = null, paddingArea = null;
+        boolean autoScale = false;
+        boolean scaleFilter = false;
         if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
             value = null;
             while (parser.nextToken() != JsonToken.END_OBJECT) {
@@ -199,6 +209,20 @@ public class ThemeData {
                     if (parser.nextToken() != JsonToken.END_ARRAY) return null;
                     continue;
                 }
+                if ("autoScale".equalsIgnoreCase(field)) {
+                    autoScale = parser.nextBooleanValue();
+                    continue;
+                }
+                if ("scaleFilter".equalsIgnoreCase(field)) {
+                    scaleFilter = parser.nextBooleanValue();
+                    continue;
+                }
+                if (parser.getCurrentToken() != JsonToken.START_OBJECT
+                        && parser.getCurrentToken() != JsonToken.START_ARRAY) {
+                    parser.nextValue();
+                } else {
+                    parser.skipChildren();
+                }
             }
         } else {
             value = parser.getText();
@@ -219,6 +243,19 @@ public class ThemeData {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 if (bitmap == null)
                     return null;
+                if (autoScale) {
+                    float density = DisplayUtils.getDensity(context);
+                    Matrix matrix = new Matrix();
+                    matrix.setScale(density, density);
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, scaleFilter);
+                    if (expandArea != null) {
+                        scaleRect(expandArea, density);
+                    }
+
+                    if (paddingArea != null) {
+                        scaleRect(paddingArea, density);
+                    }
+                }
                 byte[] chunk = bitmap.getNinePatchChunk();
                 if (!NinePatch.isNinePatchChunk(chunk)) {
                     if (expandArea == null || paddingArea == null)
@@ -281,5 +318,12 @@ public class ThemeData {
     private boolean isColorLight(int color) {
         double lightness = (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
         return lightness > 0.8;
+    }
+
+    private void scaleRect(Rect rect, float scale) {
+        rect.left = (int) (rect.left * scale + 0.5f);
+        rect.right = (int) (rect.right * scale + 0.5f);
+        rect.top = (int) (rect.top * scale + 0.5f);
+        rect.bottom = (int) (rect.bottom * scale + 0.5f);
     }
 }

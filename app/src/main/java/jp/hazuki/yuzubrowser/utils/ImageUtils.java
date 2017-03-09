@@ -37,14 +37,6 @@ public class ImageUtils {
         return BitmapFactory.decodeByteArray(bin, 0, bin.length, options);
     }
 
-    /**
-     * bitmapをバイト配列に変換します。
-     *
-     * @param bitmap      ビットマップ
-     * @param format      圧縮フォーマット
-     * @param compressVal 圧縮率
-     * @return
-     */
     public static byte[] bmp2byteArray(Bitmap bitmap, CompressFormat format, int compressVal) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(format, compressVal, baos);
