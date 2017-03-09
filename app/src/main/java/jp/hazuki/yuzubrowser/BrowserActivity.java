@@ -2062,7 +2062,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             MainTabData data = mTabList.get(web);
             if (data == null) return;
 
-            mSpeedDialAsyncManager.update(data.getOriginalUrl(), icon);
+            mSpeedDialAsyncManager.updateAsync(data.getOriginalUrl(), icon);
 
             if (mBrowserHistoryManager != null)
                 mBrowserHistoryManager.update(data.getOriginalUrl(), icon);
