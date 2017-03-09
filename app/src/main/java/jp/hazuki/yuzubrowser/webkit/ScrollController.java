@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.webkit;
 import android.support.annotation.NonNull;
 
 /**
- * Created by fimex on 17/03/09.
+ * Created by hazuki on 17/03/09.
  */
 
 public class ScrollController {
