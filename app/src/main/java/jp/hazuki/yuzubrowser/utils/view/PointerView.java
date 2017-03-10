@@ -2,7 +2,6 @@ package jp.hazuki.yuzubrowser.utils.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.SystemClock;
 import android.view.MotionEvent;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.ResourceUtils;
 
 public class PointerView extends RelativeLayout {
     //private static final String TAG = "PointerView";
@@ -70,7 +70,7 @@ public class PointerView extends RelativeLayout {
                 return false;
 
             if (e.getPointerCount() == 2)
-                mView.dispatchTouchEvent(MotionEvent.obtain(e.getDownTime(), e.getEventTime(), MotionEvent.ACTION_UP, x, y, 0));
+                mView.dispatchTouchEvent(MotionEvent.obtain(e.getDownTime(), e.getEventTime(), MotionEvent.ACTION_UP, e.getX(), e.getY(), 0));
             return false;
         }
 
@@ -80,7 +80,7 @@ public class PointerView extends RelativeLayout {
                 return false;
 
             if (e.getPointerCount() == 2)
-                mView.dispatchTouchEvent(MotionEvent.obtain(e.getDownTime(), e.getEventTime(), MotionEvent.ACTION_DOWN, x, y, 0));
+                mView.dispatchTouchEvent(MotionEvent.obtain(e.getDownTime(), e.getEventTime(), MotionEvent.ACTION_DOWN, e.getX(), e.getY(), 0));
             return false;
         }
 
@@ -121,7 +121,7 @@ public class PointerView extends RelativeLayout {
 
         mGestureDetector = new MultiTouchGestureDetector(context, new MyMultiTouchGestureListener());
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_mouse_cursor);
+        Bitmap bitmap = ResourceUtils.getBitmap(context, R.drawable.ic_mouse_cursor);
         Matrix matrix = new Matrix();
         float dimen = getResources().getDimension(R.dimen.dimen_cursor);
         matrix.postScale(dimen / bitmap.getHeight(), dimen / bitmap.getHeight());
