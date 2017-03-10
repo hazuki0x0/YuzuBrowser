@@ -159,6 +159,7 @@ import jp.hazuki.yuzubrowser.userjs.UserScriptListActivity;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.MathUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
@@ -2819,10 +2820,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             case SaveScreenshotSingleAction.SS_TYPE_ALL:
                                 WebViewUtils.savePictureOverall(mTabList.get(target).mWebView.getWebView(), file);
                                 Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                FileUtils.notifyImageFile(BrowserActivity.this, file.getAbsolutePath());
                                 break;
                             case SaveScreenshotSingleAction.SS_TYPE_PART:
                                 WebViewUtils.savePicturePart(mTabList.get(target).mWebView.getWebView(), file);
                                 Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                FileUtils.notifyImageFile(BrowserActivity.this, file.getAbsolutePath());
                                 break;
                             default:
                                 Toast.makeText(getApplicationContext(), "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show();

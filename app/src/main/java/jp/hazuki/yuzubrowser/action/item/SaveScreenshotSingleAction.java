@@ -2,7 +2,6 @@ package jp.hazuki.yuzubrowser.action.item;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.File;
 import java.io.IOException;
 
+import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.SingleAction;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
@@ -28,7 +28,7 @@ public class SaveScreenshotSingleAction extends SingleAction implements Parcelab
     public static final int SS_TYPE_ALL = 0;
     public static final int SS_TYPE_PART = 1;
     private int mSsType = SS_TYPE_PART;
-    private File mPath = new File(Environment.getExternalStorageDirectory() + File.separator + "mikanbrowser" + File.separator + "screenshot" + File.separator);
+    private File mPath = new File(BrowserApplication.getExternalUserDirectory(), "screenshot");
 
     public SaveScreenshotSingleAction(int id, JsonParser parser) throws IOException {
         super(id);

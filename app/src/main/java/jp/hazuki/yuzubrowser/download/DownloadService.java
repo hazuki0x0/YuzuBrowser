@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -373,13 +372,7 @@ public class DownloadService extends Service {
                         notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, PackageUtils.createFileOpenIntent(DownloadService.this, mData.getFile()), 0));
                         mNotificationManager.notify((int) id, notification.build());
 
-                        Uri uri = PackageUtils.getFileUri(DownloadService.this, mData.file);
-
-                        if (FileUtils.isImageFile(DownloadService.this, uri)) {
-                            Intent mediaIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-                            mediaIntent.setData(uri);
-                            sendBroadcast(mediaIntent);
-                        }
+                        FileUtils.notifyImageFile(DownloadService.this, mData.file.getAbsolutePath());
                         break;
                     }
                     case DownloadInfo.STATE_DOWNLOADING:

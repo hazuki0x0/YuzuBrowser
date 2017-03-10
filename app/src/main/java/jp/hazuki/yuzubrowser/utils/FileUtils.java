@@ -2,6 +2,7 @@ package jp.hazuki.yuzubrowser.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.util.Log;
 
@@ -158,6 +159,10 @@ public class FileUtils {
     public static boolean isImageFile(Context context, Uri uri) {
         String mineType = context.getContentResolver().getType(uri);
         return mineType != null && mineType.startsWith("image/");
+    }
+
+    public static void notifyImageFile(Context context, String... files) {
+        MediaScannerConnection.scanFile(context, files, null, null);
     }
 
     public static final FileComparator FILE_COMPARATOR = new FileComparator();

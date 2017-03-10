@@ -49,7 +49,7 @@ public class WebViewUtils {
     }
 
     public static Bitmap capturePictureOverall(WebView web) {
-        Bitmap bitmap = Bitmap.createBitmap(web.getWidth(), web.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(web.getWidth(), web.getContentHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         web.draw(canvas);
         return bitmap;
