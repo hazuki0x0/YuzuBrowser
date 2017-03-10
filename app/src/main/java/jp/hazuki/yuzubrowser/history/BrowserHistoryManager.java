@@ -67,7 +67,6 @@ public class BrowserHistoryManager implements CursorLoadable {
             db.insert(TABLE_NAME, null, values);
         }
         c.close();
-        //db.close();
     }
 
     public void update(String url, String title) {
@@ -77,7 +76,6 @@ public class BrowserHistoryManager implements CursorLoadable {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         db.update(TABLE_NAME, values, COLUMN_URL + " = ?", new String[]{url});
-        //db.close();
     }
 
     public void update(String url, Bitmap favicon) {
@@ -87,7 +85,6 @@ public class BrowserHistoryManager implements CursorLoadable {
         ContentValues values = new ContentValues();
         values.put(COLUMN_FAVICON, ImageUtils.convertToByteArray(favicon));
         db.update(TABLE_NAME, values, COLUMN_URL + " = ?", new String[]{url});
-        //db.close();
     }
 
     public void deleteFavicon() {
@@ -95,32 +92,35 @@ public class BrowserHistoryManager implements CursorLoadable {
         ContentValues values = new ContentValues();
         values.putNull(COLUMN_FAVICON);
         db.update(TABLE_NAME, values, COLUMN_FAVICON + " IS NOT NULL", null);
-        //db.close();
     }
 
     public void delete(String url) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_URL + " = ?", new String[]{url});
-        //db.close();
     }
 
     public void deleteAll() {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
-        //db.close();
     }
 
     public Bitmap getFavicon(long id) {
+        Bitmap bitmap = null;
+        byte[] icon = getFaviconImage(id);
+        if (icon != null)
+            bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
+        return bitmap;
+    }
+
+    public byte[] getFaviconImage(long id) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_ID + " = " + id, null, null, null, null);
-        Bitmap bitmap = null;
+        byte[] image = null;
         if (c.moveToFirst()) {
-            byte[] icon = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
-            if (icon != null)
-                bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
+            image = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
         }
         c.close();
-        return bitmap;
+        return image;
     }
 
     public ArrayList<BrowserHistory> getList(int offset, int limit) {
