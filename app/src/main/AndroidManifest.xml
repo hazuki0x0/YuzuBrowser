@@ -33,7 +33,7 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:theme="@style/CustomThemeBlack.NoTitle">
+            android:theme="@style/BrowserMinThemeBlack.NoTitle">
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -108,7 +108,7 @@
         <activity
             android:name=".search.SearchActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/CustomTransparentTheme" />
+            android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".pattern.url.PatternUrlActivity"
             android:configChanges="keyboardHidden|orientation" />
@@ -194,17 +194,17 @@
             android:name=".action.item.CustomPreferenceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/action_custom_setting"
-            android:theme="@style/CustomTransparentTheme" />
+            android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".useragent.UserAgentListActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/action_useragent_setting"
-            android:theme="@style/CustomTransparentTheme" />
+            android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".webencode.WebTextEncodeListActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/action_web_encode_setting"
-            android:theme="@style/CustomTransparentTheme" />
+            android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".userjs.UserScriptListActivity"
             android:configChanges="keyboardHidden|orientation"

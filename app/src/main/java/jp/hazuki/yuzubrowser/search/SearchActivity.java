@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -71,6 +73,14 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
             int textColor = ThemeData.getInstance().toolbarTextColor;
             editText.setTextColor(textColor);
             editText.setHintTextColor(textColor & 0xffffff | 0x55000000);
+            if (ThemeData.getInstance().toolbarImageColor != 0)
+                searchButton.setColorFilter(ThemeData.getInstance().toolbarImageColor);
+            if (ThemeData.getInstance().statusBarColor != 0) {
+                Window window = getWindow();
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(ThemeData.getInstance().statusBarColor);
+            }
         }
 
         editText.addTextChangedListener(this);
