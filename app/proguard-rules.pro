@@ -25,3 +25,5 @@
 -keep class org.codehaus.** { *; }
 -keepclassmembers public final enum org.codehaus.jackson.annotate.JsonAutoDetect$Visibility {
 public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
+-keep class android.support.v7.widget.SearchView { *; }
+-keepattributes SourceFile,LineNumberTable
