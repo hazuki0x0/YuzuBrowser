@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.view.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 import static jp.hazuki.yuzubrowser.useragent.SelectActionDialog.DELETE;

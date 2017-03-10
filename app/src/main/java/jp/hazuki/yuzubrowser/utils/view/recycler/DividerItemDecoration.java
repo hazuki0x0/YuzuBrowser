@@ -1,4 +1,4 @@
-package jp.hazuki.yuzubrowser.utils.view;
+package jp.hazuki.yuzubrowser.utils.view.recycler;
 
 import android.content.Context;
 import android.content.res.TypedArray;
