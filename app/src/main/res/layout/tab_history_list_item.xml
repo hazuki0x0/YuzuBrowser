@@ -11,7 +11,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="3dp"
-        android:src="@null"></ImageView>
+        android:src="@null" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_marginStart="2dp"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/siteUrlText"
@@ -36,7 +36,7 @@
             android:layout_marginStart="2dp"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceSmall"></TextView>
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
 </LinearLayout>

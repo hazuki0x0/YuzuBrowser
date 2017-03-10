@@ -161,31 +161,12 @@
     <string name="pref_toolbar_text_size">Text size</string>
     <string name="pref_text_size">Text size</string>
 
-    <string-array name="pref_text_size_list">
-        <item>Smallest</item>
-        <item>Smaller</item>
-        <item>Normal</item>
-        <item>Larger</item>
-        <item>Largest</item>
-    </string-array>
-
-    <integer-array name="pref_text_size_values">
-        <item>50</item>
-        <item>75</item>
-        <item>100</item>
-        <item>150</item>
-        <item>200</item>
-    </integer-array>
-
     <string name="pref_private_mode">Private mode</string>
     <string name="pref_javascript">Enable JavaScript</string>
     <string name="pref_web_db">Enable database</string>
     <string name="pref_web_dom_db">Enable DOM storage</string>
     <string name="pref_menu_settings">Menu settings</string>
     <string name="pref_user_agent">UserAgent</string>
-    <string name="pref_list_user_agent">UserAgent list</string>
-
-    <string name="pref_text_zoom">Text zoom</string>
 
     <string name="pref_sensitivity_distance">Sensitivity (distance)</string>
     <string name="pref_browser_settings">Browser settings</string>
@@ -205,12 +186,7 @@
     <string name="pref_oritentation_unspecified">Unspecified</string>
     <string name="pref_oritentation_landscape">Landscape</string>
     <string name="pref_oritentation_portrait">Portrait</string>
-    <string name="pref_oritentation_reverse_landscape">Reverse landscape</string>
-    <string name="pref_oritentation_reverse_portrait">Reverse portrait</string>
-    <string name="pref_oritentation_sensor_landscape">Sensor landscape</string>
-    <string name="pref_oritentation_sensor_portrait">Sensor portrait</string>
     <string name="pref_oritentation_sensor">Sensor</string>
-    <string name="pref_oritentation_full_sensor">Full sensor</string>
     <string name="pref_oritentation_no_sensor">No sensor</string>
 
     <string-array name="pref_oritentation_list">
@@ -478,10 +454,8 @@
     <string name="pref_import_export">Import/Export</string>
     <string name="pref_import_bookmark">Restore bookmarks</string>
     <string name="pref_import_bookmark_confirm">Are you sure you want to restore bookmarks?</string>
-    <string name="pref_import_sd_bookmark">Import from external storage</string>
     <string name="pref_export_bookmark">Backup bookmarks</string>
     <string name="pref_export_bookmark_confirm">Are you sure you want to backup bookmarks?</string>
-    <string name="pref_export_sd_bookmark">Export to external storage</string>
     <string name="pref_fast_back">Fast going back and forward</string>
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
@@ -493,27 +467,8 @@
     <string name="pref_resblock_enable">Enable resource interrupt</string>
     <string name="pref_resblock_manage">Manage resource interrupt</string>
     <string name="pref_minimum_font">Minimum font size</string>
-    <string name="pref_render_priority">Priority of render thread</string>
-
-    <string-array name="pref_render_priority_values" translatable="false">
-        <item><xliff:g>NORMAL</xliff:g></item>
-        <item><xliff:g>HIGH</xliff:g></item>
-        <item><xliff:g>LOW</xliff:g></item>
-    </string-array>
 
     <string name="pref_link_prefetch">Link prefetching</string>
-
-    <string-array name="pref_wifi_depend_bool_list">
-        <item>Enable</item>
-        <item>Only on Wi-Fi</item>
-        <item>Disable</item>
-    </string-array>
-
-    <integer-array name="pref_wifi_depend_bool_values">
-        <item>0</item>
-        <item>2</item>
-        <item>1</item>
-    </integer-array>
 
     <string name="pref_kill_process">Kill process on exit (deprecated)</string>
     <string name="pref_app_settings">Application settings</string>
@@ -552,7 +507,6 @@
     <string name="build_time">Build time</string>
 
     <string name="theme_setting">Theme settings</string>
-    <string name="pref_theme_setting_restart_mes">Restart the application to change the theme.</string>
 
     <string name="reflect_setting">Reflect setting now</string>
     <string name="reflect_setting_mes">Some changes will not take effect until you restart the application.</string>

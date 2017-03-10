@@ -18,9 +18,9 @@ import jp.hazuki.yuzubrowser.R;
 
 public class AppInfoListAdapter extends BaseAdapter {
 
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
     private ArrayList<AppInfo> arrayList;
-    private Context context;
+    private final Context context;
 
     public AppInfoListAdapter(Context context, ArrayList<AppInfo> items) {
         arrayList = items;

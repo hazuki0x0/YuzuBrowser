@@ -3,6 +3,7 @@ package jp.hazuki.yuzubrowser.bookmark.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,8 +87,9 @@ public class BookmarkFoldersDialog {
 
 
         mListView.setAdapter(new ArrayAdapter<BookmarkFolder>(mContext.getApplicationContext(), 0, mFolderList) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if (convertView == null)
                     convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
                 BookmarkItem item = getItem(position);

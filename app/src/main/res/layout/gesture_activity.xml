@@ -11,6 +11,6 @@
         android:eventsInterceptionEnabled="true"
         android:fadeEnabled="false"
         android:gestureColor="@color/add_gesture_color"
-        android:gestureStrokeWidth="8.0"></android.gesture.GestureOverlayView>
+        android:gestureStrokeWidth="8.0" />
 
 </LinearLayout>

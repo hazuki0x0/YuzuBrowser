@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="text|textPassword"
-            android:maxLines="1"></EditText>
+            android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 

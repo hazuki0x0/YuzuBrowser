@@ -1,5 +1,7 @@
 package jp.hazuki.yuzubrowser.utils.util;
 
+import android.support.annotation.NonNull;
+
 import java.util.Iterator;
 
 public interface DequeCompat<T> {
@@ -55,5 +57,6 @@ public interface DequeCompat<T> {
 
     Iterator<T> iterator();
 
+    @NonNull
     Iterator<T> descendingIterator();
 }

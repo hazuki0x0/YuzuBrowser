@@ -1,6 +1,7 @@
 package jp.hazuki.yuzubrowser.utils.view.filelist;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,8 +128,9 @@ public class FileListViewController {
         mCurrentFiles = file_list;
 
         ArrayAdapter<File> adapter = new ArrayAdapter<File>(mContext, android.R.layout.simple_list_item_1, file_list) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
                 }

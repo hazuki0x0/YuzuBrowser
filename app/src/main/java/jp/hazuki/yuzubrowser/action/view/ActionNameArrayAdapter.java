@@ -19,9 +19,9 @@ import jp.hazuki.yuzubrowser.action.SingleAction;
 
 public class ActionNameArrayAdapter extends BaseAdapter {
 
-    private ActionNameArray nameArray;
-    private boolean[] checked;
-    private LayoutInflater inflater;
+    private final ActionNameArray nameArray;
+    private final boolean[] checked;
+    private final LayoutInflater inflater;
     private OnSettingButtonListener mListener;
 
     public ActionNameArrayAdapter(Context context, ActionNameArray array) {

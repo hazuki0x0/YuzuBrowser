@@ -79,7 +79,7 @@ public class BackupManager {
     }
 
     private class Search {
-        private List<File> files;
+        private final List<File> files;
 
         Search(File root) {
             files = new ArrayList<>();

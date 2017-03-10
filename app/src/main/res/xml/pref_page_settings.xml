@@ -14,7 +14,6 @@
     <PreferenceCategory android:title="@string/pref_text_encoding">
         <jp.hazuki.yuzubrowser.settings.preference.WebTextEncodeListPreference
             android:key="default_encoding"
-            android:defaultValue="UTF-8"
             android:title="@string/pref_default_encoding" />
 
         <Preference
