@@ -25,6 +25,7 @@ import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialManager;
+import jp.hazuki.yuzubrowser.speeddial.WebIcon;
 import jp.hazuki.yuzubrowser.utils.view.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
@@ -35,6 +36,7 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 public class SpeedDialSettingActivityFragment extends Fragment implements OnRecyclerListener, FabActionCallBack, SpeedDialEditCallBack {
 
     private static final int RESULT_REQUEST_BOOKMARK = 100;
+    private static final int RESULT_REQUEST_HISTORY = 101;
 
     private ArrayList<SpeedDial> speedDialList;
     private SpeedDialRecyclerAdapter adapter;
@@ -85,13 +87,31 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case RESULT_REQUEST_BOOKMARK:
+            case RESULT_REQUEST_BOOKMARK: {
                 if (resultCode != Activity.RESULT_OK || data == null) break;
                 String title = data.getStringExtra(Intent.EXTRA_TITLE);
                 String url = data.getStringExtra(Intent.EXTRA_TEXT);
                 if (getActivity() instanceof SpeedDialSettingActivityController) {
                     ((SpeedDialSettingActivityController) getActivity()).goEdit(new SpeedDial(url, title));
                 }
+                break;
+            }
+            case RESULT_REQUEST_HISTORY: {
+                if (resultCode != Activity.RESULT_OK || data == null) break;
+                String title = data.getStringExtra(Intent.EXTRA_TITLE);
+                String url = data.getStringExtra(Intent.EXTRA_TEXT);
+                byte[] icon = data.getByteArrayExtra(Intent.EXTRA_STREAM);
+                if (getActivity() instanceof SpeedDialSettingActivityController) {
+                    SpeedDial speedDial;
+                    if (icon == null) {
+                        speedDial = new SpeedDial(url, title);
+                    } else {
+                        speedDial = new SpeedDial(url, title, new WebIcon(icon), true);
+                    }
+                    ((SpeedDialSettingActivityController) getActivity()).goEdit(speedDial);
+                }
+                break;
+            }
         }
     }
 
@@ -112,7 +132,7 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
             case 2: {
                 Intent intent = new Intent(getActivity(), BrowserHistoryActivity.class);
                 intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
+                startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                 break;
             }
             case 3:

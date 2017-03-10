@@ -73,8 +73,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
 
     @Override
     public void onRecyclerClicked(View v, int position) {
-        BrowserHistory history = adapter.getItem(position);
-        sendUrl(history.getTitle(), history.getUrl(), AppData.newtab_history.get());
+        sendUrl(adapter.getItem(position), AppData.newtab_history.get());
     }
 
     @Override
@@ -168,11 +167,11 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
         return false;
     }
 
-    private void sendUrl(String title, String url, int target) {
+    private void sendUrl(BrowserHistory history, int target) {
         if (pickMode) {
-            sendPicked(title, url);
+            sendPicked(history);
         } else {
-            sendUrl(url, target);
+            sendUrl(history.getUrl(), target);
         }
     }
 
@@ -185,10 +184,11 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
         getActivity().finish();
     }
 
-    private void sendPicked(String title, String url) {
+    private void sendPicked(BrowserHistory history) {
         Intent intent = new Intent();
-        intent.putExtra(Intent.EXTRA_TITLE, title);
-        intent.putExtra(Intent.EXTRA_TEXT, url);
+        intent.putExtra(Intent.EXTRA_TITLE, history.getTitle());
+        intent.putExtra(Intent.EXTRA_TEXT, history.getUrl());
+        intent.putExtra(Intent.EXTRA_STREAM, manager.getFaviconImage(history.getId()));
         getActivity().setResult(RESULT_OK, intent);
         getActivity().finish();
     }
