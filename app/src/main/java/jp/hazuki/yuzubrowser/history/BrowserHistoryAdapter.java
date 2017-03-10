@@ -11,46 +11,46 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
+import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
-public class BrowserHistoryAdapter extends ArrayRecyclerAdapter<BrowserHistory, BrowserHistoryAdapter.HistoryHolder> {
+public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>
+        implements StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
 
     private DateFormat dateFormat;
     private BrowserHistoryManager mManager;
+    private List<BrowserHistory> histories;
     private OnHistoryItemListener mListener;
     private String mQuery;
+    private LayoutInflater inflater;
+    private StickyHeaderDecoration mDecoration;
+    private Calendar calendar;
 
-    public static BrowserHistoryAdapter create(Context context, BrowserHistoryManager manager, OnHistoryItemListener listener) {
-        List<BrowserHistory> histories = manager.getList(0, 100);
-        return new BrowserHistoryAdapter(context, manager, histories, null, listener);
-    }
-
-    public static BrowserHistoryAdapter create(Context context, BrowserHistoryManager manager, String query, OnHistoryItemListener listener) {
-        List<BrowserHistory> histories = manager.search(query, 0, 100);
-        return new BrowserHistoryAdapter(context, manager, histories, query, listener);
-    }
-
-    public BrowserHistoryAdapter reCreate(Context context) {
-        return create(context, mManager, mListener);
-    }
-
-    private BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, List<BrowserHistory> list, String query, OnHistoryItemListener listener) {
-        super(context, list, listener);
-        dateFormat = android.text.format.DateFormat.getMediumDateFormat(context);
+    public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, OnHistoryItemListener listener) {
+        inflater = LayoutInflater.from(context);
+        dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         mManager = manager;
         mListener = listener;
-        mQuery = query;
+        histories = mManager.getList(0, 100);
+        mQuery = null;
+        calendar = Calendar.getInstance();
     }
 
     @Override
-    public void onBindViewHolder(HistoryHolder holder, BrowserHistory item, final int position) {
+    public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new HistoryHolder(inflater.inflate(R.layout.history_item, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(final HistoryHolder holder, int position) {
+        BrowserHistory item = histories.get(holder.getAdapterPosition());
         String url = Uri.parse(item.getUrl()).getHost();
-        String time = dateFormat.format(new Date(item.getTime()));
         Bitmap image = mManager.getFavicon(item.getId());
 
         if (image == null) {
@@ -60,43 +60,105 @@ public class BrowserHistoryAdapter extends ArrayRecyclerAdapter<BrowserHistory, 
         }
         holder.titleTextView.setText(item.getTitle());
         holder.urlTextView.setText(url);
-        holder.timeTextView.setText(time);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onRecyclerClicked(v, holder.getAdapterPosition());
+            }
+        });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return mListener.onItemLongClick(v, position);
+                return mListener.onItemLongClick(v, holder.getAdapterPosition());
             }
         });
     }
 
     @Override
-    protected HistoryHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return new HistoryHolder(inflater.inflate(R.layout.history_item, parent, false));
+    public int getItemCount() {
+        return histories.size();
+    }
+
+    public BrowserHistory getItem(int position) {
+        return histories.get(position);
+    }
+
+    public BrowserHistory remove(int position) {
+        return histories.remove(position);
     }
 
     public void loadMore() {
         if (mQuery == null) {
-            getItems().addAll(mManager.getList(getItemCount(), 100));
+            histories.addAll(mManager.getList(getItemCount(), 100));
         } else {
-            getItems().addAll(mManager.search(mQuery, getItemCount(), 100));
+            histories.addAll(mManager.search(mQuery, getItemCount(), 100));
         }
+        mDecoration.clearHeaderCache();
     }
 
-    class HistoryHolder extends RecyclerView.ViewHolder {
+    public void reLoad() {
+        mQuery = null;
+        histories = mManager.getList(0, 100);
+        mDecoration.clearHeaderCache();
+        notifyDataSetChanged();
+    }
+
+    public void search(String query) {
+        mQuery = query;
+        histories = mManager.search(mQuery, 0, 100);
+        mDecoration.clearHeaderCache();
+        notifyDataSetChanged();
+    }
+
+    public void setDecoration(StickyHeaderDecoration headerDecoration) {
+        mDecoration = headerDecoration;
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        long time = histories.get(position).getTime();
+        calendar.setTimeInMillis(time);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
+    }
+
+    @Override
+    public HeaderHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return new HeaderHolder(inflater.inflate(R.layout.history_header, parent, false));
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(HeaderHolder viewHolder, int position) {
+        viewHolder.header.setText(dateFormat.format(new Date(histories.get(position).getTime())));
+    }
+
+    static class HistoryHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
         TextView titleTextView;
         TextView urlTextView;
-        TextView timeTextView;
 
-        public HistoryHolder(View itemView) {
+        HistoryHolder(View itemView) {
             super(itemView);
 
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
             urlTextView = (TextView) itemView.findViewById(R.id.urlTextView);
-            timeTextView = (TextView) itemView.findViewById(R.id.timeTextView);
+        }
+    }
+
+    static class HeaderHolder extends RecyclerView.ViewHolder {
+        TextView header;
+
+        HeaderHolder(View itemView) {
+            super(itemView);
+
+            header = (TextView) itemView;
         }
     }
 
