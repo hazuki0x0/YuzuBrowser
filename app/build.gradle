@@ -56,4 +56,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.2.0'
     testCompile 'junit:junit:4.12'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    compile 'ca.barrenechea.header-decor:header-decor:0.2.8'
 }

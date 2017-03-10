@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
@@ -66,7 +67,10 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
         });
 
         manager = new BrowserHistoryManager(getActivity());
-        adapter = BrowserHistoryAdapter.create(getActivity(), manager, this);
+        adapter = new BrowserHistoryAdapter(getActivity(), manager, this);
+        StickyHeaderDecoration decoration = new StickyHeaderDecoration(adapter);
+        adapter.setDecoration(decoration);
+        recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -138,7 +142,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
                                 public void onClick(DialogInterface dialog, int which) {
                                     manager.delete(url);
 
-                                    adapter.getItems().remove(position);
+                                    adapter.remove(position);
                                     adapter.notifyDataSetChanged();
                                 }
                             })
@@ -215,8 +219,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
                 if (!TextUtils.isEmpty(query)) {
-                    adapter = BrowserHistoryAdapter.create(getActivity(), manager, query, BrowserHistoryFragment.this);
-                    recyclerView.setAdapter(adapter);
+                    adapter.search(query);
                 }
                 return false;
             }
@@ -229,8 +232,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                adapter = BrowserHistoryAdapter.create(getActivity(), manager, BrowserHistoryFragment.this);
-                recyclerView.setAdapter(adapter);
+                adapter.reLoad();
                 return false;
             }
         });
@@ -262,8 +264,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
                             public void onClick(DialogInterface dialog, int which) {
                                 manager.deleteAll();
 
-                                adapter = adapter.reCreate(getActivity());
-                                recyclerView.setAdapter(adapter);
+                                adapter.reLoad();
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, null)
