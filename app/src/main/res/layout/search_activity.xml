@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@android:color/background_dark"
+        android:paddingStart="8dp"
         android:gravity="center">
 
         <EditText
@@ -44,6 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/listview_background"
-        tools:listitem="@layout/search_activity_list_item"></ListView>
+        tools:listitem="@layout/search_activity_list_item" />
 
 </LinearLayout>
