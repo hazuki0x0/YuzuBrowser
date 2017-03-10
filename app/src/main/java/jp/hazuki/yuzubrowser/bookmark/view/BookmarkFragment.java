@@ -1,17 +1,15 @@
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -42,11 +40,8 @@ import jp.hazuki.yuzubrowser.utils.WebUtils;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * Created by hazuki on 17/03/01.
- */
 
-public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkItemListener, BookmarkItemCallBack {
+public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkItemListener {
     private static final String MODE_PICK = "pick";
 
     private boolean pickMode;
@@ -97,7 +92,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     @Override
     public boolean onItemLongClick(View v, int position) {
         if (!adapter.isSortMode()) {
-            showContextMenu(position);
+            showContextMenu(v, position);
             return true;
         } else {
             return false;
@@ -202,156 +197,10 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 public boolean onMenuItemClick(MenuItem item) {
                     boolean next = !adapter.isMultiSelectMode();
                     adapter.setMultiSelectMode(next);
-                    //Toast.makeText(getApplicationContext(), (next)?R.string.start_sort:R.string.end_sort, Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
         }
-    }
-
-    @Override
-    public void itemOpen(int index, int target) {
-        sendUrl(((BookmarkSite) adapter.getItem(index)).url, target);
-    }
-
-    @Override
-    public void itemsOpenAll(int target) {
-        sendUrl(getSelectedBookmark(adapter.getSelectedItems()), target);
-    }
-
-    @Override
-    public void itemOpenAll(int index, int target) {
-        sendUrl(((BookmarkFolder) adapter.getItem(index)).list, target);
-    }
-
-    @Override
-    public void itemShare(int index) {
-        BookmarkSite site = (BookmarkSite) adapter.getItem(index);
-        WebUtils.shareWeb(getActivity(), site.url, site.title, null, null);
-    }
-
-    @Override
-    public void itemCopy(int index) {
-        ClipboardUtils.setClipboardText(getActivity(), ((BookmarkSite) adapter.getItem(index)).url);
-    }
-
-    @Override
-    public void itemEdit(int index) {
-        BookmarkItem item = adapter.getItem(index);
-        if (item instanceof BookmarkSite) {
-            new AddBookmarkSiteDialog(getActivity(), mManager, (BookmarkSite) item)
-                    .setOnClickListener(new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            adapter.notifyDataSetChanged();
-                        }
-                    })
-                    .show();
-        } else if (item instanceof BookmarkFolder) {
-            new AddBookmarkFolderDialog(getActivity(), mManager, (BookmarkFolder) item)
-                    .setOnClickListener(new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            adapter.notifyDataSetChanged();
-                        }
-                    })
-                    .show();
-        }
-    }
-
-    @Override
-    public void itemMoveTo(final int index) {
-        final BookmarkItem bookmarkItem = adapter.getItem(index);
-        new BookmarkFoldersDialog(getActivity(), mManager)
-                .setTitle(R.string.move_bookmark)
-                .setCurrentFolder(mCurrentFolder, bookmarkItem)
-                .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
-                    @Override
-                    public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
-                        folder.add(bookmarkItem);
-                        mCurrentFolder.list.remove(index);
-
-                        mManager.write();
-                        adapter.notifyDataSetChanged();
-                        return false;
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void itemsMoveTo() {
-        final List<BookmarkItem> bookmarkItems = getSelectedBookmark(adapter.getSelectedItems());
-        adapter.setMultiSelectMode(false);
-        new BookmarkFoldersDialog(getActivity(), mManager)
-                .setTitle(R.string.move_bookmark)
-                .setCurrentFolder(mCurrentFolder, bookmarkItems)
-                .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
-                    @Override
-                    public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
-                        folder.addAll(bookmarkItems);
-                        mCurrentFolder.list.removeAll(bookmarkItems);
-
-                        mManager.write();
-                        adapter.notifyDataSetChanged();
-                        return false;
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void itemMove(int index, boolean up) {
-        if (up) {
-            if (index > 0) {
-                Collections.swap(mCurrentFolder.list, index - 1, index);
-                mManager.write();
-                adapter.notifyDataSetChanged();
-            }
-        } else {
-            if (index < mCurrentFolder.list.size() - 1) {
-                Collections.swap(mCurrentFolder.list, index + 1, index);
-                mManager.write();
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    @Override
-    public void itemDelete(final int index) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.confirm)
-                .setMessage(R.string.confirm_delete_bookmark)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mCurrentFolder.list.remove(index);
-                        mManager.write();
-                        adapter.notifyDataSetChanged();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
-    }
-
-    @Override
-    public void itemsDelete() {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.confirm)
-                .setMessage(R.string.confirm_delete_bookmark)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
-                        adapter.setMultiSelectMode(false);
-
-                        mCurrentFolder.list.removeAll(selectedList);
-                        mManager.write();
-                        adapter.notifyDataSetChanged();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
     }
 
     private List<BookmarkItem> getSelectedBookmark(List<Integer> items) {
@@ -362,26 +211,182 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         return bookmarkItems;
     }
 
-    private static final String INDEX = "index";
-
-    private void showContextMenu(int index) {
+    private void showContextMenu(View v, final int index) {
+        PopupMenu menu = new PopupMenu(getActivity(), v);
+        MenuInflater inflater = menu.getMenuInflater();
+        final BookmarkItem bookmarkItem;
         if (adapter.isMultiSelectMode()) {
-            MultiSelectDialog.newInstance()
-                    .show(getChildFragmentManager(), "multi");
-            return;
+            inflater.inflate(R.menu.bookmark_multiselect_menu, menu.getMenu());
+            bookmarkItem = null;
+        } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
+            inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
+            bookmarkItem = adapter.getItem(index);
+        } else {
+            inflater.inflate(R.menu.bookmark_folder_menu, menu.getMenu());
+            bookmarkItem = adapter.getItem(index);
         }
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(INDEX, index);
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onContextMenuClick(item.getItemId(), bookmarkItem, index);
+                return true;
+            }
+        });
+        menu.show();
+    }
 
-        if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
-            SiteDialog.newInstance(bundle)
-                    .show(getChildFragmentManager(), "site");
-        } else {
-            FolderDialog.newInstance(bundle)
-                    .show(getChildFragmentManager(), "folder");
+    private void onContextMenuClick(int id, final BookmarkItem item, final int index) {
+        switch (id) {
+            case R.id.open:
+                sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_CURRENT);
+                break;
+            case R.id.openNew:
+                sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_NEW);
+                break;
+            case R.id.openBg:
+                sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_BG);
+                break;
+            case R.id.openNewRight:
+                sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_NEW_RIGHT);
+                break;
+            case R.id.openBgRight:
+                sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_BG_RIGHT);
+                break;
+            case R.id.share:
+                BookmarkSite site = (BookmarkSite) item;
+                WebUtils.shareWeb(getActivity(), site.url, site.title, null, null);
+                break;
+            case R.id.copyUrl:
+                ClipboardUtils.setClipboardText(getActivity(), ((BookmarkSite) item).url);
+                break;
+            case R.id.editBookmark:
+                if (item instanceof BookmarkSite) {
+                    new AddBookmarkSiteDialog(getActivity(), mManager, (BookmarkSite) item)
+                            .setOnClickListener(new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            })
+                            .show();
+                } else if (item instanceof BookmarkFolder) {
+                    new AddBookmarkFolderDialog(getActivity(), mManager, (BookmarkFolder) item)
+                            .setOnClickListener(new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            })
+                            .show();
+                }
+                break;
+            case R.id.moveBookmark:
+                new BookmarkFoldersDialog(getActivity(), mManager)
+                        .setTitle(R.string.move_bookmark)
+                        .setCurrentFolder(mCurrentFolder, item)
+                        .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
+                            @Override
+                            public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
+                                mCurrentFolder.list.remove(index);
+                                folder.add(item);
+
+                                mManager.write();
+                                adapter.notifyDataSetChanged();
+                                return false;
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.moveUp:
+                if (index > 0) {
+                    Collections.swap(mCurrentFolder.list, index - 1, index);
+                    mManager.write();
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case R.id.moveDown:
+                if (index < mCurrentFolder.list.size() - 1) {
+                    Collections.swap(mCurrentFolder.list, index + 1, index);
+                    mManager.write();
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+            case R.id.deleteBookmark:
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.confirm)
+                        .setMessage(R.string.confirm_delete_bookmark)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mCurrentFolder.list.remove(index);
+                                mManager.write();
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+                break;
+            case R.id.openAllNew: {
+                List<BookmarkItem> items;
+                if (item instanceof BookmarkFolder) {
+                    items = ((BookmarkFolder) item).list;
+                } else {
+                    items = getSelectedBookmark(adapter.getSelectedItems());
+                }
+                sendUrl(items, BrowserManager.LOAD_URL_TAB_NEW);
+                break;
+            }
+            case R.id.openAllBg: {
+                List<BookmarkItem> items;
+                if (item instanceof BookmarkFolder) {
+                    items = ((BookmarkFolder) item).list;
+                } else {
+                    items = getSelectedBookmark(adapter.getSelectedItems());
+                }
+                sendUrl(items, BrowserManager.LOAD_URL_TAB_BG);
+                break;
+            }
+            case R.id.moveAllBookmark:
+                final List<BookmarkItem> bookmarkItems = getSelectedBookmark(adapter.getSelectedItems());
+                adapter.setMultiSelectMode(false);
+                new BookmarkFoldersDialog(getActivity(), mManager)
+                        .setTitle(R.string.move_bookmark)
+                        .setCurrentFolder(mCurrentFolder, bookmarkItems)
+                        .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
+                            @Override
+                            public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
+                                mCurrentFolder.list.removeAll(bookmarkItems);
+                                folder.addAll(bookmarkItems);
+
+                                mManager.write();
+                                adapter.notifyDataSetChanged();
+                                return false;
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.deleteAllBookmark:
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.confirm)
+                        .setMessage(R.string.confirm_delete_bookmark)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
+                                adapter.setMultiSelectMode(false);
+
+                                mCurrentFolder.list.removeAll(selectedList);
+                                mManager.write();
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+                break;
         }
     }
+
 
     private class Touch extends ItemTouchHelper.Callback {
 
@@ -408,153 +413,6 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         @Override
         public boolean isLongPressDragEnabled() {
             return adapter.isSortMode();
-        }
-    }
-
-    public static class SiteDialog extends DialogFragment {
-        public static DialogFragment newInstance(Bundle bundle) {
-            DialogFragment fragment = new SiteDialog();
-            fragment.setArguments(bundle);
-            return fragment;
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setItems(R.array.bookmark_site, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (getParentFragment() instanceof BookmarkItemCallBack) {
-                        BookmarkItemCallBack callBack = (BookmarkItemCallBack) getParentFragment();
-                        int index = getArguments().getInt(INDEX);
-                        switch (which) {
-                            case 0:
-                                callBack.itemOpen(index, BrowserManager.LOAD_URL_TAB_CURRENT);
-                                break;
-                            case 1:
-                                callBack.itemOpen(index, BrowserManager.LOAD_URL_TAB_NEW);
-                                break;
-                            case 2:
-                                callBack.itemOpen(index, BrowserManager.LOAD_URL_TAB_BG);
-                                break;
-                            case 3:
-                                callBack.itemOpen(index, BrowserManager.LOAD_URL_TAB_NEW_RIGHT);
-                                break;
-                            case 4:
-                                callBack.itemOpen(index, BrowserManager.LOAD_URL_TAB_BG_RIGHT);
-                                break;
-                            case 5:
-                                callBack.itemShare(index);
-                                break;
-                            case 6:
-                                callBack.itemCopy(index);
-                                break;
-                            case 7:
-                                callBack.itemEdit(index);
-                                break;
-                            case 8:
-                                callBack.itemMoveTo(index);
-                                break;
-                            case 9:
-                                callBack.itemMove(index, true);
-                                break;
-                            case 10:
-                                callBack.itemMove(index, false);
-                                break;
-                            case 11:
-                                callBack.itemDelete(index);
-                                break;
-                        }
-                    }
-                    dismiss();
-                }
-            });
-            return builder.create();
-        }
-    }
-
-    public static class FolderDialog extends DialogFragment {
-        public static DialogFragment newInstance(Bundle bundle) {
-            DialogFragment fragment = new FolderDialog();
-            fragment.setArguments(bundle);
-            return fragment;
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setItems(R.array.bookmark_folder, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (getParentFragment() instanceof BookmarkItemCallBack) {
-                        BookmarkItemCallBack callBack = (BookmarkItemCallBack) getParentFragment();
-                        int index = getArguments().getInt(INDEX);
-                        switch (which) {
-                            case 0:
-                                callBack.itemOpenAll(index, BrowserManager.LOAD_URL_TAB_NEW);
-                                break;
-                            case 1:
-                                callBack.itemOpenAll(index, BrowserManager.LOAD_URL_TAB_BG);
-                                break;
-                            case 2:
-                                callBack.itemEdit(index);
-                                break;
-                            case 3:
-                                callBack.itemMoveTo(index);
-                                break;
-                            case 4:
-                                callBack.itemMove(index, true);
-                                break;
-                            case 5:
-                                callBack.itemMove(index, false);
-                                break;
-                            case 6:
-                                callBack.itemDelete(index);
-                                break;
-                        }
-                    }
-                    dismiss();
-                }
-            });
-            return builder.create();
-        }
-    }
-
-    public static class MultiSelectDialog extends DialogFragment {
-        public static DialogFragment newInstance() {
-            return new MultiSelectDialog();
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getActivity())
-                    .setItems(R.array.bookmark_multi, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (getParentFragment() instanceof BookmarkItemCallBack) {
-                                BookmarkItemCallBack callBack = (BookmarkItemCallBack) getParentFragment();
-                                switch (which) {
-                                    case 0:
-                                        callBack.itemsOpenAll(BrowserManager.LOAD_URL_TAB_NEW);
-                                        break;
-                                    case 1:
-                                        callBack.itemsOpenAll(BrowserManager.LOAD_URL_TAB_BG);
-                                        break;
-                                    case 2:
-                                        callBack.itemsMoveTo();
-                                        break;
-                                    case 3:
-                                        callBack.itemsDelete();
-                                        break;
-                                }
-                            }
-                            dismiss();
-                        }
-                    })
-                    .create();
         }
     }
 }
