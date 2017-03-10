@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/pattern_replace_url_hint"
-        android:inputType="textUri"></EditText>
+        android:inputType="textUri" />
 
 </LinearLayout>

@@ -20,11 +20,11 @@ import jp.hazuki.yuzubrowser.bookmark.view.BookmarkFoldersDialog.OnFolderSelecte
 public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements OnFolderSelectedListener {
     protected final Context mContext;
     protected final AlertDialog mDialog;
-    protected EditText titleEditText;
-    protected EditText urlEditText;
-    protected Button folderButton;
+    protected final EditText titleEditText;
+    protected final EditText urlEditText;
+    protected final Button folderButton;
     protected DialogInterface.OnClickListener mOnClickListener;
-    protected S mItem;
+    protected final S mItem;
     protected BookmarkManager mManager;
     protected BookmarkFolder mParent;
 

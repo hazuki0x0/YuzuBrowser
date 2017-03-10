@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/url"
-                        android:inputType="text"
+                        android:inputType="textUri"
                         android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 

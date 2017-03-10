@@ -25,9 +25,7 @@ public class ReflectionUtils {
     public static Method getMethod(String clsname, String name, Class<?>... args) {
         try {
             return Class.forName(clsname).getDeclaredMethod(name, args);
-        } catch (NoSuchMethodException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (ClassNotFoundException e) {
+        } catch (NoSuchMethodException | ClassNotFoundException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "getMethod: error");
@@ -41,11 +39,7 @@ public class ReflectionUtils {
         }
         try {
             return method.invoke(receiver, args);
-        } catch (IllegalArgumentException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalAccessException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "invokeMethod: error");
@@ -71,11 +65,7 @@ public class ReflectionUtils {
             Field field = obj.getClass().getDeclaredField(name);
             field.setAccessible(true);
             return field.get(obj);
-        } catch (NoSuchFieldException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalArgumentException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "getMemberObject: error");
@@ -92,11 +82,7 @@ public class ReflectionUtils {
             field.setAccessible(true);
             field.set(obj, value);
             return true;
-        } catch (NoSuchFieldException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalArgumentException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "setMemberObject: error");
@@ -106,11 +92,7 @@ public class ReflectionUtils {
     public static Constructor<?> getConstructor(String clsname, Class<?>... parameterTypes) {
         try {
             return Class.forName(clsname).getConstructor(parameterTypes);
-        } catch (IllegalArgumentException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (NoSuchMethodException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalArgumentException | ClassNotFoundException | NoSuchMethodException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "getConstructor: error");
@@ -124,13 +106,7 @@ public class ReflectionUtils {
         }
         try {
             return constructor.newInstance(args);
-        } catch (IllegalArgumentException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (InstantiationException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalAccessException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "newInstance: error");
@@ -140,17 +116,7 @@ public class ReflectionUtils {
     public static Object newInstance(String clsname) {
         try {
             return Class.forName(clsname).getConstructor().newInstance();
-        } catch (IllegalArgumentException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (InstantiationException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (IllegalAccessException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (InvocationTargetException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (NoSuchMethodException e) {
-            ErrorReport.printAndWriteLog(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalArgumentException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             ErrorReport.printAndWriteLog(e);
         }
         Logger.w(TAG, "newInstance: error");

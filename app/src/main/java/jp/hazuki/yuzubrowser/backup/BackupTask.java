@@ -20,7 +20,7 @@ import jp.hazuki.yuzubrowser.utils.ErrorReport;
 
 public class BackupTask extends AsyncTaskLoader<Boolean> {
 
-    private File dest;
+    private final File dest;
 
     public BackupTask(Context context, File dest) {
         super(context);

@@ -12,6 +12,7 @@
         android:layout_height="?actionBarSize"
         android:background="@android:color/background_dark"
         android:paddingStart="8dp"
+        android:paddingEnd="0dp"
         android:gravity="center">
 
         <EditText

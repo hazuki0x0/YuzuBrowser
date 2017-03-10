@@ -189,7 +189,7 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
 
     private static class ActionListAdapter extends ArrayRecyclerAdapter<Action, SimpleViewHolder> {
 
-        private ActionNameArray nameList;
+        private final ActionNameArray nameList;
 
         ActionListAdapter(Context context, ActionList actionList, ActionNameArray nameArray, OnRecyclerListener recyclerListener) {
             super(context, actionList, recyclerListener);

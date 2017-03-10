@@ -1,5 +1,7 @@
 package jp.hazuki.yuzubrowser.utils.util;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Iterator;
@@ -101,6 +103,7 @@ public class ArrayDequeCompat<T> extends LinkedList<T> implements DequeCompat<T>
         return removeFirst();
     }
 
+    @NonNull
     @Override
     public Iterator<T> descendingIterator() {
         return null;

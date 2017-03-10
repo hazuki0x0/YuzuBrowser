@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -88,7 +89,7 @@ public class SuggestProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         int type = sUriMatcher.match(uri);
         if (type == UriMatcher.NO_MATCH) {
             Logger.e(TAG, "UriMatcher.NO_MATCH");
@@ -259,7 +260,7 @@ public class SuggestProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         int type = sUriMatcher.match(uri);
         if (type == TYPE_NET || type == TYPE_NET_ALL)
             return 0;
@@ -268,12 +269,12 @@ public class SuggestProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return SearchManager.SUGGEST_MIME_TYPE;
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         int type = sUriMatcher.match(uri);
         if (type == TYPE_NET || type == TYPE_NET_ALL)
             return null;
@@ -283,7 +284,7 @@ public class SuggestProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException();
     }
 
