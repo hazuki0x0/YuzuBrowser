@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/openAllNew"
+        android:title="@string/open_all_new" />
+
+    <item
+        android:id="@+id/openAllBg"
+        android:title="@string/open_all_bg" />
+
+    <item
+        android:id="@+id/moveAllBookmark"
+        android:title="@string/move_bookmark" />
+
+    <item
+        android:id="@+id/deleteAllBookmark"
+        android:title="@string/delete_bookmark" />
+</menu>
