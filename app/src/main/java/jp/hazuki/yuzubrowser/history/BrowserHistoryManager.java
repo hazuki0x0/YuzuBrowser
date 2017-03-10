@@ -6,7 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+
+import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
@@ -105,6 +108,53 @@ public class BrowserHistoryManager implements CursorLoadable {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
         //db.close();
+    }
+
+    public Bitmap getFavicon(long id) {
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_ID + " = " + id, null, null, null, null);
+        Bitmap bitmap = null;
+        if (c.moveToFirst()) {
+            byte[] icon = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
+            if (icon != null)
+                bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
+        }
+        c.close();
+        return bitmap;
+    }
+
+    public ArrayList<BrowserHistory> getList(int offset, int limit) {
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        ArrayList<BrowserHistory> histories = new ArrayList<>();
+        Cursor c = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
+        while (c.moveToNext()) {
+            histories.add(new BrowserHistory(
+                    c.getLong(COLUMN_ID_INDEX),
+                    c.getString(COLUMN_TITLE_INDEX),
+                    c.getString(COLUMN_URL_INDEX),
+                    c.getLong(COLUMN_TIME_INDEX)));
+        }
+        c.close();
+        return histories;
+    }
+
+    public ArrayList<BrowserHistory> search(String query, int offset, int limit) {
+        query = query.replace("%", "$%").replace("_", "$_");
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        ArrayList<BrowserHistory> histories = new ArrayList<>();
+        Cursor c = db.query(TABLE_NAME, null,
+                COLUMN_TITLE + " LIKE '%" + query + "%' OR "
+                        + COLUMN_URL + " LIKE '%" + query + "%' ESCAPE '$'",
+                null, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
+        while (c.moveToNext()) {
+            histories.add(new BrowserHistory(
+                    c.getLong(COLUMN_ID_INDEX),
+                    c.getString(COLUMN_TITLE_INDEX),
+                    c.getString(COLUMN_URL_INDEX),
+                    c.getLong(COLUMN_TIME_INDEX)));
+        }
+        c.close();
+        return histories;
     }
 
     private static boolean checkUrl(String url) {
