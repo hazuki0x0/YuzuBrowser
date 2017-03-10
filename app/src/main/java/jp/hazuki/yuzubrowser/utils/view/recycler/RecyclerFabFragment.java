@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.view.DividerItemDecoration;
 
 /**
  * Created by hazuki on 17/02/26.

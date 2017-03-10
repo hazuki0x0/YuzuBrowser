@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
-import jp.hazuki.yuzubrowser.utils.view.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 import static jp.hazuki.yuzubrowser.webencode.SelectActionDialog.DELETE;

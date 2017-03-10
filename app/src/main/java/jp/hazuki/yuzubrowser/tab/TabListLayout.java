@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.view.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 
 public class TabListLayout extends LinearLayout {
     private TabListRecyclerAdapter mAdapter;

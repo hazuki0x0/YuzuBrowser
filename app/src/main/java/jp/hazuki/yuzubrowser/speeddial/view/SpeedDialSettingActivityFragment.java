@@ -26,7 +26,7 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialManager;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
-import jp.hazuki.yuzubrowser.utils.view.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 /**
