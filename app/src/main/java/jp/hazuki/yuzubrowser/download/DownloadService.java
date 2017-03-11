@@ -372,7 +372,7 @@ public class DownloadService extends Service {
                         notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, PackageUtils.createFileOpenIntent(DownloadService.this, mData.getFile()), 0));
                         mNotificationManager.notify((int) id, notification.build());
 
-                        FileUtils.notifyImageFile(DownloadService.this, mData.file.getAbsolutePath());
+                        FileUtils.notifyImageFile(getApplicationContext(), mData.file.getAbsolutePath());
                         break;
                     }
                     case DownloadInfo.STATE_DOWNLOADING:
