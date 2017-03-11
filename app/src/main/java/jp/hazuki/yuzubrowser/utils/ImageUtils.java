@@ -6,7 +6,9 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.support.v7.widget.AppCompatDrawableManager;
 
 import java.io.ByteArrayOutputStream;
@@ -111,5 +113,25 @@ public class ImageUtils {
         buffer.putInt(TRANSPARENT_COLOR);
 
         return buffer.array();
+    }
+
+
+    public static Bitmap getBitmap(VectorDrawable vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static Bitmap getBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawable) {
+            return ImageUtils.getBitmap((VectorDrawable) drawable);
+        } else {
+            throw new IllegalArgumentException("unsupported drawable type");
+        }
     }
 }

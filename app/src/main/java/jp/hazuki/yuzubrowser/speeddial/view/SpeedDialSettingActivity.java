@@ -21,7 +21,7 @@ public class SpeedDialSettingActivity extends AppCompatActivity implements Speed
         getFragmentManager().addOnBackStackChangedListener(this);
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new SpeedDialSettingActivityFragment(), "main")
                     .commit();
         }

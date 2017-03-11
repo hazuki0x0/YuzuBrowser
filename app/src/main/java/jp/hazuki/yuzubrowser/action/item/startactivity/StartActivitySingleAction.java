@@ -1,4 +1,4 @@
-package jp.hazuki.yuzubrowser.action.item;
+package jp.hazuki.yuzubrowser.action.item.startactivity;
 
 import android.app.Activity;
 import android.content.Context;

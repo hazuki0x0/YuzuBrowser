@@ -3,12 +3,12 @@ package jp.hazuki.yuzubrowser.speeddial.view;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
-import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppInfo;
-import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppInfoListAdapter;
-import jp.hazuki.yuzubrowser.speeddial.view.appinfo.AppListTask;
-import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragment;
+import jp.hazuki.yuzubrowser.utils.appinfo.AppInfo;
+import jp.hazuki.yuzubrowser.utils.appinfo.AppInfoListAdapter;
+import jp.hazuki.yuzubrowser.utils.appinfo.AppListTask;
+import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 
 /**
  * Created by hazuki on 16/12/14.
@@ -34,7 +34,7 @@ public class SelectShortcutDialog extends DialogFragment implements LoaderManage
 
     private AppInfoListAdapter adapter;
     private ListView listView;
-    private ProgressDialogFragment progressDialog;
+    private ProgressDialogFragmentCompat progressDialog;
 
 
     public static DialogFragment newInstance() {
@@ -84,7 +84,7 @@ public class SelectShortcutDialog extends DialogFragment implements LoaderManage
     public Loader<ArrayList<AppInfo>> onCreateLoader(int i, Bundle args) {
         Intent intent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
 
-        progressDialog = ProgressDialogFragment.newInstance(getString(R.string.now_loading));
+        progressDialog = ProgressDialogFragmentCompat.newInstance(getString(R.string.now_loading));
         progressDialog.show(getChildFragmentManager(), "progress");
         return new AppListTask(getActivity(), intent, false);
     }

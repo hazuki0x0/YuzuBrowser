@@ -185,10 +185,7 @@
             android:name=".gesture.GestureTestActivity"
             android:configChanges="keyboardHidden|orientation" />
         <activity
-            android:name=".utils.view.applist.ApplicationListActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".action.item.StartActivityPreferenceActivity"
+            android:name=".action.item.startactivity.StartActivityPreferenceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/action_start_activity_setting" />
         <activity

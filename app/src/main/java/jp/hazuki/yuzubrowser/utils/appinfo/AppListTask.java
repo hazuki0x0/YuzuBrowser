@@ -1,12 +1,12 @@
-package jp.hazuki.yuzubrowser.speeddial.view.appinfo;
+package jp.hazuki.yuzubrowser.utils.appinfo;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
