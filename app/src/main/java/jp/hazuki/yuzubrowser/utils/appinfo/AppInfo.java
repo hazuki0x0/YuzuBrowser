@@ -1,4 +1,4 @@
-package jp.hazuki.yuzubrowser.speeddial.view.appinfo;
+package jp.hazuki.yuzubrowser.utils.appinfo;
 
 import android.graphics.drawable.Drawable;
 
