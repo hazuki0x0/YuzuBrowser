@@ -1,13 +1,14 @@
 package jp.hazuki.yuzubrowser.speeddial.view;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,6 @@ import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 
-/**
- * Created by hazuki on 17/02/20.
- */
-
 public class SpeedDialSettingActivityEditFragment extends Fragment {
 
     private static final String DATA = "dat";
@@ -38,6 +35,8 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
     private EditText url;
     private ImageButton icon;
     private View bottomBar;
+    private SpeedDialEditCallBack mCallBack;
+    private GoBackController goBack;
 
     public static Fragment newInstance(SpeedDial speedDial) {
         Fragment fragment = new SpeedDialSettingActivityEditFragment();
@@ -106,10 +105,10 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
         v.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity() instanceof SpeedDialEditCallBack) {
+                if (mCallBack != null) {
                     speedDial.setTitle(name.getText().toString());
                     speedDial.setUrl(url.getText().toString());
-                    ((SpeedDialEditCallBack) getActivity()).onEdited(speedDial);
+                    mCallBack.onEdited(speedDial);
                 }
             }
         });
@@ -117,9 +116,8 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
         v.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity() instanceof SpeedDialSettingActivityController) {
-                    ((SpeedDialSettingActivityController) getActivity()).goBack();
-                }
+                if (goBack != null)
+                    goBack.goBack();
             }
         });
 
@@ -159,5 +157,27 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallBack = (SpeedDialEditCallBack) getActivity();
+            goBack = (GoBackController) getActivity();
+        } catch (ClassCastException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBack = null;
+        goBack = null;
+    }
+
+    interface GoBackController {
+        boolean goBack();
     }
 }

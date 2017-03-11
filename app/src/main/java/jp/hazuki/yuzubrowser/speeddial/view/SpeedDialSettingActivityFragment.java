@@ -1,8 +1,8 @@
 package jp.hazuki.yuzubrowser.speeddial.view;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,27 +21,19 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity;
-import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialManager;
-import jp.hazuki.yuzubrowser.speeddial.WebIcon;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 
 public class SpeedDialSettingActivityFragment extends Fragment implements OnRecyclerListener, FabActionCallBack, SpeedDialEditCallBack {
-
-    private static final int RESULT_REQUEST_BOOKMARK = 100;
-    private static final int RESULT_REQUEST_HISTORY = 101;
 
     private ArrayList<SpeedDial> speedDialList;
     private SpeedDialRecyclerAdapter adapter;
     private SpeedDialManager manager;
     private View rootView;
+    private OnSpeedDialAddListener mListener;
 
     public SpeedDialSettingActivityFragment() {
     }
@@ -79,67 +71,33 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
     @Override
     public void onRecyclerClicked(View v, int position) {
         SpeedDial speedDial = speedDialList.get(position);
-        if (getActivity() instanceof SpeedDialSettingActivityController) {
-            ((SpeedDialSettingActivityController) getActivity()).goEdit(speedDial);
-        }
+        if (mListener != null)
+            mListener.goEdit(speedDial);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case RESULT_REQUEST_BOOKMARK: {
-                if (resultCode != Activity.RESULT_OK || data == null) break;
-                String title = data.getStringExtra(Intent.EXTRA_TITLE);
-                String url = data.getStringExtra(Intent.EXTRA_TEXT);
-                if (getActivity() instanceof SpeedDialSettingActivityController) {
-                    ((SpeedDialSettingActivityController) getActivity()).goEdit(new SpeedDial(url, title));
-                }
-                break;
-            }
-            case RESULT_REQUEST_HISTORY: {
-                if (resultCode != Activity.RESULT_OK || data == null) break;
-                String title = data.getStringExtra(Intent.EXTRA_TITLE);
-                String url = data.getStringExtra(Intent.EXTRA_TEXT);
-                byte[] icon = data.getByteArrayExtra(Intent.EXTRA_STREAM);
-                if (getActivity() instanceof SpeedDialSettingActivityController) {
-                    SpeedDial speedDial;
-                    if (icon == null) {
-                        speedDial = new SpeedDial(url, title);
-                    } else {
-                        speedDial = new SpeedDial(url, title, new WebIcon(icon), true);
-                    }
-                    ((SpeedDialSettingActivityController) getActivity()).goEdit(speedDial);
-                }
-                break;
-            }
-        }
+
     }
 
     @Override
     public void onAdd(int which) {
+        if (mListener == null) return;
         switch (which) {
             case 0:
-                if (getActivity() instanceof SpeedDialSettingActivityController) {
-                    ((SpeedDialSettingActivityController) getActivity()).goEdit(new SpeedDial());
-                }
+                mListener.goEdit(new SpeedDial());
                 break;
-            case 1: {
-                Intent intent = new Intent(getActivity(), BookmarkActivity.class);
-                intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
+            case 1:
+                mListener.addFromBookmark();
                 break;
-            }
-            case 2: {
-                Intent intent = new Intent(getActivity(), BrowserHistoryActivity.class);
-                intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(intent, RESULT_REQUEST_HISTORY);
+            case 2:
+                mListener.addFromHistory();
                 break;
-            }
             case 3:
-                SelectAppDialog.newInstance().show(getChildFragmentManager(), "app");
+                mListener.addFromAppList();
                 break;
             case 4:
-                SelectShortcutDialog.newInstance().show(getChildFragmentManager(), "shortcut");
+                mListener.addFromShortCutList();
                 break;
         }
     }
@@ -224,5 +182,33 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
         public boolean isItemViewSwipeEnabled() {
             return true;
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (OnSpeedDialAddListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnSpeedDialAddListener {
+        void goEdit(SpeedDial speedDial);
+
+        void addFromBookmark();
+
+        void addFromHistory();
+
+        void addFromAppList();
+
+        void addFromShortCutList();
     }
 }
