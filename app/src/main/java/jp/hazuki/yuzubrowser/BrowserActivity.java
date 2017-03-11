@@ -2820,12 +2820,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             case SaveScreenshotSingleAction.SS_TYPE_ALL:
                                 WebViewUtils.savePictureOverall(mTabList.get(target).mWebView.getWebView(), file);
                                 Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                                FileUtils.notifyImageFile(BrowserActivity.this, file.getAbsolutePath());
+                                FileUtils.notifyImageFile(getApplicationContext(), file.getAbsolutePath());
                                 break;
                             case SaveScreenshotSingleAction.SS_TYPE_PART:
                                 WebViewUtils.savePicturePart(mTabList.get(target).mWebView.getWebView(), file);
                                 Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                                FileUtils.notifyImageFile(BrowserActivity.this, file.getAbsolutePath());
+                                FileUtils.notifyImageFile(getApplicationContext(), file.getAbsolutePath());
                                 break;
                             default:
                                 Toast.makeText(getApplicationContext(), "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show();
