@@ -1,7 +1,10 @@
 package jp.hazuki.yuzubrowser.utils;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
@@ -76,16 +79,20 @@ public class PackageUtils {
             if (appId.equals(info.activityInfo.packageName)) {
                 continue;
             }
+            ActivityInfo activityInfo = info.activityInfo;
             appIntent = new Intent(query);
-            appIntent.setPackage(info.activityInfo.packageName);
-            intents.add(appIntent);
+            appIntent.setPackage(activityInfo.packageName);
+            appIntent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
+
+            LabeledIntent intent = new LabeledIntent(appIntent, activityInfo.packageName, info.labelRes, info.icon);
+            intents.add(intent);
         }
 
         Intent chooser;
-        if (intents.size() > 0) {
-            chooser = Intent.createChooser(intents.remove(0), title);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || intents.size() == 0) {
+            chooser = Intent.createChooser(new Intent(), title);
         } else {
-            chooser = Intent.createChooser(query, title);
+            chooser = Intent.createChooser(intents.remove(0), title);
         }
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[intents.size()]));
         return chooser;
