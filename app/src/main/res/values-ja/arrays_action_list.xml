@@ -89,5 +89,6 @@
         <item>プライベートモード</item>
         <item>判別タブ終了</item>
         <item>ページのソースを表示</item>
+        <item>印刷</item>
     </string-array>
 </resources>
