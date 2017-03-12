@@ -10,14 +10,12 @@ import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
 
-/**
- * Created by hazuki on 17/01/18.
- */
 
 public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> {
 
     private int bottomBarHeight = -1;
     private int topBarHeight = -1;
+    private boolean noTopBar;
 
     public BottomBarBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,21 +35,34 @@ public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, LinearLayout bottomBar, View dependency) {
+        if (dependency != null) {
+            noTopBar = false;
+            if (topBarHeight == -1) {
+                topBarHeight = dependency.getHeight();
+            }
+            if (bottomBarHeight == -1 && bottomBar != null) {
+                bottomBarHeight = bottomBar.getHeight();
+            }
 
-        if (topBarHeight == -1) {
-            topBarHeight = dependency.getHeight();
+            if (topBarHeight != 0) {
+                int height = -dependency.getTop() * bottomBarHeight / topBarHeight;
+
+                ViewCompat.setTranslationY(bottomBar, Math.min(height, bottomBarHeight));
+            } else {
+                noTopBar = true;
+            }
+        } else {
+            noTopBar = true;
         }
-        if (bottomBarHeight == -1) {
-            bottomBarHeight = bottomBar.getHeight();
-        }
 
-        int height = -dependency.getTop() * bottomBarHeight / topBarHeight;
-
-        ViewCompat.setTranslationY(bottomBar, Math.min(height, bottomBarHeight));
         return true;
     }
 
     public void setTopBarHeight(int height) {
         topBarHeight = height;
+    }
+
+    public boolean isNoTopBar() {
+        return noTopBar;
     }
 }
