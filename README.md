@@ -5,6 +5,16 @@ You can create your own browser using custom UI and custom buttons.
 
 This browser based on Mikan Browser.
 
+## Theme
+Yuzu Browser supports custom theme.
+
+For installation method and specifications, please check the Readme.txt in the archive.
+
+#### Sample theme
+[Theme material dark](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_dark.zip)
+
+[Theme material light](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_light.zip)
+
 ## Build
 Clone this project
 
