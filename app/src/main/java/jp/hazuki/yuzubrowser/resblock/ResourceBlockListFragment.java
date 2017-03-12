@@ -24,11 +24,8 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
 import jp.hazuki.yuzubrowser.utils.view.recycler.SimpleViewHolder;
 
-/**
- * Created by hazuki on 17/02/28.
- */
-
 public class ResourceBlockListFragment extends RecyclerFabFragment implements OnRecyclerListener, CheckerEditDialog.OnCheckerEdit, DeleteDialog.OnDelete {
+    static final String CHECKER = "CHECKER";
     private ResourceBlockManager mManager;
     private ResBlockAdapter adapter;
 
@@ -41,6 +38,11 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
         adapter = new ResBlockAdapter(getActivity(), mManager.getList(), this);
         setRecyclerViewAdapter(adapter);
 
+        NormalChecker checker = (NormalChecker) getArguments().getSerializable(CHECKER);
+
+        if (checker != null) {
+            showEditDialog(-1, checker);
+        }
         return getRootView();
     }
 
