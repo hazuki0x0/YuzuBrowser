@@ -89,5 +89,6 @@
         <item>Private mode</item>
         <item>Distinction tab finish</item>
         <item>Show page source</item>
+        <item>Print</item>
     </string-array>
 </resources>
