@@ -22,6 +22,7 @@ import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.utils.Logger;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
@@ -30,7 +31,7 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
  * Created by hazuki on 17/02/28.
  */
 
-public class GestureListFragment extends RecyclerFabFragment implements OnRecyclerListener {
+public class GestureListFragment extends RecyclerFabFragment implements OnRecyclerListener, DeleteDialog.OnDelete {
     private static final int RESULT_REQUEST_ADD = 0;
     private static final int RESULT_REQUEST_EDIT = 1;
     private static final String ITEM_ID = "id";
@@ -50,7 +51,7 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         GestureItem item = adapter.getItems().get(position);
         Bundle bundle = new Bundle();
         bundle.putLong(ITEM_ID, item.getId());
@@ -61,6 +62,20 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
                 .create();
 
         startActivityForResult(intent, RESULT_REQUEST_EDIT);
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, int position) {
+        DeleteDialog.newInstance(getActivity(), R.string.delete_gesture, R.string.confirm_delete_gesture, position)
+                .show(getChildFragmentManager(), "delete");
+        return true;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        GestureItem item = adapter.remove(position);
+        mManager.remove(item);
+        reset();
     }
 
     @Override

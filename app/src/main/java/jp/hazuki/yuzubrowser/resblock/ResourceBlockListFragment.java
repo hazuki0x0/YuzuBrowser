@@ -6,14 +6,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.resblock.checker.NormalChecker;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
@@ -23,7 +28,7 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.SimpleViewHolder;
  * Created by hazuki on 17/02/28.
  */
 
-public class ResourceBlockListFragment extends RecyclerFabFragment implements OnRecyclerListener, CheckerEditDialog.OnCheckerEdit {
+public class ResourceBlockListFragment extends RecyclerFabFragment implements OnRecyclerListener, CheckerEditDialog.OnCheckerEdit, DeleteDialog.OnDelete {
     private ResourceBlockManager mManager;
     private ResBlockAdapter adapter;
 
@@ -31,6 +36,7 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setHasOptionsMenu(true);
         mManager = new ResourceBlockManager(getActivity().getApplicationContext());
         adapter = new ResBlockAdapter(getActivity(), mManager.getList(), this);
         setRecyclerViewAdapter(adapter);
@@ -73,8 +79,22 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         showEditDialog(position, (NormalChecker) mManager.get(position));
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, int position) {
+        DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.resblock_confirm_delete, position)
+                .show(getChildFragmentManager(), "delete");
+        return true;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        mManager.remove(position);
+        mManager.save(getActivity().getApplicationContext());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -98,6 +118,24 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return adapter.isSortMode();
+    }
 
     private static class ResBlockAdapter extends ArrayRecyclerAdapter<ResourceChecker, SimpleViewHolder> {
         private Context context;

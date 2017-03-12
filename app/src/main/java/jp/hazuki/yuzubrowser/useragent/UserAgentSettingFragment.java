@@ -9,8 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
@@ -32,6 +36,7 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
+        setHasOptionsMenu(true);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -81,6 +86,20 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean next = !mAdapter.isSortMode();
+                mAdapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
+
+    @Override
     public void onActionSelected(@SelectActionDialog.ActionMode int mode, int position, UserAgent userAgent) {
         switch (mode) {
             case EDIT:
@@ -95,9 +114,16 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
+        EditUserAgentDialog.newInstance(position, mUserAgentList.get(position))
+                .show(getChildFragmentManager(), "edit");
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, int position) {
         SelectActionDialog.newInstance(position, mUserAgentList.get(position))
                 .show(getChildFragmentManager(), "action");
+        return true;
     }
 
     private class ListTouch extends ItemTouchHelper.Callback {
@@ -143,7 +169,7 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
 
         @Override
         public boolean isLongPressDragEnabled() {
-            return true;
+            return mAdapter.isSortMode();
         }
 
         @Override

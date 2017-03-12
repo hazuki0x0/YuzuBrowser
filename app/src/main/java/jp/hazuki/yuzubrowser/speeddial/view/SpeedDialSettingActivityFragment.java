@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,19 +14,24 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialManager;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 
-public class SpeedDialSettingActivityFragment extends Fragment implements OnRecyclerListener, FabActionCallBack, SpeedDialEditCallBack {
+public class SpeedDialSettingActivityFragment extends Fragment implements OnRecyclerListener, FabActionCallBack, SpeedDialEditCallBack, DeleteDialog.OnDelete {
 
     private ArrayList<SpeedDial> speedDialList;
     private SpeedDialRecyclerAdapter adapter;
@@ -41,6 +45,7 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -69,16 +74,40 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onRecyclerItemClicked(View v, int position) {
         SpeedDial speedDial = speedDialList.get(position);
         if (mListener != null)
             mListener.goEdit(speedDial);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+    public boolean onRecyclerItemLongClicked(View v, int position) {
+        DeleteDialog.newInstance(getActivity(), R.string.delete_speedDial, R.string.confirm_delete_speedDial, position)
+                .show(getChildFragmentManager(), "delete");
+        return true;
     }
+
+    @Override
+    public void onDelete(int position) {
+        SpeedDial speedDial = speedDialList.remove(position);
+        adapter.notifyDataSetChanged();
+        manager.delete(speedDial.getId());
+    }
+
 
     @Override
     public void onAdd(int which) {
@@ -175,7 +204,7 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
 
         @Override
         public boolean isLongPressDragEnabled() {
-            return true;
+            return adapter.isSortMode();
         }
 
         @Override

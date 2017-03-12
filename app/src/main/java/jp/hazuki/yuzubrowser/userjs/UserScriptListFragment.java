@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListActivity;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -42,7 +44,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by hazuki on 17/02/28.
  */
 
-public class UserScriptListFragment extends RecyclerFabFragment implements OnUserJsItemClickListener {
+public class UserScriptListFragment extends RecyclerFabFragment implements OnUserJsItemClickListener, DeleteDialog.OnDelete {
     private static final int REQUEST_ADD_USERJS = 1;
     private static final int REQUEST_EDIT_USERJS = 2;
     private static final int REQUEST_ADD_FROM_FILE = 3;
@@ -67,10 +69,53 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
         intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.getItems().get(position));
         startActivityForResult(intent, REQUEST_EDIT_USERJS);
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, final int position) {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+        Menu menu = popupMenu.getMenu();
+
+        menu.add(R.string.userjs_info).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onInfoButtonClick(null, position);
+                return false;
+            }
+        });
+
+        menu.add(R.string.userjs_edit).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
+                intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.getItems().get(position));
+                startActivityForResult(intent, REQUEST_EDIT_USERJS);
+                return false;
+            }
+        });
+
+        menu.add(R.string.userjs_delete).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.userjs_delete_confirm, position)
+                        .show(getChildFragmentManager(), "delete");
+                return false;
+            }
+        });
+
+        popupMenu.show();
+        return true;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        UserScript js = adapter.remove(position);
+        adapter.notifyDataSetChanged();
+        mDb.delete(js);
     }
 
     @Override
@@ -191,6 +236,21 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
                 return false;
             }
         });
+        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return adapter.isSortMode();
     }
 
     public static class InfoDialog extends DialogFragment {

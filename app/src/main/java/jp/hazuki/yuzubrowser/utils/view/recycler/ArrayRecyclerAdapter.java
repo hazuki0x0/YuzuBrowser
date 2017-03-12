@@ -9,20 +9,19 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by hazuki on 17/02/26.
- */
 
 public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     private List<T> items;
     private OnRecyclerListener recyclerListener;
     private LayoutInflater inflater;
+    private boolean sortMode;
 
     public ArrayRecyclerAdapter(Context context, List<T> list, OnRecyclerListener listener) {
         items = list;
         recyclerListener = listener;
         inflater = LayoutInflater.from(context);
+        sortMode = false;
     }
 
     public abstract void onBindViewHolder(VH holder, T item, int position);
@@ -58,8 +57,23 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         return items.get(index);
     }
 
+    public T remove(int index) {
+        return items.remove(index);
+    }
+
     public OnRecyclerListener getListener() {
         return recyclerListener;
+    }
+
+    public boolean isSortMode() {
+        return sortMode;
+    }
+
+    public void setSortMode(boolean sort) {
+        if (sort != sortMode) {
+            sortMode = sort;
+            notifyDataSetChanged();
+        }
     }
 
     protected void setRecyclerListener(OnRecyclerListener listener) {
@@ -81,8 +95,20 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
             @Override
             public void onClick(View v) {
                 if (recyclerListener != null)
-                    recyclerListener.onRecyclerClicked(v, holder.getAdapterPosition());
+                    recyclerListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
             }
         });
+
+        if (sortMode) {
+            holder.itemView.setOnLongClickListener(null);
+        } else {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return recyclerListener
+                            .onRecyclerItemLongClicked(v, holder.getAdapterPosition());
+                }
+            });
+        }
     }
 }

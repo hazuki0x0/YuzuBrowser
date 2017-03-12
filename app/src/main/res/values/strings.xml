@@ -20,12 +20,17 @@
     <string name="confirm_delete_all_favicon">Delete all favicon?</string>
     <string name="confirm_delete_bookmark">Delete this bookmark?</string>
     <string name="confirm_delete_button">Delete this button?</string>
+    <string name="confirm_delete_speedDial">Delete this speed dial?</string>
+    <string name="confirm_delete_gesture">Delete this gesture?</string>
+    <string name="confirm_delete_text_encode">Delete this text encode?</string>
     <string name="delete_action">Delete action</string>
     <string name="delete_history">Delete history</string>
     <string name="delete_all_history">Delete all history</string>
     <string name="delete_all_favicon">Delete all favicon</string>
     <string name="delete_bookmark">Delete bookmark</string>
     <string name="delete_button">Delete button</string>
+    <string name="delete_speedDial">Delete speed dial</string>
+    <string name="delete_gesture">>Delete gesture</string>
     <string name="pattern_open_app_list">Show application list</string>
     <string name="pattern_open_app_chooser">Show application chooser</string>
     <string name="now_loading">Now loading</string>
