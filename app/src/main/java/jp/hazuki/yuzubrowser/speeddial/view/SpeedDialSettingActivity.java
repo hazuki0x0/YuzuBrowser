@@ -25,6 +25,7 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.appinfo.AppInfo;
 import jp.hazuki.yuzubrowser.utils.appinfo.ApplicationListFragment;
 import jp.hazuki.yuzubrowser.utils.appinfo.ShortCutListFragment;
+import jp.hazuki.yuzubrowser.utils.stack.SingleStack;
 
 public class SpeedDialSettingActivity extends AppCompatActivity
         implements SpeedDialEditCallBack, FragmentManager.OnBackStackChangedListener,
@@ -34,10 +35,19 @@ public class SpeedDialSettingActivity extends AppCompatActivity
     private static final int RESULT_REQUEST_BOOKMARK = 100;
     private static final int RESULT_REQUEST_HISTORY = 101;
 
+    private SingleStack<SpeedDial> speedDialStack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_base);
+
+        speedDialStack = new SingleStack<SpeedDial>() {
+            @Override
+            protected void processItem(SpeedDial item) {
+                goEdit(item);
+            }
+        };
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
@@ -132,7 +142,7 @@ public class SpeedDialSettingActivity extends AppCompatActivity
             webIcon = WebIcon.createIcon(icon);
 
         SpeedDial speedDial = new SpeedDial(intent.toUri(Intent.URI_INTENT_SCHEME), name, webIcon, false);
-        goEdit(speedDial);
+        speedDialStack.addItem(speedDial);
     }
 
     @Override
@@ -142,7 +152,7 @@ public class SpeedDialSettingActivity extends AppCompatActivity
         intent.setClassName(appInfo.getPackageName(), appInfo.getClassName());
         WebIcon webIcon = WebIcon.createIcon(ImageUtils.getBitmap(appInfo.getIcon()));
         SpeedDial speedDial = new SpeedDial(intent.toUri(Intent.URI_INTENT_SCHEME), appInfo.getAppName(), webIcon, false);
-        goEdit(speedDial);
+        speedDialStack.addItem(speedDial);
     }
 
     @Override
@@ -152,7 +162,7 @@ public class SpeedDialSettingActivity extends AppCompatActivity
                 if (resultCode != Activity.RESULT_OK || data == null) break;
                 String title = data.getStringExtra(Intent.EXTRA_TITLE);
                 String url = data.getStringExtra(Intent.EXTRA_TEXT);
-                goEdit(new SpeedDial(url, title));
+                speedDialStack.addItem(new SpeedDial(url, title));
                 break;
             }
             case RESULT_REQUEST_HISTORY: {
@@ -166,7 +176,7 @@ public class SpeedDialSettingActivity extends AppCompatActivity
                 } else {
                     speedDial = new SpeedDial(url, title, new WebIcon(icon), true);
                 }
-                goEdit(speedDial);
+                speedDialStack.addItem(speedDial);
                 break;
             }
         }
@@ -201,6 +211,18 @@ public class SpeedDialSettingActivity extends AppCompatActivity
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(canback);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        speedDialStack.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        speedDialStack.onResume();
     }
 
     @Override
