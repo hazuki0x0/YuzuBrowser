@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import jp.hazuki.yuzubrowser.toolbar.main.ProgressToolBar;
 import jp.hazuki.yuzubrowser.toolbar.main.TabBar;
 import jp.hazuki.yuzubrowser.toolbar.main.ToolbarBase;
 import jp.hazuki.yuzubrowser.toolbar.main.UrlBar;
+import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
@@ -34,6 +37,8 @@ public class ToolbarManager {
     private final UrlBar urlBar;
     private final ProgressToolBar progressBar;
     private final CustomToolbar customBar;
+    private BottomBarBehavior bottomBarBehavior;
+    private int bottomBarHeight = -1;
 
     public static final int LOCATION_UNDEFINED = -1;
     public static final int LOCATION_TOP = 0;
@@ -73,6 +78,14 @@ public class ToolbarManager {
         urlBar = new UrlBar(activity, action_callback, request_callback);
         progressBar = new ProgressToolBar(activity, action_callback, request_callback);
         customBar = new CustomToolbar(activity, action_callback, request_callback);
+
+        Object o = bottomToolbarLayout.getLayoutParams();
+        if (o instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) o).getBehavior();
+            if (behavior instanceof BottomBarBehavior) {
+                bottomBarBehavior = (BottomBarBehavior) behavior;
+            }
+        }
 
     }
 
@@ -341,6 +354,29 @@ public class ToolbarManager {
     }
 
     public void onWebViewScroll(CustomWebView web, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if (bottomBarBehavior.isNoTopBar()) {
+            if (bottomBarHeight < 0) {
+                bottomBarHeight = bottomToolbarLayout.getHeight();
+            }
 
+            float translationY = bottomToolbarLayout.getTranslationY();
+            float newTrans;
+
+            if (distanceY < 0) {
+                //down
+                newTrans = Math.max(0, distanceY + translationY);
+
+            } else if (distanceY > 0) {
+                //up
+                newTrans = Math.min(bottomBarHeight, distanceY + translationY);
+            } else {
+                return;
+            }
+
+            Logger.d("trans", newTrans);
+
+            ViewCompat.setTranslationY(bottomToolbarLayout, newTrans);
+
+        }
     }
 }
