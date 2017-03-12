@@ -66,7 +66,7 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        DeleteDialog.newInstance(getActivity(), R.string.delete_gesture, R.string.confirm_delete_gesture, position)
+        DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.confirm_delete_gesture, position)
                 .show(getChildFragmentManager(), "delete");
         return true;
     }
