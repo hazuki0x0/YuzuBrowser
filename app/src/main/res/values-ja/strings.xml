@@ -55,6 +55,8 @@
     <string name="open_image_other_app">画像を他のアプリで開く</string>
     <string name="copy_image_url">画像のURLをコピー</string>
     <string name="save_image">画像を保存</string>
+    <string name="search_image">画像を検索</string>
+    <string name="block_image">画像をブロック</string>
     <string name="open_all_new">新しいタブで全て開く</string>
     <string name="open_all_bg">バックグラウンドで全て開く</string>
     <string name="copy_clipboard_mes_before">コピーしました : </string>
@@ -165,7 +167,7 @@
     <string name="saved_file">保存しました :</string>
     <string name="savepage_save_archive">WebアーカイブXMLとして保存</string>
     <string name="action_easy_add">簡易追加</string>
-    <string name="resblock_is_white">許可</string>
+    <string name="resblock_is_white">ブロックしない</string>
     <string name="resblock_edit">編集</string>
     <string name="resblock_confirm_delete">このアイテムを削除しますか？</string>
     <string name="resblock_res_type">代替タイプ</string>

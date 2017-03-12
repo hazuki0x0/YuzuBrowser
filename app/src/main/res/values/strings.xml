@@ -56,6 +56,8 @@
     <string name="open_image_other_app">Open image in another app</string>
     <string name="copy_image_url">Copy image URL</string>
     <string name="save_image">Save image</string>
+    <string name="search_image">Search image</string>
+    <string name="block_image">Block image</string>
     <string name="open_all_new">Open all in new tab</string>
     <string name="open_all_bg">Open all in background tab</string>
     <string name="copy_clipboard_mes_before">Copied : </string>
@@ -166,7 +168,7 @@
     <string name="saved_file">Saved :</string>
     <string name="savepage_save_archive">Save as Web Archive XML</string>
     <string name="action_easy_add">Easy addition</string>
-    <string name="resblock_is_white">Allowed</string>
+    <string name="resblock_is_white">Do not block</string>
     <string name="resblock_edit">Edit</string>
     <string name="resblock_confirm_delete">Delete this item?</string>
     <string name="resblock_res_type">Alternative type</string>

@@ -136,6 +136,8 @@ public class SingleAction implements Parcelable {
     public static final int LPRESS_OPEN_IMAGE_OTHERS = -151;
     public static final int LPRESS_COPY_IMAGE_URL = -152;
     public static final int LPRESS_SAVE_IMAGE = -153;
+    public static final int LPRESS_GOOGLE_IMAGE_SEARCH = -154;
+    public static final int LPRESS_IMAGE_RES_BLOCK = -155;
 
     public final int id;
 

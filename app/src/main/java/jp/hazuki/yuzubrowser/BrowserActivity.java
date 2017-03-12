@@ -133,9 +133,11 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.menuwindow.MenuWindow;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager;
+import jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity;
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager;
 import jp.hazuki.yuzubrowser.resblock.ResourceChecker;
 import jp.hazuki.yuzubrowser.search.SearchActivity;
+import jp.hazuki.yuzubrowser.search.SearchUtils;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter;
@@ -1944,6 +1946,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     case "home":
                         loadUrl(data, AppData.home_page.get());
                         return true;
+                    case "resblock":
+                        intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
+                        break;
                     default:
                         return false;
                 }
@@ -2610,6 +2615,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_SAVE_IMAGE:
                             DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl());
                             return true;
+                        case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
+                            openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_IMAGE_RES_BLOCK:
+                            Intent intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
+                            intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
+                            intent.putExtra(Intent.EXTRA_TEXT, extra);
+                            startActivity(intent);
+                            return true;
                         default:
                             return run(action, target, null);
                     }
@@ -2670,6 +2684,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE:
                             DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl());
+                            return true;
+                        case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
+                            openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
+                            return true;
+                        case SingleAction.LPRESS_IMAGE_RES_BLOCK:
+                            Intent intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
+                            intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
+                            intent.putExtra(Intent.EXTRA_TEXT, extra);
+                            startActivity(intent);
                             return true;
                         default:
                             return run(action, target, null);
