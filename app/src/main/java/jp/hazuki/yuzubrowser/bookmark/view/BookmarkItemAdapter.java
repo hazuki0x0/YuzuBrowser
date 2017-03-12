@@ -29,13 +29,11 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     private final int normalBackGround;
 
-    private boolean sortMode;
-
     private boolean multiSelectMode;
     private SparseBooleanArray itemSelected;
-    private OnBookmarkItemListener bookmarkItemListener;
+    private OnRecyclerListener bookmarkItemListener;
 
-    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, OnBookmarkItemListener listener) {
+    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, OnRecyclerListener listener) {
         super(context, list, null);
         itemSelected = new SparseBooleanArray();
         bookmarkItemListener = listener;
@@ -52,18 +50,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         }
         holder.title.setText(item.title);
 
-        if (sortMode) {
-            holder.itemView.setOnLongClickListener(null);
-        } else {
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return bookmarkItemListener
-                            .onItemLongClick(v, position);
-                }
-            });
-        }
-
         if (multiSelectMode) {
             setSelectedBackground(holder.itemView, itemSelected.get(position, false));
         }
@@ -78,17 +64,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                 return new BookmarkFolderHolder(inflater.inflate(R.layout.bookmark_item_folder, parent, false));
             default:
                 throw new IllegalStateException("Unknown BookmarkItem type");
-        }
-    }
-
-    public boolean isSortMode() {
-        return sortMode;
-    }
-
-    public void setSortMode(boolean sort) {
-        if (sort != sortMode) {
-            sortMode = sort;
-            notifyDataSetChanged();
         }
     }
 
@@ -145,13 +120,18 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     private final OnRecyclerListener recyclerListener = new OnRecyclerListener() {
         @Override
-        public void onRecyclerClicked(View v, int position) {
+        public void onRecyclerItemClicked(View v, int position) {
             if (multiSelectMode) {
                 toggle(position);
             } else {
                 if (bookmarkItemListener != null)
-                    bookmarkItemListener.onRecyclerClicked(v, position);
+                    bookmarkItemListener.onRecyclerItemClicked(v, position);
             }
+        }
+
+        @Override
+        public boolean onRecyclerItemLongClicked(View v, int position) {
+            return bookmarkItemListener.onRecyclerItemLongClicked(v, position);
         }
     };
 
@@ -188,9 +168,5 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             super(itemView);
             url = (TextView) itemView.findViewById(android.R.id.text2);
         }
-    }
-
-    public interface OnBookmarkItemListener extends OnRecyclerListener {
-        boolean onItemLongClick(View v, int position);
     }
 }

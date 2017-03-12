@@ -8,8 +8,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,6 +24,7 @@ import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.SoftButtonActionArrayManagerBase;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionArrayFile;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionFile;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
@@ -29,7 +34,7 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.SimpleViewHolder;
  * Created by hazuki on 17/02/28.
  */
 
-public class SoftButtonActionArrayFragment extends RecyclerFabFragment implements OnRecyclerListener {
+public class SoftButtonActionArrayFragment extends RecyclerFabFragment implements OnRecyclerListener, DeleteDialog.OnDelete {
     private static final String ACTION_TYPE = "type";
     private static final String ACTION_ID = "id";
     private static final int RESULT_REQUEST_ADD = 1;
@@ -44,6 +49,7 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setHasOptionsMenu(true);
         initData();
         ActionNameArray mActionNameArray = new ActionNameArray(getActivity());
         adapter = new ActionListAdapter(getActivity(), mActionArray.list, mActionNameArray, this);
@@ -64,8 +70,22 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         onListItemClick(position);
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, int position) {
+        DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.confirm_delete_button, position)
+                .show(getChildFragmentManager(), "delete");
+        return false;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        mActionArray.list.remove(position);
+        mActionArray.write(BrowserApplication.getInstance());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -116,6 +136,25 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
                 checkMax();
                 break;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return adapter.isSortMode();
     }
 
     private void checkMax() {

@@ -14,12 +14,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.SingleAction;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
@@ -31,7 +33,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by hazuki on 17/02/26.
  */
 
-public class ActionListFragment extends RecyclerFabFragment implements OnRecyclerListener {
+public class ActionListFragment extends RecyclerFabFragment implements OnRecyclerListener, DeleteDialog.OnDelete {
     public static final String EXTRA_ACTION_LIST = "ActionListActivity.extra.actionList";
     private static final String EXTRA_POSITION = "pos";
     private static final int RESULT_REQUEST_ADD = 1;
@@ -56,7 +58,7 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_POSITION, position);
         Intent intent = new ActionActivity.Builder(getActivity())
@@ -66,6 +68,20 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
                 .setReturnData(bundle)
                 .create();
         startActivityForResult(intent, RESULT_REQUEST_EDIT);
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, int position) {
+        DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.confirm_delete_action, position)
+                .show(getChildFragmentManager(), "delete");
+        return true;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        mList.remove(position);
+        adapter.notifyDataSetChanged();
+        onActionListChanged();
     }
 
     @Override
@@ -147,6 +163,16 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
                 return false;
             }
         });
+        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -185,6 +211,11 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
         bundle.putParcelable(ActionNameArray.INTENT_EXTRA, nameArray);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+        return adapter.isSortMode();
     }
 
     private static class ActionListAdapter extends ArrayRecyclerAdapter<Action, SimpleViewHolder> {

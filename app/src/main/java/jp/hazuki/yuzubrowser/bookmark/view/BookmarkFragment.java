@@ -37,11 +37,12 @@ import jp.hazuki.yuzubrowser.browser.openable.OpenUrlList;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkItemListener {
+public class BookmarkFragment extends Fragment implements OnRecyclerListener {
     private static final String MODE_PICK = "pick";
 
     private boolean pickMode;
@@ -90,18 +91,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     }
 
     @Override
-    public boolean onItemLongClick(View v, int position) {
-        if (!adapter.isSortMode()) {
-            showContextMenu(v, position);
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         BookmarkItem item = mCurrentFolder.list.get(position);
         if (item instanceof BookmarkSite) {
             if (pickMode) {
@@ -118,6 +108,16 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             setList((BookmarkFolder) item);
         } else {
             throw new IllegalStateException("Unknown BookmarkItem type");
+        }
+    }
+
+    @Override
+    public boolean onRecyclerItemLongClicked(View v, int position) {
+        if (!adapter.isSortMode()) {
+            showContextMenu(v, position);
+            return true;
+        } else {
+            return false;
         }
     }
 

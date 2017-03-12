@@ -116,7 +116,7 @@ public abstract class PatternActivity<T extends PatternChecker> extends AppCompa
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
-        return false;
+        return true;
     }
 
     protected void setDefaultUrl(String url) {

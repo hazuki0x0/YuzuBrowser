@@ -26,13 +26,13 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     private DateFormat dateFormat;
     private BrowserHistoryManager mManager;
     private List<BrowserHistory> histories;
-    private OnHistoryItemListener mListener;
+    private OnRecyclerListener mListener;
     private String mQuery;
     private LayoutInflater inflater;
     private StickyHeaderDecoration mDecoration;
     private Calendar calendar;
 
-    public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, OnHistoryItemListener listener) {
+    public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, OnRecyclerListener listener) {
         inflater = LayoutInflater.from(context);
         dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         mManager = manager;
@@ -64,14 +64,14 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onRecyclerClicked(v, holder.getAdapterPosition());
+                mListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
             }
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return mListener.onItemLongClick(v, holder.getAdapterPosition());
+                return mListener.onRecyclerItemLongClicked(v, holder.getAdapterPosition());
             }
         });
     }
@@ -160,9 +160,5 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
 
             header = (TextView) itemView;
         }
-    }
-
-    public interface OnHistoryItemListener extends OnRecyclerListener {
-        boolean onItemLongClick(View v, int position);
     }
 }

@@ -97,7 +97,7 @@
         <item>キャッシュのみ使用</item>
     </string-array>
 
-    <string name="pref_web_popup">ポップアップを有効にする</string>
+    <string name="pref_web_popup">ページのポップアップを許可する</string>
     <string name="pref_download_action">ダウンロード時の挙動</string>
 
     <string-array name="pref_download_action_list">

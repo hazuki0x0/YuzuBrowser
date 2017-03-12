@@ -19,12 +19,15 @@
     <string name="confirm_delete_all_favicon">Faviconを全て削除しますか？</string>
     <string name="confirm_delete_bookmark">このブックマークを削除しますか？</string>
     <string name="confirm_delete_button">このボタンを削除しますか？</string>
+    <string name="confirm_delete_speedDial">このスピードダイアルを削除しますか？</string>
+    <string name="confirm_delete_text_encode">このテキストエンコードを削除しますか？</string>
     <string name="delete_action">アクションの削除</string>
     <string name="delete_history">履歴の削除</string>
     <string name="delete_all_history">履歴の全削除</string>
     <string name="delete_all_favicon">Faviconの全削除</string>
     <string name="delete_bookmark">ブックマークの削除</string>
     <string name="delete_button">ボタンの削除</string>
+    <string name="delete_speedDial">スピードダイアルの削除</string>
     <string name="pattern_open_app_list">アプリ一覧の表示</string>
     <string name="pattern_open_app_chooser">アプリ一覧の強制表示</string>
     <string name="now_loading">読み込み中</string>

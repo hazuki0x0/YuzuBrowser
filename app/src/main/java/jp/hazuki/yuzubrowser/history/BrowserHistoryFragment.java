@@ -26,14 +26,12 @@ import jp.hazuki.yuzubrowser.browser.openable.OpenUrl;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * Created by hazuki on 17/03/10.
- */
 
-public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAdapter.OnHistoryItemListener {
+public class BrowserHistoryFragment extends Fragment implements OnRecyclerListener {
     private static final String PICK_MODE = "pick";
 
     private boolean pickMode;
@@ -76,12 +74,12 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
     }
 
     @Override
-    public void onRecyclerClicked(View v, int position) {
+    public void onRecyclerItemClicked(View v, int position) {
         sendUrl(adapter.getItem(position), AppData.newtab_history.get());
     }
 
     @Override
-    public boolean onItemLongClick(View v, final int position) {
+    public boolean onRecyclerItemLongClicked(View v, final int position) {
         if (!pickMode) {
             BrowserHistory history = adapter.getItem(position);
             final String url = history.getUrl();
@@ -168,7 +166,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
 
             popupMenu.show();
         }
-        return false;
+        return true;
     }
 
     private void sendUrl(BrowserHistory history, int target) {

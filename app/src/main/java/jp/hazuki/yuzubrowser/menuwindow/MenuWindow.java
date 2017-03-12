@@ -1,7 +1,9 @@
 package jp.hazuki.yuzubrowser.menuwindow;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -22,6 +24,8 @@ import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 public class MenuWindow {
 
     private PopupWindow window;
+    private boolean locking = false;
+    private Handler handler = new Handler();
 
     public MenuWindow(Context context, ActionList actionList, final ActionCallback callback) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -37,6 +41,19 @@ public class MenuWindow {
         window.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(context.getDrawable(R.drawable.menu_drop_down_background));
         window.setElevation(DisplayUtils.convertDpToPx(context, 10));
+        window.getContentView().setFocusableInTouchMode(true);
+        window.getContentView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_MENU &&
+                        event.getRepeatCount() == 0 &&
+                        event.getAction() == KeyEvent.ACTION_DOWN) {
+                    dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         TextView child;
         for (final Action action : actionList) {
@@ -54,11 +71,30 @@ public class MenuWindow {
     }
 
     public void show(View root) {
-        window.showAtLocation(root, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        if (!locking)
+            window.showAtLocation(root, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
     public void showAsDropDown(View anchor) {
-        window.showAsDropDown(anchor);
+        if (!locking)
+            window.showAsDropDown(anchor);
     }
+
+    public boolean isShowing() {
+        return window.isShowing();
+    }
+
+    public void dismiss() {
+        window.dismiss();
+        locking = true;
+        handler.postDelayed(lock, 50);
+    }
+
+    private Runnable lock = new Runnable() {
+        @Override
+        public void run() {
+            locking = false;
+        }
+    };
 
 }
