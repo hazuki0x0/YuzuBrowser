@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
@@ -54,13 +55,13 @@ public class WebViewProxy {
     }
 
     public static boolean setProxy(Context context, boolean enable, String proxy_address) {
-        if (!WebViewProxy.resetProxy(context))
+        if (!WebViewProxy.resetProxy(BrowserApplication.getInstance()))
             return false;
 
         if (enable) {
             Matcher matcher = pattern.matcher(proxy_address);
             if (matcher.find()) {
-                return WebViewProxy.setProxy(context, matcher.group(1), Integer.parseInt(matcher.group(2), 10));
+                return WebViewProxy.setProxy(BrowserApplication.getInstance(), matcher.group(1), Integer.parseInt(matcher.group(2), 10));
             } else {
                 Toast.makeText(context, R.string.proxy_address_error, Toast.LENGTH_LONG).show();
                 return false;
