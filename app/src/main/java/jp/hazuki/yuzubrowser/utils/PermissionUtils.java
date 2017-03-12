@@ -4,9 +4,14 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
 /**
  * Created by hazuki on 17/01/19.
@@ -65,12 +70,18 @@ public class PermissionUtils {
         }
     }
 
+    public static void requestStorage(Fragment fragment) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fragment.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+        }
+    }
+
     public static void setNoNeed(Context context, boolean noNeed) {
         if (checkNeed(context) != noNeed)
             getPref(context).edit().putBoolean(NO_NEED, noNeed).apply();
     }
 
-    private static boolean checkNeed(Context context) {
+    public static boolean checkNeed(Context context) {
         return !getPref(context).getBoolean(NO_NEED, false);
     }
 
@@ -78,5 +89,13 @@ public class PermissionUtils {
         if (preferences == null)
             preferences = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
         return preferences;
+    }
+
+    public static void openRequestPermissionSettings(Context context, String text) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        context.startActivity(intent);
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 }

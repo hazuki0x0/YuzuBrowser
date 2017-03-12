@@ -52,12 +52,15 @@ public class ThemePreference extends ListPreference {
         themeList.add(getContext().getString(R.string.default_text));
         valueList.add("");
 
-        for (File theme : themes) {
-            if (theme.isDirectory()) {
-                themeList.add(theme.getName());
-                valueList.add(theme.getName());
+        if (themes != null) {
+            for (File theme : themes) {
+                if (theme.isDirectory()) {
+                    themeList.add(theme.getName());
+                    valueList.add(theme.getName());
+                }
             }
         }
+
 
         setEntries(themeList.toArray(new String[themeList.size()]));
         setEntryValues(valueList.toArray(new String[valueList.size()]));
