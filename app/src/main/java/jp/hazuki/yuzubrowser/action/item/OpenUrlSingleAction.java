@@ -103,7 +103,7 @@ public class OpenUrlSingleAction extends SingleAction implements Parcelable {
 
         urlEditText.setText(mUrl);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_spinner_item, context.getResources().getStringArray(R.array.pref_newtab_list));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, context.getResources().getStringArray(R.array.pref_newtab_list));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tabSpinner.setAdapter(adapter);
         final int targetValues[] = context.getResources().getIntArray(R.array.pref_newtab_values);
