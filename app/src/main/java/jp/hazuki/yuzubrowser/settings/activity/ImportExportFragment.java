@@ -1,16 +1,20 @@
 package jp.hazuki.yuzubrowser.settings.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Loader;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import java.io.File;
@@ -174,6 +178,20 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        new PermissionDialog().show(getChildFragmentManager(), "permission");
+        if (!PermissionUtils.checkWriteStorage(getActivity())) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new PermissionDialog().show(getChildFragmentManager(), "permission");
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                }
+            }
+        }
+    }
 
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle args) {
@@ -221,6 +239,31 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
 
         void setDialog(DialogFragment dialog) {
             dialogRef = new WeakReference<>(dialog);
+        }
+    }
+
+    public static class PermissionDialog extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.permission_probrem)
+                    .setMessage(R.string.confirm_permission_storage)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PermissionUtils.openRequestPermissionSettings(getActivity(),
+                                    getString(R.string.request_permission_storage_setting));
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().onBackPressed();
+                        }
+                    });
+            setCancelable(false);
+            return builder.create();
         }
     }
 

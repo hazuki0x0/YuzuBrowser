@@ -193,4 +193,9 @@
     <string name="deleted">削除しました</string>
 
     <string name="download_service">ダウンロードサービス</string>
+
+    <string name="permission_probrem">パーミッション不足</string>
+    <string name="request_permission_storage_setting">[アクセス権]をタップしてからストレージを有効にしてください</string>
+    <string name="confirm_permission_storage">この機能を利用するにはストレージのアクセス権が必要です</string>
+    <string name="confirm_permission_storage_app">このアプリを利用するにはストレージのアクセス権が必要です</string>
 </resources>

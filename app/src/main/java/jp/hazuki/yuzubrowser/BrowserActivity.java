@@ -2,6 +2,7 @@ package jp.hazuki.yuzubrowser;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -21,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +33,8 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.Intents.Insert;
 import android.speech.RecognizerResultsIntent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -202,6 +206,9 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightBgTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 
+import static jp.hazuki.yuzubrowser.utils.PermissionUtils.FIRST_PERMISSION;
+import static jp.hazuki.yuzubrowser.utils.PermissionUtils.REQUEST_STORAGE;
+
 public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener {
     private static final String TAG = "BrowserActivity";
 
@@ -280,7 +287,19 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         setContentView(R.layout.browser_activity);
 
-        PermissionUtils.checkFirst(this);
+        if (PermissionUtils.checkNeed(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, FIRST_PERMISSION);
+            }
+        } else {
+            if (!PermissionUtils.checkWriteStorage(this)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                } else {
+                    PermissionUtils.requestStorage(this);
+                }
+            }
+        }
 
         mHandler = new Handler();
 
@@ -391,6 +410,29 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         WebViewProxy.setProxy(getApplicationContext(), AppData.proxy_set.get(), AppData.proxy_address.get());
 
         registerReceiver(mNetworkStateBroadcastReceiver, mNetworkStateChangedFilter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PermissionUtils.checkFirst(this);
+        if (PermissionUtils.checkNeed(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, FIRST_PERMISSION);
+            }
+            PermissionUtils.setNoNeed(this, true);
+        } else {
+            if (!PermissionUtils.checkWriteStorage(this)) {
+                PermissionUtils.setNoNeed(this, false);
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    new PermissionDialog().show(getSupportFragmentManager(), "permission");
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -1697,6 +1739,31 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
                     break;
             }
+        }
+    }
+
+    public static class PermissionDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.permission_probrem)
+                    .setMessage(R.string.confirm_permission_storage_app)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PermissionUtils.openRequestPermissionSettings(getActivity(), getString(R.string.request_permission_storage_setting));
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().finish();
+                        }
+                    });
+            setCancelable(false);
+            return builder.create();
+
         }
     }
 
