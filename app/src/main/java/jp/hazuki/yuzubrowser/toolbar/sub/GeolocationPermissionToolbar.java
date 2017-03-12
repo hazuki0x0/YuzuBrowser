@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.toolbar.SubToolbar;
 
 public class GeolocationPermissionToolbar extends SubToolbar implements View.OnClickListener {
@@ -41,5 +42,10 @@ public class GeolocationPermissionToolbar extends SubToolbar implements View.OnC
     }
 
     public void onHideToolbar() {
+    }
+
+    @Override
+    protected void applyThemeAutomatically(ThemeData themedata) {
+        /* no theme */
     }
 }
