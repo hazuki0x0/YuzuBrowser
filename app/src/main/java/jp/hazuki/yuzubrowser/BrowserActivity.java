@@ -597,7 +597,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Logger.d("button_down", keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
@@ -627,7 +626,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Logger.d("button", keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
@@ -692,9 +690,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        Logger.d("dispatch", event.getKeyCode());
         if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH && !event.isCanceled()) {
-            Logger.d("dispatch", "search");
             mActionCallback.run(mHardButtonManager.search_press.action);
             return true;
         }
