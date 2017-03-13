@@ -1274,6 +1274,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         old_web.destroy();
 
+        if (old_data.getTabType() == TabType.WINDOW && new_current_no > 0) {
+            int openType = AppData.newtab_blank.get();
+            if (openType == BrowserManager.LOAD_URL_TAB_NEW_RIGHT || openType == BrowserManager.LOAD_URL_TAB_BG_RIGHT) {
+                --new_current_no;
+            }
+        }
+
         if (no < new_current_no) {
             --new_current_no;
         }
