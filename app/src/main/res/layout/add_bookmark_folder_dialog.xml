@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/title"
-            android:maxLines="1">
+            android:inputType="text">
 
             <requestFocus />
         </EditText>
