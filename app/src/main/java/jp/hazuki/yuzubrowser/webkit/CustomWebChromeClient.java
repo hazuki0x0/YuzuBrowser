@@ -1,7 +1,6 @@
 package jp.hazuki.yuzubrowser.webkit;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Message;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -137,17 +136,5 @@ public class CustomWebChromeClient extends WebChromeClient {
     }
 
     public void onShowCustomView(View view, CustomViewCallback callback) {
-    }
-
-    public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-        uploadMsg.onReceiveValue(null);
-    }
-
-    public void openFileChooser(ValueCallback<Uri> uploadMsg, final String acceptType) {
-        uploadMsg.onReceiveValue(null);
-    }
-
-    public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-        uploadMsg.onReceiveValue(null);
     }
 }
