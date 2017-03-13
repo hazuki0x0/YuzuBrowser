@@ -164,19 +164,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         }
 
         @Override
-        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-            if (mWebChromeClient != null)
-                mWebChromeClient.openFileChooser(uploadMsg, acceptType, capture);
-        }
-
-        @Override
-        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-            if (mWebChromeClient != null) mWebChromeClient.openFileChooser(uploadMsg, acceptType);
-        }
-
-        @Override
-        public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-            if (mWebChromeClient != null) mWebChromeClient.openFileChooser(uploadMsg);
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+            return mWebChromeClient.onShowFileChooser(webView, filePathCallback, fileChooserParams);
         }
     };
     private final CustomWebViewClient mWebViewClientWrapper = new CustomWebViewClient() {
