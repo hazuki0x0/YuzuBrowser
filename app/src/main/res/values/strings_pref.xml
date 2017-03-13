@@ -221,6 +221,7 @@
         <item>@string/open_link_other_app</item>
         <item>@string/copy_link_url</item>
         <item>@string/save_link</item>
+        <item>@string/add_url_pattern</item>
     </string-array>
 
     <integer-array name="pref_lpress_link_values">
@@ -233,6 +234,7 @@
         <item>-51</item>
         <item>-52</item>
         <item>-53</item>
+        <item>-156</item>
     </integer-array>
 
     <string-array name="pref_lpress_image_list">
@@ -247,6 +249,7 @@
         <item>@string/save_image</item>
         <item>@string/search_image</item>
         <item>@string/block_image</item>
+        <item>@string/add_image_pattern</item>
     </string-array>
 
     <integer-array name="pref_lpress_image_values">
@@ -261,6 +264,7 @@
         <item>-153</item>
         <item>-154</item>
         <item>-155</item>
+        <item>-156</item>
     </integer-array>
 
     <string-array name="pref_lpress_linkimage_list">
@@ -284,6 +288,7 @@
         <item>@string/save_image</item>
         <item>@string/search_image</item>
         <item>@string/block_image</item>
+        <item>@string/add_image_pattern</item>
     </string-array>
 
     <integer-array name="pref_lpress_linkimage_values">
@@ -307,6 +312,7 @@
         <item>-153</item>
         <item>-154</item>
         <item>-155</item>
+        <item>-156</item>
     </integer-array>
 
     <string name="pref_tab_size_x">Tab size</string>
