@@ -110,9 +110,12 @@ public class WebUtils {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, url);
-        intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        intent.putExtra("share_favicon", favicon);
-        intent.putExtra("share_screenshot", thumbnail);
+        if (title != null)
+            intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        if (favicon != null)
+            intent.putExtra("share_favicon", favicon);
+        if (thumbnail != null)
+            intent.putExtra("share_screenshot", thumbnail);
         return intent;
     }
 
