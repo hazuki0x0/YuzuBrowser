@@ -7,7 +7,6 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -695,8 +694,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     }
 
     @Override
-    public SwipeRefreshLayout getSwipeRefresh() {
-        return mList.get(mCurrent).mWebView.getSwipeRefresh();
+    public void setSwipeEnable(boolean enable) {
+        mList.get(mCurrent).mWebView.setSwipeEnable(enable);
     }
 
     @Override
@@ -791,6 +790,11 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     public void setIdentityId(long identityId) {
         if (id > identityId)
             id = identityId;
+    }
+
+    @Override
+    public void resetTheme() {
+        mList.get(mCurrent).mWebView.resetTheme();
     }
 
     @Override

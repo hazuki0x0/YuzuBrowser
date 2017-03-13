@@ -8,7 +8,6 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -83,8 +82,8 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
     }
 
     @Override
-    public SwipeRefreshLayout getSwipeRefresh() {
-        return null;
+    public void setSwipeEnable(boolean enable) {
+
     }
 
     @Override
@@ -178,6 +177,11 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
     public void setIdentityId(long identityId) {
         if (id > identityId)
             id = identityId;
+    }
+
+    @Override
+    public void resetTheme() {
+
     }
 
     @Override

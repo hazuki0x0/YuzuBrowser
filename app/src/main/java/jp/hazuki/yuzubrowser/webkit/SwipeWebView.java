@@ -26,11 +26,9 @@ import android.webkit.WebView;
 
 import java.util.Map;
 
+import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
-
-/**
- * Created by hazuki on 17/02/24.
- */
 
 public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, SwipeRefreshLayout.OnRefreshListener, ScrollController.OnScrollEnable {
     private static final int TIMEOUT = 7500;
@@ -38,6 +36,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     private long id = System.currentTimeMillis();
     private NormalWebView webView;
     private ScrollController controller;
+    private boolean enableSwipe;
 
     private CustomWebChromeClient mWebChromeClient;
     private CustomWebViewClient mWebViewClient;
@@ -176,6 +175,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         @Override
         public void onPageFinished(CustomWebView view, String url) {
             controller.onPageChange();
+            setRefreshing(false);
             if (mWebViewClient != null) mWebViewClient.onPageFinished(SwipeWebView.this, url);
         }
 
@@ -475,8 +475,8 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     }
 
     @Override
-    public SwipeRefreshLayout getSwipeRefresh() {
-        return this;
+    public void setSwipeEnable(boolean enable) {
+        enableSwipe = enable;
     }
 
     @Override
@@ -571,6 +571,18 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     }
 
     @Override
+    public void resetTheme() {
+        if (ThemeData.isEnabled()) {
+            setColorSchemeColors(ThemeData.getInstance().progressColor);
+            if (ThemeData.getInstance().refreshUseDark) {
+                setProgressBackgroundColorSchemeColor(R.color.deep_gray);
+            }
+        } else {
+            setColorSchemeResources(R.color.accent);
+        }
+    }
+
+    @Override
     public void onRefresh() {
         webView.reload();
         postDelayed(new Runnable() {
@@ -583,6 +595,6 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
     @Override
     public void onScrollEnable(boolean enable) {
-        setEnabled(enable);
+        setEnabled(enableSwipe && enable);
     }
 }

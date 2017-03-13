@@ -37,7 +37,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.print.PrintHelper;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.ContextMenu;
@@ -249,7 +248,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private boolean mIsFullScreenMode = false;
     private boolean mIsActivityPaused = true;
     private boolean mIsImeShown = false;
-    private boolean mIsPullToRefresh = true;
     private GestureManager mWebGestureManager;
     private WebViewFindDialog mWebViewFindDialog;
     private WebViewPageFastScroller mWebViewPageFastScroller;
@@ -827,8 +825,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
         }
 
-        mIsPullToRefresh = AppData.pull_to_refresh.get();
-
         if (!AppData.private_mode.get() && AppData.save_history.get()) {
             if (mBrowserHistoryManager == null)
                 mBrowserHistoryManager = new BrowserHistoryAsyncManager(getApplicationContext());
@@ -1339,8 +1335,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             MainTabData tab = mTabList.getCurrentTabData();
             if (tab != null) {
                 mToolbar.onWebViewScroll(tab.mWebView, e1, e2, distanceX, distanceY);
-
-                tab.mWebView.getSwipeRefresh().setEnabled(mIsPullToRefresh && tab.mWebView.getScrollY() == 0);
             }
             return false;
         }
@@ -1558,17 +1552,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setting.setAppCacheEnabled(noPrivate && AppData.web_app_cache.get());
         setting.setAppCachePath(BrowserManager.getAppCacheFilePath(getApplicationContext()));
 
-        SwipeRefreshLayout refreshLayout = web.getSwipeRefresh();
-
-        if (ThemeData.getInstance() != null) {
-            refreshLayout.setColorSchemeColors(ThemeData.getInstance().progressColor);
-            if (ThemeData.getInstance().refreshUseDark) {
-                refreshLayout.setProgressBackgroundColorSchemeColor(R.color.deep_gray);
-            }
-        } else {
-            refreshLayout.setColorSchemeResources(R.color.accent);
-        }
-        refreshLayout.setEnabled(mIsPullToRefresh);
+        web.resetTheme();
+        web.setSwipeEnable(AppData.pull_to_refresh.get());
 
         //if add to this, should also add to CacheWebView#settingWebView
     }
@@ -2020,11 +2005,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
 
             data.onPageFinished(web, url);
-
-            SwipeRefreshLayout swipeRefresh = data.mWebView.getSwipeRefresh();
-
-            if (swipeRefresh.isRefreshing())
-                swipeRefresh.setRefreshing(false);
 
             if (data == mTabList.getCurrentTabData()) {
                 mToolbar.notifyChangeWebState(data);
