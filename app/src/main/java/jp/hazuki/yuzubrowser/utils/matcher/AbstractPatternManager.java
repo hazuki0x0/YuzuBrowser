@@ -96,9 +96,11 @@ public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>
 
             generator.writeStartArray();
             for (T item : mList) {
-                generator.writeStartArray();
-                item.write(generator);
-                generator.writeEndArray();
+                if (item != null) {
+                    generator.writeStartArray();
+                    item.write(generator);
+                    generator.writeEndArray();
+                }
             }
             generator.writeEndArray();
 

@@ -150,39 +150,46 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                 }
             });
 
-            return new AlertDialog.Builder(getActivity())
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.pattern_change_websettings)
                     .setView(view)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String ua = null;
-                            if (view_uaCheckBox.isChecked()) {
-                                ua = view_uaEditText.getText().toString();
-                            }
-
-                            int js = WebSettingPatternAction.UNDEFINED;
-                            if (view_jsCheckBox.isChecked()) {
-                                switch (view_jsSpinner.getSelectedItemPosition()) {
-                                    case 0:
-                                        js = WebSettingPatternAction.ENABLE;
-                                        break;
-                                    case 1:
-                                        js = WebSettingPatternAction.DISABLE;
-                                        break;
-                                }
-                            }
-
-                            WebSettingPatternAction action = new WebSettingPatternAction(ua, js);
-                            if (getActivity() instanceof PatternUrlActivity) {
-                                PatternUrlChecker newChecker = ((PatternUrlActivity) getActivity()).makeActionChecker(action, header);
-                                int id = getArguments().getInt(ID);
-                                ((PatternUrlActivity) getActivity()).add(id, newChecker);
-                            }
-                        }
-                    })
+                    .setPositiveButton(android.R.string.ok, null)
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
+
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String ua = null;
+                    if (view_uaCheckBox.isChecked()) {
+                        ua = view_uaEditText.getText().toString();
+                    }
+
+                    int js = WebSettingPatternAction.UNDEFINED;
+                    if (view_jsCheckBox.isChecked()) {
+                        switch (view_jsSpinner.getSelectedItemPosition()) {
+                            case 0:
+                                js = WebSettingPatternAction.ENABLE;
+                                break;
+                            case 1:
+                                js = WebSettingPatternAction.DISABLE;
+                                break;
+                        }
+                    }
+
+                    WebSettingPatternAction action = new WebSettingPatternAction(ua, js);
+                    if (getActivity() instanceof PatternUrlActivity) {
+                        PatternUrlChecker newChecker = ((PatternUrlActivity) getActivity()).makeActionChecker(action, header);
+                        if (newChecker != null) {
+                            int id = getArguments().getInt(ID);
+                            ((PatternUrlActivity) getActivity()).add(id, newChecker);
+                            dismiss();
+                        }
+                    }
+                }
+            });
+
+            return dialog;
         }
 
         @Override

@@ -112,7 +112,8 @@
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".pattern.url.PatternUrlActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/pref_pattern_match" />
         <activity
             android:name=".debug.DebugActivity"
             android:configChanges="keyboardHidden|orientation"
