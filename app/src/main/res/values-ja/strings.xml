@@ -4,7 +4,8 @@
     <string name="reset">リセット</string>
     <string name="app_notfound">開くことの出来るアプリケーションが見つかりません</string>
     <string name="form_resubmit">このページの表示にははポストデータの再送が必要です。 ポストデータを再送してよろしいですか？</string>
-    <string name="pattern_edittext_hint">URL (正規表現:*, +)</string>
+    <string name="pattern_edittext_info">ワイルドカードは*と+が使えます。また、正規表現を\'?\'で始めて使うこともできます。</string>
+    <string name="pattern_edittext_hint">URL</string>
     <string name="pattern_open_others">他のアプリで開く</string>
     <string name="pattern_replace_url">URLの置き換え</string>
     <string name="pattern_replace_url_hint">URLの置き換え ($1, $2, \u2026 を使用)</string>

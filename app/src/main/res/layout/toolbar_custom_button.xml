@@ -3,5 +3,6 @@
     android:id="@+id/button"
     style="@style/ToolbarImageButton"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:scaleType="fitCenter"
     android:src="@null" />

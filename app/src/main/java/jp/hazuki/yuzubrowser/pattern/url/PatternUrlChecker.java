@@ -27,6 +27,7 @@ public class PatternUrlChecker extends PatternChecker {
 
     public PatternUrlChecker(JsonParser parser) throws PatternSyntaxException, IOException {
         super(PatternAction.newInstance(parser));
+        //TODO not set mPattern
         if (parser.nextToken() != JsonToken.START_OBJECT) return;
         while (parser.nextToken() != JsonToken.END_OBJECT) {
             if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return;
@@ -49,7 +50,7 @@ public class PatternUrlChecker extends PatternChecker {
     }
 
     public boolean isMatchUrl(String url) {
-        return mPattern.matcher(url).find();
+        return mPattern != null && mPattern.matcher(url).find();
     }
 
     protected Matcher matcher(String url) {

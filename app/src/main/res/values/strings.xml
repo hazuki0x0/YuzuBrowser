@@ -5,7 +5,8 @@
     <string name="reset">Reset</string>
     <string name="app_notfound">Acceptable application not found</string>
     <string name="form_resubmit">This page cannot be refreshed unless the postdata send. Would you like to resend the POSTDATA?</string>
-    <string name="pattern_edittext_hint">URL (regex:*, +)</string>
+    <string name="pattern_edittext_info">Wildcard characters * and + are allowed.Also,regex starts with \'?\'.</string>
+    <string name="pattern_edittext_hint">URL</string>
     <string name="pattern_open_others">Open in other app</string>
     <string name="pattern_replace_url">Replace URL</string>
     <string name="pattern_replace_url_hint">Replace URL (use $1, $2, \u2026)</string>
