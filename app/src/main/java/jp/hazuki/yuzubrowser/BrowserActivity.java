@@ -1882,97 +1882,102 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 return true;
             }
 
-            if (uri.getScheme().toLowerCase().equals("intent")) {
-                try {
-                    Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+            String scheme = uri.getScheme();
 
-                    if (intent != null) {
-                        PackageManager packageManager = getPackageManager();
-                        ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                        if (info != null) {
-                            startActivity(intent);
-                        } else {
-                            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
-                            return !TextUtils.isEmpty(fallbackUrl) && shouldOverrideUrlLoading(web, fallbackUrl, Uri.parse(fallbackUrl));
-                        }
-
-                        return true;
-                    }
-                } catch (URISyntaxException e) {
-                    Logger.e(TAG, "Can't resolve intent://", e);
-                }
-            }
-
-            if (uri.getScheme().toLowerCase().equals("yuzu")) {
-
-                String action = uri.getSchemeSpecificPart();
-
-                if (action.startsWith("//")) {
-                    action = action.substring(2);
-                }
-                Intent intent;
-                if (TextUtils.isEmpty(action)) {
-                    return false;
-                } else switch (action.toLowerCase()) {
-                    case "settings":
-                    case "setting":
-                        intent = new Intent(BrowserActivity.this, MainSettingsActivity.class);
-                        break;
-                    case "histories":
-                    case "history":
-                        intent = new Intent(BrowserActivity.this, BrowserHistoryActivity.class);
-                        intent.putExtra(SearchActivity.EXTRA_QUERY, web.getUrl());
-                        startActivityForResult(intent, RESULT_REQUEST_HISTORY);
-                        return true;
-                    case "downloads":
-                    case "download":
-                        intent = new Intent(BrowserActivity.this, DownloadListActivity.class);
-                        break;
-                    case "debug":
-                        intent = new Intent(BrowserActivity.this, DebugActivity.class);
-                        break;
-                    case "bookmarks":
-                    case "bookmark":
-                        intent = new Intent(BrowserActivity.this, BookmarkActivity.class);
-                        intent.putExtra(SearchActivity.EXTRA_QUERY, web.getUrl());
-                        startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
-                        return true;
-                    case "search":
-                        showSearchBox("", mTabList.indexOf(data));
-                        return true;
-                    case "speeddial":
-                        showSpeedDial(data);
-                        return true;
-                    case "home":
-                        loadUrl(data, AppData.home_page.get());
-                        return true;
-                    case "resblock":
-                        intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
-                        break;
-                    default:
-                        return false;
-                }
-                startActivity(intent);
-                return true;
-            }
-
-            if (AppData.share_unknown_scheme.get()) {
-                if (WebUtils.isOverrideScheme(uri)) {
+            if (scheme != null) {
+                scheme = scheme.toLowerCase();
+                if (scheme.equals("intent")) {
                     try {
                         Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
 
                         if (intent != null) {
-                            ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                            PackageManager packageManager = getPackageManager();
+                            ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                             if (info != null) {
                                 startActivity(intent);
                             } else {
                                 String fallbackUrl = intent.getStringExtra("browser_fallback_url");
                                 return !TextUtils.isEmpty(fallbackUrl) && shouldOverrideUrlLoading(web, fallbackUrl, Uri.parse(fallbackUrl));
                             }
+
                             return true;
                         }
                     } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                        Logger.e(TAG, "Can't resolve intent://", e);
+                    }
+                }
+
+                if (scheme.equals("yuzu")) {
+
+                    String action = uri.getSchemeSpecificPart();
+
+                    if (action.startsWith("//")) {
+                        action = action.substring(2);
+                    }
+                    Intent intent;
+                    if (TextUtils.isEmpty(action)) {
+                        return false;
+                    } else switch (action.toLowerCase()) {
+                        case "settings":
+                        case "setting":
+                            intent = new Intent(BrowserActivity.this, MainSettingsActivity.class);
+                            break;
+                        case "histories":
+                        case "history":
+                            intent = new Intent(BrowserActivity.this, BrowserHistoryActivity.class);
+                            intent.putExtra(SearchActivity.EXTRA_QUERY, web.getUrl());
+                            startActivityForResult(intent, RESULT_REQUEST_HISTORY);
+                            return true;
+                        case "downloads":
+                        case "download":
+                            intent = new Intent(BrowserActivity.this, DownloadListActivity.class);
+                            break;
+                        case "debug":
+                            intent = new Intent(BrowserActivity.this, DebugActivity.class);
+                            break;
+                        case "bookmarks":
+                        case "bookmark":
+                            intent = new Intent(BrowserActivity.this, BookmarkActivity.class);
+                            intent.putExtra(SearchActivity.EXTRA_QUERY, web.getUrl());
+                            startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
+                            return true;
+                        case "search":
+                            showSearchBox("", mTabList.indexOf(data));
+                            return true;
+                        case "speeddial":
+                            showSpeedDial(data);
+                            return true;
+                        case "home":
+                            loadUrl(data, AppData.home_page.get());
+                            return true;
+                        case "resblock":
+                            intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
+                            break;
+                        default:
+                            return false;
+                    }
+                    startActivity(intent);
+                    return true;
+                }
+
+                if (AppData.share_unknown_scheme.get()) {
+                    if (WebUtils.isOverrideScheme(uri)) {
+                        try {
+                            Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+
+                            if (intent != null) {
+                                ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                                if (info != null) {
+                                    startActivity(intent);
+                                } else {
+                                    String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                                    return !TextUtils.isEmpty(fallbackUrl) && shouldOverrideUrlLoading(web, fallbackUrl, Uri.parse(fallbackUrl));
+                                }
+                                return true;
+                            }
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
