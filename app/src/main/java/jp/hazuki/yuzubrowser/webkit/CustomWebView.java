@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
@@ -132,7 +131,7 @@ public interface CustomWebView {
 
     WebView getWebView();
 
-    SwipeRefreshLayout getSwipeRefresh();
+    void setSwipeEnable(boolean enable);
 
     //public void setGestureDetector(GestureDetector d);
     void setGestureDetector(MultiTouchGestureDetector d);
@@ -171,6 +170,8 @@ public interface CustomWebView {
     long getIdentityId();
 
     void setIdentityId(long id);
+
+    void resetTheme();
 
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);
