@@ -15,7 +15,7 @@ import android.webkit.WebView;
 
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
-class NormalWebView extends WebView implements CustomWebView, NestedScrollingChild {
+public class NormalWebView extends WebView implements CustomWebView, NestedScrollingChild {
     private long id = System.currentTimeMillis();
 
     private MultiTouchGestureDetector mGestureDetector;
@@ -239,7 +239,7 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
                     event.offsetLocation(0, -mScrollOffset[1]);
                     mNestedOffsetY = mScrollOffset[1];
                 }
-                returnValue = super.onTouchEvent(event);
+                returnValue = super.onTouchEvent(ev);
 
                 // NestedScroll
                 if (dispatchNestedScroll(0, mScrollConsumed[1], 0, deltaY, mScrollOffset)) {
@@ -256,7 +256,7 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
                 }
                 break;
             case MotionEvent.ACTION_DOWN:
-                returnValue = super.onTouchEvent(event);
+                returnValue = super.onTouchEvent(ev);
                 if (firstScroll) {
                     mLastY = eventY - 5;
                     firstScroll = false;
@@ -269,9 +269,12 @@ class NormalWebView extends WebView implements CustomWebView, NestedScrollingChi
             case MotionEvent.ACTION_UP:
                 /* no break */
             case MotionEvent.ACTION_CANCEL:
-                returnValue = super.onTouchEvent(event);
+                returnValue = super.onTouchEvent(ev);
                 // end NestedScroll
                 stopNestedScroll();
+                break;
+            default:
+                returnValue = super.onTouchEvent(ev);
                 break;
         }
         return returnValue;

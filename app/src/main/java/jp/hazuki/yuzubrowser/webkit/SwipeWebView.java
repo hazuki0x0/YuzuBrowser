@@ -10,6 +10,7 @@ import android.print.PrintDocumentAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -217,7 +218,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         webView = new NormalWebView(context);
         controller = new ScrollController(this);
         webView.setScrollController(controller);
-        addView(webView);
+        addView(webView, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         setOnRefreshListener(this);
     }
