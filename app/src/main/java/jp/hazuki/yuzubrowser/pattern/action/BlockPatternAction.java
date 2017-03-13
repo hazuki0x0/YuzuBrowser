@@ -32,7 +32,7 @@ public class BlockPatternAction extends PatternAction {
     @Override
     public boolean write(JsonGenerator generator) throws IOException {
         generator.writeNumber(BLOCK);
-        generator.writeNull();
+        generator.writeNumber(0);
         return true;
     }
 

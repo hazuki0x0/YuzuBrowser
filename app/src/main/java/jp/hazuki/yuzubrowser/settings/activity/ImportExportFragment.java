@@ -181,7 +181,6 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
     @Override
     public void onResume() {
         super.onResume();
-        new PermissionDialog().show(getChildFragmentManager(), "permission");
         if (!PermissionUtils.checkWriteStorage(getActivity())) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 new PermissionDialog().show(getChildFragmentManager(), "permission");
