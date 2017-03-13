@@ -37,6 +37,10 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
         urlEditText = (EditText) header_view.findViewById(R.id.urlEditText);
         addHeaderView(header_view);
 
+        if (getIntent() != null) {
+            urlEditText.setText(getIntent().getStringExtra(Intent.EXTRA_TEXT));
+        }
+
         setPatternManager(new PatternUrlManager(getApplicationContext()));
     }
 

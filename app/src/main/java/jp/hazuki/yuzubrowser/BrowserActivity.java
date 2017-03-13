@@ -131,6 +131,7 @@ import jp.hazuki.yuzubrowser.gesture.GestureManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.menuwindow.MenuWindow;
+import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager;
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity;
@@ -2593,6 +2594,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_SAVE_PAGE:
                             DownloadDialog.showDownloadDialog(BrowserActivity.this, extra);//TODO referer
                             return true;
+                        case SingleAction.LPRESS_PATTERN_MATCH: {
+                            Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
+                            intent.putExtra(Intent.EXTRA_TEXT, extra);
+                            startActivity(intent);
+                            return true;
+                        }
                         default:
                             return run(action, target, null);
                     }
@@ -2630,12 +2637,19 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
                             return true;
-                        case SingleAction.LPRESS_IMAGE_RES_BLOCK:
+                        case SingleAction.LPRESS_IMAGE_RES_BLOCK: {
                             Intent intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
                             intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
                             intent.putExtra(Intent.EXTRA_TEXT, extra);
                             startActivity(intent);
                             return true;
+                        }
+                        case SingleAction.LPRESS_PATTERN_MATCH: {
+                            Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
+                            intent.putExtra(Intent.EXTRA_TEXT, extra);
+                            startActivity(intent);
+                            return true;
+                        }
                         default:
                             return run(action, target, null);
                     }
@@ -2700,12 +2714,19 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
                             return true;
-                        case SingleAction.LPRESS_IMAGE_RES_BLOCK:
+                        case SingleAction.LPRESS_IMAGE_RES_BLOCK: {
                             Intent intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
                             intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
                             intent.putExtra(Intent.EXTRA_TEXT, extra);
                             startActivity(intent);
                             return true;
+                        }
+                        case SingleAction.LPRESS_PATTERN_MATCH: {
+                            Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
+                            intent.putExtra(Intent.EXTRA_TEXT, extra);
+                            startActivity(intent);
+                            return true;
+                        }
                         default:
                             return run(action, target, null);
                     }

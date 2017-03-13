@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 
 import java.io.IOException;
 
@@ -16,7 +17,7 @@ public class BlockPatternAction extends PatternAction {
     }
 
     public BlockPatternAction(JsonParser parser) throws IOException {
-        //if (parser.nextToken() != JsonToken.VALUE_NULL) return;
+        if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return;
     }
 
     @Override

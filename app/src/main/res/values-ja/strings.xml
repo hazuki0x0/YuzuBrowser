@@ -58,6 +58,8 @@
     <string name="save_image">画像を保存</string>
     <string name="search_image">画像を検索</string>
     <string name="block_image">画像をブロック</string>
+    <string name="add_image_pattern">画像をパターンマッチに追加</string>
+    <string name="add_url_pattern">リンク先をパターンマッチに追加</string>
     <string name="open_all_new">新しいタブで全て開く</string>
     <string name="open_all_bg">バックグラウンドで全て開く</string>
     <string name="copy_clipboard_mes_before">コピーしました : </string>
