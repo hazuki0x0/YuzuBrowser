@@ -233,7 +233,7 @@
     <string name="backup_settings">設定のバックアップ</string>
     <string name="restore_settings">設定の復元</string>
     <string name="pref_backup_settings_confirm">設定をバックアップしてもよろしいですか？</string>
-    <string name="pref_restore_settings_confirm">現在の全ての設定が失われますが復元してもよろしいですか？</string>
+    <string name="pref_restore_settings_confirm">現在の全ての設定が失われますが復元してもよろしいですか？\nまた、復元完了後自動的に再起動します。</string>
 
     <string name="version">バージョン</string>
     <string name="build">ビルド</string>

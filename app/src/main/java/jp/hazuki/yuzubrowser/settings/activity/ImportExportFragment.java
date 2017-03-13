@@ -27,6 +27,7 @@ import jp.hazuki.yuzubrowser.backup.RestoreTask;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference;
+import jp.hazuki.yuzubrowser.utils.AppUtils;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.PermissionUtils;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragment;
@@ -209,6 +210,9 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
 
         if (data) {
             Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_SHORT).show();
+            if (loader instanceof RestoreTask) {
+                AppUtils.restartApp(getActivity());
+            }
         } else {
             Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_SHORT).show();
         }
