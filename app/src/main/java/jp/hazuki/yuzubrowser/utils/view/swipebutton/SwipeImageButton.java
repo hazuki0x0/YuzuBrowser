@@ -27,6 +27,7 @@ public class SwipeImageButton extends AppCompatImageButton implements SwipeContr
         mController.setActionData(action_list, callback);
         mController.setOnChangeListener(this);
         setImageDrawable(mController.getDefaultIcon());
+        setBackgroundResource(R.drawable.swipebtn_image_background_normal);
     }
 
     public void notifyChangeState() {
