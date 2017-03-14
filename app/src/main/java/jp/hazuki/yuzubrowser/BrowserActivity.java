@@ -935,10 +935,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     }
 
-    private void applyUserScript(CustomWebView web, String url) {
+    private void applyUserScript(CustomWebView web, String url, boolean isStart) {
         if (mUserScriptList != null) {
             SCRIPT_LOOP:
             for (UserScript script : mUserScriptList) {
+                if (isStart != script.isRunStart())
+                    continue;
+
                 if (script.getExclude() != null)
                     for (Pattern pattern : script.getExclude()) {
                         if (pattern.matcher(url).find())
@@ -1982,6 +1985,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             MainTabData data = mTabList.get(web);
             if (data == null) return;
 
+            applyUserScript(web, url, true);
+
             data.onPageStarted(url, favicon);
 
             if (data == mTabList.getCurrentTabData()) {
@@ -1998,7 +2003,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             MainTabData data = mTabList.get(web);
             if (data == null) return;
 
-            applyUserScript(web, url);
+            applyUserScript(web, url, false);
 
             if (mIsActivityPaused) {
                 pauseWebViewTimers(data);
@@ -2856,7 +2861,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     MainTabData tab = mTabList.get(target);
                     if (to) {
                         if (!tab.isInPageLoad())
-                            applyUserScript(tab.mWebView, tab.mUrl);
+                            applyUserScript(tab.mWebView, tab.mUrl, false);
                         mToolbar.notifyChangeWebState();//icon change
                     } else {
                         tab.mWebView.reload();
