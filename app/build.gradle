@@ -10,8 +10,8 @@ android {
         applicationId "jp.hazuki.yuzubrowser"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 103003
-        versionName "1.3.3"
+        versionCode 104000
+        versionName "1.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "GIT_HASH", "\"${gitHash}\""
