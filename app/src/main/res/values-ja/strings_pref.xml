@@ -178,6 +178,8 @@
     <string name="pref_flick_settings">フリック設定</string>
     <string name="pref_flick_left">左フリック</string>
     <string name="pref_flick_right">右フリック</string>
+    <string name="pref_flick_up">上フリック</string>
+    <string name="pref_flick_down">下フリック</string>
     <string name="pref_sensitivity_speed">感度 (速度)</string>
     <string name="pref_flick_enable">フリックアクションを有効にする</string>
     <string name="pref_qc_settings">クイックコントロール設定</string>
@@ -255,4 +257,7 @@
     <string name="pref_share_unkown_scheme_summary">未知のURLスキームを他のアプリで開きます</string>
 
     <string name="pref_speed_dial_setting">スピードダイアル設定</string>
+
+    <string name="pref_double_tap_flick_settings">ダブルタップフリック設定</string>
+    <string name="pref_double_tap_flick_enable">ダブルタップフリックを有効にする</string>
 </resources>

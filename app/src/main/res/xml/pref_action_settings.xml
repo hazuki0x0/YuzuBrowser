@@ -194,6 +194,43 @@
                 app:actionId="swipeRight" />
         </PreferenceCategory>
     </PreferenceScreen>
+    <PreferenceScreen android:title="@string/pref_double_tap_flick_settings">
+        <PreferenceCategory>
+            <SwitchPreference
+                android:key="double_tap_flick_enable"
+                android:title="@string/pref_double_tap_flick_enable" />
+
+            <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+                android:key="double_tap_flick_sensitivity_speed"
+                android:title="@string/pref_sensitivity_speed"
+                app:seekMax="100"
+                app:seekMin="0" />
+            <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+                android:key="double_tap_flick_sensitivity_distance"
+                android:title="@string/pref_sensitivity_distance"
+                app:seekMax="100"
+                app:seekMin="0" />
+        </PreferenceCategory>
+        <PreferenceCategory>
+            <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
+                android:title="@string/pref_flick_left"
+                app:actionGroup="double_tap_flick"
+                app:actionId="flickLeft" />
+            <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
+                android:title="@string/pref_flick_right"
+                app:actionGroup="double_tap_flick"
+                app:actionId="flickRight" />
+            <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
+                android:title="@string/pref_flick_up"
+                app:actionGroup="double_tap_flick"
+                app:actionId="flickUp" />
+            <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
+                android:title="@string/pref_flick_down"
+                app:actionGroup="double_tap_flick"
+                app:actionId="flickDown" />
+
+        </PreferenceCategory>
+    </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_qc_settings">
         <SwitchPreference
             android:key="qc_enable"

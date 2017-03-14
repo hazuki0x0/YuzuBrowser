@@ -41,6 +41,7 @@
         <enum name="qc" value="8" />
         <enum name="web_swipe" value="9" />
         <enum name="s_btn_array" value="10" />
+        <enum name="double_tap_flick" value="11" />
     </attr>
     <attr name="actionId" format="integer">
         <flag name="btnCenter" value="0x0040" />
@@ -67,6 +68,8 @@
         <flag name="lpImageLink" value="0x0004" />
         <flag name="flickLeft" value="0x01" />
         <flag name="flickRight" value="0x02" />
+        <flag name="flickUp" value="0x03" />
+        <flag name="flickDown" value="0x04" />
         <flag name="qcLevel1" value="0x11" />
         <flag name="qcLevel2" value="0x12" />
         <flag name="qcLevel3" value="0x13" />

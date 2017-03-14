@@ -108,6 +108,7 @@ import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
 import jp.hazuki.yuzubrowser.action.item.VibrationSingleAction;
 import jp.hazuki.yuzubrowser.action.item.WebScrollSingleAction;
 import jp.hazuki.yuzubrowser.action.item.startactivity.StartActivitySingleAction;
+import jp.hazuki.yuzubrowser.action.manager.DoubleTapFlickActionManager;
 import jp.hazuki.yuzubrowser.action.manager.FlickActionManager;
 import jp.hazuki.yuzubrowser.action.manager.HardButtonActionManager;
 import jp.hazuki.yuzubrowser.action.manager.LongPressActionManager;
@@ -1320,7 +1321,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         mToolbar.swapTab(a, b);
     }
 
-    private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener {
+    private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             return false;
@@ -1406,7 +1407,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mActionCallback.run(manager.double_left.action);
                     else
                         mActionCallback.run(manager.double_right.action);
-                    return false;
+                    return true;
                 }
 
                 if (checkWebSwipe(sense_speed, sense_dist, velocityY, distY0, distY1)) {
@@ -1416,7 +1417,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mActionCallback.run(manager.double_up.action);
                     else
                         mActionCallback.run(manager.double_down.action);
-                    return false;
+                    return true;
                 }
             }
 
@@ -1439,6 +1440,75 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean onPointerUp(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTapScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTapFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (e1 == null || e2 == null)
+                return false;
+
+            MainTabData tab = mTabList.getCurrentTabData();
+            if (tab == null)
+                return false;
+
+            if (e1.getPointerCount() <= 1 || e2.getPointerCount() <= 1) {
+                if (!AppData.double_tap_flick_enable.get())
+                    return false;
+
+                final float dx = Math.abs(velocityX);
+                final float dy = Math.abs(velocityY);
+
+                final float distX = e2.getX() - e1.getX();
+                final float distY = e2.getY() - e1.getY();
+
+                DoubleTapFlickActionManager manager = DoubleTapFlickActionManager.getInstance(getApplicationContext());
+
+                boolean returnValue;
+                if (dy > dx) {
+                    if (dy < AppData.double_tap_flick_sensitivity_speed.get() * 100)
+                        return false;
+                    if (Math.abs(distY) < AppData.double_tap_flick_sensitivity_distance.get() * 10)
+                        return false;
+
+                    if (distY < 0)
+                        returnValue = mActionCallback.run(manager.flick_up.action);
+                    else
+                        returnValue = mActionCallback.run(manager.flick_down.action);
+                } else {
+                    if (dx < AppData.double_tap_flick_sensitivity_speed.get() * 100)
+                        return false;
+                    if (Math.abs(distX) < AppData.double_tap_flick_sensitivity_distance.get() * 10)
+                        return false;
+
+                    if (distX < 0)
+                        returnValue = mActionCallback.run(manager.flick_left.action);
+                    else
+                        returnValue = mActionCallback.run(manager.flick_right.action);
+                }
+                return returnValue;
+
+            }
             return false;
         }
     }
@@ -3406,7 +3476,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (PrintHelper.systemSupportsPrint()) {
                         MainTabData tab = mTabList.get(target);
                         PrintManager manager = (PrintManager) getSystemService(PRINT_SERVICE);
-                        manager.print(tab.mUrl, tab.mWebView.createPrintDocumentAdapter(tab.mTitle), null);
+                        String title = tab.mTitle;
+                        if (TextUtils.isEmpty(title))
+                            title = tab.mWebView.getTitle();
+                        if (TextUtils.isEmpty(title))
+                            title = "document";
+                        manager.print(tab.mUrl, tab.mWebView.createPrintDocumentAdapter(title), null);
                     } else {
                         Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
                     }

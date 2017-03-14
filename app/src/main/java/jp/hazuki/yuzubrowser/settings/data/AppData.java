@@ -128,6 +128,9 @@ public class AppData {
     public static final BooleanContainer allow_content_access = new BooleanContainer("allow_content_access", true);
     public static final BooleanContainer pull_to_refresh = new BooleanContainer("pull_to_refresh", true);
     public static final BooleanContainer share_unknown_scheme = new BooleanContainer("share_unknown_scheme", true);
+    public static final BooleanContainer double_tap_flick_enable = new BooleanContainer("double_tap_flick_enable", false);
+    public static final IntContainer double_tap_flick_sensitivity_speed = new IntContainer("double_tap_flick_sensitivity_speed", 20);
+    public static final IntContainer double_tap_flick_sensitivity_distance = new IntContainer("double_tap_flick_sensitivity_distance", 15);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
