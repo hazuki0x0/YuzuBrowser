@@ -218,10 +218,13 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (mGestureDetector != null && ev != null)
-            mGestureDetector.onTouchEvent(ev);
+        if (mGestureDetector != null && ev != null && mGestureDetector.onTouchEvent(ev)) {
+            ev.setAction(MotionEvent.ACTION_CANCEL);
+            super.onTouchEvent(ev);
+            return true;
+        }
 
-        boolean returnValue = false;
+        boolean returnValue;
         MotionEvent event = MotionEvent.obtain(ev);
         final int action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {

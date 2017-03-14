@@ -5,6 +5,7 @@ import android.content.Context;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import jp.hazuki.yuzubrowser.action.manager.DoubleTapFlickActionManager;
 import jp.hazuki.yuzubrowser.action.manager.FlickActionManager;
 import jp.hazuki.yuzubrowser.action.manager.HardButtonActionManager;
 import jp.hazuki.yuzubrowser.action.manager.LongPressActionManager;
@@ -33,6 +34,7 @@ public class ActionManager {
     public static final int TYPE_QUICK_CONTROL = 8;
     public static final int TYPE_WEB_SWIPE = 9;
     public static final int TYPE_SOFT_BUTTON_ARRAY = 10;
+    public static final int TYPE_DOUBLE_TAP_FLICK = 11;
 
     public static ActionManager getActionManager(Context context, int type) {
         switch (type) {
@@ -56,6 +58,8 @@ public class ActionManager {
                 return WebSwipeActionManager.getInstance(context);
             case TYPE_SOFT_BUTTON_ARRAY:
                 return SoftButtonActionArrayManager.getInstance(context);
+            case TYPE_DOUBLE_TAP_FLICK:
+                return DoubleTapFlickActionManager.getInstance(context);
         }
         throw new IllegalArgumentException();
     }

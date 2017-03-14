@@ -451,6 +451,8 @@
     <string name="pref_flick_settings">Flick settings</string>
     <string name="pref_flick_left">Flick left action</string>
     <string name="pref_flick_right">Flick right action</string>
+    <string name="pref_flick_up">Flick up action</string>
+    <string name="pref_flick_down">Flick down action</string>
     <string name="pref_sensitivity_speed">Sensitivity (speed)</string>
     <string name="pref_flick_enable">Enable flick action</string>
     <string name="pref_qc_settings">Quick control settings</string>
@@ -536,4 +538,7 @@
     <string name="pref_share_unkown_scheme_summary">Open an unknown URL scheme with another application</string>
 
     <string name="pref_speed_dial_setting">SpeedDial settings</string>
+
+    <string name="pref_double_tap_flick_settings">Double tap with flick settings</string>
+    <string name="pref_double_tap_flick_enable">Enable double tap with flick</string>
 </resources>
