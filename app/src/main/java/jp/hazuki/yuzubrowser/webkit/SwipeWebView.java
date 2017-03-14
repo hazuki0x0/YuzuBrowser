@@ -478,6 +478,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     @Override
     public void setSwipeEnable(boolean enable) {
         enableSwipe = enable;
+        setEnabled(enable);
     }
 
     @Override

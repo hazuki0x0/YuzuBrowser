@@ -17,6 +17,6 @@ public class WebSrcImageShareWebHandler extends WebSrcImageHandler {
     public void handleUrl(String url) {
         Activity activity = mReference.get();
         if (activity != null)
-            WebUtils.shareWeb(activity, url, null, null, null);
+            WebUtils.shareWeb(activity, url, null);
     }
 }

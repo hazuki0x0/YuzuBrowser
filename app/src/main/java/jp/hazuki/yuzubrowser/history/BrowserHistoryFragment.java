@@ -152,7 +152,7 @@ public class BrowserHistoryFragment extends Fragment implements OnRecyclerListen
             menu.add(R.string.share).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    WebUtils.shareWeb(getActivity(), url, title, null, null);
+                    WebUtils.shareWeb(getActivity(), url, title);
                     return false;
                 }
             });

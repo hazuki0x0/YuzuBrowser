@@ -3,7 +3,6 @@ package jp.hazuki.yuzubrowser.utils;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Patterns;
 import android.webkit.URLUtil;
@@ -103,19 +102,11 @@ public class WebUtils {
     }
 
     public static Intent createShareWebIntent(String url, String title) {
-        return createShareWebIntent(url, title, null, null);
-    }
-
-    public static Intent createShareWebIntent(String url, String title, Bitmap favicon, Bitmap thumbnail) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, url);
         if (title != null)
             intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        if (favicon != null)
-            intent.putExtra("share_favicon", favicon);
-        if (thumbnail != null)
-            intent.putExtra("share_screenshot", thumbnail);
         return intent;
     }
 
@@ -124,10 +115,10 @@ public class WebUtils {
         return intent;
     }
 
-    public static void shareWeb(Context context, String url, String title, Bitmap favicon, Bitmap thumbnail) {
+    public static void shareWeb(Context context, String url, String title) {
         if (url == null) return;
 
-        Intent intent = createShareWebIntent(url, title, favicon, thumbnail);
+        Intent intent = createShareWebIntent(url, title);
         try {
             context.startActivity(PackageUtils.createChooser(context, intent, context.getText(R.string.share)));
         } catch (ActivityNotFoundException e) {

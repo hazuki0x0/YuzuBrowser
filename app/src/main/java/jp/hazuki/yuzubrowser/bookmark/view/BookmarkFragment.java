@@ -255,7 +255,7 @@ public class BookmarkFragment extends Fragment implements OnRecyclerListener {
                 break;
             case R.id.share:
                 BookmarkSite site = (BookmarkSite) item;
-                WebUtils.shareWeb(getActivity(), site.url, site.title, null, null);
+                WebUtils.shareWeb(getActivity(), site.url, site.title);
                 break;
             case R.id.copyUrl:
                 ClipboardUtils.setClipboardText(getActivity(), ((BookmarkSite) item).url);
