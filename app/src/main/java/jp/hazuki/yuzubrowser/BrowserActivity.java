@@ -1515,7 +1515,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
 
             private void actionShare(String url) {
-                WebUtils.shareWeb(BrowserActivity.this, url, null, null, null);
+                WebUtils.shareWeb(BrowserActivity.this, url, null);
             }
         });
 
@@ -2563,7 +2563,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             openInRightBgTab(extra, TabType.DEFAULT);
                             return true;
                         case SingleAction.LPRESS_SHARE:
-                            WebUtils.shareWeb(BrowserActivity.this, extra, null, null, null);
+                            WebUtils.shareWeb(BrowserActivity.this, extra, null);
                             return true;
                         case SingleAction.LPRESS_OPEN_OTHERS:
                             startActivity(PackageUtils.createChooser(BrowserActivity.this, extra, getText(R.string.open_other_app)));
@@ -2603,7 +2603,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             openInRightBgTab(extra, TabType.WINDOW);
                             return true;
                         case SingleAction.LPRESS_SHARE_IMAGE:
-                            WebUtils.shareWeb(BrowserActivity.this, extra, null, null, null);
+                            WebUtils.shareWeb(BrowserActivity.this, extra, null);
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE_OTHERS:
                             startActivity(PackageUtils.createChooser(BrowserActivity.this, extra, getText(R.string.open_other_app)));
@@ -2680,7 +2680,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             openInRightBgTab(extra, TabType.WINDOW);
                             return true;
                         case SingleAction.LPRESS_SHARE_IMAGE:
-                            WebUtils.shareWeb(BrowserActivity.this, extra, null, null, null);
+                            WebUtils.shareWeb(BrowserActivity.this, extra, null);
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE_OTHERS:
                             startActivity(PackageUtils.createChooser(BrowserActivity.this, extra, getText(R.string.open_other_app)));
@@ -3320,7 +3320,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
                 case SingleAction.SHARE_WEB: {
                     MainTabData tab = mTabList.get(target);
-                    WebUtils.shareWeb(BrowserActivity.this, tab.mUrl, tab.mTitle, tab.mWebView.getFavicon(), null);//TODO thumbnail
+                    WebUtils.shareWeb(BrowserActivity.this, tab.mUrl, tab.mTitle);
                 }
                 break;
                 case SingleAction.OPEN_OTHER:
