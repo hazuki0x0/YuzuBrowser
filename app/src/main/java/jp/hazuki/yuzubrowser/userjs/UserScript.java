@@ -29,7 +29,7 @@ public class UserScript implements Parcelable {
     private List<Pattern> include;
     private List<Pattern> exclude;
     private boolean unwrap;
-
+    private boolean runStart;
     public UserScript() {
     }
 
@@ -161,6 +161,14 @@ public class UserScript implements Parcelable {
         return unwrap;
     }
 
+    public boolean isRunStart() {
+        return runStart;
+    }
+
+    public void setRunStart(boolean runStart) {
+        this.runStart = runStart;
+    }
+
     private void loadData() {
         name = null;
         version = null;
@@ -187,37 +195,50 @@ public class UserScript implements Parcelable {
                 } else {
                     String field = matcher.group(1);
                     String value = matcher.group(2);
-                    if ("name".equalsIgnoreCase(field)) {
-                        name = value;
-                    } else if ("version".equalsIgnoreCase(field)) {
-                        version = value;
-                    } else if ("author".equalsIgnoreCase(field)) {
-                        author = value;
-                    } else if ("description".equalsIgnoreCase(field)) {
-                        description = value;
-                    } else if ("include".equalsIgnoreCase(field)) {
-                        if (include == null)
-                            include = new ArrayList<>();
-                        Pattern pattern = WebUtils.makeUrlPattern(value);
-                        if (pattern != null)
-                            include.add(pattern);
-                    } else if ("exclude".equalsIgnoreCase(field)) {
-                        if (exclude == null)
-                            exclude = new ArrayList<>();
-                        Pattern pattern = WebUtils.makeUrlPattern(value);
-                        if (pattern != null)
-                            exclude.add(pattern);
-                    } else if ("unwrap".equalsIgnoreCase(field)) {
-                        unwrap = true;
-                    } else {
-                        Logger.w(TAG, "Unknown header : " + line);
-                    }
+                    readData(field, value, line);
                 }
             }
 
             Logger.w(TAG, "Header (end) parser error");
         } catch (IOException e) {
             ErrorReport.printAndWriteLog(e);
+        }
+    }
+
+    protected void readData(String field, String value, String line) {
+        if ("name".equalsIgnoreCase(field)) {
+            name = value;
+        } else if ("version".equalsIgnoreCase(field)) {
+            version = value;
+        } else if ("author".equalsIgnoreCase(field)) {
+            author = value;
+        } else if ("description".equalsIgnoreCase(field)) {
+            description = value;
+        } else if ("include".equalsIgnoreCase(field)) {
+            if (include == null)
+                include = new ArrayList<>();
+            Pattern pattern = WebUtils.makeUrlPattern(value);
+            if (pattern != null)
+                include.add(pattern);
+        } else if ("exclude".equalsIgnoreCase(field)) {
+            if (exclude == null)
+                exclude = new ArrayList<>();
+            Pattern pattern = WebUtils.makeUrlPattern(value);
+            if (pattern != null)
+                exclude.add(pattern);
+        } else if ("unwrap".equalsIgnoreCase(field)) {
+            unwrap = true;
+        } else if ("run-at".equalsIgnoreCase(field)) {
+            runStart = "document-start".equalsIgnoreCase(value);
+        } else if ("match".equalsIgnoreCase(field)) {
+            String pattern_url = "?" + value.replace("?", "\\?").replace(".", "\\.")
+                    .replace("*", ".*?").replace("+", ".+?")
+                    .replace(".*?://", "^\\w*://").replace(".*?\\.", "((?![\\.]).)*.");
+            Pattern pattern = WebUtils.makeUrlPattern(pattern_url);
+            if (pattern != null)
+                include.add(pattern);
+        } else {
+            Logger.w(TAG, "Unknown header : " + line);
         }
     }
 
