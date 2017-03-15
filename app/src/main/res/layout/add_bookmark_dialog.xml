@@ -47,6 +47,8 @@
         android:id="@+id/folderButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
         style="@style/Widget.AppCompat.Spinner" />
 

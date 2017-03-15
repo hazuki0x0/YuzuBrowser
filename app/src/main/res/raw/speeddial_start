@@ -25,6 +25,7 @@
   margin: 20px 5px;
   box-shadow:2px 2px 2px;
   background-color: #ffffff;
+  border-radius: 2px;
 }
 
 search:hover {
@@ -93,6 +94,7 @@ body {
 img {
   width: 100%;
   height: auto;
+  max-height: 98px;
   border-radius: 3px 3px 0px 0px;
 }
 

@@ -7,6 +7,7 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
+import android.support.annotation.Px;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,7 +38,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     private long id = System.currentTimeMillis();
     private NormalWebView webView;
     private ScrollController controller;
-    private boolean enableSwipe;
+    private boolean enableSwipe = false;
 
     private CustomWebChromeClient mWebChromeClient;
     private CustomWebViewClient mWebViewClient;
@@ -461,6 +462,16 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     }
 
     @Override
+    public void scrollTo(@Px int x, @Px int y) {
+        webView.scrollTo(x, y);
+    }
+
+    @Override
+    public void scrollBy(@Px int x, @Px int y) {
+        webView.scrollBy(x, y);
+    }
+
+    @Override
     public boolean saveWebArchiveMethod(String filename) {
         return webView.saveWebArchiveMethod(filename);
     }
@@ -597,6 +608,11 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
     @Override
     public void onScrollEnable(boolean enable) {
-        setEnabled(enableSwipe && enable);
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enableSwipe && enabled);
     }
 }

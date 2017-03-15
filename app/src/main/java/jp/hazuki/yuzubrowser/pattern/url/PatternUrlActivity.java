@@ -2,29 +2,47 @@ package jp.hazuki.yuzubrowser.pattern.url;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
 import jp.hazuki.yuzubrowser.pattern.PatternActivity;
+import jp.hazuki.yuzubrowser.pattern.action.OpenOthersPatternAction;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingPatternAction;
 import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.ImeUtils;
+import jp.hazuki.yuzubrowser.utils.Logger;
+import jp.hazuki.yuzubrowser.utils.WebUtils;
 
 public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
     private EditText urlEditText;
@@ -60,18 +78,13 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
     }
 
     @Override
-    protected void settingOpenOthersAction(PatternUrlChecker checker, View header_view) {
-        super.settingOpenOthersAction(checker, makeHeaderView(checker));
-    }
-
-    @Override
     protected DialogFragment getWebSettingDialog(PatternUrlChecker checker) {
         return SettingWebDialog.getInstance(getPosition(checker), checker);
     }
 
     @Override
-    protected void settingWebSettingAction(PatternUrlChecker checker, View header_view) {
-        super.settingWebSettingAction(checker, makeHeaderView(checker));
+    protected DialogFragment getOpenOtherDialog(PatternUrlChecker checker) {
+        return OpenOtherDialog.newInstance(getPosition(checker), checker, urlEditText.getText().toString());
     }
 
     @Override
@@ -80,7 +93,7 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
     }
 
     @Override
-    protected PatternUrlChecker makeActionChecker(PatternAction pattern_action, View header_view) {
+    public PatternUrlChecker makeActionChecker(PatternAction pattern_action, View header_view) {
         String pattern_url = ((EditText) header_view.findViewById(R.id.urlEditText)).getText().toString();
         try {
             return new PatternUrlChecker(pattern_action, pattern_url);
@@ -207,6 +220,182 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
             if (requestCode == REQUEST_USER_AGENT && resultCode == RESULT_OK) {
                 view_uaEditText.setText(data.getStringExtra(Intent.EXTRA_TEXT));
             }
+        }
+    }
+
+    public static class OpenOtherDialog extends DialogFragment {
+        private static final String ID = "id";
+        private static final String CHECKER = "checker";
+        private static final String URL = "url";
+
+        private PatternUrlActivity patternActivity;
+        private Intent intent;
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            String url = getArguments().getString(URL);
+            final PatternUrlChecker checker = (PatternUrlChecker) getArguments().getSerializable(CHECKER);
+
+            final LayoutInflater inflater = LayoutInflater.from(getActivity());
+            final View header_view = inflater.inflate(R.layout.pattern_list_url, null);
+            final EditText view_urlEditText = (EditText) header_view.findViewById(R.id.urlEditText);
+            if (checker != null) {
+                url = checker.getPatternUrl();
+            }
+            view_urlEditText.setText(url);
+
+            ViewGroup view = (ViewGroup) inflater.inflate(R.layout.pattern_add_open, null);
+            view.addView(header_view, 0);
+            ListView view_listView = (ListView) view.findViewById(R.id.listView);
+
+            final PackageManager pm = getActivity().getPackageManager();
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse((WebUtils.maybeContainsUrlScheme(url)) ? url : "http://" + url));
+            final int flag;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                flag = PackageManager.MATCH_ALL;
+            } else {
+                flag = PackageManager.MATCH_DEFAULT_ONLY;
+            }
+            final List<ResolveInfo> open_app_list = pm.queryIntentActivities(intent, flag);
+            Collections.sort(open_app_list, new ResolveInfo.DisplayNameComparator(pm));
+
+            final ArrayAdapter<ResolveInfo> arrayAdapter = new ArrayAdapter<ResolveInfo>(getActivity(), 0, open_app_list) {
+                private final int app_icon_size = (int) getResources().getDimension(android.R.dimen.app_icon_size);
+
+                @NonNull
+                @Override
+                public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                    if (convertView == null) {
+                        convertView = inflater.inflate(R.layout.image_text_list_item, null);
+                        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+
+                        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                        params.height = app_icon_size;
+                        params.width = app_icon_size;
+                        imageView.setLayoutParams(params);
+                    }
+
+                    ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+                    TextView textView = (TextView) convertView.findViewById(R.id.textView);
+
+                    if (position == 0) {
+                        imageView.setImageDrawable(null);
+                        textView.setText(getString(R.string.pattern_open_app_list));
+                    } else {
+                        ResolveInfo item = getItem(position);
+                        imageView.setImageDrawable(item.loadIcon(pm));
+                        textView.setText(item.loadLabel(pm));
+                    }
+
+                    return convertView;
+                }
+
+                @Override
+                public ResolveInfo getItem(int position) {
+                    return super.getItem(position - 1);
+                }
+
+                @Override
+                public int getCount() {
+                    return super.getCount() + 1;
+                }
+            };
+
+            view_listView.setAdapter(arrayAdapter);
+
+            final AlertDialog.Builder dialog_builder = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.pattern_open_others)
+                    .setView(view)
+                    .setNegativeButton(android.R.string.cancel, null);
+
+            if (checker != null)
+                dialog_builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PatternUrlChecker new_checker = patternActivity.makeActionChecker(checker.getAction(), header_view);
+                        if (new_checker != null) {
+                            patternActivity.add(getArguments().getInt(ID), new_checker);
+                        }
+                    }
+                });
+
+            view_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    OpenOthersPatternAction pattern;
+                    if (position == 0) {
+                        pattern = new OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_LIST);
+                    } else {
+                        ResolveInfo item = open_app_list.get(position - 1);
+                        intent.setClassName(item.activityInfo.packageName, item.activityInfo.name);
+                        pattern = new OpenOthersPatternAction(intent);
+                    }
+                    PatternUrlChecker new_checker = patternActivity.makeActionChecker(pattern, header_view);
+                    if (new_checker != null) {
+                        patternActivity.add(getArguments().getInt(ID), new_checker);
+                        dismiss();
+                    }
+                }
+            });
+
+            view_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0) {
+                        OpenOthersPatternAction new_pattern = new OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_CHOOSER);
+                        PatternUrlChecker new_checker = patternActivity.makeActionChecker(new_pattern, header_view);
+                        if (new_checker != null) {
+                            patternActivity.add(getArguments().getInt(ID), new_checker);
+                            dismiss();
+                        }
+                    }
+                    return true;
+                }
+            });
+
+            view_urlEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    Logger.d("act", actionId);
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        ImeUtils.hideIme(getActivity(), view_urlEditText);
+                        String url = view_urlEditText.getText().toString();
+                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse((WebUtils.maybeContainsUrlScheme(url)) ? url : "http://" + url));
+                        List<ResolveInfo> open_app_list = pm.queryIntentActivities(intent, flag);
+                        Collections.sort(open_app_list, new ResolveInfo.DisplayNameComparator(pm));
+                        arrayAdapter.clear();
+                        arrayAdapter.addAll(open_app_list);
+                        arrayAdapter.notifyDataSetChanged();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            return dialog_builder.create();
+        }
+
+        public static OpenOtherDialog newInstance(int id, PatternUrlChecker checker, String url) {
+            OpenOtherDialog dialog = new OpenOtherDialog();
+            Bundle bundle = new Bundle();
+            bundle.putInt(ID, id);
+            bundle.putSerializable(CHECKER, checker);
+            bundle.putString(URL, url);
+            dialog.setArguments(bundle);
+            return dialog;
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            patternActivity = (PatternUrlActivity) getActivity();
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            patternActivity = null;
         }
     }
 }

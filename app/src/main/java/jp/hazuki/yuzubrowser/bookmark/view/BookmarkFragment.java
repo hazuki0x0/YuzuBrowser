@@ -37,12 +37,11 @@ import jp.hazuki.yuzubrowser.browser.openable.OpenUrlList;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
-import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class BookmarkFragment extends Fragment implements OnRecyclerListener {
+public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkRecyclerListener {
     private static final String MODE_PICK = "pick";
 
     private boolean pickMode;
@@ -78,7 +77,7 @@ public class BookmarkFragment extends Fragment implements OnRecyclerListener {
             actionBar.setTitle(folder.title);
         }
 
-        adapter = new BookmarkItemAdapter(getActivity(), folder.list, this);
+        adapter = new BookmarkItemAdapter(getActivity(), folder.list, pickMode, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -118,6 +117,14 @@ public class BookmarkFragment extends Fragment implements OnRecyclerListener {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void onIconClick(View v, int position) {
+        BookmarkItem item = adapter.getItem(position);
+        if (item instanceof BookmarkSite) {
+            sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_NEW);
         }
     }
 
@@ -386,7 +393,6 @@ public class BookmarkFragment extends Fragment implements OnRecyclerListener {
                 break;
         }
     }
-
 
     private class Touch extends ItemTouchHelper.Callback {
 
