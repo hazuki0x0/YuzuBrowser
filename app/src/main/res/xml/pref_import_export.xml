@@ -9,6 +9,14 @@
             android:dialogTitle="@string/pref_export_bookmark"
             android:key="export_sd_bookmark"
             android:title="@string/pref_export_bookmark" />
+        <Preference
+            android:key="import_html_bookmark"
+            android:title="@string/pref_import_html_bookmark" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference
+            android:dialogMessage="@string/pref_export_html_bookmark_confirm"
+            android:dialogTitle="@string/pref_export_html_bookmark"
+            android:key="export_html_bookmark"
+            android:title="@string/pref_export_html_bookmark" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_settings">
         <Preference

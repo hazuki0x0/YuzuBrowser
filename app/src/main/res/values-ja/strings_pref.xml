@@ -196,9 +196,13 @@
     <string name="pref_flick_edge">画面端判定</string>
     <string name="pref_import_export">インポート/エクスポート</string>
     <string name="pref_import_bookmark">ブックマークの復元</string>
-    <string name="pref_import_bookmark_confirm">ブックマークをインポートしてもよろしいですか？</string>
-    <string name="pref_export_bookmark">ブックマークのエクスポート</string>
-    <string name="pref_export_bookmark_confirm">ブックマークをエクスポートしてもよろしいですか？</string>
+    <string name="pref_import_bookmark_confirm">ブックマークを復元してもよろしいですか？</string>
+    <string name="pref_export_bookmark">ブックマークのバックアップ</string>
+    <string name="pref_export_bookmark_confirm">ブックマークをバックアップしてもよろしいですか？</string>
+    <string name="pref_import_html_bookmark">HTMLブックマークのインポート</string>
+    <string name="pref_import_html_bookmark_confirm">HTMLブックマークをインポートしてもよろしいですか？</string>
+    <string name="pref_export_html_bookmark">HTMLブックマークのエクスポート</string>
+    <string name="pref_export_html_bookmark_confirm">HTMLブックマークをエクスポートしてもよろしいですか？</string>
     <string name="pref_fast_back">高速ページ間移動</string>
     <string name="pref_userjs_settings">UserScript設定</string>
     <string name="pref_userjs_enable">UserScriptを有効にする</string>
