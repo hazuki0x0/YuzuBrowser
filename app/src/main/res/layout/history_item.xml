@@ -4,16 +4,18 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:descendantFocusability="blocksDescendants">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <ImageButton
+        android:id="@+id/imageButton"
         android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/urlTextView"
-        android:scaleType="fitStart" />
+        android:scaleType="fitStart"
+        android:background="?attr/selectableItemBackground" />
 
     <TextView
         android:id="@+id/titleTextView"

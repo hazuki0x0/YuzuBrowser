@@ -109,8 +109,8 @@ public class ToolbarManager {
         return customBar;
     }
 
-    public LinearLayout getBottomToolbarLayout() {
-        return bottomToolbarLayout;
+    public LinearLayout getBottomToolbarAlwaysLayout() {
+        return bottomToolbarAlwaysLayout;
     }
 
     public void addToolbarView(Resources res) {
@@ -262,10 +262,10 @@ public class ToolbarManager {
     }
 
     public void onFullscreeenChanged(boolean isFullscreen) {
-//        tabBar.onFullscreeenChanged(isFullscreen);
-//        urlBar.onFullscreeenChanged(isFullscreen);
-//        progressBar.onFullscreeenChanged(isFullscreen);
-//        customBar.onFullscreeenChanged(isFullscreen);
+        tabBar.onFullscreeenChanged(isFullscreen);
+        urlBar.onFullscreeenChanged(isFullscreen);
+        progressBar.onFullscreeenChanged(isFullscreen);
+        customBar.onFullscreeenChanged(isFullscreen);
     }
 
     public void onImeChanged(boolean shown) {

@@ -26,12 +26,11 @@ import jp.hazuki.yuzubrowser.browser.openable.OpenUrl;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
-import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class BrowserHistoryFragment extends Fragment implements OnRecyclerListener {
+public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAdapter.OnHistoryRecyclerListener {
     private static final String PICK_MODE = "pick";
 
     private boolean pickMode;
@@ -65,7 +64,7 @@ public class BrowserHistoryFragment extends Fragment implements OnRecyclerListen
         });
 
         manager = new BrowserHistoryManager(getActivity());
-        adapter = new BrowserHistoryAdapter(getActivity(), manager, this);
+        adapter = new BrowserHistoryAdapter(getActivity(), manager, pickMode, this);
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(adapter);
         adapter.setDecoration(decoration);
         recyclerView.addItemDecoration(decoration);
@@ -167,6 +166,11 @@ public class BrowserHistoryFragment extends Fragment implements OnRecyclerListen
             popupMenu.show();
         }
         return true;
+    }
+
+    @Override
+    public void onIconClicked(View v, int position) {
+        sendUrl(adapter.getItem(position), BrowserManager.LOAD_URL_TAB_NEW);
     }
 
     private void sendUrl(BrowserHistory history, int target) {

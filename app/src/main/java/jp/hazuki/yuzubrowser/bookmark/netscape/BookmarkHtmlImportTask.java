@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 
@@ -46,7 +47,7 @@ public class BookmarkHtmlImportTask extends AsyncTaskLoader<Boolean> {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(context, "This file is not bookmark html file.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.not_bookmark_file, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (XmlPullParserException | IOException e) {

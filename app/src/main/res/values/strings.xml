@@ -204,4 +204,6 @@
     <string name="request_permission_storage_setting">Please tap [access right] and enable storage</string>
     <string name="confirm_permission_storage">You need storage access to use this function</string>
     <string name="confirm_permission_storage_app">You need storage access to use this app</string>
+
+    <string name="not_bookmark_file">This file is not bookmark html file.</string>
 </resources>

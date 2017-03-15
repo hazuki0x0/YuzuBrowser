@@ -70,7 +70,7 @@
             android:title="@string/pref_newtab_blank" />
     </PreferenceScreen>
 
-    <EditTextPreference
+    <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
         android:key="search_url"
         android:singleLine="true"
         android:title="@string/pref_search_url" />

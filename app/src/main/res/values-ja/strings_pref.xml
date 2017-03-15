@@ -76,6 +76,7 @@
     <string name="pref_oritentation_sensor">センサー</string>
     <string name="pref_oritentation_no_sensor">センサーに従わない</string>
     <string name="pref_search_url">検索エンジンのURL</string>
+    <string name="pref_search_url_error">%sがありません</string>
     <string name="pref_lpress_settings">ロングタップ設定</string>
     <string name="pref_lpress_link">リンク</string>
     <string name="pref_lpress_image">画像</string>

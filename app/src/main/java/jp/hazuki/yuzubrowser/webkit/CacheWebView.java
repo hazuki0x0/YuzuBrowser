@@ -853,6 +853,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         to_setting.setDefaultFixedFontSize(from_setting.getDefaultFixedFontSize());
         WebViewUtils.setTextSize(from_setting, to_setting);
         to_setting.setJavaScriptEnabled(from_setting.getJavaScriptEnabled());
+        to_setting.setLoadsImagesAutomatically(from_setting.getLoadsImagesAutomatically());
         to_setting.setDatabaseEnabled(from_setting.getDatabaseEnabled());
         to_setting.setDomStorageEnabled(from_setting.getDomStorageEnabled());
 

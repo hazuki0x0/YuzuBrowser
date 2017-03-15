@@ -13,10 +13,10 @@
         android:id="@+id/urlEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:ems="10"
         android:hint="@string/pattern_edittext_hint"
-        android:inputType="textUri">
+        android:inputType="textUri"
+        android:imeOptions="actionDone">
 
         <requestFocus />
     </EditText>

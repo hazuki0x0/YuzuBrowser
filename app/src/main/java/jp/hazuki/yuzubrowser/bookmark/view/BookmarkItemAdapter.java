@@ -7,6 +7,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,12 +32,14 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     private boolean multiSelectMode;
     private SparseBooleanArray itemSelected;
-    private OnRecyclerListener bookmarkItemListener;
+    private OnBookmarkRecyclerListener bookmarkItemListener;
+    private boolean pickMode;
 
-    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, OnRecyclerListener listener) {
+    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, boolean pick, OnBookmarkRecyclerListener listener) {
         super(context, list, null);
         itemSelected = new SparseBooleanArray();
         bookmarkItemListener = listener;
+        pickMode = pick;
         setRecyclerListener(recyclerListener);
         TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
         normalBackGround = a.getResourceId(0, 0);
@@ -44,9 +47,20 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     }
 
     @Override
-    public void onBindViewHolder(BookmarkFolderHolder holder, BookmarkItem item, final int position) {
+    public void onBindViewHolder(final BookmarkFolderHolder holder, BookmarkItem item, final int position) {
         if (item instanceof BookmarkSite) {
             ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
+            if (pickMode || multiSelectMode) {
+                ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
+            } else {
+                ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
+                ((BookmarkSiteHolder) holder).imageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bookmarkItemListener.onIconClick(v, holder.getAdapterPosition());
+                    }
+                });
+            }
         }
         holder.title.setText(item.title);
 
@@ -162,11 +176,17 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     }
 
     static class BookmarkSiteHolder extends BookmarkFolderHolder {
+        ImageButton imageButton;
         TextView url;
 
         BookmarkSiteHolder(View itemView) {
             super(itemView);
+            imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
             url = (TextView) itemView.findViewById(android.R.id.text2);
         }
+    }
+
+    public interface OnBookmarkRecyclerListener extends OnRecyclerListener {
+        void onIconClick(View v, int position);
     }
 }

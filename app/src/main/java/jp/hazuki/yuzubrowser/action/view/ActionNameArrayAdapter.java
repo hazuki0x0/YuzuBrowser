@@ -85,7 +85,7 @@ public class ActionNameArrayAdapter extends BaseAdapter {
 
         if (SingleAction.checkSubPreference(getItemValue(position))) {
             holder.setting.setVisibility(View.VISIBLE);
-            holder.setting.setEnabled(isChecked(position));
+            holder.setting.setClickable(isChecked(position));
             holder.setting.setColorFilter(isChecked(position) ? 0xffffffff : 0x88000000);
             holder.setting.setOnClickListener(new View.OnClickListener() {
                 @Override

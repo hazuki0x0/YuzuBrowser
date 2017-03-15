@@ -34,7 +34,7 @@ public abstract class ToolbarBase extends AbstractToolbar {
     }
 
     public void onFullscreeenChanged(boolean isFullscreen) {
-        //setVisibility(mRequestCallback.shouldShowToolbar(mPreferences.visibility, null) ? VISIBLE : GONE);
+        setVisibility(mRequestCallback.shouldShowToolbar(mPreferences.visibility, null) ? VISIBLE : GONE);
     }
 
     public void notifyChangeWebState(MainTabData data) {

@@ -746,10 +746,16 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         mIsFullScreenMode = enable;
 
+        if (mToolbar != null) {
+            mToolbar.onFullscreeenChanged(enable);
+        }
+
         if (enable) {
-            getWindow().addFlags(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+            getWindow().getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         } else {
-            getWindow().clearFlags(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+            getWindow().getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
     }
 
@@ -2889,12 +2895,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.PAGE_FAST_SCROLL: {
                     if (mWebViewPageFastScroller == null) {
                         mWebViewPageFastScroller = new WebViewPageFastScroller(BrowserActivity.this);
-                        mToolbar.getBottomToolbarLayout().addView(mWebViewPageFastScroller);
+                        mToolbar.getBottomToolbarAlwaysLayout().addView(mWebViewPageFastScroller);
                         mWebViewPageFastScroller.show(mTabList.get(target).mWebView);
                         mWebViewPageFastScroller.setOnEndListener(new WebViewPageFastScroller.OnEndListener() {
                             @Override
                             public boolean onEnd() {
-                                mToolbar.getBottomToolbarLayout().removeView(mWebViewPageFastScroller);
+                                mToolbar.getBottomToolbarAlwaysLayout().removeView(mWebViewPageFastScroller);
                                 mWebViewPageFastScroller = null;
                                 return true;
                             }

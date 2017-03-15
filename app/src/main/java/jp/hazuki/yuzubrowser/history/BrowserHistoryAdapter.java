@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -26,13 +26,14 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     private DateFormat dateFormat;
     private BrowserHistoryManager mManager;
     private List<BrowserHistory> histories;
-    private OnRecyclerListener mListener;
+    private OnHistoryRecyclerListener mListener;
     private String mQuery;
     private LayoutInflater inflater;
     private StickyHeaderDecoration mDecoration;
     private Calendar calendar;
+    private boolean pickMode;
 
-    public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, OnRecyclerListener listener) {
+    public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, boolean pick, OnHistoryRecyclerListener listener) {
         inflater = LayoutInflater.from(context);
         dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         mManager = manager;
@@ -40,6 +41,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         histories = mManager.getList(0, 100);
         mQuery = null;
         calendar = Calendar.getInstance();
+        pickMode = pick;
     }
 
     @Override
@@ -54,9 +56,9 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         Bitmap image = mManager.getFavicon(item.getId());
 
         if (image == null) {
-            holder.imageView.setImageResource(R.drawable.ic_public_white_24dp);
+            holder.imageButton.setImageResource(R.drawable.ic_public_white_24dp);
         } else {
-            holder.imageView.setImageBitmap(image);
+            holder.imageButton.setImageBitmap(image);
         }
         holder.titleTextView.setText(item.getTitle());
         holder.urlTextView.setText(url);
@@ -74,6 +76,17 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
                 return mListener.onRecyclerItemLongClicked(v, holder.getAdapterPosition());
             }
         });
+
+        if (pickMode) {
+            holder.imageButton.setClickable(false);
+        } else {
+            holder.imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onIconClicked(v, holder.getAdapterPosition());
+                }
+            });
+        }
     }
 
     @Override
@@ -139,14 +152,14 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
 
     static class HistoryHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
+        ImageButton imageButton;
         TextView titleTextView;
         TextView urlTextView;
 
         HistoryHolder(View itemView) {
             super(itemView);
 
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
             titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
             urlTextView = (TextView) itemView.findViewById(R.id.urlTextView);
         }
@@ -160,5 +173,9 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
 
             header = (TextView) itemView;
         }
+    }
+
+    public interface OnHistoryRecyclerListener extends OnRecyclerListener {
+        void onIconClicked(View v, int position);
     }
 }
