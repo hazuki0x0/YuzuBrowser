@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.view.ViewConfiguration;
 
 public class Api24LongPressFix {
-    private long time;
+    private final int longPressTimeout = ViewConfiguration.getLongPressTimeout();
+    private final Handler handler = new Handler();
     private final OnBackLongClickListener longClickListener;
-    private Handler handler = new Handler();
+
+    private long time;
 
     public Api24LongPressFix(@NonNull OnBackLongClickListener listener) {
         longClickListener = listener;
@@ -15,12 +17,12 @@ public class Api24LongPressFix {
 
     public void onBackKeyDown() {
         time = System.currentTimeMillis();
-        handler.postDelayed(longPress, ViewConfiguration.getLongPressTimeout());
+        handler.postDelayed(longPress, longPressTimeout);
     }
 
     public boolean onBackKeyUp() {
         handler.removeCallbacks(longPress);
-        return System.currentTimeMillis() - time > ViewConfiguration.getLongPressTimeout();
+        return System.currentTimeMillis() - time > longPressTimeout;
     }
 
     private Runnable longPress = new Runnable() {

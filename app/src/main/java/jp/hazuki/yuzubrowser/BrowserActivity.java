@@ -660,6 +660,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
             case KeyEvent.KEYCODE_BACK:
                 if (event.getRepeatCount() == 0) {
+                    event.startTracking();
                     api24LongPressFix.onBackKeyDown();
                     return true;
                 }
