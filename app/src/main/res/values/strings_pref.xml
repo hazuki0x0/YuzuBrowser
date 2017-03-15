@@ -472,6 +472,10 @@
     <string name="pref_import_bookmark_confirm">Are you sure you want to restore bookmarks?</string>
     <string name="pref_export_bookmark">Backup bookmarks</string>
     <string name="pref_export_bookmark_confirm">Are you sure you want to backup bookmarks?</string>
+    <string name="pref_import_html_bookmark">Import html bookmarks</string>
+    <string name="pref_import_html_bookmark_confirm">Are you sure you want to import bookmarks?</string>
+    <string name="pref_export_html_bookmark">Export html bookmarks</string>
+    <string name="pref_export_html_bookmark_confirm">Are you sure you want to export bookmarks?</string>
     <string name="pref_fast_back">Fast going back and forward</string>
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>

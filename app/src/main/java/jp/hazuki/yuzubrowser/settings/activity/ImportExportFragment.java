@@ -24,7 +24,10 @@ import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.backup.BackupTask;
 import jp.hazuki.yuzubrowser.backup.RestoreTask;
+import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
+import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask;
+import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference;
 import jp.hazuki.yuzubrowser.utils.AppUtils;
@@ -39,6 +42,8 @@ import jp.hazuki.yuzubrowser.utils.view.filelist.FileListViewController;
  */
 
 public class ImportExportFragment extends PreferenceFragment implements LoaderManager.LoaderCallbacks<Boolean> {
+    private static final int REQUEST_IMPORT_FOLDER = 1;
+    private static final int REQUEST_EXPORT_FOLDER = 2;
 
     private static final String EXT = ".yuzubackup";
     private DialogFragment progress;
@@ -112,6 +117,78 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                             return;
                         }
                     Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
+                } else {
+                    PermissionUtils.requestStorage(getActivity());
+                }
+            }
+        });
+
+        findPreference("import_html_bookmark").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final BookmarkManager manager = new BookmarkManager(getActivity());
+                File def_folder = Environment.getExternalStorageDirectory();
+
+                new FileListDialog(getActivity())
+                        .setFilePath(def_folder)
+                        .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
+                            @Override
+                            public void onFileSelected(final File file) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle(R.string.pref_import_html_bookmark)
+                                        .setMessage(R.string.pref_import_html_bookmark_confirm)
+                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (file.exists()) {
+                                                    BookmarkFolder root = new BookmarkFolder(file.getName(), manager.getRoot());
+                                                    manager.add(root);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putSerializable("file", file);
+                                                    bundle.putSerializable("manager", manager);
+                                                    bundle.putSerializable("folder", root);
+                                                    getLoaderManager().restartLoader(2, bundle, ImportExportFragment.this);
+                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                                                    progress.show(getChildFragmentManager(), "progress");
+                                                    handler.setDialog(progress);
+                                                }
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .show();
+                            }
+
+                            @Override
+                            public boolean onDirectorySelected(File file) {
+                                return false;
+                            }
+                        })
+                        .show();
+
+                return false;
+            }
+        });
+
+        ((AlertDialogPreference) findPreference("export_html_bookmark")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick() {
+                if (PermissionUtils.checkWriteStorage(getActivity())) {
+                    BookmarkManager manager = new BookmarkManager(getActivity());
+                    File external_file = new File(BrowserApplication.getExternalUserDirectory(), manager.getBookmarkFile().getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".html");
+                    if (!external_file.getParentFile().exists()) {
+                        if (!external_file.getParentFile().mkdirs()) {
+                            Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("file", external_file);
+                    bundle.putSerializable("folder", manager.getRoot());
+                    getLoaderManager().restartLoader(3, bundle, ImportExportFragment.this);
+                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                    progress.show(getChildFragmentManager(), "progress");
+                    handler.setDialog(progress);
                 } else {
                     PermissionUtils.requestStorage(getActivity());
                 }
@@ -195,11 +272,21 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
 
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-
-        if (id == 0) {
-            return new RestoreTask(getActivity(), (File) args.getSerializable("file"));
-        } else if (id == 1) {
-            return new BackupTask(getActivity(), (File) args.getSerializable("file"));
+        switch (id) {
+            case 0:
+                return new RestoreTask(getActivity(), (File) args.getSerializable("file"));
+            case 1:
+                return new BackupTask(getActivity(), (File) args.getSerializable("file"));
+            case 2:
+                return new BookmarkHtmlImportTask(getActivity(),
+                        (File) args.getSerializable("file"),
+                        (BookmarkManager) args.getSerializable("manager"),
+                        (BookmarkFolder) args.getSerializable("folder"),
+                        new Handler());
+            case 3:
+                return new BookmarkHtmlExportTask(getActivity(),
+                        (File) args.getSerializable("file"),
+                        (BookmarkFolder) args.getSerializable("folder"));
         }
         return null;
     }
