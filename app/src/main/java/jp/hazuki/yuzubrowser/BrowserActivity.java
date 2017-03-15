@@ -163,6 +163,7 @@ import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity;
 import jp.hazuki.yuzubrowser.userjs.UserScript;
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase;
 import jp.hazuki.yuzubrowser.userjs.UserScriptListActivity;
+import jp.hazuki.yuzubrowser.utils.Api24LongPressFix;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
@@ -212,7 +213,7 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 import static jp.hazuki.yuzubrowser.utils.PermissionUtils.FIRST_PERMISSION;
 import static jp.hazuki.yuzubrowser.utils.PermissionUtils.REQUEST_STORAGE;
 
-public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener {
+public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -245,7 +246,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private ArrayList<UserScript> mUserScriptList;
     private ArrayList<ResourceChecker> mResourceCheckerList;
     private View mVideoLoadingProgressView;
-    private boolean mIsBackLongPressed = false;
     private boolean mIsFullScreenMode = false;
     private boolean mIsActivityPaused = true;
     private boolean mIsImeShown = false;
@@ -280,6 +280,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private CustomCoordinatorLayout coordinatorLayout;
 
     private MenuWindow menuWindow;
+
+    private Api24LongPressFix api24LongPressFix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -387,6 +389,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         MenuActionManager action_manager = MenuActionManager.getInstance(appContext);
         menuWindow = new MenuWindow(this, action_manager.browser_activity.list, mActionCallback);
+
+        api24LongPressFix = new Api24LongPressFix(this);
     }
 
     @Override
@@ -656,12 +660,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
             case KeyEvent.KEYCODE_BACK:
                 if (event.getRepeatCount() == 0) {
-                    event.startTracking();
+                    api24LongPressFix.onBackKeyDown();
                     return true;
-                } else if (event.isLongPress()) {
-                    if (mActionCallback.run(mHardButtonManager.back_lpress.action)) {
-                        mIsBackLongPressed = true;
-                    }
                 }
                 break;
         }
@@ -689,8 +689,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
             case KeyEvent.KEYCODE_BACK:
-                if (mIsBackLongPressed) {
-                    mIsBackLongPressed = false;
+                if (api24LongPressFix.onBackKeyUp()) {
                     return true;
                 }
                 if (event.isTracking() && !event.isCanceled()) {
@@ -730,6 +729,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public void onBackLongClick() {
+        mActionCallback.run(mHardButtonManager.back_lpress.action);
     }
 
     @Override
