@@ -2,6 +2,7 @@ package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -52,8 +53,10 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
             if (pickMode || multiSelectMode) {
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
+                ((BookmarkSiteHolder) holder).imageButton.setBackgroundColor(Color.TRANSPARENT);
             } else {
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
+                ((BookmarkSiteHolder) holder).imageButton.setBackgroundResource(normalBackGround);
                 ((BookmarkSiteHolder) holder).imageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -66,6 +69,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
         if (multiSelectMode) {
             setSelectedBackground(holder.itemView, itemSelected.get(position, false));
+        } else {
+            holder.itemView.setBackgroundResource(normalBackGround);
         }
     }
 
@@ -118,7 +123,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         List<Integer> items = new ArrayList<>();
         for (int i = 0; itemSelected.size() > i; i++) {
             if (itemSelected.valueAt(i)) {
-                items.add(i);
+                items.add(itemSelected.keyAt(i));
             }
         }
         return items;
