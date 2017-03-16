@@ -209,11 +209,12 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenOtherAppHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightBgTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkTextHandler;
 
 import static jp.hazuki.yuzubrowser.utils.PermissionUtils.FIRST_PERMISSION;
 import static jp.hazuki.yuzubrowser.utils.PermissionUtils.REQUEST_STORAGE;
 
-public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener {
+public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener, MenuWindow.OnMenuCloseListener {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -322,6 +323,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             mToolbar.notifyChangeWebState(tab);
                         mToolbar.onImeChanged(visible);
                     }
+
+                    if (!visible && mIsFullScreenMode) {
+                        getWindow().getDecorView()
+                                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    }
                 }
             }
         });
@@ -389,8 +395,22 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         MenuActionManager action_manager = MenuActionManager.getInstance(appContext);
         menuWindow = new MenuWindow(this, action_manager.browser_activity.list, mActionCallback);
+        menuWindow.setListener(this);
 
         api24LongPressFix = new Api24LongPressFix(this);
+
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (mIsFullScreenMode) {
+                    getWindow().getDecorView()
+                            .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                } else {
+                    getWindow().getDecorView()
+                            .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -421,6 +441,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     protected void onResume() {
         super.onResume();
+        if (mIsFullScreenMode) {
+            getWindow().getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
         PermissionUtils.checkFirst(this);
         if (PermissionUtils.checkNeed(this)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -520,6 +544,25 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         destroy();
         if (AppData.kill_process.get())
             Process.killProcess(Process.myPid());
+    }
+
+    @Override
+    public void onMenuClose() {
+        setFullscreenIfEnable();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            setFullscreenIfEnable();
+    }
+
+    private void setFullscreenIfEnable() {
+        if (mIsFullScreenMode) {
+            getWindow().getDecorView()
+                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     @Override
@@ -634,13 +677,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     }
 
-    private void showSpeedDial(MainTabData tab) {
+    private void showSpeedDial(MainTabData tab, boolean isBig) {
         List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
-        String html = new SpeedDialHtml(getApplicationContext(), speedDials).getSpeedDialHtml();
+        String html = new SpeedDialHtml(getApplicationContext(), speedDials, isBig).getSpeedDialHtml();
         if (tab == null) {
             tab = addNewTab(TabType.DEFAULT);
         }
-        tab.mWebView.loadDataWithBaseURL("yuzu:speeddial", html, "text/html", "UTF-8", "yuzu:speeddial");
+
+        String url = isBig ? "yuzu:speeddial#big" : "yuzu:speeddial";
+        tab.mWebView.loadDataWithBaseURL(url, html, "text/html", "UTF-8", url);
     }
 
     @Override
@@ -1279,7 +1324,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         showSearchBox("", mTabList.indexOf(data));
                         return true;
                     case "speeddial":
-                        showSpeedDial(data);
+                        showSpeedDial(data, "big".equalsIgnoreCase(uri.getFragment()));
                         return true;
                     case "home":
                         loadUrl(data, AppData.home_page.get());
@@ -2682,6 +2727,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             startActivity(intent);
                             return true;
                         }
+                        case SingleAction.LPRESS_COPY_LINK_TEXT:
+                            webview.requestFocusNodeHref(new WebSrcLinkTextHandler(new WebSrcLinkTextHandler.OnGetTextListener() {
+                                @Override
+                                public void onGetText(String text) {
+                                    ClipboardUtils.setClipboardText(getApplicationContext(), text);
+                                }
+                            }).obtainMessage());
+                            return true;
                         default:
                             return run(action, target, null);
                     }
@@ -3027,8 +3080,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mWebViewFindDialog = WebViewFindDialogFactory.createInstance(BrowserActivity.this, mToolbar.getFindOnPage());
                     if (mWebViewFindDialog.isVisible())
                         mWebViewFindDialog.hide();
-                    else
+                    else {
                         mWebViewFindDialog.show(mTabList.get(target).mWebView);
+                    }
                     break;
                 case SingleAction.SAVE_SCREENSHOT: {
                     SaveScreenshotSingleAction saveSsAction = (SaveScreenshotSingleAction) action;

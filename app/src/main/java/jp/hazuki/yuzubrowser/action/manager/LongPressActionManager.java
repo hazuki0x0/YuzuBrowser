@@ -51,6 +51,7 @@ public class LongPressActionManager extends SingleActionManager {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_URL));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_LINK_TEXT));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
                 manager.link.action.add(action);

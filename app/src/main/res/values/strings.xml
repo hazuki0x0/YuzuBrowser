@@ -47,6 +47,7 @@
     <string name="share_link">Share link</string>
     <string name="open_link_other_app">Open link in another app</string>
     <string name="copy_link_url">Copy link URL</string>
+    <string name="copy_link_text">Copy link text</string>
     <string name="save_link">Save link</string>
     <string name="open_image">Open image</string>
     <string name="open_image_new">Open image in new tab</string>

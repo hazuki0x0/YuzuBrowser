@@ -1,14 +1,18 @@
 package jp.hazuki.yuzubrowser.toolbar.sub;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ImeUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
@@ -37,8 +41,29 @@ public class WebViewFindDialogFactory {
             mCurrentWeb = web;
             mCurrentWeb.setFindListener(findListener);
 
+            ImageButton buttonLeft = (ImageButton) root.findViewById(R.id.buttonLeft);
+            ImageButton buttonRight = (ImageButton) root.findViewById(R.id.buttonRight);
+            ImageButton buttonEnd = (ImageButton) root.findViewById(R.id.buttonEnd);
+
+            if (ThemeData.isEnabled()) {
+                ThemeData data = ThemeData.getInstance();
+                root.setBackgroundColor(data.toolbarBackgroundColor);
+                editText.setTextColor(data.toolbarTextColor);
+                editText.setHintTextColor(data.toolbarTextColor & 0xffffff | 0x88000000);
+                match.setTextColor(data.toolbarTextColor);
+                buttonLeft.setColorFilter(data.toolbarImageColor);
+                buttonRight.setColorFilter(data.toolbarImageColor);
+                buttonEnd.setColorFilter(data.toolbarImageColor);
+            }
+
             root.setVisibility(View.VISIBLE);
-            ImeUtils.showIme(mContext, editText);
+            editText.requestFocus();
+            editText.postDelayed(new Runnable() {
+                public void run() {
+                    editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
+                    editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0));
+                }
+            }, 100);
             editText.setText("");
 
             editText.addTextChangedListener(new TextWatcher() {
@@ -59,8 +84,7 @@ public class WebViewFindDialogFactory {
                 }
             });
 
-            root.findViewById(R.id.buttonLeft)
-                    .setOnClickListener(new View.OnClickListener() {
+            buttonLeft.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
                             if (mCurrentWeb == null) return;
@@ -70,8 +94,8 @@ public class WebViewFindDialogFactory {
                             mCurrentWeb.requestFocus();
                         }
                     });
-            root.findViewById(R.id.buttonRight)
-                    .setOnClickListener(new View.OnClickListener() {
+
+            buttonRight.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
                             if (mCurrentWeb == null) return;
@@ -81,8 +105,8 @@ public class WebViewFindDialogFactory {
                             mCurrentWeb.requestFocus();
                         }
                     });
-            root.findViewById(R.id.buttonEnd)
-                    .setOnClickListener(new View.OnClickListener() {
+
+            buttonEnd.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
                             hide();
@@ -110,7 +134,7 @@ public class WebViewFindDialogFactory {
             @Override
             public void onFindResultReceived(int activeMatchOrdinal, int numberOfMatches, boolean isDoneCounting) {
                 if (match != null) {
-                    match.setText(activeMatchOrdinal + "/" + numberOfMatches);
+                    match.setText((numberOfMatches > 0 ? activeMatchOrdinal + 1 : 0) + "/" + numberOfMatches);
                 }
             }
         };

@@ -45,7 +45,8 @@
     <string name="copy_url">URLをコピー</string>
     <string name="share_link">リンクの共有</string>
     <string name="open_link_other_app">リンクを他のアプリで開く</string>
-    <string name="copy_link_url">リンクのURLをコピー</string>
+    <string name="copy_link_url">リンクアドレスをコピー</string>
+    <string name="copy_link_text">リンクテキストをコピー</string>
     <string name="save_link">リンク先を保存</string>
     <string name="open_image">画像を開く</string>
     <string name="open_image_new">新しいタブで画像を開く</string>

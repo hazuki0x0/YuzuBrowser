@@ -139,6 +139,7 @@ public class SingleAction implements Parcelable {
     public static final int LPRESS_GOOGLE_IMAGE_SEARCH = -154;
     public static final int LPRESS_IMAGE_RES_BLOCK = -155;
     public static final int LPRESS_PATTERN_MATCH = -156;
+    public static final int LPRESS_COPY_LINK_TEXT = -157;
 
     public final int id;
 
