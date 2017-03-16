@@ -39,14 +39,15 @@ search:hover {
   flex-grow: 1;
   justify-content: space-between;
   width:100%;
-  margin: 40px 0px 0px;
+  max-width: 320px;
+  margin: 40px auto;
 }
 
 .linkBox::before{
   content:"";
   display: block;
-  width: calc(33.3% - 10px);
-  max-width: 100px;
+  width: calc(25% - 12px);
+  max-width: 68px;
   margin: 5px;
   order:1;
 }
@@ -54,14 +55,14 @@ search:hover {
 .linkBox::after{
   content:"";
   display: block;
-  width: calc(33.3% - 10px);
-  max-width: 100px;
+  width: calc(25% - 12px);
+  max-width: 68px;
   margin: 5px;
 }
 
 .box {
-  width: calc(33.3% - 12px);
-  max-width: 98px;
+  width: calc(25% - 12px);
+  max-width: 68px;
   margin: 5px;
   background-color: #f2f2f2;
   box-shadow:2px 2px 2px rgba(0,0,0,0.4);
@@ -82,6 +83,8 @@ search:hover {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   margin: 0 auto;
+  font-size: small;
+  text-align: center;
 }
 
 body {

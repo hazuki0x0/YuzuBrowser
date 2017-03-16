@@ -221,6 +221,7 @@
         <item>@string/share_link</item>
         <item>@string/open_link_other_app</item>
         <item>@string/copy_link_url</item>
+        <item>@string/copy_link_text</item>
         <item>@string/save_link</item>
         <item>@string/add_url_pattern</item>
     </string-array>
@@ -234,6 +235,7 @@
         <item>-50</item>
         <item>-51</item>
         <item>-52</item>
+        <item>-157</item>
         <item>-53</item>
         <item>-156</item>
     </integer-array>

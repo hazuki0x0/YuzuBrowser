@@ -19,12 +19,13 @@
 
 .search {
   width:calc(100% - 20px);
-  border: 1px solid #aaaaaa;
+  border: 1px solid #999999;
   padding: 8px 5px;
-  color: #cccccc;
+  color: #aaaaaa;
   margin: 20px 5px;
-  box-shadow:3px 3px 3px;
+  box-shadow:2px 2px 2px;
   background-color: #ffffff;
+  border-radius: 2px;
 }
 
 search:hover {
@@ -38,13 +39,15 @@ search:hover {
   flex-grow: 1;
   justify-content: space-between;
   width:100%;
+  max-width: 320px;
+  margin: 40px auto;
 }
 
 .linkBox::before{
   content:"";
   display: block;
-  width: calc(33.3% - 10px);
-  max-width: 100px;
+  width: calc(25% - 12px);
+  max-width: 68px;
   margin: 5px;
   order:1;
 }
@@ -52,15 +55,19 @@ search:hover {
 .linkBox::after{
   content:"";
   display: block;
-  width: calc(33.3% - 10px);
-  max-width: 100px;
+  width: calc(25% - 12px);
+  max-width: 68px;
   margin: 5px;
 }
 
 .box {
-  width: calc(33.3% - 10px);
-  max-width: 100px;
+  width: calc(25% - 12px);
+  max-width: 68px;
   margin: 5px;
+  background-color: #f2f2f2;
+  box-shadow:2px 2px 2px rgba(0,0,0,0.4);
+  border: 1px solid #d5d5d5;
+  border-radius: 3px;
 }
 
 .inner {
@@ -76,18 +83,22 @@ search:hover {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   margin: 0 auto;
+  font-size: small;
+  text-align: center;
 }
 
 body {
-  background-color: #fafafa;
+  background-color: #eeeeee;
   -webkit-text-size-adjust: 100%;
   -webkit-touch-callout:none;
   -webkit-user-select:none;
 }
 
 img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
+  max-height: 98px;
+  border-radius: 3px 3px 0px 0px;
 }
 
 a {
@@ -116,18 +127,14 @@ a {
     <div class="linkBox">
         <div class="box">
             <a href="tes">
-                <div>
-                    <img src="test_img.png"/>
-                    <div class="name">First test item</div>
-                </div>
+                <img src="test_img.png"/>
+                <div class="name">First test item</div>
             </a>
         </div>
         <div class="box">
             <a href="tes">
-                <div>
-                    <img src="test_img.png"/>
-                    <div class="name">Second long long text message test item</div>
-                </div>
+                <img src="test_img.png"/>
+                <div class="name">Second long long text message test item</div>
             </a>
         </div>
 

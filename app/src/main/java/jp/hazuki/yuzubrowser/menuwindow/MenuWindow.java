@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.menuwindow;
 
 import android.content.Context;
@@ -17,15 +33,12 @@ import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 
-/**
- * Created by hazuki on 17/01/17.
- */
-
 public class MenuWindow {
 
     private PopupWindow window;
     private boolean locking = false;
     private Handler handler = new Handler();
+    private OnMenuCloseListener mListener;
 
     public MenuWindow(Context context, ActionList actionList, final ActionCallback callback) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -88,6 +101,8 @@ public class MenuWindow {
         window.dismiss();
         locking = true;
         handler.postDelayed(lock, 50);
+        if (mListener != null)
+            mListener.onMenuClose();
     }
 
     private Runnable lock = new Runnable() {
@@ -97,4 +112,11 @@ public class MenuWindow {
         }
     };
 
+    public void setListener(OnMenuCloseListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnMenuCloseListener {
+        void onMenuClose();
+    }
 }
