@@ -2881,6 +2881,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         public boolean run(SingleAction action, final TargetInfo def_target, View button) {
             final int target = (def_target != null && def_target.getTarget() >= 0) ? def_target.getTarget() : mTabList.getCurrentTabNo();
 
+            if (target < 0 || target >= mTabList.size()) {
+                return false;
+            }
+
             switch (action.id) {
                 case SingleAction.GO_BACK: {
                     MainTabData tab = mTabList.get(target);
