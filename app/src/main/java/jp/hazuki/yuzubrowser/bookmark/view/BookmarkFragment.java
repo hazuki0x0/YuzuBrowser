@@ -381,10 +381,11 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
-                                adapter.setMultiSelectMode(false);
 
                                 mCurrentFolder.list.removeAll(selectedList);
                                 mManager.write();
+
+                                adapter.setMultiSelectMode(false);
                                 adapter.notifyDataSetChanged();
                             }
                         })
