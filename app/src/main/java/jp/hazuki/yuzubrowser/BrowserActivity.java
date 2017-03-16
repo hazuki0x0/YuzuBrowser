@@ -853,9 +853,19 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 openInNewTab(urls.get(0), TabType.INTENT);
             }
         } else if (Intent.ACTION_SEND.equals(action)) {
-            String text = WebUtils.extractionUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
-            if (!TextUtils.isEmpty(text))
-                openInNewTab(text, TabType.INTENT);
+            String query = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (!TextUtils.isEmpty(query)) {
+                if (WebUtils.isUrl(query)) {
+                    openInNewTab(query, TabType.INTENT);
+                } else {
+                    String text = WebUtils.extractionUrl(query);
+                    if (query.equals(text)) {
+                        text = WebUtils.makeUrlFromQuery(query, AppData.search_url.get(), "%s");
+                    }
+                    openInNewTab(text, TabType.INTENT);
+                }
+            }
+
             return false;
         } else {
             return false;
