@@ -231,6 +231,8 @@ public class UserScript implements Parcelable {
         } else if ("run-at".equalsIgnoreCase(field)) {
             runStart = "document-start".equalsIgnoreCase(value);
         } else if ("match".equalsIgnoreCase(field)) {
+            if (include == null)
+                include = new ArrayList<>();
             String pattern_url = "?" + value.replace("?", "\\?").replace(".", "\\.")
                     .replace("*", ".*").replace("+", ".+")
                     .replace(".*\\.", "((?![\\.]).)*.").replaceAll("^\\.\\*://", "^https?://");
