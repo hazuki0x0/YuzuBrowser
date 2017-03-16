@@ -1,7 +1,25 @@
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.backup;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,10 +31,6 @@ import java.util.zip.ZipInputStream;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
-
-/**
- * Created by hazuki on 17/01/25.
- */
 
 public class RestoreTask extends AsyncTaskLoader<Boolean> {
 
@@ -45,26 +59,36 @@ public class RestoreTask extends AsyncTaskLoader<Boolean> {
 
             while ((entry = zipStream.getNextEntry()) != null) {
                 file = new File(root, entry.getName());
-                if (entry.isDirectory()) {
-                    if (file.exists()) {
-                        FileUtils.deleteFile(file);
+                if ("main_preference.xml".equalsIgnoreCase(file.getName())) {
+                    PrefXmlParser parser = new PrefXmlParser(getContext(), "main_preference");
+                    try {
+                        parser.load(zipStream);
+                    } catch (XmlPullParserException e) {
+                        e.printStackTrace();
                     }
-                    file.mkdir();
                 } else {
-                    if (file.exists()) {
-                        FileUtils.deleteFile(file);
-                    } else if (!file.getParentFile().exists()) {
-                        file.getParentFile().mkdirs();
-                    }
+                    if (entry.isDirectory()) {
+                        if (file.exists()) {
+                            FileUtils.deleteFile(file);
+                        }
+                        file.mkdir();
+                    } else {
+                        if (file.exists()) {
+                            FileUtils.deleteFile(file);
+                        } else if (!file.getParentFile().exists()) {
+                            file.getParentFile().mkdirs();
+                        }
 
-                    os = new FileOutputStream(file);
+                        os = new FileOutputStream(file);
 
-                    while ((len = zipStream.read(buffer)) > 0) {
-                        os.write(buffer, 0, len);
+                        while ((len = zipStream.read(buffer)) > 0) {
+                            os.write(buffer, 0, len);
+                        }
+                        os.close();
+                        os = null;
                     }
-                    os.close();
-                    os = null;
                 }
+
             }
             return true;
         } catch (IOException e) {
