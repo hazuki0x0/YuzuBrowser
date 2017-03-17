@@ -258,6 +258,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private PointerView mCursorView;
     private Handler mHandler;
     private boolean mIsDestroyed;
+    private boolean forceDestroy;
 
     private IntentFilter mNetworkStateChangedFilter;
     private BroadcastReceiver mNetworkStateBroadcastReceiver;
@@ -542,7 +543,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         Logger.d(TAG, "onDestroy()");
         super.onDestroy();
         destroy();
-        if (AppData.kill_process.get())
+        if (AppData.kill_process.get() || forceDestroy)
             Process.killProcess(Process.myPid());
     }
 
@@ -816,6 +817,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setIntent(new Intent());
         if (action == null) return false;
         if (ACTION_FINISH.equals(action)) {
+            forceDestroy = true;
             finish();
             return false;
         }
