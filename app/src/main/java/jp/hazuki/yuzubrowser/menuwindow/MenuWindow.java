@@ -33,7 +33,7 @@ import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 
-public class MenuWindow {
+public class MenuWindow implements PopupWindow.OnDismissListener {
 
     private PopupWindow window;
     private boolean locking = false;
@@ -54,6 +54,7 @@ public class MenuWindow {
         window.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(context.getDrawable(R.drawable.menu_drop_down_background));
         window.setElevation(DisplayUtils.convertDpToPx(context, 10));
+        window.setOnDismissListener(this);
         window.getContentView().setFocusableInTouchMode(true);
         window.getContentView().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -101,8 +102,6 @@ public class MenuWindow {
         window.dismiss();
         locking = true;
         handler.postDelayed(lock, 50);
-        if (mListener != null)
-            mListener.onMenuClose();
     }
 
     private Runnable lock = new Runnable() {
@@ -114,6 +113,12 @@ public class MenuWindow {
 
     public void setListener(OnMenuCloseListener listener) {
         mListener = listener;
+    }
+
+    @Override
+    public void onDismiss() {
+        if (mListener != null)
+            mListener.onMenuClose();
     }
 
     public interface OnMenuCloseListener {

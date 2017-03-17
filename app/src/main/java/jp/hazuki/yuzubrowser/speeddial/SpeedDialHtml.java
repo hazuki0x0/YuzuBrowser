@@ -31,7 +31,7 @@ public class SpeedDialHtml {
         StringBuilder builder = new StringBuilder(8000);
         String start = getResourceString(context, R.raw.speeddial_start);
         if (isBig) {
-            start = start.replace("25%", "33.3%").replace("max-width: 320px;", "max-width: 440px;");
+            start = start.replace("25%", "33.3%").replace("max-width: 320px;", "max-width: 440px;").replace("68px;", "98px;");
         }
         builder.append(start);
         for (SpeedDial speedDial : speedDialList) {
