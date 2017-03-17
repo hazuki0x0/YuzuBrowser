@@ -120,7 +120,7 @@ public class WebScrollSingleAction extends SingleAction implements Parcelable {
         final EditText editTextY = (EditText) view.findViewById(R.id.editTextY);
 
         Resources res = context.getResources();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_spinner_item, res.getStringArray(R.array.action_web_scroll_type_list));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, res.getStringArray(R.array.action_web_scroll_type_list));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter);
         final int values[] = res.getIntArray(R.array.action_web_scroll_type_values);
