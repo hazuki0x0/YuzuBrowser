@@ -9,8 +9,6 @@ public interface WebBrowser {
 
     MainTabData addNewTab(boolean cacheType, @TabType int type);
 
-    MainTabData addNewTab(boolean cacheType, @TabType int type, long id);
-
     CustomWebView makeWebView(boolean cacheType);
 
     void openInNewTab(String url, @TabType int type);

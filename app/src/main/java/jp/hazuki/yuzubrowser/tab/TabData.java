@@ -20,6 +20,7 @@ public class TabData {
     public String mTitle;
     public int mProgress = -1;
     private int tabType;
+    private long parent;
 
 
     public int getTabType() {
@@ -28,6 +29,14 @@ public class TabData {
 
     public void setTabType(@TabType int type) {
         tabType = type;
+    }
+
+    public long getParent() {
+        return parent;
+    }
+
+    public void setParent(long parent) {
+        this.parent = parent;
     }
 
     public String getOriginalUrl() {

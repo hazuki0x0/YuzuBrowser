@@ -119,6 +119,15 @@ public class TabList implements Iterable<MainTabData> {
         return null;
     }
 
+    public int searchParentTabNo(long id) {
+        for (int i = 0; mList.size() > i; i++) {
+            if (mList.get(i).mWebView.getIdentityId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public void destroy() {
         for (MainTabData data : mList) {
             data.mWebView.setEmbeddedTitleBarMethod(null);
@@ -137,31 +146,43 @@ public class TabList implements Iterable<MainTabData> {
     private static final String EXTRA_CURRENT_NO = "TAB.E0";
     private static final String EXTRA_LIST_COUNT = "TAB.E1";
     private static final String EXTRA_TAB_TYPE = "TAB.E2";
+    private static final String EXTRA_TAB_ID = "TAB.E3";
+    private static final String EXTRA_TAB_PARENT = "TAB.E4";
 
     public void saveInstanceState(Bundle bundle) {
         int i = 0;
         //Bundle[] bundle_list = new Bundle[mList.size()];
         int[] types = new int[mList.size()];
+        long[] ids = new long[mList.size()];
+        long[] parents = new long[mList.size()];
         for (MainTabData web : mList) {
             Bundle state = new Bundle();
             web.mWebView.saveState(state);
             types[i] = web.getTabType();
+            ids[i] = web.mWebView.getIdentityId();
+            parents[i] = web.getParent();
             bundle.putBundle("TAB.W" + String.valueOf(i), state);
             ++i;
         }
         bundle.putInt(EXTRA_LIST_COUNT, mList.size());
         bundle.putInt(EXTRA_CURRENT_NO, mCurrentNo);
         bundle.putSerializable(EXTRA_TAB_TYPE, types);
+        bundle.putSerializable(EXTRA_TAB_ID, ids);
+        bundle.putSerializable(EXTRA_TAB_PARENT, parents);
     }
 
     public RestoreStateData restoreInstanceState(Bundle bundle) {
         int currentNo = bundle.getInt(EXTRA_CURRENT_NO);
         int list_count = bundle.getInt(EXTRA_LIST_COUNT);
         int[] tabType = (int[]) bundle.getSerializable(EXTRA_TAB_TYPE);
+        long[] ids = (long[]) bundle.getSerializable(EXTRA_TAB_ID);
+        long[] parents = (long[]) bundle.getSerializable(EXTRA_TAB_PARENT);
+        if (ids == null) ids = new long[list_count];
+        if (parents == null) parents = new long[list_count];
         Bundle[] list = new Bundle[list_count];
         for (int i = 0; i < list_count; ++i) {
             list[i] = bundle.getBundle("TAB.W" + String.valueOf(i));
         }
-        return new RestoreStateData(currentNo, list, tabType);
+        return new RestoreStateData(currentNo, list, tabType, ids, parents);
     }
 }
