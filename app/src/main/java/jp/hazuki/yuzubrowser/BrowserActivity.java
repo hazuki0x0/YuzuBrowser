@@ -1147,19 +1147,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             web.onPause();
         MainTabData tabdata = mTabList.add(web, mToolbar.addNewTabView());
         tabdata.setTabType(type);
-        if (ThemeData.isEnabled())
-            tabdata.onMoveTabToBackground(getResources(), getTheme());
-        return tabdata;
-    }
-
-    @Override
-    public MainTabData addNewTab(boolean cacheType, @TabType int type, long id) {
-        CustomWebView web = makeWebView(cacheType);
-        if (AppData.pause_web_tab_change.get())
-            web.onPause();
-        web.setIdentityId(id);
-        MainTabData tabdata = mTabList.add(web, mToolbar.addNewTabView());
-        tabdata.setTabType(type);
+        if (type == TabType.WINDOW) {
+            MainTabData nowData = mTabList.get(mTabList.getCurrentTabNo());
+            if (nowData != null)
+                tabdata.setParent(nowData.mWebView.getIdentityId());
+        }
         if (ThemeData.isEnabled())
             tabdata.onMoveTabToBackground(getResources(), getTheme());
         return tabdata;
@@ -1456,11 +1448,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         old_web.destroy();
 
-        if (old_data.getTabType() == TabType.WINDOW && new_current_no > 0) {
-            int openType = AppData.newtab_blank.get();
-            if (openType == BrowserManager.LOAD_URL_TAB_NEW_RIGHT || openType == BrowserManager.LOAD_URL_TAB_BG_RIGHT) {
-                --new_current_no;
-            }
+        if (old_data.getTabType() == TabType.WINDOW && old_data.getParent() != 0) {
+            int new_no = mTabList.searchParentTabNo(old_data.getParent());
+            if (new_no >= 0)
+                new_current_no = new_no;
         }
 
         if (no < new_current_no) {

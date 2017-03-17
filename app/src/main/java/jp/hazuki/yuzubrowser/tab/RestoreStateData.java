@@ -9,11 +9,15 @@ public final class RestoreStateData implements RestoreTabData {
     private final int currentNo;
     private final Bundle[] list;
     private final int[] tabType;
+    private final long[] ids;
+    private final long[] parents;
 
-    public RestoreStateData(int currentNo, Bundle[] list, int[] tabType) {
+    public RestoreStateData(int currentNo, Bundle[] list, int[] tabType, long[] ids, long[] parents) {
         this.currentNo = currentNo;
         this.list = list;
         this.tabType = tabType;
+        this.ids = ids;
+        this.parents = parents;
     }
 
     public boolean restoreWebViewState(WebBrowser browser) {
@@ -30,8 +34,14 @@ public final class RestoreStateData implements RestoreTabData {
             else if (tabCount != 0)
                 browser.setCurrentTab(0);
 
-            for (int i = 0; i < length; ++i)
-                tablist[i].mWebView.restoreState(list[i]);
+            MainTabData tabData;
+            for (int i = 0; i < length; ++i) {
+                tabData = tablist[i];
+                if (ids[i] > 0)
+                    tabData.mWebView.setIdentityId(ids[i]);
+                tabData.setParent(parents[i]);
+                tabData.mWebView.restoreState(list[i]);
+            }
 
             return true;
         }
