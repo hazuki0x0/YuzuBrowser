@@ -87,8 +87,9 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(final VH holder, int position) {
-        if (items != null && items.size() > position && items.get(position) != null) {
-            onBindViewHolder(holder, items.get(position), position);
+        int pos = holder.getAdapterPosition();
+        if (items != null && items.size() > pos && items.get(pos) != null) {
+            onBindViewHolder(holder, items.get(pos), pos);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

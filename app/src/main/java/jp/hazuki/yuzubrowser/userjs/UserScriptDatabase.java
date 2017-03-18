@@ -63,7 +63,6 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
         values.put(COLUMN_DATA, js.getData());
         values.put(COLUMN_ENABLED, 1);
         js.setId(db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE));
-        //db.close();
     }
 
     public void update(UserScript js) {
@@ -73,30 +72,29 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
         values.put(COLUMN_DATA, js.getData());
         values.put(COLUMN_ENABLED, js.isEnabled());
         db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        //db.close();
     }
 
     public void addAll(Collection<UserScript> list) {
         SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         for (UserScript js : list) {
             ContentValues values = new ContentValues();
             values.put(COLUMN_DATA, js.getData());
-            values.put(COLUMN_ENABLED, 1);
+            values.put(COLUMN_ENABLED, js.isEnabled());
             js.setId(db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE));
         }
-        //db.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public void delete(UserScript js) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_ID + " = " + js.getId(), null);
-        //db.close();
     }
 
     public void deleteAll() {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
-        //db.close();
     }
 
     public ArrayList<UserScript> getAllList() {
@@ -110,7 +108,6 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
         c.close();
-        //db.close();
         return list;
     }
 
@@ -125,7 +122,6 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
         c.close();
-        //db.close();
         return list;
     }
 
