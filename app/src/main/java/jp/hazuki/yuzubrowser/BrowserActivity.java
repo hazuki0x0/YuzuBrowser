@@ -678,15 +678,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     }
 
-    private void showSpeedDial(MainTabData tab, boolean isBig) {
+    private void showSpeedDial(MainTabData tab) {
         List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
-        String html = new SpeedDialHtml(getApplicationContext(), speedDials, isBig).getSpeedDialHtml();
+        String html = new SpeedDialHtml(getApplicationContext(), speedDials).getSpeedDialHtml();
         if (tab == null) {
             tab = addNewTab(TabType.DEFAULT);
         }
-
-        String url = isBig ? "yuzu:speeddial#big" : "yuzu:speeddial";
-        tab.mWebView.loadDataWithBaseURL(url, html, "text/html", "UTF-8", url);
+        tab.mWebView.loadDataWithBaseURL("yuzu:speeddial", html, "text/html", "UTF-8", "yuzu:speeddial");
     }
 
     @Override
@@ -1328,7 +1326,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         showSearchBox("", mTabList.indexOf(data));
                         return true;
                     case "speeddial":
-                        showSpeedDial(data, "big".equalsIgnoreCase(uri.getFragment()));
+                        showSpeedDial(data);
                         return true;
                     case "home":
                         loadUrl(data, AppData.home_page.get());
