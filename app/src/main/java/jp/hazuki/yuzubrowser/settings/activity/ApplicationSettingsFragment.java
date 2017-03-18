@@ -1,8 +1,12 @@
 package jp.hazuki.yuzubrowser.settings.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.view.MenuItem;
 
 import jp.hazuki.yuzubrowser.R;
@@ -19,6 +23,32 @@ public class ApplicationSettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
         addPreferencesFromResource(R.xml.pref_app_settings);
+
+        SwitchPreference pref = (SwitchPreference) findPreference("enable_share");
+        String packageName = getActivity().getPackageName();
+        final ComponentName componentName = new ComponentName(packageName,
+                packageName + ".ShareActivity");
+
+        final PackageManager pm = getActivity().getPackageManager();
+
+        pref.setChecked(pm.getComponentEnabledSetting(componentName)
+                == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+
+        pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if ((boolean) newValue) {
+                    pm.setComponentEnabledSetting(componentName,
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP);
+                } else {
+                    pm.setComponentEnabledSetting(componentName,
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP);
+                }
+                return true;
+            }
+        });
     }
 
     @Override

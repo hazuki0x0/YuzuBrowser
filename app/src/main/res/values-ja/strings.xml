@@ -206,4 +206,7 @@
     <string name="confirm_permission_storage_app">このアプリを利用するにはストレージのアクセス権が必要です</string>
 
     <string name="not_bookmark_file">このファイルはHTMLブックマークファイルではありません。</string>
+
+    <string name="open_in_browser">Yuzu Browserで開く</string>
+    <string name="enable_share">共有にこのアプリを表示する</string>
 </resources>

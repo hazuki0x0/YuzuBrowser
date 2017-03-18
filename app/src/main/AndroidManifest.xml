@@ -90,6 +90,11 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity-alias
+            android:label="@string/open_in_browser"
+            android:name=".ShareActivity"
+            android:targetActivity=".BrowserActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -97,7 +102,7 @@
 
                 <data android:mimeType="text/*" />
             </intent-filter>
-        </activity>
+        </activity-alias>
         <activity
             android:name=".settings.activity.MainSettingsActivity"
             android:configChanges="keyboardHidden|orientation"
