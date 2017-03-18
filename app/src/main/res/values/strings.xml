@@ -207,4 +207,7 @@
     <string name="confirm_permission_storage_app">You need storage access to use this app</string>
 
     <string name="not_bookmark_file">This file is not bookmark html file.</string>
+
+    <string name="open_in_browser">Open in Yuzu Browser</string>
+    <string name="enable_share">Enable share from other app</string>
 </resources>

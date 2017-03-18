@@ -3,4 +3,8 @@
     <SwitchPreference
         android:key="kill_process"
         android:title="@string/pref_kill_process" />
+
+    <SwitchPreference
+        android:key="enable_share"
+        android:title="@string/enable_share" />
 </PreferenceScreen>
