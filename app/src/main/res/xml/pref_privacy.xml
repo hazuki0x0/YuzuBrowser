@@ -71,6 +71,12 @@
             android:key="file_access"
             android:title="@string/pref_file_access" />
 
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_mixed_content_list"
+            android:entryValues="@array/pref_mixed_contents_values"
+            android:key="mixed_content"
+            android:title="@string/pref_mixed_content" />
+
         <SwitchPreference
             android:key="ssl_error_alert"
             android:title="@string/pref_ssl_error_alert" />

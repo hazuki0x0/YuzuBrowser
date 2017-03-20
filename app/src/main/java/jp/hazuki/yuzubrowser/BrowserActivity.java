@@ -1772,6 +1772,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setting.setMinimumLogicalFontSize(AppData.minimum_font.get());
         setting.setMinimumFontSize(AppData.minimum_font.get());
 
+        setting.setMixedContentMode(AppData.mixed_content.get());
         setting.setSupportMultipleWindows(AppData.newtab_blank.get() != BrowserManager.LOAD_URL_TAB_CURRENT);
         WebViewUtils.setTextSize(setting, AppData.text_size.get());
         setting.setJavaScriptEnabled(AppData.javascript.get());
