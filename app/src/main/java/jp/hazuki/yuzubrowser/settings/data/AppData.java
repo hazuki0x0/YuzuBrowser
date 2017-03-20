@@ -131,6 +131,7 @@ public class AppData {
     public static final BooleanContainer double_tap_flick_enable = new BooleanContainer("double_tap_flick_enable", false);
     public static final IntContainer double_tap_flick_sensitivity_speed = new IntContainer("double_tap_flick_sensitivity_speed", 20);
     public static final IntContainer double_tap_flick_sensitivity_distance = new IntContainer("double_tap_flick_sensitivity_distance", 15);
+    public static final IntContainer mixed_content = new IntContainer("mixed_content", WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

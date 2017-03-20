@@ -436,6 +436,20 @@
         <item>2</item>
     </integer-array>
 
+    <string name="pref_mixed_content">Insecure content settings on https</string>
+
+    <string-array name="pref_mixed_content_list">
+        <item>Disable (safest)</item>
+        <item>Compatibility (default)</item>
+        <item>Enable (unsafe)</item>
+    </string-array>
+
+    <integer-array name="pref_mixed_contents_values">
+        <item>1</item>
+        <item>2</item>
+        <item>0</item>
+    </integer-array>
+
     <string name="pref_toolbar_visibility">Visibility</string>
 
     <integer name="pref_toolbar_visibility_count">6</integer>
