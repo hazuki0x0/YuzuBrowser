@@ -25,6 +25,10 @@ public class Api24LongPressFix {
         return System.currentTimeMillis() - time > longPressTimeout;
     }
 
+    public void cancel() {
+        handler.removeCallbacks(longPress);
+    }
+
     private Runnable longPress = new Runnable() {
         @Override
         public void run() {

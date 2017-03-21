@@ -403,13 +403,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
-                if (mIsFullScreenMode) {
-                    getWindow().getDecorView()
-                            .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                } else {
-                    getWindow().getDecorView()
-                            .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                }
+                setFullscreenIfEnable();
             }
         });
     }
@@ -442,10 +436,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     protected void onResume() {
         super.onResume();
-        if (mIsFullScreenMode) {
-            getWindow().getDecorView()
-                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+        setFullscreenIfEnable();
         PermissionUtils.checkFirst(this);
         if (PermissionUtils.checkNeed(this)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -774,6 +765,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return super.onKeyLongPress(keyCode, event);
     }
 
     @Override
@@ -1343,25 +1339,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
             if (AppData.share_unknown_scheme.get()) {
                 if (WebUtils.isOverrideScheme(uri)) {
-                    try {
-                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-
-                        if (intent != null) {
-                            ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                            if (info != null) {
-                                startActivity(intent);
-                            } else {
-                                String fallbackUrl = intent.getStringExtra("browser_fallback_url");
-                                if (!TextUtils.isEmpty(fallbackUrl)) {
-                                    loadUrl(data, fallbackUrl);
-                                    return true;
-                                }
-                            }
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                    if (info != null) {
+                        startActivity(intent);
+                    } else {
+                        String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                        if (!TextUtils.isEmpty(fallbackUrl)) {
+                            loadUrl(data, fallbackUrl);
                             return true;
                         }
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
                     }
+                    return true;
                 }
             }
         }
@@ -2421,6 +2410,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onHideCustomView() {
+            api24LongPressFix.cancel();
             if (mWebCustomViewHandler != null)
                 mWebCustomViewHandler.hideCustomView(BrowserActivity.this);
         }
