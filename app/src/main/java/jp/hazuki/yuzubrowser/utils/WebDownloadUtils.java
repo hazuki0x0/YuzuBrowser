@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 public class WebDownloadUtils {
     private WebDownloadUtils() {
@@ -29,6 +30,12 @@ public class WebDownloadUtils {
     }
 
     public static File guessDownloadFile(String folder_path, String url, String contentDisposition, String mimetype) {
+        if (url.startsWith("data:")) {
+            String[] data = url.split(Pattern.quote(","));
+            if (data.length > 1) {
+                mimetype = data[0].split(Pattern.quote(";"))[0].substring(5);
+            }
+        }
         String filename = URLUtil.guessFileName(url, contentDisposition, mimetype);
         if (TextUtils.isEmpty(filename)) {
             filename = "index.html";
