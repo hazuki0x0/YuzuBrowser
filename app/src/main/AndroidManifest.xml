@@ -162,16 +162,6 @@
             android:name=".download.DownloadListActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/download" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
         <provider
             android:name=".browser.SafeFileProvider"
             android:authorities="jp.hazuki.yuzubrowser.browser.SafeFileProvider"
@@ -179,6 +169,11 @@
             android:permission="jp.hazuki.yuzubrowser.permission.myapp.signature"
             android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
+        <provider
+            android:name=".download.DownloadFileProvider"
+            android:authorities="${applicationId}.downloadFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true" />
 
         <activity
             android:name=".history.BrowserHistoryActivity"

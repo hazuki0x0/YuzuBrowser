@@ -11,12 +11,13 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
-import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import jp.hazuki.yuzubrowser.download.DownloadFileProvider;
 
 public class PackageUtils {
     private PackageUtils() {
@@ -31,16 +32,12 @@ public class PackageUtils {
         Intent openIntent = new Intent(Intent.ACTION_VIEW);
         openIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Uri uri = getFileUri(context, file);
+        Uri uri = DownloadFileProvider.getUriForFIle(file);
         openIntent.setDataAndType(uri, context.getContentResolver().getType(uri));
 
         openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         return openIntent;
-    }
-
-    public static Uri getFileUri(Context context, File file) {
-        return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".fileProvider", file);
     }
 
     public static boolean isPermissionDerivedFromMyPackage(Context context, String permssion_name) {
