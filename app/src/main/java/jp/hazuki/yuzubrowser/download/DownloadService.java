@@ -16,6 +16,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.webkit.CookieManager;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
@@ -247,6 +249,32 @@ public class DownloadService extends Service {
         public void run() {
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
+            synchronized (mThreadList) {
+                mThreadList.add(this);
+            }
+
+            WakeLock wakelock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread");
+            wakelock.acquire();
+
+            if (mData.getUrl().startsWith("data:")) {
+                base64Download();
+            } else {
+                normalDownload();
+            }
+
+            if (wakelock != null) {
+                wakelock.release();
+            }
+
+            synchronized (mThreadList) {
+                mThreadList.remove(this);
+                if (mThreadList.isEmpty()) {
+                    stopSelf();
+                }
+            }
+        }
+
+        private void normalDownload() {
             HttpClientBuilder httpClient = HttpClientBuilder.createInstance(mData.getUrl());
             if (httpClient == null) {
                 showToast("HttpClientBuilder is null");
@@ -256,7 +284,6 @@ public class DownloadService extends Service {
             OutputStream outputStream = null;
             InputStream inputStream = null;
             NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
-            WakeLock wakelock = null;
 
             long id = mDb.insert(mData);
             if (id < 0) {
@@ -265,17 +292,9 @@ public class DownloadService extends Service {
             }
 
             try {
-                synchronized (mThreadList) {
-                    mThreadList.add(this);
-                }
-
-                wakelock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread");
-                wakelock.acquire();
-
                 notification.setSmallIcon(android.R.drawable.stat_sys_download);
                 notification.setOngoing(true);
                 notification.setContentTitle(mData.getFile().getName());
-                //notification.setContentText(mData.getUrl());
                 notification.setWhen(mData.start_time);
                 notification.setProgress(0, 0, true);
                 notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), DownloadListActivity.class), 0));
@@ -407,13 +426,54 @@ public class DownloadService extends Service {
                     }
                 }
                 httpClient.destroy();
+            }
+        }
 
-                if (wakelock != null) {
-                    wakelock.release();
+        private void base64Download() {
+            String[] data = mData.getUrl().split(Pattern.quote(","));
+            if (data.length > 1) {
+                long id = mDb.insert(mData);
+                if (id < 0) {
+                    showToast("DownloadInfoDatabase#insert failed");
+                    return;
                 }
 
+                byte[] image = Base64.decode(data[1], Base64.DEFAULT);
+                File file = mData.getFile();
+                if (file.getParentFile() != null) {
+                    file.getParentFile().mkdirs();
+                }
+
+                boolean done = false;
+
+                try (OutputStream outputStream = new FileOutputStream(file)) {
+                    outputStream.write(image);
+                    done = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (done) {
+                    mData.setState(DownloadInfo.STATE_DOWNLOADED);
+
+                    NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+                    notification.setWhen(System.currentTimeMillis());
+                    notification.setProgress(0, 0, false);
+                    notification.setAutoCancel(true);
+                    notification.setContentTitle(mData.getFile().getName());
+                    notification.setContentText(getText(R.string.download_success));
+                    notification.setSmallIcon(android.R.drawable.stat_sys_download_done);
+
+                    notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, PackageUtils.createFileOpenIntent(DownloadService.this, mData.getFile()), 0));
+                    mNotificationManager.notify((int) id, notification.build());
+
+                    FileUtils.notifyImageFile(getApplicationContext(), mData.file.getAbsolutePath());
+                } else {
+                    mData.setState(DownloadInfo.STATE_UNKNOWN_ERROR);
+                }
+
+                mDb.updateState(mData);
                 synchronized (mThreadList) {
-                    mThreadList.remove(this);
                     if (mThreadList.isEmpty()) {
                         stopSelf();
                     }
@@ -430,5 +490,4 @@ public class DownloadService extends Service {
             });
         }
     }
-
 }
