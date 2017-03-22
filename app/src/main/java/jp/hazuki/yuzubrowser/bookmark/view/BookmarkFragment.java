@@ -43,6 +43,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkRecyclerListener {
     private static final String MODE_PICK = "pick";
+    private static final String ITEM_ID = "id";
 
     private boolean pickMode;
 
@@ -72,8 +73,12 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     }
 
     private BookmarkFolder getRoot() {
-        if (AppData.save_bookmark_folder.get()) {
-            BookmarkItem item = mManager.get(AppData.save_bookmark_folder_id.get());
+        long id = getArguments().getLong(ITEM_ID);
+        if (AppData.save_bookmark_folder.get() || id > 0) {
+            if (id < 1) {
+                id = AppData.save_bookmark_folder_id.get();
+            }
+            BookmarkItem item = mManager.get(id);
             if (item instanceof BookmarkFolder) {
                 return (BookmarkFolder) item;
             }
@@ -92,10 +97,11 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         recyclerView.setAdapter(adapter);
     }
 
-    public static Fragment newInstance(boolean pickMode) {
+    public static Fragment newInstance(boolean pickMode, long id) {
         Fragment fragment = new BookmarkFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(MODE_PICK, pickMode);
+        bundle.putLong(ITEM_ID, id);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -233,15 +239,36 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         PopupMenu menu = new PopupMenu(getActivity(), v);
         MenuInflater inflater = menu.getMenuInflater();
         final BookmarkItem bookmarkItem;
-        if (adapter.isMultiSelectMode()) {
-            inflater.inflate(R.menu.bookmark_multiselect_menu, menu.getMenu());
-            bookmarkItem = null;
-        } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
-            inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
+        if (pickMode) {
             bookmarkItem = adapter.getItem(index);
+            menu.getMenu().add(R.string.select_this_item).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title);
+                    if (bookmarkItem instanceof BookmarkSite) {
+                        intent.putExtra(Intent.EXTRA_TEXT, ((BookmarkSite) bookmarkItem).url);
+                    } else {
+                        Intent sender = new Intent(getActivity(), BookmarkActivity.class);
+                        sender.putExtra("id", bookmarkItem.getId());
+                        intent.putExtra(Intent.EXTRA_TEXT, sender.toUri(Intent.URI_INTENT_SCHEME));
+                    }
+                    getActivity().setResult(RESULT_OK, intent);
+                    getActivity().finish();
+                    return false;
+                }
+            });
         } else {
-            inflater.inflate(R.menu.bookmark_folder_menu, menu.getMenu());
-            bookmarkItem = adapter.getItem(index);
+            if (adapter.isMultiSelectMode()) {
+                inflater.inflate(R.menu.bookmark_multiselect_menu, menu.getMenu());
+                bookmarkItem = null;
+            } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
+                inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
+                bookmarkItem = adapter.getItem(index);
+            } else {
+                inflater.inflate(R.menu.bookmark_folder_menu, menu.getMenu());
+                bookmarkItem = adapter.getItem(index);
+            }
         }
 
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
