@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/bookmark">
+
+        <SwitchPreference
+            android:key="save_bookmark_folder"
+            android:title="@string/save_bookmark_folder" />
+
+        <SwitchPreference
+            android:key="open_bookmark_new_tab"
+            android:title="@string/open_bookmark_new_tab"
+            android:summary="@string/open_bookmark_new_tab_info" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

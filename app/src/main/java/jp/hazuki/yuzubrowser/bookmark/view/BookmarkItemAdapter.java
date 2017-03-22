@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.content.Context;
@@ -21,10 +37,6 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
-/**
- * Created by hazuki on 17/03/01.
- */
-
 public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder> {
     private static final int TYPE_SITE = 1;
     private static final int TYPE_FOLDER = 2;
@@ -35,12 +47,14 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private SparseBooleanArray itemSelected;
     private OnBookmarkRecyclerListener bookmarkItemListener;
     private boolean pickMode;
+    private boolean openNewTab;
 
-    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, boolean pick, OnBookmarkRecyclerListener listener) {
+    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, boolean pick, boolean openNewTab, OnBookmarkRecyclerListener listener) {
         super(context, list, null);
         itemSelected = new SparseBooleanArray();
         bookmarkItemListener = listener;
         pickMode = pick;
+        this.openNewTab = openNewTab;
         setRecyclerListener(recyclerListener);
         TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
         normalBackGround = a.getResourceId(0, 0);
@@ -51,7 +65,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     public void onBindViewHolder(final BookmarkFolderHolder holder, BookmarkItem item, final int position) {
         if (item instanceof BookmarkSite) {
             ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
-            if (pickMode || multiSelectMode) {
+            if (!openNewTab || pickMode || multiSelectMode) {
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
                 ((BookmarkSiteHolder) holder).imageButton.setBackgroundColor(Color.TRANSPARENT);
             } else {

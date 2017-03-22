@@ -65,9 +65,20 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         pickMode = getArguments().getBoolean(MODE_PICK);
 
         mManager = new BookmarkManager(BrowserApplication.getInstance());
-        setList(mManager.getRoot());
+
+        setList(getRoot());
 
         return rootView;
+    }
+
+    private BookmarkFolder getRoot() {
+        if (AppData.save_bookmark_folder.get()) {
+            BookmarkItem item = mManager.get(AppData.save_bookmark_folder_id.get());
+            if (item instanceof BookmarkFolder) {
+                return (BookmarkFolder) item;
+            }
+        }
+        return mManager.getRoot();
     }
 
     private void setList(BookmarkFolder folder) {
@@ -77,7 +88,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             actionBar.setTitle(folder.title);
         }
 
-        adapter = new BookmarkItemAdapter(getActivity(), folder.list, pickMode, this);
+        adapter = new BookmarkItemAdapter(getActivity(), folder.list, pickMode, AppData.open_bookmark_new_tab.get(), this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -392,6 +403,15 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
                 break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (AppData.save_bookmark_folder.get()) {
+            AppData.save_bookmark_folder_id.set(mCurrentFolder.getId());
+            AppData.commit(getActivity(), AppData.save_bookmark_folder_id);
         }
     }
 

@@ -10,13 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
-
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
-import jp.hazuki.yuzubrowser.tab.TabList;
+import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
 
 public class AddBookmarkFolderDialog {
     private final AlertDialog mDialog;
@@ -29,15 +26,6 @@ public class AddBookmarkFolderDialog {
     public AddBookmarkFolderDialog(Context context, BookmarkManager manager, BookmarkFolder item) {
         this(context, manager, item.title, item.parent);
         mItem = item;
-    }
-
-    public AddBookmarkFolderDialog(Context context, TabList list) {
-        this(context, list.getList());
-    }
-
-    public AddBookmarkFolderDialog(Context context, List<MainTabData> list) {
-        this(context, null, null, null);
-        mItem = new BookmarkFolder(list);
     }
 
     public AddBookmarkFolderDialog(final Context context, BookmarkManager manager, String title, BookmarkFolder parent) {
@@ -76,7 +64,7 @@ public class AddBookmarkFolderDialog {
                     mParent = mManager.getRoot();
 
                 if (mItem == null) {
-                    BookmarkFolder item = new BookmarkFolder(title.toString(), mParent);
+                    BookmarkFolder item = new BookmarkFolder(title.toString(), mParent, BookmarkIdGenerator.getNewId());
                     mParent.add(item);
                 } else {
                     if (mItem.parent == null) {

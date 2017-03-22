@@ -21,6 +21,10 @@
         android:fragment="jp.hazuki.yuzubrowser.settings.activity.ActionSettingsFragment"
         android:title="@string/pref_action_settings" />
 
+    <header
+        android:fragment="jp.hazuki.yuzubrowser.settings.activity.OperationSettingsFragment"
+        android:title="@string/operation_settings" />
+
     <header android:title="@string/pref_speed_dial_setting">
         <intent
             android:targetPackage="jp.hazuki.yuzubrowser"

@@ -27,6 +27,7 @@ import java.io.StringReader;
 
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
+import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
 
 public class NetscapeBookmarkParser {
 
@@ -73,13 +74,13 @@ public class NetscapeBookmarkParser {
     private void startTag(String tag, XmlPullParser parser) throws IOException, XmlPullParserException {
         if ("h3".equals(tag)) {
             hierarchy++;
-            BookmarkFolder folder = new BookmarkFolder(parser.nextText(), parentFolder);
+            BookmarkFolder folder = new BookmarkFolder(parser.nextText(), parentFolder, BookmarkIdGenerator.getNewId());
             parentFolder.add(folder);
             parentFolder = folder;
         } else if ("a".equals(tag)) {
             String url = parser.getAttributeValue(null, "HREF");
             if (url != null) {
-                BookmarkSite site = new BookmarkSite(parser.nextText(), url);
+                BookmarkSite site = new BookmarkSite(parser.nextText(), url, BookmarkIdGenerator.getNewId());
                 parentFolder.add(site);
             }
         }
