@@ -91,6 +91,7 @@ import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.SingleAction;
+import jp.hazuki.yuzubrowser.action.item.AutoPageScrollAction;
 import jp.hazuki.yuzubrowser.action.item.CloseAutoSelectAction;
 import jp.hazuki.yuzubrowser.action.item.CloseTabSingleAction;
 import jp.hazuki.yuzubrowser.action.item.CustomMenuSingleAction;
@@ -199,6 +200,7 @@ import jp.hazuki.yuzubrowser.webkit.TabType;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
 import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
+import jp.hazuki.yuzubrowser.webkit.WebViewAutoScrollManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageCopyUrlHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageHandler;
@@ -253,6 +255,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private GestureManager mWebGestureManager;
     private WebViewFindDialog mWebViewFindDialog;
     private WebViewPageFastScroller mWebViewPageFastScroller;
+    private WebViewAutoScrollManager mWebViewAutoScrollManager;
     private DequeCompat<Bundle> mClosedTabs;
     private MultiTouchGestureDetector mGestureDetector;
     private PointerView mCursorView;
@@ -744,6 +747,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mWebViewFindDialog.hide();
                     } else if (mWebViewPageFastScroller != null) {
                         mWebViewPageFastScroller.close();
+                    } else if (mWebViewAutoScrollManager != null) {
+                        mWebViewAutoScrollManager.stop();
                     } else if (mTabList.getCurrentTabData().mWebView.canGoBack()) {
                         mTabList.getCurrentTabData().mWebView.goBack();
                     } else {
@@ -1373,6 +1378,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (mWebViewPageFastScroller != null)
             mWebViewPageFastScroller.close();
 
+        if (mWebViewAutoScrollManager != null)
+            mWebViewAutoScrollManager.stop();
+
         if (old_data != null) {
             old_data.mWebView.setOnMyCreateContextMenuListener(null);
             old_data.mWebView.setGestureDetector(null);
@@ -1589,6 +1597,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean onDown(MotionEvent e) {
+            if (mWebViewAutoScrollManager != null)
+                mWebViewAutoScrollManager.stop();
             return false;
         }
 
@@ -2129,6 +2139,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (mIsActivityPaused) {
                 resumeWebViewTimers(data);
             }
+
+            if (mWebViewAutoScrollManager != null)
+                mWebViewAutoScrollManager.stop();
         }
 
         @Override
@@ -2964,6 +2977,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
                 }
                 break;
+                case SingleAction.PAGE_AUTO_SCROLL: {
+                    if (mWebViewAutoScrollManager == null) {
+                        mWebViewAutoScrollManager = new WebViewAutoScrollManager();
+                        mWebViewAutoScrollManager.setOnStopListener(new WebViewAutoScrollManager.OnStop() {
+                            @Override
+                            public void onStop() {
+                                mWebViewAutoScrollManager = null;
+                            }
+                        });
+                        mWebViewAutoScrollManager.start(mTabList.get(target).mWebView, ((AutoPageScrollAction) action).getScrollSpeed());
+                    } else {
+                        mWebViewAutoScrollManager.stop();
+                    }
+                }
                 case SingleAction.FOCUS_UP:
                     dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP));
                     dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_UP));
@@ -3626,6 +3653,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 case SingleAction.PAGE_FAST_SCROLL:
                     return res.getDrawable(R.drawable.ic_scroll_white_24dp, getTheme());
+                case SingleAction.PAGE_AUTO_SCROLL:
+                    return res.getDrawable(R.drawable.ic_play_arrow_white_24dp, getTheme());
                 case SingleAction.FOCUS_UP:
                     return res.getDrawable(R.drawable.ic_label_up_white_24px, getTheme());
                 case SingleAction.FOCUS_DOWN:
