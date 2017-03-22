@@ -32,7 +32,7 @@ public class ApplicationSettingsFragment extends PreferenceFragment {
         final PackageManager pm = getActivity().getPackageManager();
 
         pref.setChecked(pm.getComponentEnabledSetting(componentName)
-                == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+                != PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
 
         pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
