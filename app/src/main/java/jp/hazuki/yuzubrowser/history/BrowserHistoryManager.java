@@ -104,6 +104,20 @@ public class BrowserHistoryManager implements CursorLoadable {
         db.delete(TABLE_NAME, null, null);
     }
 
+    public Bitmap getFavicon(String url) {
+        Bitmap bitmap = null;
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_URL + " = ?", new String[]{url}, null, null, null);
+        byte[] icon = null;
+        if (c.moveToFirst()) {
+            icon = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
+        }
+        c.close();
+        if (icon != null)
+            bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
+        return bitmap;
+    }
+
     public Bitmap getFavicon(long id) {
         Bitmap bitmap = null;
         byte[] icon = getFaviconImage(id);

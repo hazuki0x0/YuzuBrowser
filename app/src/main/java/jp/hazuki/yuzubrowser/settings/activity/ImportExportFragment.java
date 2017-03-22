@@ -58,7 +58,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
         findPreference("import_sd_bookmark").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                BookmarkManager manager = new BookmarkManager(getActivity());
+                final BookmarkManager manager = new BookmarkManager(getActivity());
                 final File internal_file = manager.getBookmarkFile();
 
                 File def_folder = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator);
@@ -78,6 +78,8 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (file.exists())
                                                     if (FileUtils.copySingleFile(file, internal_file)) {
+                                                        manager.load();
+                                                        manager.write();
                                                         Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
                                                         return;
                                                     }

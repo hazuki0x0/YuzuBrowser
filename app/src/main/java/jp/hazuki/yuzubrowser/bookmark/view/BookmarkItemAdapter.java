@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -34,6 +35,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
+import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
@@ -46,6 +48,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private boolean multiSelectMode;
     private SparseBooleanArray itemSelected;
     private OnBookmarkRecyclerListener bookmarkItemListener;
+    private BrowserHistoryManager historyManager;
     private boolean pickMode;
     private boolean openNewTab;
 
@@ -59,6 +62,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
         normalBackGround = a.getResourceId(0, 0);
         a.recycle();
+
+        historyManager = new BrowserHistoryManager(context);
     }
 
     @Override
@@ -77,6 +82,15 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                         bookmarkItemListener.onIconClick(v, holder.getAdapterPosition());
                     }
                 });
+            }
+
+            Bitmap bitmap = historyManager.getFavicon(((BookmarkSite) item).url);
+            if (bitmap != null) {
+                ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
+                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(0);
+            } else {
+                ((BookmarkSiteHolder) holder).imageButton.setImageResource(R.drawable.ic_bookmark_white_24dp);
+                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(0xffe6e6e6);
             }
         }
         holder.title.setText(item.title);

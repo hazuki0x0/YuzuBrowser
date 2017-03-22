@@ -21,6 +21,7 @@ import jp.hazuki.yuzubrowser.action.manager.MenuActionManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionArrayManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionManager;
 import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
+import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.settings.container.BooleanContainer;
@@ -258,9 +259,13 @@ public class AppData {
         }
 
         if (lastLaunch < versionCode) {
-//            if (lastLaunch >= 0) {
-//                //version up code
-//            }
+            if (lastLaunch >= 0) {
+                //version up code
+                if (lastLaunch < 106000) {
+                    BookmarkManager manager = new BookmarkManager(context);
+                    manager.write();
+                }
+            }
 
             lastLaunchVersion.set(versionCode);
             commit(context);
