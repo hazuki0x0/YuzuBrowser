@@ -48,16 +48,27 @@ public class NetscapeBookmarkCreator {
 
     private void writeFolder(Writer writer, BookmarkFolder folder) throws IOException {
         for (BookmarkItem item : folder.list) {
+            String date = Long.toString(item.getId() / 1000);
             if (item instanceof BookmarkSite) {
                 writeIndent(writer);
                 writer.write("<DT><A HREF=\"");
                 writer.write(((BookmarkSite) item).url);
-                writer.write("\" ADD_DATE=\"0\" LAST_VISIT=\"0\" LAST_MODIFIED=\"0\">");
+                writer.write("\" ADD_DATE=\"");
+                writer.write(date);
+                writer.write("\" LAST_VISIT=\"");
+                writer.write(date);
+                writer.write("\" LAST_MODIFIED=\"");
+                writer.write(date);
+                writer.write("\">");
                 writer.write(item.title);
                 writer.write("</A>\n");
             } else if (item instanceof BookmarkFolder) {
                 writeIndent(writer);
-                writer.write("<DT><H3 ADD_DATE=\"0\" LAST_MODIFIED=\"0\">");
+                writer.write("<DT><H3 ADD_DATE=\"");
+                writer.write(date);
+                writer.write("\" LAST_MODIFIED=\"");
+                writer.write(date);
+                writer.write("\">");
                 writer.write(item.title);
                 writer.write("</H3>\n");
                 writeIndent(writer);

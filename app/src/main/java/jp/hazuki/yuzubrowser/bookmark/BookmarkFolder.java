@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
 import jp.hazuki.yuzubrowser.tab.MainTabData;
 
 public class BookmarkFolder extends BookmarkItem implements Serializable {
@@ -21,18 +22,18 @@ public class BookmarkFolder extends BookmarkItem implements Serializable {
     public BookmarkFolder parent;
     public final ArrayList<BookmarkItem> list;
 
-    public BookmarkFolder(String title, BookmarkFolder parent) {
-        super(title);
+    public BookmarkFolder(String title, BookmarkFolder parent, long id) {
+        super(title, id);
         this.list = new ArrayList<>();
         this.parent = parent;
     }
 
-    public BookmarkFolder(List<MainTabData> list) {
-        super(null);
+    public BookmarkFolder(List<MainTabData> list, long id) {
+        super(null, id);
         this.list = new ArrayList<>(list.size());
         for (MainTabData tab : list)
             if (!TextUtils.isEmpty(tab.mUrl))
-                this.list.add(new BookmarkSite((tab.mTitle != null) ? tab.mTitle : tab.mUrl, tab.mUrl));
+                this.list.add(new BookmarkSite((tab.mTitle != null) ? tab.mTitle : tab.mUrl, tab.mUrl, BookmarkIdGenerator.getNewId()));
         this.parent = null;
     }
 
@@ -49,7 +50,7 @@ public class BookmarkFolder extends BookmarkItem implements Serializable {
     }
 
     @Override
-    protected int getId() {
+    protected int getType() {
         return BOOKMARK_ITEM_ID;
     }
 
@@ -65,7 +66,6 @@ public class BookmarkFolder extends BookmarkItem implements Serializable {
 
     @Override
     protected boolean readMain(JsonParser parser) throws IOException {
-        parser.nextToken();
         if (!COLUMN_NAME_LIST.equals(parser.getCurrentName())) return false;
 
         if (parser.nextToken() != JsonToken.START_ARRAY) return false;

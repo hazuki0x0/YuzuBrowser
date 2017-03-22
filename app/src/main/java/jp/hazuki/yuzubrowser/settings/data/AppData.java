@@ -27,6 +27,7 @@ import jp.hazuki.yuzubrowser.settings.container.BooleanContainer;
 import jp.hazuki.yuzubrowser.settings.container.Containable;
 import jp.hazuki.yuzubrowser.settings.container.FloatContainer;
 import jp.hazuki.yuzubrowser.settings.container.IntContainer;
+import jp.hazuki.yuzubrowser.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
@@ -132,6 +133,9 @@ public class AppData {
     public static final IntContainer double_tap_flick_sensitivity_speed = new IntContainer("double_tap_flick_sensitivity_speed", 20);
     public static final IntContainer double_tap_flick_sensitivity_distance = new IntContainer("double_tap_flick_sensitivity_distance", 15);
     public static final IntContainer mixed_content = new IntContainer("mixed_content", WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+    public static final BooleanContainer save_bookmark_folder = new BooleanContainer("save_bookmark_folder", false);
+    public static final LongContainer save_bookmark_folder_id = new LongContainer("save_bookmark_folder_id", -1L);
+    public static final BooleanContainer open_bookmark_new_tab = new BooleanContainer("open_bookmark_new_tab", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
