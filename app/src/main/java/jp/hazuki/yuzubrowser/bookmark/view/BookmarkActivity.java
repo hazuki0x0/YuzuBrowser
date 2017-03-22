@@ -50,6 +50,7 @@ public class BookmarkActivity extends AppCompatActivity implements Api24LongPres
                     if (((BookmarkFragment) fragment).onBack()) {
                         finish();
                     }
+                    return true;
                 }
             }
         }
