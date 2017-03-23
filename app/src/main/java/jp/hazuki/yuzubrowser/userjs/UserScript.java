@@ -233,9 +233,9 @@ public class UserScript implements Parcelable {
         } else if ("match".equalsIgnoreCase(field)) {
             if (include == null)
                 include = new ArrayList<>();
-            String pattern_url = "?" + value.replace("?", "\\?").replace(".", "\\.")
+            String pattern_url = "?^" + value.replace("?", "\\?").replace(".", "\\.")
                     .replace("*", ".*").replace("+", ".+")
-                    .replace(".*\\.", "((?![\\.]).)*\\.").replaceAll("^\\.\\*://", "^https?://");
+                    .replace("://.*\\.", "://((?![\\./]).)*\\.").replaceAll("^\\.\\*://", "https?://");
             Pattern pattern = WebUtils.makeUrlPattern(pattern_url);
             if (pattern != null)
                 include.add(pattern);
