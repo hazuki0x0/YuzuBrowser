@@ -19,7 +19,8 @@ package jp.hazuki.yuzubrowser.bookmark.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -42,6 +43,9 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder> {
     private static final int TYPE_SITE = 1;
     private static final int TYPE_FOLDER = 2;
+
+    private static final PorterDuffColorFilter defaultColorFilter = new PorterDuffColorFilter(0xffe6e6e6, PorterDuff.Mode.SRC_ATOP);
+    private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
     private final int normalBackGround;
 
@@ -71,11 +75,11 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         if (item instanceof BookmarkSite) {
             ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
             if (!openNewTab || pickMode || multiSelectMode) {
+                ((BookmarkSiteHolder) holder).imageButton.setEnabled(false);
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
-                ((BookmarkSiteHolder) holder).imageButton.setBackgroundColor(Color.TRANSPARENT);
             } else {
+                ((BookmarkSiteHolder) holder).imageButton.setEnabled(true);
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
-                ((BookmarkSiteHolder) holder).imageButton.setBackgroundResource(normalBackGround);
                 ((BookmarkSiteHolder) holder).imageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -87,10 +91,10 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             Bitmap bitmap = historyManager.getFavicon(((BookmarkSite) item).url);
             if (bitmap != null) {
                 ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
-                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(0);
+                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(faviconColorFilter);
             } else {
                 ((BookmarkSiteHolder) holder).imageButton.setImageResource(R.drawable.ic_bookmark_white_24dp);
-                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(0xffe6e6e6);
+                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(defaultColorFilter);
             }
         }
         holder.title.setText(item.title);
