@@ -15,13 +15,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 
 public class BookmarkManager implements Serializable {
     private final File mFile;
-    private BookmarkFolder mRoot = new BookmarkFolder(null, null);
+    private BookmarkFolder mRoot = new BookmarkFolder(null, null, -1);
+    private List<BookmarkItem> mItems = new ArrayList<>();
 
     public BookmarkManager(Context context) {
         mFile = new File(context.getDir("bookmark1", Context.MODE_PRIVATE), "bookmark1.dat");
@@ -83,5 +86,24 @@ public class BookmarkManager implements Serializable {
             ErrorReport.printAndWriteLog(e);
         }
         return false;
+    }
+
+    public BookmarkItem get(long id) {
+        if (id < 0) return null;
+        return get(id, mRoot);
+    }
+
+    private BookmarkItem get(long id, BookmarkFolder root) {
+        for (BookmarkItem item : root.list) {
+            if (item.getId() == id) {
+                return item;
+            } else if (item instanceof BookmarkFolder) {
+                BookmarkItem inner = get(id, (BookmarkFolder) item);
+                if (inner != null) {
+                    return inner;
+                }
+            }
+        }
+        return null;
     }
 }

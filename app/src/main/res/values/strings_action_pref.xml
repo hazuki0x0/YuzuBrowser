@@ -48,5 +48,7 @@
     <string name="action_start_activity_setting">Activity setting</string>
     <string name="action_web_encode_setting">Text encoding setting</string>
     <string name="action_vibration_setting">Period of time (ms.)</string>
+    <string name="action_auto_scroll_speed">Auto scroll speed</string>
+    <string name="action_auto_scroll_speed_zero">Error : Speed must not be 0</string>
 
 </resources>

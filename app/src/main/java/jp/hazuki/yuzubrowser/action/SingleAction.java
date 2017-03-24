@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonParser;
 
 import java.io.IOException;
 
+import jp.hazuki.yuzubrowser.action.item.AutoPageScrollAction;
 import jp.hazuki.yuzubrowser.action.item.CloseAutoSelectAction;
 import jp.hazuki.yuzubrowser.action.item.CloseTabSingleAction;
 import jp.hazuki.yuzubrowser.action.item.CustomMenuSingleAction;
@@ -44,6 +45,7 @@ public class SingleAction implements Parcelable {
     public static final int PAGE_BOTTOM = 1210;
     public static final int PAGE_SCROLL = 1215;
     public static final int PAGE_FAST_SCROLL = 1216;
+    public static final int PAGE_AUTO_SCROLL = 1217;
     public static final int FOCUS_UP = 1220;
     public static final int FOCUS_DOWN = 1221;
     public static final int FOCUS_LEFT = 1222;
@@ -184,6 +186,8 @@ public class SingleAction implements Parcelable {
                 return new GoBackSingleAction(id, parser);
             case PAGE_SCROLL:
                 return new WebScrollSingleAction(id, parser);
+            case PAGE_AUTO_SCROLL:
+                return new AutoPageScrollAction(id, parser);
             case MOUSE_POINTER:
                 return new MousePointerSingleAction(id, parser);
             case SAVE_SCREENSHOT:
@@ -224,6 +228,7 @@ public class SingleAction implements Parcelable {
         switch (id) {
             case GO_BACK:
             case PAGE_SCROLL:
+            case PAGE_AUTO_SCROLL:
             case MOUSE_POINTER:
             case SAVE_SCREENSHOT:
             case SHARE_SCREENSHOT:

@@ -53,6 +53,7 @@ public class FinishAlertDialog extends CustomDialogPreference {
         final CheckBox passwordCheckBox = (CheckBox) view.findViewById(R.id.passwordCheckBox);
         final CheckBox formdataCheckBox = (CheckBox) view.findViewById(R.id.formdataCheckBox);
         final CheckBox closeallCheckBox = (CheckBox) view.findViewById(R.id.closeallCheckBox);
+        final CheckBox historyCheckBox = (CheckBox) view.findViewById(R.id.deleteHistoryCheckBox);
 
         if (!mShowMessage)
             textView.setVisibility(View.GONE);
@@ -63,6 +64,7 @@ public class FinishAlertDialog extends CustomDialogPreference {
         databaseCheckBox.setChecked((def & 0x04) != 0);
         passwordCheckBox.setChecked((def & 0x08) != 0);
         formdataCheckBox.setChecked((def & 0x10) != 0);
+        historyCheckBox.setChecked((def & 0x20) != 0);
 
         if (!AppData.save_last_tabs.get())
             closeallCheckBox.setVisibility(View.GONE);
@@ -91,6 +93,9 @@ public class FinishAlertDialog extends CustomDialogPreference {
 
                         if (formdataCheckBox.isChecked())
                             new_settings |= 0x10;
+
+                        if (historyCheckBox.isChecked())
+                            new_settings |= 0x20;
 
                         if (closeallCheckBox.isChecked())
                             new_settings |= 0x1000;

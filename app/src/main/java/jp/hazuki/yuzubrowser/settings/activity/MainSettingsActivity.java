@@ -71,7 +71,8 @@ public class MainSettingsActivity extends AppCompatPreferenceActivity {
                 || PageSettingFragment.class.getName().equals(fragmentName)
                 || UiSettingFragment.class.getName().equals(fragmentName)
                 || PrivacyFragment.class.getName().equals(fragmentName)
-                || ImportExportFragment.class.getName().equals(fragmentName);
+                || ImportExportFragment.class.getName().equals(fragmentName)
+                || OperationSettingsFragment.class.getName().equals(fragmentName);
     }
 
     @Override

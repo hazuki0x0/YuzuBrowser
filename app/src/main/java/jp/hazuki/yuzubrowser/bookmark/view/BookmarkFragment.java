@@ -43,6 +43,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkRecyclerListener {
     private static final String MODE_PICK = "pick";
+    private static final String ITEM_ID = "id";
 
     private boolean pickMode;
 
@@ -65,9 +66,24 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         pickMode = getArguments().getBoolean(MODE_PICK);
 
         mManager = new BookmarkManager(BrowserApplication.getInstance());
-        setList(mManager.getRoot());
+
+        setList(getRoot());
 
         return rootView;
+    }
+
+    private BookmarkFolder getRoot() {
+        long id = getArguments().getLong(ITEM_ID);
+        if (AppData.save_bookmark_folder.get() || id > 0) {
+            if (id < 1) {
+                id = AppData.save_bookmark_folder_id.get();
+            }
+            BookmarkItem item = mManager.get(id);
+            if (item instanceof BookmarkFolder) {
+                return (BookmarkFolder) item;
+            }
+        }
+        return mManager.getRoot();
     }
 
     private void setList(BookmarkFolder folder) {
@@ -77,14 +93,15 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             actionBar.setTitle(folder.title);
         }
 
-        adapter = new BookmarkItemAdapter(getActivity(), folder.list, pickMode, this);
+        adapter = new BookmarkItemAdapter(getActivity(), folder.list, pickMode, AppData.open_bookmark_new_tab.get(), this);
         recyclerView.setAdapter(adapter);
     }
 
-    public static Fragment newInstance(boolean pickMode) {
+    public static Fragment newInstance(boolean pickMode, long id) {
         Fragment fragment = new BookmarkFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(MODE_PICK, pickMode);
+        bundle.putLong(ITEM_ID, id);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -94,11 +111,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         BookmarkItem item = mCurrentFolder.list.get(position);
         if (item instanceof BookmarkSite) {
             if (pickMode) {
-                BookmarkSite site = (BookmarkSite) item;
-                Intent intent = new Intent();
-                intent.putExtra(Intent.EXTRA_TITLE, site.title);
-                intent.putExtra(Intent.EXTRA_TEXT, site.url);
-                getActivity().setResult(RESULT_OK, intent);
+                pickBookmark((BookmarkSite) item);
             } else {
                 sendUrl(((BookmarkSite) item).url, AppData.newtab_bookmark.get());
             }
@@ -124,7 +137,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     public void onIconClick(View v, int position) {
         BookmarkItem item = adapter.getItem(position);
         if (item instanceof BookmarkSite) {
-            sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_NEW);
+            sendUrl(((BookmarkSite) item).url, AppData.open_bookmark_icon_action.get());
         }
     }
 
@@ -222,15 +235,38 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         PopupMenu menu = new PopupMenu(getActivity(), v);
         MenuInflater inflater = menu.getMenuInflater();
         final BookmarkItem bookmarkItem;
-        if (adapter.isMultiSelectMode()) {
-            inflater.inflate(R.menu.bookmark_multiselect_menu, menu.getMenu());
-            bookmarkItem = null;
-        } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
-            inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
+        if (pickMode) {
             bookmarkItem = adapter.getItem(index);
+            menu.getMenu().add(R.string.select_this_item).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    if (bookmarkItem instanceof BookmarkSite) {
+                        pickBookmark((BookmarkSite) bookmarkItem);
+                    } else {
+                        Intent sender = new Intent(getActivity(), BookmarkActivity.class);
+                        sender.putExtra("id", bookmarkItem.getId());
+
+                        Intent intent = new Intent();
+                        intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title);
+                        intent.putExtra(Intent.EXTRA_TEXT, sender.toUri(Intent.URI_INTENT_SCHEME));
+                        getActivity().setResult(RESULT_OK, intent);
+                    }
+                    getActivity().finish();
+                    return false;
+                }
+            });
         } else {
-            inflater.inflate(R.menu.bookmark_folder_menu, menu.getMenu());
-            bookmarkItem = adapter.getItem(index);
+            if (adapter.isMultiSelectMode()) {
+                inflater.inflate(R.menu.bookmark_multiselect_menu, menu.getMenu());
+                bookmarkItem = null;
+            } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
+                inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
+                bookmarkItem = adapter.getItem(index);
+            } else {
+                inflater.inflate(R.menu.bookmark_folder_menu, menu.getMenu());
+                bookmarkItem = adapter.getItem(index);
+            }
         }
 
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -241,6 +277,19 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             }
         });
         menu.show();
+    }
+
+    private void pickBookmark(BookmarkSite site) {
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_TITLE, site.title);
+        intent.putExtra(Intent.EXTRA_TEXT, site.url);
+
+        byte[] icon = adapter.getFavicon(site);
+        if (icon != null) {
+            intent.putExtra(Intent.EXTRA_STREAM, icon);
+        }
+
+        getActivity().setResult(RESULT_OK, intent);
     }
 
     private void onContextMenuClick(int id, final BookmarkItem item, final int index) {
@@ -392,6 +441,15 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
                 break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (AppData.save_bookmark_folder.get()) {
+            AppData.save_bookmark_folder_id.set(mCurrentFolder.getId());
+            AppData.commit(getActivity(), AppData.save_bookmark_folder_id);
         }
     }
 

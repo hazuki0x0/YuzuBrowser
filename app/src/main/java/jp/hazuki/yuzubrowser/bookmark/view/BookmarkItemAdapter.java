@@ -1,7 +1,24 @@
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -18,12 +35,9 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
+import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
-
-/**
- * Created by hazuki on 17/03/01.
- */
 
 public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder> {
     private static final int TYPE_SITE = 1;
@@ -34,24 +48,29 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private boolean multiSelectMode;
     private SparseBooleanArray itemSelected;
     private OnBookmarkRecyclerListener bookmarkItemListener;
+    private BrowserHistoryManager historyManager;
     private boolean pickMode;
+    private boolean openNewTab;
 
-    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, boolean pick, OnBookmarkRecyclerListener listener) {
+    public BookmarkItemAdapter(Context context, List<BookmarkItem> list, boolean pick, boolean openNewTab, OnBookmarkRecyclerListener listener) {
         super(context, list, null);
         itemSelected = new SparseBooleanArray();
         bookmarkItemListener = listener;
         pickMode = pick;
+        this.openNewTab = openNewTab;
         setRecyclerListener(recyclerListener);
         TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
         normalBackGround = a.getResourceId(0, 0);
         a.recycle();
+
+        historyManager = new BrowserHistoryManager(context);
     }
 
     @Override
     public void onBindViewHolder(final BookmarkFolderHolder holder, BookmarkItem item, final int position) {
         if (item instanceof BookmarkSite) {
             ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
-            if (pickMode || multiSelectMode) {
+            if (!openNewTab || pickMode || multiSelectMode) {
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
                 ((BookmarkSiteHolder) holder).imageButton.setBackgroundColor(Color.TRANSPARENT);
             } else {
@@ -63,6 +82,15 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                         bookmarkItemListener.onIconClick(v, holder.getAdapterPosition());
                     }
                 });
+            }
+
+            Bitmap bitmap = historyManager.getFavicon(((BookmarkSite) item).url);
+            if (bitmap != null) {
+                ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
+                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(0);
+            } else {
+                ((BookmarkSiteHolder) holder).imageButton.setImageResource(R.drawable.ic_bookmark_white_24dp);
+                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(0xffe6e6e6);
             }
         }
         holder.title.setText(item.title);
@@ -127,6 +155,10 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             }
         }
         return items;
+    }
+
+    public byte[] getFavicon(BookmarkSite site) {
+        return historyManager.getFaviconImage(site.url);
     }
 
     private void setSelectedBackground(View view, boolean selected) {

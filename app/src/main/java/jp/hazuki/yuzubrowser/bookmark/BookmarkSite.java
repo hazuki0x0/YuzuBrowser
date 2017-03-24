@@ -13,17 +13,17 @@ public class BookmarkSite extends BookmarkItem implements Serializable {
 
     public String url;
 
-    public BookmarkSite(String title) {
-        super(title);
+    public BookmarkSite(String title, long id) {
+        super(title, id);
     }
 
-    public BookmarkSite(String title, String url) {
-        super(title);
+    public BookmarkSite(String title, String url, long id) {
+        super(title, id);
         this.url = url;
     }
 
     @Override
-    protected int getId() {
+    protected int getType() {
         return BOOKMARK_ITEM_ID;
     }
 
@@ -35,7 +35,6 @@ public class BookmarkSite extends BookmarkItem implements Serializable {
 
     @Override
     protected boolean readMain(JsonParser parser) throws IOException {
-        parser.nextToken();
         if (!COLUMN_NAME_URL.equals(parser.getCurrentName())) return false;
         if (parser.nextToken() != JsonToken.VALUE_STRING) return false;
         url = parser.getText();

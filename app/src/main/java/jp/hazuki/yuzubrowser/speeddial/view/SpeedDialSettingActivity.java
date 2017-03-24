@@ -158,14 +158,8 @@ public class SpeedDialSettingActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case RESULT_REQUEST_BOOKMARK: {
-                if (resultCode != Activity.RESULT_OK || data == null) break;
-                String title = data.getStringExtra(Intent.EXTRA_TITLE);
-                String url = data.getStringExtra(Intent.EXTRA_TEXT);
-                speedDialStack.addItem(new SpeedDial(url, title));
-                break;
-            }
-            case RESULT_REQUEST_HISTORY: {
+            case RESULT_REQUEST_BOOKMARK:
+            case RESULT_REQUEST_HISTORY:
                 if (resultCode != Activity.RESULT_OK || data == null) break;
                 String title = data.getStringExtra(Intent.EXTRA_TITLE);
                 String url = data.getStringExtra(Intent.EXTRA_TEXT);
@@ -178,7 +172,6 @@ public class SpeedDialSettingActivity extends AppCompatActivity
                 }
                 speedDialStack.addItem(speedDial);
                 break;
-            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
