@@ -230,6 +230,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private static final String TAB_TYPE = "tabType";
     public static final String ACTION_FINISH = BrowserActivity.class.getName() + ".finish";
     public static final String ACTION_NEW_TAB = BrowserActivity.class.getName() + ".newTab";
+    public static final String EXTRA_FORCE_DESTROY = "force_destroy";
 
     private final MyActionCallback mActionCallback = new MyActionCallback();
     private final MyWebViewClient mWebViewClient = new MyWebViewClient();
@@ -811,7 +812,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setIntent(new Intent());
         if (action == null) return false;
         if (ACTION_FINISH.equals(action)) {
-            forceDestroy = true;
+            forceDestroy = intent.getBooleanExtra(EXTRA_FORCE_DESTROY, false);
             finish();
             return false;
         }
