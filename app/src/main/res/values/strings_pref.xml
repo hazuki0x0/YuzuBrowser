@@ -564,7 +564,8 @@
     <string name="pref_double_tap_flick_enable">Enable double tap with flick</string>
 
     <string name="operation_settings">Operation Settings</string>
-    <string name="open_bookmark_new_tab">Open bookmark with new tab</string>
-    <string name="open_bookmark_new_tab_info">Open in a new tab when tapping bookmark icon</string>
+    <string name="open_bookmark_new_tab">Bookmark icon action</string>
+    <string name="open_bookmark_new_tab_info">When you tap the icon of the site, do another operation</string>
+    <string name="open_bookmark_new_tab_action">Icon action</string>
     <string name="save_bookmark_folder">Remember location of bookmark folder</string>
 </resources>

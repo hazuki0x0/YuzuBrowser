@@ -137,6 +137,7 @@ public class AppData {
     public static final BooleanContainer save_bookmark_folder = new BooleanContainer("save_bookmark_folder", false);
     public static final LongContainer save_bookmark_folder_id = new LongContainer("save_bookmark_folder_id", -1L);
     public static final BooleanContainer open_bookmark_new_tab = new BooleanContainer("open_bookmark_new_tab", true);
+    public static final IntContainer open_bookmark_icon_action = new IntContainer("open_bookmark_icon_action", 1);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

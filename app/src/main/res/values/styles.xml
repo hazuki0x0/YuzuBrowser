@@ -41,4 +41,8 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
+
+    <style name="CustomThemeBlack.Pref" parent="CustomThemeBlack">
+        <item name="android:textColorPrimary">@color/pref_text_color</item>
+    </style>
 </resources>

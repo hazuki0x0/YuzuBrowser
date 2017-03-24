@@ -141,7 +141,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     public void onIconClick(View v, int position) {
         BookmarkItem item = adapter.getItem(position);
         if (item instanceof BookmarkSite) {
-            sendUrl(((BookmarkSite) item).url, BrowserManager.LOAD_URL_TAB_NEW);
+            sendUrl(((BookmarkSite) item).url, AppData.open_bookmark_icon_action.get());
         }
     }
 
