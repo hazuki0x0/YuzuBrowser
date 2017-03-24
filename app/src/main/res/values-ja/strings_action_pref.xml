@@ -43,5 +43,7 @@
     <string name="action_start_activity_setting">Activity設定</string>
     <string name="action_web_encode_setting">テキストエンコード設定</string>
     <string name="action_vibration_setting">時間 (ミリ秒)</string>
+    <string name="action_auto_scroll_speed">オートスクロールスピード</string>
+    <string name="action_auto_scroll_speed_zero">エラー : Xスピードは0以外でなくてはいけません</string>
 
 </resources>

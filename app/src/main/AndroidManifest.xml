@@ -107,7 +107,8 @@
             android:name=".settings.activity.MainSettingsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="true"
-            android:label="@string/pref_settings" />
+            android:label="@string/pref_settings"
+            android:theme="@style/CustomThemeBlack.Pref" />
         <activity
             android:name=".action.view.ActionActivity"
             android:configChanges="keyboardHidden|orientation"

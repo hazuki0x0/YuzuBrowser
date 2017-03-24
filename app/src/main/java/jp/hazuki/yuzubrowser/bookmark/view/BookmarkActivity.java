@@ -21,10 +21,17 @@ public class BookmarkActivity extends AppCompatActivity implements Api24LongPres
         api24LongPressFix = new Api24LongPressFix(this);
 
         Intent intent = getIntent();
-        boolean pickMode = intent != null && Intent.ACTION_PICK.equals(intent.getAction());
+        boolean pickMode = false;
+        long itemId = -1;
+        if (intent != null) {
+            pickMode = Intent.ACTION_PICK.equals(intent.getAction());
+            itemId = intent.getLongExtra("id", -1);
+        }
+
+
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, BookmarkFragment.newInstance(pickMode))
+                .replace(R.id.container, BookmarkFragment.newInstance(pickMode, itemId))
                 .commit();
     }
 

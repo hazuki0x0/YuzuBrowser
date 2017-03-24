@@ -28,6 +28,7 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask;
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask;
+import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference;
 import jp.hazuki.yuzubrowser.utils.AppUtils;
@@ -57,7 +58,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
         findPreference("import_sd_bookmark").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                BookmarkManager manager = new BookmarkManager(getActivity());
+                final BookmarkManager manager = new BookmarkManager(getActivity());
                 final File internal_file = manager.getBookmarkFile();
 
                 File def_folder = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator);
@@ -77,6 +78,8 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (file.exists())
                                                     if (FileUtils.copySingleFile(file, internal_file)) {
+                                                        manager.load();
+                                                        manager.write();
                                                         Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
                                                         return;
                                                     }
@@ -141,7 +144,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (file.exists()) {
-                                                    BookmarkFolder root = new BookmarkFolder(file.getName(), manager.getRoot());
+                                                    BookmarkFolder root = new BookmarkFolder(file.getName(), manager.getRoot(), BookmarkIdGenerator.getNewId());
                                                     manager.add(root);
                                                     Bundle bundle = new Bundle();
                                                     bundle.putSerializable("file", file);

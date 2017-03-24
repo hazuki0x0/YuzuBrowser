@@ -5,6 +5,7 @@ import android.view.View;
 
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
+import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
 
 public class AddBookmarkSiteDialog extends AddBookmarkDialog<BookmarkSite, String> {
     public AddBookmarkSiteDialog(Context context, BookmarkManager manager, BookmarkSite item) {
@@ -25,7 +26,7 @@ public class AddBookmarkSiteDialog extends AddBookmarkDialog<BookmarkSite, Strin
     @Override
     protected BookmarkSite makeItem(BookmarkSite item, String title, String url) {
         if (item == null) {
-            return new BookmarkSite(title, url.trim());
+            return new BookmarkSite(title, url.trim(), BookmarkIdGenerator.getNewId());
         } else {
             item.title = title;
             item.url = url.trim();

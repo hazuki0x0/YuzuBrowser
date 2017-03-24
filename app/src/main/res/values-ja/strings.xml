@@ -168,6 +168,7 @@
     <string name="clipboard_empty">クリップボードには何も入っていませんよ。</string>
     <string name="action_to_json">JSON文字列を表示</string>
     <string name="multi_select">複数選択</string>
+    <string name="select_this_item">このアイテムを選択</string>
     <string name="saved_file">保存しました :</string>
     <string name="savepage_save_archive">WebアーカイブXMLとして保存</string>
     <string name="action_easy_add">簡易追加</string>
