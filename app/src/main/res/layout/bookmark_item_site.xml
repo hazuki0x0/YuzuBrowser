@@ -7,9 +7,10 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="35dp"
+        android:layout_width="64dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="13dp"
         android:tint="#e6e6e6"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_bookmark_white_24dp"

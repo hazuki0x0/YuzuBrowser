@@ -276,7 +276,7 @@
 
     <string name="operation_settings">操作設定</string>
     <string name="open_bookmark_new_tab">ブックマークアイコンアクション</string>
-    <string name="open_bookmark_new_tab_info">サイトのアイコンをタップした時、別の動作をする</string>
+    <string name="open_bookmark_new_tab_info">サイトのアイコンをタップした時、他のタブで開く</string>
     <string name="open_bookmark_new_tab_action">アイコンアクション</string>
     <string name="save_bookmark_folder">ブックマークフォルダの位置を記憶</string>
 </resources>
