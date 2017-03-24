@@ -131,6 +131,7 @@ import jp.hazuki.yuzubrowser.download.DownloadListActivity;
 import jp.hazuki.yuzubrowser.gesture.GestureManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
+import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.menuwindow.MenuWindow;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
@@ -1829,6 +1830,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         if ((finish_clear & 0x10) != 0) {
             WebViewDatabase.getInstance(getApplicationContext()).clearFormData();
+        }
+        if ((finish_clear & 0x20) != 0) {
+            BrowserHistoryManager manager = new BrowserHistoryManager(this);
+            manager.deleteAll();
         }
 
         mHandler.removeCallbacks(mSaveTabsRunnable);
