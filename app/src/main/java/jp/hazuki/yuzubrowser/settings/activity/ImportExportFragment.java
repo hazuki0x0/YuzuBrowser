@@ -298,7 +298,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
         if (data) {
             Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_SHORT).show();
             if (loader instanceof RestoreTask) {
-                AppUtils.restartApp(getActivity());
+                AppUtils.restartApp(getActivity(), true);
             }
         } else {
             Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_SHORT).show();
