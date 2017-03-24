@@ -111,11 +111,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         BookmarkItem item = mCurrentFolder.list.get(position);
         if (item instanceof BookmarkSite) {
             if (pickMode) {
-                BookmarkSite site = (BookmarkSite) item;
-                Intent intent = new Intent();
-                intent.putExtra(Intent.EXTRA_TITLE, site.title);
-                intent.putExtra(Intent.EXTRA_TEXT, site.url);
-                getActivity().setResult(RESULT_OK, intent);
+                pickBookmark((BookmarkSite) item);
             } else {
                 sendUrl(((BookmarkSite) item).url, AppData.newtab_bookmark.get());
             }
@@ -244,16 +240,18 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             menu.getMenu().add(R.string.select_this_item).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent();
-                    intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title);
+
                     if (bookmarkItem instanceof BookmarkSite) {
-                        intent.putExtra(Intent.EXTRA_TEXT, ((BookmarkSite) bookmarkItem).url);
+                        pickBookmark((BookmarkSite) bookmarkItem);
                     } else {
                         Intent sender = new Intent(getActivity(), BookmarkActivity.class);
                         sender.putExtra("id", bookmarkItem.getId());
+
+                        Intent intent = new Intent();
+                        intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title);
                         intent.putExtra(Intent.EXTRA_TEXT, sender.toUri(Intent.URI_INTENT_SCHEME));
+                        getActivity().setResult(RESULT_OK, intent);
                     }
-                    getActivity().setResult(RESULT_OK, intent);
                     getActivity().finish();
                     return false;
                 }
@@ -279,6 +277,19 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             }
         });
         menu.show();
+    }
+
+    private void pickBookmark(BookmarkSite site) {
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_TITLE, site.title);
+        intent.putExtra(Intent.EXTRA_TEXT, site.url);
+
+        byte[] icon = adapter.getFavicon(site);
+        if (icon != null) {
+            intent.putExtra(Intent.EXTRA_STREAM, icon);
+        }
+
+        getActivity().setResult(RESULT_OK, intent);
     }
 
     private void onContextMenuClick(int id, final BookmarkItem item, final int index) {

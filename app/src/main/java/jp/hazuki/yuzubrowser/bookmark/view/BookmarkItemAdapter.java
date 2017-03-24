@@ -157,6 +157,10 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         return items;
     }
 
+    public byte[] getFavicon(BookmarkSite site) {
+        return historyManager.getFaviconImage(site.url);
+    }
+
     private void setSelectedBackground(View view, boolean selected) {
         if (selected) {
             view.setBackgroundResource(R.drawable.selectable_selected_item_background);
