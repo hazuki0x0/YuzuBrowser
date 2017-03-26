@@ -315,6 +315,9 @@ public class ToolbarManager {
     }
 
     public void setWebViewTitlebar(CustomWebView web, boolean combine) {
+        if (fixedWebToolbarLayout.getParent() instanceof ViewGroup) {
+            ((ViewGroup) fixedWebToolbarLayout.getParent()).removeView(fixedWebToolbarLayout);
+        }
         if (combine) {
             if (!mIsWebToolbarCombined) {
                 topToolbarLayout.removeView(webToolbarLayout);
