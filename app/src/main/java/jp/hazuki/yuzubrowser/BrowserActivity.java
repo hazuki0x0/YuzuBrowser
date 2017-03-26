@@ -1272,15 +1272,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
 
                     if (intent != null) {
-                        PackageManager packageManager = getPackageManager();
-                        ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                        if (info != null) {
-                            startActivity(intent);
+                        if (intent.getComponent() != null && BookmarkActivity.class.getName().equals(intent.getComponent().getClassName())) {
+                            startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         } else {
-                            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
-                            if (!TextUtils.isEmpty(fallbackUrl)) {
-                                loadUrl(data, fallbackUrl);
-                                return true;
+                            PackageManager packageManager = getPackageManager();
+                            ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                            if (info != null) {
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                                if (!TextUtils.isEmpty(fallbackUrl)) {
+                                    loadUrl(data, fallbackUrl);
+                                    return true;
+                                }
                             }
                         }
 
@@ -1349,6 +1354,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                     if (info != null) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {
                         String fallbackUrl = intent.getStringExtra("browser_fallback_url");

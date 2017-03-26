@@ -166,9 +166,9 @@
     <string name="pref_mixed_content">https上の安全でないコンテンツ設定</string>
 
     <string-array name="pref_mixed_content_list">
-        <item>無効 (安全)</item>
+        <item>許可しない (安全)</item>
         <item>互換モード (既定)</item>
-        <item>有効 (非推奨)</item>
+        <item>全て許可する (非推奨)</item>
     </string-array>
 
     <string name="pref_toolbar_visibility">表示設定</string>

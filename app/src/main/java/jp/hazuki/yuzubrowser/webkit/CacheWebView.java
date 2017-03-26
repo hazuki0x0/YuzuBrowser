@@ -859,6 +859,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
         to_setting.setAllowContentAccess(from_setting.getAllowContentAccess());
         to_setting.setAllowFileAccess(from_setting.getAllowFileAccess());
+        to_setting.setMixedContentMode(from_setting.getMixedContentMode());
         to_setting.setDefaultTextEncodingName(from_setting.getDefaultTextEncodingName());
         to_setting.setUserAgentString(from_setting.getUserAgentString());
         to_setting.setLoadWithOverviewMode(from_setting.getLoadWithOverviewMode());

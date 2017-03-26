@@ -439,9 +439,9 @@
     <string name="pref_mixed_content">Insecure content settings on https</string>
 
     <string-array name="pref_mixed_content_list">
-        <item>Disable (safest)</item>
+        <item>Never allow (safest)</item>
         <item>Compatibility (default)</item>
-        <item>Enable (unsafe)</item>
+        <item>Always allow (unsafe)</item>
     </string-array>
 
     <integer-array name="pref_mixed_contents_values">
