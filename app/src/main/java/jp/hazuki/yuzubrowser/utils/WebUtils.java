@@ -120,7 +120,7 @@ public class WebUtils {
 
         Intent intent = createShareWebIntent(url, title);
         try {
-            context.startActivity(PackageUtils.createChooser(context, intent, context.getText(R.string.share)));
+            context.startActivity(Intent.createChooser(intent, context.getText(R.string.share)));
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }

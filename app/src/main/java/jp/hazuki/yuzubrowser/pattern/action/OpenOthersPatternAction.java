@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -17,7 +18,6 @@ import java.net.URISyntaxException;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
 import jp.hazuki.yuzubrowser.tab.MainTabData;
-import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 
 public class OpenOthersPatternAction extends PatternAction {
@@ -27,11 +27,11 @@ public class OpenOthersPatternAction extends PatternAction {
     public static final int TYPE_APP_LIST = 1;
     public static final int TYPE_APP_CHOOSER = 2;
     private int mType;
-    private Intent mIntent;
+    private String mUrl;
 
-    public OpenOthersPatternAction(Intent intent) {
+    public OpenOthersPatternAction(@NonNull Intent intent) {
         mType = TYPE_NORMAL;
-        mIntent = intent;
+        mUrl = intent.toUri(0);
     }
 
     public OpenOthersPatternAction(int type) {
@@ -49,11 +49,7 @@ public class OpenOthersPatternAction extends PatternAction {
             }
             if (FIELD_INTENT.equals(parser.getCurrentName())) {
                 if (parser.nextToken() != JsonToken.VALUE_STRING) return;
-                try {
-                    mIntent = Intent.parseUri(parser.getText(), 0);
-                } catch (URISyntaxException e) {
-                    ErrorReport.printAndWriteLog(e);
-                }
+                mUrl = parser.getText();
                 continue;
             }
             parser.skipChildren();
@@ -70,8 +66,8 @@ public class OpenOthersPatternAction extends PatternAction {
         generator.writeNumber(OPEN_OTHERS);
         generator.writeStartObject();
         generator.writeNumberField(FIELD_TYPE, mType);
-        if (mIntent != null)
-            generator.writeStringField(FIELD_INTENT, mIntent.toUri(0));
+        if (mUrl != null)
+            generator.writeStringField(FIELD_INTENT, mUrl);
         generator.writeEndObject();
         return true;
     }
@@ -83,7 +79,7 @@ public class OpenOthersPatternAction extends PatternAction {
                 String pre = context.getString(R.string.pattern_open_others);
                 try {
                     PackageManager pm = context.getPackageManager();
-                    return pre + " : " + pm.getActivityInfo(mIntent.getComponent(), 0).loadLabel(pm).toString();
+                    return pre + " : " + pm.getActivityInfo(getIntent().getComponent(), 0).loadLabel(pm).toString();
                 } catch (NameNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -103,7 +99,12 @@ public class OpenOthersPatternAction extends PatternAction {
     }
 
     public Intent getIntent() {
-        return mIntent;
+        try {
+            return Intent.parseUri(mUrl, 0);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class OpenOthersPatternAction extends PatternAction {
         Intent intent;
         switch (mType) {
             case TYPE_NORMAL:
-                intent = new Intent(mIntent);
+                intent = getIntent();
                 intent.setData(Uri.parse(url));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 break;
