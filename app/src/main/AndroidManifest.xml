@@ -33,7 +33,7 @@
             android:name=".BrowserActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/BrowserMinThemeBlack.NoTitle">
             <meta-data
                 android:name="android.app.shortcuts"

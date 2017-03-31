@@ -2510,7 +2510,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     menu.add(R.string.dial).setOnMenuItemClickListener(new OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem arg0) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_TEL + extra)));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_TEL + extra));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                             return false;
                         }
                     });
@@ -2520,6 +2522,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
                             intent.putExtra(Insert.PHONE, Uri.decode(extra));
                             intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             return false;
                         }
@@ -2540,7 +2543,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     menu.add(R.string.email).setOnMenuItemClickListener(new OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem arg0) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_MAILTO + extra)));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_MAILTO + extra));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                             return false;
                         }
                     });
@@ -2550,6 +2555,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
                             intent.putExtra(Insert.EMAIL, extra);
                             intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             return false;
                         }

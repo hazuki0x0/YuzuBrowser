@@ -46,7 +46,16 @@ public class SwipeImageButton extends AppCompatImageButton implements SwipeContr
 
     @Override
     public void onLongPress() {
+        postDelayed(_longPress, 500);
     }
+
+    private Runnable _longPress = new Runnable() {
+        @Override
+        public void run() {
+            setImageDrawable(mController.getDefaultIcon());
+            setBackgroundResource(R.drawable.swipebtn_image_background_normal);
+        }
+    };
 
     @Override
     public boolean onEventOutSide() {
