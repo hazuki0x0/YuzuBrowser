@@ -460,6 +460,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
             }
         }
+        mToolbar.notifyChangeWebState();
     }
 
     @Override
