@@ -1242,7 +1242,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private void loadUrl(MainTabData tab, String url) {
         if (tab.isNavLock() && !WebViewUtils.shouldLoadSameTabUser(url)) {
-            performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.DEFAULT);
+            performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW);
             return;
         }
         if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
@@ -1255,7 +1255,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public void loadUrl(String url, int target) {
-        loadUrl(mTabList.getCurrentTabData(), url, target, TabType.DEFAULT);
+        loadUrl(mTabList.getCurrentTabData(), url, target, TabType.WINDOW);
     }
 
     private void loadUrl(MainTabData tab, String url, int target, @TabType int type) {
@@ -2725,13 +2725,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             openInNewTabPost(extra, TabType.WINDOW);
                             return true;
                         case SingleAction.LPRESS_OPEN_BG:
-                            openInBackground(extra, TabType.DEFAULT);
+                            openInBackground(extra, TabType.WINDOW);
                             return true;
                         case SingleAction.LPRESS_OPEN_NEW_RIGHT:
-                            openInRightNewTabPost(extra, TabType.DEFAULT);
+                            openInRightNewTabPost(extra, TabType.WINDOW);
                             return true;
                         case SingleAction.LPRESS_OPEN_BG_RIGHT:
-                            openInRightBgTab(extra, TabType.DEFAULT);
+                            openInRightBgTab(extra, TabType.WINDOW);
                             return true;
                         case SingleAction.LPRESS_SHARE:
                             WebUtils.shareWeb(BrowserActivity.this, extra, null);
@@ -2916,7 +2916,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         if (tab.isNavLock()) {
                             CustomWebHistoryItem item = tab.mWebView.copyMyBackForwardList().getPrev();
                             if (item != null) {
-                                performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
+                                performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.WINDOW);
                                 break;
                             }
                         }
@@ -2932,7 +2932,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         if (tab.isNavLock()) {
                             CustomWebHistoryItem item = tab.mWebView.copyMyBackForwardList().getNext();
                             if (item != null) {
-                                performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
+                                performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.WINDOW);
                                 break;
                             }
                         }
@@ -3189,7 +3189,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
                 case SingleAction.OPEN_URL: {
                     OpenUrlSingleAction openUrlAction = (OpenUrlSingleAction) action;
-                    loadUrl(mTabList.get(target), openUrlAction.getUrl(), openUrlAction.getTargetTab(), TabType.DEFAULT);
+                    loadUrl(mTabList.get(target), openUrlAction.getUrl(), openUrlAction.getTargetTab(), TabType.WINDOW);
                 }
                 break;
                 case SingleAction.TRANSLATE_PAGE: {
