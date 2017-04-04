@@ -17,26 +17,31 @@
 package jp.hazuki.yuzubrowser.tab;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
     private TabManager tabList;
     private OnRecyclerListener mListener;
+    private ThumbnailManager thumbnailManager;
 
-    public TabListRecyclerAdapter(Context context, TabManager list, OnRecyclerListener listener) {
+    public TabListRecyclerAdapter(Context context, TabManager list, ThumbnailManager manager, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         tabList = list;
         mListener = listener;
+        thumbnailManager = manager;
     }
 
     @Override
@@ -49,6 +54,12 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         // データ表示
         TabIndexData indexData = getItem(position);
         if (indexData != null) {
+            Bitmap thumbNail = thumbnailManager.getThumbnail(indexData.getId());
+            if (thumbNail != null) {
+                holder.thumbNail.setImageBitmap(thumbNail);
+            } else {
+                holder.thumbNail.setImageResource(R.drawable.empty_thumbnail);
+            }
             holder.title.setText(indexData.getTitle());
             holder.url.setText(indexData.getUrl());
         }
@@ -90,11 +101,6 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         }
     }
 
-    public void deleteItem(int pos) {
-        tabList.remove(pos);
-        notifyDataSetChanged();
-    }
-
     public TabIndexData getItem(int pos) {
         return tabList.getIndexData(pos);
     }
@@ -109,6 +115,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        ImageView thumbNail;
         TextView title;
         TextView url;
         View closeButton;
@@ -116,6 +123,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
 
         public ViewHolder(View itemView) {
             super(itemView);
+            thumbNail = (ImageView) itemView.findViewById(R.id.thumbNailImageView);
             title = (TextView) itemView.findViewById(R.id.titleTextView);
             url = (TextView) itemView.findViewById(R.id.urlTextView);
             closeButton = itemView.findViewById(R.id.closeImageButton);

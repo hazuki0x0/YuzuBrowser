@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 
 public class TabListLayout extends LinearLayout {
@@ -50,7 +51,7 @@ public class TabListLayout extends LinearLayout {
         bottomBar = findViewById(R.id.bottomBar);
     }
 
-    public void setTabManager(final TabManager list) {
+    public void setTabManager(final TabManager list, ThumbnailManager manager) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -66,7 +67,7 @@ public class TabListLayout extends LinearLayout {
         recyclerView.addItemDecoration(helper);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
 
-        mAdapter = new TabListRecyclerAdapter(getContext(), list, new TabListRecyclerAdapter.OnRecyclerListener() {
+        mAdapter = new TabListRecyclerAdapter(getContext(), list, manager, new TabListRecyclerAdapter.OnRecyclerListener() {
             @Override
             public void onRecyclerItemClicked(View v, int position) {
                 mCallback.requestSelectTab(position);
@@ -118,7 +119,7 @@ public class TabListLayout extends LinearLayout {
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             mCallback.requestMoveTab(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
         }
 

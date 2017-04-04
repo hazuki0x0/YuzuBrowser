@@ -157,6 +157,7 @@ import jp.hazuki.yuzubrowser.tab.manager.CacheTabManager;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.toolbar.sub.GeolocationPermissionToolbar;
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialog;
@@ -248,6 +249,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private BrowserHistoryAsyncManager mBrowserHistoryManager;
     private SpeedDialAsyncManager mSpeedDialAsyncManager;
     private HardButtonActionManager mHardButtonManager;
+    private ThumbnailManager mThumbnailManager;
     private ArrayList<UserScript> mUserScriptList;
     private ArrayList<ResourceChecker> mResourceCheckerList;
     private View mVideoLoadingProgressView;
@@ -314,6 +316,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         mHandler = new Handler();
         mTabManager = new CacheTabManager(this);
+        mThumbnailManager = new ThumbnailManager(this);
 
         webFrameLayout = (FrameLayout) findViewById(R.id.webFrameLayout);
         webGestureOverlayView = (GestureOverlayView) findViewById(R.id.webGestureOverlayView);
@@ -1440,6 +1443,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         MainTabData old_data = mTabManager.get(no);
         CustomWebView old_web = old_data.mWebView;
 
+        mThumbnailManager.removeThumbnail(old_data.getId());
+
         if (AppData.save_closed_tab.get()) {
             Bundle outState = new Bundle();
             old_web.saveState(outState);
@@ -1616,6 +1621,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         public boolean onDown(MotionEvent e) {
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
+
+            if (!mThumbnailManager.isShotTab(mTabManager.getIndexData(getCurrentTab()).getId())) {
+                mThumbnailManager.create(mTabManager.get(getCurrentTab()).mWebView);
+            }
             return false;
         }
 
@@ -2163,6 +2172,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
+
+            mThumbnailManager.onStartPage(web.getIdentityId());
         }
 
         @Override
@@ -2181,6 +2192,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (data == mTabManager.getCurrentTabData()) {
                 mToolbar.notifyChangeWebState(data);
             }
+
+            if (!mThumbnailManager.isShotTab(web.getIdentityId()))
+                mThumbnailManager.create(web);
         }
 
         @Override
@@ -3303,7 +3317,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         break;
 
                     mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).isReverse());
-                    mTabManagerView.setTabManager(mTabManager);
+                    mTabManagerView.setTabManager(mTabManager, mThumbnailManager);
                     mTabManagerView.setCallback(new TabListLayout.Callback() {
                         @Override
                         public void requestTabListClose() {
