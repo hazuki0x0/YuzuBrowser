@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.tab;
 
 import android.content.Context;
@@ -8,18 +24,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
-
-/**
- * Created by hazuki on 17/01/20.
- */
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private TabList tabList;
+    private TabManager tabList;
     private OnRecyclerListener mListener;
 
-    public TabListRecyclerAdapter(Context context, TabList list, OnRecyclerListener listener) {
+    public TabListRecyclerAdapter(Context context, TabManager list, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         tabList = list;
         mListener = listener;
@@ -33,10 +47,10 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // データ表示
-        MainTabData tabData = tabList.get(position);
-        if (tabData != null) {
-            holder.title.setText(tabData.mTitle);
-            holder.url.setText(tabData.mUrl);
+        TabIndexData indexData = getItem(position);
+        if (indexData != null) {
+            holder.title.setText(indexData.getTitle());
+            holder.url.setText(indexData.getUrl());
         }
 
         // クリック処理
@@ -81,12 +95,8 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         notifyDataSetChanged();
     }
 
-    public MainTabData getItem(int pos) {
-        return tabList.get(pos);
-    }
-
-    public TabList getItemList() {
-        return tabList;
+    public TabIndexData getItem(int pos) {
+        return tabList.getIndexData(pos);
     }
 
     public interface OnRecyclerListener {

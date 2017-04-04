@@ -9,7 +9,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;

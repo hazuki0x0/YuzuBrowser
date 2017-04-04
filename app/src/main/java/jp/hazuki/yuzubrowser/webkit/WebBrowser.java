@@ -2,7 +2,8 @@ package jp.hazuki.yuzubrowser.webkit;
 
 import android.os.Bundle;
 
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
+import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 
 public interface WebBrowser {
     MainTabData addNewTab(@TabType int type);
@@ -30,4 +31,6 @@ public interface WebBrowser {
     void restoreWebState(Bundle bundle);
 
     void loadUrl(String url, int target);
+
+    ToolbarManager getToolbar();
 }

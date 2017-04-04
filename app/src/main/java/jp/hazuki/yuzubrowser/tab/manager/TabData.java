@@ -1,4 +1,20 @@
-package jp.hazuki.yuzubrowser.tab;
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.graphics.Bitmap;
 
@@ -7,7 +23,13 @@ import jp.hazuki.yuzubrowser.webkit.TabType;
 
 public class TabData {
     public TabData(CustomWebView web) {
+        this(web, new TabIndexData());
+        mIndexData.setId(web.getIdentityId());
+    }
+
+    public TabData(CustomWebView web, TabIndexData data) {
         mWebView = web;
+        mIndexData = data;
     }
 
     public boolean equals(CustomWebView web) {
@@ -15,34 +37,55 @@ public class TabData {
     }
 
     public final CustomWebView mWebView;
-    public String mUrl;
     private String mOriginalUrl;
-    public String mTitle;
+    private TabIndexData mIndexData;
     public int mProgress = -1;
-    private int tabType;
-    private long parent;
 
 
     public int getTabType() {
-        return tabType;
+        return mIndexData.getTabType();
     }
 
     public void setTabType(@TabType int type) {
-        tabType = type;
+        mIndexData.setTabType(type);
     }
 
     public long getParent() {
-        return parent;
+        return mIndexData.getParent();
     }
 
     public void setParent(long parent) {
-        this.parent = parent;
+        mIndexData.setParent(parent);
     }
 
     public String getOriginalUrl() {
         if (mOriginalUrl == null)
-            return mUrl;
+            return mIndexData.getUrl();
         return mOriginalUrl;
+    }
+
+    public String getUrl() {
+        return mIndexData.getUrl();
+    }
+
+    public void setUrl(String url) {
+        mIndexData.setUrl(url);
+    }
+
+    public String getTitle() {
+        return mIndexData.getTitle();
+    }
+
+    public void setTitle(String title) {
+        mIndexData.setTitle(title);
+    }
+
+    public TabIndexData getTabIndexData() {
+        return mIndexData;
+    }
+
+    public long getId() {
+        return mIndexData.getId();
     }
 
     protected static final int STATE_LOADING = 0x001;
@@ -74,26 +117,26 @@ public class TabData {
     public void onPageStarted(String url, Bitmap favicon) {
         mState |= STATE_LOADING;
         mProgress = 0;
-        mUrl = url;
+        mIndexData.setUrl(url);
         mOriginalUrl = url;
-        mTitle = null;
+        mIndexData.setTitle(null);
     }
 
     public void onPageFinished(CustomWebView web, String url) {
         mState &= ~STATE_LOADING;//moved from onProgressChanged
-        mUrl = web.getUrl();
+        mIndexData.setUrl(web.getUrl());
         mOriginalUrl = web.getOriginalUrl();
-        mTitle = web.getTitle();
+        mIndexData.setTitle(web.getTitle());
     }
 
     public void onReceivedTitle(String title) {
-        mTitle = title;
+        mIndexData.setTitle(title);
     }
 
     public void onStateChanged(TabData tabdata) {
         mProgress = tabdata.mProgress;
-        mTitle = tabdata.mTitle;
-        mUrl = tabdata.mUrl;
+        mIndexData.setTitle(tabdata.getTitle());
+        mIndexData.setUrl(tabdata.getUrl());
         mOriginalUrl = tabdata.mOriginalUrl;
         setInPageLoad(tabdata.isInPageLoad());
     }

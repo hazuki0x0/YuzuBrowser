@@ -152,10 +152,11 @@ import jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialAsyncManager;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
-import jp.hazuki.yuzubrowser.tab.TabData;
-import jp.hazuki.yuzubrowser.tab.TabList;
 import jp.hazuki.yuzubrowser.tab.TabListLayout;
+import jp.hazuki.yuzubrowser.tab.manager.CacheTabManager;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.toolbar.sub.GeolocationPermissionToolbar;
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialog;
@@ -177,7 +178,6 @@ import jp.hazuki.yuzubrowser.utils.PermissionUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
-import jp.hazuki.yuzubrowser.utils.content.BundleDatabase;
 import jp.hazuki.yuzubrowser.utils.util.ArrayDequeCompat;
 import jp.hazuki.yuzubrowser.utils.util.DequeCompat;
 import jp.hazuki.yuzubrowser.utils.view.CopyableTextView;
@@ -239,7 +239,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private final MyWebViewClient mWebViewClient = new MyWebViewClient();
     private final MyOnWebStateChangeListener mOnWebStateChangeListener = new MyOnWebStateChangeListener();
     private final MyOnCreateContextMenuListener mOnCreateContextMenuListener = new MyOnCreateContextMenuListener();
-    private final TabList mTabList = new TabList();
+    private TabManager mTabManager;
     private Toolbar mToolbar;
     private PieControl mPieControl;
     private WebUploadHandler mWebUploadHandler;
@@ -272,7 +272,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private final Runnable mSaveTabsRunnable = new Runnable() {
         @Override
         public void run() {
-            BrowserManager.getLastTabListDatabase(BrowserActivity.this).writeList(BrowserActivity.this);
+            mTabManager.saveData();
 
             int delay = AppData.auto_tab_save_delay.get();
             if (delay > 0)
@@ -280,7 +280,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     };
 
-    private TabListLayout mTabListView;
+    private TabListLayout mTabManagerView;
     private FrameLayout webFrameLayout;
     private GestureOverlayView webGestureOverlayView, mSubGestureView;
     private RootLayout superFrameLayout;
@@ -313,6 +313,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
 
         mHandler = new Handler();
+        mTabManager = new CacheTabManager(this);
 
         webFrameLayout = (FrameLayout) findViewById(R.id.webFrameLayout);
         webGestureOverlayView = (GestureOverlayView) findViewById(R.id.webGestureOverlayView);
@@ -324,7 +325,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 if (mIsImeShown != visible) {
                     mIsImeShown = visible;
                     if (mToolbar != null) {
-                        MainTabData tab = mTabList.getCurrentTabData();
+                        MainTabData tab = mTabManager.getCurrentTabData();
                         if (tab != null)
                             mToolbar.notifyChangeWebState(tab);
                         mToolbar.onImeChanged(visible);
@@ -370,7 +371,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return;
                 boolean networkUp = !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
                 if (mIsNetworkUp != networkUp) {
-                    for (TabData tab : mTabList) {
+                    for (TabData tab : mTabManager.getLoadedData()) {
                         tab.mWebView.setNetworkAvailable(networkUp);
                     }
                 }
@@ -387,14 +388,16 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.removeSessionCookies(null);
 
-            BundleDatabase lasttabs_db = BrowserManager.getLastTabListDatabase(appContext);
-            lasttabs_db.readList(this);
-            lasttabs_db.clear();
+            mTabManager.loadData();
+            if (mTabManager.size() > 0) {
+                setCurrentTab(mTabManager.getCurrentTabNo());
+            }
+
 
             handleIntent(getIntent());
         }
 
-        if (mTabList.isEmpty()) {
+        if (mTabManager.isEmpty()) {
             MainTabData first_tab = addNewTab(TabType.DEFAULT);
             setCurrentTab(0);
             loadUrl(first_tab, AppData.home_page.get());
@@ -422,7 +425,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         if (mIsActivityPaused) {
             mIsActivityPaused = false;
-            MainTabData tab = mTabList.getCurrentTabData();
+            MainTabData tab = mTabManager.getCurrentTabData();
             if (tab != null) {
                 tab.mWebView.onResume();
                 resumeWebViewTimers(tab);
@@ -466,7 +469,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     protected void onStop() {
         super.onStop();
-        BrowserManager.getLastTabListDatabase(getApplicationContext()).writeList(this);
+        mTabManager.saveData();
         mHandler.removeCallbacks(mSaveTabsRunnable);
 
         if (mIsActivityPaused) {
@@ -477,7 +480,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (AppData.pause_web_background.get()) {
             mIsActivityPaused = true;
 
-            MainTabData tab = mTabList.getCurrentTabData();
+            MainTabData tab = mTabManager.getCurrentTabData();
             if (tab != null) {
                 tab.mWebView.onPause();
                 pauseWebViewTimers(tab);
@@ -526,7 +529,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             mWebUploadHandler = null;
         }
         webFrameLayout.removeAllViews();
-        mTabList.destroy();
+        mTabManager.destroy();
         if (mBrowserHistoryManager != null) {
             mBrowserHistoryManager.destroy();
             mBrowserHistoryManager = null;
@@ -577,15 +580,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     public boolean saveWebState(Bundle bundle) {
         if (mIsDestroyed)
             return false;
-        mTabList.saveInstanceState(bundle);
+        mTabManager.saveData();
         return true;
     }
 
     @Override
     public void restoreWebState(Bundle bundle) {
-        mTabList.restoreInstanceState(bundle).restoreWebViewState(this);
-        if (!mTabList.isEmpty())
-            mToolbar.scrollTabTo(mTabList.getCurrentTabNo());
+        mTabManager.loadData();
+        if (!mTabManager.isEmpty())
+            mToolbar.scrollTabTo(mTabManager.getCurrentTabNo());
     }
 
     @Override
@@ -629,7 +632,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 Bundle appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA);
                 int target = appdata.getInt(APPDATA_EXTRA_TARGET, -1);
-                MainTabData tab = mTabList.get(target);
+                MainTabData tab = mTabManager.get(target);
                 if (tab == null)
                     openInNewTab(url, TabType.DEFAULT);
                 else
@@ -653,7 +656,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 if (resultCode != RESULT_OK || data == null) break;
                 String ua = data.getStringExtra(Intent.EXTRA_TEXT);
                 if (ua == null) return;
-                MainTabData tab = mTabList.getCurrentTabData();
+                MainTabData tab = mTabManager.getCurrentTabData();
                 tab.mWebView.getSettings().setUserAgentString(ua);
                 tab.mWebView.reload();
             }
@@ -665,7 +668,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 if (resultCode != RESULT_OK || data == null) break;
                 String encoding = data.getStringExtra(Intent.EXTRA_TEXT);
                 if (encoding == null) return;
-                MainTabData tab = mTabList.getCurrentTabData();
+                MainTabData tab = mTabManager.getCurrentTabData();
                 tab.mWebView.getSettings().setDefaultTextEncodingName(encoding);
                 tab.mWebView.reload();
             }
@@ -744,16 +747,16 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mCursorView.setView(null);
                         webFrameLayout.removeView(mCursorView);
                         mCursorView = null;
-                    } else if (mTabListView != null) {
-                        mTabListView.close();
+                    } else if (mTabManagerView != null) {
+                        mTabManagerView.close();
                     } else if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible()) {
                         mWebViewFindDialog.hide();
                     } else if (mWebViewPageFastScroller != null) {
                         mWebViewPageFastScroller.close();
                     } else if (mWebViewAutoScrollManager != null) {
                         mWebViewAutoScrollManager.stop();
-                    } else if (mTabList.getCurrentTabData().mWebView.canGoBack()) {
-                        mTabList.getCurrentTabData().mWebView.goBack();
+                    } else if (mTabManager.getCurrentTabData().mWebView.canGoBack()) {
+                        mTabManager.getCurrentTabData().mWebView.goBack();
                     } else {
                         mActionCallback.run(mHardButtonManager.back_press.action);
                     }
@@ -910,11 +913,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         else
             mResourceCheckerList = null;
 
-        for (MainTabData tabdata : mTabList) {
+        for (MainTabData tabdata : mTabManager.getLoadedData()) {
             initWebSetting(tabdata.mWebView);
         }
 
-        MainTabData tab = mTabList.getCurrentTabData();
+        MainTabData tab = mTabManager.getCurrentTabData();
         if (tab != null)
             mToolbar.notifyChangeWebState(tab);
 
@@ -934,7 +937,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         if (cookie) {
             boolean thirdCookie = AppData.accept_third_cookie.get();
-            for (MainTabData tabData : mTabList) {
+            for (MainTabData tabData : mTabManager.getLoadedData()) {
                 CookieManager.getInstance().setAcceptThirdPartyCookies(tabData.mWebView.getWebView(), thirdCookie);
             }
         }
@@ -1101,7 +1104,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (WebViewUtils.shouldLoadSameTabAuto(url))
             return false;
 
-        return !(TextUtils.equals(url, tab.mUrl) || tab.mWebView.isBackForwardListEmpty()) && performNewTabLink(perform, tab, url, TabType.WINDOW);
+        return !(TextUtils.equals(url, tab.getUrl()) || tab.mWebView.isBackForwardListEmpty()) && performNewTabLink(perform, tab, url, TabType.WINDOW);
 
     }
 
@@ -1147,10 +1150,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         CustomWebView web = makeWebView(cacheType);
         if (AppData.pause_web_tab_change.get())
             web.onPause();
-        MainTabData tabdata = mTabList.add(web, mToolbar.addNewTabView());
+        MainTabData tabdata = mTabManager.add(web, mToolbar.addNewTabView());
         tabdata.setTabType(type);
         if (type == TabType.WINDOW) {
-            MainTabData nowData = mTabList.get(mTabList.getCurrentTabNo());
+            MainTabData nowData = mTabManager.get(mTabManager.getCurrentTabNo());
             if (nowData != null)
                 tabdata.setParent(nowData.mWebView.getIdentityId());
         }
@@ -1161,14 +1164,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private MainTabData openNewTab(@TabType int type) {
         MainTabData tab_data = addNewTab(type);
-        setCurrentTab(mTabList.getLastTabNo());
+        setCurrentTab(mTabManager.getLastTabNo());
         mToolbar.scrollTabRight();
         return tab_data;
     }
 
     private MainTabData openNewTab(boolean cacheType, @TabType int type) {
         MainTabData tab_data = addNewTab(cacheType, type);
-        setCurrentTab(mTabList.getLastTabNo());
+        setCurrentTab(mTabManager.getLastTabNo());
         mToolbar.scrollTabRight();
         return tab_data;
     }
@@ -1201,8 +1204,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private MainTabData openRightNewTab(@TabType int type) {
         MainTabData tab_data = addNewTab(type);
-        int from = mTabList.getLastTabNo();
-        int to = mTabList.getCurrentTabNo() + 1;
+        int from = mTabManager.getLastTabNo();
+        int to = mTabManager.getCurrentTabNo() + 1;
         setCurrentTab(from);
         if (!moveTab(from, to))//maybe already right-most
             mToolbar.scrollTabRight();
@@ -1225,8 +1228,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private MainTabData openRightBgTab(@TabType int type) {
         MainTabData tab_data = addNewTab(type);
-        int from = mTabList.getLastTabNo();
-        int to = mTabList.getCurrentTabNo() + 1;
+        int from = mTabManager.getLastTabNo();
+        int to = mTabManager.getCurrentTabNo() + 1;
         moveTab(from, to);
         return tab_data;
     }
@@ -1255,7 +1258,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public void loadUrl(String url, int target) {
-        loadUrl(mTabList.getCurrentTabData(), url, target, TabType.WINDOW);
+        loadUrl(mTabManager.getCurrentTabData(), url, target, TabType.WINDOW);
+    }
+
+    @Override
+    public ToolbarManager getToolbar() {
+        return mToolbar;
     }
 
     private void loadUrl(MainTabData tab, String url, int target, @TabType int type) {
@@ -1332,7 +1340,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
                     case "search":
-                        showSearchBox("", mTabList.indexOf(data));
+                        showSearchBox("", mTabManager.indexOf(data));
                         return true;
                     case "speeddial":
                         showSpeedDial(data);
@@ -1375,10 +1383,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public void setCurrentTab(int no) {
-        MainTabData old_data = mTabList.getCurrentTabData();
-        MainTabData new_data = mTabList.get(no);
+        MainTabData old_data = mTabManager.getCurrentTabData();
+        MainTabData new_data = mTabManager.get(no);
 
-        mTabList.setCurrentTab(no);
+        mTabManager.setCurrentTab(no);
         mToolbar.changeCurrentTab(no, old_data, new_data);
 
         if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible())
@@ -1415,21 +1423,21 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public int getCurrentTab() {
-        return mTabList.getCurrentTabNo();
+        return mTabManager.getCurrentTabNo();
     }
 
     @Override
     public int getTabCount() {
-        return mTabList.size();
+        return mTabManager.size();
     }
 
     private boolean removeTab(int no) {
-        if (mTabList.size() <= 1) {
+        if (mTabManager.size() <= 1) {
             //Last tab
             return false;
         }
 
-        MainTabData old_data = mTabList.get(no);
+        MainTabData old_data = mTabManager.get(no);
         CustomWebView old_web = old_data.mWebView;
 
         if (AppData.save_closed_tab.get()) {
@@ -1442,18 +1450,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
 
         old_web.setEmbeddedTitleBarMethod(null);
-        webFrameLayout.removeView(mTabList.getCurrentTabData().mWebView.getView());
+        webFrameLayout.removeView(mTabManager.getCurrentTabData().mWebView.getView());
 
-        mTabList.remove(no);
+        mTabManager.remove(no);
         mToolbar.removeTab(no);
 
-        int new_current_no = mTabList.getCurrentTabNo();
-        int last_tab_no = mTabList.getLastTabNo();
+        int new_current_no = mTabManager.getCurrentTabNo();
+        int last_tab_no = mTabManager.getLastTabNo();
 
         old_web.destroy();
 
         if (old_data.getTabType() == TabType.WINDOW && old_data.getParent() != 0) {
-            int new_no = mTabList.searchParentTabNo(old_data.getParent());
+            int new_no = mTabManager.searchParentTabNo(old_data.getParent());
             if (new_no >= 0)
                 new_current_no = new_no;
         }
@@ -1466,7 +1474,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             new_current_no = last_tab_no;
         }
 
-        mTabList.setCurrentTab(-1);
+        mTabManager.setCurrentTab(-1);
         setCurrentTab(new_current_no);
 
         return true;
@@ -1476,8 +1484,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (from == to)
             return false;
 
-        int current = mTabList.getCurrentTabNo();
-        int new_curernt = mTabList.move(from, to);
+        int current = mTabManager.getCurrentTabNo();
+        int new_curernt = mTabManager.move(from, to);
         mToolbar.moveTab(from, to, new_curernt);
         if (current == from)
             mToolbar.scrollTabTo(to);
@@ -1487,13 +1495,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private void swapTab(int a, int b) {
         if (a == b)
             return;
-        int old_current_tab = mTabList.getCurrentTabNo();
+        int old_current_tab = mTabManager.getCurrentTabNo();
         int new_current_tab = (a == old_current_tab) ? b : (b == old_current_tab) ? a : -1;
 
         if (new_current_tab >= 0) {
-            mTabList.setCurrentTab(new_current_tab);
+            mTabManager.setCurrentTab(new_current_tab);
         }
-        mTabList.swap(a, b);
+        mTabManager.swap(a, b);
         mToolbar.swapTab(a, b);
     }
 
@@ -1512,7 +1520,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (e1 == null || e2 == null)
                 return false;
 
-            MainTabData tab = mTabList.getCurrentTabData();
+            MainTabData tab = mTabManager.getCurrentTabData();
             if (tab != null) {
                 mToolbar.onWebViewScroll(tab.mWebView, e1, e2, distanceX, distanceY);
             }
@@ -1528,7 +1536,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (e1 == null || e2 == null)
                 return false;
 
-            MainTabData tab = mTabList.getCurrentTabData();
+            MainTabData tab = mTabManager.getCurrentTabData();
             if (tab == null)
                 return false;
 
@@ -1649,7 +1657,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (e1 == null || e2 == null)
                 return false;
 
-            MainTabData tab = mTabList.getCurrentTabData();
+            MainTabData tab = mTabManager.getCurrentTabData();
             if (tab == null)
                 return false;
 
@@ -1750,7 +1758,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
 
                 if (web.isBackForwardListEmpty()) {
-                    removeTab(mTabList.indexOf(web));
+                    removeTab(mTabManager.indexOf(web));
                 }
             }
 
@@ -1818,14 +1826,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private void finishQuick(int clearTabNo, int finish_clear) {
         if (clearTabNo >= 0) {
-            if (mTabList.size() >= 2)
+            if (mTabManager.size() >= 2)
                 removeTab(clearTabNo);
             else
                 destroy();
         }
 
         if ((finish_clear & 0x01) != 0) {
-            mTabList.clearCache(true);
+            mTabManager.clearCache(true);
         }
         if ((finish_clear & 0x02) != 0) {
             CookieManager.getInstance().removeAllCookies(null);
@@ -1846,9 +1854,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         mHandler.removeCallbacks(mSaveTabsRunnable);
         if (AppData.save_last_tabs.get() && (finish_clear & 0x1000) == 0) {
-            BrowserManager.getLastTabListDatabase(getApplicationContext()).writeList(this);
+            mTabManager.saveData();
         } else {
-            BrowserManager.getLastTabListDatabase(getApplicationContext()).clear();
+            mTabManager.clear();
         }
 
         destroy();
@@ -1867,7 +1875,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 .setNeutralButton(R.string.minimize, new FinishAlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, int new_value) {
-                        if (clearTabNo >= 0 && mTabList.size() >= 2)
+                        if (clearTabNo >= 0 && mTabManager.size() >= 2)
                             removeTab(clearTabNo);
                         moveTaskToBack(true);
                     }
@@ -1888,7 +1896,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     }
 
     private void showTabHistory(int target) {
-        final MainTabData tab = mTabList.get(target);
+        final MainTabData tab = mTabManager.get(target);
         final CustomWebBackForwardList history_list = tab.mWebView.copyMyBackForwardList();
 
         ArrayAdapter<CustomWebHistoryItem> adapter = new ArrayAdapter<CustomWebHistoryItem>(getApplicationContext(), 0, history_list) {
@@ -1952,7 +1960,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         WebSettings setting;
 
-        for (MainTabData tabData : mTabList) {
+        for (MainTabData tabData : mTabManager.getLoadedData()) {
             setting = tabData.mWebView.getSettings();
             if (cookie)
                 CookieManager.getInstance()
@@ -2050,7 +2058,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return false;
 
                     if (tabdata == null) {
-                        tabdata = mTabList.getCurrentTabData();
+                        tabdata = mTabManager.getCurrentTabData();
                         if (tabdata == null)
                             return true;
                     }
@@ -2100,8 +2108,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onChangeCurrentTab(int from, int to) {
-            MainTabData from_data = mTabList.get(from);
-            MainTabData to_data = mTabList.get(to);
+            MainTabData from_data = mTabManager.get(from);
+            MainTabData to_data = mTabManager.get(to);
 
             Resources res = getResources();
 
@@ -2116,7 +2124,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean shouldOverrideUrlLoading(CustomWebView web, String url, Uri uri) {
-            MainTabData data = mTabList.get(web);
+            MainTabData data = mTabManager.get(web);
             if (data == null)
                 return true;
 
@@ -2127,7 +2135,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
             if (checkPatternMatch(data, url) || checkNewTabLinkAuto(AppData.newtab_link.get(), data, url)) {
                 if (web.getUrl() == null || data.mWebView.isBackForwardListEmpty()) {
-                    removeTab(mTabList.indexOf(data));
+                    removeTab(mTabManager.indexOf(data));
                 }
                 return true;
             }
@@ -2138,14 +2146,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onPageStarted(CustomWebView web, String url, Bitmap favicon) {
-            MainTabData data = mTabList.get(web);
+            MainTabData data = mTabManager.get(web);
             if (data == null) return;
 
             applyUserScript(web, url, true);
 
             data.onPageStarted(url, favicon);
 
-            if (data == mTabList.getCurrentTabData()) {
+            if (data == mTabManager.getCurrentTabData()) {
                 mToolbar.notifyChangeWebState(data);
             }
 
@@ -2159,7 +2167,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onPageFinished(CustomWebView web, String url) {
-            MainTabData data = mTabList.get(web);
+            MainTabData data = mTabManager.get(web);
             if (data == null) return;
 
             applyUserScript(web, url, false);
@@ -2170,7 +2178,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
             data.onPageFinished(web, url);
 
-            if (data == mTabList.getCurrentTabData()) {
+            if (data == mTabManager.getCurrentTabData()) {
                 mToolbar.notifyChangeWebState(data);
             }
         }
@@ -2203,7 +2211,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void doUpdateVisitedHistory(CustomWebView view, String url, boolean isReload) {
-            MainTabData data = mTabList.get(view);
+            MainTabData data = mTabManager.get(view);
             if (data == null) return;
 
             if (mBrowserHistoryManager != null)
@@ -2271,7 +2279,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onProgressChanged(CustomWebView web, int newProgress) {
-            MainTabData data = mTabList.get(web);
+            MainTabData data = mTabManager.get(web);
             if (data == null) return;
 
             data.onProgressChanged(newProgress);
@@ -2279,7 +2287,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 CookieManager.getInstance().flush();
             }
 
-            if (data == mTabList.getCurrentTabData()) {
+            if (data == mTabManager.getCurrentTabData()) {
                 if (data.isInPageLoad())
                     mToolbar.notifyChangeProgress(data);
                 else
@@ -2289,7 +2297,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onReceivedTitle(CustomWebView web, String title) {
-            MainTabData data = mTabList.get(web);
+            MainTabData data = mTabManager.get(web);
             if (data == null) return;
 
             data.onReceivedTitle(title);
@@ -2303,7 +2311,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (!AppData.save_history.get())
                 return;
 
-            MainTabData data = mTabList.get(web);
+            MainTabData data = mTabManager.get(web);
             if (data == null) return;
 
             mSpeedDialAsyncManager.updateAsync(data.getOriginalUrl(), icon);
@@ -2314,7 +2322,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onRequestFocus(CustomWebView web) {
-            int i = mTabList.indexOf(web);
+            int i = mTabManager.indexOf(web);
             if (i >= 0)
                 setCurrentTab(i);
         }
@@ -2329,7 +2337,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onCloseWindow(CustomWebView web) {
-            int i = mTabList.indexOf(web);
+            int i = mTabManager.indexOf(web);
             if (i >= 0)
                 removeTab(i);
         }
@@ -2475,13 +2483,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private class MyOnWebStateChangeListener implements OnWebStateChangeListener {
         @Override
         public void onStateChanged(CustomWebView web, TabData tabdata) {
-            MainTabData tab = mTabList.get(web);
+            MainTabData tab = mTabManager.get(web);
             if (tab == null)
                 return;
 
             tab.onStateChanged(tabdata);
 
-            if (tab == mTabList.getCurrentTabData()) {
+            if (tab == mTabManager.getCurrentTabData()) {
                 mToolbar.notifyChangeWebState(tab);
             }
         }
@@ -2903,15 +2911,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean run(SingleAction action, final TargetInfo def_target, View button) {
-            final int target = (def_target != null && def_target.getTarget() >= 0) ? def_target.getTarget() : mTabList.getCurrentTabNo();
+            final int target = (def_target != null && def_target.getTarget() >= 0) ? def_target.getTarget() : mTabManager.getCurrentTabNo();
 
-            if (target < 0 || target >= mTabList.size()) {
+            if (target < 0 || target >= mTabManager.size()) {
                 return false;
             }
 
             switch (action.id) {
                 case SingleAction.GO_BACK: {
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
                     if (tab.mWebView.canGoBack()) {
                         if (tab.isNavLock()) {
                             CustomWebHistoryItem item = tab.mWebView.copyMyBackForwardList().getPrev();
@@ -2927,7 +2935,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.GO_FORWARD: {
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
                     if (tab.mWebView.canGoForward()) {
                         if (tab.isNavLock()) {
                             CustomWebHistoryItem item = tab.mWebView.copyMyBackForwardList().getNext();
@@ -2941,7 +2949,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.WEB_RELOAD_STOP: {
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
                     if (tab.isInPageLoad())
                         tab.mWebView.stopLoading();
                     else
@@ -2949,40 +2957,40 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.WEB_RELOAD:
-                    mTabList.get(target).mWebView.reload();
+                    mTabManager.get(target).mWebView.reload();
                     break;
                 case SingleAction.WEB_STOP:
-                    mTabList.get(target).mWebView.stopLoading();
+                    mTabManager.get(target).mWebView.stopLoading();
                     break;
                 case SingleAction.GO_HOME:
-                    loadUrl(mTabList.get(target), AppData.home_page.get());
+                    loadUrl(mTabManager.get(target), AppData.home_page.get());
                     break;
                 case SingleAction.ZOOM_IN:
-                    mTabList.get(target).mWebView.zoomIn();
+                    mTabManager.get(target).mWebView.zoomIn();
                     break;
                 case SingleAction.ZOOM_OUT:
-                    mTabList.get(target).mWebView.zoomOut();
+                    mTabManager.get(target).mWebView.zoomOut();
                     break;
                 case SingleAction.PAGE_UP:
-                    mTabList.get(target).mWebView.pageUp(false);
+                    mTabManager.get(target).mWebView.pageUp(false);
                     break;
                 case SingleAction.PAGE_DOWN:
-                    mTabList.get(target).mWebView.pageDown(false);
+                    mTabManager.get(target).mWebView.pageDown(false);
                     break;
                 case SingleAction.PAGE_TOP:
-                    mTabList.get(target).mWebView.pageUp(true);
+                    mTabManager.get(target).mWebView.pageUp(true);
                     break;
                 case SingleAction.PAGE_BOTTOM:
-                    mTabList.get(target).mWebView.pageDown(true);
+                    mTabManager.get(target).mWebView.pageDown(true);
                     break;
                 case SingleAction.PAGE_SCROLL:
-                    ((WebScrollSingleAction) action).scrollWebView(getApplicationContext(), mTabList.get(target).mWebView);
+                    ((WebScrollSingleAction) action).scrollWebView(getApplicationContext(), mTabManager.get(target).mWebView);
                     break;
                 case SingleAction.PAGE_FAST_SCROLL: {
                     if (mWebViewPageFastScroller == null) {
                         mWebViewPageFastScroller = new WebViewPageFastScroller(BrowserActivity.this);
                         mToolbar.getBottomToolbarAlwaysLayout().addView(mWebViewPageFastScroller);
-                        mWebViewPageFastScroller.show(mTabList.get(target).mWebView);
+                        mWebViewPageFastScroller.show(mTabManager.get(target).mWebView);
                         mWebViewPageFastScroller.setOnEndListener(new WebViewPageFastScroller.OnEndListener() {
                             @Override
                             public boolean onEnd() {
@@ -3005,7 +3013,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                                 mWebViewAutoScrollManager = null;
                             }
                         });
-                        mWebViewAutoScrollManager.start(mTabList.get(target).mWebView, ((AutoPageScrollAction) action).getScrollSpeed());
+                        mWebViewAutoScrollManager.start(mTabManager.get(target).mWebView, ((AutoPageScrollAction) action).getScrollSpeed());
                     } else {
                         mWebViewAutoScrollManager.stop();
                     }
@@ -3031,7 +3039,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER));
                     break;
                 case SingleAction.TOGGLE_JS: {
-                    CustomWebView web = mTabList.get(target).mWebView;
+                    CustomWebView web = mTabManager.get(target).mWebView;
                     boolean to = !web.getSettings().getJavaScriptEnabled();
                     Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
                     web.getSettings().setJavaScriptEnabled(to);
@@ -3039,7 +3047,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.TOGGLE_IMAGE: {
-                    CustomWebView web = mTabList.get(target).mWebView;
+                    CustomWebView web = mTabManager.get(target).mWebView;
                     boolean to = !web.getSettings().getLoadsImagesAutomatically();
                     Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
                     web.getSettings().setLoadsImagesAutomatically(to);
@@ -3050,10 +3058,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     boolean to = mUserScriptList == null;
                     Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
                     resetUserScript(to);
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
                     if (to) {
                         if (!tab.isInPageLoad())
-                            applyUserScript(tab.mWebView, tab.mUrl, false);
+                            applyUserScript(tab.mWebView, tab.getUrl(), false);
                         mToolbar.notifyChangeWebState();//icon change
                     } else {
                         tab.mWebView.reload();
@@ -3061,21 +3069,21 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.TOGGLE_NAV_LOCK: {
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
                     tab.setNavLock(!tab.isNavLock());
-                    tab.invalidateView(target == mTabList.getCurrentTabNo(), getResources(), getTheme());
+                    tab.invalidateView(target == mTabManager.getCurrentTabNo(), getResources(), getTheme());
                     mToolbar.notifyChangeWebState();//icon change
                 }
                 break;
                 case SingleAction.PAGE_INFO: {
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
 
                     View view = getLayoutInflater().inflate(R.layout.page_info_dialog, null);
                     final CopyableTextView titleTextView = (CopyableTextView) view.findViewById(R.id.titleTextView);
                     final CopyableTextView urlTextView = (CopyableTextView) view.findViewById(R.id.urlTextView);
 
-                    titleTextView.setText(tab.mTitle);
-                    urlTextView.setText(tab.mUrl);
+                    titleTextView.setText(tab.getTitle());
+                    urlTextView.setText(tab.getUrl());
 
                     new AlertDialog.Builder(BrowserActivity.this)
                             .setTitle(R.string.page_info)
@@ -3085,15 +3093,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.COPY_URL:
-                    ClipboardUtils.setClipboardText(getApplicationContext(), mTabList.get(target).mUrl);
+                    ClipboardUtils.setClipboardText(getApplicationContext(), mTabManager.get(target).getUrl());
                     break;
                 case SingleAction.COPY_TITLE:
-                    ClipboardUtils.setClipboardText(getApplicationContext(), mTabList.get(target).mTitle);
+                    ClipboardUtils.setClipboardText(getApplicationContext(), mTabManager.get(target).getTitle());
                     break;
                 case SingleAction.COPY_TITLE_URL: {
-                    MainTabData tab = mTabList.get(target);
-                    String url = tab.mUrl;
-                    String title = tab.mTitle;
+                    MainTabData tab = mTabManager.get(target);
+                    String url = tab.getUrl();
+                    String title = tab.getTitle();
                     if (url == null)
                         ClipboardUtils.setClipboardText(getApplicationContext(), title);
                     else if (title == null)
@@ -3109,7 +3117,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (mCursorView == null) {
                         mCursorView = new PointerView(getApplicationContext());
                         mCursorView.setBackFinish(((MousePointerSingleAction) action).isBackFinish());
-                        mCursorView.setView(mTabList.getCurrentTabData().mWebView.getView());
+                        mCursorView.setView(mTabManager.getCurrentTabData().mWebView.getView());
                         webFrameLayout.addView(mCursorView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     } else {
                         mCursorView.setView(null);
@@ -3123,7 +3131,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (mWebViewFindDialog.isVisible())
                         mWebViewFindDialog.hide();
                     else {
-                        mWebViewFindDialog.show(mTabList.get(target).mWebView);
+                        mWebViewFindDialog.show(mTabManager.get(target).mWebView);
                     }
                     break;
                 case SingleAction.SAVE_SCREENSHOT: {
@@ -3133,12 +3141,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     try {
                         switch (type) {
                             case SaveScreenshotSingleAction.SS_TYPE_ALL:
-                                WebViewUtils.savePictureOverall(mTabList.get(target).mWebView.getWebView(), file);
+                                WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file);
                                 Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                                 FileUtils.notifyImageFile(getApplicationContext(), file.getAbsolutePath());
                                 break;
                             case SaveScreenshotSingleAction.SS_TYPE_PART:
-                                WebViewUtils.savePicturePart(mTabList.get(target).mWebView.getWebView(), file);
+                                WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file);
                                 Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                                 FileUtils.notifyImageFile(getApplicationContext(), file.getAbsolutePath());
                                 break;
@@ -3158,10 +3166,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     try {
                         switch (type) {
                             case ShareScreenshotSingleAction.SS_TYPE_ALL:
-                                WebViewUtils.savePictureOverall(mTabList.get(target).mWebView.getWebView(), file);
+                                WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file);
                                 break;
                             case ShareScreenshotSingleAction.SS_TYPE_PART:
-                                WebViewUtils.savePicturePart(mTabList.get(target).mWebView.getWebView(), file);
+                                WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file);
                                 break;
                             default:
                                 Toast.makeText(getApplicationContext(), "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show();
@@ -3183,18 +3191,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.SAVE_PAGE: {
-                    MainTabData tab = mTabList.get(target);
-                    DownloadDialog.showArchiveDownloadDialog(BrowserActivity.this, tab.mUrl, tab.mWebView);
+                    MainTabData tab = mTabManager.get(target);
+                    DownloadDialog.showArchiveDownloadDialog(BrowserActivity.this, tab.getUrl(), tab.mWebView);
                 }
                 break;
                 case SingleAction.OPEN_URL: {
                     OpenUrlSingleAction openUrlAction = (OpenUrlSingleAction) action;
-                    loadUrl(mTabList.get(target), openUrlAction.getUrl(), openUrlAction.getTargetTab(), TabType.WINDOW);
+                    loadUrl(mTabManager.get(target), openUrlAction.getUrl(), openUrlAction.getTargetTab(), TabType.WINDOW);
                 }
                 break;
                 case SingleAction.TRANSLATE_PAGE: {
                     TranslatePageSingleAction translateAction = (TranslatePageSingleAction) action;
-                    final MainTabData tab = mTabList.get(target);
+                    final MainTabData tab = mTabManager.get(target);
                     final String from = translateAction.getTranslateFrom();
                     String to = translateAction.getTranslateTo();
                     if (TextUtils.isEmpty(to)) {
@@ -3203,13 +3211,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         String to = getResources().getStringArray(R.array.translate_language_values)[which];
-                                        String url = URLUtil.composeSearchUrl(tab.mUrl, "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
+                                        String url = URLUtil.composeSearchUrl(tab.getUrl(), "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
                                         loadUrl(tab, url);
                                     }
                                 })
                                 .show();
                     } else {
-                        String url = URLUtil.composeSearchUrl(tab.mUrl, "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
+                        String url = URLUtil.composeSearchUrl(tab.getUrl(), "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
                         loadUrl(tab, url);
                     }
                 }
@@ -3224,12 +3232,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     break;
                 case SingleAction.CLOSE_ALL:
                     openInBackground(AppData.home_page.get(), TabType.DEFAULT);
-                    while (mTabList.size() > 1) {
+                    while (mTabManager.size() > 1) {
                         removeTab(0);
                     }
                     break;
                 case SingleAction.CLOSE_OTHERS:
-                    for (int i = mTabList.getLastTabNo(); i > target; --i) {
+                    for (int i = mTabManager.getLastTabNo(); i > target; --i) {
                         removeTab(i);
                     }
                     for (int i = 0; i < target; ++i) {
@@ -3237,7 +3245,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
                     break;
                 case SingleAction.CLOSE_AUTO_SELECT:
-                    int type = mTabList.get(target).getTabType();
+                    int type = mTabManager.get(target).getTabType();
 
                     switch (type) {
                         case TabType.DEFAULT:
@@ -3253,54 +3261,54 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
                     break;
                 case SingleAction.LEFT_TAB:
-                    if (mTabList.isFirst()) {
+                    if (mTabManager.isFirst()) {
                         if (((LeftRightTabSingleAction) action).isTabLoop()) {
-                            setCurrentTab(mTabList.getLastTabNo());
+                            setCurrentTab(mTabManager.getLastTabNo());
                             mToolbar.scrollTabRight();
                         }
                     } else {
-                        int to = mTabList.getCurrentTabNo() - 1;
+                        int to = mTabManager.getCurrentTabNo() - 1;
                         setCurrentTab(to);
                         mToolbar.scrollTabTo(to);
                     }
                     break;
                 case SingleAction.RIGHT_TAB:
-                    if (mTabList.isLast()) {
+                    if (mTabManager.isLast()) {
                         if (((LeftRightTabSingleAction) action).isTabLoop()) {
                             setCurrentTab(0);
                             mToolbar.scrollTabLeft();
                         }
                     } else {
-                        int to = mTabList.getCurrentTabNo() + 1;
+                        int to = mTabManager.getCurrentTabNo() + 1;
                         setCurrentTab(to);
                         mToolbar.scrollTabTo(to);
                     }
                     break;
                 case SingleAction.SWAP_LEFT_TAB:
-                    if (!mTabList.isFirst(target)) {
+                    if (!mTabManager.isFirst(target)) {
                         int to = target - 1;
                         swapTab(to, target);
                         mToolbar.scrollTabTo(to);
                     }
                     break;
                 case SingleAction.SWAP_RIGHT_TAB:
-                    if (!mTabList.isLast(target)) {
+                    if (!mTabManager.isLast(target)) {
                         int to = target + 1;
                         swapTab(to, target);
                         mToolbar.scrollTabTo(to);
                     }
                     break;
                 case SingleAction.TAB_LIST: {
-                    if (mTabListView != null)
+                    if (mTabManagerView != null)
                         break;
 
-                    mTabListView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).isReverse());
-                    mTabListView.setList(mTabList);
-                    mTabListView.setCallback(new TabListLayout.Callback() {
+                    mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).isReverse());
+                    mTabManagerView.setTabManager(mTabManager);
+                    mTabManagerView.setCallback(new TabListLayout.Callback() {
                         @Override
                         public void requestTabListClose() {
-                            superFrameLayout.removeView(mTabListView);
-                            mTabListView = null;
+                            superFrameLayout.removeView(mTabManagerView);
+                            mTabManagerView = null;
                         }
 
                         @Override
@@ -3321,7 +3329,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
                         @Override
                         public void requestRemoveAllTab() {
-                            while (mTabList.size() > 1) {
+                            while (mTabManager.size() > 1) {
                                 removeTab(0);
                             }
                         }
@@ -3336,7 +3344,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             moveTab(positionFrom, positionTo);
                         }
                     });
-                    superFrameLayout.addView(mTabListView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    superFrameLayout.addView(mTabManagerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 }
                 break;
                 case SingleAction.CLOSE_ALL_LEFT:
@@ -3345,7 +3353,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
                     break;
                 case SingleAction.CLOSE_ALL_RIGHT:
-                    for (int i = mTabList.getLastTabNo(); i > target; --i) {
+                    for (int i = mTabManager.getLastTabNo(); i > target; --i) {
                         removeTab(i);
                     }
                     break;
@@ -3365,12 +3373,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
                 case SingleAction.REPLICATE_TAB: {
                     Bundle outState = new Bundle();
-                    mTabList.get(target).mWebView.saveState(outState);
+                    mTabManager.get(target).mWebView.saveState(outState);
                     openInNewTab(outState);
                 }
                 break;
                 case SingleAction.SHOW_SEARCHBOX:
-                    showSearchBox(mTabList.get(target).mUrl, target);
+                    showSearchBox(mTabManager.get(target).getUrl(), target);
                     break;
                 case SingleAction.PASTE_SEARCHBOX:
                     showSearchBox(ClipboardUtils.getClipboardText(getApplicationContext()), target);
@@ -3381,24 +3389,24 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         Toast.makeText(getApplicationContext(), R.string.clipboard_empty, Toast.LENGTH_SHORT).show();
                         break;
                     }
-                    loadUrl(mTabList.get(target), WebUtils.makeUrlFromQuery(text, AppData.search_url.get(), "%s"), ((PasteGoSingleAction) action).getTargetTab(), TabType.WINDOW);
+                    loadUrl(mTabManager.get(target), WebUtils.makeUrlFromQuery(text, AppData.search_url.get(), "%s"), ((PasteGoSingleAction) action).getTargetTab(), TabType.WINDOW);
                 }
                 break;
                 case SingleAction.SHOW_BOOKMARK: {
                     Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabList.get(target).mUrl);
+                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabManager.get(target).getUrl());
                     startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                 }
                 break;
                 case SingleAction.SHOW_HISTORY: {
                     Intent intent = new Intent(getApplicationContext(), BrowserHistoryActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabList.get(target).mUrl);
+                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabManager.get(target).getUrl());
                     startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                 }
                 break;
                 case SingleAction.SHOW_DOWNLOADS: {
                     Intent intent = new Intent(getApplicationContext(), DownloadListActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabList.get(target).mUrl);
+                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabManager.get(target).getUrl());
                     startActivity(intent);
                 }
                 break;
@@ -3408,8 +3416,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.ADD_BOOKMARK: {
-                    MainTabData tab = mTabList.get(target);
-                    new AddBookmarkSiteDialog(BrowserActivity.this, tab.mTitle, tab.mUrl).show();
+                    MainTabData tab = mTabManager.get(target);
+                    new AddBookmarkSiteDialog(BrowserActivity.this, tab.getTitle(), tab.getUrl()).show();
                 }
                 break;
                 case SingleAction.SUB_GESTURE: {
@@ -3435,7 +3443,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.CLEAR_DATA:
-                    new ClearBrowserDataAlertDialog(BrowserActivity.this, mTabList).show();
+                    new ClearBrowserDataAlertDialog(BrowserActivity.this, mTabManager).show();
                     break;
                 case SingleAction.SHOW_PROXY_SETTING:
                     new ProxySettingDialog(BrowserActivity.this).show();
@@ -3462,11 +3470,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     break;
                 case SingleAction.USERAGENT_SETTING:
                     Intent uaIntent = new Intent(getApplicationContext(), UserAgentListActivity.class);
-                    uaIntent.putExtra(Intent.EXTRA_TEXT, mTabList.get(target).mWebView.getSettings().getUserAgentString());
+                    uaIntent.putExtra(Intent.EXTRA_TEXT, mTabManager.get(target).mWebView.getSettings().getUserAgentString());
                     startActivityForResult(uaIntent, RESULT_REQUEST_USERAGENT);
                     break;
                 case SingleAction.TEXTSIZE_SETTING: {
-                    final WebSettings setting = mTabList.get(target).mWebView.getSettings();
+                    final WebSettings setting = mTabManager.get(target).mWebView.getSettings();
                     new WebTextSizeDialog(BrowserActivity.this, WebViewUtils.getTextSize(setting)) {
                         @Override
                         public void onClick(int value) {
@@ -3480,7 +3488,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     break;
                 case SingleAction.WEB_ENCODE_SETTING:
                     Intent webEncode = new Intent(getApplicationContext(), WebTextEncodeListActivity.class);
-                    webEncode.putExtra(Intent.EXTRA_TEXT, mTabList.get(target).mWebView.getSettings().getDefaultTextEncodingName());
+                    webEncode.putExtra(Intent.EXTRA_TEXT, mTabManager.get(target).mWebView.getSettings().getDefaultTextEncodingName());
                     startActivityForResult(webEncode, RESULT_REQUEST_WEB_ENCODE_SETTING);
                     break;
                 case SingleAction.TOGGLE_VISIBLE_TAB:
@@ -3496,7 +3504,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     mToolbar.getCustomBar().toggleVisibility();
                     break;
                 case SingleAction.TOGGLE_WEB_TITLEBAR:
-                    mToolbar.setWebViewTitlebar(mTabList.getCurrentTabData().mWebView, false);
+                    mToolbar.setWebViewTitlebar(mTabManager.getCurrentTabData().mWebView, false);
                     break;
                 case SingleAction.TOGGLE_WEB_GESTURE:
                     webGestureOverlayView.setEnabled(!webGestureOverlayView.isEnabled());
@@ -3517,15 +3525,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.SHARE_WEB: {
-                    MainTabData tab = mTabList.get(target);
-                    WebUtils.shareWeb(BrowserActivity.this, tab.mUrl, tab.mTitle);
+                    MainTabData tab = mTabManager.get(target);
+                    WebUtils.shareWeb(BrowserActivity.this, tab.getUrl(), tab.getTitle());
                 }
                 break;
                 case SingleAction.OPEN_OTHER:
-                    WebUtils.openInOtherApp(BrowserActivity.this, mTabList.get(target).mUrl);
+                    WebUtils.openInOtherApp(BrowserActivity.this, mTabManager.get(target).getTitle());
                     break;
                 case SingleAction.START_ACTIVITY: {
-                    Intent intent = ((StartActivitySingleAction) action).getIntent(mTabList.get(target));
+                    Intent intent = ((StartActivitySingleAction) action).getIntent(mTabManager.get(target));
                     if (intent != null)
                         startActivity(intent);
                 }
@@ -3540,7 +3548,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         menuWindow.show(findViewById(R.id.superFrameLayout));
                     break;
                 case SingleAction.CUSTOM_MENU: {
-                    MainTabData tab = mTabList.get(target);
+                    MainTabData tab = mTabManager.get(target);
                     final ActionList actionList = ((CustomMenuSingleAction) action).getActionList();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(BrowserActivity.this);
@@ -3554,7 +3562,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                                     }
                                 });
                     } else {
-                        builder.setTitle(tab.mUrl)
+                        builder.setTitle(tab.getUrl())
                                 .setAdapter(new ActionListViewAdapter(BrowserActivity.this, actionList, null), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -3591,20 +3599,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     setPrivateMode(privateMode);
                     break;
                 case SingleAction.VIEW_SOURCE: {
-                    CustomWebView webView = mTabList.get(target).mWebView;
+                    CustomWebView webView = mTabManager.get(target).mWebView;
                     webView.loadUrl("view-source:" + webView.getUrl());
                     break;
                 }
                 case SingleAction.PRINT:
                     if (PrintHelper.systemSupportsPrint()) {
-                        MainTabData tab = mTabList.get(target);
+                        MainTabData tab = mTabManager.get(target);
                         PrintManager manager = (PrintManager) getSystemService(PRINT_SERVICE);
-                        String title = tab.mTitle;
+                        String title = tab.getTitle();
                         if (TextUtils.isEmpty(title))
                             title = tab.mWebView.getTitle();
                         if (TextUtils.isEmpty(title))
                             title = "document";
-                        manager.print(tab.mUrl, tab.mWebView.createPrintDocumentAdapter(title), null);
+                        manager.print(tab.getUrl(), tab.mWebView.createPrintDocumentAdapter(title), null);
                     } else {
                         Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
                     }
@@ -3622,7 +3630,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
             switch (action.id) {
                 case SingleAction.GO_BACK: {
-                    MainTabData tab = mTabList.getCurrentTabData();
+                    MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     if (tab.mWebView.canGoBack())
                         return res.getDrawable(R.drawable.ic_arrow_back_white_24dp, getTheme());
@@ -3630,7 +3638,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return res.getDrawable(R.drawable.ic_arrow_back_disable_white_24dp, getTheme());
                 }
                 case SingleAction.GO_FORWARD: {
-                    MainTabData tab = mTabList.getCurrentTabData();
+                    MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     if (tab.mWebView.canGoForward())
                         return res.getDrawable(R.drawable.ic_arrow_forward_white_24dp, getTheme());
@@ -3638,7 +3646,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return res.getDrawable(R.drawable.ic_arrow_forward_disable_white_24dp, getTheme());
                 }
                 case SingleAction.WEB_RELOAD_STOP: {
-                    MainTabData tab = mTabList.getCurrentTabData();
+                    MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     if (tab.isInPageLoad())
                         return res.getDrawable(R.drawable.ic_clear_white_24dp, getTheme());
@@ -3685,7 +3693,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.FOCUS_CLICK:
                     return res.getDrawable(R.drawable.ic_fiber_manual_record_white_24dp, getTheme());
                 case SingleAction.TOGGLE_JS: {
-                    MainTabData tab = mTabList.getCurrentTabData();
+                    MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     if (tab.mWebView.getSettings().getJavaScriptEnabled())
                         return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
@@ -3693,7 +3701,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return res.getDrawable(R.drawable.ic_memory_white_disable_24px, getTheme());
                 }
                 case SingleAction.TOGGLE_IMAGE: {
-                    MainTabData tab = mTabList.getCurrentTabData();
+                    MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     if (tab.mWebView.getSettings().getLoadsImagesAutomatically())
                         return res.getDrawable(R.drawable.ic_crop_original_white_24px, getTheme());
@@ -3707,7 +3715,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return res.getDrawable(R.drawable.ic_memory_white_disable_24px, getTheme());
                 }
                 case SingleAction.TOGGLE_NAV_LOCK: {
-                    MainTabData tab = mTabList.getCurrentTabData();
+                    MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     if (tab.isNavLock())
                         return res.getDrawable(R.drawable.ic_lock_outline_white_24px, getTheme());

@@ -31,6 +31,7 @@ import jp.hazuki.yuzubrowser.settings.container.IntContainer;
 import jp.hazuki.yuzubrowser.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
+import jp.hazuki.yuzubrowser.tab.manager.BundleDataBaseConverter;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.useragent.UserAgent;
 import jp.hazuki.yuzubrowser.useragent.UserAgentList;
@@ -265,6 +266,12 @@ public class AppData {
                 if (lastLaunch < 106000) {
                     BookmarkManager manager = new BookmarkManager(context);
                     manager.write();
+                }
+
+                if (lastLaunch < 200000) {
+                    BundleDataBaseConverter converter = new BundleDataBaseConverter(context.getFileStreamPath("last_url_2.dat"));
+                    converter.readList(context);
+                    converter.clear();
                 }
             }
 

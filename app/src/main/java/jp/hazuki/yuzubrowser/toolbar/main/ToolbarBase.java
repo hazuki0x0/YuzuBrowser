@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.view.LayoutInflater;
 
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.AbstractToolbar;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 

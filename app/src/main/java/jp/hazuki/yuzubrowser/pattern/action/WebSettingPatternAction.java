@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 
 public class WebSettingPatternAction extends PatternAction {
     public static final int UNDEFINED = 0;

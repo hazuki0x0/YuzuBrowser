@@ -19,10 +19,10 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.search.SuggestProvider;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.CustomDialogPreference;
-import jp.hazuki.yuzubrowser.tab.TabList;
+import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 
 public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
-    private final TabList mTabList;
+    private final TabManager mTabManager;
     private int mSelected = 0;
     private int mArrayMax;
 
@@ -34,13 +34,13 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         this(context, attrs, null);
     }
 
-    public ClearBrowserDataAlertDialog(Context context, TabList tablist) {
-        this(context, null, tablist);
+    public ClearBrowserDataAlertDialog(Context context, TabManager tabManager) {
+        this(context, null, tabManager);
     }
 
-    private ClearBrowserDataAlertDialog(Context context, AttributeSet attrs, TabList tablist) {
+    private ClearBrowserDataAlertDialog(Context context, AttributeSet attrs, TabManager tabManager) {
         super(context, attrs);
-        mTabList = tablist;
+        mTabManager = tabManager;
     }
 
     protected void runAction(int i) {
@@ -48,8 +48,8 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
             case 0:
                 BrowserManager.clearAppCacheFile(getContext().getApplicationContext());
 
-                if (mTabList != null)
-                    mTabList.clearCache(true);
+                if (mTabManager != null)
+                    mTabManager.clearCache(true);
                 else
                     (new WebView(getContext())).clearCache(true);
                 break;
@@ -107,11 +107,6 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
 
         builder
                 .setTitle(R.string.pref_clear_browser_data)
-            /*.setMultiChoiceItems(arrays, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                @Override
-				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-					
-				}})*/
                 .setView(listView)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override

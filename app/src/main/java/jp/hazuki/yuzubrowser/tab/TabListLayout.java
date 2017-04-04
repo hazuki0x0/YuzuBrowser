@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 
 public class TabListLayout extends LinearLayout {
@@ -49,7 +50,7 @@ public class TabListLayout extends LinearLayout {
         bottomBar = findViewById(R.id.bottomBar);
     }
 
-    public void setList(final TabList list) {
+    public void setTabManager(final TabManager list) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

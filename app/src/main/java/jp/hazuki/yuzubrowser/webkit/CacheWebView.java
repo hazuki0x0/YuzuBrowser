@@ -33,7 +33,7 @@ import java.util.TreeMap;
 
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
-import jp.hazuki.yuzubrowser.tab.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
@@ -52,7 +52,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             synchronized (CacheWebView.this) {
                 if (mCurrent >= 1) {
                     TabData from = mList.get(mCurrent);
-                    if (from.mUrl == null || from.mUrl.equals(url)) {
+                    if (from.getUrl() == null || from.getUrl().equals(url)) {
                         mList.remove(mCurrent);
 
                         TabData to = mList.get(--mCurrent);
@@ -298,7 +298,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         settingWebView(from.mWebView, to.mWebView);
         if (additionalHttpHeaders == null)
             additionalHttpHeaders = sHeaderMap;
-        additionalHttpHeaders.put("Referer", from.mUrl);
+        additionalHttpHeaders.put("Referer", from.getUrl());
         to.mWebView.loadUrl(url, sHeaderMap);
         ++mCurrent;
         move(from, to);
