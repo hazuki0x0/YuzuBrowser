@@ -156,6 +156,7 @@ import jp.hazuki.yuzubrowser.tab.TabListLayout;
 import jp.hazuki.yuzubrowser.tab.manager.CacheTabManager;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
@@ -1346,7 +1347,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
                     case "search":
-                        showSearchBox("", mTabManager.indexOf(data));
+                        showSearchBox("", mTabManager.indexOf(data.getId()));
                         return true;
                     case "speeddial":
                         showSpeedDial(data);
@@ -1770,7 +1771,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
 
                 if (web.isBackForwardListEmpty()) {
-                    removeTab(mTabManager.indexOf(web));
+                    removeTab(mTabManager.indexOf(web.getIdentityId()));
                 }
             }
 
@@ -2147,7 +2148,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
             if (checkPatternMatch(data, url) || checkNewTabLinkAuto(AppData.newtab_link.get(), data, url)) {
                 if (web.getUrl() == null || data.mWebView.isBackForwardListEmpty()) {
-                    removeTab(mTabManager.indexOf(data));
+                    removeTab(mTabManager.indexOf(data.getId()));
                 }
                 return true;
             }
@@ -2339,7 +2340,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onRequestFocus(CustomWebView web) {
-            int i = mTabManager.indexOf(web);
+            int i = mTabManager.indexOf(web.getIdentityId());
             if (i >= 0)
                 setCurrentTab(i);
         }
@@ -2354,7 +2355,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onCloseWindow(CustomWebView web) {
-            int i = mTabManager.indexOf(web);
+            int i = mTabManager.indexOf(web.getIdentityId());
             if (i >= 0)
                 removeTab(i);
         }
@@ -3345,10 +3346,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         }
 
                         @Override
-                        public void requestRemoveAllTab() {
-                            while (mTabManager.size() > 1) {
-                                removeTab(0);
-                            }
+                        public void requestRemoveTab(TabIndexData data) {
+                            removeTab(mTabManager.indexOf(data.getId()));
                         }
 
                         @Override

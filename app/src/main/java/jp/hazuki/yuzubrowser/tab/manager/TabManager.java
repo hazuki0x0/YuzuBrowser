@@ -32,9 +32,7 @@ public interface TabManager {
 
     int move(int from, int to);
 
-    int indexOf(MainTabData tab);
-
-    int indexOf(CustomWebView web);
+    int indexOf(long id);
 
     int size();
 
@@ -75,4 +73,6 @@ public interface TabManager {
     void clear();
 
     List<MainTabData> getLoadedData();
+
+    List<TabIndexData> getIndexDataList();
 }

@@ -25,21 +25,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
+import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private TabManager tabList;
+    private TabManager tabManager;
+    private List<TabIndexData> tabList;
     private OnRecyclerListener mListener;
     private ThumbnailManager thumbnailManager;
 
     public TabListRecyclerAdapter(Context context, TabManager list, ThumbnailManager manager, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
-        tabList = list;
+        tabManager = list;
+        tabList = new ArrayList<>(tabManager.getIndexDataList());
         mListener = listener;
         thumbnailManager = manager;
     }
@@ -86,7 +92,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
             }
         });
 
-        if (position == tabList.getCurrentTabNo())
+        if (position == tabManager.getCurrentTabNo())
             holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
         else
             holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background);
@@ -102,7 +108,19 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
     }
 
     public TabIndexData getItem(int pos) {
-        return tabList.getIndexData(pos);
+        return tabList.get(pos);
+    }
+
+    public TabIndexData remove(int position) {
+        return tabList.remove(position);
+    }
+
+    public void add(int position, TabIndexData data) {
+        tabList.add(position, data);
+    }
+
+    public void move(int from, int to) {
+        ArrayUtils.move(tabList, from, to);
     }
 
     public interface OnRecyclerListener {

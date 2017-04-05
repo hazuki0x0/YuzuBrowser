@@ -210,4 +210,6 @@
 
     <string name="open_in_browser">Yuzu Browserで開く</string>
     <string name="enable_share">共有にこのアプリを表示する</string>
+
+    <string name="closed_tab">%1$s を閉じました</string>
 </resources>

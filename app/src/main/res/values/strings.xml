@@ -211,4 +211,6 @@
 
     <string name="open_in_browser">Open in Yuzu Browser</string>
     <string name="enable_share">Enable share from other app</string>
+
+    <string name="closed_tab">Closed %1$s</string>
 </resources>

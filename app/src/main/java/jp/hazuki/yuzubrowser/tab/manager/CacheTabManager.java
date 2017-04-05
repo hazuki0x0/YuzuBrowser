@@ -94,13 +94,8 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
     }
 
     @Override
-    public int indexOf(MainTabData tab) {
-        return indexOf(tab.mWebView);
-    }
-
-    @Override
-    public int indexOf(CustomWebView web) {
-        return mTabStorage.indexOf(web.getIdentityId());
+    public int indexOf(long id) {
+        return mTabStorage.indexOf(id);
     }
 
     @Override
@@ -218,6 +213,10 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
             setText(v, data);
         }
         mCurrentNo = mTabStorage.loadCurrentTab();
+
+        if (mCurrentNo >= list.size()) {
+            mCurrentNo = list.size() - 1;
+        }
     }
 
     public void moveTabToBackground(View v, Resources res, Resources.Theme theme) {
@@ -242,6 +241,11 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
     @Override
     public List<MainTabData> getLoadedData() {
         return new ArrayList<>(mTabCache.values());
+    }
+
+    @Override
+    public List<TabIndexData> getIndexDataList() {
+        return mTabStorage.getTabIndexDataList();
     }
 
     private void setText(View view, TabIndexData indexData) {

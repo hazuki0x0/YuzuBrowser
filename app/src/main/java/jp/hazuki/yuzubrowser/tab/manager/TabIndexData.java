@@ -83,10 +83,6 @@ public class TabIndexData implements Serializable {
     public MainTabData getMainTabData(CustomWebView webView, View view) {
         webView.setIdentityId(mId);
 
-        MainTabData tabData = new MainTabData(webView, view, this);
-        tabData.setTabType(tabType);
-        tabData.setParent(parent);
-
-        return tabData;
+        return new MainTabData(webView, view, this);
     }
 }

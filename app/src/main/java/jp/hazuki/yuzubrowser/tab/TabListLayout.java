@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
@@ -47,7 +48,7 @@ public class TabListLayout extends LinearLayout {
             mLayoutInflater.inflate(R.layout.tab_list, this);
         }
 
-        setBackgroundColor(0xBB000000);
+        setBackgroundColor(0xcc222222);
         bottomBar = findViewById(R.id.bottomBar);
     }
 
@@ -77,6 +78,7 @@ public class TabListLayout extends LinearLayout {
             @Override
             public void onCloseButtonClicked(View v, int position) {
                 mCallback.requestRemoveTab(position);
+                mAdapter.remove(position);
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -113,36 +115,38 @@ public class TabListLayout extends LinearLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+            return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) |
+                    makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
         }
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             mCallback.requestMoveTab(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mAdapter.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
         }
 
         @Override
-        public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             if (mAdapter.getItemCount() > 1) {
-                viewHolder.itemView.setVisibility(GONE);
+                final int position = viewHolder.getAdapterPosition();
+                final TabIndexData data = mAdapter.remove(position);
                 mAdapter.notifyDataSetChanged();
-                snackbar = Snackbar.make(bottomBar, ((TabListRecyclerAdapter.ViewHolder) viewHolder).title.getText(), Snackbar.LENGTH_SHORT)
+                snackbar = Snackbar.make(bottomBar, getContext().getString(R.string.closed_tab,
+                        ((TabListRecyclerAdapter.ViewHolder) viewHolder).title.getText()), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                viewHolder.itemView.setVisibility(VISIBLE);
+                                mAdapter.add(position, data);
                                 mAdapter.notifyDataSetChanged();
                             }
                         })
                         .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             @Override
                             public void onDismissed(Snackbar transientBottomBar, int event) {
-                                if (viewHolder.itemView.getVisibility() == GONE) {
-                                    viewHolder.itemView.setVisibility(VISIBLE);
-                                    mCallback.requestRemoveTab(viewHolder.getAdapterPosition());
-                                    mAdapter.notifyDataSetChanged();
+                                if (event != DISMISS_EVENT_ACTION) {
+                                    mCallback.requestRemoveTab(data);
                                 }
                             }
                         });
@@ -150,6 +154,11 @@ public class TabListLayout extends LinearLayout {
             } else {
                 mAdapter.notifyDataSetChanged();
             }
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled() {
+            return mAdapter.getItemCount() > 1;
         }
     }
 
@@ -160,7 +169,7 @@ public class TabListLayout extends LinearLayout {
 
         void requestRemoveTab(int no);
 
-        void requestRemoveAllTab();
+        void requestRemoveTab(TabIndexData data);
 
         void requestAddTab();
 
