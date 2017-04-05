@@ -45,7 +45,6 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
         mTabCache = new TabCache(5, this);
         mTabStorage = new TabStorage(activity);
         mTabView = new ArrayList<>();
-        mCurrentNo = getCurrentTabNo();
     }
 
     @Override

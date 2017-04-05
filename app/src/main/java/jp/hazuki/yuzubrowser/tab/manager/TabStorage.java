@@ -252,19 +252,11 @@ class TabStorage {
         try (JsonParser parser = factory.createParser(new File(tabPath, FILE_TAB_CURRENT))) {
             if (parser.nextToken() == JsonToken.START_OBJECT) {
                 while (parser.nextToken() != JsonToken.END_OBJECT) {
-                    // 各オブジェクトの処理
-                    if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
-                        while (parser.nextToken() != JsonToken.END_OBJECT) {
-                            String name = parser.getCurrentName();
-                            parser.nextToken();
+                    String name = parser.getCurrentName();
+                    parser.nextToken();
 
-                            if (JSON_NAME_CURRENT_TAB.equals(name)) {
-                                tab = parser.getIntValue();
-                            }
-                        }
-
-                    } else {
-                        parser.skipChildren();
+                    if (JSON_NAME_CURRENT_TAB.equals(name)) {
+                        tab = parser.getIntValue();
                     }
                 }
             }

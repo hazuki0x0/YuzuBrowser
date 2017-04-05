@@ -394,6 +394,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             mTabManager.loadData();
             if (mTabManager.size() > 0) {
                 setCurrentTab(mTabManager.getCurrentTabNo());
+                mToolbar.scrollTabTo(mTabManager.getCurrentTabNo());
             }
 
 
@@ -1136,6 +1137,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     public CustomWebView makeWebView(boolean cacheType) {
         CustomWebView web = (cacheType) ? new CacheWebView(this) : new SwipeWebView(this);
+        web.getWebView().setDrawingCacheEnabled(true);
+        web.getWebView().buildDrawingCache();
         initWebSetting(web);
         if (!AppData.private_mode.get() && AppData.accept_cookie.get())
             CookieManager.getInstance()
