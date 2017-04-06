@@ -568,4 +568,18 @@
     <string name="open_bookmark_new_tab_info">When you tap the icon of the site, open in another tab</string>
     <string name="open_bookmark_new_tab_action">Icon action</string>
     <string name="save_bookmark_folder">Remember location of bookmark folder</string>
+
+    <string name="pref_search_suggest_engine">Search suggest engine</string>
+
+    <string-array name="pref_search_suggest_engine_list" translatable="false">
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Duck Duck Go</item>
+    </string-array>
+
+    <integer-array name="pref_search_suggest_engine_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 </resources>

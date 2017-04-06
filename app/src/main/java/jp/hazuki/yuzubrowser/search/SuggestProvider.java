@@ -16,17 +16,20 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+import jp.hazuki.yuzubrowser.search.suggest.ISuggest;
+import jp.hazuki.yuzubrowser.search.suggest.SuggestBing;
+import jp.hazuki.yuzubrowser.search.suggest.SuggestDuckDuckGo;
+import jp.hazuki.yuzubrowser.search.suggest.SuggestGoogle;
+import jp.hazuki.yuzubrowser.search.suggest.Suggestion;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
@@ -52,8 +55,6 @@ public class SuggestProvider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, "local/*", TYPE_LOCAL_ALL);
         sUriMatcher.addURI(AUTHORITY, "normal/*", TYPE_NORMAL_ALL);
     }
-
-    private static final String SUGGEST_URL_BASE = "http://suggestqueries.google.com/complete/search?output=firefox&oe=utf-8&hl={{LANG}}&qu={{TERMS}}";
 
     private static final String[] yuzuPrefix = {
             "yuzu:bookmarks", "yuzu:debug", "yuzu:downloads", "yuzu:history", "yuzu:home", "yuzu:resBlock", "yuzu:settings", "yuzu:speeddial"
@@ -82,9 +83,14 @@ public class SuggestProvider extends ContentProvider {
     private final JsonFactory mJsonFactory = new JsonFactory();
     private DatabaseHelper mOpenHelper;
 
+    private int mSuggestType;
+    private ISuggest mSuggestEngine;
+
     @Override
     public boolean onCreate() {
         mOpenHelper = new DatabaseHelper(getContext());
+        mSuggestType = AppData.search_suggest_engine.get();
+        mSuggestEngine = getSuggestEngine(mSuggestType);
         return true;
     }
 
@@ -119,23 +125,22 @@ public class SuggestProvider extends ContentProvider {
         if (TextUtils.isEmpty(query)) {
             return null;
         }
+
+        if (AppData.search_suggest_engine.get() != mSuggestType) {
+            mSuggestType = AppData.search_suggest_engine.get();
+            mSuggestEngine = getSuggestEngine(mSuggestType);
+        }
+
+
         JsonParser parser = null;
         try {
-            URL url = new URL(SUGGEST_URL_BASE.replace("{{LANG}}", Locale.getDefault().getLanguage()).replace("{{TERMS}}", URLEncoder.encode(query, "UTF-8")));
+            URL url = mSuggestEngine.getUrl(query);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
             if (connection.getResponseCode() == 200) {
-                ArrayList<Suggestion> list = new ArrayList<>();
-
                 parser = mJsonFactory.createParser(connection.getInputStream());
-
-                if (parser.nextToken() != JsonToken.START_ARRAY) return null;
-                parser.nextToken(); //query
-                if (parser.nextToken() != JsonToken.START_ARRAY) return null;
-                while (parser.nextToken() != JsonToken.END_ARRAY) {
-                    list.add(new Suggestion(parser.getText()));
-                }
+                List<Suggestion> list = mSuggestEngine.getSuggestions(parser);
 
                 for (String prefix : yuzuPrefix) {
                     if (prefix.startsWith(query)) {
@@ -187,18 +192,21 @@ public class SuggestProvider extends ContentProvider {
         return new SuggestionsCursor(suggestions);
     }
 
-    private static class Suggestion {
-        public Suggestion(String word) {
-            this.word = word;
+    private ISuggest getSuggestEngine(int type) {
+        switch (type) {
+            case 1:
+                return new SuggestBing();
+            case 2:
+                return new SuggestDuckDuckGo();
+            default:
+                return new SuggestGoogle();
         }
-
-        public final String word;
     }
 
     private static class SuggestionsCursor extends AbstractCursor {
-        private ArrayList<Suggestion> mList;
+        private List<Suggestion> mList;
 
-        public SuggestionsCursor(ArrayList<Suggestion> list) {
+        public SuggestionsCursor(List<Suggestion> list) {
             mList = list;
         }
 

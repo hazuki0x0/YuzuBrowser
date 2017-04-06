@@ -103,4 +103,10 @@
         android:entryValues="@array/pref_search_suggest_values"
         android:key="search_suggest"
         android:title="@string/pref_search_suggest" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_search_suggest_engine_list"
+        android:entryValues="@array/pref_search_suggest_engine_values"
+        android:key="search_suggest_engine"
+        android:title="@string/pref_search_suggest_engine" />
 </PreferenceScreen>

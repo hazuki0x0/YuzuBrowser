@@ -279,4 +279,6 @@
     <string name="open_bookmark_new_tab_info">サイトのアイコンをタップした時、他のタブで開く</string>
     <string name="open_bookmark_new_tab_action">アイコンアクション</string>
     <string name="save_bookmark_folder">ブックマークフォルダの位置を記憶</string>
+
+    <string name="pref_search_suggest_engine">検索サジェストエンジン</string>
 </resources>
