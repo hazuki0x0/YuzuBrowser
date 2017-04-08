@@ -2817,7 +2817,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl());
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
@@ -2894,7 +2894,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl());
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
