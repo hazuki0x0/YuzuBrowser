@@ -67,10 +67,13 @@ public class WebViewUtils {
     }
 
     public static Bitmap capturePicturePart(WebView web) {
-        Bitmap bitmap = Bitmap.createBitmap(web.getWidth(), web.getHeight(), Bitmap.Config.ARGB_8888);
+        int width = web.getWidth();
+        int height = web.getHeight();
+        int scroll = web.getScrollY();
+        Bitmap bitmap = Bitmap.createBitmap(width, height + scroll, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         web.draw(canvas);
-        return bitmap;
+        return Bitmap.createBitmap(bitmap, 0, scroll, width, height);
     }
 
     public static boolean savePicturePart(WebView web, File file) throws IOException {

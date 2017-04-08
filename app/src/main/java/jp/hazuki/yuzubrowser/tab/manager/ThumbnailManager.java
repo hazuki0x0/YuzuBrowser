@@ -67,17 +67,19 @@ public class ThumbnailManager {
     }
 
     private Bitmap createThumbnailImage(CustomWebView webView) {
-        int i = webView.getWebView().getWidth();
-        if (i <= 0) return null;
-        float scale = (float) width / i;
+        int x = webView.getWebView().getWidth();
+        int y = (int) ((float) x / width * height + 0.5f);
+        if (x <= 0 || y <= 0) return null;
+        float scale = (float) width / x;
+        int scroll = webView.getWebView().getScrollY();
 
-        Bitmap bitmap = Bitmap.createBitmap(i, (int) ((float) i / width * height + 0.5f), Bitmap.Config.RGB_565);
+        Bitmap bitmap = Bitmap.createBitmap(x, y + scroll, Bitmap.Config.RGB_565);
         Canvas localCanvas = new Canvas(bitmap);
         webView.getWebView().draw(localCanvas);
 
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return Bitmap.createBitmap(bitmap, 0, scroll, x, y, matrix, true);
     }
 
     public Bitmap getThumbnail(long id) {
