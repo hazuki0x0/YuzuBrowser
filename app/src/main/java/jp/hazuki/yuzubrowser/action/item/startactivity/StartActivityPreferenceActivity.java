@@ -146,7 +146,10 @@ public class StartActivityPreferenceActivity extends AppCompatActivity implement
 
         switch (type) {
             case RESULT_REQUEST_SHARE:
-                WebUtils.createShareWebIntent(intent, StartActivitySingleAction.REPLACE_URI);
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, StartActivitySingleAction.REPLACE_URI);
+                intent.putExtra(Intent.EXTRA_SUBJECT, StartActivitySingleAction.REPLACE_TITLE);
                 break;
             case RESULT_REQUEST_OPEN_OTHER:
                 WebUtils.createOpenInOtherAppIntent(intent, StartActivitySingleAction.REPLACE_URI);
