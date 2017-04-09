@@ -128,6 +128,7 @@ import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable;
 import jp.hazuki.yuzubrowser.debug.DebugActivity;
 import jp.hazuki.yuzubrowser.download.DownloadDialog;
 import jp.hazuki.yuzubrowser.download.DownloadListActivity;
+import jp.hazuki.yuzubrowser.download.FastDownloadActivity;
 import jp.hazuki.yuzubrowser.gesture.GestureManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
@@ -230,6 +231,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private static final int RESULT_REQUEST_USERAGENT = 6;
     private static final int RESULT_REQUEST_USERJS_SETTING = 7;
     private static final int RESULT_REQUEST_WEB_ENCODE_SETTING = 8;
+    private static final int RESULT_REQUEST_SHARE_IMAGE = 9;
 
     private static final String APPDATA_EXTRA_TARGET = "BrowserActivity.target";
     private static final String TAB_TYPE = "tabType";
@@ -678,6 +680,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 tab.mWebView.reload();
             }
             break;
+            case RESULT_REQUEST_SHARE_IMAGE:
+                if (resultCode != RESULT_OK || data == null) break;
+                Intent open = data.getParcelableExtra(FastDownloadActivity.EXTRA_OPENABLE_INTENT);
+                open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(open);
+                break;
             default:
                 throw new IllegalStateException();
         }
@@ -2807,7 +2815,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_OPEN_IMAGE_BG_RIGHT:
                             openInRightBgTab(extra, TabType.WINDOW);
                             return true;
-                        case SingleAction.LPRESS_SHARE_IMAGE:
+                        case SingleAction.LPRESS_SHARE_IMAGE_URL:
                             WebUtils.shareWeb(BrowserActivity.this, extra, null);
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE_OTHERS:
@@ -2833,6 +2841,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
                             intent.putExtra(Intent.EXTRA_TEXT, extra);
                             startActivity(intent);
+                            return true;
+                        }
+                        case SingleAction.LPRESS_SHARE_IMAGE: {
+                            Intent intent = new Intent(BrowserActivity.this, FastDownloadActivity.class);
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, extra);
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, webview.getUrl());
+                            intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg");
+                            startActivityForResult(intent, RESULT_REQUEST_SHARE_IMAGE);
                             return true;
                         }
                         default:
@@ -2884,7 +2900,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_OPEN_IMAGE_BG_RIGHT:
                             openInRightBgTab(extra, TabType.WINDOW);
                             return true;
-                        case SingleAction.LPRESS_SHARE_IMAGE:
+                        case SingleAction.LPRESS_SHARE_IMAGE_URL:
                             WebUtils.shareWeb(BrowserActivity.this, extra, null);
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE_OTHERS:
@@ -2910,6 +2926,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
                             intent.putExtra(Intent.EXTRA_TEXT, extra);
                             startActivity(intent);
+                            return true;
+                        }
+                        case SingleAction.LPRESS_SHARE_IMAGE: {
+                            Intent intent = new Intent(BrowserActivity.this, FastDownloadActivity.class);
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, extra);
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, webview.getUrl());
+                            intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg");
+                            startActivityForResult(intent, RESULT_REQUEST_SHARE_IMAGE);
                             return true;
                         }
                         default:

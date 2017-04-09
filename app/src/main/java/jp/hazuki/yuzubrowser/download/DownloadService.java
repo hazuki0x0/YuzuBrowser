@@ -16,7 +16,6 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.webkit.CookieManager;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
@@ -430,53 +428,40 @@ public class DownloadService extends Service {
         }
 
         private void base64Download() {
-            String[] data = mData.getUrl().split(Pattern.quote(","));
-            if (data.length > 1) {
-                long id = mDb.insert(mData);
-                if (id < 0) {
-                    showToast("DownloadInfoDatabase#insert failed");
-                    return;
-                }
+            long id = mDb.insert(mData);
+            if (DownloadUtils.saveBase64Image(mData.getUrl(), mData.file) != null) {
+                mData.setState(DownloadInfo.STATE_DOWNLOADED);
 
-                byte[] image = Base64.decode(data[1], Base64.DEFAULT);
-                File file = mData.getFile();
-                if (file.getParentFile() != null) {
-                    file.getParentFile().mkdirs();
-                }
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+                notification.setWhen(System.currentTimeMillis());
+                notification.setProgress(0, 0, false);
+                notification.setAutoCancel(true);
+                notification.setContentTitle(mData.getFile().getName());
+                notification.setContentText(getText(R.string.download_success));
+                notification.setSmallIcon(android.R.drawable.stat_sys_download_done);
 
-                boolean done = false;
+                notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, PackageUtils.createFileOpenIntent(DownloadService.this, mData.getFile()), 0));
+                mNotificationManager.notify((int) id, notification.build());
 
-                try (OutputStream outputStream = new FileOutputStream(file)) {
-                    outputStream.write(image);
-                    done = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                FileUtils.notifyImageFile(getApplicationContext(), mData.file.getAbsolutePath());
+            } else {
+                mData.setState(DownloadInfo.STATE_UNKNOWN_ERROR);
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+                notification.setOngoing(false);
+                notification.setContentTitle(mData.getFile().getName());
+                notification.setWhen(System.currentTimeMillis());
+                notification.setProgress(0, 0, false);
+                notification.setAutoCancel(true);
+                notification.setContentText(getText(R.string.download_fail));
+                notification.setSmallIcon(android.R.drawable.stat_sys_warning);
+                notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), DownloadListActivity.class), 0));
+                mNotificationManager.notify((int) id, notification.build());
+            }
 
-                if (done) {
-                    mData.setState(DownloadInfo.STATE_DOWNLOADED);
-
-                    NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
-                    notification.setWhen(System.currentTimeMillis());
-                    notification.setProgress(0, 0, false);
-                    notification.setAutoCancel(true);
-                    notification.setContentTitle(mData.getFile().getName());
-                    notification.setContentText(getText(R.string.download_success));
-                    notification.setSmallIcon(android.R.drawable.stat_sys_download_done);
-
-                    notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, PackageUtils.createFileOpenIntent(DownloadService.this, mData.getFile()), 0));
-                    mNotificationManager.notify((int) id, notification.build());
-
-                    FileUtils.notifyImageFile(getApplicationContext(), mData.file.getAbsolutePath());
-                } else {
-                    mData.setState(DownloadInfo.STATE_UNKNOWN_ERROR);
-                }
-
-                mDb.updateState(mData);
-                synchronized (mThreadList) {
-                    if (mThreadList.isEmpty()) {
-                        stopSelf();
-                    }
+            mDb.updateState(mData);
+            synchronized (mThreadList) {
+                if (mThreadList.isEmpty()) {
+                    stopSelf();
                 }
             }
         }

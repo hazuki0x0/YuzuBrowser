@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.support.v7.widget.AppCompatDrawableManager;
+import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.regex.Pattern;
 
 public class ImageUtils {
     private ImageUtils() {
@@ -133,5 +135,14 @@ public class ImageUtils {
         } else {
             throw new IllegalArgumentException("unsupported drawable type");
         }
+    }
+
+    public static byte[] getBase64Image(String data) {
+        if (!data.startsWith("data:")) return null;
+        String[] strings = data.split(Pattern.quote(","));
+        if (strings.length > 2) {
+            return Base64.decode(strings[1], Base64.DEFAULT);
+        }
+        return null;
     }
 }

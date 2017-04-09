@@ -248,6 +248,11 @@
         <activity
             android:name=".speeddial.view.SpeedDialSettingActivity"
             android:label="@string/pref_speed_dial_setting" />
+        <activity
+            android:name=".download.FastDownloadActivity"
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/BrowserMinThemeBlack.Transparent" />
     </application>
 
 </manifest>

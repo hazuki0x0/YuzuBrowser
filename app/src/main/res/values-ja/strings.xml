@@ -33,6 +33,7 @@
     <string name="pattern_open_app_list">アプリ一覧の表示</string>
     <string name="pattern_open_app_chooser">アプリ一覧の強制表示</string>
     <string name="now_loading">読み込み中</string>
+    <string name="now_downloading">ダウンロード中…</string>
     <string name="finish_mes">このアプリケーションを終了してもよろしいですか？</string>
     <string name="minimize">最小化</string>
     <string name="open">開く</string>
@@ -54,6 +55,7 @@
     <string name="open_image_new_right">新しいタブで右に画像を開く</string>
     <string name="open_image_bg_right">バックグラウンドで右に画像を開く</string>
     <string name="share_image">画像の共有</string>
+    <string name="share_image_url">画像のURLを共有</string>
     <string name="open_image_other_app">画像を他のアプリで開く</string>
     <string name="copy_image_url">画像のURLをコピー</string>
     <string name="save_image">画像を保存</string>

@@ -65,24 +65,7 @@ public class WebDownloadUtils {
             }
         }
 
-        FileUtils.ParsedFileName pFname = FileUtils.getParsedFileName(filename);
-        int i = 1;
-        final File folder = new File(folder_path);
-        String[] filelist = folder.list();
-        if (filelist != null) {
-            StringBuilder strbuilder = new StringBuilder();
-            while (FileUtils.checkFileExists(filelist, filename)) {
-                strbuilder.append(pFname.Prefix).append("-").append(i);
-                if (pFname.Suffix != null) {
-                    strbuilder.append(".").append(pFname.Suffix);
-                }
-                filename = strbuilder.toString();
-                ++i;
-                strbuilder.delete(0, strbuilder.length());
-            }
-        }
-
-        return new File(folder, filename);
+        return FileUtils.createUniqueFile(folder_path, filename);
     }
 
 

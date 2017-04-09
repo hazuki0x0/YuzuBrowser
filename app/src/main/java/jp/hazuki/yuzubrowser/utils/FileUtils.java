@@ -165,6 +165,27 @@ public class FileUtils {
         MediaScannerConnection.scanFile(context, files, null, null);
     }
 
+    public static File createUniqueFile(String folderPath, String fileName) {
+        FileUtils.ParsedFileName pFname = FileUtils.getParsedFileName(fileName);
+        int i = 1;
+        final File folder = new File(folderPath);
+        String[] fileList = folder.list();
+        if (fileList != null) {
+            StringBuilder builder = new StringBuilder();
+            while (FileUtils.checkFileExists(fileList, fileName)) {
+                builder.append(pFname.Prefix).append("-").append(i);
+                if (pFname.Suffix != null) {
+                    builder.append(".").append(pFname.Suffix);
+                }
+                fileName = builder.toString();
+                ++i;
+                builder.delete(0, builder.length());
+            }
+        }
+
+        return new File(folder, fileName);
+    }
+
     public static final FileComparator FILE_COMPARATOR = new FileComparator();
 
     public static class FileComparator implements Comparator<File> {
