@@ -32,7 +32,7 @@ import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
-public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
+class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
     private int mCurrentNo = -1;
 
     private BrowserActivity mWebBrowser;
@@ -41,7 +41,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
 
     private List<View> mTabView;
 
-    public CacheTabManager(BrowserActivity activity) {
+    CacheTabManager(BrowserActivity activity) {
         mWebBrowser = activity;
         mTabCache = new TabCache(AppData.tabs_cache_number.get(), this);
         mTabStorage = new TabStorage(activity);
@@ -220,7 +220,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
         }
     }
 
-    public void moveTabToBackground(View v, Resources res, Resources.Theme theme) {
+    private void moveTabToBackground(View v, Resources res, Resources.Theme theme) {
         ThemeData themedata = ThemeData.getInstance();
         if (themedata != null && themedata.tabBackgroundNormal != null)
             v.setBackground(themedata.tabBackgroundNormal);

@@ -24,7 +24,7 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public interface TabManager {
 
-    public MainTabData add(CustomWebView web, View view);
+    MainTabData add(CustomWebView web, View view);
 
     void setCurrentTab(int no);
 
