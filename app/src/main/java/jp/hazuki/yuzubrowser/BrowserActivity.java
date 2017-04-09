@@ -2859,6 +2859,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         }
                         case SingleAction.LPRESS_SAVE_IMAGE:
                             DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
                         default:
@@ -2948,6 +2949,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         }
                         case SingleAction.LPRESS_SAVE_IMAGE:
                             DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
                         default:

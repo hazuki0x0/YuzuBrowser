@@ -17,21 +17,22 @@
 package jp.hazuki.yuzubrowser.utils;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 
 public final class HttpUtils {
 
-    public static File getFileName(String url, String defaultExt, Map header) {
+    public static File getFileName(String url, String defaultExt, Map<String, List<String>> header) {
         if (header.get("Content-Disposition") != null) {
-            String raw = header.get("Content-Disposition").toString();
-            // raw = "attachment; filename=abc.jpg"
-            if (raw != null && raw.contains("=")) {
-                // getting value after '='
-                String fileName = raw.split("=")[1];
-                fileName = fileName.replaceAll("\"", "").replaceAll("]", "");
-                return FileUtils.createUniqueFile(AppData.download_folder.get(), fileName);
+            List<String> lines = header.get("Content-Disposition");
+            for (String raw : lines) {
+                if (raw != null && raw.toLowerCase().startsWith("filename=")) {
+                    // getting value after '='
+                    String fileName = raw.split("=")[1];
+                    return FileUtils.createUniqueFile(AppData.download_folder.get(), fileName);
+                }
             }
         }
 

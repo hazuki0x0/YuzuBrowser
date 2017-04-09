@@ -297,7 +297,7 @@ public class DownloadService extends Service {
             HttpResponseData response = httpClient.connect();
             if (response == null) {
                 if (mData.getFile() == null) {
-                    File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), mData.getUrl(), null, null);
+                    File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), mData.getUrl(), null, null, mData.getDefaultExt());
                     mData.setFile(file);
                 }
 
@@ -319,7 +319,7 @@ public class DownloadService extends Service {
             File file = mData.getFile();
 
             if (file == null) {
-                file = HttpUtils.getFileName(mData.getUrl(), null, response.getHeaderFields());
+                file = HttpUtils.getFileName(mData.getUrl(), mData.getDefaultExt(), response.getHeaderFields());
                 mData.setFile(file);
             }
 
