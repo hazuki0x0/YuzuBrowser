@@ -70,6 +70,12 @@
             android:title="@string/pref_newtab_blank" />
     </PreferenceScreen>
 
+    <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+        android:key="tab_cache_number"
+        android:title="@string/pref_number_of_tab_to_cache"
+        app:seekMax="50"
+        app:seekMin="2" />
+
     <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
         android:key="search_url"
         android:singleLine="true"

@@ -897,6 +897,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private void onPreferenceReset() {
         mToolbar.onPreferenceReset();
+        mTabManager.onPreferenceReset();
         mPatternManager.load(getApplicationContext());
 
         if (ThemeData.createInstance(getApplicationContext(), AppData.theme_setting.get()) != null) {

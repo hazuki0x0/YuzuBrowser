@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 class TabCache extends LinkedHashMap<Long, MainTabData> {
 
     private final OnCacheOverFlowListener mListener;
-    private final int mSize;
+    private int mSize;
 
     TabCache(int cacheSize, OnCacheOverFlowListener listener) {
         super(cacheSize, 0.75f, true);
@@ -43,6 +43,10 @@ class TabCache extends LinkedHashMap<Long, MainTabData> {
         if (value != null)
             return super.put(key, value);
         return null;
+    }
+
+    public void setSize(int size) {
+        mSize = size;
     }
 
     public interface OnCacheOverFlowListener {

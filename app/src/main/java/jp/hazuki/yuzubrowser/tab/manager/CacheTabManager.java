@@ -27,6 +27,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
@@ -42,7 +43,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
 
     public CacheTabManager(BrowserActivity activity) {
         mWebBrowser = activity;
-        mTabCache = new TabCache(5, this);
+        mTabCache = new TabCache(AppData.tabs_cache_number.get(), this);
         mTabStorage = new TabStorage(activity);
         mTabView = new ArrayList<>();
     }
@@ -236,6 +237,11 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
     @Override
     public void clear() {
         mTabStorage.clear();
+    }
+
+    @Override
+    public void onPreferenceReset() {
+        mTabCache.setSize(AppData.tabs_cache_number.get());
     }
 
     @Override

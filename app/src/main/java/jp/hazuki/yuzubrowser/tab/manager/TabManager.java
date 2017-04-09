@@ -72,6 +72,8 @@ public interface TabManager {
 
     void clear();
 
+    void onPreferenceReset();
+
     List<MainTabData> getLoadedData();
 
     List<TabIndexData> getIndexDataList();
