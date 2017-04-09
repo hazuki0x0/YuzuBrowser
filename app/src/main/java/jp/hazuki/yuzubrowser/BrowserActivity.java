@@ -128,6 +128,8 @@ import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable;
 import jp.hazuki.yuzubrowser.debug.DebugActivity;
 import jp.hazuki.yuzubrowser.download.DownloadDialog;
 import jp.hazuki.yuzubrowser.download.DownloadListActivity;
+import jp.hazuki.yuzubrowser.download.DownloadRequestInfo;
+import jp.hazuki.yuzubrowser.download.DownloadService;
 import jp.hazuki.yuzubrowser.download.FastDownloadActivity;
 import jp.hazuki.yuzubrowser.gesture.GestureManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
@@ -2776,8 +2778,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_COPY_URL:
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
-                        case SingleAction.LPRESS_SAVE_PAGE:
+                        case SingleAction.LPRESS_SAVE_PAGE_AS:
                             DownloadDialog.showDownloadDialog(BrowserActivity.this, extra);//TODO referer
+                            return true;
+                        case SingleAction.LPRESS_SAVE_PAGE:
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, null, -1);
+                            DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
                         case SingleAction.LPRESS_PATTERN_MATCH: {
                             Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
@@ -2824,7 +2830,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_COPY_IMAGE_URL:
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
-                        case SingleAction.LPRESS_SAVE_IMAGE:
+                        case SingleAction.LPRESS_SAVE_IMAGE_AS:
                             DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
@@ -2851,6 +2857,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             startActivityForResult(intent, RESULT_REQUEST_SHARE_IMAGE);
                             return true;
                         }
+                        case SingleAction.LPRESS_SAVE_IMAGE:
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            DownloadService.startDownloadService(BrowserActivity.this, info);
+                            return true;
                         default:
                             return run(action, target, null);
                     }
@@ -2882,7 +2892,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_COPY_URL:
                             webview.requestFocusNodeHref(new WebSrcImageCopyUrlHandler(getApplicationContext()).obtainMessage());
                             return true;
-                        case SingleAction.LPRESS_SAVE_PAGE:
+                        case SingleAction.LPRESS_SAVE_PAGE_AS:
                             webview.requestFocusNodeHref(new WebImageHandler(BrowserActivity.this).obtainMessage());
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE:
@@ -2909,7 +2919,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_COPY_IMAGE_URL:
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
-                        case SingleAction.LPRESS_SAVE_IMAGE:
+                        case SingleAction.LPRESS_SAVE_IMAGE_AS:
                             DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
@@ -2936,6 +2946,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             startActivityForResult(intent, RESULT_REQUEST_SHARE_IMAGE);
                             return true;
                         }
+                        case SingleAction.LPRESS_SAVE_IMAGE:
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            DownloadService.startDownloadService(BrowserActivity.this, info);
+                            return true;
                         default:
                             return run(action, target, null);
                     }

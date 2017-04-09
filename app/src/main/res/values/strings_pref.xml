@@ -223,6 +223,7 @@
         <item>@string/copy_link_url</item>
         <item>@string/copy_link_text</item>
         <item>@string/save_link</item>
+        <item>@string/save_link_as</item>
         <item>@string/add_url_pattern</item>
     </string-array>
 
@@ -236,6 +237,7 @@
         <item>-51</item>
         <item>-52</item>
         <item>-157</item>
+        <item>-54</item>
         <item>-53</item>
         <item>-156</item>
     </integer-array>
@@ -251,6 +253,7 @@
         <item>@string/open_image_other_app</item>
         <item>@string/copy_image_url</item>
         <item>@string/save_image</item>
+        <item>@string/save_image_as</item>
         <item>@string/search_image</item>
         <item>@string/block_image</item>
         <item>@string/add_image_pattern</item>
@@ -266,6 +269,7 @@
         <item>-150</item>
         <item>-151</item>
         <item>-152</item>
+        <item>-159</item>
         <item>-153</item>
         <item>-154</item>
         <item>-155</item>
@@ -292,6 +296,7 @@
         <item>@string/open_image_other_app</item>
         <item>@string/copy_image_url</item>
         <item>@string/save_image</item>
+        <item>@string/save_image_as</item>
         <item>@string/search_image</item>
         <item>@string/block_image</item>
         <item>@string/add_image_pattern</item>
@@ -316,6 +321,7 @@
         <item>-150</item>
         <item>-151</item>
         <item>-152</item>
+        <item>-159</item>
         <item>-153</item>
         <item>-154</item>
         <item>-155</item>

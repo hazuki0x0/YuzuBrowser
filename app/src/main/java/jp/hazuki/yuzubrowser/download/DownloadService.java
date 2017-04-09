@@ -30,10 +30,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
+import jp.hazuki.yuzubrowser.utils.HttpUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
+import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.net.HttpClientBuilder;
 import jp.hazuki.yuzubrowser.utils.net.HttpResponseData;
 
@@ -279,9 +282,50 @@ public class DownloadService extends Service {
                 return;
             }
 
-            OutputStream outputStream = null;
-            InputStream inputStream = null;
+            String cookie = CookieManager.getInstance().getCookie(mData.getUrl());
+            if (!TextUtils.isEmpty(cookie)) {
+                httpClient.setHeader("Cookie", cookie);
+            }
+
+            String referer = mData.getReferer();
+            if (!TextUtils.isEmpty(referer)) {
+                httpClient.setHeader("Referer", referer);
+            }
+
             NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+
+            HttpResponseData response = httpClient.connect();
+            if (response == null) {
+                if (mData.getFile() == null) {
+                    File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), mData.getUrl(), null, null);
+                    mData.setFile(file);
+                }
+
+                mData.setState(DownloadInfo.STATE_UNKNOWN_ERROR);
+                long id = mDb.insert(mData);
+
+                notification.setOngoing(false);
+                notification.setContentTitle(mData.getFile().getName());
+                notification.setWhen(System.currentTimeMillis());
+                notification.setProgress(0, 0, false);
+                notification.setAutoCancel(true);
+                notification.setContentText(getText(R.string.download_fail));
+                notification.setSmallIcon(android.R.drawable.stat_sys_warning);
+                notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), DownloadListActivity.class), 0));
+                mNotificationManager.notify((int) id, notification.build());
+                return;
+            }
+
+            File file = mData.getFile();
+
+            if (file == null) {
+                file = HttpUtils.getFileName(mData.getUrl(), null, response.getHeaderFields());
+                mData.setFile(file);
+            }
+
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
+            }
 
             long id = mDb.insert(mData);
             if (id < 0) {
@@ -289,7 +333,9 @@ public class DownloadService extends Service {
                 return;
             }
 
-            try {
+            try (OutputStream outputStream = new FileOutputStream(file);
+                 InputStream inputStream = response.getInputStream()) {
+
                 notification.setSmallIcon(android.R.drawable.stat_sys_download);
                 notification.setOngoing(true);
                 notification.setContentTitle(mData.getFile().getName());
@@ -297,27 +343,6 @@ public class DownloadService extends Service {
                 notification.setProgress(0, 0, true);
                 notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), DownloadListActivity.class), 0));
                 mNotificationManager.notify((int) id, notification.build());//long to int
-
-                String cookie = CookieManager.getInstance().getCookie(mData.getUrl());
-                if (!TextUtils.isEmpty(cookie)) {
-                    httpClient.setHeader("Cookie", cookie);
-                }
-
-                String referer = mData.getReferer();
-                if (!TextUtils.isEmpty(referer)) {
-                    httpClient.setHeader("Referer", referer);
-                }
-
-                HttpResponseData response = httpClient.connect();
-                if (response == null) return;
-
-                File file = mData.getFile();
-                if (file.getParentFile() != null) {
-                    file.getParentFile().mkdirs();
-                }
-
-                outputStream = new FileOutputStream(file);
-                inputStream = response.getInputStream();
 
                 int max = (int) response.getContentLength();
                 mData.setMaxLength(max);
@@ -351,10 +376,6 @@ public class DownloadService extends Service {
                 }
 
                 outputStream.flush();
-                outputStream.close();
-                outputStream = null;
-                inputStream.close();
-                inputStream = null;
 
                 if (!mAbort)
                     mData.setState(DownloadInfo.STATE_DOWNLOADED);
@@ -407,21 +428,6 @@ public class DownloadService extends Service {
                         notification.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), DownloadListActivity.class), 0));
                         mNotificationManager.notify((int) id, notification.build());
                         break;
-                }
-
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        ErrorReport.printAndWriteLog(e);
-                    }
-                }
-                if (outputStream != null) {
-                    try {
-                        outputStream.close();
-                    } catch (IOException e) {
-                        ErrorReport.printAndWriteLog(e);
-                    }
                 }
                 httpClient.destroy();
             }

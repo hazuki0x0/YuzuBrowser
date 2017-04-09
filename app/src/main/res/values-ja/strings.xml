@@ -49,6 +49,7 @@
     <string name="copy_link_url">リンクアドレスをコピー</string>
     <string name="copy_link_text">リンクテキストをコピー</string>
     <string name="save_link">リンク先を保存</string>
+    <string name="save_link_as">名前をつけてリンク先を保存</string>
     <string name="open_image">画像を開く</string>
     <string name="open_image_new">新しいタブで画像を開く</string>
     <string name="open_image_bg">バックグラウンドで画像を開く</string>
@@ -59,6 +60,7 @@
     <string name="open_image_other_app">画像を他のアプリで開く</string>
     <string name="copy_image_url">画像のURLをコピー</string>
     <string name="save_image">画像を保存</string>
+    <string name="save_image_as">名前をつけて画像を保存</string>
     <string name="search_image">画像を検索</string>
     <string name="block_image">画像をブロック</string>
     <string name="add_image_pattern">画像をパターンマッチに追加</string>

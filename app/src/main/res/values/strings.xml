@@ -50,6 +50,7 @@
     <string name="copy_link_url">Copy link URL</string>
     <string name="copy_link_text">Copy link text</string>
     <string name="save_link">Save link</string>
+    <string name="save_link_as">Save link As…</string>
     <string name="open_image">Open image</string>
     <string name="open_image_new">Open image in new tab</string>
     <string name="open_image_bg">Open image in background tab</string>
@@ -60,6 +61,7 @@
     <string name="open_image_other_app">Open image in another app</string>
     <string name="copy_image_url">Copy image URL</string>
     <string name="save_image">Save image</string>
+    <string name="save_image_as">Save image As…</string>
     <string name="search_image">Search image</string>
     <string name="block_image">Block image</string>
     <string name="add_image_pattern">Add image to pattern match</string>
