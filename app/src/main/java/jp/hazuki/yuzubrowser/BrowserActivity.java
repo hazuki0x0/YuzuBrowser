@@ -454,6 +454,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     protected void onResume() {
         super.onResume();
         setFullscreenIfEnable();
+        mToolbar.resetToolBar();
         PermissionUtils.checkFirst(this);
         if (PermissionUtils.checkNeed(this)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -472,7 +473,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
             }
         }
-        mToolbar.notifyChangeWebState();
     }
 
     @Override

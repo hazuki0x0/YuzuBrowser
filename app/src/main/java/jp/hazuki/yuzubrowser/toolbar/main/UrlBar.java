@@ -74,6 +74,12 @@ public class UrlBar extends ToolbarBase {
             changeTitle(data);
     }
 
+    @Override
+    public void resetToolBar() {
+        mLeftButtonController.resetIcon();
+        mRightButtonController.resetIcon();
+    }
+
     public void changeTitle(final MainTabData data) {
         //need post Runnable?
         post(new Runnable() {

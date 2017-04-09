@@ -64,6 +64,12 @@ public class TabBar extends ToolbarBase {
     }
 
     @Override
+    public void resetToolBar() {
+        mLeftButtonController.resetIcon();
+        mRightButtonController.resetIcon();
+    }
+
+    @Override
     public void applyTheme(ThemeData themedata) {
         super.applyTheme(themedata);
         applyTheme(themedata, mLeftButtonController);

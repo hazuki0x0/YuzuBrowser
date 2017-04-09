@@ -42,6 +42,10 @@ public abstract class ToolbarBase extends AbstractToolbar {
             setVisibility(mRequestCallback.shouldShowToolbar(mPreferences.visibility, data) ? VISIBLE : GONE);
     }
 
+    public void resetToolBar() {
+
+    }
+
     public void toggleVisibility() {
         boolean isVisible = getVisibility() == VISIBLE;
         mPreferences.visibility.setAlwaysVisible(!isVisible);

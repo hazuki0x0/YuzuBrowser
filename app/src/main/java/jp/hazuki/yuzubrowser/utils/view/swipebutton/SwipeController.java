@@ -150,6 +150,11 @@ public class SwipeController {
         if (mListener != null) mListener.onChangeState(mWhatNo);
     }
 
+    public void setToDefault() {
+        mWhatNo = SWIPE_PRESS;
+        mListener.onChangeState(mWhatNo);
+    }
+
     public void setSense(int sense) {
         mSense = sense;
     }

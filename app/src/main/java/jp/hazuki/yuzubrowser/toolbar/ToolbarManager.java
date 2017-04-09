@@ -294,6 +294,12 @@ public class ToolbarManager {
         customBar.notifyChangeWebState(data);
     }
 
+    public void resetToolBar() {
+        tabBar.resetToolBar();
+        urlBar.resetToolBar();
+        customBar.resetToolBar();
+    }
+
     public View addNewTabView() {
         return tabBar.addNewTabView();
     }

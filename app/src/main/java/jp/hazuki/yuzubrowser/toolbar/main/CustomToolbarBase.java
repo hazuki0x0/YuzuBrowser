@@ -57,4 +57,9 @@ public class CustomToolbarBase extends ToolbarBase {
         super.notifyChangeWebState(data);
         mButtonController.notifyChangeState();
     }
+
+    @Override
+    public void resetToolBar() {
+        mButtonController.resetIcon();
+    }
 }

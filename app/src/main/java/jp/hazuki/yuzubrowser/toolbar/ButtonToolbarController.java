@@ -87,6 +87,12 @@ public class ButtonToolbarController {
         }
     }
 
+    public void resetIcon() {
+        for (SwipeImageButton btn : mButtonList) {
+            btn.setToDefault();
+        }
+    }
+
     public void setColorFilter(ColorFilter cf) {
         for (SwipeImageButton btn : mButtonList)
             btn.setColorFilter(cf);
