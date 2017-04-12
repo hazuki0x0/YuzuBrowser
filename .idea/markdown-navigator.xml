@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="MarkdownProjectSettings">
-    <PreviewSettings splitEditorLayout="SPLIT" splitEditorPreview="PREVIEW" useGrayscaleRendering="false" zoomFactor="1.0" maxImageWidth="0" showGitHubPageIfSynced="false" allowBrowsingInPreview="false" synchronizePreviewPosition="false" highlightPreviewType="LINE" highlightFadeOut="5" highlightOnTyping="false" synchronizeSourcePosition="false">
+    <PreviewSettings splitEditorLayout="SPLIT" splitEditorPreview="PREVIEW" useGrayscaleRendering="false" zoomFactor="1.5" maxImageWidth="0" showGitHubPageIfSynced="false" allowBrowsingInPreview="false" synchronizePreviewPosition="true" highlightPreviewType="NONE" highlightFadeOut="5" highlightOnTyping="true" synchronizeSourcePosition="true" verticallyAlignSourceAndPreviewSyncPosition="true" showSearchHighlightsInPreview="false" showSelectionInPreview="true">
       <PanelProvider>
         <provider providerId="com.vladsch.idea.multimarkdown.editor.swing.html.panel" providerName="Default - Swing" />
       </PanelProvider>
@@ -10,6 +10,7 @@
       <PegdownExtensions>
         <option name="ABBREVIATIONS" value="false" />
         <option name="ANCHORLINKS" value="true" />
+        <option name="ASIDE" value="false" />
         <option name="ATXHEADERSPACE" value="true" />
         <option name="AUTOLINKS" value="true" />
         <option name="DEFINITIONS" value="false" />
@@ -35,7 +36,7 @@
         <option name="DUMMY" value="false" />
         <option name="EMOJI_SHORTCUTS" value="true" />
         <option name="FLEXMARK_FRONT_MATTER" value="false" />
-        <option name="GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA" value="false" />
+        <option name="GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA" value="true" />
         <option name="GFM_TABLE_RENDERING" value="true" />
         <option name="GITBOOK_URL_ENCODING" value="false" />
         <option name="GITHUB_EMOJI_URL" value="false" />
