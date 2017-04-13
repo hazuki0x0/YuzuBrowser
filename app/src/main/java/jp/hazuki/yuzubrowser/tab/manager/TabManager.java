@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.tab.manager;
 
+import android.graphics.Bitmap;
 import android.view.View;
 
 import java.util.List;
@@ -77,4 +78,10 @@ public interface TabManager {
     List<MainTabData> getLoadedData();
 
     List<TabIndexData> getIndexDataList();
+
+    void onStartPage(CustomWebView webView);
+
+    void takeThumbnailIfNeeded(CustomWebView webView);
+
+    Bitmap getThumbnail(long id);
 }

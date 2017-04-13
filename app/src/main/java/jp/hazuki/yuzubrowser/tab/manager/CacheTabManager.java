@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.TextView;
@@ -32,12 +33,13 @@ import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
-class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
+class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener, ThumbnailManager.OnThumbnailListener {
     private int mCurrentNo = -1;
 
     private BrowserActivity mWebBrowser;
     private TabCache mTabCache;
     private TabStorage mTabStorage;
+    private ThumbnailManager thumbnailManager;
 
     private List<View> mTabView;
 
@@ -46,6 +48,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
         mTabCache = new TabCache(AppData.tabs_cache_number.get(), this);
         mTabStorage = new TabStorage(activity);
         mTabView = new ArrayList<>();
+        thumbnailManager = new ThumbnailManager(activity, this);
     }
 
     @Override
@@ -73,6 +76,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
     public void remove(int no) {
         TabIndexData data = mTabStorage.removeAndDelete(no);
         mTabView.remove(no);
+        thumbnailManager.removeThumbnailCache(data.getId());
         if (mTabCache.containsKey(data.getId()))
             mTabCache.remove(data.getId());
     }
@@ -182,6 +186,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
 
     @Override
     public void destroy() {
+        thumbnailManager.destroy();
         for (MainTabData data : mTabCache.values()) {
             data.mWebView.setEmbeddedTitleBarMethod(null);
             data.mWebView.destroy();
@@ -254,6 +259,21 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
         return mTabStorage.getTabIndexDataList();
     }
 
+    @Override
+    public void onStartPage(CustomWebView webView) {
+        thumbnailManager.onStartPage(webView.getIdentityId());
+    }
+
+    @Override
+    public void takeThumbnailIfNeeded(CustomWebView webView) {
+        thumbnailManager.takeThumbnailIfNeeded(webView);
+    }
+
+    @Override
+    public Bitmap getThumbnail(long id) {
+        return thumbnailManager.getThumbnail(id);
+    }
+
     private void setText(View view, TabIndexData indexData) {
         String text;
         if (indexData.getTitle() != null) {
@@ -278,5 +298,15 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
         mTabStorage.saveWebView(tabData);
         tabData.mWebView.setEmbeddedTitleBarMethod(null);
         tabData.mWebView.destroy();
+    }
+
+    @Override
+    public void onSaveThumbnail(long id, byte[] image) {
+        mTabStorage.saveThumbnail(id, image);
+    }
+
+    @Override
+    public byte[] onLoadThumbnail(long id) {
+        return mTabStorage.getThumbnail(id);
     }
 }

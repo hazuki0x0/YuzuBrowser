@@ -31,7 +31,6 @@ import java.util.List;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
-import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
@@ -40,14 +39,12 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
     private TabManager tabManager;
     private List<TabIndexData> tabList;
     private OnRecyclerListener mListener;
-    private ThumbnailManager thumbnailManager;
 
-    public TabListRecyclerAdapter(Context context, TabManager list, ThumbnailManager manager, OnRecyclerListener listener) {
+    public TabListRecyclerAdapter(Context context, TabManager list, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         tabManager = list;
         tabList = new ArrayList<>(tabManager.getIndexDataList());
         mListener = listener;
-        thumbnailManager = manager;
     }
 
     @Override
@@ -60,7 +57,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         // データ表示
         TabIndexData indexData = getItem(position);
         if (indexData != null) {
-            Bitmap thumbNail = thumbnailManager.getThumbnail(indexData.getId());
+            Bitmap thumbNail = tabManager.getThumbnail(indexData.getId());
             if (thumbNail != null) {
                 holder.thumbNail.setImageBitmap(thumbNail);
             } else {

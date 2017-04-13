@@ -1,44 +1,63 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.LongSparseArray;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.ImageUtils;
+import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
-public class ThumbnailManager {
+class ThumbnailManager {
     private final int height;
     private final int width;
 
     private final LongSparseArray<Bitmap> thumbnails;
     private final LongSparseArray<Boolean> shotTab;
 
-    public ThumbnailManager(Context context) {
+    private OnThumbnailListener thumbnailListener;
+    private ThumbThread thread;
+
+    ThumbnailManager(Context context, OnThumbnailListener listener) {
         float density = DisplayUtils.getDensity(context);
         height = (int) (density * 82 + 0.5f);
         width = (int) (density * 104 + 0.5f);
 
         thumbnails = new LongSparseArray<>();
         shotTab = new LongSparseArray<>();
+
+        /* save image */
+        thumbnailListener = listener;
+        thread = new ThumbThread(listener);
+        thread.start();
+    }
+
+    public void takeThumbnailIfNeeded(CustomWebView webView) {
+        if (!shotTab.get(webView.getIdentityId(), Boolean.FALSE)) {
+            create(webView);
+        }
     }
 
     public void create(final CustomWebView webView) {
@@ -47,8 +66,10 @@ public class ThumbnailManager {
             public void run() {
                 shotTab.put(webView.getIdentityId(), true);
                 Bitmap bitmap = createThumbnailImage(webView);
-                if (bitmap != null)
+                if (bitmap != null) {
                     thumbnails.put(webView.getIdentityId(), bitmap);
+                    thread.addQueue(new ThumbItem(webView.getIdentityId(), bitmap));
+                }
             }
         };
 
@@ -66,7 +87,7 @@ public class ThumbnailManager {
         }).start();
     }
 
-    private Bitmap createThumbnailImage(CustomWebView webView) {
+    protected Bitmap createThumbnailImage(CustomWebView webView) {
         int x = webView.getWebView().getWidth();
         int y = (int) ((float) x / width * height + 0.5f);
         if (x <= 0 || y <= 0) return null;
@@ -83,18 +104,77 @@ public class ThumbnailManager {
     }
 
     public Bitmap getThumbnail(long id) {
-        return thumbnails.get(id);
+        /* from cache */
+        Bitmap bitmap = thumbnails.get(id);
+
+        /* from file */
+        if (bitmap == null) {
+            byte[] image = thumbnailListener.onLoadThumbnail(id);
+            if (image != null) {
+                bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                thumbnails.put(id, bitmap);
+            }
+        }
+
+        return bitmap;
     }
 
-    public void removeThumbnail(long id) {
+    public void removeThumbnailCache(long id) {
         thumbnails.remove(id);
     }
 
     public void onStartPage(long id) {
-        shotTab.put(id, false);
+        shotTab.put(id, Boolean.FALSE);
     }
 
-    public boolean isShotTab(long id) {
-        return shotTab.get(id, Boolean.FALSE);
+    public void destroy() {
+        thread.interrupt();
+    }
+
+    private static final class ThumbItem {
+        private final long id;
+        private final Bitmap thumbnail;
+
+        ThumbItem(long id, Bitmap icon) {
+            this.id = id;
+            thumbnail = icon;
+        }
+    }
+
+    private static class ThumbThread extends Thread {
+        private final OnThumbnailListener thumbnailListener;
+        private final LinkedBlockingQueue<ThumbItem> queue = new LinkedBlockingQueue<>();
+
+        ThumbThread(OnThumbnailListener listener) {
+            thumbnailListener = listener;
+        }
+
+        @SuppressWarnings("InfiniteLoopStatement")
+        @Override
+        public void run() {
+            setPriority(MIN_PRIORITY);
+            try {
+                while (true) {
+                    save(queue.take());
+                }
+            } catch (InterruptedException e) {
+                Logger.d("Thumbnail", "thread stop");
+            }
+        }
+
+        private void save(ThumbItem item) {
+            byte[] image = ImageUtils.bmp2byteArray(item.thumbnail, Bitmap.CompressFormat.WEBP, 70);
+            thumbnailListener.onSaveThumbnail(item.id, image);
+        }
+
+        void addQueue(ThumbItem item) {
+            queue.add(item);
+        }
+    }
+
+    public interface OnThumbnailListener {
+        void onSaveThumbnail(long id, byte[] image);
+
+        byte[] onLoadThumbnail(long id);
     }
 }

@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 import jp.hazuki.yuzubrowser.webkit.CacheWebView;
@@ -48,6 +49,7 @@ import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 class TabStorage {
     private static final String FILE_TAB_INDEX = "index";
     private static final String FILE_TAB_CURRENT = "current";
+    private static final String FILE_TAB_THUMBNAIL_SUFFIX = "_thumb";
     private List<TabIndexData> mTabIndexDataList;
     private final File tabPath;
 
@@ -128,8 +130,34 @@ class TabStorage {
         return data;
     }
 
+    public void saveThumbnail(long id, byte[] image) {
+        try (FileOutputStream stream = new FileOutputStream(
+                new File(tabPath, Long.toString(id) + FILE_TAB_THUMBNAIL_SUFFIX))) {
+            stream.write(image);
+        } catch (IOException e) {
+            ErrorReport.printAndWriteLog(e);
+        }
+    }
+
+    public byte[] getThumbnail(long id) {
+        File file = new File(tabPath, Long.toString(id) + FILE_TAB_THUMBNAIL_SUFFIX);
+
+        if (!file.exists()) return null;
+
+        try (FileInputStream inputStream = new FileInputStream(file);
+             BufferedInputStream is = new BufferedInputStream(inputStream)) {
+            return IOUtils.readByte(is);
+        } catch (IOException e) {
+            ErrorReport.printAndWriteLog(e);
+        }
+
+        return null;
+    }
+
     private void deleteWebView(TabIndexData data) {
-        new File(tabPath, Long.toString(data.getId())).delete();
+        String id = Long.toString(data.getId());
+        new File(tabPath, id).delete();
+        new File(tabPath, id + FILE_TAB_THUMBNAIL_SUFFIX).delete();
     }
 
     private Bundle loadBundle(File file) {
@@ -144,7 +172,7 @@ class TabStorage {
 
                 return bundle != null ? bundle : new Bundle();
             } catch (IOException e) {
-                e.printStackTrace();
+                ErrorReport.printAndWriteLog(e);
             }
         }
         return new Bundle();
@@ -161,7 +189,7 @@ class TabStorage {
             os.write(parcel.marshall());
             parcel.recycle();
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrorReport.printAndWriteLog(e);
         }
     }
 

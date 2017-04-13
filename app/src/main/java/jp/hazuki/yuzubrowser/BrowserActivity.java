@@ -161,7 +161,6 @@ import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.TabManagerFactory;
-import jp.hazuki.yuzubrowser.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.toolbar.sub.GeolocationPermissionToolbar;
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialog;
@@ -254,7 +253,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private BrowserHistoryAsyncManager mBrowserHistoryManager;
     private SpeedDialAsyncManager mSpeedDialAsyncManager;
     private HardButtonActionManager mHardButtonManager;
-    private ThumbnailManager mThumbnailManager;
     private ArrayList<UserScript> mUserScriptList;
     private ArrayList<ResourceChecker> mResourceCheckerList;
     private View mVideoLoadingProgressView;
@@ -321,7 +319,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         mHandler = new Handler();
         mTabManager = TabManagerFactory.newInstance(this);
-        mThumbnailManager = new ThumbnailManager(this);
 
         webFrameLayout = (FrameLayout) findViewById(R.id.webFrameLayout);
         webGestureOverlayView = (GestureOverlayView) findViewById(R.id.webGestureOverlayView);
@@ -895,6 +892,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return true;
     }
 
+    @SuppressWarnings("WrongConstant")
     private void onPreferenceReset() {
         mToolbar.onPreferenceReset();
         mTabManager.onPreferenceReset();
@@ -1203,6 +1201,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         web_transport.setWebView(openNewTab(TabType.WINDOW).mWebView.getWebView());
     }
 
+    @SuppressWarnings("WrongConstant")
     private void openInNewTab(Bundle state) {
         openNewTab(CacheWebView.isBundleCacheWebView(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
     }
@@ -1458,8 +1457,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         MainTabData old_data = mTabManager.get(no);
         CustomWebView old_web = old_data.mWebView;
 
-        mThumbnailManager.removeThumbnail(old_data.getId());
-
         if (AppData.save_closed_tab.get()) {
             Bundle outState = new Bundle();
             old_web.saveState(outState);
@@ -1637,9 +1634,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
 
-            if (!mThumbnailManager.isShotTab(mTabManager.getIndexData(getCurrentTab()).getId())) {
-                mThumbnailManager.create(mTabManager.get(getCurrentTab()).mWebView);
-            }
+            mTabManager.takeThumbnailIfNeeded(mTabManager.get(getCurrentTab()).mWebView);
             return false;
         }
 
@@ -1724,6 +1719,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     }
 
+    @SuppressWarnings("WrongConstant")
     private void initWebSetting(final CustomWebView web) {
         web.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         web.setOverScrollModeMethod(View.OVER_SCROLL_NEVER);
@@ -2188,7 +2184,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
 
-            mThumbnailManager.onStartPage(web.getIdentityId());
+            mTabManager.onStartPage(web);
         }
 
         @Override
@@ -2208,8 +2204,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mToolbar.notifyChangeWebState(data);
             }
 
-            if (!mThumbnailManager.isShotTab(web.getIdentityId()))
-                mThumbnailManager.create(web);
+            mTabManager.takeThumbnailIfNeeded(web);
         }
 
         @Override
@@ -3362,7 +3357,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         break;
 
                     mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).isReverse());
-                    mTabManagerView.setTabManager(mTabManager, mThumbnailManager);
+                    mTabManagerView.setTabManager(mTabManager);
                     mTabManagerView.setCallback(new TabListLayout.Callback() {
                         @Override
                         public void requestTabListClose() {
@@ -3508,6 +3503,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.ORIENTATION_SETTING:
                     new AlertDialog.Builder(BrowserActivity.this)
                             .setItems(R.array.pref_oritentation_list, new DialogInterface.OnClickListener() {
+                                @SuppressWarnings("WrongConstant")
                                 @Override
                                 public void onClick(DialogInterface arg0, int which) {
                                     setRequestedOrientation(getResources().getIntArray(R.array.pref_oritentation_values)[which]);
