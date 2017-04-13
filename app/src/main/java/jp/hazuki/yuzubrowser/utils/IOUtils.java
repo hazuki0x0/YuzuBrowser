@@ -13,7 +13,7 @@ public class IOUtils {
         throw new UnsupportedOperationException();
     }
 
-    private static final int BUFFER_SIZE = 1024 * 2;
+    private static final int BUFFER_SIZE = 1024 * 8;
 
     public static byte[] readByte(InputStream is) throws IOException {
         byte buffer[] = new byte[BUFFER_SIZE];
@@ -30,14 +30,13 @@ public class IOUtils {
     }
 
     public static String readString(InputStream is, String encode) {
-        int readLength = 8192;
 
-        final char[] bytes = new char[readLength];
+        final char[] bytes = new char[BUFFER_SIZE];
         StringBuilder builder = new StringBuilder();
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, encode), readLength)) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, encode), BUFFER_SIZE)) {
             int len;
-            while ((len = reader.read(bytes, 0, readLength)) > 0) {
+            while ((len = reader.read(bytes, 0, BUFFER_SIZE)) > 0) {
                 builder.append(bytes, 0, len);
             }
             return builder.toString();
