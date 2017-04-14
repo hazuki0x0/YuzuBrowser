@@ -65,8 +65,6 @@ public interface TabManager {
 
     void destroy();
 
-    void clearCache(boolean includeDiskFiles);
-
     void saveData();
 
     void loadData();

@@ -87,6 +87,21 @@ public class FileUtils {
         return getFileSuffix(file.getName());
     }
 
+    public static boolean deleteDirectoryContents(File folder) {
+        if (folder == null)
+            throw new NullPointerException("file is null");
+        if (!folder.isDirectory()) return false;
+        File[] list = folder.listFiles();
+        if (list == null) {
+            Logger.e(TAG, "File#listFiles returns null");
+            return false;
+        }
+        for (File file : folder.listFiles()) {
+            if (!deleteFile(file)) return false;
+        }
+        return true;
+    }
+
     public static boolean deleteFile(File file) {
         if (file == null)
             throw new NullPointerException("file is null");

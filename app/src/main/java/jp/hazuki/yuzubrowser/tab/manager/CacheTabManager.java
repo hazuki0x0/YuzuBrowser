@@ -194,13 +194,6 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener, T
     }
 
     @Override
-    public void clearCache(boolean includeDiskFiles) {
-        for (MainTabData data : mTabCache.values()) {
-            data.mWebView.clearCache(includeDiskFiles);
-        }
-    }
-
-    @Override
     public void saveData() {
         for (MainTabData tabData : mTabCache.values()) {
             mTabStorage.saveWebView(tabData);

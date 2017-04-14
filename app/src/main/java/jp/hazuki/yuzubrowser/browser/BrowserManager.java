@@ -34,6 +34,10 @@ public class BrowserManager {
         WebStorage.getInstance().deleteAllData();
     }
 
+    public static void clearCache(Context context) {
+        FileUtils.deleteDirectoryContents(context.getCacheDir());
+    }
+
     public static void clearGeolocation() {
         GeolocationPermissions.getInstance().clearAll();
     }

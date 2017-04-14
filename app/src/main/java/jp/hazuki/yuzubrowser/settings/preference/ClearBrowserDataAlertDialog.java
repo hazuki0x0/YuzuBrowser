@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.WebView;
 import android.webkit.WebViewDatabase;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,11 +46,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         switch (i) {
             case 0:
                 BrowserManager.clearAppCacheFile(getContext().getApplicationContext());
-
-                if (mTabManager != null)
-                    mTabManager.clearCache(true);
-                else
-                    (new WebView(getContext())).clearCache(true);
+                BrowserManager.clearCache(getContext().getApplicationContext());
                 break;
             case 1:
                 CookieManager.getInstance().removeAllCookies(null);

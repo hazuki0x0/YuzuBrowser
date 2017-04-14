@@ -1853,7 +1853,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
 
         if ((finish_clear & 0x01) != 0) {
-            mTabManager.clearCache(true);
+            BrowserManager.clearCache(getApplicationContext());
         }
         if ((finish_clear & 0x02) != 0) {
             CookieManager.getInstance().removeAllCookies(null);
