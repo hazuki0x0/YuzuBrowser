@@ -23,8 +23,8 @@ import java.io.Serializable;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class TabIndexData implements Serializable {
-    public String mUrl;
-    public String mTitle;
+    private String mUrl;
+    private String mTitle;
     private int tabType;
     private long mId;
     private long parent;
@@ -32,9 +32,9 @@ public class TabIndexData implements Serializable {
     public TabIndexData() {
     }
 
-    public TabIndexData(String mUrl, String mTitle, int tabType, long id, long parent) {
-        this.mUrl = mUrl;
-        this.mTitle = mTitle;
+    public TabIndexData(String url, String title, int tabType, long id, long parent) {
+        this.mUrl = url;
+        this.mTitle = title;
         this.tabType = tabType;
         this.mId = id;
         this.parent = parent;
@@ -64,20 +64,20 @@ public class TabIndexData implements Serializable {
         this.tabType = tabType;
     }
 
-    void setId(long mId) {
-        this.mId = mId;
+    void setId(long id) {
+        this.mId = id;
     }
 
     void setParent(long parent) {
         this.parent = parent;
     }
 
-    public void setUrl(String mUrl) {
-        this.mUrl = mUrl;
+    public void setUrl(String url) {
+        this.mUrl = url;
     }
 
-    public void setTitle(String mTitle) {
-        this.mTitle = mTitle;
+    public void setTitle(String title) {
+        this.mTitle = title;
     }
 
     public MainTabData getMainTabData(CustomWebView webView, View view) {

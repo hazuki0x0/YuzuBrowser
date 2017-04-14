@@ -22,6 +22,16 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 
 public class TabData {
+    protected static final int STATE_LOADING = 0x001;
+    protected static final int STATE_NAV_LOCK = 0x002;
+
+    public final CustomWebView mWebView;
+    private String mOriginalUrl;
+    private TabIndexData mIndexData;
+    public int mProgress = -1;
+
+    protected int mState;
+
     public TabData(CustomWebView web) {
         this(web, new TabIndexData());
         mIndexData.setId(web.getIdentityId());
@@ -35,12 +45,6 @@ public class TabData {
     public boolean equals(CustomWebView web) {
         return mWebView.equals(web);
     }
-
-    public final CustomWebView mWebView;
-    private String mOriginalUrl;
-    private TabIndexData mIndexData;
-    public int mProgress = -1;
-
 
     public int getTabType() {
         return mIndexData.getTabType();
@@ -87,10 +91,6 @@ public class TabData {
     public long getId() {
         return mIndexData.getId();
     }
-
-    protected static final int STATE_LOADING = 0x001;
-    protected static final int STATE_NAV_LOCK = 0x002;
-    protected int mState;
 
     public boolean isInPageLoad() {
         return (mState & STATE_LOADING) != 0;
