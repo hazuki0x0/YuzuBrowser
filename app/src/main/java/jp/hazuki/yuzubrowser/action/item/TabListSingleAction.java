@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.CheckBox;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -19,9 +18,14 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
 
 public class TabListSingleAction extends SingleAction implements Parcelable {
+    public static final int MODE_NORMAL = 0;
+    public static final int MODE_REVERSE = 1;
+    public static final int MODE_HORIZONTAL = 2;
+
     private static final String TAG = "TabListSingleAction";
     private static final String FIELD_NAME_REVERSE = "0";
-    private boolean mReverse = false;
+    private static final String FIELD_NAME_MODE = "1";
+    private int mode = MODE_NORMAL;
 
     public TabListSingleAction(int id, JsonParser parser) throws IOException {
         super(id);
@@ -29,22 +33,25 @@ public class TabListSingleAction extends SingleAction implements Parcelable {
         if (parser != null) {
             if (parser.nextToken() != JsonToken.START_OBJECT) return;
             while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return;
-                if (!FIELD_NAME_REVERSE.equals(parser.getCurrentName())) {
+                if (FIELD_NAME_REVERSE.equals(parser.getCurrentName())) {
+                    switch (parser.nextToken()) {
+                        case VALUE_TRUE:
+                            mode = MODE_REVERSE;
+                            break;
+                        case VALUE_FALSE:
+                            mode = MODE_NORMAL;
+                            break;
+                        default:
+                            Logger.w(TAG, "current token is not boolean value : " + parser.getCurrentToken().toString());
+                            break;
+                    }
+                } else if (FIELD_NAME_MODE.equals(parser.getCurrentName())) {
+                    if (parser.nextValue().isNumeric())
+                        mode = parser.getIntValue();
+                } else {
                     parser.skipChildren();
-                    continue;
                 }
-                switch (parser.nextToken()) {
-                    case VALUE_TRUE:
-                        mReverse = true;
-                        break;
-                    case VALUE_FALSE:
-                        mReverse = false;
-                        break;
-                    default:
-                        Logger.w(TAG, "current token is not boolean value : " + parser.getCurrentToken().toString());
-                        break;
-                }
+
             }
         }
     }
@@ -53,7 +60,7 @@ public class TabListSingleAction extends SingleAction implements Parcelable {
     public void writeIdAndData(JsonGenerator generator) throws IOException {
         generator.writeNumber(id);
         generator.writeStartObject();
-        generator.writeBooleanField(FIELD_NAME_REVERSE, mReverse);
+        generator.writeNumberField(FIELD_NAME_MODE, mode);
         generator.writeEndObject();
     }
 
@@ -65,12 +72,12 @@ public class TabListSingleAction extends SingleAction implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeInt(mReverse ? 1 : 0);
+        dest.writeInt(mode);
     }
 
     protected TabListSingleAction(Parcel source) {
         super(source.readInt());
-        mReverse = source.readInt() == 1;
+        mode = source.readInt();
     }
 
     public static final Creator<TabListSingleAction> CREATOR = new Creator<TabListSingleAction>() {
@@ -87,17 +94,13 @@ public class TabListSingleAction extends SingleAction implements Parcelable {
 
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
-        final CheckBox view = new CheckBox(context);
-        view.setText(R.string.action_tablist_reverse);
-        view.setChecked(mReverse);
-
         new AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(R.array.action_tab_list, mode, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mReverse = view.isChecked();
+                        mode = which;
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -106,7 +109,7 @@ public class TabListSingleAction extends SingleAction implements Parcelable {
         return null;
     }
 
-    public boolean isReverse() {
-        return mReverse;
+    public int getMode() {
+        return mode;
     }
 }

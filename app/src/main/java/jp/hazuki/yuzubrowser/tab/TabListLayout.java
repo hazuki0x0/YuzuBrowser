@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
@@ -22,32 +23,44 @@ public class TabListLayout extends LinearLayout {
     private Snackbar snackbar;
     private final View bottomBar;
     private boolean reverse = false;
+    private boolean horizontal = false;
 
     public TabListLayout(Context context) {
         this(context, null);
     }
 
     public TabListLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, false);
+        this(context, attrs, TabListSingleAction.MODE_NORMAL);
     }
 
-    public TabListLayout(Context context, boolean shouldReverse) {
-        this(context, null, shouldReverse);
+    public TabListLayout(Context context, int mode) {
+        this(context, null, mode);
     }
 
-    public TabListLayout(Context context, AttributeSet attrs, boolean shouldReverse) {
+    public TabListLayout(Context context, AttributeSet attrs, int mode) {
         super(context, attrs);
 
-        reverse = shouldReverse;
+        reverse = mode == TabListSingleAction.MODE_REVERSE;
+        horizontal = mode == TabListSingleAction.MODE_HORIZONTAL;
 
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
-        if (reverse) {
-            mLayoutInflater.inflate(R.layout.tab_list_reverse, this);
+        if (horizontal) {
+            mLayoutInflater.inflate(R.layout.tab_list_horizontal, this);
+            findViewById(R.id.outer).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
         } else {
-            mLayoutInflater.inflate(R.layout.tab_list, this);
+            if (reverse) {
+                mLayoutInflater.inflate(R.layout.tab_list_reverse, this);
+            } else {
+                mLayoutInflater.inflate(R.layout.tab_list, this);
+            }
+            setBackgroundColor(0xcc222222);
         }
 
-        setBackgroundColor(0xcc222222);
         bottomBar = findViewById(R.id.bottomBar);
     }
 
@@ -56,7 +69,9 @@ public class TabListLayout extends LinearLayout {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
-        if (reverse) {
+        if (horizontal) {
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        } else if (reverse) {
             layoutManager.setStackFromEnd(true);
         }
 
@@ -67,7 +82,7 @@ public class TabListLayout extends LinearLayout {
         recyclerView.addItemDecoration(helper);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
 
-        mAdapter = new TabListRecyclerAdapter(getContext(), list, new TabListRecyclerAdapter.OnRecyclerListener() {
+        mAdapter = new TabListRecyclerAdapter(getContext(), list, horizontal, new TabListRecyclerAdapter.OnRecyclerListener() {
             @Override
             public void onRecyclerItemClicked(View v, int position) {
                 mCallback.requestSelectTab(position);
@@ -91,7 +106,7 @@ public class TabListLayout extends LinearLayout {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.requestTabListClose();
+                close();
             }
         });
 
@@ -114,8 +129,13 @@ public class TabListLayout extends LinearLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) |
-                    makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+            if (horizontal) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.DOWN | ItemTouchHelper.UP) |
+                        makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+            } else {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) |
+                        makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+            }
         }
 
         @Override

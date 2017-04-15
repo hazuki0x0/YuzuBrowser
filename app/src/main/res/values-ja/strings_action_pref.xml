@@ -9,7 +9,6 @@
     <string name="action_action_cant_close_tab">最後のタブを閉じようとした場合のアクション</string>
     <string name="action_select_menu">メニューの選択</string>
     <string name="action_target_tab">対象のタブ</string>
-    <string name="action_tablist_reverse">リストを逆にする</string>
 
     <string-array name="action_start_activity_template">
         <item>アプリケーション</item>
@@ -46,4 +45,9 @@
     <string name="action_auto_scroll_speed">オートスクロールスピード</string>
     <string name="action_auto_scroll_speed_zero">エラー : Xスピードは0以外でなくてはいけません</string>
 
+    <string-array name="action_tab_list">
+        <item>縦リスト</item>
+        <item>縦反転リスト</item>
+        <item>横リスト</item>
+    </string-array>
 </resources>

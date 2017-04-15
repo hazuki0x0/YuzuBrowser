@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.tab;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,17 +40,23 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
     private TabManager tabManager;
     private List<TabIndexData> tabList;
     private OnRecyclerListener mListener;
+    private boolean horizontal;
 
-    public TabListRecyclerAdapter(Context context, TabManager list, OnRecyclerListener listener) {
+    public TabListRecyclerAdapter(Context context, TabManager list, boolean isHorizontal, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         tabManager = list;
         tabList = new ArrayList<>(tabManager.getIndexDataList());
         mListener = listener;
+        horizontal = isHorizontal;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.tab_list_item, parent, false));
+        if (horizontal) {
+            return new ViewHolder(mInflater.inflate(R.layout.tab_list_item_horizontal, parent, false));
+        } else {
+            return new ViewHolder(mInflater.inflate(R.layout.tab_list_item, parent, false));
+        }
     }
 
     @Override
@@ -88,11 +95,18 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
                 mListener.onHistoryButtonClicked(v, holder.getAdapterPosition());
             }
         });
+        if (horizontal) {
+            if (position == tabManager.getCurrentTabNo())
+                holder.thumbNail.setBackgroundColor(0xFF33B5E5);
+            else
+                holder.thumbNail.setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            if (position == tabManager.getCurrentTabNo())
+                holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
+            else
+                holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background);
+        }
 
-        if (position == tabManager.getCurrentTabNo())
-            holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
-        else
-            holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background);
     }
 
     @Override
