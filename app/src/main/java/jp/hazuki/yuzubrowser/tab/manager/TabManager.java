@@ -82,4 +82,8 @@ public interface TabManager {
     void takeThumbnailIfNeeded(CustomWebView webView);
 
     Bitmap getThumbnail(long id);
+
+    boolean hideItem(int index);
+
+    TabIndexData unHideItem();
 }

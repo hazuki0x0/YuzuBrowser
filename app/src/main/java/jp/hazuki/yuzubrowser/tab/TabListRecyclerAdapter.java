@@ -26,26 +26,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
-import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
     private TabManager tabManager;
-    private List<TabIndexData> tabList;
     private OnRecyclerListener mListener;
     private boolean horizontal;
 
     public TabListRecyclerAdapter(Context context, TabManager list, boolean isHorizontal, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
         tabManager = list;
-        tabList = new ArrayList<>(tabManager.getIndexDataList());
         mListener = listener;
         horizontal = isHorizontal;
     }
@@ -111,27 +105,11 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
 
     @Override
     public int getItemCount() {
-        if (tabList != null) {
-            return tabList.size();
-        } else {
-            return 0;
-        }
+        return tabManager.size();
     }
 
     public TabIndexData getItem(int pos) {
-        return tabList.get(pos);
-    }
-
-    public TabIndexData remove(int position) {
-        return tabList.remove(position);
-    }
-
-    public void add(int position, TabIndexData data) {
-        tabList.add(position, data);
-    }
-
-    public void move(int from, int to) {
-        ArrayUtils.move(tabList, from, to);
+        return tabManager.getIndexData(pos);
     }
 
     public interface OnRecyclerListener {

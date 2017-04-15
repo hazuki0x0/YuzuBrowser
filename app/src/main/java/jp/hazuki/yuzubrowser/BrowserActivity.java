@@ -158,7 +158,6 @@ import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
 import jp.hazuki.yuzubrowser.tab.TabListLayout;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
-import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.TabManagerFactory;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
@@ -3379,11 +3378,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         @Override
                         public void requestRemoveTab(int no) {
                             removeTab(no);
-                        }
-
-                        @Override
-                        public void requestRemoveTab(TabIndexData data) {
-                            removeTab(mTabManager.indexOf(data.getId()));
                         }
 
                         @Override

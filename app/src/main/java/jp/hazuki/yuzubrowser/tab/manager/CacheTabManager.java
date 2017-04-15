@@ -43,6 +43,8 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener, T
 
     private List<View> mTabView;
 
+    private HideItem hideItem;
+
     CacheTabManager(BrowserActivity activity) {
         mWebBrowser = activity;
         mTabCache = new TabCache(AppData.tabs_cache_number.get(), this);
@@ -191,6 +193,11 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener, T
             data.mWebView.setEmbeddedTitleBarMethod(null);
             data.mWebView.destroy();
         }
+        if (hideItem != null) {
+            int index = hideItem.index;
+            mTabStorage.add(index, hideItem.data);
+            mTabStorage.removeAndDelete(index);
+        }
     }
 
     @Override
@@ -267,6 +274,26 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener, T
         return thumbnailManager.getThumbnail(id);
     }
 
+    @Override
+    public boolean hideItem(int index) {
+        if (hideItem == null) {
+            hideItem = new HideItem(index, mTabStorage.remove(index));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public TabIndexData unHideItem() {
+        if (hideItem != null) {
+            mTabStorage.add(hideItem.index, hideItem.data);
+            TabIndexData data = hideItem.data;
+            hideItem = null;
+            return data;
+        }
+        return null;
+    }
+
     private void setText(View view, TabIndexData indexData) {
         String text;
         if (indexData.getTitle() != null) {
@@ -301,5 +328,15 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener, T
     @Override
     public byte[] onLoadThumbnail(long id) {
         return mTabStorage.getThumbnail(id);
+    }
+
+    private static class HideItem {
+        final int index;
+        final TabIndexData data;
+
+        HideItem(int index, TabIndexData data) {
+            this.index = index;
+            this.data = data;
+        }
     }
 }

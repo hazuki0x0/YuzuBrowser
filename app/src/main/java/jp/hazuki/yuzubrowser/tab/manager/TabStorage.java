@@ -93,6 +93,14 @@ class TabStorage {
         Collections.swap(mTabIndexDataList, i, j);
     }
 
+    TabIndexData remove(int index) {
+        return mTabIndexDataList.remove(index);
+    }
+
+    void add(int index, TabIndexData tabIndexData) {
+        mTabIndexDataList.add(index, tabIndexData);
+    }
+
     public List<TabIndexData> getTabIndexDataList() {
         return new ArrayList<>(mTabIndexDataList);
     }
