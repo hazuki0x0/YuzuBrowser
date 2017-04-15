@@ -10,7 +10,7 @@
         android:id="@+id/search_bar_container"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@android:color/background_dark"
+        android:background="@color/deep_gray"
         android:paddingStart="8dp"
         android:paddingEnd="0dp"
         android:gravity="center">
@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@color/deep_gray"
             android:ems="10"
             android:hint="@string/search_editText_hint"
             android:imeOptions="actionGo"

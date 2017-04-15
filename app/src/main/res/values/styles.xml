@@ -12,7 +12,7 @@
     </style>
 
     <style name="ToolbarStyle">
-        <item name="android:background">@color/toolbar_background</item>
+        <item name="android:background">@color/deep_gray</item>
         <item name="android:clickable">true</item>
     </style>
 

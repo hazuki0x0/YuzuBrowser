@@ -223,14 +223,14 @@ public class ToolbarManager {
             topToolbarAlwaysLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
             bottomToolbarAlwaysLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
         } else {
-            topToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            bottomToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            webToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            fixedWebToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            leftToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            rightToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            topToolbarAlwaysLayout.setBackgroundResource(R.color.toolbar_background);
-            bottomToolbarAlwaysLayout.setBackgroundColor(R.color.toolbar_background);
+            topToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            bottomToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            webToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            fixedWebToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            leftToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            rightToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            topToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray);
+            bottomToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray);
         }
 
         bottomToolbarLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());

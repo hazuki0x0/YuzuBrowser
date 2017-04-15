@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
 import android.support.annotation.Px;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
 import android.view.View;
@@ -588,7 +589,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         if (ThemeData.isEnabled()) {
             setColorSchemeColors(ThemeData.getInstance().progressColor);
             if (ThemeData.getInstance().refreshUseDark) {
-                setProgressBackgroundColorSchemeColor(R.color.deep_gray);
+                setProgressBackgroundColorSchemeColor(ResourcesCompat.getColor(getResources(), R.color.deep_gray, getContext().getTheme()));
             }
         } else {
             setColorSchemeResources(R.color.accent);
