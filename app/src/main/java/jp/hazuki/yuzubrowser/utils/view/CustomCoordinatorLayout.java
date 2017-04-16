@@ -32,11 +32,7 @@ public class CustomCoordinatorLayout extends CoordinatorLayout {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (toolbarHeight > 0) {
-            if (ev.getY() > toolbarHeight) {
-                return super.onTouchEvent(ev);
-            } else {
-                return false;
-            }
+            return ev.getY() > toolbarHeight && super.onTouchEvent(ev);
         }
         return super.onTouchEvent(ev);
     }
@@ -44,11 +40,7 @@ public class CustomCoordinatorLayout extends CoordinatorLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (toolbarHeight > 0) {
-            if (ev.getY() > toolbarHeight) {
-                return super.onInterceptTouchEvent(ev);
-            } else {
-                return false;
-            }
+            return ev.getY() > toolbarHeight && super.onInterceptTouchEvent(ev);
         }
         return super.onInterceptTouchEvent(ev);
     }

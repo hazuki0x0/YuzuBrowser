@@ -62,12 +62,28 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         bookmarkItemListener = listener;
         pickMode = pick;
         this.openNewTab = openNewTab;
-        setRecyclerListener(recyclerListener);
         TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
         normalBackGround = a.getResourceId(0, 0);
         a.recycle();
 
         historyManager = new BrowserHistoryManager(context);
+
+        setRecyclerListener(new OnRecyclerListener() {
+            @Override
+            public void onRecyclerItemClicked(View v, int position) {
+                if (multiSelectMode) {
+                    toggle(position);
+                } else {
+                    if (bookmarkItemListener != null)
+                        bookmarkItemListener.onRecyclerItemClicked(v, position);
+                }
+            }
+
+            @Override
+            public boolean onRecyclerItemLongClicked(View v, int position) {
+                return bookmarkItemListener.onRecyclerItemLongClicked(v, position);
+            }
+        });
     }
 
     @Override
@@ -172,23 +188,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             view.setBackgroundResource(normalBackGround);
         }
     }
-
-    private final OnRecyclerListener recyclerListener = new OnRecyclerListener() {
-        @Override
-        public void onRecyclerItemClicked(View v, int position) {
-            if (multiSelectMode) {
-                toggle(position);
-            } else {
-                if (bookmarkItemListener != null)
-                    bookmarkItemListener.onRecyclerItemClicked(v, position);
-            }
-        }
-
-        @Override
-        public boolean onRecyclerItemLongClicked(View v, int position) {
-            return bookmarkItemListener.onRecyclerItemLongClicked(v, position);
-        }
-    };
 
     @Override
     public int getItemViewType(int position) {

@@ -74,6 +74,7 @@ public class BundleDataBaseConverter {
         int[] tabType = (int[]) bundle.getSerializable(EXTRA_TAB_TYPE);
         long[] ids = (long[]) bundle.getSerializable(EXTRA_TAB_ID);
         long[] parents = (long[]) bundle.getSerializable(EXTRA_TAB_PARENT);
+        if (tabType == null) tabType = new int[list_count];
         if (ids == null) ids = new long[list_count];
         if (parents == null) parents = new long[list_count];
 

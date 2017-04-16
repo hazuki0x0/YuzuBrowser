@@ -29,7 +29,7 @@ android {
     }
 
     applicationVariants.all { variant ->
-        if (variant.buildType.name.equals("release")) {
+        if (variant.buildType.name == "release") {
             variant.outputs.each { output ->
                 if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
                     // Rename APK

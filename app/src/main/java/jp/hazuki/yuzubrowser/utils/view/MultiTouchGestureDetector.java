@@ -298,7 +298,7 @@ public class MultiTouchGestureDetector {
                         // This is a second tap
                         mIsDoubleTapping = true;
                         // Give a callback with the first tap of the double-tap
-                        handled |= mDoubleTapListener.onDoubleTap(mCurrentDownEvent);
+                        handled = mDoubleTapListener.onDoubleTap(mCurrentDownEvent);
                         // Give a callback with down event of the double-tap
                         handled |= mDoubleTapListener.onDoubleTapEvent(ev);
                     } else {
@@ -339,7 +339,7 @@ public class MultiTouchGestureDetector {
                 final float scrollY = mLastMotionY - y;
                 if (mIsDoubleTapping) {
                     // Give the move events of the double-tap
-                    handled |= mDoubleTapListener.onDoubleTapEvent(ev);
+                    handled = mDoubleTapListener.onDoubleTapEvent(ev);
                 }
                 if (mAlwaysInTapRegion) {
                     final int deltaX = (int) (x - mCurrentDownEvent.getX());
@@ -376,7 +376,7 @@ public class MultiTouchGestureDetector {
                 MotionEvent currentUpEvent = MotionEvent.obtain(ev);
                 if (mIsDoubleTapping) {
                     // Finally, give the up event of the double-tap
-                    handled |= mDoubleTapListener.onDoubleTapEvent(ev);
+                    handled = mDoubleTapListener.onDoubleTapEvent(ev);
                 }
                 if (mInLongPress) {
                     mHandler.removeMessages(TAP);

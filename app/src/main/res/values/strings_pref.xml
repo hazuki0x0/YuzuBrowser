@@ -507,15 +507,12 @@
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
     <string name="pref_userjs_manage">Manage UserScript</string>
-    <string name="pref_force_scalable">Force user scalable</string>
     <string name="pref_invert_rendering">Invert rendering</string>
     <string name="pref_auto_tab_save_delay">Auto save interval (sec.)</string>
     <string name="pref_resblock_settings">Resource interrupt settings</string>
     <string name="pref_resblock_enable">Enable resource interrupt</string>
     <string name="pref_resblock_manage">Manage resource interrupt</string>
     <string name="pref_minimum_font">Minimum font size</string>
-
-    <string name="pref_link_prefetch">Link prefetching</string>
 
     <string name="pref_kill_process">Kill process on exit (deprecated)</string>
     <string name="pref_app_settings">Application settings</string>

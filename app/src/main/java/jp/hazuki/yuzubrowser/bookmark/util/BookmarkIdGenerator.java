@@ -33,12 +33,14 @@ public final class BookmarkIdGenerator {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 continue;
             } else if (newId < lastId) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 continue;
             }

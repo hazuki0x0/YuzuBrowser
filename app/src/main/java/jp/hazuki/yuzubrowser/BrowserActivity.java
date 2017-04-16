@@ -302,20 +302,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         setContentView(R.layout.browser_activity);
 
-        if (PermissionUtils.checkNeed(this)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, FIRST_PERMISSION);
-            }
-        } else {
-            if (!PermissionUtils.checkWriteStorage(this)) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                } else {
-                    PermissionUtils.requestStorage(this);
-                }
-            }
-        }
-
         mHandler = new Handler();
         mTabManager = TabManagerFactory.newInstance(this);
 
@@ -460,12 +446,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         } else {
             if (!PermissionUtils.checkWriteStorage(this)) {
                 PermissionUtils.setNoNeed(this, false);
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    new PermissionDialog().show(getSupportFragmentManager(), "permission");
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
                 }
             }
         }
@@ -2011,8 +1993,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     break;
                 case Manifest.permission.WRITE_EXTERNAL_STORAGE:
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                        PermissionUtils.requestStorage(this);
                         PermissionUtils.setNoNeed(this, false);
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            PermissionUtils.requestStorage(this);
+                        } else {
+                            new PermissionDialog().show(getSupportFragmentManager(), "permission");
+                        }
                     } else {
                         PermissionUtils.setNoNeed(this, true);
                     }
@@ -2042,7 +2028,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     });
             setCancelable(false);
             return builder.create();
-
         }
     }
 
@@ -3489,7 +3474,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.CLEAR_DATA:
-                    new ClearBrowserDataAlertDialog(BrowserActivity.this, mTabManager).show();
+                    new ClearBrowserDataAlertDialog(BrowserActivity.this).show();
                     break;
                 case SingleAction.SHOW_PROXY_SETTING:
                     new ProxySettingDialog(BrowserActivity.this).show();

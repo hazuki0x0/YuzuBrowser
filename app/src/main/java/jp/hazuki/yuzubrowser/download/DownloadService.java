@@ -263,9 +263,7 @@ public class DownloadService extends Service {
                 normalDownload();
             }
 
-            if (wakelock != null) {
-                wakelock.release();
-            }
+            wakelock.release();
 
             synchronized (mThreadList) {
                 mThreadList.remove(this);

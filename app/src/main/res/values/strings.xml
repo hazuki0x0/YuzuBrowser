@@ -8,8 +8,6 @@
     <string name="pattern_edittext_info">Wildcard characters * and + are allowed.Also,regex starts with `?`.</string>
     <string name="pattern_edittext_hint">URL</string>
     <string name="pattern_open_others">Open in other app</string>
-    <string name="pattern_replace_url">Replace URL</string>
-    <string name="pattern_replace_url_hint">Replace URL (use $1, $2, \u2026)</string>
     <string name="pattern_change_websettings">Change web setting</string>
     <string name="pattern_block">Block</string>
     <string name="useragent">UserAgent</string>
@@ -23,13 +21,10 @@
     <string name="confirm_delete_button">Delete this button?</string>
     <string name="confirm_delete_speedDial">Delete this speed dial?</string>
     <string name="confirm_delete_gesture">Delete this gesture?</string>
-    <string name="confirm_delete_text_encode">Delete this text encode?</string>
-    <string name="delete_action">Delete action</string>
     <string name="delete_history">Delete history</string>
     <string name="delete_all_history">Delete all history</string>
     <string name="delete_all_favicon">Delete all favicon</string>
     <string name="delete_bookmark">Delete bookmark</string>
-    <string name="delete_button">Delete button</string>
     <string name="delete_speedDial">Delete speed dial</string>
     <string name="pattern_open_app_list">Show application list</string>
     <string name="pattern_open_app_chooser">Show application chooser</string>
@@ -132,7 +127,6 @@
     <!-- <string name="gesture_exists">Gesture already exists.</string> -->
     <string name="action_empty">Empty action</string>
     <string name="gesture_test">Gesture test</string>
-    <string name="list_empty">Empty</string>
     <string name="move_up">Move up</string>
     <string name="move_down">Move down</string>
     <string name="page_info">Page information</string>
@@ -192,7 +186,6 @@
 
     <string name="undo">Undo</string>
 
-    <string name="backuping">Backuping</string>
     <string name="restoring">Restoring</string>
 
     <string name="new_tab">New tab</string>

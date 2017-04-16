@@ -44,8 +44,9 @@ captures/
 .idea/copyright/
 .idea/dictionaries/
 .idea/markdown-navigator/
-/.idea/markdown-exported-files.xml
-/.idea/markdown-navigator.xml
+.idea/inspectionProfiles/
+.idea/markdown-exported-files.xml
+.idea/markdown-navigator.xml
 
 # Keystore files
 *.jks
