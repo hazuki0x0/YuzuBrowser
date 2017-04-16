@@ -17,6 +17,8 @@
 package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcel;
 
@@ -42,6 +44,7 @@ import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
+import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.webkit.CacheWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
@@ -56,6 +59,7 @@ class TabStorage {
     public TabStorage(Context context) {
         tabPath = context.getDir("tabs", Context.MODE_PRIVATE);
         mTabIndexDataList = loadIndexJson(new File(tabPath, FILE_TAB_INDEX));
+        loadThumbnails();
     }
 
     public void addIndexData(TabIndexData data) {
@@ -116,6 +120,7 @@ class TabStorage {
 
     public void saveIndexData() {
         saveIndexJson(new File(tabPath, FILE_TAB_INDEX), mTabIndexDataList);
+        saveThumbnails();
     }
 
     public CustomWebView loadWebView(WebBrowser webBrowser, TabIndexData data) {
@@ -138,7 +143,26 @@ class TabStorage {
         return data;
     }
 
-    public void saveThumbnail(long id, byte[] image) {
+    private void loadThumbnails() {
+        for (TabIndexData data : mTabIndexDataList) {
+            byte[] image = getThumbnail(data.getId());
+            if (image != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                data.setThumbnail(bitmap);
+            }
+        }
+    }
+
+    private void saveThumbnails() {
+        for (TabIndexData data : mTabIndexDataList) {
+            if (data.isThumbnailUpdated()) {
+                byte[] image = ImageUtils.bmp2byteArray(data.getThumbnail(), Bitmap.CompressFormat.WEBP, 60);
+                saveThumbnail(data.getId(), image);
+            }
+        }
+    }
+
+    private void saveThumbnail(long id, byte[] image) {
         try (FileOutputStream stream = new FileOutputStream(
                 new File(tabPath, Long.toString(id) + FILE_TAB_THUMBNAIL_SUFFIX))) {
             stream.write(image);

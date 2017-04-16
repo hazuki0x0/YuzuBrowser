@@ -750,6 +750,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mWebViewAutoScrollManager.stop();
                     } else if (mTabManager.getCurrentTabData().mWebView.canGoBack()) {
                         mTabManager.getCurrentTabData().mWebView.goBack();
+                        superFrameLayout.postDelayed(takeCurrentTabScreen, 500);
                     } else {
                         mActionCallback.run(mHardButtonManager.back_press.action);
                     }
@@ -1615,7 +1616,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
 
-            mTabManager.takeThumbnailIfNeeded(mTabManager.get(getCurrentTab()).mWebView);
+            mTabManager.takeThumbnailIfNeeded(mTabManager.get(getCurrentTab()));
             return false;
         }
 
@@ -2031,6 +2032,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     }
 
+    private Runnable takeCurrentTabScreen = new Runnable() {
+        @Override
+        public void run() {
+            MainTabData data = mTabManager.getCurrentTabData();
+            if (data.isShotThumbnail())
+                mTabManager.forceTakeThumbnail(mTabManager.getCurrentTabData());
+        }
+    };
+
     private class Toolbar extends ToolbarManager implements TabLayout.OnTabClickListener {
         private final ActionCallback.TargetInfo mTargetInfoCache = new ActionCallback.TargetInfo();
         private final TabActionManager mTabActionManager;
@@ -2168,7 +2178,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
 
-            mTabManager.onStartPage(web);
+            data.onStartPage();
         }
 
         @Override
@@ -2188,7 +2198,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mToolbar.notifyChangeWebState(data);
             }
 
-            mTabManager.takeThumbnailIfNeeded(web);
+            mTabManager.takeThumbnailIfNeeded(data);
         }
 
         @Override
@@ -2967,6 +2977,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             }
                         }
                         tab.mWebView.goBack();
+                        superFrameLayout.postDelayed(takeCurrentTabScreen, 500);
                     } else {
                         checkAndRun(((GoBackSingleAction) action).getDefaultAction(), def_target);
                     }

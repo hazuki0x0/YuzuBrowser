@@ -57,7 +57,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         // データ表示
         TabIndexData indexData = getItem(position);
         if (indexData != null) {
-            Bitmap thumbNail = tabManager.getThumbnail(indexData.getId());
+            Bitmap thumbNail = indexData.getThumbnail();
             if (thumbNail != null) {
                 holder.thumbNail.setImageBitmap(thumbNail);
             } else {

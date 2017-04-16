@@ -144,4 +144,17 @@ public class TabData {
     public void onProgressChanged(int newProgress) {
         mProgress = newProgress;
     }
+
+    public void onStartPage() {
+        mIndexData.setShotThumbnail(false);
+    }
+
+    public boolean isShotThumbnail() {
+        return mIndexData.isShotThumbnail();
+    }
+
+    public void shotThumbnail(Bitmap thumbnail) {
+        mIndexData.setThumbnail(thumbnail);
+        mIndexData.setShotThumbnail(true);
+    }
 }

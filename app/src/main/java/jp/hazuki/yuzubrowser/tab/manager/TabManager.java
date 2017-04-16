@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.tab.manager;
 
-import android.graphics.Bitmap;
 import android.view.View;
 
 import java.util.List;
@@ -77,11 +76,9 @@ public interface TabManager {
 
     List<TabIndexData> getIndexDataList();
 
-    void onStartPage(CustomWebView webView);
+    void takeThumbnailIfNeeded(MainTabData data);
 
-    void takeThumbnailIfNeeded(CustomWebView webView);
-
-    Bitmap getThumbnail(long id);
+    void forceTakeThumbnail(MainTabData data);
 
     boolean hideItem(int index);
 

@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.tab.manager;
 
+import android.graphics.Bitmap;
 import android.view.View;
 
 import java.io.Serializable;
@@ -28,6 +29,9 @@ public class TabIndexData implements Serializable {
     private int tabType;
     private long mId;
     private long parent;
+    private Bitmap thumbnail;
+    private boolean thumbnailUpdated;
+    private boolean shotThumbnail;
 
     public TabIndexData() {
     }
@@ -84,5 +88,28 @@ public class TabIndexData implements Serializable {
         webView.setIdentityId(mId);
 
         return new MainTabData(webView, view, this);
+    }
+
+    public Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public boolean isThumbnailUpdated() {
+        return thumbnailUpdated;
+    }
+
+    public boolean isShotThumbnail() {
+        return shotThumbnail;
+    }
+
+    public void setShotThumbnail(boolean shotThumbnail) {
+        this.shotThumbnail = shotThumbnail;
+        if (shotThumbnail) {
+            thumbnailUpdated = true;
+        }
     }
 }
