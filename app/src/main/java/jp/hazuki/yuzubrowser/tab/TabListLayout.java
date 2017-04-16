@@ -47,19 +47,16 @@ public class TabListLayout extends LinearLayout {
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         if (horizontal) {
             mLayoutInflater.inflate(R.layout.tab_list_horizontal, this);
-            findViewById(R.id.outer).setOnClickListener(new OnClickListener() {
+            setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     close();
                 }
             });
+        } else if (reverse) {
+            mLayoutInflater.inflate(R.layout.tab_list_reverse, this);
         } else {
-            if (reverse) {
-                mLayoutInflater.inflate(R.layout.tab_list_reverse, this);
-            } else {
-                mLayoutInflater.inflate(R.layout.tab_list, this);
-            }
-            setBackgroundColor(0xcc222222);
+            mLayoutInflater.inflate(R.layout.tab_list, this);
         }
 
         bottomBar = findViewById(R.id.bottomBar);
@@ -104,6 +101,8 @@ public class TabListLayout extends LinearLayout {
             }
         });
         recyclerView.setAdapter(mAdapter);
+
+        layoutManager.scrollToPosition(tabManager.getCurrentTabNo());
 
         setOnClickListener(new OnClickListener() {
             @Override

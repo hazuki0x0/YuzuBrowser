@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.tab;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,9 +90,9 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         });
         if (horizontal) {
             if (position == tabManager.getCurrentTabNo())
-                holder.thumbNail.setBackgroundColor(0xFF33B5E5);
+                holder.itemView.setAlpha(1.0f);
             else
-                holder.thumbNail.setBackgroundColor(Color.TRANSPARENT);
+                holder.itemView.setAlpha(0.6f);
         } else {
             if (position == tabManager.getCurrentTabNo())
                 holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
