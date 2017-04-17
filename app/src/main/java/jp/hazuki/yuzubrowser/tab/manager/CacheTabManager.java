@@ -308,6 +308,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
     @Override
     public void onCacheOverflow(MainTabData tabData) {
         mTabStorage.saveWebView(tabData);
+        mTabStorage.saveIndexData();
         tabData.mWebView.setEmbeddedTitleBarMethod(null);
         tabData.mWebView.destroy();
     }
