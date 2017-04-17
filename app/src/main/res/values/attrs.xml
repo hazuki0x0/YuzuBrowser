@@ -93,4 +93,6 @@
         <attr name="actionId" />
     </declare-styleable>
 
+    <attr name="spinnerButtonStyle" format="reference" />
+
 </resources>

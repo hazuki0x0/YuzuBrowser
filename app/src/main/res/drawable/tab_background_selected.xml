@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="0dp"
+        android:left="-5dp"
+        android:right="-5dp"
+        android:top="-5dp">
+
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="3dp"
+                android:color="@color/accent" />
+        </shape>
+    </item>
+    <item>
+        <nine-patch android:src="@drawable/tab_background_normal" />
+    </item>
+</layer-list>

@@ -18,8 +18,11 @@ package jp.hazuki.yuzubrowser.tab;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,6 +33,7 @@ import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
+    private static final PorterDuffColorFilter IMAGE_FILTER = new PorterDuffColorFilter(0x64FFFFFF, PorterDuff.Mode.SRC_ATOP);
 
     private LayoutInflater mInflater;
     private TabManager tabManager;
@@ -97,7 +101,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
             if (position == tabManager.getCurrentTabNo())
                 holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
             else
-                holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background);
+                holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_normal);
         }
 
     }
@@ -134,6 +138,22 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
             url = (TextView) itemView.findViewById(R.id.urlTextView);
             closeButton = itemView.findViewById(R.id.closeImageButton);
             historyButton = itemView.findViewById(R.id.tabHistoryImageButton);
+
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            thumbNail.setColorFilter(IMAGE_FILTER);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            thumbNail.setColorFilter(null);
+                            break;
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

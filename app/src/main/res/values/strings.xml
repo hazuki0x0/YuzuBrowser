@@ -168,6 +168,7 @@
     <string name="action_to_json">Show JSON string</string>
     <string name="multi_select">Multi select</string>
     <string name="select_this_item">Select this item</string>
+    <string name="save_to">Save to</string>
     <string name="saved_file">Saved :</string>
     <string name="savepage_save_archive">Save as Web Archive XML</string>
     <string name="action_easy_add">Easy addition</string>

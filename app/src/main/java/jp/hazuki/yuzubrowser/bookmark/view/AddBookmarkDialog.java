@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,13 +15,14 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkFoldersDialog.OnFolderSelectedListener;
+import jp.hazuki.yuzubrowser.utils.view.SpinnerButton;
 
 public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements OnFolderSelectedListener {
     protected final Context mContext;
     protected final AlertDialog mDialog;
     protected final EditText titleEditText;
     protected final EditText urlEditText;
-    protected final Button folderButton;
+    protected final SpinnerButton folderButton;
     protected DialogInterface.OnClickListener mOnClickListener;
     protected final S mItem;
     protected BookmarkManager mManager;
@@ -39,7 +39,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
         View view = inflateView();
         titleEditText = (EditText) view.findViewById(R.id.titleEditText);
         urlEditText = (EditText) view.findViewById(R.id.urlEditText);
-        folderButton = (Button) view.findViewById(R.id.folderButton);
+        folderButton = (SpinnerButton) view.findViewById(R.id.folderButton);
 
         initView(view, title, url);
 
