@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.WebView;
 import android.webkit.WebViewDatabase;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -19,62 +18,17 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.search.SuggestProvider;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.CustomDialogPreference;
-import jp.hazuki.yuzubrowser.tab.TabList;
 
 public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
-    private final TabList mTabList;
     private int mSelected = 0;
     private int mArrayMax;
 
     public ClearBrowserDataAlertDialog(Context context) {
-        this(context, null, null);
+        this(context, null);
     }
 
     public ClearBrowserDataAlertDialog(Context context, AttributeSet attrs) {
-        this(context, attrs, null);
-    }
-
-    public ClearBrowserDataAlertDialog(Context context, TabList tablist) {
-        this(context, null, tablist);
-    }
-
-    private ClearBrowserDataAlertDialog(Context context, AttributeSet attrs, TabList tablist) {
         super(context, attrs);
-        mTabList = tablist;
-    }
-
-    protected void runAction(int i) {
-        switch (i) {
-            case 0:
-                BrowserManager.clearAppCacheFile(getContext().getApplicationContext());
-
-                if (mTabList != null)
-                    mTabList.clearCache(true);
-                else
-                    (new WebView(getContext())).clearCache(true);
-                break;
-            case 1:
-                CookieManager.getInstance().removeAllCookies(null);
-                break;
-            case 2:
-                WebViewDatabase.getInstance(getContext().getApplicationContext()).clearHttpAuthUsernamePassword();
-                break;
-            case 3:
-                WebViewDatabase.getInstance(getContext()).clearFormData();
-                break;
-            case 4:
-                BrowserManager.clearWebDatabase();
-                break;
-            case 5:
-                BrowserManager.clearGeolocation();
-                break;
-            case 6:
-                new BrowserHistoryManager(getContext().getApplicationContext()).deleteAll();
-                break;
-            case 7:
-                getContext().getApplicationContext().getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);
-                break;
-        }
     }
 
     @Override
@@ -107,11 +61,6 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
 
         builder
                 .setTitle(R.string.pref_clear_browser_data)
-            /*.setMultiChoiceItems(arrays, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                @Override
-				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-					
-				}})*/
                 .setView(listView)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -123,7 +72,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         ;
     }
 
-    protected void onClickPositiveButton() {
+    private void onClickPositiveButton() {
         for (int i = 0; i < mArrayMax; ++i) {
             int shifted = 1 << i;
             if ((mSelected & shifted) == shifted)
@@ -132,5 +81,35 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
 
         AppData.clear_data_default.set(mSelected);
         AppData.commit(getContext().getApplicationContext(), AppData.clear_data_default);
+    }
+
+    private void runAction(int i) {
+        switch (i) {
+            case 0:
+                BrowserManager.clearAppCacheFile(getContext().getApplicationContext());
+                BrowserManager.clearCache(getContext().getApplicationContext());
+                break;
+            case 1:
+                CookieManager.getInstance().removeAllCookies(null);
+                break;
+            case 2:
+                WebViewDatabase.getInstance(getContext().getApplicationContext()).clearHttpAuthUsernamePassword();
+                break;
+            case 3:
+                WebViewDatabase.getInstance(getContext()).clearFormData();
+                break;
+            case 4:
+                BrowserManager.clearWebDatabase();
+                break;
+            case 5:
+                BrowserManager.clearGeolocation();
+                break;
+            case 6:
+                new BrowserHistoryManager(getContext().getApplicationContext()).deleteAll();
+                break;
+            case 7:
+                getContext().getApplicationContext().getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);
+                break;
+        }
     }
 }

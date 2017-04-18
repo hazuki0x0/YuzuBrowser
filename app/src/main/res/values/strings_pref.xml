@@ -223,6 +223,7 @@
         <item>@string/copy_link_url</item>
         <item>@string/copy_link_text</item>
         <item>@string/save_link</item>
+        <item>@string/save_link_as</item>
         <item>@string/add_url_pattern</item>
     </string-array>
 
@@ -236,6 +237,7 @@
         <item>-51</item>
         <item>-52</item>
         <item>-157</item>
+        <item>-54</item>
         <item>-53</item>
         <item>-156</item>
     </integer-array>
@@ -247,9 +249,11 @@
         <item>@string/open_image_new_right</item>
         <item>@string/open_image_bg_right</item>
         <item>@string/share_image</item>
+        <item>@string/share_image_url</item>
         <item>@string/open_image_other_app</item>
         <item>@string/copy_image_url</item>
         <item>@string/save_image</item>
+        <item>@string/save_image_as</item>
         <item>@string/search_image</item>
         <item>@string/block_image</item>
         <item>@string/add_image_pattern</item>
@@ -261,9 +265,11 @@
         <item>-112</item>
         <item>-113</item>
         <item>-114</item>
+        <item>-158</item>
         <item>-150</item>
         <item>-151</item>
         <item>-152</item>
+        <item>-159</item>
         <item>-153</item>
         <item>-154</item>
         <item>-155</item>
@@ -286,9 +292,11 @@
         <item>@string/open_image_new_right</item>
         <item>@string/open_image_bg_right</item>
         <item>@string/share_image</item>
+        <item>@string/share_image_url</item>
         <item>@string/open_image_other_app</item>
         <item>@string/copy_image_url</item>
         <item>@string/save_image</item>
+        <item>@string/save_image_as</item>
         <item>@string/search_image</item>
         <item>@string/block_image</item>
         <item>@string/add_image_pattern</item>
@@ -309,9 +317,11 @@
         <item>-112</item>
         <item>-113</item>
         <item>-114</item>
+        <item>-158</item>
         <item>-150</item>
         <item>-151</item>
         <item>-152</item>
+        <item>-159</item>
         <item>-153</item>
         <item>-154</item>
         <item>-155</item>
@@ -497,15 +507,12 @@
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
     <string name="pref_userjs_manage">Manage UserScript</string>
-    <string name="pref_force_scalable">Force user scalable</string>
     <string name="pref_invert_rendering">Invert rendering</string>
     <string name="pref_auto_tab_save_delay">Auto save interval (sec.)</string>
     <string name="pref_resblock_settings">Resource interrupt settings</string>
     <string name="pref_resblock_enable">Enable resource interrupt</string>
     <string name="pref_resblock_manage">Manage resource interrupt</string>
     <string name="pref_minimum_font">Minimum font size</string>
-
-    <string name="pref_link_prefetch">Link prefetching</string>
 
     <string name="pref_kill_process">Kill process on exit (deprecated)</string>
     <string name="pref_app_settings">Application settings</string>
@@ -568,4 +575,20 @@
     <string name="open_bookmark_new_tab_info">When you tap the icon of the site, open in another tab</string>
     <string name="open_bookmark_new_tab_action">Icon action</string>
     <string name="save_bookmark_folder">Remember location of bookmark folder</string>
+
+    <string name="pref_search_suggest_engine">Search suggest engine</string>
+
+    <string-array name="pref_search_suggest_engine_list" translatable="false">
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Duck Duck Go</item>
+    </string-array>
+
+    <integer-array name="pref_search_suggest_engine_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <string name="pref_number_of_tab_to_cache">Number of tabs to cache</string>
 </resources>

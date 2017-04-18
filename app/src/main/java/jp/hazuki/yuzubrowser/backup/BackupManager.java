@@ -54,6 +54,7 @@ public class BackupManager {
             case "app_textures":
             case "app_public_html":
             case "app_appcache":
+            case "app_tabs":
             case "instant-run":
                 return false;
             default:

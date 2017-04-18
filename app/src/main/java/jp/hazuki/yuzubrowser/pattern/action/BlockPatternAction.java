@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 
 public class BlockPatternAction extends PatternAction {
     public BlockPatternAction() {

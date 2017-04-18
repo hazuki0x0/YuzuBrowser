@@ -23,7 +23,6 @@ import jp.hazuki.yuzubrowser.pattern.action.BlockPatternAction;
 public abstract class PatternActivity<T extends PatternChecker> extends AppCompatActivity implements View.OnClickListener, OnItemClickListener, OnItemLongClickListener {
 
     private PatternManager<T> mManager;
-    private String mDefaultUrl;
 
     private LinearLayout rootLayout;
     private ListView listView;
@@ -106,10 +105,6 @@ public abstract class PatternActivity<T extends PatternChecker> extends AppCompa
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
         return true;
-    }
-
-    protected void setDefaultUrl(String url) {
-        mDefaultUrl = url;
     }
 
     protected void onClick(int id, T checker) {

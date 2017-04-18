@@ -17,7 +17,7 @@ import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.main.CustomToolbar;
 import jp.hazuki.yuzubrowser.toolbar.main.ProgressToolBar;
 import jp.hazuki.yuzubrowser.toolbar.main.TabBar;
@@ -223,14 +223,14 @@ public class ToolbarManager {
             topToolbarAlwaysLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
             bottomToolbarAlwaysLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
         } else {
-            topToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            bottomToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            webToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            fixedWebToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            leftToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            rightToolbarLayout.setBackgroundResource(R.color.toolbar_background);
-            topToolbarAlwaysLayout.setBackgroundResource(R.color.toolbar_background);
-            bottomToolbarAlwaysLayout.setBackgroundColor(R.color.toolbar_background);
+            topToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            bottomToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            webToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            fixedWebToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            leftToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            rightToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            topToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray);
+            bottomToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray);
         }
 
         bottomToolbarLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());
@@ -292,6 +292,12 @@ public class ToolbarManager {
         urlBar.notifyChangeWebState(data);
         progressBar.notifyChangeWebState(data);
         customBar.notifyChangeWebState(data);
+    }
+
+    public void resetToolBar() {
+        tabBar.resetToolBar();
+        urlBar.resetToolBar();
+        customBar.resetToolBar();
     }
 
     public View addNewTabView() {

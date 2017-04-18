@@ -73,7 +73,6 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
             url = checker.getPatternUrl();
         }
         view_urlEditText.setText(url);
-        setDefaultUrl(url.toString());
         return header_view;
     }
 

@@ -9,7 +9,6 @@
     <string name="action_action_cant_close_tab">Action on last tab</string>
     <string name="action_select_menu">Select menu</string>
     <string name="action_target_tab">Target tab</string>
-    <string name="action_tablist_reverse">Reverse list</string>
 
     <string-array name="action_start_activity_template">
         <item>Application</item>
@@ -51,4 +50,9 @@
     <string name="action_auto_scroll_speed">Auto scroll speed</string>
     <string name="action_auto_scroll_speed_zero">Error : Speed must not be 0</string>
 
+    <string-array name="action_tab_list">
+        <item>Vertical list</item>
+        <item>Vertical Reverse list</item>
+        <item>Horizontal list</item>
+    </string-array>
 </resources>

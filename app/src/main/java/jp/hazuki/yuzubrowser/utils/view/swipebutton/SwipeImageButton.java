@@ -30,6 +30,10 @@ public class SwipeImageButton extends AppCompatImageButton implements SwipeContr
         setBackgroundResource(R.drawable.swipebtn_image_background_normal);
     }
 
+    public void setToDefault() {
+        mController.setToDefault();
+    }
+
     public void notifyChangeState() {
         mController.notifyChangeState();
     }

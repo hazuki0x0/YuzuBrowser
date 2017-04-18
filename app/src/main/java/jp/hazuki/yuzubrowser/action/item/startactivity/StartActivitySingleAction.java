@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
 
 import jp.hazuki.yuzubrowser.action.SingleAction;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener;
@@ -197,10 +197,10 @@ public class StartActivitySingleAction extends SingleAction implements Parcelabl
     }
 
     private static String replaceString(MainTabData tab, String data) {
-        if (tab.mUrl != null)
-            data = data.replace(REPLACE_URI, tab.mUrl);
-        if (tab.mTitle != null)
-            data = data.replace(REPLACE_TITLE, tab.mTitle);
+        if (tab.getUrl() != null)
+            data = data.replace(REPLACE_URI, tab.getUrl());
+        if (tab.getTitle() != null)
+            data = data.replace(REPLACE_TITLE, tab.getTitle());
         return data;
     }
 

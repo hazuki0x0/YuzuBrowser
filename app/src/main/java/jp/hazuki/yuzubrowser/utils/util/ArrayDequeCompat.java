@@ -106,6 +106,6 @@ public class ArrayDequeCompat<T> extends LinkedList<T> implements DequeCompat<T>
     @NonNull
     @Override
     public Iterator<T> descendingIterator() {
-        return null;
+        return iterator();
     }
 }

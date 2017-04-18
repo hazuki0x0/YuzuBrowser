@@ -216,14 +216,12 @@
     <string name="pref_userjs_settings">UserScript設定</string>
     <string name="pref_userjs_enable">UserScriptを有効にする</string>
     <string name="pref_userjs_manage">UserScriptの管理</string>
-    <string name="pref_force_scalable">強制的にズームを有効にする</string>
     <string name="pref_invert_rendering">反転レンダリング</string>
     <string name="pref_auto_tab_save_delay">オートセーブの間隔 (秒)</string>
     <string name="pref_resblock_settings">リソース割り込み設定</string>
     <string name="pref_resblock_enable">リソース割り込みを有効にする</string>
     <string name="pref_resblock_manage">リソース割り込みの管理</string>
     <string name="pref_minimum_font">最小フォントサイズ</string>
-    <string name="pref_link_prefetch">リンクの先読み</string>
 
     <string name="pref_kill_process">終了時にプロセスをキルする (非推奨)</string>
     <string name="pref_app_settings">アプリケーション設定</string>
@@ -279,4 +277,8 @@
     <string name="open_bookmark_new_tab_info">サイトのアイコンをタップした時、他のタブで開く</string>
     <string name="open_bookmark_new_tab_action">アイコンアクション</string>
     <string name="save_bookmark_folder">ブックマークフォルダの位置を記憶</string>
+
+    <string name="pref_search_suggest_engine">検索サジェストエンジン</string>
+
+    <string name="pref_number_of_tab_to_cache">メモリに保持するタブ数</string>
 </resources>

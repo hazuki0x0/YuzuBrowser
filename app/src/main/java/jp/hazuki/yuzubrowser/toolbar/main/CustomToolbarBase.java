@@ -11,7 +11,7 @@ import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
@@ -56,5 +56,10 @@ public class CustomToolbarBase extends ToolbarBase {
     public void notifyChangeWebState(MainTabData data) {
         super.notifyChangeWebState(data);
         mButtonController.notifyChangeState();
+    }
+
+    @Override
+    public void resetToolBar() {
+        mButtonController.resetIcon();
     }
 }

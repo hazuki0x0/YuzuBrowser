@@ -1,14 +1,15 @@
 package jp.hazuki.yuzubrowser.utils.view.filelist;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
 
-public class FileListButton extends AppCompatButton implements Button.OnClickListener {
+import jp.hazuki.yuzubrowser.utils.view.SpinnerButton;
+
+public class FileListButton extends SpinnerButton implements Button.OnClickListener {
     private final FileListDialog mDialog;
 
     public FileListButton(Context context) {

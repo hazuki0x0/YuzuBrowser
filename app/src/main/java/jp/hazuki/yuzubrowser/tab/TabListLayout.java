@@ -12,49 +12,66 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 
 public class TabListLayout extends LinearLayout {
     private TabListRecyclerAdapter mAdapter;
+    private TabManager tabManager;
     private Callback mCallback;
     private Snackbar snackbar;
     private final View bottomBar;
     private boolean reverse = false;
+    private boolean horizontal = false;
 
     public TabListLayout(Context context) {
         this(context, null);
     }
 
     public TabListLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, false);
+        this(context, attrs, TabListSingleAction.MODE_NORMAL);
     }
 
-    public TabListLayout(Context context, boolean shouldReverse) {
-        this(context, null, shouldReverse);
+    public TabListLayout(Context context, int mode) {
+        this(context, null, mode);
     }
 
-    public TabListLayout(Context context, AttributeSet attrs, boolean shouldReverse) {
+    public TabListLayout(Context context, AttributeSet attrs, int mode) {
         super(context, attrs);
 
-        reverse = shouldReverse;
+        reverse = mode == TabListSingleAction.MODE_REVERSE;
+        horizontal = mode == TabListSingleAction.MODE_HORIZONTAL;
 
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
-        if (reverse) {
+        if (horizontal) {
+            mLayoutInflater.inflate(R.layout.tab_list_horizontal, this);
+            setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    close();
+                }
+            });
+        } else if (reverse) {
             mLayoutInflater.inflate(R.layout.tab_list_reverse, this);
         } else {
             mLayoutInflater.inflate(R.layout.tab_list, this);
         }
 
-        setBackgroundColor(0xBB000000);
         bottomBar = findViewById(R.id.bottomBar);
     }
 
-    public void setList(final TabList list) {
+    public void setTabManager(final TabManager manager) {
+        tabManager = manager;
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
-        if (reverse) {
+        if (horizontal) {
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        } else if (reverse) {
             layoutManager.setStackFromEnd(true);
         }
 
@@ -65,7 +82,7 @@ public class TabListLayout extends LinearLayout {
         recyclerView.addItemDecoration(helper);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
 
-        mAdapter = new TabListRecyclerAdapter(getContext(), list, new TabListRecyclerAdapter.OnRecyclerListener() {
+        mAdapter = new TabListRecyclerAdapter(getContext(), manager, horizontal, new TabListRecyclerAdapter.OnRecyclerListener() {
             @Override
             public void onRecyclerItemClicked(View v, int position) {
                 mCallback.requestSelectTab(position);
@@ -85,10 +102,12 @@ public class TabListLayout extends LinearLayout {
         });
         recyclerView.setAdapter(mAdapter);
 
+        layoutManager.scrollToPosition(tabManager.getCurrentTabNo());
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.requestTabListClose();
+                close();
             }
         });
 
@@ -111,36 +130,65 @@ public class TabListLayout extends LinearLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+            if (horizontal) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.DOWN | ItemTouchHelper.UP) |
+                        makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+            } else {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) |
+                        makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+            }
         }
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             mCallback.requestMoveTab(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
         }
 
         @Override
-        public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             if (mAdapter.getItemCount() > 1) {
-                viewHolder.itemView.setVisibility(GONE);
+                int position = viewHolder.getAdapterPosition();
+
+                final boolean changeCurrent;
+                if (tabManager.getCurrentTabNo() == position) {
+                    mCallback.requestSelectTab(position == tabManager.size() - 1 ? position - 1 : position + 1);
+                }
+
+                final int oldCurrent = tabManager.getCurrentTabNo();
+
+                if ((position < oldCurrent && oldCurrent > 0)) {
+                    tabManager.setCurrentTab(oldCurrent - 1);
+                    changeCurrent = true;
+                } else {
+                    changeCurrent = false;
+                }
+
+                if (!tabManager.hideItem(position) && changeCurrent) {
+                    tabManager.setCurrentTab(oldCurrent);
+                }
                 mAdapter.notifyDataSetChanged();
-                snackbar = Snackbar.make(bottomBar, ((TabListRecyclerAdapter.ViewHolder) viewHolder).title.getText(), Snackbar.LENGTH_SHORT)
+                snackbar = Snackbar.make(bottomBar, getContext().getString(R.string.closed_tab,
+                        ((TabListRecyclerAdapter.ViewHolder) viewHolder).title.getText()), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                viewHolder.itemView.setVisibility(VISIBLE);
+                                tabManager.unHideItem();
+                                if (changeCurrent)
+                                    tabManager.setCurrentTab(oldCurrent);
                                 mAdapter.notifyDataSetChanged();
                             }
                         })
                         .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             @Override
                             public void onDismissed(Snackbar transientBottomBar, int event) {
-                                if (viewHolder.itemView.getVisibility() == GONE) {
-                                    viewHolder.itemView.setVisibility(VISIBLE);
-                                    mCallback.requestRemoveTab(viewHolder.getAdapterPosition());
-                                    mAdapter.notifyDataSetChanged();
+                                if (event != DISMISS_EVENT_ACTION) {
+                                    TabIndexData data = tabManager.unHideItem();
+                                    if (changeCurrent)
+                                        tabManager.setCurrentTab(oldCurrent);
+                                    if (data != null)
+                                        mCallback.requestRemoveTab(tabManager.indexOf(data.getId()));
                                 }
                             }
                         });
@@ -148,6 +196,11 @@ public class TabListLayout extends LinearLayout {
             } else {
                 mAdapter.notifyDataSetChanged();
             }
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled() {
+            return mAdapter.getItemCount() > 1;
         }
     }
 
@@ -157,8 +210,6 @@ public class TabListLayout extends LinearLayout {
         void requestMoveTab(int positionFrom, int positionTo);
 
         void requestRemoveTab(int no);
-
-        void requestRemoveAllTab();
 
         void requestAddTab();
 

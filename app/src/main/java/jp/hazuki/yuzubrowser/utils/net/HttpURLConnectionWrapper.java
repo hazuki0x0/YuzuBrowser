@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 
@@ -34,10 +36,12 @@ public class HttpURLConnectionWrapper extends HttpClientBuilder {
     private static class MyHttpResponseData implements HttpResponseData {
         private final InputStream mInputStream;
         private final long mContentLength;
+        private final Map<String, List<String>> mHeaderFields;
 
-        public MyHttpResponseData(InputStream is, long cl) {
+        public MyHttpResponseData(InputStream is, long cl, Map<String, List<String>> header) {
             mInputStream = is;
             mContentLength = cl;
+            mHeaderFields = header;
         }
 
         @Override
@@ -48,6 +52,11 @@ public class HttpURLConnectionWrapper extends HttpClientBuilder {
         @Override
         public long getContentLength() {
             return mContentLength;
+        }
+
+        @Override
+        public Map<String, List<String>> getHeaderFields() {
+            return mHeaderFields;
         }
     }
 
@@ -68,7 +77,7 @@ public class HttpURLConnectionWrapper extends HttpClientBuilder {
                     }
                 }
 
-                return new MyHttpResponseData(is, cl);
+                return new MyHttpResponseData(is, cl, mConnection.getHeaderFields());
             }
         } catch (IOException e) {
             ErrorReport.printAndWriteLog(e);

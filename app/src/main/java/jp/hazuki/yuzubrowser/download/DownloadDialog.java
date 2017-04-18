@@ -158,11 +158,11 @@ public class DownloadDialog {
     }
 
     public static DownloadDialog showDownloadDialog(Context context, String url) {
-        return showDownloadDialog(context, url, null);
+        return showDownloadDialog(context, url, null, null);
     }
 
-    public static DownloadDialog showDownloadDialog(Context context, String url, String referer) {
-        File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null);
+    public static DownloadDialog showDownloadDialog(Context context, String url, String referer, String defaultExt) {
+        File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
         DownloadRequestInfo info = new DownloadRequestInfo(url, file, referer, -1);
         return showDownloadDialog(context, info);
     }

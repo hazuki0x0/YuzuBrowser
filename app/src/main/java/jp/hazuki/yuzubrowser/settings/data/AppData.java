@@ -31,6 +31,7 @@ import jp.hazuki.yuzubrowser.settings.container.IntContainer;
 import jp.hazuki.yuzubrowser.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
+import jp.hazuki.yuzubrowser.tab.manager.BundleDataBaseConverter;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.useragent.UserAgent;
 import jp.hazuki.yuzubrowser.useragent.UserAgentList;
@@ -138,6 +139,8 @@ public class AppData {
     public static final LongContainer save_bookmark_folder_id = new LongContainer("save_bookmark_folder_id", -1L);
     public static final BooleanContainer open_bookmark_new_tab = new BooleanContainer("open_bookmark_new_tab", true);
     public static final IntContainer open_bookmark_icon_action = new IntContainer("open_bookmark_icon_action", 1);
+    public static final IntContainer search_suggest_engine = new IntContainer("search_suggest_engine", 0);
+    public static final IntContainer tabs_cache_number = new IntContainer("tab_cache_number", 5);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
@@ -189,7 +192,7 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_LINK_TEXT));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
                 manager.link.action.add(action);
             }
@@ -199,10 +202,10 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_NEW));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_BG));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_IMAGE_URL));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_IMAGE_RES_BLOCK));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
@@ -217,14 +220,14 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_URL));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_NEW));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_BG));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_IMAGE_URL));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_IMAGE_RES_BLOCK));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
@@ -265,6 +268,12 @@ public class AppData {
                 if (lastLaunch < 106000) {
                     BookmarkManager manager = new BookmarkManager(context);
                     manager.write();
+                }
+
+                if (lastLaunch < 200000) {
+                    BundleDataBaseConverter converter = new BundleDataBaseConverter(context.getFileStreamPath("last_url_2.dat"));
+                    converter.readList(context);
+                    converter.clear();
                 }
             }
 

@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.view.LayoutInflater;
 
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.AbstractToolbar;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 
@@ -40,6 +40,10 @@ public abstract class ToolbarBase extends AbstractToolbar {
     public void notifyChangeWebState(MainTabData data) {
         if (data != null)
             setVisibility(mRequestCallback.shouldShowToolbar(mPreferences.visibility, data) ? VISIBLE : GONE);
+    }
+
+    public void resetToolBar() {
+
     }
 
     public void toggleVisibility() {

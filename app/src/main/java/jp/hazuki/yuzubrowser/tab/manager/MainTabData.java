@@ -1,4 +1,20 @@
-package jp.hazuki.yuzubrowser.tab;
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,6 +32,11 @@ public class MainTabData extends TabData {
         mTabView = view;
     }
 
+    public MainTabData(CustomWebView web, View view, TabIndexData data) {
+        super(web, data);
+        mTabView = view;
+    }
+
     @Override
     public void onPageStarted(String url, Bitmap favicon) {
         super.onPageStarted(url, favicon);
@@ -25,22 +46,22 @@ public class MainTabData extends TabData {
     @Override
     public void onPageFinished(CustomWebView web, String url) {
         super.onPageFinished(web, url);
-        setText((mTitle != null) ? mTitle : url);
+        setText((getTitle() != null) ? getTitle() : url);
     }
 
     @Override
     public void onReceivedTitle(String title) {
         super.onReceivedTitle(title);
-        setText(mTitle);
+        setText(getTitle());
     }
 
     @Override
     public void onStateChanged(TabData tabdata) {
         super.onStateChanged(tabdata);
-        if (mTitle != null)
-            setText(mTitle);
+        if (getTitle() != null)
+            setText(getTitle());
         else
-            setText(mUrl);
+            setText(getUrl());
     }
 
     public void onMoveTabToBackground(Resources res, Resources.Theme theme) {

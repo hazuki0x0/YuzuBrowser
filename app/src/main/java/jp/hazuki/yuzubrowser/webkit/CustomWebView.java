@@ -13,7 +13,7 @@ import android.webkit.WebView;
 
 import java.util.Map;
 
-import jp.hazuki.yuzubrowser.tab.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
 public interface CustomWebView {

@@ -128,20 +128,23 @@ public class SingleAction implements Parcelable {
     public static final int LPRESS_SHARE = -50;
     public static final int LPRESS_OPEN_OTHERS = -51;
     public static final int LPRESS_COPY_URL = -52;
-    public static final int LPRESS_SAVE_PAGE = -53;
+    public static final int LPRESS_SAVE_PAGE_AS = -53;
+    public static final int LPRESS_SAVE_PAGE = -54;
     public static final int LPRESS_OPEN_IMAGE = -110;
     public static final int LPRESS_OPEN_IMAGE_NEW = -111;
     public static final int LPRESS_OPEN_IMAGE_BG = -112;
     public static final int LPRESS_OPEN_IMAGE_NEW_RIGHT = -113;
     public static final int LPRESS_OPEN_IMAGE_BG_RIGHT = -114;
-    public static final int LPRESS_SHARE_IMAGE = -150;
+    public static final int LPRESS_SHARE_IMAGE_URL = -150;
     public static final int LPRESS_OPEN_IMAGE_OTHERS = -151;
     public static final int LPRESS_COPY_IMAGE_URL = -152;
-    public static final int LPRESS_SAVE_IMAGE = -153;
+    public static final int LPRESS_SAVE_IMAGE_AS = -153;
     public static final int LPRESS_GOOGLE_IMAGE_SEARCH = -154;
     public static final int LPRESS_IMAGE_RES_BLOCK = -155;
     public static final int LPRESS_PATTERN_MATCH = -156;
     public static final int LPRESS_COPY_LINK_TEXT = -157;
+    public static final int LPRESS_SHARE_IMAGE = -158;
+    public static final int LPRESS_SAVE_IMAGE = -159;
 
     public final int id;
 

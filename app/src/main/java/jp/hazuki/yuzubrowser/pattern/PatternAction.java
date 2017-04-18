@@ -10,7 +10,7 @@ import java.io.IOException;
 import jp.hazuki.yuzubrowser.pattern.action.BlockPatternAction;
 import jp.hazuki.yuzubrowser.pattern.action.OpenOthersPatternAction;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingPatternAction;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.utils.matcher.AbstractPatternAction;
 
 public abstract class PatternAction extends AbstractPatternAction {

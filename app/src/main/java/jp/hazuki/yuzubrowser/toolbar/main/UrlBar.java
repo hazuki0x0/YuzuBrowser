@@ -11,7 +11,7 @@ import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionArrayManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
@@ -74,17 +74,23 @@ public class UrlBar extends ToolbarBase {
             changeTitle(data);
     }
 
+    @Override
+    public void resetToolBar() {
+        mLeftButtonController.resetIcon();
+        mRightButtonController.resetIcon();
+    }
+
     public void changeTitle(final MainTabData data) {
         //need post Runnable?
         post(new Runnable() {
             @SuppressLint("RtlHardcoded")
             @Override
             public void run() {
-                if (data.mTitle != null && !data.isInPageLoad()) {
-                    centerUrlButton.setText(data.mTitle);
+                if (data.getTitle() != null && !data.isInPageLoad()) {
+                    centerUrlButton.setText(data.getTitle());
                     centerUrlButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                 } else {
-                    centerUrlButton.setText(data.mUrl);
+                    centerUrlButton.setText(data.getUrl());
                     centerUrlButton.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 }
             }

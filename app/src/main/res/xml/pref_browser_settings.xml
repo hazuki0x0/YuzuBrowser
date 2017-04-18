@@ -70,6 +70,12 @@
             android:title="@string/pref_newtab_blank" />
     </PreferenceScreen>
 
+    <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+        android:key="tab_cache_number"
+        android:title="@string/pref_number_of_tab_to_cache"
+        app:seekMax="50"
+        app:seekMin="2" />
+
     <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
         android:key="search_url"
         android:singleLine="true"
@@ -103,4 +109,10 @@
         android:entryValues="@array/pref_search_suggest_values"
         android:key="search_suggest"
         android:title="@string/pref_search_suggest" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_search_suggest_engine_list"
+        android:entryValues="@array/pref_search_suggest_engine_values"
+        android:key="search_suggest_engine"
+        android:title="@string/pref_search_suggest_engine" />
 </PreferenceScreen>

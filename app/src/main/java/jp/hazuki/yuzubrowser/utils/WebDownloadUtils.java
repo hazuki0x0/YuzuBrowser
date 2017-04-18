@@ -30,6 +30,10 @@ public class WebDownloadUtils {
     }
 
     public static File guessDownloadFile(String folder_path, String url, String contentDisposition, String mimetype) {
+        return guessDownloadFile(folder_path, url, contentDisposition, mimetype, null);
+    }
+
+    public static File guessDownloadFile(String folder_path, String url, String contentDisposition, String mimetype, String defaultExt) {
         if (url.startsWith("data:")) {
             String[] data = url.split(Pattern.quote(","));
             if (data.length > 1) {
@@ -41,24 +45,27 @@ public class WebDownloadUtils {
             filename = "index.html";
         }
 
-        FileUtils.ParsedFileName pFname = FileUtils.getParsedFileName(filename);
-        int i = 1;
-        final File folder = new File(folder_path);
-        String[] filelist = folder.list();
-        if (filelist != null) {
-            StringBuilder strbuilder = new StringBuilder();
-            while (FileUtils.checkFileExists(filelist, filename)) {
-                strbuilder.append(pFname.Prefix).append("-").append(i);
-                if (pFname.Suffix != null) {
-                    strbuilder.append(".").append(pFname.Suffix);
+        if (filename.endsWith(".bin") && defaultExt != null) {
+            String decodedUrl = Uri.decode(url);
+            if (decodedUrl != null) {
+                int queryIndex = decodedUrl.indexOf('?');
+                // If there is a query string strip it, same as desktop browsers
+                if (queryIndex > 0) {
+                    decodedUrl = decodedUrl.substring(0, queryIndex);
                 }
-                filename = strbuilder.toString();
-                ++i;
-                strbuilder.delete(0, strbuilder.length());
+                if (!decodedUrl.endsWith("/")) {
+                    int index = decodedUrl.lastIndexOf('/') + 1;
+                    if (index > 0) {
+                        filename = decodedUrl.substring(index);
+                        if (filename.indexOf('.') < 0) {
+                            filename = filename + defaultExt;
+                        }
+                    }
+                }
             }
         }
 
-        return new File(folder, filename);
+        return FileUtils.createUniqueFile(folder_path, filename);
     }
 
 

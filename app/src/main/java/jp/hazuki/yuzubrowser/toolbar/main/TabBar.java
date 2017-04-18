@@ -10,7 +10,7 @@ import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionArrayManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
@@ -61,6 +61,12 @@ public class TabBar extends ToolbarBase {
         super.notifyChangeWebState(data);
         mLeftButtonController.notifyChangeState();
         mRightButtonController.notifyChangeState();
+    }
+
+    @Override
+    public void resetToolBar() {
+        mLeftButtonController.resetIcon();
+        mRightButtonController.resetIcon();
     }
 
     @Override

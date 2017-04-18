@@ -1,42 +1,74 @@
+/*
+ * Copyright (c) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.tab;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
-
-/**
- * Created by hazuki on 17/01/20.
- */
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
+    private static final PorterDuffColorFilter IMAGE_FILTER = new PorterDuffColorFilter(0x64FFFFFF, PorterDuff.Mode.SRC_ATOP);
 
     private LayoutInflater mInflater;
-    private TabList tabList;
+    private TabManager tabManager;
     private OnRecyclerListener mListener;
+    private boolean horizontal;
 
-    public TabListRecyclerAdapter(Context context, TabList list, OnRecyclerListener listener) {
+    public TabListRecyclerAdapter(Context context, TabManager list, boolean isHorizontal, OnRecyclerListener listener) {
         mInflater = LayoutInflater.from(context);
-        tabList = list;
+        tabManager = list;
         mListener = listener;
+        horizontal = isHorizontal;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.tab_list_item, parent, false));
+        if (horizontal) {
+            return new ViewHolder(mInflater.inflate(R.layout.tab_list_item_horizontal, parent, false));
+        } else {
+            return new ViewHolder(mInflater.inflate(R.layout.tab_list_item, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // データ表示
-        MainTabData tabData = tabList.get(position);
-        if (tabData != null) {
-            holder.title.setText(tabData.mTitle);
-            holder.url.setText(tabData.mUrl);
+        TabIndexData indexData = getItem(position);
+        if (indexData != null) {
+            Bitmap thumbNail = indexData.getThumbnail();
+            if (thumbNail != null) {
+                holder.thumbNail.setImageBitmap(thumbNail);
+            } else {
+                holder.thumbNail.setImageResource(R.drawable.empty_thumbnail);
+            }
+            holder.title.setText(indexData.getTitle());
+            holder.url.setText(indexData.getUrl());
         }
 
         // クリック処理
@@ -60,33 +92,27 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
                 mListener.onHistoryButtonClicked(v, holder.getAdapterPosition());
             }
         });
+        if (horizontal) {
+            if (position == tabManager.getCurrentTabNo())
+                holder.itemView.setAlpha(1.0f);
+            else
+                holder.itemView.setAlpha(0.6f);
+        } else {
+            if (position == tabManager.getCurrentTabNo())
+                holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
+            else
+                holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_normal);
+        }
 
-        if (position == tabList.getCurrentTabNo())
-            holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);
-        else
-            holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background);
     }
 
     @Override
     public int getItemCount() {
-        if (tabList != null) {
-            return tabList.size();
-        } else {
-            return 0;
-        }
+        return tabManager.size();
     }
 
-    public void deleteItem(int pos) {
-        tabList.remove(pos);
-        notifyDataSetChanged();
-    }
-
-    public MainTabData getItem(int pos) {
-        return tabList.get(pos);
-    }
-
-    public TabList getItemList() {
-        return tabList;
+    public TabIndexData getItem(int pos) {
+        return tabManager.getIndexData(pos);
     }
 
     public interface OnRecyclerListener {
@@ -99,6 +125,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        ImageView thumbNail;
         TextView title;
         TextView url;
         View closeButton;
@@ -106,10 +133,27 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
 
         public ViewHolder(View itemView) {
             super(itemView);
+            thumbNail = (ImageView) itemView.findViewById(R.id.thumbNailImageView);
             title = (TextView) itemView.findViewById(R.id.titleTextView);
             url = (TextView) itemView.findViewById(R.id.urlTextView);
             closeButton = itemView.findViewById(R.id.closeImageButton);
             historyButton = itemView.findViewById(R.id.tabHistoryImageButton);
+
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            thumbNail.setColorFilter(IMAGE_FILTER);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            thumbNail.setColorFilter(null);
+                            break;
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

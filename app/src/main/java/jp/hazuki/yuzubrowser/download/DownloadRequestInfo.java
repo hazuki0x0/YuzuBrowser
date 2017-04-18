@@ -12,6 +12,7 @@ public class DownloadRequestInfo extends DownloadInfo {
     private String referer;
     private int max_length;
     private int current_length;
+    private String mDefaultExt;
 
     public DownloadRequestInfo() {
     }
@@ -66,5 +67,13 @@ public class DownloadRequestInfo extends DownloadInfo {
             //return (FileUtils.convertReadableByteCount(current_length));
             return Formatter.formatFileSize(context, current_length);
         }
+    }
+
+    public String getDefaultExt() {
+        return mDefaultExt;
+    }
+
+    public void setDefaultExt(String defaultExt) {
+        mDefaultExt = defaultExt;
     }
 }

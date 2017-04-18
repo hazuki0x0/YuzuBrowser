@@ -87,6 +87,21 @@ public class FileUtils {
         return getFileSuffix(file.getName());
     }
 
+    public static boolean deleteDirectoryContents(File folder) {
+        if (folder == null)
+            throw new NullPointerException("file is null");
+        if (!folder.isDirectory()) return false;
+        File[] list = folder.listFiles();
+        if (list == null) {
+            Logger.e(TAG, "File#listFiles returns null");
+            return false;
+        }
+        for (File file : folder.listFiles()) {
+            if (!deleteFile(file)) return false;
+        }
+        return true;
+    }
+
     public static boolean deleteFile(File file) {
         if (file == null)
             throw new NullPointerException("file is null");
@@ -163,6 +178,27 @@ public class FileUtils {
 
     public static void notifyImageFile(Context context, String... files) {
         MediaScannerConnection.scanFile(context, files, null, null);
+    }
+
+    public static File createUniqueFile(String folderPath, String fileName) {
+        FileUtils.ParsedFileName pFname = FileUtils.getParsedFileName(fileName);
+        int i = 1;
+        final File folder = new File(folderPath);
+        String[] fileList = folder.list();
+        if (fileList != null) {
+            StringBuilder builder = new StringBuilder();
+            while (FileUtils.checkFileExists(fileList, fileName)) {
+                builder.append(pFname.Prefix).append("-").append(i);
+                if (pFname.Suffix != null) {
+                    builder.append(".").append(pFname.Suffix);
+                }
+                fileName = builder.toString();
+                ++i;
+                builder.delete(0, builder.length());
+            }
+        }
+
+        return new File(folder, fileName);
     }
 
     public static final FileComparator FILE_COMPARATOR = new FileComparator();

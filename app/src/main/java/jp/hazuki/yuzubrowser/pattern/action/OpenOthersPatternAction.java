@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 
 public class OpenOthersPatternAction extends PatternAction {

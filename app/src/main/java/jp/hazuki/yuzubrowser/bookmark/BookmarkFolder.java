@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
-import jp.hazuki.yuzubrowser.tab.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 
 public class BookmarkFolder extends BookmarkItem implements Serializable {
     protected static final String COLUMN_NAME_LIST = "2";
@@ -32,8 +32,8 @@ public class BookmarkFolder extends BookmarkItem implements Serializable {
         super(null, id);
         this.list = new ArrayList<>(list.size());
         for (MainTabData tab : list)
-            if (!TextUtils.isEmpty(tab.mUrl))
-                this.list.add(new BookmarkSite((tab.mTitle != null) ? tab.mTitle : tab.mUrl, tab.mUrl, BookmarkIdGenerator.getNewId()));
+            if (!TextUtils.isEmpty(tab.getUrl()))
+                this.list.add(new BookmarkSite((tab.getTitle() != null) ? tab.getTitle() : tab.getUrl(), tab.getUrl(), BookmarkIdGenerator.getNewId()));
         this.parent = null;
     }
 

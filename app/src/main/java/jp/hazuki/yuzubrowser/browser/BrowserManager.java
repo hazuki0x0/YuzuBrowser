@@ -7,7 +7,6 @@ import android.webkit.WebStorage;
 import java.io.File;
 
 import jp.hazuki.yuzubrowser.utils.FileUtils;
-import jp.hazuki.yuzubrowser.utils.content.BundleDatabase;
 
 public class BrowserManager {
     public static final String EXTRA_OPENABLE = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_OPENABLE";
@@ -35,12 +34,12 @@ public class BrowserManager {
         WebStorage.getInstance().deleteAllData();
     }
 
-    public static void clearGeolocation() {
-        GeolocationPermissions.getInstance().clearAll();
+    public static void clearCache(Context context) {
+        FileUtils.deleteDirectoryContents(context.getCacheDir());
     }
 
-    public static BundleDatabase getLastTabListDatabase(Context context) {
-        return new BundleDatabase(context.getFileStreamPath("last_url_2.dat"));
+    public static void clearGeolocation() {
+        GeolocationPermissions.getInstance().clearAll();
     }
 
 }

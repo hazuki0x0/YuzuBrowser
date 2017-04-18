@@ -8,8 +8,6 @@
     <string name="pattern_edittext_info">Wildcard characters * and + are allowed.Also,regex starts with `?`.</string>
     <string name="pattern_edittext_hint">URL</string>
     <string name="pattern_open_others">Open in other app</string>
-    <string name="pattern_replace_url">Replace URL</string>
-    <string name="pattern_replace_url_hint">Replace URL (use $1, $2, \u2026)</string>
     <string name="pattern_change_websettings">Change web setting</string>
     <string name="pattern_block">Block</string>
     <string name="useragent">UserAgent</string>
@@ -23,17 +21,15 @@
     <string name="confirm_delete_button">Delete this button?</string>
     <string name="confirm_delete_speedDial">Delete this speed dial?</string>
     <string name="confirm_delete_gesture">Delete this gesture?</string>
-    <string name="confirm_delete_text_encode">Delete this text encode?</string>
-    <string name="delete_action">Delete action</string>
     <string name="delete_history">Delete history</string>
     <string name="delete_all_history">Delete all history</string>
     <string name="delete_all_favicon">Delete all favicon</string>
     <string name="delete_bookmark">Delete bookmark</string>
-    <string name="delete_button">Delete button</string>
     <string name="delete_speedDial">Delete speed dial</string>
     <string name="pattern_open_app_list">Show application list</string>
     <string name="pattern_open_app_chooser">Show application chooser</string>
     <string name="now_loading">Now loading</string>
+    <string name="now_downloading">Now downloading…</string>
     <string name="finish_mes">Would you like to leave this application?</string>
     <string name="minimize">Minimize</string>
     <string name="open">Open</string>
@@ -49,15 +45,18 @@
     <string name="copy_link_url">Copy link URL</string>
     <string name="copy_link_text">Copy link text</string>
     <string name="save_link">Save link</string>
+    <string name="save_link_as">Save link As…</string>
     <string name="open_image">Open image</string>
     <string name="open_image_new">Open image in new tab</string>
     <string name="open_image_bg">Open image in background tab</string>
     <string name="open_image_new_right">Open image in right new tab</string>
     <string name="open_image_bg_right">Open image in right background tab</string>
     <string name="share_image">Share image</string>
+    <string name="share_image_url">Share image URL</string>
     <string name="open_image_other_app">Open image in another app</string>
     <string name="copy_image_url">Copy image URL</string>
     <string name="save_image">Save image</string>
+    <string name="save_image_as">Save image As…</string>
     <string name="search_image">Search image</string>
     <string name="block_image">Block image</string>
     <string name="add_image_pattern">Add image to pattern match</string>
@@ -128,7 +127,6 @@
     <!-- <string name="gesture_exists">Gesture already exists.</string> -->
     <string name="action_empty">Empty action</string>
     <string name="gesture_test">Gesture test</string>
-    <string name="list_empty">Empty</string>
     <string name="move_up">Move up</string>
     <string name="move_down">Move down</string>
     <string name="page_info">Page information</string>
@@ -170,6 +168,7 @@
     <string name="action_to_json">Show JSON string</string>
     <string name="multi_select">Multi select</string>
     <string name="select_this_item">Select this item</string>
+    <string name="save_to">Save to</string>
     <string name="saved_file">Saved :</string>
     <string name="savepage_save_archive">Save as Web Archive XML</string>
     <string name="action_easy_add">Easy addition</string>
@@ -188,7 +187,6 @@
 
     <string name="undo">Undo</string>
 
-    <string name="backuping">Backuping</string>
     <string name="restoring">Restoring</string>
 
     <string name="new_tab">New tab</string>
@@ -211,4 +209,6 @@
 
     <string name="open_in_browser">Open in Yuzu Browser</string>
     <string name="enable_share">Enable share from other app</string>
+
+    <string name="closed_tab">Closed %1$s</string>
 </resources>
