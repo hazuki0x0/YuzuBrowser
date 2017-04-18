@@ -13,5 +13,8 @@
     <exclude
         domain="root"
         path="appcache" />
+    <exclude
+        domain="root"
+        path="app_tabs" />
 
 </full-backup-content>
