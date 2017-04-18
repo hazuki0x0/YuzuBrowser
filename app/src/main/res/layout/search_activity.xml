@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/deep_gray"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:hint="@string/search_editText_hint"
             android:imeOptions="actionGo"
