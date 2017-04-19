@@ -23,6 +23,7 @@ However, as the theme has been expanded, not all displays change.
 
 #### Sample theme
 [Theme material dark](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_dark.zip)
+(default theme)
 
 [Theme material light](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_light.zip)
 
