@@ -430,6 +430,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         WebViewProxy.setProxy(getApplicationContext(), AppData.proxy_set.get(), AppData.proxy_address.get());
 
         registerReceiver(mNetworkStateBroadcastReceiver, mNetworkStateChangedFilter);
+
+        if (mTabManager.get(getCurrentTab()).mWebView.getView().getParent() == null) {
+            setCurrentTab(getCurrentTab());
+        }
     }
 
     @Override
