@@ -3608,7 +3608,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.OPEN_OTHER:
-                    WebUtils.openInOtherApp(BrowserActivity.this, mTabManager.get(target).getTitle());
+                    WebUtils.openInOtherApp(BrowserActivity.this, mTabManager.get(target).getUrl());
                     break;
                 case SingleAction.START_ACTIVITY: {
                     Intent intent = ((StartActivitySingleAction) action).getIntent(mTabManager.get(target));
