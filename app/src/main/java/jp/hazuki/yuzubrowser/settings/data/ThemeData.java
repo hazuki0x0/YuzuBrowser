@@ -30,6 +30,8 @@ import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 
 public class ThemeData {
+    public static final String THEME_LIGHT = "theme://internal/light";
+
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
     public int tabTextColorNormal, tabTextColorLock, tabTextColorSelect;
     public int progressColor, progressIndeterminateColor;
@@ -39,6 +41,9 @@ public class ThemeData {
     public int qcItemBackgroundColorNormal, qcItemBackgroundColorSelect, qcItemColor;
     public int statusBarColor;
     public boolean refreshUseDark;
+
+    private ThemeData() {
+    }
 
     private ThemeData(Context context, File folder) throws IOException {
         try (InputStream is = new BufferedInputStream(new FileInputStream(new File(folder, "theme.json")))) {
@@ -298,6 +303,8 @@ public class ThemeData {
 
         if (TextUtils.isEmpty(folder)) {
             sInstance = null;
+        } else if (THEME_LIGHT.equals(folder)) {
+            sInstance = createLightTheme(context);
         } else {
             File file = new File(BrowserApplication.getExternalUserDirectory(), "theme" + File.separator + folder);
             if (!file.exists() || !file.isDirectory())
@@ -325,5 +332,27 @@ public class ThemeData {
         rect.right = (int) (rect.right * scale + 0.5f);
         rect.top = (int) (rect.top * scale + 0.5f);
         rect.bottom = (int) (rect.bottom * scale + 0.5f);
+    }
+
+    private static ThemeData createLightTheme(Context context) {
+        ThemeData data = new ThemeData();
+        data.tabTextColorNormal = 0xFF444444;
+        data.tabTextColorLock = 0xFF222222;
+        data.tabTextColorSelect = 0xFF222222;
+
+        data.toolbarBackgroundColor = 0xFFDDDDDD;
+        data.toolbarTextColor = 0xFF222222;
+        data.toolbarImageColor = 0xFF444444;
+
+        data.statusBarColor = 0xFFAAAAAA;
+
+        int padding = context.getResources().getDimensionPixelOffset(R.dimen.swipebtn_bg_padding);
+        Rect paddingRect = new Rect(padding, padding, padding, padding);
+
+        data.toolbarButtonBackgroundPress = new ShapeDrawable(new RectShape());
+        data.toolbarButtonBackgroundPress.setPadding(paddingRect);
+        data.toolbarButtonBackgroundPress.getPaint().setColor(0xFFB5B5B5);
+
+        return data;
     }
 }

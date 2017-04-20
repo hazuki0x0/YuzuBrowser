@@ -281,4 +281,6 @@
     <string name="pref_search_suggest_engine">検索サジェストエンジン</string>
 
     <string name="pref_number_of_tab_to_cache">メモリに保持するタブ数</string>
+    <string name="pref_dark_theme">ダークテーマ</string>
+    <string name="pref_light_theme">ライトテーマ</string>
 </resources>

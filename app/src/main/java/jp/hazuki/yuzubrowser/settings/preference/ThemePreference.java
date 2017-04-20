@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.settings.preference;
 
 import android.content.Context;
@@ -11,10 +27,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
-
-/**
- * Created by hazuki on 17/01/26.
- */
+import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 
 public class ThemePreference extends ListPreference {
     public ThemePreference(Context context, AttributeSet attrs) {
@@ -49,8 +62,10 @@ public class ThemePreference extends ListPreference {
         List<String> valueList = new ArrayList<>();
 
         //Add default
-        themeList.add(getContext().getString(R.string.default_text));
+        themeList.add(getContext().getString(R.string.pref_dark_theme));
         valueList.add("");
+        themeList.add(getContext().getString(R.string.pref_light_theme));
+        valueList.add(ThemeData.THEME_LIGHT);
 
         if (themes != null) {
             for (File theme : themes) {
