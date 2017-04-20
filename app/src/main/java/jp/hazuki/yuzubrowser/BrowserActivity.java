@@ -136,6 +136,8 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.menuwindow.MenuWindow;
+import jp.hazuki.yuzubrowser.pattern.action.WebSettingPatternAction;
+import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager;
@@ -1059,10 +1061,34 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     }
 
     private boolean checkPatternMatch(MainTabData tab, String url) {
+        boolean normalSettings = true;
         for (PatternUrlChecker pattern : mPatternManager.getList()) {
             if (!pattern.isMatchUrl(url)) continue;
-            if (pattern.getAction().run(this, tab, url))
+            if (pattern.getAction() instanceof WebSettingPatternAction) {
+                if (tab.getResetAction() != null && tab.getResetAction().getPatternAction() == pattern.getAction()) {
+                    normalSettings = false;
+                    continue;
+                }
+
+                /* save normal settings */
+                if (tab.getResetAction() == null)
+                    tab.setResetAction(new WebSettingResetAction(tab.mWebView.getSettings()));
+                tab.getResetAction().setPatternAction((WebSettingPatternAction) pattern.getAction());
+
+                /* change web settings */
+                pattern.getAction().run(this, tab, url);
+                loadUrl(tab, url);
                 return true;
+            } else if (pattern.getAction().run(this, tab, url))
+                return true;
+        }
+
+        /* reset to normal */
+        if (normalSettings && tab.getResetAction() != null) {
+            tab.getResetAction().reset(tab.mWebView);
+            tab.setResetAction(null);
+            loadUrl(tab, url);
+            return true;
         }
         return false;
     }

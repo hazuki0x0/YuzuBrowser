@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
@@ -114,4 +115,13 @@ public class MainTabData extends TabData {
     }
 
     private final View mTabView;
+    private WebSettingResetAction resetAction;
+
+    public WebSettingResetAction getResetAction() {
+        return resetAction;
+    }
+
+    public void setResetAction(WebSettingResetAction resetAction) {
+        this.resetAction = resetAction;
+    }
 }

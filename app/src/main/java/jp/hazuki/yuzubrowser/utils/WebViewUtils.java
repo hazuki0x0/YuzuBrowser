@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import jp.hazuki.yuzubrowser.webkit.CustomWebView;
+
 public class WebViewUtils {
     private WebViewUtils() {
         throw new UnsupportedOperationException();
@@ -95,5 +97,9 @@ public class WebViewUtils {
     public static void disablePlatformNotifications() {
         Method method = ReflectionUtils.getMethod(WebView.class, "disablePlatformNotifications");
         ReflectionUtils.invokeMethod(method, null);
+    }
+
+    public static boolean isRedirect(CustomWebView webView) {
+        return webView.getHitTestResult().getType() <= 0;
     }
 }

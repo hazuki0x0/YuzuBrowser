@@ -247,8 +247,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             if (mWebViewClient != null && mWebViewClient.shouldOverrideUrlLoading(CacheWebView.this, url, uri)) {
                 return true;
             } else {
-                /* check redirect */
-                if (view.getHitTestResult().getType() <= 0) return false;
+                if (WebViewUtils.isRedirect(view)) return false;
                 if (view.getUrl() == null) return false;
                 newtab(url);
                 return true;
