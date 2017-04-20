@@ -102,6 +102,10 @@ public class TabIndexData implements Serializable {
         return thumbnailUpdated;
     }
 
+    void setThumbnailUpdated(boolean thumbnailUpdated) {
+        this.thumbnailUpdated = thumbnailUpdated;
+    }
+
     public boolean isShotThumbnail() {
         return shotThumbnail;
     }

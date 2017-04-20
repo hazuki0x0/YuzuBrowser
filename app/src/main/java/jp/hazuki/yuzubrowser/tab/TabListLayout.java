@@ -126,6 +126,12 @@ public class TabListLayout extends LinearLayout {
         mCallback.requestTabListClose();
     }
 
+    public void closeSnackBar() {
+        if (snackbar != null && snackbar.isShown()) {
+            snackbar.dismiss();
+        }
+    }
+
     private class ListTouch extends ItemTouchHelper.Callback {
 
         @Override

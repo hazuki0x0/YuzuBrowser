@@ -158,6 +158,7 @@ class TabStorage {
             if (data.isThumbnailUpdated()) {
                 byte[] image = ImageUtils.bmp2byteArray(data.getThumbnail(), Bitmap.CompressFormat.WEBP, 60);
                 saveThumbnail(data.getId(), image);
+                data.setThumbnailUpdated(false);
             }
         }
     }
@@ -186,6 +187,7 @@ class TabStorage {
         return null;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void deleteWebView(TabIndexData data) {
         String id = Long.toString(data.getId());
         new File(tabPath, id).delete();

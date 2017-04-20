@@ -460,6 +460,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     protected void onStop() {
         super.onStop();
+        if (mTabManagerView != null)
+            mTabManagerView.closeSnackBar();
+
         mTabManager.saveData();
         mHandler.removeCallbacks(mSaveTabsRunnable);
 
@@ -571,6 +574,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     public boolean saveWebState(Bundle bundle) {
         if (mIsDestroyed)
             return false;
+        if (mTabManagerView != null)
+            mTabManagerView.closeSnackBar();
         mTabManager.saveData();
         return true;
     }

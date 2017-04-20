@@ -190,15 +190,12 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
             data.mWebView.setEmbeddedTitleBarMethod(null);
             data.mWebView.destroy();
         }
-        if (hideItem != null) {
-            int index = hideItem.index;
-            mTabStorage.add(index, hideItem.data);
-            mTabStorage.removeAndDelete(index);
-        }
+        deleteHideItemIfNeed();
     }
 
     @Override
     public void saveData() {
+        deleteHideItemIfNeed();
         for (MainTabData tabData : mTabCache.values()) {
             mTabStorage.saveWebView(tabData);
         }
@@ -284,6 +281,15 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
             return data;
         }
         return null;
+    }
+
+    private void deleteHideItemIfNeed() {
+        if (hideItem != null) {
+            mTabStorage.add(hideItem.index, hideItem.data);
+            mTabStorage.removeAndDelete(hideItem.index);
+            mTabCache.remove(hideItem.data.getId());
+            hideItem = null;
+        }
     }
 
     private void setText(View view, TabIndexData indexData) {
