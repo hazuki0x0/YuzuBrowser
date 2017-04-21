@@ -191,6 +191,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
             data.mWebView.destroy();
         }
         deleteHideItemIfNeed();
+        thumbnailManager.destroy();
     }
 
     @Override

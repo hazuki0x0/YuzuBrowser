@@ -22,20 +22,33 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.image.ImageCache;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 class ThumbnailManager {
     private final int height;
     private final int width;
 
+    private ImageCache cache;
+
     ThumbnailManager(Context context) {
         float density = DisplayUtils.getDensity(context);
         height = (int) (density * 82 + 0.5f);
         width = (int) (density * 104 + 0.5f);
+        cache = new ImageCache(0x200000);
     }
 
     void takeThumbnailIfNeeded(MainTabData data) {
         if (!data.isShotThumbnail()) {
+            createWithCache(data);
+        }
+    }
+
+    private void createWithCache(MainTabData data) {
+        Bitmap bitmap = cache.getBitmap(data.getUrl());
+        if (bitmap != null) {
+            data.shotThumbnail(bitmap);
+        } else {
             create(data);
         }
     }
@@ -46,6 +59,7 @@ class ThumbnailManager {
             public void run() {
                 Bitmap bitmap = createThumbnailImage(data.mWebView);
                 if (bitmap != null) {
+                    cache.putBitmap(data.getUrl(), bitmap);
                     data.shotThumbnail(bitmap);
                 }
             }
@@ -66,10 +80,11 @@ class ThumbnailManager {
     }
 
     void forceTakeThumbnail(MainTabData data) {
-        Bitmap bitmap = createThumbnailImage(data.mWebView);
-        if (bitmap != null) {
-            data.shotThumbnail(bitmap);
-        }
+        createWithCache(data);
+    }
+
+    public void destroy() {
+        cache.dispose();
     }
 
     private Bitmap createThumbnailImage(CustomWebView webView) {
