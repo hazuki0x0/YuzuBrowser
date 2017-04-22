@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.tab.manager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
+import android.graphics.Rect;
 
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.image.ImageCache;
@@ -88,18 +88,23 @@ class ThumbnailManager {
     }
 
     private Bitmap createThumbnailImage(CustomWebView webView) {
-        int x = webView.getWebView().getWidth();
+        int x = webView.getWebView().getMeasuredWidth();
         int y = (int) ((float) x / width * height + 0.5f);
         if (x <= 0 || y <= 0) return null;
         float scale = (float) width / x;
-        int scroll = webView.getWebView().getScrollY();
+        int scroll = (int) (webView.getWebView().getScrollY() * scale);
 
-        Bitmap bitmap = Bitmap.createBitmap(x, y + scroll, Bitmap.Config.RGB_565);
+        Bitmap bitmap = Bitmap.createBitmap(width, height + scroll, Bitmap.Config.RGB_565);
         Canvas localCanvas = new Canvas(bitmap);
+        localCanvas.clipRect(new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()));
+        localCanvas.scale(scale, scale, 0.0f, 0.0f);
+
         webView.getWebView().draw(localCanvas);
 
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-        return Bitmap.createBitmap(bitmap, 0, scroll, x, y, matrix, true);
+        if (scroll == 0) {
+            return bitmap;
+        } else {
+            return Bitmap.createBitmap(bitmap, 0, scroll, width, height);
+        }
     }
 }

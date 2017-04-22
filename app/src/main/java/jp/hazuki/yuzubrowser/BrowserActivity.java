@@ -1865,8 +1865,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (clearTabNo >= 0) {
             if (mTabManager.size() >= 2)
                 removeTab(clearTabNo);
-            else
-                destroy();
         }
 
         if ((finish_clear & 0x01) != 0) {
@@ -1896,7 +1894,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             mTabManager.clear();
         }
 
-        destroy();
         finish();
     }
 
