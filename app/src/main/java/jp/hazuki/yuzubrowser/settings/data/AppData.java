@@ -192,6 +192,7 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_LINK_TEXT));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
                 manager.link.action.add(action);
@@ -205,6 +206,7 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_IMAGE_URL));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_IMAGE_RES_BLOCK));
@@ -227,6 +229,7 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_IMAGE_URL));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_IMAGE_RES_BLOCK));
