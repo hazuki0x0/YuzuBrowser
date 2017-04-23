@@ -2,11 +2,13 @@ package jp.hazuki.yuzubrowser.webkit;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
+import android.support.annotation.Nullable;
 import android.support.annotation.Px;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -615,5 +617,10 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enableSwipe && enabled);
+    }
+
+    @Override
+    public void setLayerType(int layerType, @Nullable Paint paint) {
+        webView.setLayerType(layerType, paint);
     }
 }

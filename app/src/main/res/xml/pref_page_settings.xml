@@ -48,10 +48,11 @@
     <!--android:enabled="false"-->
     <!--android:key="force_scalable"-->
     <!--android:title="@string/pref_force_scalable" />-->
-    <!--<CheckBoxPreference-->
-    <!--android:enabled="false"-->
-    <!--android:key="invert_rendering"-->
-    <!--android:title="@string/pref_invert_rendering" />-->
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_rendering_list"
+        android:entryValues="@array/pref_rendering_values"
+        android:key="rendering"
+        android:title="@string/pref_rendering" />
 
 
     <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference

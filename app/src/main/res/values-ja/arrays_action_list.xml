@@ -68,7 +68,7 @@
         <item>テキストサイズの設定</item>
         <item>UserScriptの設定</item>
         <item>テキストエンコードの設定</item>
-        <!--<item>反転レンダリング設定</item>-->
+        <item>レンダリング モード</item>
         <item>タブバー表示の切替</item>
         <item>URLバー表示の切替</item>
         <item>プログレスバー表示の切替</item>

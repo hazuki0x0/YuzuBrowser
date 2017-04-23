@@ -507,7 +507,7 @@
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
     <string name="pref_userjs_manage">Manage UserScript</string>
-    <string name="pref_invert_rendering">Invert rendering</string>
+    <string name="preft_rendering">Rendering mode</string>
     <string name="pref_auto_tab_save_delay">Auto save interval (sec.)</string>
     <string name="pref_resblock_settings">Resource interrupt settings</string>
     <string name="pref_resblock_enable">Enable resource interrupt</string>
@@ -593,4 +593,18 @@
     <string name="pref_number_of_tab_to_cache">Number of tabs to cache</string>
     <string name="pref_dark_theme">Dark theme</string>
     <string name="pref_light_theme">Light theme</string>
+
+    <string-array name="pref_rendering_list">
+        <item>Normal</item>
+        <item>Invert</item>
+        <item>Gray scale</item>
+        <item>Invert gray scale</item>
+    </string-array>
+
+    <integer-array name="pref_rendering_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
 </resources>

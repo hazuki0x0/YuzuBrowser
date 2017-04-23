@@ -2,11 +2,13 @@ package jp.hazuki.yuzubrowser.webkit;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
+import android.support.annotation.Nullable;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -43,6 +45,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     private int mCurrent = 0;
     private boolean isFirst = true;
     private View mTitlebar;
+    private int layerType;
+    private Paint layerPaint;
     private OnWebStateChangeListener mStateChangeListener;
     private OnScrollChangedListener mOnScrollChangedListener;
     private DownloadListener mDownloadListener;
@@ -842,6 +846,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         to.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         to.setOverScrollModeMethod(from.getOverScrollModeMethod());
 
+        to.setLayerType(layerType, layerPaint);
+
         WebSettings from_setting = from.getSettings();
         WebSettings to_setting = to.getSettings();
 
@@ -887,5 +893,14 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     public void setMyOnScrollChangedListener(OnScrollChangedListener l) {
         mOnScrollChangedListener = l;
         mList.get(mCurrent).mWebView.setMyOnScrollChangedListener(l);
+    }
+
+    @Override
+    public void setLayerType(int layerType, @Nullable Paint paint) {
+        this.layerType = layerType;
+        layerPaint = paint;
+        for (TabData web : mList) {
+            web.mWebView.setLayerType(layerType, paint);
+        }
     }
 }

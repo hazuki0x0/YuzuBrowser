@@ -98,7 +98,7 @@ public class SingleAction implements Parcelable {
     public static final int TEXTSIZE_SETTING = 35306;
     public static final int USERJS_SETTING = 35307;
     public static final int WEB_ENCODE_SETTING = 35308;
-    public static final int INVERT_RENDER_SETTING = 35400;
+    public static final int RENDER_SETTING = 35400;
     public static final int TOGGLE_VISIBLE_TAB = 38000;
     public static final int TOGGLE_VISIBLE_URL = 38001;
     public static final int TOGGLE_VISIBLE_PROGRESS = 38002;

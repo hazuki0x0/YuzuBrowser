@@ -216,7 +216,7 @@
     <string name="pref_userjs_settings">UserScript設定</string>
     <string name="pref_userjs_enable">UserScriptを有効にする</string>
     <string name="pref_userjs_manage">UserScriptの管理</string>
-    <string name="pref_invert_rendering">反転レンダリング</string>
+    <string name="pref_rendering">レンダリングモード</string>
     <string name="pref_auto_tab_save_delay">オートセーブの間隔 (秒)</string>
     <string name="pref_resblock_settings">リソース割り込み設定</string>
     <string name="pref_resblock_enable">リソース割り込みを有効にする</string>
@@ -283,4 +283,11 @@
     <string name="pref_number_of_tab_to_cache">メモリに保持するタブ数</string>
     <string name="pref_dark_theme">ダークテーマ</string>
     <string name="pref_light_theme">ライトテーマ</string>
+
+    <string-array name="pref_rendering_list">
+        <item>標準</item>
+        <item>反転</item>
+        <item>グレースケール</item>
+        <item>反転グレースケール</item>
+    </string-array>
 </resources>

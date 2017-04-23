@@ -1,6 +1,7 @@
 package jp.hazuki.yuzubrowser.webkit;
 
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
@@ -172,6 +173,8 @@ public interface CustomWebView {
     void setIdentityId(long id);
 
     void resetTheme();
+
+    void setLayerType(int layerType, Paint paint);
 
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);

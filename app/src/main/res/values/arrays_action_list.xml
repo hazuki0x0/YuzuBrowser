@@ -68,10 +68,10 @@
         <item>Page text size settings</item>
         <item>UserScript settings</item>
         <item>Text encoding settings</item>
-        <item>Revert rendering settings</item>
+        <item>Rendering mode</item>
         <item>Toggle Tab bar visibility</item>
         <item>Toggle Url bar visibility</item>
-        <!--<item>Toggle Progress bar visibility</item>-->
+        <item>Toggle Progress bar visibility</item>
         <item>Toggle Custom bar visibility</item>
         <item>Combine web titlebar</item>
         <item>Toggle web gesture</item>

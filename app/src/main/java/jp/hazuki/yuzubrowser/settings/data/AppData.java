@@ -141,6 +141,7 @@ public class AppData {
     public static final IntContainer open_bookmark_icon_action = new IntContainer("open_bookmark_icon_action", 1);
     public static final IntContainer search_suggest_engine = new IntContainer("search_suggest_engine", 0);
     public static final IntContainer tabs_cache_number = new IntContainer("tab_cache_number", 5);
+    public static final IntContainer rendering = new IntContainer("rendering", 0);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

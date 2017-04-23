@@ -208,6 +208,7 @@ import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
 import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
 import jp.hazuki.yuzubrowser.webkit.WebViewAutoScrollManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
+import jp.hazuki.yuzubrowser.webkit.WebViewRenderingManager;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageCopyUrlHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageLoadUrlHandler;
@@ -264,6 +265,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private WebViewFindDialog mWebViewFindDialog;
     private WebViewPageFastScroller mWebViewPageFastScroller;
     private WebViewAutoScrollManager mWebViewAutoScrollManager;
+    private WebViewRenderingManager webViewRenderingManager = new WebViewRenderingManager();
     private DequeCompat<Bundle> mClosedTabs;
     private MultiTouchGestureDetector mGestureDetector;
     private PointerView mCursorView;
@@ -889,6 +891,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private void onPreferenceReset() {
         mToolbar.onPreferenceReset();
         mTabManager.onPreferenceReset();
+        webViewRenderingManager.onPreferenceReset();
         mPatternManager.load(getApplicationContext());
 
         if (ThemeData.createInstance(getApplicationContext(), AppData.theme_setting.get()) != null) {
@@ -1740,6 +1743,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private void initWebSetting(final CustomWebView web) {
         web.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         web.setOverScrollModeMethod(View.OVER_SCROLL_NEVER);
+
+        webViewRenderingManager.setWebViewRendering(web);
 
         web.setMyWebChromeClient(new MyWebChromeClient());
         web.setMyWebViewClient(mWebViewClient);
@@ -3561,6 +3566,22 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     webEncode.putExtra(Intent.EXTRA_TEXT, mTabManager.get(target).mWebView.getSettings().getDefaultTextEncodingName());
                     startActivityForResult(webEncode, RESULT_REQUEST_WEB_ENCODE_SETTING);
                     break;
+                case SingleAction.RENDER_SETTING: {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BrowserActivity.this);
+                    builder.setTitle(R.string.pref_rendering)
+                            .setSingleChoiceItems(R.array.pref_rendering_list, AppData.rendering.get(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    AppData.rendering.set(which);
+                                    AppData.commit(BrowserActivity.this, AppData.rendering);
+                                    onPreferenceReset();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null);
+                    builder.create().show();
+                    break;
+                }
                 case SingleAction.TOGGLE_VISIBLE_TAB:
                     mToolbar.getTabBar().toggleVisibility();
                     break;
@@ -3878,6 +3899,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
                 case SingleAction.WEB_ENCODE_SETTING:
                     return res.getDrawable(R.drawable.ic_format_shapes_white_24dp, getTheme());
+                case SingleAction.RENDER_SETTING:
+                    return res.getDrawable(R.drawable.ic_blur_linear_white_24dp, getTheme());
                 case SingleAction.TOGGLE_VISIBLE_TAB:
                     return res.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, getTheme());
                 case SingleAction.TOGGLE_VISIBLE_URL:
