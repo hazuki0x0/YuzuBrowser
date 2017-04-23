@@ -217,7 +217,7 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenOtherAppHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightBgTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
-import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkTextHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
 import static jp.hazuki.yuzubrowser.utils.PermissionUtils.FIRST_PERMISSION;
 import static jp.hazuki.yuzubrowser.utils.PermissionUtils.REQUEST_STORAGE;
@@ -2814,12 +2814,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             return true;
                         }
                         case SingleAction.LPRESS_COPY_LINK_TEXT:
-                            webview.requestFocusNodeHref(new WebSrcLinkTextHandler(new WebSrcLinkTextHandler.OnGetTextListener() {
-                                @Override
-                                public void onGetText(String text) {
-                                    ClipboardUtils.setClipboardText(getApplicationContext(), text);
-                                }
-                            }).obtainMessage());
+                            webview.requestFocusNodeHref(new WebSrcLinkCopyHandler(BrowserActivity.this).obtainMessage());
                             return true;
                         default:
                             return run(action, target, null);

@@ -16,27 +16,29 @@
 
 package jp.hazuki.yuzubrowser.webkit.handler;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-public class WebSrcLinkTextHandler extends Handler {
+import java.lang.ref.WeakReference;
 
-    private OnGetTextListener mListener;
+import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 
-    public WebSrcLinkTextHandler(OnGetTextListener listener) {
-        mListener = listener;
+public class WebSrcLinkCopyHandler extends Handler {
+    private WeakReference<Context> mReference;
+
+    public WebSrcLinkCopyHandler(Context context) {
+        mReference = new WeakReference<>(context);
     }
 
     @Override
     public void handleMessage(Message msg) {
         String text = msg.getData().getString("title");
         if (!TextUtils.isEmpty(text)) {
-            mListener.onGetText(text);
+            Context context = mReference.get();
+            if (context != null)
+                ClipboardUtils.setClipboardText(context, text);
         }
-    }
-
-    public interface OnGetTextListener {
-        void onGetText(String text);
     }
 }
