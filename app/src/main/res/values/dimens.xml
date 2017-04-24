@@ -19,4 +19,12 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Tab list item horizontal size -->
+    <dimen name="tab_list_item_h_width">104dp</dimen>
+    <dimen name="tab_list_item_h_height">82dp</dimen>
+    <dimen name="tab_list_item_h_button_size">24dp</dimen>
+    <dimen name="tab_list_item_h_button_padding">4dp</dimen>
+    <dimen name="tab_list_item_h_button_margin">4dp</dimen>
+    <dimen name="tab_list_item_h_text_size">12sp</dimen>
 </resources>
