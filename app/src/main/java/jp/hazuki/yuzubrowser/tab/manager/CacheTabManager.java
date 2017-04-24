@@ -284,6 +284,11 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
         return null;
     }
 
+    @Override
+    public boolean isHideItem() {
+        return hideItem != null;
+    }
+
     private void deleteHideItemIfNeed() {
         if (hideItem != null) {
             mTabStorage.add(hideItem.index, hideItem.data);

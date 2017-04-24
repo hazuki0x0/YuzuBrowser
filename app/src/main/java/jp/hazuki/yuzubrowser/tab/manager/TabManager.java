@@ -83,4 +83,6 @@ public interface TabManager {
     boolean hideItem(int index);
 
     TabIndexData unHideItem();
+
+    boolean isHideItem();
 }

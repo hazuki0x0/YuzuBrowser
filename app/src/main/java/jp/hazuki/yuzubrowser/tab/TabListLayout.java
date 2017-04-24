@@ -26,6 +26,9 @@ public class TabListLayout extends LinearLayout {
     private boolean reverse = false;
     private boolean horizontal = false;
 
+    private boolean changeCurrent;
+    private int oldCurrent;
+
     public TabListLayout(Context context) {
         this(context, null);
     }
@@ -132,6 +135,15 @@ public class TabListLayout extends LinearLayout {
         }
     }
 
+    private void deleteHideItem() {
+        TabIndexData data = tabManager.unHideItem();
+        if (changeCurrent)
+            tabManager.setCurrentTab(oldCurrent);
+        changeCurrent = false;
+        if (data != null)
+            mCallback.requestRemoveTab(tabManager.indexOf(data.getId()));
+    }
+
     private class ListTouch extends ItemTouchHelper.Callback {
 
         @Override
@@ -147,6 +159,10 @@ public class TabListLayout extends LinearLayout {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            if (snackbar != null && snackbar.isShown()) {
+                deleteHideItem();
+                snackbar.dismiss();
+            }
             mCallback.requestMoveTab(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
@@ -155,14 +171,17 @@ public class TabListLayout extends LinearLayout {
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             if (mAdapter.getItemCount() > 1) {
+                if (snackbar != null && snackbar.isShown()) {
+                    deleteHideItem();
+                    snackbar.dismiss();
+                }
                 int position = viewHolder.getAdapterPosition();
 
-                final boolean changeCurrent;
                 if (tabManager.getCurrentTabNo() == position) {
                     mCallback.requestSelectTab(position == tabManager.size() - 1 ? position - 1 : position + 1);
                 }
 
-                final int oldCurrent = tabManager.getCurrentTabNo();
+                oldCurrent = tabManager.getCurrentTabNo();
 
                 if ((position < oldCurrent && oldCurrent > 0)) {
                     tabManager.setCurrentTab(oldCurrent - 1);
@@ -183,19 +202,17 @@ public class TabListLayout extends LinearLayout {
                                 tabManager.unHideItem();
                                 if (changeCurrent)
                                     tabManager.setCurrentTab(oldCurrent);
+                                changeCurrent = false;
                                 mAdapter.notifyDataSetChanged();
                             }
                         })
                         .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                             @Override
                             public void onDismissed(Snackbar transientBottomBar, int event) {
-                                if (event != DISMISS_EVENT_ACTION) {
-                                    TabIndexData data = tabManager.unHideItem();
-                                    if (changeCurrent)
-                                        tabManager.setCurrentTab(oldCurrent);
-                                    if (data != null)
-                                        mCallback.requestRemoveTab(tabManager.indexOf(data.getId()));
+                                if (event != DISMISS_EVENT_ACTION && tabManager.isHideItem()) {
+                                    deleteHideItem();
                                 }
+                                snackbar = null;
                             }
                         });
                 snackbar.show();
