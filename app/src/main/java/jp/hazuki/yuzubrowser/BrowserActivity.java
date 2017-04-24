@@ -1446,6 +1446,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         CustomWebView new_web = new_data.mWebView;
         new_web.onResume();
+        if (new_web.getView().getParent() != null) {
+            ((ViewGroup) new_web.getView().getParent()).removeView(new_web.getView());
+        }
         webFrameLayout.addView(new_web.getView(), 0);
 
         new_web.setOnMyCreateContextMenuListener(mOnCreateContextMenuListener);
