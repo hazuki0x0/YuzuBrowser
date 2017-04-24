@@ -271,8 +271,10 @@ public class ToolbarManager {
     public void onImeChanged(boolean shown) {
         if (shown) {
             bottomToolbarLayout.setVisibility(View.GONE);
+            bottomToolbarAlwaysLayout.setVisibility(View.GONE);
         } else {
             bottomToolbarLayout.setVisibility(View.VISIBLE);
+            bottomToolbarAlwaysLayout.setVisibility(View.VISIBLE);
         }
     }
 

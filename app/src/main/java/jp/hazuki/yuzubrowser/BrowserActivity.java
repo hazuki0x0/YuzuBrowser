@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser;
 
 import android.Manifest;
@@ -306,6 +322,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setFullScreenMode(AppData.fullscreen.get());
 
         setContentView(R.layout.browser_activity);
+
+        if (BrowserApplication.isNeedLoad()) {
+            AppData.load(this);
+            BrowserApplication.setNeedLoad(false);
+        }
 
         mHandler = new Handler();
         mTabManager = TabManagerFactory.newInstance(this);
@@ -831,6 +852,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (action == null) return false;
         if (ACTION_FINISH.equals(action)) {
             forceDestroy = intent.getBooleanExtra(EXTRA_FORCE_DESTROY, false);
+            BrowserApplication.setNeedLoad(true);
             finish();
             return false;
         }
@@ -1904,6 +1926,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             mTabManager.clear();
         }
 
+        BrowserApplication.setNeedLoad(true);
         finish();
     }
 
@@ -2116,7 +2139,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (tabdata == null) {
                         tabdata = mTabManager.getCurrentTabData();
                         if (tabdata == null)
-                            return true;
+                            return visibility.isVisible();
                     }
 
                     return !(visibility.isHideWhenEndLoading() && !tabdata.isInPageLoad());
