@@ -105,6 +105,7 @@ import jp.hazuki.yuzubrowser.action.item.PasteGoSingleAction;
 import jp.hazuki.yuzubrowser.action.item.SaveScreenshotSingleAction;
 import jp.hazuki.yuzubrowser.action.item.ShareScreenshotSingleAction;
 import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
+import jp.hazuki.yuzubrowser.action.item.ToastAction;
 import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
 import jp.hazuki.yuzubrowser.action.item.VibrationSingleAction;
 import jp.hazuki.yuzubrowser.action.item.WebScrollSingleAction;
@@ -1401,6 +1402,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                     if (info != null) {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         startActivity(intent);
                     } else {
                         String fallbackUrl = intent.getStringExtra("browser_fallback_url");
@@ -3686,6 +3688,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                     vibrator.vibrate(((VibrationSingleAction) action).getTime());
                     break;
+                case SingleAction.TOAST:
+                    Toast.makeText(getApplicationContext(), ((ToastAction) action).getText(), Toast.LENGTH_SHORT).show();
+                    break;
                 case SingleAction.PRIVATE:
                     boolean privateMode = !AppData.private_mode.get();
                     AppData.private_mode.set(privateMode);
@@ -3951,6 +3956,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.CUSTOM_ACTION:
                     return getIcon(((CustomSingleAction) action).getAction());
                 case SingleAction.VIBRATION:
+                    return null;
+                case SingleAction.TOAST:
                     return null;
                 case SingleAction.PRIVATE:
                     if (AppData.private_mode.get())

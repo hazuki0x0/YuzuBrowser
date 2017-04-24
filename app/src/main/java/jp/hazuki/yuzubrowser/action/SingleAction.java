@@ -22,6 +22,7 @@ import jp.hazuki.yuzubrowser.action.item.PasteGoSingleAction;
 import jp.hazuki.yuzubrowser.action.item.SaveScreenshotSingleAction;
 import jp.hazuki.yuzubrowser.action.item.ShareScreenshotSingleAction;
 import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
+import jp.hazuki.yuzubrowser.action.item.ToastAction;
 import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
 import jp.hazuki.yuzubrowser.action.item.VibrationSingleAction;
 import jp.hazuki.yuzubrowser.action.item.WebScrollSingleAction;
@@ -117,6 +118,7 @@ public class SingleAction implements Parcelable {
     public static final int MINIMIZE = 90005;
     public static final int CUSTOM_ACTION = 100000;
     public static final int VIBRATION = 100100;
+    public static final int TOAST = 100101;
     public static final int PRIVATE = 100110;
     public static final int VIEW_SOURCE = 101000;
     public static final int PRINT = 101010;
@@ -220,6 +222,8 @@ public class SingleAction implements Parcelable {
                 return new CustomSingleAction(id, parser);
             case VIBRATION:
                 return new VibrationSingleAction(id, parser);
+            case TOAST:
+                return new ToastAction(id, parser);
             case CLOSE_AUTO_SELECT:
                 return new CloseAutoSelectAction(id, parser);
             default:
@@ -247,6 +251,7 @@ public class SingleAction implements Parcelable {
             case FINISH:
             case CUSTOM_ACTION:
             case VIBRATION:
+            case TOAST:
             case CLOSE_AUTO_SELECT:
                 return true;
             default:
