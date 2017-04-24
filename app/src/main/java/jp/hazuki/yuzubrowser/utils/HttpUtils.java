@@ -17,6 +17,8 @@
 package jp.hazuki.yuzubrowser.utils;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +30,20 @@ public final class HttpUtils {
         if (header.get("Content-Disposition") != null) {
             List<String> lines = header.get("Content-Disposition");
             for (String raw : lines) {
-                if (raw != null && raw.toLowerCase().startsWith("filename=")) {
-                    // getting value after '='
-                    String fileName = raw.split("=")[1];
-                    return FileUtils.createUniqueFile(AppData.download_folder.get(), fileName);
+                if (raw != null) {
+                    String lowRaw = raw.toLowerCase();
+                    if (lowRaw.startsWith("filename=")) {
+                        // getting value after '='
+                        String fileName = raw.substring(9);
+                        try {
+                            return FileUtils.createUniqueFile(AppData.download_folder.get(), URLDecoder.decode(fileName, "UTF-8"));
+                        } catch (UnsupportedEncodingException e) {
+                            return FileUtils.createUniqueFile(AppData.download_folder.get(), fileName);
+                        }
+                    } else if (lowRaw.startsWith("filename*=UTF-8''")) { /* RFC 6266 */
+                        return FileUtils.createUniqueFile(AppData.download_folder.get(), raw.substring(17));
+                    }
+
                 }
             }
         }
