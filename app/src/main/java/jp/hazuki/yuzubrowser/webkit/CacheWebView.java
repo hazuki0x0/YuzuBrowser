@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.webkit;
 
 import android.content.Context;
@@ -44,7 +60,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     private long id = System.currentTimeMillis();
     private int mCurrent = 0;
     private boolean isFirst = true;
-    private View mTitlebar;
+    private View mTitleBar;
     private int layerType;
     private Paint layerPaint;
     private OnWebStateChangeListener mStateChangeListener;
@@ -388,7 +404,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public void destroy() {
-        mTitlebar = null;
+        mTitleBar = null;
         for (TabData web : mList) {
             web.mWebView.destroy();
         }
@@ -700,7 +716,14 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public void setSwipeEnable(boolean enable) {
-        mList.get(mCurrent).mWebView.setSwipeEnable(enable);
+        for (TabData web : mList) {
+            web.mWebView.setSwipeEnable(enable);
+        }
+    }
+
+    @Override
+    public boolean getSwipeEnable() {
+        return mList.get(mCurrent).mWebView.getSwipeEnable();
     }
 
     @Override
@@ -716,7 +739,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         for (TabData web : mList) {
             web.mWebView.setEmbeddedTitleBarMethod(null);
         }
-        mTitlebar = view;
+        mTitleBar = view;
         return mList.get(mCurrent).mWebView.setEmbeddedTitleBarMethod(view);
     }
 
@@ -799,7 +822,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public void resetTheme() {
-        mList.get(mCurrent).mWebView.resetTheme();
+        for (TabData web : mList) {
+            web.mWebView.resetTheme();
+        }
     }
 
     @Override
@@ -824,7 +849,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         from.onPause();
         to.onResume();
         from.setEmbeddedTitleBarMethod(null);
-        to.setEmbeddedTitleBarMethod(mTitlebar);
+        to.setEmbeddedTitleBarMethod(mTitleBar);
         from.setOnMyCreateContextMenuListener(null);
         to.setOnMyCreateContextMenuListener(mCreateContextMenuListenerWrapper);
         from.setGestureDetector(null);
@@ -845,6 +870,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
         to.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         to.setOverScrollModeMethod(from.getOverScrollModeMethod());
+
+        to.setSwipeEnable(from.getSwipeEnable());
 
         to.setLayerType(layerType, layerPaint);
 
