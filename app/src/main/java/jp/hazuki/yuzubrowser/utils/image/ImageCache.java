@@ -24,12 +24,7 @@ public class ImageCache {
     private LruCache<Integer, Bitmap> imageCache;
 
     public ImageCache(int cacheSize) {
-        imageCache = new LruCache<Integer, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(Integer key, Bitmap value) {
-                return value.getByteCount();
-            }
-        };
+        imageCache = new ImageLruCache(cacheSize);
     }
 
     public Bitmap getBitmap(String url) {
@@ -48,5 +43,16 @@ public class ImageCache {
 
     private int getKey(String url) {
         return url.hashCode();
+    }
+
+    private static class ImageLruCache extends LruCache<Integer, Bitmap> {
+        ImageLruCache(int maxSize) {
+            super(maxSize);
+        }
+
+        @Override
+        protected int sizeOf(Integer key, Bitmap value) {
+            return value.getByteCount();
+        }
     }
 }
