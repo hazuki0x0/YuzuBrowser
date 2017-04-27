@@ -510,7 +510,7 @@
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
     <string name="pref_userjs_manage">Manage UserScript</string>
-    <string name="preft_rendering">Rendering mode</string>
+    <string name="pref_rendering">Rendering mode</string>
     <string name="pref_auto_tab_save_delay">Auto save interval (sec.)</string>
     <string name="pref_resblock_settings">Resource interrupt settings</string>
     <string name="pref_resblock_enable">Enable resource interrupt</string>
