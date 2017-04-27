@@ -29,6 +29,7 @@
     <string name="pref_toolbar_location_top">Top bar</string>
     <string name="pref_toolbar_location_top_always">Top bar(Always display)</string>
     <string name="pref_toolbar_location_bottom">Bottom bar</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">Bottom overlay bar(Always display)</string>
     <string name="pref_toolbar_location_bottom_always">Bottom bar(Always display)</string>
     <string name="pref_toolbar_location_web">Web bar</string>
     <string name="pref_toolbar_location_web_fix">Web bar (fixed)</string>
@@ -39,6 +40,7 @@
         <item>@string/pref_toolbar_location_top</item>
         <item>@string/pref_toolbar_location_top_always</item>
         <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_overlay_always</item>
         <item>@string/pref_toolbar_location_bottom_always</item>
         <item>@string/pref_toolbar_location_web</item>
         <item>@string/pref_toolbar_location_web_fix</item>
@@ -48,6 +50,7 @@
         <item>0</item>
         <item>7</item>
         <item>1</item>
+        <item>9</item>
         <item>8</item>
         <item>2</item>
         <item>3</item>

@@ -24,6 +24,7 @@
     <string name="pref_toolbar_location_top">上部バー</string>
     <string name="pref_toolbar_location_top_always">上部バー(常時表示)</string>
     <string name="pref_toolbar_location_bottom">下部バー</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">下部透過バー(常時表示)</string>
     <string name="pref_toolbar_location_bottom_always">下部バー(常時表示)</string>
     <string name="pref_toolbar_location_web">Webバー</string>
     <string name="pref_toolbar_location_web_fix">Webバー (固定)</string>

@@ -41,7 +41,7 @@ public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
                 topBarHeight = dependency.getHeight();
             }
             if (bottomBarHeight == -1 && bottomBar != null) {
-                bottomBarHeight = bottomBar.getHeight();
+                bottomBarHeight = bottomBar.findViewById(R.id.bottomToolbarLayout).getHeight();
             }
 
             if (topBarHeight != 0) {

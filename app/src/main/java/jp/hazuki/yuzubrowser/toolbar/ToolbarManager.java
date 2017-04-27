@@ -32,6 +32,7 @@ public class ToolbarManager {
     private final LinearLayout topToolbarLayout, bottomToolbarLayout, leftToolbarLayout, rightToolbarLayout;
     private final LinearLayout webToolbarLayout, fixedWebToolbarLayout;
     private final LinearLayout topToolbarAlwaysLayout, bottomToolbarAlwaysLayout;
+    private final LinearLayout bottomOverlayLayout, bottomOverlayItemLayout;
     private final View findOnPage;
     private boolean mIsWebToolbarCombined = false;
     private final TabBar tabBar;
@@ -52,6 +53,7 @@ public class ToolbarManager {
     public static final int LOCATION_RIGHT = 6;
     public static final int LOCATION_TOP_ALWAYS = 7;
     public static final int LOCATION_BOTTOM_ALWAYS = 8;
+    public static final int LOCATION_BOTTOM_OVERLAY_ALWAYS = 9;
 
     private static final LinearLayout.LayoutParams TOOLBAR_LAYOUT_PARAMS = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
@@ -64,6 +66,8 @@ public class ToolbarManager {
     public ToolbarManager(Activity activity, ActionCallback action_callback, RequestCallback request_callback) {
         topToolbarLayout = (LinearLayout) activity.findViewById(R.id.topToolbarLayout);
         bottomToolbarLayout = (LinearLayout) activity.findViewById(R.id.bottomToolbarLayout);
+        bottomOverlayLayout = (LinearLayout) activity.findViewById(R.id.bottomOverlayLayout);
+        bottomOverlayItemLayout = (LinearLayout) activity.findViewById(R.id.bottomOverlayItemLayout);
         topToolbarAlwaysLayout = (LinearLayout) activity.findViewById(R.id.topAlwaysToolbarLayout);
         bottomToolbarAlwaysLayout = (LinearLayout) activity.findViewById(R.id.bottomAlwaysToolbarLayout);
         leftToolbarLayout = (LinearLayout) activity.findViewById(R.id.leftToolbarLayout);
@@ -81,7 +85,7 @@ public class ToolbarManager {
         progressBar = new ProgressToolBar(activity, action_callback, request_callback);
         customBar = new CustomToolbar(activity, action_callback, request_callback);
 
-        Object o = bottomToolbarLayout.getLayoutParams();
+        Object o = bottomOverlayLayout.getLayoutParams();
         if (o instanceof CoordinatorLayout.LayoutParams) {
             CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) o).getBehavior();
             if (behavior instanceof BottomBarBehavior) {
@@ -178,6 +182,9 @@ public class ToolbarManager {
             case LOCATION_BOTTOM_ALWAYS:
                 bottomToolbarAlwaysLayout.addView(toolbar, TOOLBAR_LAYOUT_PARAMS);
                 break;
+            case LOCATION_BOTTOM_OVERLAY_ALWAYS:
+                bottomOverlayItemLayout.addView(toolbar, TOOLBAR_LAYOUT_PARAMS);
+                break;
             default:
                 throw new IllegalStateException("Unknown location:" + toolbar.getToolbarPreferences().location.get());
         }
@@ -218,6 +225,7 @@ public class ToolbarManager {
         if (themedata != null && themedata.toolbarBackgroundColor != 0) {
             topToolbarLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
             bottomToolbarLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
+            bottomOverlayItemLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
             webToolbarLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
             fixedWebToolbarLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
             leftToolbarLayout.setBackgroundColor(themedata.toolbarBackgroundColor);
@@ -227,6 +235,7 @@ public class ToolbarManager {
         } else {
             topToolbarLayout.setBackgroundResource(R.color.deep_gray);
             bottomToolbarLayout.setBackgroundResource(R.color.deep_gray);
+            bottomOverlayItemLayout.setBackgroundResource(R.color.deep_gray);
             webToolbarLayout.setBackgroundResource(R.color.deep_gray);
             fixedWebToolbarLayout.setBackgroundResource(R.color.deep_gray);
             leftToolbarLayout.setBackgroundResource(R.color.deep_gray);
@@ -236,6 +245,7 @@ public class ToolbarManager {
         }
 
         bottomToolbarLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());
+        bottomOverlayItemLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());
 
         for (int i = 0; i < bottomToolbarLayout.getChildCount(); ++i) {
             View view = bottomToolbarLayout.getChildAt(i);
@@ -272,11 +282,9 @@ public class ToolbarManager {
 
     public void onImeChanged(boolean shown) {
         if (shown) {
-            bottomToolbarLayout.setVisibility(View.GONE);
-            bottomToolbarAlwaysLayout.setVisibility(View.GONE);
+            bottomOverlayLayout.setVisibility(View.GONE);
         } else {
-            bottomToolbarLayout.setVisibility(View.VISIBLE);
-            bottomToolbarAlwaysLayout.setVisibility(View.VISIBLE);
+            bottomOverlayLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -353,11 +361,11 @@ public class ToolbarManager {
     }
 
     public void showGeolocationPrmissionPrompt(View view) {
-        bottomToolbarLayout.addView(view, 0);
+        bottomOverlayItemLayout.addView(view, 0);
     }
 
     public void hideGeolocationPrmissionPrompt(View view) {
-        bottomToolbarLayout.removeView(view);
+        bottomOverlayItemLayout.removeView(view);
     }
 
     public boolean isContainsWebToolbar(MotionEvent ev) {

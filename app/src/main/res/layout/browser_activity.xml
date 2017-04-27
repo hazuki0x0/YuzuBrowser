@@ -72,24 +72,32 @@
                         android:id="@+id/webFrameLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
-
-
-                    <View
-                        android:id="@+id/floatBottomView"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:background="@color/float_bottom_background" />
                 </LinearLayout>
 
-
                 <LinearLayout
-                    android:id="@+id/bottomToolbarLayout"
-                    style="@style/ToolbarStyle"
+                    android:id="@+id/bottomOverlayLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    app:layout_behavior="jp.hazuki.yuzubrowser.toolbar.BottomBarBehavior" />
+                    app:layout_behavior="jp.hazuki.yuzubrowser.toolbar.BottomBarBehavior">
+
+                    <LinearLayout
+                        android:id="@+id/bottomOverlayItemLayout"
+                        style="@style/ToolbarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:id="@+id/bottomToolbarLayout"
+                        style="@style/ToolbarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
+
 
             </jp.hazuki.yuzubrowser.utils.view.CustomCoordinatorLayout>
 
