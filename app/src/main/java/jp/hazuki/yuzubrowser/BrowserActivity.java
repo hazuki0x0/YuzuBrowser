@@ -3597,13 +3597,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.RENDER_SETTING: {
                     AlertDialog.Builder builder = new AlertDialog.Builder(BrowserActivity.this);
                     builder.setTitle(R.string.pref_rendering)
-                            .setSingleChoiceItems(R.array.pref_rendering_list, AppData.rendering.get(), new DialogInterface.OnClickListener() {
+                            .setSingleChoiceItems(R.array.pref_rendering_list, webViewRenderingManager.getMode(), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    AppData.rendering.set(which);
-                                    AppData.commit(BrowserActivity.this, AppData.rendering);
-                                    onPreferenceReset();
+                                    webViewRenderingManager.setMode(which);
+
+                                    for (MainTabData data : mTabManager.getLoadedData()) {
+                                        webViewRenderingManager.setWebViewRendering(data.mWebView);
+                                    }
                                 }
                             })
                             .setNegativeButton(android.R.string.cancel, null);

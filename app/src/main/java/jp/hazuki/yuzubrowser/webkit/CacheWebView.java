@@ -871,6 +871,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         to.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         to.setOverScrollModeMethod(from.getOverScrollModeMethod());
 
+        to.resetTheme();
         to.setSwipeEnable(from.getSwipeEnable());
 
         to.setLayerType(layerType, layerPaint);

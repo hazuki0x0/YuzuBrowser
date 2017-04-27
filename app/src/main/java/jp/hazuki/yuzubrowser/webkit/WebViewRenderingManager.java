@@ -31,28 +31,29 @@ public class WebViewRenderingManager {
             0, 0, 0, 1, 0};
 
     private final Paint paint = new Paint();
-    private boolean normal = true;
+    private int mode;
 
     public void onPreferenceReset() {
-        switch (AppData.rendering.get()) {
+        setMode(AppData.rendering.get());
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+        switch (mode) {
             default:
             case 0:
-                normal = true;
                 paint.setColorFilter(null);
                 break;
             case 1:
-                normal = false;
                 paint.setColorFilter(new ColorMatrixColorFilter(NEGATIVE_COLOR));
                 break;
             case 2: {
-                normal = false;
                 ColorMatrix grayScale = new ColorMatrix();
                 grayScale.setSaturation(0);
                 paint.setColorFilter(new ColorMatrixColorFilter(grayScale));
                 break;
             }
             case 3: {
-                normal = false;
                 ColorMatrix negative = new ColorMatrix();
                 negative.set(NEGATIVE_COLOR);
                 ColorMatrix grayScale = new ColorMatrix();
@@ -65,8 +66,12 @@ public class WebViewRenderingManager {
         }
     }
 
+    public int getMode() {
+        return mode;
+    }
+
     public void setWebViewRendering(CustomWebView webView) {
-        if (normal) {
+        if (mode == 0) {
             webView.setLayerType(View.LAYER_TYPE_NONE, null);
         } else {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, paint);
