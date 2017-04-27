@@ -123,7 +123,7 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
         void onHistoryButtonClicked(View v, int position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView thumbNail;
         TextView title;
