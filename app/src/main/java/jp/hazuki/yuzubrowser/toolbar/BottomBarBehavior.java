@@ -62,6 +62,11 @@ public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
         topBarHeight = height;
     }
 
+    public void setBarSize(int topHeight, int bottomHeight) {
+        topBarHeight = topHeight;
+        bottomBarHeight = bottomHeight;
+    }
+
     public boolean isNoTopBar() {
         return noTopBar;
     }

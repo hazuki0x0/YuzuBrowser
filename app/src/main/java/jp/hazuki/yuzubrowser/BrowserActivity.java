@@ -3614,15 +3614,19 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 case SingleAction.TOGGLE_VISIBLE_TAB:
                     mToolbar.getTabBar().toggleVisibility();
+                    mToolbar.resetToolBarSize();
                     break;
                 case SingleAction.TOGGLE_VISIBLE_URL:
                     mToolbar.getUrlBar().toggleVisibility();
+                    mToolbar.resetToolBarSize();
                     break;
                 case SingleAction.TOGGLE_VISIBLE_PROGRESS:
                     mToolbar.getProgressToolBar().toggleVisibility();
+                    mToolbar.resetToolBarSize();
                     break;
                 case SingleAction.TOGGLE_VISIBLE_CUSTOM:
                     mToolbar.getCustomBar().toggleVisibility();
+                    mToolbar.resetToolBarSize();
                     break;
                 case SingleAction.TOGGLE_WEB_TITLEBAR:
                     mToolbar.setWebViewTitlebar(mTabManager.getCurrentTabData().mWebView, false);

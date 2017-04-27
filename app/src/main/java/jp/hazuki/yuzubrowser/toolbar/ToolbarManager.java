@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ public class ToolbarManager {
     private final CustomToolbar customBar;
     private BottomBarBehavior bottomBarBehavior;
     private int bottomBarHeight = -1;
+    private final Handler handler = new Handler();
 
     public static final int LOCATION_UNDEFINED = -1;
     public static final int LOCATION_TOP = 0;
@@ -363,6 +365,17 @@ public class ToolbarManager {
         fixedWebToolbarLayout.getGlobalVisibleRect(rc);
         return rc.contains((int) ev.getRawX(), (int) ev.getRawY());
     }
+
+    public void resetToolBarSize() {
+        handler.postDelayed(_resetToolBarSize, 100);
+    }
+
+    private final Runnable _resetToolBarSize = new Runnable() {
+        @Override
+        public void run() {
+            bottomBarBehavior.setBarSize(topToolbarLayout.getHeight(), bottomToolbarLayout.getHeight());
+        }
+    };
 
     public void onWebViewScroll(CustomWebView web, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if (bottomBarBehavior.isNoTopBar()) {
