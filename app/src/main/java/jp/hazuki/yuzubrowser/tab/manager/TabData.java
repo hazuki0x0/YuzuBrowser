@@ -145,6 +145,10 @@ public class TabData {
         mProgress = newProgress;
     }
 
+    public int getProgress() {
+        return mProgress;
+    }
+
     public void onStartPage() {
         mIndexData.setShotThumbnail(false);
     }
