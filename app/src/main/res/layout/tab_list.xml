@@ -11,11 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
+        android:clickable="true"
         android:gravity="end"
         style="?android:attr/buttonBarStyle">
 
-        <Button
-            android:text="@string/new_tab"
+        <ImageButton
+            android:src="@drawable/ic_add_box_white_24dp"
+            android:contentDescription="@string/new_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/newTabButton"

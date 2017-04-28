@@ -5,13 +5,12 @@ import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 
 import jp.hazuki.yuzubrowser.utils.ImeUtils;
 
-public class RootLayout extends FrameLayout {
+public class RootLayout extends CoordinatorLayout {
     private OnImeShownListener mOnImeShownListener;
 
     public RootLayout(Context context) {
@@ -22,8 +21,8 @@ public class RootLayout extends FrameLayout {
         super(context, attrs);
     }
 
-    public RootLayout(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+    public RootLayout(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     @Override
