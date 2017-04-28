@@ -291,4 +291,6 @@
         <item>グレースケール</item>
         <item>反転グレースケール</item>
     </string-array>
+
+    <string name="pref_move_to_parent">タブを閉じた時に親タブに移動</string>
 </resources>

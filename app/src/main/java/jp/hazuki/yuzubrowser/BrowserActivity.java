@@ -1524,7 +1524,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         old_web.destroy();
 
-        if (old_data.getTabType() == TabType.WINDOW && old_data.getParent() != 0) {
+        if (AppData.move_to_parent.get() && old_data.getTabType() == TabType.WINDOW && old_data.getParent() != 0) {
             int new_no = mTabManager.searchParentTabNo(old_data.getParent());
             if (new_no >= 0)
                 new_current_no = new_no;

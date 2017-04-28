@@ -610,4 +610,6 @@
         <item>2</item>
         <item>3</item>
     </integer-array>
+
+    <string name="pref_move_to_parent">Move to parent tab when tab closed</string>
 </resources>
