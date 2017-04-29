@@ -8,7 +8,10 @@ This browser based on Mikan Browser.
 ## Download and install
 **Android 5.0 or higher is required.**
 
-Prebuilt apk file is here
+<a href="https://play.google.com/store/apps/details?id=jp.hazuki.yuzubrowser">
+<img src="https://cloud.githubusercontent.com/assets/15681348/25552469/9d87214c-2cd5-11e7-8ada-6cf0c69df419.png" width="200px"></a>
+
+Or prebuilt apk file is here
 
 https://github.com/Hazuki0x0/YuzuBrowser/releases/latest
 
