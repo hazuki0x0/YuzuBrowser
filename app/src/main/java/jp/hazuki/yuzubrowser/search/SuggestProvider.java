@@ -113,11 +113,45 @@ public class SuggestProvider extends ContentProvider {
                 return queryLocal(query);
             case TYPE_NORMAL_ALL:
             case TYPE_NORMAL:
-                if (TextUtils.isEmpty(query))
-                    return queryLocal(query);
-                else
-                    return queryNet(query);
+                return queryBoth(query);
         }
+        return null;
+    }
+
+    private Cursor queryBoth(String query) {
+        if (TextUtils.isEmpty(query)) {
+            return queryLocal(query);
+        }
+
+        try {
+            List<Suggestion> net = getSuggests(query);
+            if (net != null) {
+                List<Suggestion> suggestions = new ArrayList<>();
+
+                SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+                Cursor c = db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " like ?", new String[]{"%" + query + "%"}, null, null, BaseColumns._ID + " DESC", "3");
+                int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
+                while (c.moveToNext()) {
+                    Suggestion suggestion = new Suggestion(c.getString(COL_QUERY));
+                    suggestions.add(suggestion);
+                    net.remove(suggestion);
+                }
+                c.close();
+
+                suggestions.addAll(net);
+
+                for (String prefix : yuzuPrefix) {
+                    if (prefix.startsWith(query)) {
+                        suggestions.add(new Suggestion(prefix));
+                    }
+                }
+
+                return new SuggestionsCursor(suggestions);
+            }
+        } catch (UnknownHostException e) {
+            return queryLocal(query);
+        }
+
         return null;
     }
 
@@ -126,11 +160,28 @@ public class SuggestProvider extends ContentProvider {
             return null;
         }
 
+        try {
+            List<Suggestion> list = getSuggests(query);
+            if (list != null) {
+                for (String prefix : yuzuPrefix) {
+                    if (prefix.startsWith(query)) {
+                        list.add(new Suggestion(prefix));
+                    }
+                }
+                return new SuggestionsCursor(list);
+            }
+        } catch (UnknownHostException e) {
+            return queryLocal(query);
+        }
+
+        return null;
+    }
+
+    private List<Suggestion> getSuggests(String query) throws UnknownHostException {
         if (AppData.search_suggest_engine.get() != mSuggestType) {
             mSuggestType = AppData.search_suggest_engine.get();
             mSuggestEngine = getSuggestEngine(mSuggestType);
         }
-
 
         JsonParser parser = null;
         try {
@@ -140,18 +191,11 @@ public class SuggestProvider extends ContentProvider {
             connection.connect();
             if (connection.getResponseCode() == 200) {
                 parser = mJsonFactory.createParser(connection.getInputStream());
-                List<Suggestion> list = mSuggestEngine.getSuggestions(parser);
 
-                for (String prefix : yuzuPrefix) {
-                    if (prefix.startsWith(query)) {
-                        list.add(new Suggestion(prefix));
-                    }
-                }
-
-                return new SuggestionsCursor(list);
+                return mSuggestEngine.getSuggestions(parser);
             }
         } catch (UnknownHostException e) {
-            return queryLocal(query);
+            throw e;
         } catch (IOException | IllegalStateException e) {
             ErrorReport.printAndWriteLog(e);
         } finally {

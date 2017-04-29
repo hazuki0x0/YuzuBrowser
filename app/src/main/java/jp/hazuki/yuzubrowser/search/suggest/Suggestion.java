@@ -22,4 +22,16 @@ public class Suggestion {
     }
 
     public final String word;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Suggestion) {
+            if (word != null) {
+                return word.equals(((Suggestion) obj).word);
+            } else {
+                return ((Suggestion) obj).word == null;
+            }
+        }
+        return false;
+    }
 }
