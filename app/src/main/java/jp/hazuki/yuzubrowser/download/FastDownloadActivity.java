@@ -27,7 +27,6 @@ import android.support.v7.app.AppCompatActivity;
 import java.io.File;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 
 public class FastDownloadActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<File> {
@@ -35,8 +34,6 @@ public class FastDownloadActivity extends AppCompatActivity implements LoaderMan
     public static final String EXTRA_FILE_URL = "fileURL";
     public static final String EXTRA_FILE_REFERER = "fileReferer";
     public static final String EXTRA_DEFAULT_EXTENSION = "defExt";
-
-    public static final String EXTRA_OPENABLE_INTENT = "openableIntent";
 
     private ProgressDialogFragmentCompat progressDialog;
 
@@ -86,10 +83,8 @@ public class FastDownloadActivity extends AppCompatActivity implements LoaderMan
         });
 
         if (data != null) {
-            Intent fileIntent = PackageUtils.createFileOpenIntent(FastDownloadActivity.this, data);
-
             Intent result = new Intent();
-            result.putExtra(EXTRA_OPENABLE_INTENT, fileIntent);
+            result.setData(DownloadFileProvider.getUriForFIle(data));
 
             setResult(RESULT_OK, result);
         } else {

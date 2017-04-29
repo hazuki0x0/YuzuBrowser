@@ -101,6 +101,18 @@ public class ArrayUtils {
         return list.toArray((T[]) Array.newInstance(array.getClass().getComponentType(), 0));
     }
 
+    public static String[] copyOf(String[] original, int newLength) {
+        final String[] result = new String[newLength];
+        System.arraycopy(original, 0, result, 0, newLength);
+        return result;
+    }
+
+    public static Object[] copyOf(Object[] original, int newLength) {
+        final Object[] result = new Object[newLength];
+        System.arraycopy(original, 0, result, 0, newLength);
+        return result;
+    }
+
     public static <S, T> Collection<S> transform(Collection<T> from, Transformer<S, T> trans) {
         ArrayList<S> list = new ArrayList<>(from.size());
         for (T item : from)

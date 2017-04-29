@@ -697,8 +697,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             break;
             case RESULT_REQUEST_SHARE_IMAGE:
                 if (resultCode != RESULT_OK || data == null) break;
-                Intent open = data.getParcelableExtra(FastDownloadActivity.EXTRA_OPENABLE_INTENT);
-                open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri uri = data.getData();
+                Intent open = new Intent(Intent.ACTION_SEND);
+                open.setDataAndType(uri, "image/*");
+                open.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                open.putExtra(Intent.EXTRA_STREAM, uri);
+                open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(open);
                 break;
             default:

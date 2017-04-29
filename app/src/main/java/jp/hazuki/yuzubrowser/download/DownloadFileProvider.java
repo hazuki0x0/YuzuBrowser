@@ -19,8 +19,11 @@ package jp.hazuki.yuzubrowser.download;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.webkit.MimeTypeMap;
@@ -30,8 +33,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import jp.hazuki.yuzubrowser.BuildConfig;
+import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 
 public class DownloadFileProvider extends ContentProvider {
+    private static final String[] COLUMNS = {
+            OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE};
 
     public static final String PATH = "file";
 
@@ -53,7 +59,34 @@ public class DownloadFileProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        throw new UnsupportedOperationException();
+        File file = getFileForUri(uri);
+
+        if (projection == null) {
+            projection = COLUMNS;
+        }
+
+        String[] cols = new String[projection.length];
+        Object[] values = new Object[projection.length];
+        int i = 0;
+        for (String col : projection) {
+            if (OpenableColumns.DISPLAY_NAME.equals(col)) {
+                cols[i] = OpenableColumns.DISPLAY_NAME;
+                values[i++] = file.getName();
+            } else if (OpenableColumns.SIZE.equals(col)) {
+                cols[i] = OpenableColumns.SIZE;
+                values[i++] = file.length();
+            } else if (MediaStore.MediaColumns.DATA.equals(col)) {
+                cols[i] = MediaStore.MediaColumns.DATA;
+                values[i++] = Uri.fromFile(file).toString();
+            }
+        }
+
+        cols = ArrayUtils.copyOf(cols, i);
+        values = ArrayUtils.copyOf(values, i);
+
+        final MatrixCursor cursor = new MatrixCursor(cols, 1);
+        cursor.addRow(values);
+        return cursor;
     }
 
     @Nullable
