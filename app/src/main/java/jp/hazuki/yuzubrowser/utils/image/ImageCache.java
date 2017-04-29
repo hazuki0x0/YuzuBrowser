@@ -33,8 +33,11 @@ public class ImageCache {
     }
 
     public void putBitmap(String url, Bitmap image) {
-        if (!TextUtils.isEmpty(url))
-            imageCache.put(getKey(url), image);
+        if (!TextUtils.isEmpty(url)) {
+            Bitmap previous = imageCache.put(getKey(url), image);
+            if (previous != null)
+                previous.recycle();
+        }
     }
 
     public void dispose() {

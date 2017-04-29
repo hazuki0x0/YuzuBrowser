@@ -104,7 +104,9 @@ class ThumbnailManager {
         if (scroll == 0) {
             return bitmap;
         } else {
-            return Bitmap.createBitmap(bitmap, 0, scroll, width, height);
+            Bitmap thumb = Bitmap.createBitmap(bitmap, 0, scroll, width, height);
+            bitmap.recycle();
+            return thumb;
         }
     }
 }
