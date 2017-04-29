@@ -27,6 +27,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
@@ -202,6 +203,11 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     @Override
     public void resetTheme() {
 
+    }
+
+    @Override
+    public void setAcceptThirdPartyCookies(CookieManager manager, boolean accept) {
+        manager.setAcceptThirdPartyCookies(this, accept);
     }
 
     @Override

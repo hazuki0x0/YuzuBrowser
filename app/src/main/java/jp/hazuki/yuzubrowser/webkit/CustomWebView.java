@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
 import android.webkit.WebBackForwardList;
@@ -193,6 +194,8 @@ public interface CustomWebView {
     void resetTheme();
 
     void setLayerType(int layerType, Paint paint);
+
+    void setAcceptThirdPartyCookies(CookieManager manager, boolean accept);
 
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);

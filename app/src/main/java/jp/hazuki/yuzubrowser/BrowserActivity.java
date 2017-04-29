@@ -966,13 +966,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         boolean cookie = !AppData.private_mode.get() && AppData.accept_cookie.get();
 
-        CookieManager.getInstance().setAcceptCookie(cookie);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(cookie);
 
-        if (cookie) {
-            boolean thirdCookie = AppData.accept_third_cookie.get();
-            for (MainTabData tabData : mTabManager.getLoadedData()) {
-                CookieManager.getInstance().setAcceptThirdPartyCookies(tabData.mWebView.getWebView(), thirdCookie);
-            }
+        boolean thirdCookie = cookie && AppData.accept_third_cookie.get();
+        for (MainTabData tabData : mTabManager.getLoadedData()) {
+            tabData.mWebView.setAcceptThirdPartyCookies(cookieManager, thirdCookie);
         }
 
         if (AppData.gesture_enable_web.get()) {
@@ -1193,9 +1192,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         web.getWebView().setDrawingCacheEnabled(true);
         web.getWebView().buildDrawingCache();
         initWebSetting(web);
-        if (!AppData.private_mode.get() && AppData.accept_cookie.get())
-            CookieManager.getInstance()
-                    .setAcceptThirdPartyCookies(web.getWebView(), AppData.accept_third_cookie.get());
+        web.setAcceptThirdPartyCookies(CookieManager.getInstance(),
+                !AppData.private_mode.get() && AppData.accept_cookie.get() && AppData.accept_third_cookie.get());
         return web;
     }
 
@@ -2029,10 +2027,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         for (MainTabData tabData : mTabManager.getLoadedData()) {
             setting = tabData.mWebView.getSettings();
-            if (cookie)
-                CookieManager.getInstance()
-                        .setAcceptThirdPartyCookies(tabData.mWebView.getWebView(),
-                                noPrivate && AppData.accept_third_cookie.get());
+
+            tabData.mWebView.setAcceptThirdPartyCookies(
+                    CookieManager.getInstance(), noPrivate && cookie && AppData.accept_third_cookie.get());
 
             setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
             setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());

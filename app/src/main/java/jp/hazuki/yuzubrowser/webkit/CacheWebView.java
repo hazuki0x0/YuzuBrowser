@@ -30,6 +30,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ConsoleMessage;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions.Callback;
 import android.webkit.HttpAuthHandler;
@@ -63,6 +64,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     private View mTitleBar;
     private int layerType;
     private Paint layerPaint;
+    private boolean acceptThirdPartyCookies;
     private OnWebStateChangeListener mStateChangeListener;
     private OnScrollChangedListener mOnScrollChangedListener;
     private DownloadListener mDownloadListener;
@@ -875,6 +877,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         to.setSwipeEnable(from.getSwipeEnable());
 
         to.setLayerType(layerType, layerPaint);
+        to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies);
 
         WebSettings from_setting = from.getSettings();
         WebSettings to_setting = to.getSettings();
@@ -929,6 +932,14 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         layerPaint = paint;
         for (TabData web : mList) {
             web.mWebView.setLayerType(layerType, paint);
+        }
+    }
+
+    @Override
+    public void setAcceptThirdPartyCookies(CookieManager manager, boolean accept) {
+        acceptThirdPartyCookies = accept;
+        for (TabData web : mList) {
+            web.mWebView.setAcceptThirdPartyCookies(manager, accept);
         }
     }
 }

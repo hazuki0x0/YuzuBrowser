@@ -32,6 +32,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.HttpAuthHandler;
@@ -643,5 +644,10 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     @Override
     public void setLayerType(int layerType, @Nullable Paint paint) {
         webView.setLayerType(layerType, paint);
+    }
+
+    @Override
+    public void setAcceptThirdPartyCookies(CookieManager manager, boolean accept) {
+        webView.setAcceptThirdPartyCookies(manager, accept);
     }
 }
