@@ -13,14 +13,19 @@ public class ClipboardUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static void setClipboardText(Context context, String txt) {
+    public static void setClipboardText(Context context, CharSequence txt) {
+        setClipboardText(context, txt, true);
+    }
+
+    public static void setClipboardText(Context context, CharSequence txt, boolean showToast) {
         if (txt != null) {
             ClipData.Item clipItem = new ClipData.Item(txt);
             String[] mineType = {ClipDescription.MIMETYPE_TEXT_PLAIN};
             ClipData clipData = new ClipData("text_data", mineType, clipItem);
             ClipboardManager manager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip(clipData);
-            Toast.makeText(context, context.getResources().getString(R.string.copy_clipboard_mes_before) + txt, Toast.LENGTH_SHORT).show();
+            if (showToast)
+                Toast.makeText(context, context.getResources().getString(R.string.copy_clipboard_mes_before) + txt, Toast.LENGTH_SHORT).show();
         }
     }
 

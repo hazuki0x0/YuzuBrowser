@@ -31,6 +31,7 @@ import android.widget.TextView;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.utils.UrlUtils;
 
 public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecyclerAdapter.ViewHolder> {
     private static final PorterDuffColorFilter IMAGE_FILTER = new PorterDuffColorFilter(0x64FFFFFF, PorterDuff.Mode.SRC_ATOP);
@@ -68,7 +69,8 @@ public class TabListRecyclerAdapter extends RecyclerView.Adapter<TabListRecycler
                 holder.thumbNail.setImageResource(R.drawable.empty_thumbnail);
             }
             holder.title.setText(indexData.getTitle());
-            holder.url.setText(indexData.getUrl());
+            if (!horizontal)
+                holder.url.setText(UrlUtils.decodeUrl(indexData.getUrl()));
         }
 
         // クリック処理

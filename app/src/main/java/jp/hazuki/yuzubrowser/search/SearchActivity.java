@@ -17,8 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.ActionMode;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +40,13 @@ import java.util.ArrayList;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.data.ThemeData;
+import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
+import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 
-public class SearchActivity extends AppCompatActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback {
+public class SearchActivity extends AppCompatActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     private static final String TAG = "SearchActivity";
     public static final String EXTRA_URI = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.uri";
     public static final String EXTRA_QUERY = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.query";
@@ -59,11 +65,16 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     private EditText editText;
     private ListView listView;
 
+    private String initQuery;
+    private String initDecodedQuery;
+    private GestureDetector gestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
 
+        gestureDetector = new GestureDetector(this, this);
         editText = (EditText) findViewById(R.id.editText);
         SearchButton searchButton = (SearchButton) findViewById(R.id.searchButton);
         listView = (ListView) findViewById(R.id.listView);
@@ -94,6 +105,62 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
                 return false;
             }
         });
+        editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return true;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                CharSequence text = editText.getText();
+
+                int min = 0;
+                int max = text.length();
+
+                if (editText.isFocused()) {
+                    final int selStart = editText.getSelectionStart();
+                    final int selEnd = editText.getSelectionEnd();
+
+                    min = Math.max(0, Math.min(selStart, selEnd));
+                    max = Math.max(0, Math.max(selStart, selEnd));
+                }
+
+                switch (item.getItemId()) {
+                    case android.R.id.copy:
+                        if (min == 0 && max == text.length() && initDecodedQuery.equals(text.toString())) {
+                            ClipboardUtils.setClipboardText(SearchActivity.this, initQuery, false);
+                            mode.finish();
+                            return true;
+                        }
+                        break;
+                    case android.R.id.cut:
+                        if (min == 0 && max == text.length() && initDecodedQuery.equals(text.toString())) {
+                            ClipboardUtils.setClipboardText(SearchActivity.this, initQuery, false);
+                            editText.setText("");
+                            mode.finish();
+                            return true;
+                        }
+                        break;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+        });
+        editText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
 
         searchButton.setActionCallback(this);
         searchButton.setSense(AppData.swipebtn_sensitivity.get());
@@ -118,9 +185,10 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
                 }
             }
 
-            String initquery = intent.getStringExtra(EXTRA_QUERY);
-            if (initquery != null) {
-                editText.setText(initquery);
+            initQuery = intent.getStringExtra(EXTRA_QUERY);
+            if (initQuery != null) {
+                initDecodedQuery = UrlUtils.decodeUrl(initQuery);
+                editText.setText(initDecodedQuery);
             }
 
             if (intent.getBooleanExtra(EXTRA_SELECT_INITIAL_QUERY, true)) {
@@ -266,5 +334,54 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
             finish();
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+        editText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                editText.selectAll();
+            }
+        }, 50);
+        return false;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
     }
 }

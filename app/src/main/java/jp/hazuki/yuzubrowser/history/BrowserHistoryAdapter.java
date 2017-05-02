@@ -2,7 +2,6 @@ package jp.hazuki.yuzubrowser.history;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import java.util.List;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>
@@ -52,7 +52,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     @Override
     public void onBindViewHolder(final HistoryHolder holder, int position) {
         BrowserHistory item = histories.get(holder.getAdapterPosition());
-        String url = Uri.parse(item.getUrl()).getHost();
+        String url = UrlUtils.decodeUrlHost(item.getUrl());
         Bitmap image = mManager.getFavicon(item.getId());
 
         if (image == null) {

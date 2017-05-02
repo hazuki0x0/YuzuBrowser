@@ -15,6 +15,7 @@ import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.RequestCallback;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.swipebutton.SwipeTextButton;
 
 public class UrlBar extends ToolbarBase {
@@ -90,7 +91,7 @@ public class UrlBar extends ToolbarBase {
                     centerUrlButton.setText(data.getTitle());
                     centerUrlButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                 } else {
-                    centerUrlButton.setText(data.getUrl());
+                    centerUrlButton.setText(UrlUtils.decodeUrl(data.getUrl()));
                     centerUrlButton.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 }
             }

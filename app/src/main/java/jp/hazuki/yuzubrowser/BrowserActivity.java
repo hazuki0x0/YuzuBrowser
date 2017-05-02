@@ -197,6 +197,7 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.MathUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.PermissionUtils;
+import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
@@ -3193,7 +3194,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     final CopyableTextView urlTextView = (CopyableTextView) view.findViewById(R.id.urlTextView);
 
                     titleTextView.setText(tab.getTitle());
-                    urlTextView.setText(tab.getUrl());
+                    final String url = tab.getUrl();
+                    urlTextView.setText(UrlUtils.decodeUrl(url));
+                    urlTextView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            ClipboardUtils.setClipboardText(BrowserActivity.this, url);
+                            return true;
+                        }
+                    });
 
                     new AlertDialog.Builder(BrowserActivity.this)
                             .setTitle(R.string.page_info)
