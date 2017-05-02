@@ -21,6 +21,7 @@ import android.content.Context;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.HtmlUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 
 public class SpeedDialHtml {
@@ -37,7 +38,7 @@ public class SpeedDialHtml {
                     .append("\"><img src=\"")
                     .append(speedDial.getIcon().getIconBase64())
                     .append("\" /><div class=\"name\">")
-                    .append(speedDial.getTitle())
+                    .append(HtmlUtils.sanitize(speedDial.getTitle()))
                     .append("</div></a></div>");
         }
         builder.append(getResourceString(context, R.raw.speeddial_end));
