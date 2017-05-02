@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
     private int mCurrentNo = -1;
+    private boolean cleared = false;
 
     private BrowserActivity mWebBrowser;
     private TabCache mTabCache;
@@ -196,12 +197,14 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
 
     @Override
     public void saveData() {
-        deleteHideItemIfNeed();
-        for (MainTabData tabData : mTabCache.values()) {
-            mTabStorage.saveWebView(tabData);
+        if (!cleared) {
+            deleteHideItemIfNeed();
+            for (MainTabData tabData : mTabCache.values()) {
+                mTabStorage.saveWebView(tabData);
+            }
+            mTabStorage.saveIndexData();
+            mTabStorage.saveCurrentTab(mCurrentNo);
         }
-        mTabStorage.saveIndexData();
-        mTabStorage.saveCurrentTab(mCurrentNo);
     }
 
     @Override
@@ -237,6 +240,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
     @Override
     public void clear() {
         mTabStorage.clear();
+        cleared = true;
     }
 
     @Override
