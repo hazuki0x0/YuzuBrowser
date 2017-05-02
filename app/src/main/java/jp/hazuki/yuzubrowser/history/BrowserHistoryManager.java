@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.history;
 
 import android.content.ContentValues;
@@ -133,7 +149,7 @@ public class BrowserHistoryManager implements CursorLoadable {
 
     public byte[] getFaviconImage(long id) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_ID + " = " + id, null, null, null, null);
+        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_ID + " = ?", new String[]{Long.toString(id)}, null, null, null);
         byte[] image = null;
         if (c.moveToFirst()) {
             image = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
@@ -162,9 +178,9 @@ public class BrowserHistoryManager implements CursorLoadable {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         ArrayList<BrowserHistory> histories = new ArrayList<>();
         Cursor c = db.query(TABLE_NAME, null,
-                COLUMN_TITLE + " LIKE '%" + query + "%' OR "
-                        + COLUMN_URL + " LIKE '%" + query + "%' ESCAPE '$'",
-                null, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
+                COLUMN_TITLE + " LIKE '%' || ? || '%' OR "
+                        + COLUMN_URL + " LIKE '%' || ? || '%' ESCAPE '$'",
+                new String[]{query, query}, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
         while (c.moveToNext()) {
             histories.add(new BrowserHistory(
                     c.getLong(COLUMN_ID_INDEX),

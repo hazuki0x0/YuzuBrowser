@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.speeddial;
 
 import android.content.ContentValues;
@@ -10,10 +26,6 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by hazuki on 17/02/19.
- */
 
 public class SpeedDialManager {
     private static final String DB_NAME = "speeddial1.db";
@@ -81,8 +93,8 @@ public class SpeedDialManager {
         long time = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
         Cursor c = db.query(TABLE_NAME, null,
                 COLUMN_FAVICON + " = 1 AND " +
-                        COLUMN_URL + " = '" + url + "' AND " +
-                        COLUMN_LAST_UPDATE + " <= " + time, null, null, null, null);
+                        COLUMN_URL + " = ? AND " +
+                        COLUMN_LAST_UPDATE + " <= ?", new String[]{url, Long.toString(time)}, null, null, null);
         if (c.moveToFirst()) {
             do {
                 ContentValues values = new ContentValues();
@@ -96,7 +108,7 @@ public class SpeedDialManager {
 
     public synchronized SpeedDial get(int id) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor c = db.query(TABLE_NAME, null, COLUMN_ID + " = " + id, null, null, null, null);
+        Cursor c = db.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{Long.toString(id)}, null, null, null);
         SpeedDial speedDial = null;
         if (c.moveToFirst()) {
             speedDial = new SpeedDial(c.getInt(COLUMN_ID_INDEX),

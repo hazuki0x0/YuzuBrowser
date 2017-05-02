@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.search;
 
 import android.app.SearchManager;
@@ -126,10 +142,11 @@ public class SuggestProvider extends ContentProvider {
         try {
             List<Suggestion> net = getSuggests(query);
             if (net != null) {
+                String dbQuery = query.replace("%", "$%").replace("_", "$_");
                 List<Suggestion> suggestions = new ArrayList<>();
 
                 SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-                Cursor c = db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " like ?", new String[]{"%" + query + "%"}, null, null, BaseColumns._ID + " DESC", "3");
+                Cursor c = db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " LIKE '%' || ? || '%' ESCAPE '$'", new String[]{dbQuery}, null, null, BaseColumns._ID + " DESC", "3");
                 int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
                 while (c.moveToNext()) {
                     Suggestion suggestion = new Suggestion(c.getString(COL_QUERY));
@@ -213,8 +230,10 @@ public class SuggestProvider extends ContentProvider {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         if (TextUtils.isEmpty(query))
             return db.query(TABLE_NAME, null, null, null, null, null, BaseColumns._ID + " DESC");
-        else
-            return addYuzuPrefix(query, db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " like ?", new String[]{"%" + query + "%"}, null, null, BaseColumns._ID + " DESC"));
+        else {
+            String dbQuery = query.replace("%", "$%").replace("_", "$_");
+            return addYuzuPrefix(query, db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " LIKE '%' || ? || '%' ESCAPE '$'", new String[]{dbQuery}, null, null, BaseColumns._ID + " DESC"));
+        }
     }
 
     private Cursor addYuzuPrefix(String query, Cursor c) {
