@@ -13,12 +13,14 @@ import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
+import jp.hazuki.yuzubrowser.tab.adapter.TabListRecyclerAdapterFactory;
+import jp.hazuki.yuzubrowser.tab.adapter.TabListRecyclerBaseAdapter;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 
 public class TabListLayout extends LinearLayout {
-    private TabListRecyclerAdapter mAdapter;
+    private TabListRecyclerBaseAdapter mAdapter;
     private TabManager tabManager;
     private Callback mCallback;
     private Snackbar snackbar;
@@ -85,7 +87,7 @@ public class TabListLayout extends LinearLayout {
         recyclerView.addItemDecoration(helper);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
 
-        mAdapter = new TabListRecyclerAdapter(getContext(), manager, horizontal, new TabListRecyclerAdapter.OnRecyclerListener() {
+        mAdapter = TabListRecyclerAdapterFactory.create(getContext(), tabManager, horizontal, new TabListRecyclerBaseAdapter.OnRecyclerListener() {
             @Override
             public void onRecyclerItemClicked(View v, int position) {
                 mCallback.requestSelectTab(position);
@@ -195,7 +197,7 @@ public class TabListLayout extends LinearLayout {
                 }
                 mAdapter.notifyDataSetChanged();
                 snackbar = Snackbar.make(bottomBar, getContext().getString(R.string.closed_tab,
-                        ((TabListRecyclerAdapter.ViewHolder) viewHolder).title.getText()), Snackbar.LENGTH_SHORT)
+                        ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle()), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override
                             public void onClick(View v) {
