@@ -20,6 +20,12 @@
 
     <uses-permission android:name="jp.hazuki.yuzubrowser.permission.myapp.signature" />
 
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true" />
+
     <application
         android:name=".BrowserApplication"
         android:allowBackup="true"
