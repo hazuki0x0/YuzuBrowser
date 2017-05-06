@@ -56,7 +56,7 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // データ表示
-        TabIndexData indexData = getItem(position);
+        TabIndexData indexData = getItem(holder.getAdapterPosition());
         if (indexData != null) {
             Bitmap thumbNail = indexData.getThumbnail();
             if (thumbNail != null) {
