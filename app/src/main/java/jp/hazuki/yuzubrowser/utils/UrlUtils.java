@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.utils;
 
 import android.net.Uri;
+import android.text.TextUtils;
 
 import java.net.IDN;
 
@@ -24,18 +25,17 @@ public class UrlUtils {
 
     public static String decodeUrl(String url) {
         if (url == null) return null;
-        return Uri.decode(decodeUrl(Uri.parse(url)).toString());
+        return decodeUrl(Uri.parse(url)).toString();
     }
 
     public static Uri decodeUrl(Uri uri) {
-        String host = uri.getAuthority();
-        if (host != null) {
-            return uri.buildUpon()
-                    .authority(decodePunyCode(host))
-                    .build();
-        } else {
-            return uri;
-        }
+        Uri.Builder decode = uri.buildUpon();
+        if (isValid(uri.getQuery()))
+            decode.query(uri.getQuery());
+        if (isValid(uri.getFragment()))
+            decode.fragment(uri.getFragment());
+        decode.authority(decodeAuthority(uri));
+        return decode.build();
     }
 
     public static String decodeUrlHost(String url) {
@@ -47,5 +47,45 @@ public class UrlUtils {
 
     private static String decodePunyCode(String domain) {
         return IDN.toUnicode(domain);
+    }
+
+    private static String decodeAuthority(Uri uri) {
+        String host = uri.getHost();
+        if (TextUtils.isEmpty(host)) {
+            return uri.getEncodedAuthority();
+        } else {
+            host = decodePunyCode(host);
+        }
+
+        String userInfo = uri.getUserInfo();
+        boolean noUserInfo = TextUtils.isEmpty(userInfo);
+        int port = uri.getPort();
+
+        if (noUserInfo && port == -1)
+            return host;
+
+        StringBuilder builder = new StringBuilder();
+
+        if (!noUserInfo) {
+            if (isValid(userInfo)) {
+                builder.append(userInfo).append("@");
+            } else {
+                builder.append(uri.getEncodedUserInfo()).append("@");
+            }
+        }
+
+        builder.append(host);
+
+        if (port > -1) {
+            builder.append(":").append(port);
+        }
+
+        return builder.toString();
+    }
+
+    private static final char INVALID_CHAR = '\uFFFD';
+
+    private static boolean isValid(String str) {
+        return str != null && !(str.indexOf(INVALID_CHAR) > -1);
     }
 }
