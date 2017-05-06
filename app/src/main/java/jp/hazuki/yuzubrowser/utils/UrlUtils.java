@@ -25,17 +25,19 @@ public class UrlUtils {
 
     public static String decodeUrl(String url) {
         if (url == null) return null;
-        return decodeUrl(Uri.parse(url)).toString();
+        return decodeUrl(Uri.parse(url));
     }
 
-    public static Uri decodeUrl(Uri uri) {
+    public static String decodeUrl(Uri uri) {
         Uri.Builder decode = uri.buildUpon();
         if (isValid(uri.getQuery()))
-            decode.query(uri.getQuery());
+            decode.encodedQuery(uri.getQuery());
         if (isValid(uri.getFragment()))
-            decode.fragment(uri.getFragment());
-        decode.authority(decodeAuthority(uri));
-        return decode.build();
+            decode.encodedFragment(uri.getFragment());
+        if (isValid(uri.getPath()))
+            decode.encodedPath(uri.getPath());
+        decode.encodedAuthority(decodeAuthority(uri));
+        return decode.build().toString();
     }
 
     public static String decodeUrlHost(String url) {
