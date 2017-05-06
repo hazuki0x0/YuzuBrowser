@@ -29,15 +29,34 @@ public class UrlUtils {
     }
 
     public static String decodeUrl(Uri uri) {
-        Uri.Builder decode = uri.buildUpon();
-        if (isValid(uri.getQuery()))
-            decode.encodedQuery(uri.getQuery());
-        if (isValid(uri.getFragment()))
-            decode.encodedFragment(uri.getFragment());
-        if (isValid(uri.getPath()))
-            decode.encodedPath(uri.getPath());
-        decode.encodedAuthority(decodeAuthority(uri));
-        return decode.build().toString();
+        if (uri.isOpaque()) {
+            StringBuilder builder = new StringBuilder(uri.getScheme()).append(":");
+            if (isValid(uri.getSchemeSpecificPart())) {
+                builder.append(uri.getSchemeSpecificPart());
+            } else {
+                builder.append(uri.getEncodedSchemeSpecificPart());
+            }
+            String fragment = uri.getFragment();
+            if (!TextUtils.isEmpty(fragment)) {
+                builder.append("#");
+                if (isValid(fragment)) {
+                    builder.append(fragment);
+                } else {
+                    builder.append(uri.getEncodedFragment());
+                }
+            }
+            return builder.toString();
+        } else {
+            Uri.Builder decode = uri.buildUpon();
+            if (isValid(uri.getQuery()))
+                decode.encodedQuery(uri.getQuery());
+            if (isValid(uri.getFragment()))
+                decode.encodedFragment(uri.getFragment());
+            if (isValid(uri.getPath()))
+                decode.encodedPath(uri.getPath());
+            decode.encodedAuthority(decodeAuthority(uri));
+            return decode.build().toString();
+        }
     }
 
     public static String decodeUrlHost(String url) {
