@@ -39,7 +39,7 @@ class ThumbnailManager {
     }
 
     void takeThumbnailIfNeeded(MainTabData data) {
-        if (data.getProgress() > 90 && !data.isShotThumbnail()) {
+        if (data.isFinished() && !data.isShotThumbnail()) {
             createWithCache(data);
         }
     }

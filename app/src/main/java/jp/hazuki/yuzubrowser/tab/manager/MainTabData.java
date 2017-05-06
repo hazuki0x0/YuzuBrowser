@@ -42,12 +42,14 @@ public class MainTabData extends TabData {
     public void onPageStarted(String url, Bitmap favicon) {
         super.onPageStarted(url, favicon);
         setText(url);
+        finished = false;
     }
 
     @Override
     public void onPageFinished(CustomWebView web, String url) {
         super.onPageFinished(web, url);
         setText((getTitle() != null) ? getTitle() : url);
+        finished = true;
     }
 
     @Override
@@ -116,6 +118,7 @@ public class MainTabData extends TabData {
 
     private final View mTabView;
     private WebSettingResetAction resetAction;
+    private boolean finished;
 
     public WebSettingResetAction getResetAction() {
         return resetAction;
@@ -123,5 +126,9 @@ public class MainTabData extends TabData {
 
     public void setResetAction(WebSettingResetAction resetAction) {
         this.resetAction = resetAction;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 }
