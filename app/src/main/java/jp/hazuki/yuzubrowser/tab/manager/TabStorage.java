@@ -45,9 +45,9 @@ import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.webkit.CacheWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
+import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
 
 class TabStorage {
     private static final String FILE_TAB_INDEX = "index";
@@ -126,7 +126,7 @@ class TabStorage {
     public CustomWebView loadWebView(WebBrowser webBrowser, TabIndexData data) {
         if (data == null) return null;
         Bundle bundle = loadBundle(new File(tabPath, Long.toString(data.getId())));
-        CustomWebView webView = webBrowser.makeWebView(CacheWebView.isBundleCacheWebView(bundle));
+        CustomWebView webView = webBrowser.makeWebView(WebViewFactory.getMode(bundle));
         webView.restoreState(bundle);
         webView.setIdentityId(data.getId());
         return webView;

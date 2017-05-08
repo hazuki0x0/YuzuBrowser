@@ -213,7 +213,9 @@
     <string name="pref_import_html_bookmark_confirm">HTMLブックマークをインポートしてもよろしいですか？</string>
     <string name="pref_export_html_bookmark">HTMLブックマークのエクスポート</string>
     <string name="pref_export_html_bookmark_confirm">HTMLブックマークをエクスポートしてもよろしいですか？</string>
-    <string name="pref_fast_back">高速ページ間移動</string>
+    <string name="pref_fast_back">ファストバック</string>
+    <string name="pref_fast_back_cache_size">ファストバックキャッシュサイズ</string>
+    <string name="pref_fast_back_cache_size_comment">0で無制限</string>
     <string name="pref_userjs_settings">UserScript設定</string>
     <string name="pref_userjs_enable">UserScriptを有効にする</string>
     <string name="pref_userjs_manage">UserScriptの管理</string>

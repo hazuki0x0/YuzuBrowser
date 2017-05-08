@@ -211,7 +211,6 @@ import jp.hazuki.yuzubrowser.utils.view.pie.PieControlBase;
 import jp.hazuki.yuzubrowser.utils.view.pie.PieMenu;
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout;
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity;
-import jp.hazuki.yuzubrowser.webkit.CacheWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomOnCreateContextMenuListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebBackForwardList;
 import jp.hazuki.yuzubrowser.webkit.CustomWebChromeClient;
@@ -219,14 +218,15 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebHistoryItem;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView.OnWebStateChangeListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebViewClient;
-import jp.hazuki.yuzubrowser.webkit.SwipeWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
 import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
 import jp.hazuki.yuzubrowser.webkit.WebViewAutoScrollManager;
+import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
 import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
 import jp.hazuki.yuzubrowser.webkit.WebViewRenderingManager;
+import jp.hazuki.yuzubrowser.webkit.WebViewType;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageCopyUrlHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageLoadUrlHandler;
@@ -953,6 +953,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         for (MainTabData tabdata : mTabManager.getLoadedData()) {
             initWebSetting(tabdata.mWebView);
+            tabdata.mWebView.onPreferenceReset();
         }
 
         MainTabData tab = mTabManager.getCurrentTabData();
@@ -1192,8 +1193,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     }
 
     @Override
-    public CustomWebView makeWebView(boolean cacheType) {
-        CustomWebView web = (cacheType) ? new CacheWebView(this) : new SwipeWebView(this);
+    public CustomWebView makeWebView(@WebViewType int cacheType) {
+        CustomWebView web = WebViewFactory.create(this, cacheType);
         web.getWebView().setDrawingCacheEnabled(true);
         web.getWebView().buildDrawingCache();
         initWebSetting(web);
@@ -1204,11 +1205,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public MainTabData addNewTab(@TabType int type) {
-        return addNewTab(AppData.fast_back.get(), type);
+        return addNewTab(WebViewFactory.getMode(), type);
     }
 
     @Override
-    public MainTabData addNewTab(boolean cacheType, @TabType int type) {
+    public MainTabData addNewTab(@WebViewType int cacheType, @TabType int type) {
         CustomWebView web = makeWebView(cacheType);
         if (AppData.pause_web_tab_change.get())
             web.onPause();
@@ -1231,7 +1232,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return tab_data;
     }
 
-    private MainTabData openNewTab(boolean cacheType, @TabType int type) {
+    private MainTabData openNewTab(@WebViewType int cacheType, @TabType int type) {
         MainTabData tab_data = addNewTab(cacheType, type);
         setCurrentTab(mTabManager.getLastTabNo());
         mToolbar.scrollTabRight();
@@ -1249,7 +1250,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @SuppressWarnings("WrongConstant")
     private void openInNewTab(Bundle state) {
-        openNewTab(CacheWebView.isBundleCacheWebView(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
+        openNewTab(WebViewFactory.getMode(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
     }
 
     private void openInNewTabPost(final String url, @TabType int type) {

@@ -206,6 +206,10 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     }
 
     @Override
+    public void onPreferenceReset() {
+    }
+
+    @Override
     public void setAcceptThirdPartyCookies(CookieManager manager, boolean accept) {
         manager.setAcceptThirdPartyCookies(this, accept);
     }

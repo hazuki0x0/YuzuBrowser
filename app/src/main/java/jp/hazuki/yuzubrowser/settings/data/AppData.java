@@ -115,6 +115,7 @@ public class AppData {
     public static final BooleanContainer save_last_tabs = new BooleanContainer("save_last_tabs", false);
     public static final BooleanContainer save_closed_tab = new BooleanContainer("save_closed_tab", false);
     public static final BooleanContainer fast_back = new BooleanContainer("fast_back", false);
+    public static final IntContainer fast_back_cache_size = new IntContainer("fast_back_cache_size", 5);
     public static final BooleanContainer userjs_enable = new BooleanContainer("userjs_enable", false);
     public static final BooleanContainer webswipe_enable = new BooleanContainer("webswipe_enable", false);
     public static final IntContainer webswipe_sensitivity_speed = new IntContainer("webswipe_sensitivity_speed", 5);

@@ -512,7 +512,9 @@
     <string name="pref_import_html_bookmark_confirm">Are you sure you want to import bookmarks?</string>
     <string name="pref_export_html_bookmark">Export html bookmarks</string>
     <string name="pref_export_html_bookmark_confirm">Are you sure you want to export bookmarks?</string>
-    <string name="pref_fast_back">Fast going back and forward</string>
+    <string name="pref_fast_back">Fastback</string>
+    <string name="pref_fast_back_cache_size">Fastback cache size</string>
+    <string name="pref_fast_back_cache_size_comment">0 = unlimited</string>
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
     <string name="pref_userjs_manage">Manage UserScript</string>

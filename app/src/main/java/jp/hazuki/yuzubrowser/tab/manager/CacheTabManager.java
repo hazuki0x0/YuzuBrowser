@@ -32,12 +32,12 @@ import jp.hazuki.yuzubrowser.settings.data.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
-class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
+class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<MainTabData> {
     private int mCurrentNo = -1;
     private boolean cleared = false;
 
     private BrowserActivity mWebBrowser;
-    private TabCache mTabCache;
+    private TabCache<MainTabData> mTabCache;
     private TabStorage mTabStorage;
     private ThumbnailManager thumbnailManager;
 
@@ -47,7 +47,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener {
 
     CacheTabManager(BrowserActivity activity) {
         mWebBrowser = activity;
-        mTabCache = new TabCache(AppData.tabs_cache_number.get(), this);
+        mTabCache = new TabCache<>(AppData.tabs_cache_number.get(), this);
         mTabStorage = new TabStorage(activity);
         mTabView = new ArrayList<>();
         thumbnailManager = new ThumbnailManager(activity);

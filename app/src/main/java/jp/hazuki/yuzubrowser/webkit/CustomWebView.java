@@ -195,6 +195,8 @@ public interface CustomWebView {
 
     void setLayerType(int layerType, Paint paint);
 
+    void onPreferenceReset();
+
     void setAcceptThirdPartyCookies(CookieManager manager, boolean accept);
 
     interface OnWebStateChangeListener {

@@ -647,6 +647,10 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     }
 
     @Override
+    public void onPreferenceReset() {
+    }
+
+    @Override
     public void setAcceptThirdPartyCookies(CookieManager manager, boolean accept) {
         webView.setAcceptThirdPartyCookies(manager, accept);
     }

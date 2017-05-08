@@ -90,6 +90,12 @@ public class TabIndexData implements Serializable {
         return new MainTabData(webView, view, this);
     }
 
+    public TabData getTabData(CustomWebView webView) {
+        webView.setIdentityId(mId);
+
+        return new TabData(webView, this);
+    }
+
     public Bitmap getThumbnail() {
         return thumbnail;
     }
