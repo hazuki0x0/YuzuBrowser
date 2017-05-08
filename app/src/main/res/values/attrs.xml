@@ -14,6 +14,7 @@
     <declare-styleable name="SeekbarPreference">
         <attr name="seekMax" format="integer" />
         <attr name="seekMin" format="integer" />
+        <attr name="comment" format="string" />
     </declare-styleable>
     <declare-styleable name="FloatSeekbarPreference" parent="SeekbarPreference">
         <attr name="denominator" format="integer" />
