@@ -38,7 +38,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -201,6 +200,7 @@ import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
+import jp.hazuki.yuzubrowser.utils.handler.PauseHandler;
 import jp.hazuki.yuzubrowser.utils.util.ArrayDequeCompat;
 import jp.hazuki.yuzubrowser.utils.util.DequeCompat;
 import jp.hazuki.yuzubrowser.utils.view.CopyableTextView;
@@ -238,9 +238,6 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
-import static jp.hazuki.yuzubrowser.utils.PermissionUtils.FIRST_PERMISSION;
-import static jp.hazuki.yuzubrowser.utils.PermissionUtils.REQUEST_STORAGE;
-
 public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener, MenuWindow.OnMenuCloseListener {
     private static final String TAG = "BrowserActivity";
 
@@ -264,6 +261,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private final MyWebViewClient mWebViewClient = new MyWebViewClient();
     private final MyOnWebStateChangeListener mOnWebStateChangeListener = new MyOnWebStateChangeListener();
     private final MyOnCreateContextMenuListener mOnCreateContextMenuListener = new MyOnCreateContextMenuListener();
+    private PermissionDialogHandler dialogHandler;
     private TabManager mTabManager;
     private Toolbar mToolbar;
     private PieControl mPieControl;
@@ -330,6 +328,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
 
         mHandler = new Handler();
+        dialogHandler = new PermissionDialogHandler(this);
         mTabManager = TabManagerFactory.newInstance(this);
 
         webFrameLayout = (FrameLayout) findViewById(R.id.webFrameLayout);
@@ -466,22 +465,16 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     protected void onResume() {
         super.onResume();
+        dialogHandler.resume();
         setFullscreenIfEnable();
         mToolbar.resetToolBar();
         PermissionUtils.checkFirst(this);
-        if (PermissionUtils.checkNeed(this)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, FIRST_PERMISSION);
-            }
-            PermissionUtils.setNoNeed(this, true);
-        } else {
-            if (!PermissionUtils.checkWriteStorage(this)) {
-                PermissionUtils.setNoNeed(this, false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
-                }
-            }
-        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dialogHandler.pause();
     }
 
     @Override
@@ -2065,12 +2058,42 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             PermissionUtils.requestStorage(this);
                         } else {
-                            new PermissionDialog().show(getSupportFragmentManager(), "permission");
+                            if (!(getSupportFragmentManager().findFragmentByTag("permission") instanceof PermissionDialog)) {
+                                dialogHandler.sendMessage(dialogHandler.obtainMessage(PermissionDialogHandler.SHOW_DIALOG));
+                            }
                         }
                     } else {
                         PermissionUtils.setNoNeed(this, true);
                     }
                     break;
+            }
+        }
+    }
+
+    static class PermissionDialogHandler extends PauseHandler {
+
+        static final int SHOW_DIALOG = 1;
+        private WeakReference<AppCompatActivity> activityReference;
+
+        public PermissionDialogHandler(AppCompatActivity activity) {
+            activityReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected boolean storeMessage(Message message) {
+            return true;
+        }
+
+        @Override
+        protected void processMessage(Message message) {
+            switch (message.what) {
+                case SHOW_DIALOG: {
+                    AppCompatActivity activity = activityReference.get();
+                    if (activity != null && !PermissionUtils.checkWriteStorage(activity)) {
+                        new PermissionDialog().show(activity.getSupportFragmentManager(), "permission");
+                    }
+                    break;
+                }
             }
         }
     }
