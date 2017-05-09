@@ -2564,6 +2564,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
             geoView.onGeolocationPermissionsShowPrompt(origin, callback);
         }
+
+        @Override
+        public void getVisitedHistory(final ValueCallback<String[]> callback) {
+            if (mBrowserHistoryManager != null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onReceiveValue(mBrowserHistoryManager.getHistoryArray(3000));
+                    }
+                }).start();
+            }
+        }
     }
 
     private class MyOnWebStateChangeListener implements OnWebStateChangeListener {

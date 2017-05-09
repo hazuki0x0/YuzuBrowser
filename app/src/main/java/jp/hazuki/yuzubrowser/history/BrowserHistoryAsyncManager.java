@@ -12,9 +12,11 @@ public class BrowserHistoryAsyncManager {
     private static final int UPDATE_TITLE = 2;
     private static final int UPDATE_FAVICON = 3;
     private final MyThread mThread;
+    private final BrowserHistoryManager mHistoryManager;
 
     public BrowserHistoryAsyncManager(Context context) {
-        mThread = new MyThread(context);
+        mHistoryManager = new BrowserHistoryManager(context);
+        mThread = new MyThread(mHistoryManager);
         mThread.start();
     }
 
@@ -32,6 +34,10 @@ public class BrowserHistoryAsyncManager {
 
     public void update(String url, Bitmap favicon) {
         mThread.sendMessage(new MyMessage(UPDATE_FAVICON, url, favicon));
+    }
+
+    public String[] getHistoryArray(int limit) {
+        return mHistoryManager.getHistoryArray(limit);
     }
 
     private static final class MyMessage {
@@ -56,8 +62,8 @@ public class BrowserHistoryAsyncManager {
         private final BrowserHistoryManager mHistoryManager;
         private final LinkedBlockingQueue<MyMessage> mMessageQueue = new LinkedBlockingQueue<>();
 
-        MyThread(Context context) {
-            mHistoryManager = new BrowserHistoryManager(context);
+        MyThread(BrowserHistoryManager manager) {
+            mHistoryManager = manager;
         }
 
         @SuppressWarnings("InfiniteLoopStatement")

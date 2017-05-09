@@ -158,6 +158,20 @@ public class BrowserHistoryManager implements CursorLoadable {
         return image;
     }
 
+    public String[] getHistoryArray(int limit) {
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        ArrayList<String> histories = new ArrayList<>();
+        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_URL}, null, null, null, null, COLUMN_TIME + " DESC", Integer.toString(limit));
+        if (c.moveToFirst()) {
+            int urlIndex = c.getColumnIndex(COLUMN_URL);
+            do {
+                histories.add(c.getString(urlIndex));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return histories.toArray(new String[histories.size()]);
+    }
+
     public ArrayList<BrowserHistory> getList(int offset, int limit) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         ArrayList<BrowserHistory> histories = new ArrayList<>();
