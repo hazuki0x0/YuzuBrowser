@@ -100,7 +100,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
             }
         });
 
-        if (sortMode) {
+        if (sortMode || recyclerListener == null) {
             holder.itemView.setOnLongClickListener(null);
         } else {
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
