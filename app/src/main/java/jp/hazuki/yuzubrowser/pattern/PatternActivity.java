@@ -58,8 +58,14 @@ public abstract class PatternActivity<T extends PatternChecker> extends AppCompa
                 if (convertView == null)
                     convertView = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, null);
                 T item = getItem(position);
-                ((TextView) convertView.findViewById(android.R.id.text1)).setText(item.getTitle(getApplicationContext()));
-                ((TextView) convertView.findViewById(android.R.id.text2)).setText(item.getActionTitle(getApplicationContext()));
+                if (item != null) {
+                    ((TextView) convertView.findViewById(android.R.id.text1)).setText(item.getTitle(getApplicationContext()));
+                    ((TextView) convertView.findViewById(android.R.id.text2)).setText(item.getActionTitle(getApplicationContext()));
+                } else {
+                    ((TextView) convertView.findViewById(android.R.id.text1)).setText(R.string.unknown);
+                    ((TextView) convertView.findViewById(android.R.id.text2)).setText(R.string.unknown);
+                }
+
                 return convertView;
             }
         });

@@ -210,4 +210,5 @@
     <string name="enable_share">共有にこのアプリを表示する</string>
 
     <string name="closed_tab">%1$s を閉じました</string>
+    <string name="unknown">不明</string>
 </resources>
