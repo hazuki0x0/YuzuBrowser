@@ -620,4 +620,9 @@
     </integer-array>
 
     <string name="pref_move_to_parent">Move to parent tab when tab closed</string>
+    <string name="pref_multi_finger_gesture_settings">Multi touch gesture settings</string>
+    <string name="pref_multi_finger_gesture_enable">Enable multi touch gesture</string>
+    <string name="pref_multi_finger_gesture_name_enable">Show action name</string>
+    <string name="pref_number_of_fingers">Number of fingers</string>
+    <string name="pref_sensitivity">Sensitivity</string>
 </resources>

@@ -127,6 +127,9 @@
             app:gestureId="sub"
             app:intentTitle="@string/pref_sub_gesture_settings" />
     </PreferenceScreen>
+    <Preference
+        android:key="mf_gesture"
+        android:title="@string/pref_multi_finger_gesture_settings" />
     <PreferenceScreen android:title="@string/pref_flick_settings">
         <PreferenceCategory>
             <SwitchPreference

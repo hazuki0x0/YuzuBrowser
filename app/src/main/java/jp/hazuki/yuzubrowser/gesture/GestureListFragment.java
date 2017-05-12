@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.gesture;
 
 import android.app.Activity;
@@ -22,16 +38,12 @@ import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.utils.Logger;
-import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
 
-/**
- * Created by hazuki on 17/02/28.
- */
-
-public class GestureListFragment extends RecyclerFabFragment implements OnRecyclerListener, DeleteDialog.OnDelete {
+public class GestureListFragment extends RecyclerFabFragment implements OnRecyclerListener, DeleteDialogCompat.OnDelete {
     private static final int RESULT_REQUEST_ADD = 0;
     private static final int RESULT_REQUEST_EDIT = 1;
     private static final String ITEM_ID = "id";
@@ -66,7 +78,7 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.confirm_delete_gesture, position)
+        DeleteDialogCompat.newInstance(getActivity(), R.string.confirm, R.string.confirm_delete_gesture, position)
                 .show(getChildFragmentManager(), "delete");
         return true;
     }

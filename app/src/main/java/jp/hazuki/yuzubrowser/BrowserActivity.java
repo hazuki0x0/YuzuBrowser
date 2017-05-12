@@ -149,6 +149,10 @@ import jp.hazuki.yuzubrowser.download.DownloadRequestInfo;
 import jp.hazuki.yuzubrowser.download.DownloadService;
 import jp.hazuki.yuzubrowser.download.FastDownloadActivity;
 import jp.hazuki.yuzubrowser.gesture.GestureManager;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureDetector;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureInfo;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
@@ -316,6 +320,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private Api24LongPressFix api24LongPressFix;
 
+    private MultiFingerGestureManager multiFingerGestureManager;
+    private MultiFingerGestureDetector multiFingerGestureDetector;
+    private TextView actionNameTextView;
+    private boolean isShowActionName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -430,6 +439,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
                 setFullscreenIfEnable();
+            }
+        });
+
+        actionNameTextView = (TextView) findViewById(R.id.actionNameTextView);
+        webGestureOverlayView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return multiFingerGestureDetector != null && multiFingerGestureDetector.onTouchEvent(event);
             }
         });
     }
@@ -956,7 +973,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             tabdata.mWebView.onPreferenceReset();
         }
 
-        MainTabData tab = mTabManager.getCurrentTabData();
+        final MainTabData tab = mTabManager.getCurrentTabData();
         if (tab != null)
             mToolbar.notifyChangeWebState(tab);
 
@@ -975,7 +992,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(cookie);
 
-        boolean thirdCookie = cookie && AppData.accept_third_cookie.get();
+        final boolean thirdCookie = cookie && AppData.accept_third_cookie.get();
         for (MainTabData tabData : mTabManager.getLoadedData()) {
             tabData.mWebView.setAcceptThirdPartyCookies(cookieManager, thirdCookie);
         }
@@ -999,6 +1016,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             webGestureOverlayView.removeAllOnGestureListeners();
             webGestureOverlayView.removeAllOnGesturePerformedListeners();
             webGestureOverlayView.setEnabled(false);
+        }
+
+        if (AppData.multi_finger_gesture.get()) {
+            multiFingerGestureManager = new MultiFingerGestureManager(this);
+            if (multiFingerGestureDetector == null)
+                multiFingerGestureDetector = new MultiFingerGestureDetector(this, new MyMfGestureListener());
+            multiFingerGestureDetector.setShowName(AppData.multi_finger_gesture_show_name.get());
+            multiFingerGestureDetector.setSensitivity(AppData.multi_finger_gesture_sensitivity.get());
+        } else {
+            if (multiFingerGestureDetector != null)
+                multiFingerGestureDetector = null;
+
+            if (multiFingerGestureManager != null)
+                multiFingerGestureManager = null;
         }
 
         resetUserScript(AppData.userjs_enable.get());
@@ -1767,6 +1798,45 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
             }
             return false;
+        }
+    }
+
+    private final class MyMfGestureListener implements MultiFingerGestureDetector.OnMultiFingerGestureListener {
+
+        private final ActionNameArray nameArray = new ActionNameArray(BrowserActivity.this);
+
+        @Override
+        public boolean onGesturePerformed(MultiFingerGestureInfo info) {
+            for (MultiFingerGestureItem item : multiFingerGestureManager.getGestureItems()) {
+                if (info.match(item)) {
+                    mActionCallback.run(item.getAction());
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void onShowGestureName(MultiFingerGestureInfo info) {
+            for (MultiFingerGestureItem item : multiFingerGestureManager.getGestureItems()) {
+                if (info.match(item)) {
+                    actionNameTextView.setVisibility(View.VISIBLE);
+                    actionNameTextView.setText(item.getAction().toString(nameArray));
+                    isShowActionName = true;
+                    return;
+                }
+            }
+
+            if (isShowActionName) {
+                actionNameTextView.setVisibility(View.GONE);
+                isShowActionName = false;
+            }
+        }
+
+        @Override
+        public void onDismissGestureName() {
+            if (isShowActionName)
+                actionNameTextView.setVisibility(View.GONE);
         }
     }
 

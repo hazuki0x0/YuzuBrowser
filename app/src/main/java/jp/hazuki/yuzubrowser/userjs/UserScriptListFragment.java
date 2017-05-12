@@ -48,7 +48,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
-import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListActivity;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -56,7 +56,7 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
 
 import static android.app.Activity.RESULT_OK;
 
-public class UserScriptListFragment extends RecyclerFabFragment implements OnUserJsItemClickListener, DeleteDialog.OnDelete {
+public class UserScriptListFragment extends RecyclerFabFragment implements OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
     private static final int REQUEST_ADD_USERJS = 1;
     private static final int REQUEST_EDIT_USERJS = 2;
     private static final int REQUEST_ADD_FROM_FILE = 3;
@@ -115,7 +115,7 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
         menu.add(R.string.userjs_delete).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.userjs_delete_confirm, position)
+                DeleteDialogCompat.newInstance(getActivity(), R.string.confirm, R.string.userjs_delete_confirm, position)
                         .show(getChildFragmentManager(), "delete");
                 return false;
             }

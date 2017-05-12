@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webencode;
+package jp.hazuki.yuzubrowser.gesture.multiFinger;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -33,29 +36,29 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.action.ActionNameArray;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
 import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
-import static jp.hazuki.yuzubrowser.webencode.SelectActionDialog.DELETE;
-import static jp.hazuki.yuzubrowser.webencode.SelectActionDialog.EDIT;
+public class MfsListFragment extends Fragment implements OnRecyclerListener, DeleteDialogCompat.OnDelete {
 
-public class WebTextEncodeSettingFragment extends Fragment implements OnRecyclerListener, EditWebTextEncodeDialog.OnEditedWebTextEncode, SelectActionDialog.OnActionSelect, DeleteDialogCompat.OnDelete {
-    private WebTextEncodeList mEncodeList;
-    private WebTextEncodeRecyclerAdapter mAdapter;
     private View rootView;
+    private MultiFingerGestureManager manager;
+    private MfsListAdapter adapter;
+    private OnMfsListListener listener;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
         setHasOptionsMenu(true);
+        rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-
-        mEncodeList = new WebTextEncodeList();
-        mEncodeList.read(getActivity());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ItemTouchHelper helper = new ItemTouchHelper(new ListTouch());
@@ -63,65 +66,68 @@ public class WebTextEncodeSettingFragment extends Fragment implements OnRecycler
         recyclerView.addItemDecoration(helper);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
 
-        mAdapter = new WebTextEncodeRecyclerAdapter(getActivity(), mEncodeList, this);
-        recyclerView.setAdapter(mAdapter);
+        manager = new MultiFingerGestureManager(getActivity());
+        adapter = new MfsListAdapter(getActivity(), manager.getGestureItems(), new ActionNameArray(getActivity()), this);
+
+        recyclerView.setAdapter(adapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditWebTextEncodeDialog.newInstance().show(getChildFragmentManager(), "new");
+                if (listener != null)
+                    listener.goEdit(-1, new MultiFingerGestureItem());
             }
         });
+
         return rootView;
     }
 
     @Override
-    public void onDelete(int position) {
-        mEncodeList.remove(position);
-        mEncodeList.write(getActivity());
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onEdited(int position, String name) {
-        if (position < 0) {
-            mEncodeList.add(new WebTextEncode(name));
-            mEncodeList.write(getActivity());
-            mAdapter.notifyDataSetChanged();
-        } else {
-            WebTextEncode encode = mEncodeList.get(position);
-            encode.encoding = name;
-            mEncodeList.set(position, encode);
-            mEncodeList.write(getActivity());
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onActionSelected(@SelectActionDialog.ActionMode int mode, int position, WebTextEncode encode) {
-        switch (mode) {
-            case EDIT:
-                EditWebTextEncodeDialog.newInstance(position, encode)
-                        .show(getChildFragmentManager(), "edit");
-                break;
-            case DELETE:
-                DeleteDialogCompat.newInstance(getActivity(), R.string.delete_web_encode, R.string.delete_web_encode_confirm, position)
-                        .show(getChildFragmentManager(), "delete");
-                break;
-        }
-    }
-
-    @Override
     public void onRecyclerItemClicked(View v, int position) {
-        EditWebTextEncodeDialog.newInstance(position, mEncodeList.get(position))
-                .show(getChildFragmentManager(), "edit");
+        if (listener != null)
+            listener.goEdit(position, adapter.getItem(position));
+    }
+
+    public void onEdited(int index, MultiFingerGestureItem item) {
+        if (index >= 0) {
+            manager.set(index, item);
+        } else {
+            manager.add(item);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        SelectActionDialog.newInstance(position, mEncodeList.get(position))
-                .show(getChildFragmentManager(), "action");
+        DeleteDialog.newInstance(getActivity(), R.string.delete_speedDial, R.string.confirm_delete_speedDial, position)
+                .show(getChildFragmentManager(), "delete");
         return true;
+    }
+
+    @Override
+    public void onDelete(int position) {
+        manager.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getActivity() instanceof OnMfsListListener)
+            listener = (OnMfsListListener) getActivity();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && getActivity() instanceof OnMfsListListener)
+            listener = (OnMfsListListener) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 
     @Override
@@ -129,8 +135,8 @@ public class WebTextEncodeSettingFragment extends Fragment implements OnRecycler
         menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                boolean next = !mAdapter.isSortMode();
-                mAdapter.setSortMode(next);
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
 
                 Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
                 return false;
@@ -139,8 +145,6 @@ public class WebTextEncodeSettingFragment extends Fragment implements OnRecycler
     }
 
     private class ListTouch extends ItemTouchHelper.Callback {
-
-
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) |
@@ -149,44 +153,54 @@ public class WebTextEncodeSettingFragment extends Fragment implements OnRecycler
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            mAdapter.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            mEncodeList.write(getActivity());
+            adapter.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
+        }
+
+        @Override
+        public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
+            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+            manager.save();
         }
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             final int position = viewHolder.getAdapterPosition();
-            final WebTextEncode encode = mEncodeList.remove(position);
+            final MultiFingerGestureItem item = adapter.remove(position);
 
-            mAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mEncodeList.add(position, encode);
-                            mAdapter.notifyDataSetChanged();
+                            manager.add(position, item);
+                            adapter.notifyDataSetChanged();
                         }
                     })
                     .addCallback(new Snackbar.Callback() {
                         @Override
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             if (event != DISMISS_EVENT_ACTION) {
-                                mEncodeList.write(getActivity());
+                                manager.save();
                             }
                         }
                     })
                     .show();
+
         }
 
         @Override
         public boolean isLongPressDragEnabled() {
-            return mAdapter.isSortMode();
+            return adapter.isSortMode();
         }
 
         @Override
         public boolean isItemViewSwipeEnabled() {
             return true;
         }
+    }
+
+    interface OnMfsListListener {
+        void goEdit(int index, MultiFingerGestureItem item);
     }
 }

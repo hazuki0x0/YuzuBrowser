@@ -42,12 +42,12 @@ import java.util.ArrayList;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialManager;
-import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 
-public class SpeedDialSettingActivityFragment extends Fragment implements OnRecyclerListener, FabActionCallBack, SpeedDialEditCallBack, DeleteDialog.OnDelete {
+public class SpeedDialSettingActivityFragment extends Fragment implements OnRecyclerListener, FabActionCallBack, SpeedDialEditCallBack, DeleteDialogCompat.OnDelete {
 
     private ArrayList<SpeedDial> speedDialList;
     private SpeedDialRecyclerAdapter adapter;
@@ -112,7 +112,7 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        DeleteDialog.newInstance(getActivity(), R.string.delete_speedDial, R.string.confirm_delete_speedDial, position)
+        DeleteDialogCompat.newInstance(getActivity(), R.string.delete_speedDial, R.string.confirm_delete_speedDial, position)
                 .show(getChildFragmentManager(), "delete");
         return true;
     }

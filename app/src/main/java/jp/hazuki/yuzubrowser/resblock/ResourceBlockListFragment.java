@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.resblock;
 
 import android.content.Context;
@@ -18,13 +34,13 @@ import java.util.List;
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.resblock.checker.NormalChecker;
-import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
 import jp.hazuki.yuzubrowser.utils.view.recycler.SimpleViewHolder;
 
-public class ResourceBlockListFragment extends RecyclerFabFragment implements OnRecyclerListener, CheckerEditDialog.OnCheckerEdit, DeleteDialog.OnDelete {
+public class ResourceBlockListFragment extends RecyclerFabFragment implements OnRecyclerListener, CheckerEditDialog.OnCheckerEdit, DeleteDialogCompat.OnDelete {
     static final String CHECKER = "CHECKER";
     private ResourceBlockManager mManager;
     private ResBlockAdapter adapter;
@@ -87,7 +103,7 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        DeleteDialog.newInstance(getActivity(), R.string.confirm, R.string.resblock_confirm_delete, position)
+        DeleteDialogCompat.newInstance(getActivity(), R.string.confirm, R.string.resblock_confirm_delete, position)
                 .show(getChildFragmentManager(), "delete");
         return true;
     }
