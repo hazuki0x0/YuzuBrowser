@@ -37,6 +37,7 @@ import jp.hazuki.yuzubrowser.action.manager.MenuActionManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionArrayManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionManager;
 import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
+import jp.hazuki.yuzubrowser.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
@@ -188,6 +189,14 @@ public class AppData {
             hardBtnManager.back_press.action.add(SingleAction.makeInstance(SingleAction.GO_BACK));
             hardBtnManager.search_press.action.add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
             hardBtnManager.save(context);
+
+            ToolbarActionManager toolbarManager = ToolbarActionManager.getInstance(context);
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.GO_BACK));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.TAB_LIST));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.OPEN_OPTIONS_MENU));
+            toolbarManager.save(context);
 
             TabActionManager tabManager = TabActionManager.getInstance(context);
             tabManager.tab_press.action.add(SingleAction.makeInstance(SingleAction.CLOSE_TAB));

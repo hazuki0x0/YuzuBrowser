@@ -36,7 +36,7 @@ public class GoBackSingleAction extends SingleAction implements Parcelable {
                 mAction.loadAction(parser);
             }
         } else {
-            mAction.add(SingleAction.makeInstance(FINISH));
+            mAction.add(SingleAction.makeInstance(CLOSE_AUTO_SELECT));
         }
     }
 
