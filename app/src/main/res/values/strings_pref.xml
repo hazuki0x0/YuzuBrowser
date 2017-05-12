@@ -512,7 +512,9 @@
     <string name="pref_import_html_bookmark_confirm">Are you sure you want to import bookmarks?</string>
     <string name="pref_export_html_bookmark">Export html bookmarks</string>
     <string name="pref_export_html_bookmark_confirm">Are you sure you want to export bookmarks?</string>
-    <string name="pref_fast_back">Fast going back and forward</string>
+    <string name="pref_fast_back">Fastback</string>
+    <string name="pref_fast_back_cache_size">Fastback cache size</string>
+    <string name="pref_fast_back_cache_size_comment">0 = unlimited</string>
     <string name="pref_userjs_settings">UserScript settings</string>
     <string name="pref_userjs_enable">Enable UserScript</string>
     <string name="pref_userjs_manage">Manage UserScript</string>
@@ -618,4 +620,9 @@
     </integer-array>
 
     <string name="pref_move_to_parent">Move to parent tab when tab closed</string>
+    <string name="pref_multi_finger_gesture_settings">Multi touch gesture settings</string>
+    <string name="pref_multi_finger_gesture_enable">Enable multi touch gesture</string>
+    <string name="pref_multi_finger_gesture_name_enable">Show action name</string>
+    <string name="pref_number_of_fingers">Number of fingers</string>
+    <string name="pref_sensitivity">Sensitivity</string>
 </resources>

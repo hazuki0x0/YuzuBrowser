@@ -8,9 +8,9 @@ import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 public interface WebBrowser {
     MainTabData addNewTab(@TabType int type);
 
-    MainTabData addNewTab(boolean cacheType, @TabType int type);
+    MainTabData addNewTab(@WebViewType int cacheType, @TabType int type);
 
-    CustomWebView makeWebView(boolean cacheType);
+    CustomWebView makeWebView(@WebViewType int cacheType);
 
     void openInNewTab(String url, @TabType int type);
 

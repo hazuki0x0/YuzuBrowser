@@ -259,6 +259,9 @@
             android:exported="false"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
+        <activity
+            android:name=".gesture.multiFinger.MultiFingerSettingsActivity"
+            android:label="@string/pref_multi_finger_gesture_settings" />
     </application>
 
 </manifest>

@@ -18,19 +18,19 @@ package jp.hazuki.yuzubrowser.tab.manager;
 
 import java.util.LinkedHashMap;
 
-class TabCache extends LinkedHashMap<Long, MainTabData> {
+public class TabCache<T extends TabData> extends LinkedHashMap<Long, T> {
 
-    private final OnCacheOverFlowListener mListener;
+    private final OnCacheOverFlowListener<T> mListener;
     private int mSize;
 
-    TabCache(int cacheSize, OnCacheOverFlowListener listener) {
+    public TabCache(int cacheSize, OnCacheOverFlowListener<T> listener) {
         super(cacheSize, 0.75f, true);
         mSize = cacheSize;
         mListener = listener;
     }
 
     @Override
-    protected boolean removeEldestEntry(Entry<Long, MainTabData> eldest) {
+    protected boolean removeEldestEntry(Entry<Long, T> eldest) {
         boolean result = size() > mSize;
         if (result) {
             mListener.onCacheOverflow(eldest.getValue());
@@ -39,7 +39,7 @@ class TabCache extends LinkedHashMap<Long, MainTabData> {
     }
 
     @Override
-    public MainTabData put(Long key, MainTabData value) {
+    public T put(Long key, T value) {
         if (value != null)
             return super.put(key, value);
         return null;
@@ -49,7 +49,7 @@ class TabCache extends LinkedHashMap<Long, MainTabData> {
         mSize = size;
     }
 
-    public interface OnCacheOverFlowListener {
-        void onCacheOverflow(MainTabData tabData);
+    public interface OnCacheOverFlowListener<T> {
+        void onCacheOverflow(T tabData);
     }
 }

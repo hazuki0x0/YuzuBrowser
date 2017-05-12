@@ -148,6 +148,10 @@ import jp.hazuki.yuzubrowser.download.DownloadRequestInfo;
 import jp.hazuki.yuzubrowser.download.DownloadService;
 import jp.hazuki.yuzubrowser.download.FastDownloadActivity;
 import jp.hazuki.yuzubrowser.gesture.GestureManager;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureDetector;
+import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureInfo;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
@@ -211,7 +215,6 @@ import jp.hazuki.yuzubrowser.utils.view.pie.PieControlBase;
 import jp.hazuki.yuzubrowser.utils.view.pie.PieMenu;
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout;
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity;
-import jp.hazuki.yuzubrowser.webkit.CacheWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomOnCreateContextMenuListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebBackForwardList;
 import jp.hazuki.yuzubrowser.webkit.CustomWebChromeClient;
@@ -219,14 +222,15 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebHistoryItem;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView.OnWebStateChangeListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebViewClient;
-import jp.hazuki.yuzubrowser.webkit.SwipeWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
 import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
 import jp.hazuki.yuzubrowser.webkit.WebViewAutoScrollManager;
+import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
 import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
 import jp.hazuki.yuzubrowser.webkit.WebViewRenderingManager;
+import jp.hazuki.yuzubrowser.webkit.WebViewType;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageCopyUrlHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageLoadUrlHandler;
@@ -313,6 +317,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private MenuWindow menuWindow;
 
     private Api24LongPressFix api24LongPressFix;
+
+    private MultiFingerGestureManager multiFingerGestureManager;
+    private MultiFingerGestureDetector multiFingerGestureDetector;
+    private TextView actionNameTextView;
+    private boolean isShowActionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -429,6 +438,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
                 setFullscreenIfEnable();
+            }
+        });
+
+        actionNameTextView = (TextView) findViewById(R.id.actionNameTextView);
+        webGestureOverlayView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return multiFingerGestureDetector != null && multiFingerGestureDetector.onTouchEvent(event);
             }
         });
     }
@@ -946,9 +963,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         for (MainTabData tabdata : mTabManager.getLoadedData()) {
             initWebSetting(tabdata.mWebView);
+            tabdata.mWebView.onPreferenceReset();
         }
 
-        MainTabData tab = mTabManager.getCurrentTabData();
+        final MainTabData tab = mTabManager.getCurrentTabData();
         if (tab != null)
             mToolbar.notifyChangeWebState(tab);
 
@@ -967,7 +985,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(cookie);
 
-        boolean thirdCookie = cookie && AppData.accept_third_cookie.get();
+        final boolean thirdCookie = cookie && AppData.accept_third_cookie.get();
         for (MainTabData tabData : mTabManager.getLoadedData()) {
             tabData.mWebView.setAcceptThirdPartyCookies(cookieManager, thirdCookie);
         }
@@ -991,6 +1009,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             webGestureOverlayView.removeAllOnGestureListeners();
             webGestureOverlayView.removeAllOnGesturePerformedListeners();
             webGestureOverlayView.setEnabled(false);
+        }
+
+        if (AppData.multi_finger_gesture.get()) {
+            multiFingerGestureManager = new MultiFingerGestureManager(this);
+            if (multiFingerGestureDetector == null)
+                multiFingerGestureDetector = new MultiFingerGestureDetector(this, new MyMfGestureListener());
+            multiFingerGestureDetector.setShowName(AppData.multi_finger_gesture_show_name.get());
+            multiFingerGestureDetector.setSensitivity(AppData.multi_finger_gesture_sensitivity.get());
+        } else {
+            if (multiFingerGestureDetector != null)
+                multiFingerGestureDetector = null;
+
+            if (multiFingerGestureManager != null)
+                multiFingerGestureManager = null;
         }
 
         resetUserScript(AppData.userjs_enable.get());
@@ -1185,8 +1217,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     }
 
     @Override
-    public CustomWebView makeWebView(boolean cacheType) {
-        CustomWebView web = (cacheType) ? new CacheWebView(this) : new SwipeWebView(this);
+    public CustomWebView makeWebView(@WebViewType int cacheType) {
+        CustomWebView web = WebViewFactory.create(this, cacheType);
         web.getWebView().setDrawingCacheEnabled(true);
         web.getWebView().buildDrawingCache();
         initWebSetting(web);
@@ -1197,11 +1229,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public MainTabData addNewTab(@TabType int type) {
-        return addNewTab(AppData.fast_back.get(), type);
+        return addNewTab(WebViewFactory.getMode(), type);
     }
 
     @Override
-    public MainTabData addNewTab(boolean cacheType, @TabType int type) {
+    public MainTabData addNewTab(@WebViewType int cacheType, @TabType int type) {
         CustomWebView web = makeWebView(cacheType);
         if (AppData.pause_web_tab_change.get())
             web.onPause();
@@ -1224,7 +1256,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return tab_data;
     }
 
-    private MainTabData openNewTab(boolean cacheType, @TabType int type) {
+    private MainTabData openNewTab(@WebViewType int cacheType, @TabType int type) {
         MainTabData tab_data = addNewTab(cacheType, type);
         setCurrentTab(mTabManager.getLastTabNo());
         mToolbar.scrollTabRight();
@@ -1242,7 +1274,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @SuppressWarnings("WrongConstant")
     private void openInNewTab(Bundle state) {
-        openNewTab(CacheWebView.isBundleCacheWebView(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
+        openNewTab(WebViewFactory.getMode(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
     }
 
     private void openInNewTabPost(final String url, @TabType int type) {
@@ -1703,6 +1735,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
+            if (e == null)
+                return false;
+            MainTabData tab = mTabManager.getCurrentTabData();
+            if (tab == null)
+                return false;
+
+            tab.mWebView.setDoubleTapFling(e.getPointerCount() == 1);
             return false;
         }
 
@@ -1759,6 +1798,45 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
             }
             return false;
+        }
+    }
+
+    private final class MyMfGestureListener implements MultiFingerGestureDetector.OnMultiFingerGestureListener {
+
+        private final ActionNameArray nameArray = new ActionNameArray(BrowserActivity.this);
+
+        @Override
+        public boolean onGesturePerformed(MultiFingerGestureInfo info) {
+            for (MultiFingerGestureItem item : multiFingerGestureManager.getGestureItems()) {
+                if (info.match(item)) {
+                    mActionCallback.run(item.getAction());
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void onShowGestureName(MultiFingerGestureInfo info) {
+            for (MultiFingerGestureItem item : multiFingerGestureManager.getGestureItems()) {
+                if (info.match(item)) {
+                    actionNameTextView.setVisibility(View.VISIBLE);
+                    actionNameTextView.setText(item.getAction().toString(nameArray));
+                    isShowActionName = true;
+                    return;
+                }
+            }
+
+            if (isShowActionName) {
+                actionNameTextView.setVisibility(View.GONE);
+                isShowActionName = false;
+            }
+        }
+
+        @Override
+        public void onDismissGestureName() {
+            if (isShowActionName)
+                actionNameTextView.setVisibility(View.GONE);
         }
     }
 
@@ -2585,6 +2663,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mToolbar.showGeolocationPrmissionPrompt(geoView);
             }
             geoView.onGeolocationPermissionsShowPrompt(origin, callback);
+        }
+
+        @Override
+        public void getVisitedHistory(final ValueCallback<String[]> callback) {
+            if (mBrowserHistoryManager != null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onReceiveValue(mBrowserHistoryManager.getHistoryArray(3000));
+                    }
+                }).start();
+            }
         }
     }
 

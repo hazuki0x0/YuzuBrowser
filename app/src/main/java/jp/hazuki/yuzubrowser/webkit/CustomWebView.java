@@ -195,7 +195,11 @@ public interface CustomWebView {
 
     void setLayerType(int layerType, Paint paint);
 
+    void onPreferenceReset();
+
     void setAcceptThirdPartyCookies(CookieManager manager, boolean accept);
+
+    void setDoubleTapFling(boolean fling);
 
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);

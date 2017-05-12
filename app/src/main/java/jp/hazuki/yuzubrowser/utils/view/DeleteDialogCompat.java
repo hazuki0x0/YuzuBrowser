@@ -18,24 +18,24 @@ package jp.hazuki.yuzubrowser.utils.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 
-public class DeleteDialog extends DialogFragment {
+public class DeleteDialogCompat extends DialogFragment {
 
     private static final String POS = "pos";
     private static final String TITLE = "title";
     private static final String MES = "mes";
 
-    public static DeleteDialog newInstance(Context context, int title, int message, int pos) {
+    public static DeleteDialogCompat newInstance(Context context, int title, int message, int pos) {
         return newInstance(context.getString(title), context.getString(message), pos);
     }
 
-    public static DeleteDialog newInstance(String title, String message, int pos) {
-        DeleteDialog deleteWebTextEncodeDialog = new DeleteDialog();
+    public static DeleteDialogCompat newInstance(String title, String message, int pos) {
+        DeleteDialogCompat deleteWebTextEncodeDialog = new DeleteDialogCompat();
         Bundle bundle = new Bundle();
         bundle.putString(TITLE, title);
         bundle.putString(MES, message);

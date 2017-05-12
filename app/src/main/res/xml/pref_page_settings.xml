@@ -41,6 +41,14 @@
         android:key="fast_back"
         android:title="@string/pref_fast_back" />
 
+    <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+        android:dependency="fast_back"
+        android:key="fast_back_cache_size"
+        android:title="@string/pref_fast_back_cache_size"
+        app:comment="@string/pref_fast_back_cache_size_comment"
+        app:seekMax="50"
+        app:seekMin="0" />
+
     <SwitchPreference
         android:key="pull_to_refresh"
         android:title="@string/pref_pull_to_refresh" />

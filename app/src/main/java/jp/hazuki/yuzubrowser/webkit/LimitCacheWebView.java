@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
 import android.support.annotation.Nullable;
+import android.util.LongSparseArray;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -46,18 +47,30 @@ import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
 import android.widget.FrameLayout;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.tab.manager.TabCache;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
-public class CacheWebView extends FrameLayout implements CustomWebView {
-    private final ArrayList<TabData> mList = new ArrayList<>();
+public class LimitCacheWebView extends FrameLayout implements CustomWebView, TabCache.OnCacheOverFlowListener<TabData> {
+    private final ArrayList<TabIndexData> tabIndexList = new ArrayList<>();
+    private final LongSparseArray<Bundle> tabSaveData = new LongSparseArray<>();
+    private final TabCache<TabData> tabCache;
+    private TabData currentTab;
     private long id = System.currentTimeMillis();
     private int mCurrent = 0;
     private boolean isFirst = true;
@@ -71,16 +84,12 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     private final DownloadListener mDownloadListenerWrapper = new DownloadListener() {
         @Override
         public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-            synchronized (CacheWebView.this) {
+            synchronized (LimitCacheWebView.this) {
                 if (mCurrent >= 1) {
-                    TabData from = mList.get(mCurrent);
+                    TabData from = currentTab;
                     if (from.getUrl() == null || from.getUrl().equals(url)) {
-                        mList.remove(mCurrent);
-
-                        TabData to = mList.get(--mCurrent);
-                        removeAllViews();
-                        addView(to.mWebView.getView());
-                        move(from, to);
+                        tabIndexList.remove(mCurrent);
+                        moveTo(false);
 
                         from.mWebView.destroy();
                     }
@@ -101,7 +110,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
         @Override
         public void onCloseWindow(CustomWebView window) {
-            if (mWebChromeClient != null) mWebChromeClient.onCloseWindow(CacheWebView.this);
+            if (mWebChromeClient != null) mWebChromeClient.onCloseWindow(LimitCacheWebView.this);
         }
 
         @Override
@@ -111,7 +120,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
         @Override
         public boolean onCreateWindow(CustomWebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-            return mWebChromeClient != null && mWebChromeClient.onCreateWindow(CacheWebView.this, isDialog, isUserGesture, resultMsg);
+            return mWebChromeClient != null && mWebChromeClient.onCreateWindow(LimitCacheWebView.this, isDialog, isUserGesture, resultMsg);
         }
 
         @Override
@@ -132,17 +141,17 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
         @Override
         public boolean onJsAlert(CustomWebView view, String url, String message, JsResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsAlert(CacheWebView.this, url, message, result);
+            return mWebChromeClient != null && mWebChromeClient.onJsAlert(LimitCacheWebView.this, url, message, result);
         }
 
         @Override
         public boolean onJsConfirm(CustomWebView view, String url, String message, JsResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsConfirm(CacheWebView.this, url, message, result);
+            return mWebChromeClient != null && mWebChromeClient.onJsConfirm(LimitCacheWebView.this, url, message, result);
         }
 
         @Override
         public boolean onJsPrompt(CustomWebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsPrompt(CacheWebView.this, url, message, defaultValue, result);
+            return mWebChromeClient != null && mWebChromeClient.onJsPrompt(LimitCacheWebView.this, url, message, defaultValue, result);
         }
 
         @Override
@@ -151,9 +160,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             if (data != null) {
                 data.onProgressChanged(newProgress);
             }
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
+            if (!view.equals(currentTab.mWebView)) return;
             if (mWebChromeClient != null)
-                mWebChromeClient.onProgressChanged(CacheWebView.this, newProgress);
+                mWebChromeClient.onProgressChanged(LimitCacheWebView.this, newProgress);
         }
 
         @Override
@@ -162,21 +171,21 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             if (data != null) {
                 data.onReceivedTitle(title);
             }
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
+            if (!view.equals(currentTab.mWebView)) return;
             if (mWebChromeClient != null)
-                mWebChromeClient.onReceivedTitle(CacheWebView.this, title);
+                mWebChromeClient.onReceivedTitle(LimitCacheWebView.this, title);
         }
 
         @Override
         public void onReceivedIcon(CustomWebView view, Bitmap icon) {
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
+            if (!view.equals(currentTab.mWebView)) return;
             if (mWebChromeClient != null)
-                mWebChromeClient.onReceivedIcon(CacheWebView.this, icon);
+                mWebChromeClient.onReceivedIcon(LimitCacheWebView.this, icon);
         }
 
         @Override
         public void onRequestFocus(CustomWebView view) {
-            if (mWebChromeClient != null) mWebChromeClient.onRequestFocus(CacheWebView.this);
+            if (mWebChromeClient != null) mWebChromeClient.onRequestFocus(LimitCacheWebView.this);
         }
 
         @Override
@@ -193,33 +202,33 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         @Override
         public void onLoadResource(CustomWebView view, String url) {
             if (mWebViewClient != null)
-                mWebViewClient.onLoadResource(CacheWebView.this, url);
+                mWebViewClient.onLoadResource(LimitCacheWebView.this, url);
         }
 
         @Override
         public void onScaleChanged(CustomWebView view, float oldScale, float newScale) {
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
+            if (!view.equals(currentTab.mWebView)) return;
             if (mWebViewClient != null)
-                mWebViewClient.onScaleChanged(CacheWebView.this, oldScale, newScale);
+                mWebViewClient.onScaleChanged(LimitCacheWebView.this, oldScale, newScale);
         }
 
         @Override
         public void onUnhandledKeyEvent(CustomWebView view, KeyEvent event) {
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
+            if (!view.equals(currentTab.mWebView)) return;
             if (mWebViewClient != null)
-                mWebViewClient.onUnhandledKeyEvent(CacheWebView.this, event);
+                mWebViewClient.onUnhandledKeyEvent(LimitCacheWebView.this, event);
         }
 
         @Override
         public void doUpdateVisitedHistory(CustomWebView view, String url, boolean isReload) {
             if (mWebViewClient != null)
-                mWebViewClient.doUpdateVisitedHistory(CacheWebView.this, url, isReload);
+                mWebViewClient.doUpdateVisitedHistory(LimitCacheWebView.this, url, isReload);
         }
 
         @Override
         public void onFormResubmission(CustomWebView view, Message dontResend, Message resend) {
             if (mWebViewClient != null)
-                mWebViewClient.onFormResubmission(CacheWebView.this, dontResend, resend);
+                mWebViewClient.onFormResubmission(LimitCacheWebView.this, dontResend, resend);
         }
 
         @Override
@@ -228,8 +237,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             if (data != null) {
                 data.onPageFinished(view, url);
             }
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
-            if (mWebViewClient != null) mWebViewClient.onPageFinished(CacheWebView.this, url);
+            if (!view.equals(currentTab.mWebView)) return;
+            if (mWebViewClient != null) mWebViewClient.onPageFinished(LimitCacheWebView.this, url);
         }
 
         @Override
@@ -238,27 +247,27 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             if (data != null) {
                 data.onPageStarted(url, favicon);
             }
-            if (!view.equals(mList.get(mCurrent).mWebView)) return;
+            if (!view.equals(currentTab.mWebView)) return;
             if (mWebViewClient != null)
-                mWebViewClient.onPageStarted(CacheWebView.this, url, favicon);
+                mWebViewClient.onPageStarted(LimitCacheWebView.this, url, favicon);
         }
 
         @Override
         public void onReceivedHttpAuthRequest(CustomWebView view, HttpAuthHandler handler, String host, String realm) {
             if (mWebViewClient != null)
-                mWebViewClient.onReceivedHttpAuthRequest(CacheWebView.this, handler, host, realm);
+                mWebViewClient.onReceivedHttpAuthRequest(LimitCacheWebView.this, handler, host, realm);
         }
 
         @Override
         public void onReceivedSslError(CustomWebView view, SslErrorHandler handler, SslError error) {
             if (mWebViewClient != null)
-                mWebViewClient.onReceivedSslError(CacheWebView.this, handler, error);
+                mWebViewClient.onReceivedSslError(LimitCacheWebView.this, handler, error);
         }
 
         @Override
         public WebResourceResponse shouldInterceptRequest(CustomWebView view, WebResourceRequest request) {
             if (mWebViewClient != null)
-                return mWebViewClient.shouldInterceptRequest(CacheWebView.this, request);
+                return mWebViewClient.shouldInterceptRequest(LimitCacheWebView.this, request);
             return null;
         }
 
@@ -266,7 +275,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         public boolean shouldOverrideUrlLoading(CustomWebView view, String url, Uri uri) {
             if (url == null || uri == null) return true;
             if (WebViewUtils.shouldLoadSameTabAuto(url)) return false;
-            if (mWebViewClient != null && mWebViewClient.shouldOverrideUrlLoading(CacheWebView.this, url, uri)) {
+            if (mWebViewClient != null && mWebViewClient.shouldOverrideUrlLoading(LimitCacheWebView.this, url, uri)) {
                 return true;
             } else {
                 if (WebViewUtils.isRedirect(view)) return false;
@@ -281,24 +290,25 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         @Override
         public void onCreateContextMenu(ContextMenu menu, CustomWebView v, ContextMenuInfo menuInfo) {
             if (mCreateContextMenuListener != null)
-                mCreateContextMenuListener.onCreateContextMenu(menu, (CustomWebView) CacheWebView.this, menuInfo);
+                mCreateContextMenuListener.onCreateContextMenu(menu, (CustomWebView) LimitCacheWebView.this, menuInfo);
         }
     };
     private MultiTouchGestureDetector mGestureDetector;
 
-    public CacheWebView(Context context) {
+    public LimitCacheWebView(Context context) {
         super(context);
+        tabCache = new TabCache<>(AppData.fast_back_cache_size.get(), this);
         SwipeWebView web = new SwipeWebView(context);
-        mList.add(new TabData(web));
+        TabData data = new TabData(web);
+        tabIndexList.add(data.getTabIndexData());
+        tabCache.put(data.getId(), data);
+        currentTab = data;
+
         addView(web);
     }
 
     private TabData webview2data(CustomWebView web) {
-        for (TabData data : mList) {
-            if (data.mWebView.equals(web))
-                return data;
-        }
-        return null;
+        return tabCache.get(web.getIdentityId());
     }
 
     private static final TreeMap<String, String> sHeaderMap = new TreeMap<>();
@@ -308,23 +318,65 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     }
 
     private void newtab(String url, Map<String, String> additionalHttpHeaders) {
-        TabData from = mList.get(mCurrent);
-        TabData to = new TabData(new SwipeWebView(getContext()));
-        for (int i = mList.size() - 1; i > mCurrent; --i) {
-            mList.get(i).mWebView.destroy();
-            mList.remove(i);
-        }
-
-        removeAllViews();
-        mList.add(to);
-        addView(to.mWebView.getView());
-        settingWebView(from.mWebView, to.mWebView);
+        TabData to = makeWebView();
         if (additionalHttpHeaders == null)
             additionalHttpHeaders = sHeaderMap;
-        additionalHttpHeaders.put("Referer", from.getUrl());
+        additionalHttpHeaders.put("Referer", currentTab.getUrl());
         to.mWebView.loadUrl(url, sHeaderMap);
-        ++mCurrent;
-        move(from, to);
+
+        for (int i = tabIndexList.size() - 1; i > mCurrent; --i) {
+            removeWebView(i);
+        }
+
+        tabIndexList.add(to.getTabIndexData());
+        tabCache.put(to.getId(), to);
+        moveTo(true);
+    }
+
+    private TabData makeWebView() {
+        TabData to = new TabData(new SwipeWebView(getContext()));
+        settingWebView(currentTab.mWebView, to.mWebView);
+        return to;
+    }
+
+    private void removeWebView(int index) {
+        TabIndexData now = tabIndexList.remove(index);
+        tabCache.remove(now.getId());
+        tabSaveData.remove(now.getId());
+    }
+
+    private TabData getWebView(int index) {
+        TabIndexData now = tabIndexList.get(index);
+        TabData data = tabCache.get(now.getId());
+        if (data == null) {
+            data = now.getTabData(new SwipeWebView(getContext()));
+            settingWebView(currentTab.mWebView, data.mWebView);
+            Bundle state = tabSaveData.get(now.getId());
+            if (state != null) {
+                data.mWebView.restoreState(state);
+            } else {
+                if (now.getUrl() != null)
+                    data.mWebView.loadUrl(now.getUrl());
+            }
+            tabCache.put(now.getId(), data);
+        }
+        return data;
+    }
+
+    private void setCurrentTab(int index, TabData data) {
+        mCurrent = index;
+        currentTab = data;
+    }
+
+    private TabData moveTo(boolean next) {
+        mCurrent += next ? 1 : -1;
+
+        TabData from = currentTab;
+        currentTab = getWebView(mCurrent);
+        removeAllViews();
+        addView(currentTab.mWebView.getView());
+        move(from, currentTab);
+        return currentTab;
     }
 
     private static final int CAN_NOT_MOVE = 0;
@@ -332,7 +384,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     private static final int CAN_INTERNAL_MOVE = 2;
 
     private int canGoBackType() {
-        if (mList.get(mCurrent).mWebView.canGoBack()) return CAN_INTERNAL_MOVE;
+        if (currentTab.mWebView.canGoBack()) return CAN_INTERNAL_MOVE;
         if (mCurrent >= 1) return CAN_EXTERNAL_MOVE;
         return CAN_NOT_MOVE;
     }
@@ -348,13 +400,13 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         if (steps < 0) {
             return mCurrent >= -steps;
         } else {
-            return mCurrent + steps < mList.size();
+            return mCurrent + steps < tabIndexList.size();
         }
     }
 
     private int canGoForwardType() {
-        if (mList.get(mCurrent).mWebView.canGoForward()) return CAN_INTERNAL_MOVE;
-        if (mCurrent + 1 < mList.size()) return CAN_EXTERNAL_MOVE;
+        if (currentTab.mWebView.canGoForward()) return CAN_INTERNAL_MOVE;
+        if (mCurrent + 1 < tabIndexList.size()) return CAN_EXTERNAL_MOVE;
         return CAN_NOT_MOVE;
     }
 
@@ -365,40 +417,47 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public void clearCache(boolean includeDiskFiles) {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.clearCache(true);
         }
     }
 
     @Override
     public void clearFormData() {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.clearFormData();
         }
     }
 
     @Override
     public synchronized void clearHistory() {
-        TabData data = mList.get(mCurrent);
+        TabData data = currentTab;
         data.mWebView.clearHistory();
-        mList.clear();
-        mList.add(data);
+        tabIndexList.clear();
+        tabCache.clear();
+        tabIndexList.add(data.getTabIndexData());
+        tabCache.put(data.getId(), data);
         mCurrent = 0;
     }
 
     @Override
     public void clearMatches() {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.clearMatches();
         }
     }
 
     @Override
     public CustomWebBackForwardList copyMyBackForwardList() {
-        CustomWebBackForwardList list = new CustomWebBackForwardList(mCurrent, mList.size());
-        for (TabData webdata : mList) {
-            CustomWebView web = webdata.mWebView;
-            CustomWebHistoryItem item = new CustomWebHistoryItem(web.getUrl(), web.getOriginalUrl(), web.getTitle(), web.getFavicon());
+        CustomWebBackForwardList list = new CustomWebBackForwardList(mCurrent, tabIndexList.size());
+        for (TabIndexData webdata : tabIndexList) {
+            TabData data = tabCache.get(webdata.getId());
+            CustomWebHistoryItem item;
+            if (data == null) {
+                item = new CustomWebHistoryItem(webdata.getUrl(), webdata.getUrl(), webdata.getTitle(), null);
+            } else {
+                item = new CustomWebHistoryItem(data.getUrl(), data.getOriginalUrl(), data.getTitle(), data.mWebView.getFavicon());
+            }
             list.add(item);
         }
         return list;
@@ -407,82 +466,79 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     @Override
     public void destroy() {
         mTitleBar = null;
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.destroy();
         }
     }
 
     @Override
     public void findAllAsync(String find) {
-        mList.get(mCurrent).mWebView.findAllAsync(find);
+        currentTab.mWebView.findAllAsync(find);
     }
 
     @Override
     public void setFindListener(WebView.FindListener listener) {
-        mList.get(mCurrent).mWebView.setFindListener(listener);
+        currentTab.mWebView.setFindListener(listener);
     }
 
     @Override
     public void findNext(boolean forward) {
-        mList.get(mCurrent).mWebView.findNext(forward);
+        currentTab.mWebView.findNext(forward);
     }
 
     @Override
     public void flingScroll(int vx, int vy) {
-        mList.get(mCurrent).mWebView.flingScroll(vx, vy);
+        currentTab.mWebView.flingScroll(vx, vy);
     }
 
     @Override
     public Bitmap getFavicon() {
-        return mList.get(mCurrent).mWebView.getFavicon();
+        return currentTab.mWebView.getFavicon();
     }
 
     @Override
     public HitTestResult getHitTestResult() {
-        return mList.get(mCurrent).mWebView.getHitTestResult();
+        return currentTab.mWebView.getHitTestResult();
     }
 
     @Override
     public String[] getHttpAuthUsernamePassword(String host, String realm) {
-        return mList.get(mCurrent).mWebView.getHttpAuthUsernamePassword(host, realm);
+        return currentTab.mWebView.getHttpAuthUsernamePassword(host, realm);
     }
 
     @Override
     public String getOriginalUrl() {
-        return mList.get(mCurrent).mWebView.getOriginalUrl();
+        return currentTab.mWebView.getOriginalUrl();
     }
 
     @Override
     public int getProgress() {
-        return mList.get(mCurrent).mWebView.getProgress();
+        return currentTab.mWebView.getProgress();
     }
 
     @Override
     public WebSettings getSettings() {
-        return mList.get(mCurrent).mWebView.getSettings();
+        return currentTab.mWebView.getSettings();
     }
 
     @Override
     public String getTitle() {
-        return mList.get(mCurrent).mWebView.getTitle();
+        return currentTab.mWebView.getTitle();
     }
 
     @Override
     public String getUrl() {
-        return mList.get(mCurrent).mWebView.getUrl();
+        return currentTab.mWebView.getUrl();
     }
 
     @Override
     public synchronized void goBack() {
-        TabData from = mList.get(mCurrent);
+        TabData from = currentTab;
         switch (canGoBackType()) {
             default:
                 break;
             case CAN_EXTERNAL_MOVE:
-                TabData to = mList.get(--mCurrent);
-                removeAllViews();
-                addView(to.mWebView.getView());
-                move(from, to);
+                moveTo(false);
                 break;
             case CAN_INTERNAL_MOVE:
                 from.mWebView.goBack();
@@ -495,24 +551,21 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         if (!canGoBackOrForward(steps)) return;
 
         removeAllViews();
-        TabData from = mList.get(mCurrent);
+        TabData from = currentTab;
         mCurrent += steps;
-        TabData to = mList.get(mCurrent);
-        addView(to.mWebView.getView());
-        move(from, to);
+        currentTab = getWebView(mCurrent);
+        addView(currentTab.mWebView.getView());
+        move(from, currentTab);
     }
 
     @Override
     public synchronized void goForward() {
-        TabData from = mList.get(mCurrent);
+        TabData from = currentTab;
         switch (canGoForwardType()) {
             default:
                 break;
             case CAN_EXTERNAL_MOVE:
-                TabData to = mList.get(++mCurrent);
-                removeAllViews();
-                addView(to.mWebView.getView());
-                move(from, to);
+                moveTo(true);
                 break;
             case CAN_INTERNAL_MOVE:
                 from.mWebView.goForward();
@@ -524,9 +577,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     public void loadUrl(String url) {
         if (isFirst) {
             isFirst = false;
-            mList.get(0).mWebView.loadUrl(url);
+            currentTab.mWebView.loadUrl(url);
         } else if (WebViewUtils.shouldLoadSameTabUser(url)) {
-            mList.get(mCurrent).mWebView.loadUrl(url);
+            currentTab.mWebView.loadUrl(url);
         } else if (url != null) {
             newtab(url);
         }
@@ -536,9 +589,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     public void loadUrl(String url, Map<String, String> additionalHttpHeaders) {
         if (isFirst) {
             isFirst = false;
-            mList.get(0).mWebView.loadUrl(url, additionalHttpHeaders);
+            currentTab.mWebView.loadUrl(url, additionalHttpHeaders);
         } else if (WebViewUtils.shouldLoadSameTabUser(url)) {
-            mList.get(mCurrent).mWebView.loadUrl(url, additionalHttpHeaders);
+            currentTab.mWebView.loadUrl(url, additionalHttpHeaders);
         } else if (url != null) {
             newtab(url, additionalHttpHeaders);
         }
@@ -546,12 +599,12 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public void evaluateJavascript(String js, ValueCallback<String> callback) {
-        mList.get(mCurrent).mWebView.evaluateJavascript(js, callback);
+        currentTab.mWebView.evaluateJavascript(js, callback);
     }
 
     @Override
     public void onPause() {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.onPause();
         }
     }
@@ -561,105 +614,197 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         /*for(NormalWebView web:mList){
             web.onResume();
 		}*/
-        mList.get(mCurrent).mWebView.onResume();
+        currentTab.mWebView.onResume();
     }
 
     @Override
     public boolean pageDown(boolean bottom) {
-        return mList.get(mCurrent).mWebView.pageDown(bottom);
+        return currentTab.mWebView.pageDown(bottom);
     }
 
     @Override
     public boolean pageUp(boolean top) {
-        return mList.get(mCurrent).mWebView.pageUp(top);
+        return currentTab.mWebView.pageUp(top);
     }
 
     @Override
     public void pauseTimers() {
-        mList.get(mCurrent).mWebView.pauseTimers();
+        currentTab.mWebView.pauseTimers();
     }
 
     @Override
     public void reload() {
-        mList.get(mCurrent).mWebView.reload();
+        currentTab.mWebView.reload();
     }
 
     @Override
     public void requestFocusNodeHref(Message hrefMsg) {
-        mList.get(mCurrent).mWebView.requestFocusNodeHref(hrefMsg);
+        currentTab.mWebView.requestFocusNodeHref(hrefMsg);
     }
 
     @Override
     public void requestImageRef(Message msg) {
-        mList.get(mCurrent).mWebView.requestImageRef(msg);
+        currentTab.mWebView.requestImageRef(msg);
     }
+
+    private static final String BUNDLE_TAB_DATA = "FastBack.TAB_DATA";
+    private static final String BUNDLE_WEB_NO = "FastBack.WEB_NO";
+    private static final String BUNDLE_LOADED = "FastBack.LOADED_";
+    private static final String BUNDLE_IS_FAST_BACK = "FastBack.IsFastBack";
+    private static final String BUNDLE_CURRENT = "FastBack.WEB_CURRENT_COUNT";
 
     @Override
     public synchronized WebBackForwardList restoreState(Bundle inState) {
         isFirst = false;
 
-        TabData from = mList.get(mCurrent);
-        mList.clear();
+        TabData from = currentTab;
+        tabCache.clear();
+        tabSaveData.clear();
         removeAllViews();
 
-        int all = inState.getInt("CacheWebView.WEB_ALL_COUNT");
-        mCurrent = inState.getInt("CacheWebView.WEB_CURRENT_COUNT");
+        mCurrent = inState.getInt(BUNDLE_CURRENT);
+        String data = inState.getString(BUNDLE_TAB_DATA);
+        loadIndexData(data);
 
-        for (int i = 0; i < all; ++i) {
-            TabData web = new TabData(new SwipeWebView(getContext()));
-            web.mWebView.onPause();
-            mList.add(web);
-            if (i == mCurrent)
-                addView(web.mWebView.getView());
-            web.mWebView.restoreState(inState.getBundle("CacheWebView.WEB_NO" + i));
-            settingWebView(from.mWebView, web.mWebView);
+        for (int i = 0; i < tabIndexList.size(); ++i) {
+            TabIndexData indexData = tabIndexList.get(i);
+            Bundle state = inState.getBundle(BUNDLE_WEB_NO + i);
+            tabSaveData.put(indexData.getId(), state);
+
+            if (inState.getBoolean(BUNDLE_LOADED + indexData.getId(), false)) {
+                TabData web = indexData.getTabData(new SwipeWebView(getContext()));
+                web.mWebView.onPause();
+                tabCache.put(id, web);
+                if (i == mCurrent) {
+                    addView(web.mWebView.getView());
+                    currentTab = web;
+                }
+
+                web.mWebView.restoreState(state);
+                settingWebView(from.mWebView, web.mWebView);
+            }
         }
-        move(from, mList.get(mCurrent));
+
+
+        move(from, currentTab);
         return null;
     }
 
     @Override
     public void resumeTimers() {
-        mList.get(mCurrent).mWebView.resumeTimers();
+        currentTab.mWebView.resumeTimers();
     }
 
-    public static boolean isBundleCacheWebView(Bundle state) {
-        return state.getBoolean("CacheWebView.IsCacheWebView", false);
+    public static boolean isBundleFastBackWebView(Bundle state) {
+        return state.getBoolean(BUNDLE_IS_FAST_BACK, false);
     }
 
     @Override
     public synchronized WebBackForwardList saveState(Bundle outState) {
-        outState.putBoolean("CacheWebView.IsCacheWebView", true);
-        outState.putInt("CacheWebView.WEB_ALL_COUNT", mList.size());
-        outState.putInt("CacheWebView.WEB_CURRENT_COUNT", mCurrent);
-        int i = 0;
-        for (TabData web : mList) {
+        outState.putBoolean(BUNDLE_IS_FAST_BACK, true);
+        outState.putInt(BUNDLE_CURRENT, mCurrent);
+        outState.putString(BUNDLE_TAB_DATA, saveIndexData());
+
+        for (TabData tabData : tabCache.values()) {
             final Bundle state = new Bundle();
-            web.mWebView.saveState(state);
-            outState.putBundle("CacheWebView.WEB_NO" + i, state);
-            ++i;
+            tabData.mWebView.saveState(state);
+            tabSaveData.put(tabData.getId(), state);
+            outState.putBoolean(BUNDLE_LOADED + tabData.getId(), true);
         }
+
+        for (int i = 0; tabIndexList.size() > i; i++) {
+            Bundle state = tabSaveData.get(tabIndexList.get(i).getId());
+            outState.putBundle(BUNDLE_WEB_NO + i, state);
+        }
+
         return null;
+    }
+
+    private static final String JSON_NAME_ID = "id";
+    private static final String JSON_NAME_URL = "url";
+    private static final String JSON_NAME_TITLE = "t";
+
+    private String saveIndexData() {
+        StringWriter writer = new StringWriter();
+        JsonFactory jsonFactory = new JsonFactory();
+        try (JsonGenerator generator = jsonFactory.createGenerator(writer)) {
+            generator.writeStartArray();
+            for (TabIndexData data : tabIndexList) {
+                generator.writeStartObject();
+                generator.writeNumberField(JSON_NAME_ID, data.getId());
+                generator.writeStringField(JSON_NAME_URL, data.getUrl());
+                generator.writeStringField(JSON_NAME_TITLE, data.getTitle());
+                generator.writeEndObject();
+            }
+            generator.writeEndArray();
+            generator.flush();
+            return writer.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private void loadIndexData(String data) {
+        tabIndexList.clear();
+        JsonFactory factory = new JsonFactory();
+        try (JsonParser parser = factory.createParser(data)) {
+            // 配列の処理
+            if (parser.nextToken() == JsonToken.START_ARRAY) {
+                while (parser.nextToken() != JsonToken.END_ARRAY) {
+                    // 各オブジェクトの処理
+                    if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
+                        long id = -1;
+                        String url = null;
+                        String title = null;
+                        while (parser.nextToken() != JsonToken.END_OBJECT) {
+                            String name = parser.getCurrentName();
+                            parser.nextToken();
+                            if (name != null) {
+                                switch (name) {
+                                    case JSON_NAME_ID:
+                                        id = parser.getLongValue();
+                                        break;
+                                    case JSON_NAME_URL:
+                                        url = parser.getText();
+                                        break;
+                                    case JSON_NAME_TITLE:
+                                        title = parser.getText();
+                                    default:
+                                        parser.skipChildren();
+                                        break;
+                                }
+                            }
+                        }
+                        tabIndexList.add(new TabIndexData(url, title, 0, id, 0));
+                    } else {
+                        parser.skipChildren();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void setDownloadListener(DownloadListener listener) {
         mDownloadListener = listener;
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setDownloadListener(mDownloadListenerWrapper);
         }
     }
 
     @Override
     public void setHttpAuthUsernamePassword(String host, String realm, String username, String password) {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setHttpAuthUsernamePassword(host, realm, username, password);
         }
     }
 
     @Override
     public void setNetworkAvailable(boolean networkUp) {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setNetworkAvailable(networkUp);
         }
     }
@@ -667,8 +812,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     @Override
     public void setMyWebChromeClient(CustomWebChromeClient client) {
         mWebChromeClient = client;
-        /*mList.get(mCurrent).setMyWebChromeClient(mWebChromeClientWrapper);*/
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setMyWebChromeClient(mWebChromeClientWrapper);
         }
     }
@@ -676,32 +820,30 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     @Override
     public void setMyWebViewClient(CustomWebViewClient client) {
         mWebViewClient = client;
-		/*mList.get(mCurrent).setMyWebViewClient(mWebViewClientWrapper);*/
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setMyWebViewClient(mWebViewClientWrapper);
         }
     }
 
     @Override
     public void stopLoading() {
-        mList.get(mCurrent).mWebView.stopLoading();
+        currentTab.mWebView.stopLoading();
     }
 
     @Override
     public boolean zoomIn() {
-        return mList.get(mCurrent).mWebView.zoomIn();
+        return currentTab.mWebView.zoomIn();
     }
 
     @Override
     public boolean zoomOut() {
-        return mList.get(mCurrent).mWebView.zoomOut();
+        return currentTab.mWebView.zoomOut();
     }
 
     @Override
     public void setOnMyCreateContextMenuListener(CustomOnCreateContextMenuListener webContextMenuListener) {
         mCreateContextMenuListener = webContextMenuListener;
-		/*mList.get(mCurrent).setOnMyCreateContextMenuListener(mCreateContextMenuListenerWrapper);*/
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setOnMyCreateContextMenuListener(mCreateContextMenuListenerWrapper);
         }
     }
@@ -713,41 +855,41 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public WebView getWebView() {
-        return mList.get(mCurrent).mWebView.getWebView();
+        return currentTab.mWebView.getWebView();
     }
 
     @Override
     public void setSwipeEnable(boolean enable) {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setSwipeEnable(enable);
         }
     }
 
     @Override
     public boolean getSwipeEnable() {
-        return mList.get(mCurrent).mWebView.getSwipeEnable();
+        return currentTab.mWebView.getSwipeEnable();
     }
 
     @Override
     public void setGestureDetector(MultiTouchGestureDetector d) {
         mGestureDetector = d;
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setGestureDetector(d);
         }
     }
 
     @Override
     public synchronized boolean setEmbeddedTitleBarMethod(View view) {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setEmbeddedTitleBarMethod(null);
         }
         mTitleBar = view;
-        return mList.get(mCurrent).mWebView.setEmbeddedTitleBarMethod(view);
+        return currentTab.mWebView.setEmbeddedTitleBarMethod(view);
     }
 
     @Override
     public boolean notifyFindDialogDismissedMethod() {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.notifyFindDialogDismissedMethod();
         }
         return true;
@@ -755,7 +897,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public boolean setOverScrollModeMethod(int arg) {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setOverScrollModeMethod(arg);
         }
         return true;
@@ -763,7 +905,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public int getOverScrollModeMethod() {
-        return mList.get(mCurrent).mWebView.getOverScrollModeMethod();
+        return currentTab.mWebView.getOverScrollModeMethod();
     }
 
     @Override
@@ -773,42 +915,42 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public int computeVerticalScrollRangeMethod() {
-        return mList.get(mCurrent).mWebView.computeVerticalScrollRangeMethod();
+        return currentTab.mWebView.computeVerticalScrollRangeMethod();
     }
 
     @Override
     public int computeVerticalScrollOffsetMethod() {
-        return mList.get(mCurrent).mWebView.computeVerticalScrollOffsetMethod();
+        return currentTab.mWebView.computeVerticalScrollOffsetMethod();
     }
 
     @Override
     public int computeVerticalScrollExtentMethod() {
-        return mList.get(mCurrent).mWebView.computeVerticalScrollExtentMethod();
+        return currentTab.mWebView.computeVerticalScrollExtentMethod();
     }
 
     @Override
     public int computeHorizontalScrollRangeMethod() {
-        return mList.get(mCurrent).mWebView.computeHorizontalScrollRangeMethod();
+        return currentTab.mWebView.computeHorizontalScrollRangeMethod();
     }
 
     @Override
     public int computeHorizontalScrollOffsetMethod() {
-        return mList.get(mCurrent).mWebView.computeHorizontalScrollOffsetMethod();
+        return currentTab.mWebView.computeHorizontalScrollOffsetMethod();
     }
 
     @Override
     public int computeHorizontalScrollExtentMethod() {
-        return mList.get(mCurrent).mWebView.computeHorizontalScrollExtentMethod();
+        return currentTab.mWebView.computeHorizontalScrollExtentMethod();
     }
 
     @Override
     public PrintDocumentAdapter createPrintDocumentAdapter(String documentName) {
-        return mList.get(mCurrent).mWebView.createPrintDocumentAdapter(documentName);
+        return currentTab.mWebView.createPrintDocumentAdapter(documentName);
     }
 
     @Override
     public void loadDataWithBaseURL(String baseUrl, String data, String mimeType, String encoding, String historyUrl) {
-        mList.get(mCurrent).mWebView.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, historyUrl);
+        currentTab.mWebView.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, historyUrl);
     }
 
     @Override
@@ -824,24 +966,24 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public void resetTheme() {
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.resetTheme();
         }
     }
 
     @Override
     public void scrollTo(int x, int y) {
-        mList.get(mCurrent).mWebView.scrollTo(x, y);
+        currentTab.mWebView.scrollTo(x, y);
     }
 
     @Override
     public void scrollBy(int x, int y) {
-        mList.get(mCurrent).mWebView.scrollBy(x, y);
+        currentTab.mWebView.scrollBy(x, y);
     }
 
     @Override
     public boolean saveWebArchiveMethod(String filename) {
-        return mList.get(mCurrent).mWebView.saveWebArchiveMethod(filename);
+        return currentTab.mWebView.saveWebArchiveMethod(filename);
     }
 
     private void move(TabData fromdata, TabData todata) {
@@ -916,39 +1058,48 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public boolean isBackForwardListEmpty() {
-        //return mList.size() == 1 && mList.get(0).mWebView.getUrl() == null;
-        return mCurrent == 0 && mList.size() == 1;
+        return mCurrent == 0 && tabIndexList.size() == 1;
     }
 
     @Override
     public void setMyOnScrollChangedListener(OnScrollChangedListener l) {
         mOnScrollChangedListener = l;
-        mList.get(mCurrent).mWebView.setMyOnScrollChangedListener(l);
+        currentTab.mWebView.setMyOnScrollChangedListener(l);
     }
 
     @Override
     public void setLayerType(int layerType, @Nullable Paint paint) {
         this.layerType = layerType;
         layerPaint = paint;
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setLayerType(layerType, paint);
         }
     }
 
     @Override
     public void onPreferenceReset() {
+        tabCache.setSize(AppData.fast_back_cache_size.get());
     }
 
     @Override
     public void setAcceptThirdPartyCookies(CookieManager manager, boolean accept) {
         acceptThirdPartyCookies = accept;
-        for (TabData web : mList) {
+        for (TabData web : tabCache.values()) {
             web.mWebView.setAcceptThirdPartyCookies(manager, accept);
         }
     }
 
     @Override
     public void setDoubleTapFling(boolean fling) {
-        mList.get(mCurrent).mWebView.setDoubleTapFling(fling);
+        currentTab.mWebView.setDoubleTapFling(fling);
+    }
+
+    @Override
+    public void onCacheOverflow(TabData tabData) {
+        Bundle bundle = new Bundle();
+        tabData.mWebView.saveState(bundle);
+        tabSaveData.put(tabData.getId(), bundle);
+        tabData.mWebView.setEmbeddedTitleBarMethod(null);
+        tabData.mWebView.destroy();
     }
 }

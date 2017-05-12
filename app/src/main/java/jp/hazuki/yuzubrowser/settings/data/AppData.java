@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.settings.data;
 
 import android.content.Context;
@@ -21,6 +37,7 @@ import jp.hazuki.yuzubrowser.action.manager.MenuActionManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionArrayManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionManager;
 import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
+import jp.hazuki.yuzubrowser.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
@@ -115,6 +132,7 @@ public class AppData {
     public static final BooleanContainer save_last_tabs = new BooleanContainer("save_last_tabs", false);
     public static final BooleanContainer save_closed_tab = new BooleanContainer("save_closed_tab", false);
     public static final BooleanContainer fast_back = new BooleanContainer("fast_back", false);
+    public static final IntContainer fast_back_cache_size = new IntContainer("fast_back_cache_size", 5);
     public static final BooleanContainer userjs_enable = new BooleanContainer("userjs_enable", false);
     public static final BooleanContainer webswipe_enable = new BooleanContainer("webswipe_enable", false);
     public static final IntContainer webswipe_sensitivity_speed = new IntContainer("webswipe_sensitivity_speed", 5);
@@ -143,6 +161,9 @@ public class AppData {
     public static final IntContainer tabs_cache_number = new IntContainer("tab_cache_number", 5);
     public static final IntContainer rendering = new IntContainer("rendering", 0);
     public static final BooleanContainer move_to_parent = new BooleanContainer("move_to_parent", true);
+    public static final BooleanContainer multi_finger_gesture = new BooleanContainer("multi_finger_gesture", false);
+    public static final BooleanContainer multi_finger_gesture_show_name = new BooleanContainer("multi_finger_gesture_show_name", false);
+    public static final IntContainer multi_finger_gesture_sensitivity = new IntContainer("multi_finger_gesture_sensitivity", 30);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
@@ -168,6 +189,14 @@ public class AppData {
             hardBtnManager.back_press.action.add(SingleAction.makeInstance(SingleAction.GO_BACK));
             hardBtnManager.search_press.action.add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
             hardBtnManager.save(context);
+
+            ToolbarActionManager toolbarManager = ToolbarActionManager.getInstance(context);
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.GO_BACK));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.TAB_LIST));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.OPEN_OPTIONS_MENU));
+            toolbarManager.save(context);
 
             TabActionManager tabManager = TabActionManager.getInstance(context);
             tabManager.tab_press.action.add(SingleAction.makeInstance(SingleAction.CLOSE_TAB));

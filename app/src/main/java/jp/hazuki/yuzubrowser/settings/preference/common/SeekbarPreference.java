@@ -17,6 +17,7 @@ public class SeekbarPreference extends DialogPreference {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekbarPreference);
         mController.setSeekMin(a.getInt(R.styleable.SeekbarPreference_seekMin, 0));
         mController.setSeekMax(a.getInt(R.styleable.SeekbarPreference_seekMax, 100));
+        mController.setComment(a.getString(R.styleable.SeekbarPreference_comment));
         a.recycle();
     }
 
