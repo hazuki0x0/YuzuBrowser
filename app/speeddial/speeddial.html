@@ -6,6 +6,7 @@
 .outer {
   width:100%;
   max-width: 440px;
+  min-height: calc(100vh - 100px);
   margin: 0 auto;
 }
 
@@ -106,6 +107,23 @@ a {
   -webkit-tap-highlight-color:rgba(0,0,0,0);
   -webkit-touch-callout:none;
 }
+
+.footer {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align : right;
+}
+
+.footer_link {
+  color: #555555;
+  margin: 0 3px;
+  text-decoration: auto;
+  -webkit-touch-callout: auto;
+}
+
+.footer_link:hover{
+  color: #222222;
+}
 //-->
 
     </style>
@@ -152,5 +170,10 @@ a {
         </div>
     </div>
 </div>
+<footer class="footer">
+    <a href="yuzu:history" class="footer_link">History</a>
+    <a href="yuzu:bookmarks" class="footer_link">Bookmarks</a>
+    <a href="yuzu:settings" class="footer_link">Settings</a>
+</footer>
 </body>
 </html>
