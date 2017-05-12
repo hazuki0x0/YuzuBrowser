@@ -47,6 +47,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private NestedScrollingChildHelper mChildHelper;
     private boolean firstScroll = true;
     private CustomWebViewClient webViewClient;
+    private boolean doubleTapFling;
 
     public NormalWebView(Context context) {
         this(context, null);
@@ -215,6 +216,11 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     }
 
     @Override
+    public void setDoubleTapFling(boolean fling) {
+        doubleTapFling = fling;
+    }
+
+    @Override
     public boolean isBackForwardListEmpty() {
         return copyBackForwardList().getSize() == 0;
     }
@@ -254,9 +260,16 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
             return true;
         }
 
-        boolean returnValue;
         MotionEvent event = MotionEvent.obtain(ev);
         final int action = MotionEventCompat.getActionMasked(event);
+
+        if (doubleTapFling) {
+            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_OUTSIDE)
+                doubleTapFling = false;
+            return super.onTouchEvent(ev);
+        }
+
+        boolean returnValue;
         if (action == MotionEvent.ACTION_DOWN) {
             mNestedOffsetY = 0;
         }

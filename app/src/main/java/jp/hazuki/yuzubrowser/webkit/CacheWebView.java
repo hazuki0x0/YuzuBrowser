@@ -946,4 +946,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             web.mWebView.setAcceptThirdPartyCookies(manager, accept);
         }
     }
+
+    @Override
+    public void setDoubleTapFling(boolean fling) {
+        mList.get(mCurrent).mWebView.setDoubleTapFling(fling);
+    }
 }

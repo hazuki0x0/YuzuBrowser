@@ -1742,6 +1742,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
+            if (e == null)
+                return false;
+            MainTabData tab = mTabManager.getCurrentTabData();
+            if (tab == null)
+                return false;
+
+            tab.mWebView.setDoubleTapFling(e.getPointerCount() == 1);
             return false;
         }
 
