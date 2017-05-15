@@ -212,4 +212,6 @@
 
     <string name="closed_tab">Closed %1$s</string>
     <string name="unknown">Unknown</string>
+    <string name="delete_mf_gesture">Delete multi touch gesture</string>
+    <string name="confirm_delete_mf_gesture">Delete this gesture?</string>
 </resources>

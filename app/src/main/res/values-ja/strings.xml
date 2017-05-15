@@ -211,4 +211,6 @@
 
     <string name="closed_tab">%1$s を閉じました</string>
     <string name="unknown">不明</string>
+    <string name="delete_mf_gesture">マルチタッチジェスチャを削除</string>
+    <string name="confirm_delete_mf_gesture">このジェスチャを削除しますか？</string>
 </resources>

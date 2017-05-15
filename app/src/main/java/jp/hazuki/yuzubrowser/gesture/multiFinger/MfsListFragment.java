@@ -40,11 +40,10 @@ import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
 import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
-import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
-public class MfsListFragment extends Fragment implements OnRecyclerListener, DeleteDialogCompat.OnDelete {
+public class MfsListFragment extends Fragment implements OnRecyclerListener, DeleteDialog.OnDelete {
 
     private View rootView;
     private MultiFingerGestureManager manager;
@@ -99,7 +98,7 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        DeleteDialog.newInstance(getActivity(), R.string.delete_speedDial, R.string.confirm_delete_speedDial, position)
+        DeleteDialog.newInstance(getActivity(), R.string.delete_mf_gesture, R.string.confirm_delete_mf_gesture, position)
                 .show(getChildFragmentManager(), "delete");
         return true;
     }
