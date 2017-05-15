@@ -19,8 +19,6 @@ package jp.hazuki.yuzubrowser.webkit;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
@@ -28,21 +26,12 @@ import android.support.annotation.Nullable;
 import android.support.annotation.Px;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
-import android.webkit.GeolocationPermissions;
-import android.webkit.HttpAuthHandler;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebBackForwardList;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -60,176 +49,27 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     private ScrollController controller;
     private boolean enableSwipe = false;
 
-    private CustomWebChromeClient mWebChromeClient;
-    private CustomWebViewClient mWebViewClient;
-
-    private final CustomWebChromeClient mWebChromeClientWrapper = new CustomWebChromeClient() {
-        @Override
-        public void onReceivedTouchIconUrl(CustomWebView view, String url, boolean precomposed) {
-            if (mWebChromeClient != null)
-                mWebChromeClient.onReceivedTouchIconUrl(SwipeWebView.this, url, precomposed);
-        }
-
-        @Override
-        public boolean onJsBeforeUnload(CustomWebView view, String url, String message, JsResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsBeforeUnload(SwipeWebView.this, url, message, result);
-        }
-
-        @Override
-        public View getVideoLoadingProgressView() {
-            if (mWebChromeClient != null) return mWebChromeClient.getVideoLoadingProgressView();
-            return null;
-        }
-
-        @Override
-        public void onCloseWindow(CustomWebView window) {
-            if (mWebChromeClient != null) mWebChromeClient.onCloseWindow(SwipeWebView.this);
-        }
-
-        @Override
-        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            return mWebChromeClient != null && mWebChromeClient.onConsoleMessage(consoleMessage);
-        }
-
-        @Override
-        public boolean onCreateWindow(CustomWebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-            return mWebChromeClient != null && mWebChromeClient.onCreateWindow(SwipeWebView.this, isDialog, isUserGesture, resultMsg);
-        }
-
-        @Override
-        public void onGeolocationPermissionsHidePrompt() {
-            if (mWebChromeClient != null) mWebChromeClient.onGeolocationPermissionsHidePrompt();
-        }
-
-        @Override
-        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-            if (mWebChromeClient != null)
-                mWebChromeClient.onGeolocationPermissionsShowPrompt(origin, callback);
-        }
-
-        @Override
-        public void onHideCustomView() {
-            if (mWebChromeClient != null) mWebChromeClient.onHideCustomView();
-        }
-
-        @Override
-        public boolean onJsAlert(CustomWebView view, String url, String message, JsResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsAlert(SwipeWebView.this, url, message, result);
-        }
-
-        @Override
-        public boolean onJsConfirm(CustomWebView view, String url, String message, JsResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsConfirm(SwipeWebView.this, url, message, result);
-        }
-
-        @Override
-        public boolean onJsPrompt(CustomWebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            return mWebChromeClient != null && mWebChromeClient.onJsPrompt(SwipeWebView.this, url, message, defaultValue, result);
-        }
-
+    private final CustomWebChromeClientWrapper mWebChromeClientWrapper = new CustomWebChromeClientWrapper(this) {
         @Override
         public void onProgressChanged(CustomWebView view, int newProgress) {
             if (isRefreshing() && newProgress > 80)
                 setRefreshing(false);
 
-            if (mWebChromeClient != null)
-                mWebChromeClient.onProgressChanged(SwipeWebView.this, newProgress);
-        }
-
-        @Override
-        public void onReceivedTitle(CustomWebView view, String title) {
-            if (mWebChromeClient != null)
-                mWebChromeClient.onReceivedTitle(SwipeWebView.this, title);
-        }
-
-        @Override
-        public void onReceivedIcon(CustomWebView view, Bitmap icon) {
-            if (mWebChromeClient != null)
-                mWebChromeClient.onReceivedIcon(SwipeWebView.this, icon);
-        }
-
-        @Override
-        public void onRequestFocus(CustomWebView view) {
-            if (mWebChromeClient != null) mWebChromeClient.onRequestFocus(SwipeWebView.this);
-        }
-
-        @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
-            if (mWebChromeClient != null) mWebChromeClient.onShowCustomView(view, callback);
-        }
-
-        @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-            return mWebChromeClient.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+            super.onProgressChanged(view, newProgress);
         }
     };
-    private final CustomWebViewClient mWebViewClientWrapper = new CustomWebViewClient() {
-        @Override
-        public void onLoadResource(CustomWebView view, String url) {
-            if (mWebViewClient != null)
-                mWebViewClient.onLoadResource(SwipeWebView.this, url);
-        }
 
-        @Override
-        public void onScaleChanged(CustomWebView view, float oldScale, float newScale) {
-            if (mWebViewClient != null)
-                mWebViewClient.onScaleChanged(SwipeWebView.this, oldScale, newScale);
-        }
-
-        @Override
-        public void onUnhandledKeyEvent(CustomWebView view, KeyEvent event) {
-            if (mWebViewClient != null)
-                mWebViewClient.onUnhandledKeyEvent(SwipeWebView.this, event);
-        }
-
-        @Override
-        public void doUpdateVisitedHistory(CustomWebView view, String url, boolean isReload) {
-            if (mWebViewClient != null)
-                mWebViewClient.doUpdateVisitedHistory(SwipeWebView.this, url, isReload);
-        }
-
-        @Override
-        public void onFormResubmission(CustomWebView view, Message dontResend, Message resend) {
-            if (mWebViewClient != null)
-                mWebViewClient.onFormResubmission(SwipeWebView.this, dontResend, resend);
-        }
-
+    private final CustomWebViewClientWrapper mWebViewClientWrapper = new CustomWebViewClientWrapper(this) {
         @Override
         public void onPageFinished(CustomWebView view, String url) {
             controller.onPageChange();
-            setRefreshing(false);
-            if (mWebViewClient != null) mWebViewClient.onPageFinished(SwipeWebView.this, url);
+            super.onPageFinished(view, url);
         }
 
         @Override
         public void onPageStarted(CustomWebView view, String url, Bitmap favicon) {
             controller.onPageChange();
-            if (mWebViewClient != null)
-                mWebViewClient.onPageStarted(SwipeWebView.this, url, favicon);
-        }
-
-        @Override
-        public void onReceivedHttpAuthRequest(CustomWebView view, HttpAuthHandler handler, String host, String realm) {
-            if (mWebViewClient != null)
-                mWebViewClient.onReceivedHttpAuthRequest(SwipeWebView.this, handler, host, realm);
-        }
-
-        @Override
-        public void onReceivedSslError(CustomWebView view, SslErrorHandler handler, SslError error) {
-            if (mWebViewClient != null)
-                mWebViewClient.onReceivedSslError(SwipeWebView.this, handler, error);
-        }
-
-        @Override
-        public WebResourceResponse shouldInterceptRequest(CustomWebView view, WebResourceRequest request) {
-            if (mWebViewClient != null)
-                return mWebViewClient.shouldInterceptRequest(SwipeWebView.this, request);
-            return null;
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(CustomWebView view, String url, Uri uri) {
-            return mWebViewClient != null && mWebViewClient.shouldOverrideUrlLoading(SwipeWebView.this, url, uri);
+            super.onPageStarted(view, url, favicon);
         }
     };
 
@@ -451,13 +291,13 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
     @Override
     public void setMyWebChromeClient(CustomWebChromeClient client) {
-        mWebChromeClient = client;
+        mWebChromeClientWrapper.setWebChromeClient(client);
         webView.setMyWebChromeClient(mWebChromeClientWrapper);
     }
 
     @Override
     public void setMyWebViewClient(CustomWebViewClient client) {
-        mWebViewClient = client;
+        mWebViewClientWrapper.setWebViewClient(client);
         webView.setMyWebViewClient(mWebViewClientWrapper);
     }
 
