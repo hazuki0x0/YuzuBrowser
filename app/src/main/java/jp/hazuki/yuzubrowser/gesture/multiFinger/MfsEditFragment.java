@@ -227,7 +227,6 @@ public class MfsEditFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, Integer item, int position) {
             holder.title.setText((position + 1) + ".");
-            holder.title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, getImage(item), 0);
             holder.icon.setImageResource(getImage(item));
         }
 
