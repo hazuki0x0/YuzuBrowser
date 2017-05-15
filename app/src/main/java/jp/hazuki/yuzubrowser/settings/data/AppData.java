@@ -164,6 +164,7 @@ public class AppData {
     public static final BooleanContainer multi_finger_gesture = new BooleanContainer("multi_finger_gesture", false);
     public static final BooleanContainer multi_finger_gesture_show_name = new BooleanContainer("multi_finger_gesture_show_name", false);
     public static final IntContainer multi_finger_gesture_sensitivity = new IntContainer("multi_finger_gesture_sensitivity", 30);
+    public static final IntContainer menu_btn_list_mode = new IntContainer("menu_btn_list_mode", 1);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

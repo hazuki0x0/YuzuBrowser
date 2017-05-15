@@ -50,4 +50,11 @@
         <item>縦反転リスト</item>
         <item>横リスト</item>
     </string-array>
+
+    <string name="action_open_menu">メニューの表示位置</string>
+    <string-array name="action_open_menu_list">
+        <item>左寄せ</item>
+        <item>中央</item>
+        <item>右寄せ</item>
+    </string-array>
 </resources>

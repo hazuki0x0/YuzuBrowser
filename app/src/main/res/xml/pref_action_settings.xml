@@ -26,6 +26,12 @@
             android:title="@string/pref_btn_camera_press"
             app:actionGroup="h_btn"
             app:actionId="btnCameraPress" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:key="menu_btn_list_mode"
+            android:title="@string/pref_btn_menu_press"
+            android:summary="@string/action_open_menu"
+            android:entries="@array/action_open_menu_list"
+            android:entryValues="@array/action_open_menu_values" />
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_softbtn_settings">
         <PreferenceCategory>

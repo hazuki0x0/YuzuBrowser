@@ -115,6 +115,7 @@ import jp.hazuki.yuzubrowser.action.item.FinishSingleAction;
 import jp.hazuki.yuzubrowser.action.item.GoBackSingleAction;
 import jp.hazuki.yuzubrowser.action.item.LeftRightTabSingleAction;
 import jp.hazuki.yuzubrowser.action.item.MousePointerSingleAction;
+import jp.hazuki.yuzubrowser.action.item.OpenOptionsMenuAction;
 import jp.hazuki.yuzubrowser.action.item.OpenUrlSingleAction;
 import jp.hazuki.yuzubrowser.action.item.PasteGoSingleAction;
 import jp.hazuki.yuzubrowser.action.item.SaveScreenshotSingleAction;
@@ -812,7 +813,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (menuWindow.isShowing()) {
                         menuWindow.dismiss();
                     } else {
-                        menuWindow.show(findViewById(R.id.superFrameLayout));
+                        menuWindow.show(findViewById(R.id.superFrameLayout), OpenOptionsMenuAction.getGravity(AppData.menu_btn_list_mode.get()));
                     }
                     return true;
                 }
@@ -3793,7 +3794,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (button != null)
                         menuWindow.showAsDropDown(button);
                     else
-                        menuWindow.show(findViewById(R.id.superFrameLayout));
+                        menuWindow.show(findViewById(R.id.superFrameLayout), ((OpenOptionsMenuAction) action).getGravity());
                     break;
                 case SingleAction.CUSTOM_MENU: {
                     MainTabData tab = mTabManager.get(target);

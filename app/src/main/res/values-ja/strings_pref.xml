@@ -67,6 +67,7 @@
     <string name="pref_btn_volume_up">ボリュームアップボタン</string>
     <string name="pref_btn_volume_down">ボリュームダウンボタン</string>
     <string name="pref_btn_camera_press">カメラボタン</string>
+    <string name="pref_btn_menu_press">メニューボタン</string>
     <string name="pref_load_overview">ページを全体表示で開く</string>
     <string name="pref_web_wideview">ページを常に広域表示する</string>
     <string name="pref_oritentation">画面の向き</string>

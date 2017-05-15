@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.menuwindow;
 
 import android.content.Context;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,9 +83,9 @@ public class MenuWindow implements PopupWindow.OnDismissListener {
         }
     }
 
-    public void show(View root) {
+    public void show(View root, int gravity) {
         if (!locking)
-            window.showAtLocation(root, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+            window.showAtLocation(root, gravity, 0, 0);
     }
 
     public void showAsDropDown(View anchor) {
