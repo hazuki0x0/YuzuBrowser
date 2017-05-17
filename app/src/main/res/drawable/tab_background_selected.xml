@@ -12,7 +12,5 @@
                 android:color="@color/accent" />
         </shape>
     </item>
-    <item>
-        <nine-patch android:src="@drawable/tab_background_normal" />
-    </item>
+    <item android:drawable="@drawable/tab_background_normal" />
 </layer-list>
