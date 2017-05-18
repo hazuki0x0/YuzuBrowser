@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import jp.hazuki.yuzubrowser.R;
@@ -20,6 +19,7 @@ import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.utils.Logger;
+import jp.hazuki.yuzubrowser.utils.view.SpinnerButton;
 
 public class CustomPreferenceActivity extends AppCompatActivity {
     private static final String TAG = "CustomPreferenceActivity";
@@ -51,7 +51,7 @@ public class CustomPreferenceActivity extends AppCompatActivity {
         private Action mAction;
         private ActionNameArray mActionNameArray;
 
-        private Button actionButton;
+        private SpinnerButton actionButton;
         private EditText nameEditText;
 
         public static DialogFragment newInstance(String name, Action action, ActionNameArray nameArray) {
@@ -69,7 +69,7 @@ public class CustomPreferenceActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             View v = LayoutInflater.from(getActivity()).inflate(R.layout.action_custom_setting, null);
 
-            actionButton = (Button) v.findViewById(R.id.actionButton);
+            actionButton = (SpinnerButton) v.findViewById(R.id.actionButton);
             nameEditText = (EditText) v.findViewById(R.id.nameEditText);
 
             mAction = getArguments().getParcelable(ACTION);

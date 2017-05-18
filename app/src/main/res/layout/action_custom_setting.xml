@@ -9,11 +9,12 @@
         android:layout_height="wrap_content"
         android:text="@string/action_custom_base" />
 
-    <Button
+    <jp.hazuki.yuzubrowser.utils.view.SpinnerButton
         android:id="@+id/actionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Material.Spinner" />
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
