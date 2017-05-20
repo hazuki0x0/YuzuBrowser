@@ -110,9 +110,11 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
 
     @Override
     public void onDelete(int position) {
-        mManager.remove(position);
-        mManager.save(getActivity().getApplicationContext());
-        adapter.notifyDataSetChanged();
+        if (position > 0 && position < mManager.getList().size()) {
+            mManager.remove(position);
+            mManager.save(getActivity().getApplicationContext());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
