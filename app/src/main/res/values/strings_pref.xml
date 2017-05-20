@@ -190,9 +190,9 @@
     <string name="pref_btn_camera_press">Camera press</string>
     <string name="pref_btn_menu_press">Menu press</string>
     <string name="pref_load_overview">Load with overview mode</string>
-    <string name="pref_web_wideview">Use wideview port</string>
-    <string name="pref_oritentation">Oritentation</string>
-    <string name="pref_web_customview_oritentation">Oritentation of full screen video</string>
+    <string name="pref_web_wideview">Use wide view port</string>
+    <string name="pref_oritentation">Orientation</string>
+    <string name="pref_web_customview_oritentation">Orientation of full screen video</string>
     <string name="pref_oritentation_unspecified">Unspecified</string>
     <string name="pref_oritentation_landscape">Landscape</string>
     <string name="pref_oritentation_portrait">Portrait</string>
