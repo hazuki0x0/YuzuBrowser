@@ -3,7 +3,7 @@
 
     <string name="pref_settings">設定</string>
     <string name="pref_about">このアプリについて</string>
-    <string name="pref_ui_settings">UI設定</string>
+    <string name="pref_ui_settings">表示設定</string>
     <string name="pref_toolbar_settings">ツールバー設定</string>
     <string name="pref_tab_bar">タブバー</string>
     <string name="pref_url_bar">URLバー</string>
