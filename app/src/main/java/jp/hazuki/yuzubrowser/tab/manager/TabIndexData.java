@@ -37,7 +37,10 @@ public class TabIndexData implements Serializable {
     }
 
     public TabIndexData(String url, String title, int tabType, long id, long parent) {
-        this.mUrl = url;
+        if (url != null)
+            this.mUrl = url;
+        else
+            mUrl = "";
         this.mTitle = title;
         this.tabType = tabType;
         this.mId = id;
@@ -77,7 +80,10 @@ public class TabIndexData implements Serializable {
     }
 
     public void setUrl(String url) {
-        this.mUrl = url;
+        if (url != null)
+            this.mUrl = url;
+        else
+            mUrl = "";
     }
 
     public void setTitle(String title) {
