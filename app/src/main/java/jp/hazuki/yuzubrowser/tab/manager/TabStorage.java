@@ -157,7 +157,8 @@ class TabStorage {
         for (TabIndexData data : mTabIndexDataList) {
             if (data.isThumbnailUpdated()) {
                 byte[] image = ImageUtils.bmp2byteArray(data.getThumbnail(), Bitmap.CompressFormat.WEBP, 60);
-                saveThumbnail(data.getId(), image);
+                if (image != null)
+                    saveThumbnail(data.getId(), image);
                 data.setThumbnailUpdated(false);
             }
         }

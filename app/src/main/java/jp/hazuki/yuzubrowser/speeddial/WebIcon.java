@@ -21,7 +21,7 @@ public class WebIcon implements Serializable {
     }
 
     private WebIcon(Bitmap bitmap) {
-        iconBytes = ImageUtils.bmp2byteArray(bitmap, Bitmap.CompressFormat.WEBP, 90);
+        iconBytes = ImageUtils.bmp2byteArray(bitmap, Bitmap.CompressFormat.PNG, 100);
     }
 
     public byte[] getIconBytes() {

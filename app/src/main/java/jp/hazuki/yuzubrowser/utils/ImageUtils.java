@@ -42,6 +42,8 @@ public class ImageUtils {
     }
 
     public static byte[] bmp2byteArray(Bitmap bitmap, CompressFormat format, int compressVal) {
+        if (bitmap == null)
+            return null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(format, compressVal, baos);
         return baos.toByteArray();
