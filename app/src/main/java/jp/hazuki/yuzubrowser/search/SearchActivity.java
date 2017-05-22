@@ -264,7 +264,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     }
 
     private void finishWithResult(String query, int mode) {
-        if (!TextUtils.isEmpty(query) && mode != SEARCH_MODE_URL && !WebUtils.isUrl(query)) {
+        if (!AppData.private_mode.get() && !TextUtils.isEmpty(query) && mode != SEARCH_MODE_URL && !WebUtils.isUrl(query)) {
             ContentValues values = new ContentValues();
             values.put(SearchManager.SUGGEST_COLUMN_QUERY, query);
             getContentResolver().insert(mContentUri, values);
