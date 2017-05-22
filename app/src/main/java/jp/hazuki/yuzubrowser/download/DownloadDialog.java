@@ -3,9 +3,11 @@ package jp.hazuki.yuzubrowser.download;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -13,9 +15,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.HttpUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListButton;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListViewController;
@@ -39,6 +45,7 @@ public class DownloadDialog {
 
         filenameEditText = (EditText) view.findViewById(R.id.filenameEditText);
         filenameEditText.setText(mInfo.getFile().getName());
+        setRealItemName();
 
         folderButton = (FileListButton) view.findViewById(R.id.folderButton);
         folderButton.setText(mInfo.getFile().getParentFile().getName());
@@ -116,6 +123,40 @@ public class DownloadDialog {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+    }
+
+    private void setRealItemName() {
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(mInfo.getUrl());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("HEAD");
+                    String cookie = CookieManager.getInstance().getCookie(mInfo.getUrl());
+                    if (!TextUtils.isEmpty(cookie)) {
+                        conn.setRequestProperty("Cookie", cookie);
+                    }
+                    String referer = mInfo.getReferer();
+                    if (!TextUtils.isEmpty(referer)) {
+                        conn.setRequestProperty("Referer", referer);
+                    }
+                    conn.connect();
+                    final File file = HttpUtils.getFileName(mInfo.getUrl(), null, conn.getHeaderFields());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (filenameEditText.getText().toString().equals(mInfo.getFile().getName()))
+                                filenameEditText.setText(file.getName());
+                        }
+                    });
+                    conn.disconnect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     protected Context getContext() {

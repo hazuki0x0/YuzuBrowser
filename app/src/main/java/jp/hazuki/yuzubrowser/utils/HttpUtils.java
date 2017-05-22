@@ -21,29 +21,33 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 
 public final class HttpUtils {
+
+    private static final Pattern NAME_UTF_8 = Pattern.compile("filename\\*=UTF-8''(\\S+)");
+    private static final Pattern NAME_NORMAL = Pattern.compile("filename=\"(.*)\"");
 
     public static File getFileName(String url, String defaultExt, Map<String, List<String>> header) {
         if (header.get("Content-Disposition") != null) {
             List<String> lines = header.get("Content-Disposition");
             for (String raw : lines) {
                 if (raw != null) {
-                    String lowRaw = raw.toLowerCase();
-                    if (lowRaw.startsWith("filename=")) {
-                        // getting value after '='
-                        String fileName = raw.substring(9);
-                        try {
-                            return FileUtils.createUniqueFile(AppData.download_folder.get(), URLDecoder.decode(fileName, "UTF-8"));
-                        } catch (UnsupportedEncodingException e) {
-                            return FileUtils.createUniqueFile(AppData.download_folder.get(), fileName);
-                        }
-                    } else if (lowRaw.startsWith("filename*=UTF-8''")) { /* RFC 6266 */
-                        return FileUtils.createUniqueFile(AppData.download_folder.get(), raw.substring(17));
+                    Matcher utf8 = NAME_UTF_8.matcher(raw);
+                    if (utf8.find()) { /* RFC 6266 */
+                        return FileUtils.createUniqueFile(AppData.download_folder.get(), utf8.group(1).replace("%20", " "));
                     }
-
+                    Matcher normal = NAME_NORMAL.matcher(raw);
+                    if (normal.find()) {
+                        try {
+                            return FileUtils.createUniqueFile(AppData.download_folder.get(), URLDecoder.decode(normal.group(1), "UTF-8"));
+                        } catch (UnsupportedEncodingException e) {
+                            return FileUtils.createUniqueFile(AppData.download_folder.get(), normal.group(1));
+                        }
+                    }
                 }
             }
         }
