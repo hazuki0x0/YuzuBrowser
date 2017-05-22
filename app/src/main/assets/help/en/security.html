@@ -1,0 +1,44 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+</head>
+<body>
+<h1 class="head">Security settings</h1>
+<details>
+    <summary>Allow content access</summary>
+    <p class="details_info">Allow access of URL starting with content://</p>
+</details>
+<details>
+    <summary>Local file access settings</summary>
+    <p class="details_info">
+        Allow access of URL starting with file://<br>
+        <b>Disable</b><br>
+        Access is completely prohibited.<br>
+        <b>Enable in sandbox</b><br>
+        Allow access only in external storage and
+        /data/data/jp.hazuki.yuzubrowser/app_public_html.<br>
+        <b>Enable</b><br>
+        Allow access to all accessible paths.</p>
+</details>
+<details>
+    <summary>Insecure content settings on https</summary>
+    <p class="details_info">
+        Allows to load scripts and images etc. on http on https page<br>
+        <b>Never allow</b><br>
+        It does not load<br>
+        <b>Compatibility</b><br>
+        Decide automatically whether to load<br>
+        Judgment may change depending on WebView / Chrome update<br>
+        <b>Always allow</b><br>
+        Load all contents</p>
+</details>
+<details>
+    <summary>Show security warnings</summary>
+    <p class="details_info">Display a warning if there is a problem with SSL certificate and confirm
+        whether to continue loading.<br>
+        If it is invalid, the load is automatically canceled.</p>
+</details>
+</body>
+</html>

@@ -301,4 +301,6 @@
     <string name="pref_multi_finger_gesture_name_enable">アクション名を表示</string>
     <string name="pref_number_of_fingers">指の数</string>
     <string name="pref_sensitivity">感度</string>
+    <string name="pref_help">ヘルプ</string>
+    <string name="pref_help_url">file:///android_asset/help/ja/index.html</string>
 </resources>

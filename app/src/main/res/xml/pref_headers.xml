@@ -39,6 +39,12 @@
         android:fragment="jp.hazuki.yuzubrowser.settings.activity.ImportExportFragment"
         android:title="@string/pref_import_export" />
 
+    <header android:title="@string/pref_help">
+        <intent
+            android:targetPackage="jp.hazuki.yuzubrowser"
+            android:targetClass="jp.hazuki.yuzubrowser.help.HelpActivity" />
+    </header>
+
     <header
         android:fragment="jp.hazuki.yuzubrowser.settings.activity.AboutFragment"
         android:title="@string/pref_about" />
