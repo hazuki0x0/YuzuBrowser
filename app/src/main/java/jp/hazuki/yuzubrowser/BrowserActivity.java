@@ -240,6 +240,7 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenOtherAppHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightBgTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageResBlockHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
@@ -3098,13 +3099,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
                             return true;
-                        case SingleAction.LPRESS_IMAGE_RES_BLOCK: {
-                            Intent intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
-                            intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
-                            intent.putExtra(Intent.EXTRA_TEXT, extra);
-                            startActivity(intent);
+                        case SingleAction.LPRESS_IMAGE_RES_BLOCK:
+                            webview.requestFocusNodeHref(new WebSrcImageResBlockHandler(BrowserActivity.this).obtainMessage());
                             return true;
-                        }
                         case SingleAction.LPRESS_PATTERN_MATCH: {
                             Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
                             intent.putExtra(Intent.EXTRA_TEXT, extra);
