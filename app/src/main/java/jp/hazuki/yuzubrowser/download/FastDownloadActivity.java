@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 
@@ -34,6 +35,7 @@ public class FastDownloadActivity extends AppCompatActivity implements LoaderMan
     public static final String EXTRA_FILE_URL = "fileURL";
     public static final String EXTRA_FILE_REFERER = "fileReferer";
     public static final String EXTRA_DEFAULT_EXTENSION = "defExt";
+    public static final String EXTRA_MINE_TYPE = "mineType";
 
     private ProgressDialogFragmentCompat progressDialog;
 
@@ -85,6 +87,15 @@ public class FastDownloadActivity extends AppCompatActivity implements LoaderMan
         if (data != null) {
             Intent result = new Intent();
             result.setData(DownloadFileProvider.getUriForFIle(data));
+
+            int index = data.getPath().lastIndexOf(".");
+            if (index > -1) {
+                String extension = data.getPath().substring(index + 1);
+                String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                if (mimeType != null) {
+                    result.putExtra(EXTRA_MINE_TYPE, mimeType);
+                }
+            }
 
             setResult(RESULT_OK, result);
         } else {
