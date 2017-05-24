@@ -24,6 +24,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -99,6 +100,12 @@ public class FastDownloadActivity extends AppCompatActivity implements LoaderMan
 
             setResult(RESULT_OK, result);
         } else {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_SHORT).show();
+                }
+            });
             setResult(RESULT_CANCELED);
         }
         finish();

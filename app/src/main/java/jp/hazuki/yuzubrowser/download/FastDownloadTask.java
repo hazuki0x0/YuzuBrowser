@@ -73,6 +73,11 @@ public class FastDownloadTask extends AsyncTaskLoader<File> {
 
         HttpResponseData response = httpClient.connect();
 
+        if (response == null) {
+            httpClient.destroy();
+            return null;
+        }
+
         File file = HttpUtils.getFileName(mUrl, mDefaultExt, response.getHeaderFields());
         if (file.getParentFile() != null) {
             file.getParentFile().mkdirs();
