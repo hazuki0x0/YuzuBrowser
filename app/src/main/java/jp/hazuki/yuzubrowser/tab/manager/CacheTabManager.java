@@ -280,7 +280,11 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     @Override
     public TabIndexData unHideItem() {
         if (hideItem != null) {
-            mTabStorage.add(hideItem.index, hideItem.data);
+            if (hideItem.index > mTabStorage.size()) {
+                mTabStorage.addIndexData(hideItem.data);
+            } else {
+                mTabStorage.add(hideItem.index, hideItem.data);
+            }
             TabIndexData data = hideItem.data;
             hideItem = null;
             return data;
