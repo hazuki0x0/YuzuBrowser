@@ -54,7 +54,8 @@ public class DownloadDialog {
         folderButton.setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
             @Override
             public void onFileSelected(File file) {
-                folderButton.setText(file.getName());
+                if (file != null)
+                    folderButton.setText(file.getName());
             }
 
             @Override
