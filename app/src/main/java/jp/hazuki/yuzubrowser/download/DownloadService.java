@@ -432,8 +432,14 @@ public class DownloadService extends Service {
         }
 
         private void base64Download() {
+            DownloadUtils.Base64Image image = DownloadUtils.decodeBase64Image(mData.getUrl());
+            if (!image.isValid()) return;
+
+            if (mData.getFile() == null)
+                mData.setFile(DownloadUtils.getFile(image));
             long id = mDb.insert(mData);
-            if (DownloadUtils.saveBase64Image(mData.getUrl(), mData.file) != null) {
+
+            if (DownloadUtils.saveBase64Image(image, mData.file) != null) {
                 mData.setState(DownloadInfo.STATE_DOWNLOADED);
 
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());

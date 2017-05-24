@@ -31,20 +31,21 @@ import jp.hazuki.yuzubrowser.utils.FileUtils;
 class DownloadUtils {
 
     static File saveBase64Image(String data) {
-        return saveBase64Image(data, null);
+        Base64Image image = decodeBase64Image(data);
+        if (image.isValid())
+            return saveBase64Image(image, getFile(image));
+        return null;
     }
 
-    static File saveBase64Image(String data, File file) {
-        String[] raw = data.split(Pattern.quote(","));
-        if (raw.length > 2) {
-            String mimeType = raw[0].split(Pattern.quote(";"))[0].substring(5);
+    static File saveBase64Image(Base64Image imageData, File file) {
+        if (imageData.isValid()) {
+            byte[] image = Base64.decode(imageData.getData(), Base64.DEFAULT);
 
-            byte[] image = Base64.decode(raw[1], Base64.DEFAULT);
+            if (file == null)
+                file = getFile(imageData);
 
-            if (file == null) {
-                String name = System.currentTimeMillis() + "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
-                file = FileUtils.createUniqueFile(AppData.download_folder.get(), name);
-            }
+            if (file == null)
+                return null;
 
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
@@ -61,5 +62,37 @@ class DownloadUtils {
             }
         }
         return null;
+    }
+
+    static File getFile(Base64Image image) {
+        if (!image.isValid()) return null;
+
+        String mimeType = image.getHeader().split(";")[0].substring(5);
+        String name = System.currentTimeMillis() + "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+        return FileUtils.createUniqueFile(AppData.download_folder.get(), name);
+    }
+
+    static Base64Image decodeBase64Image(String url) {
+        return new Base64Image(url);
+    }
+
+    static class Base64Image {
+        private final String[] data;
+
+        private Base64Image(String url) {
+            data = url.split(Pattern.quote(","));
+        }
+
+        boolean isValid() {
+            return data.length >= 2;
+        }
+
+        private String getHeader() {
+            return data[0];
+        }
+
+        private String getData() {
+            return data[1];
+        }
     }
 }
