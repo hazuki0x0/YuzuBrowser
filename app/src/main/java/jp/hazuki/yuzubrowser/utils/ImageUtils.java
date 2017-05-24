@@ -30,7 +30,7 @@ public class ImageUtils {
         if (bitmap == null)
             return null;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(CompressFormat.WEBP, 100, os);
+        bitmap.compress(CompressFormat.PNG, 100, os);
         return os.toByteArray();
     }
 
