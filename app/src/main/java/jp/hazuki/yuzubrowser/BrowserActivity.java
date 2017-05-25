@@ -722,7 +722,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 open.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 open.putExtra(Intent.EXTRA_STREAM, uri);
                 open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(open);
+                startActivity(Intent.createChooser(open, getText(R.string.share)));
                 break;
             default:
                 throw new IllegalStateException();
