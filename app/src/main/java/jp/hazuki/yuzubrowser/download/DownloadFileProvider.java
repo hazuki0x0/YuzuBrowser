@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -75,9 +74,6 @@ public class DownloadFileProvider extends ContentProvider {
             } else if (OpenableColumns.SIZE.equals(col)) {
                 cols[i] = OpenableColumns.SIZE;
                 values[i++] = file.length();
-            } else if (MediaStore.MediaColumns.DATA.equals(col)) {
-                cols[i] = MediaStore.MediaColumns.DATA;
-                values[i++] = Uri.fromFile(file).toString();
             }
         }
 
