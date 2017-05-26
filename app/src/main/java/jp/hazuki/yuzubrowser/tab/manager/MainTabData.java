@@ -18,6 +18,8 @@ package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.TextView;
@@ -90,7 +92,13 @@ public class MainTabData extends TabData {
         ThemeData themedata = ThemeData.getInstance();
         if (themedata != null && themedata.tabBackgroundSelect != null)
             mTabView.setBackground(themedata.tabBackgroundSelect);
-        else
+        else if (themedata != null && themedata.tabAccentColor != 0) {
+            LayerDrawable drawable = (LayerDrawable) res.getDrawable(R.drawable.tab_background_selected, theme);
+            GradientDrawable accent = (GradientDrawable) drawable.findDrawableByLayerId(R.id.tabAccent);
+            int px = (int) (res.getDisplayMetrics().density * 3 + 0.5f);
+            accent.setStroke(px, themedata.tabAccentColor);
+            mTabView.setBackground(drawable);
+        } else
             mTabView.setBackgroundResource(R.drawable.tab_background_selected);
 
         TextView textView = (TextView) mTabView.findViewById(R.id.textView);

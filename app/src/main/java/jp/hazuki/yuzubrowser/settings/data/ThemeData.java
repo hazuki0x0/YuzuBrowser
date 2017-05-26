@@ -33,7 +33,7 @@ public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
 
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
-    public int tabTextColorNormal, tabTextColorLock, tabTextColorSelect;
+    public int tabTextColorNormal, tabTextColorLock, tabTextColorSelect, tabAccentColor;
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
     public int toolbarTextColor, toolbarImageColor;
@@ -82,6 +82,14 @@ public class ThemeData {
                 if ("tabTextColorSelect".equalsIgnoreCase(field)) {
                     try {
                         tabTextColorSelect = Long.decode(parser.getText().trim()).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+                if ("tabAccentColor".equalsIgnoreCase(field)) {
+                    try {
+                        tabAccentColor = Long.decode(parser.getText().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
