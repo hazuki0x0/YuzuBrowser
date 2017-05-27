@@ -210,7 +210,7 @@
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".useragent.UserAgentListActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_useragent_setting"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
