@@ -213,4 +213,13 @@
     <string name="unknown">不明</string>
     <string name="delete_mf_gesture">マルチタッチジェスチャを削除</string>
     <string name="confirm_delete_mf_gesture">このジェスチャを削除しますか？</string>
+    <string name="theme_importer">Yuzu Browserテーマ インポート</string>
+    <string name="theme_imported">\"%1$s\"をインポートしました</string>
+    <string name="theme_installed_version">このバージョンのテーマはインポート済みです</string>
+    <string name="theme_unknown_error">不明なエラー</string>
+    <string name="theme_manifest_not_found">マニフェストが見つかりません</string>
+    <string name="cant_create_folder">フォルダを作成できませんでした</string>
+    <string name="theme_broken_manifest">マニフェストが壊れています</string>
+    <string name="theme_same_name">\"%1$s\"と同名のテーマがすでにあります</string>
+    <string name="theme_unknown_version">このバージョンの形式のテーマはサポートしていません。</string>
 </resources>

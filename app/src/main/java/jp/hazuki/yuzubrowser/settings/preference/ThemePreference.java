@@ -28,6 +28,7 @@ import java.util.List;
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
+import jp.hazuki.yuzubrowser.theme.ThemeManifest;
 
 public class ThemePreference extends ListPreference {
     public ThemePreference(Context context, AttributeSet attrs) {
@@ -70,7 +71,8 @@ public class ThemePreference extends ListPreference {
         if (themes != null) {
             for (File theme : themes) {
                 if (theme.isDirectory()) {
-                    themeList.add(theme.getName());
+                    ThemeManifest manifest = ThemeManifest.getManifest(theme);
+                    themeList.add(manifest != null ? manifest.getName() : theme.getName());
                     valueList.add(theme.getName());
                 }
             }

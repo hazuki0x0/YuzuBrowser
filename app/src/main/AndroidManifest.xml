@@ -267,6 +267,21 @@
             android:label="@string/pref_help"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".theme.ThemeImportActivity"
+            android:label="@string/theme_importer"
+            android:theme="@style/BrowserMinThemeBlack.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.yuzutheme" />
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

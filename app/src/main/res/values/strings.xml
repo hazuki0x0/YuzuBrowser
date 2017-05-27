@@ -214,4 +214,13 @@
     <string name="unknown">Unknown</string>
     <string name="delete_mf_gesture">Delete multi touch gesture</string>
     <string name="confirm_delete_mf_gesture">Delete this gesture?</string>
+    <string name="theme_importer">Yuzu Browser theme importer</string>
+    <string name="theme_imported">%1$s is imported.</string>
+    <string name="theme_installed_version">This version of theme is already installed.</string>
+    <string name="theme_unknown_error">Unknown error</string>
+    <string name="theme_manifest_not_found">Manifest not found</string>
+    <string name="cant_create_folder">Can\'t create folder</string>
+    <string name="theme_broken_manifest">Broken manifest file</string>
+    <string name="theme_same_name">There is already a theme with the same name as \"%1$s\"</string>
+    <string name="theme_unknown_version">It does not support the theme of the format of this version.</string>
 </resources>
