@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
-import jp.hazuki.yuzubrowser.settings.data.ThemeData;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class MainTabData extends TabData {

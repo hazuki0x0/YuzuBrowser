@@ -2,7 +2,7 @@ package jp.hazuki.yuzubrowser.toolbar;
 
 import android.content.Context;
 
-import jp.hazuki.yuzubrowser.settings.data.ThemeData;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
 
 public class SubToolbar extends AbstractToolbar {
     public SubToolbar(Context context) {

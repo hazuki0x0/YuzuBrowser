@@ -27,7 +27,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.ThemeData;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
 
 public class ThemePreference extends ListPreference {
     public ThemePreference(Context context, AttributeSet attrs) {

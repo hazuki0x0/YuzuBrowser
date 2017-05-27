@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionFile;
-import jp.hazuki.yuzubrowser.settings.data.ThemeData;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
 
 public class SwipeTextButton extends AppCompatButton implements SwipeController.OnChangeListener {
     private final SwipeSoftButtonController mController;
