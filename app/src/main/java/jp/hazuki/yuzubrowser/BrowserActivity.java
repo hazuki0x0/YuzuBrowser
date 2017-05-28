@@ -205,6 +205,8 @@ import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
+import jp.hazuki.yuzubrowser.utils.graphics.SimpleLayerDrawable;
+import jp.hazuki.yuzubrowser.utils.graphics.TabListActionTextDrawable;
 import jp.hazuki.yuzubrowser.utils.handler.PauseHandler;
 import jp.hazuki.yuzubrowser.utils.util.ArrayDequeCompat;
 import jp.hazuki.yuzubrowser.utils.util.DequeCompat;
@@ -4019,8 +4021,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_fast_rewind_white_24dp, getTheme());
                 case SingleAction.SWAP_RIGHT_TAB:
                     return res.getDrawable(R.drawable.ic_fast_forward_white_24dp, getTheme());
-                case SingleAction.TAB_LIST:
-                    return res.getDrawable(R.drawable.ic_layers_white_24dp, getTheme());
+                case SingleAction.TAB_LIST: {
+                    Drawable base = res.getDrawable(R.drawable.ic_tab_white_24dp, getTheme());
+                    Drawable text = new TabListActionTextDrawable(getApplicationContext(), mTabManager.size());
+                    return new SimpleLayerDrawable(base, text);
+                }
                 case SingleAction.CLOSE_ALL_LEFT:
                     return res.getDrawable(R.drawable.ic_skip_previous_white_24dp, getTheme());
                 case SingleAction.CLOSE_ALL_RIGHT:
@@ -4054,7 +4059,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.ORIENTATION_SETTING:
                     return res.getDrawable(R.drawable.ic_stay_current_portrait_white_24dp, getTheme());
                 case SingleAction.OPEN_LINK_SETTING:
-                    return res.getDrawable(R.drawable.ic_layers_white_24dp, getTheme());
+                    return res.getDrawable(R.drawable.ic_tab_white_24dp, getTheme());
                 case SingleAction.USERAGENT_SETTING:
                     return res.getDrawable(R.drawable.ic_group_white_24dp, getTheme());
                 case SingleAction.TEXTSIZE_SETTING:
