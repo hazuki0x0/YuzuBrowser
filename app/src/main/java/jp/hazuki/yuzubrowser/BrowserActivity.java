@@ -175,6 +175,7 @@ import jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialAsyncManager;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
+import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
 import jp.hazuki.yuzubrowser.tab.TabListLayout;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
@@ -3618,6 +3619,23 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     new AddBookmarkSiteDialog(BrowserActivity.this, tab.getTitle(), tab.getUrl()).show();
                 }
                 break;
+                case SingleAction.ADD_SPEED_DIAL: {
+                    MainTabData tab = mTabManager.get(target);
+                    Intent intent = new Intent(BrowserActivity.this, SpeedDialSettingActivity.class);
+                    intent.setAction(SpeedDialSettingActivity.ACTION_ADD_SPEED_DIAL);
+                    intent.putExtra(Intent.EXTRA_TITLE, tab.getTitle());
+                    intent.putExtra(Intent.EXTRA_TEXT, tab.getUrl());
+                    intent.putExtra(SpeedDialSettingActivity.EXTRA_ICON, tab.mWebView.getFavicon());
+                    startActivity(intent);
+                }
+                break;
+                case SingleAction.ADD_PATTERN: {
+                    MainTabData tab = mTabManager.get(target);
+                    Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
+                    intent.putExtra(Intent.EXTRA_TEXT, tab.getUrl());
+                    startActivity(intent);
+                }
+                break;
                 case SingleAction.SUB_GESTURE: {
                     final GestureManager manager = GestureManager.getInstance(getApplicationContext(), GestureManager.GESTURE_TYPE_SUB);
 
@@ -4017,6 +4035,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_settings_white_24dp, getTheme());
                 case SingleAction.ADD_BOOKMARK:
                     return res.getDrawable(R.drawable.ic_star_white_24px, getTheme());
+                case SingleAction.ADD_SPEED_DIAL:
+                    return res.getDrawable(R.drawable.ic_speed_dial_add_white_24dp, getTheme());
+                case SingleAction.ADD_PATTERN:
+                    return res.getDrawable(R.drawable.ic_pattern_add_white_24dp, getTheme());
                 case SingleAction.SUB_GESTURE:
                     return res.getDrawable(R.drawable.ic_gesture_white_24dp, getTheme());
                 case SingleAction.CLEAR_DATA:

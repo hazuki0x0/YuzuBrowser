@@ -32,6 +32,9 @@ public class SpeedDialSettingActivity extends AppCompatActivity
         SpeedDialSettingActivityFragment.OnSpeedDialAddListener, SpeedDialSettingActivityEditFragment.GoBackController,
         ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {
 
+    public static final String ACTION_ADD_SPEED_DIAL = "jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity.add_speed_dial";
+    public static final String EXTRA_ICON = ACTION_ADD_SPEED_DIAL + ".icon";
+
     private static final int RESULT_REQUEST_BOOKMARK = 100;
     private static final int RESULT_REQUEST_HISTORY = 101;
 
@@ -55,6 +58,13 @@ public class SpeedDialSettingActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new SpeedDialSettingActivityFragment(), "main")
                     .commit();
+
+            if (getIntent() != null && ACTION_ADD_SPEED_DIAL.equals(getIntent().getAction())) {
+                String title = getIntent().getStringExtra(Intent.EXTRA_TITLE);
+                String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                Bitmap icon = getIntent().getParcelableExtra(EXTRA_ICON);
+                speedDialStack.addItem(new SpeedDial(url, title, WebIcon.createIcon(icon), true));
+            }
         }
 
         shouldDisplayHomeUp();

@@ -91,6 +91,8 @@ public class SingleAction implements Parcelable {
     public static final int SHOW_DOWNLOADS = 35012;
     public static final int SHOW_SETTINGS = 35013;
     public static final int ADD_BOOKMARK = 35020;
+    public static final int ADD_SPEED_DIAL = 35021;
+    public static final int ADD_PATTERN = 35022;
     public static final int SUB_GESTURE = 35031;
     public static final int CLEAR_DATA = 35300;
     public static final int SHOW_PROXY_SETTING = 35301;
