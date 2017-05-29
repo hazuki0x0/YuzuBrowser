@@ -339,6 +339,7 @@
     </integer-array>
 
     <string name="pref_tab_size_x">Tab size</string>
+    <string name="pref_tab_font_size">Tab font size</string>
     <string name="pref_action_settings">Action settings</string>
     <string name="pref_tab_action">Tab action</string>
     <string name="pref_show_zoom_button">Display zoom buttons</string>

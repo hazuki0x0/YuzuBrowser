@@ -45,7 +45,7 @@
     <string name="pref_btn_action_down">下スワイプ</string>
     <string name="pref_btn_action_left">左スワイプ</string>
     <string name="pref_btn_action_right">右スワイプ</string>
-    <string name="pref_toolbar_size">サイズ</string>
+    <string name="pref_toolbar_size">バーサイズ</string>
     <string name="pref_toolbar_text_size">テキストサイズ</string>
     <string name="pref_text_size">テキストサイズ</string>
 
@@ -83,7 +83,8 @@
     <string name="pref_lpress_link">リンク</string>
     <string name="pref_lpress_image">画像</string>
     <string name="pref_lpress_linkimage">画像リンク</string>
-    <string name="pref_tab_size_x">タブのサイズ</string>
+    <string name="pref_tab_size_x">タブの表示幅</string>
+    <string name="pref_tab_font_size">タブのフォントサイズ</string>
     <string name="pref_action_settings">アクション設定</string>
     <string name="pref_tab_action">タブアクション</string>
     <string name="pref_show_zoom_button">ズームボタンの表示</string>

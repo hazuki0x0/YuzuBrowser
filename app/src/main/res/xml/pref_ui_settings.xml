@@ -64,6 +64,12 @@
                 android:title="@string/pref_tab_size_x"
                 app:seekMax="400"
                 app:seekMin="10" />
+
+            <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+                android:key="tab_font_size"
+                android:title="@string/pref_tab_font_size"
+                app:seekMax="50"
+                app:seekMin="1" />
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/pref_url_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference

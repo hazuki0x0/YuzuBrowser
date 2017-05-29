@@ -67,17 +67,15 @@ public class AppData {
     public static final IntContainer clear_data_default = new IntContainer("_clear_data_default", 0);
     public static final IntContainer finish_alert_default = new IntContainer("_finish_alert_default", 0);
 
-    //public static final StringDelayedContainer last_read_allow_geolocation_origins = new StringDelayedContainer("last_read_allow_geolocation_origins", "");
-
     public static final IntContainer tab_type = new IntContainer("tab_type", 0);
     public static final IntContainer tab_size_x = new IntContainer("tab_size_x", 150);
+    public static final IntContainer tab_font_size = new IntContainer("tab_font_size", 14);
     public static final IntContainer toolbar_text_size_url = new IntContainer("toolbar_text_size_url", 14);
     public static final ToolbarContainer toolbar_tab = new ToolbarContainer("tab", 1);
     public static final ToolbarContainer toolbar_url = new ToolbarContainer("url", 1);
     public static final ToolbarContainer toolbar_progress = new ToolbarContainer("progress", 1);
     public static final ToolbarContainer toolbar_custom1 = new ToolbarContainer("custom1", 1);
     public static final IntContainer swipebtn_sensitivity = new IntContainer("swipebtn_sensitivity", 150);
-    public static final IntContainer swipetab_sensitivity = new IntContainer("swipetab_sensitivity", 150);
     public static final StringContainer default_encoding = new StringContainer("default_encoding", "UTF-8");
     public static final StringContainer user_agent = new StringContainer("user_agent", "");
     public static final IntContainer text_size = new IntContainer("text_size", 100);
