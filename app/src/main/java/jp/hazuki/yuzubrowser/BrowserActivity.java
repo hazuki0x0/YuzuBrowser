@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -46,7 +45,6 @@ import android.os.Vibrator;
 import android.print.PrintManager;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Intents.Insert;
-import android.speech.RecognizerResultsIntent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -898,37 +896,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 Logger.w(TAG, "ACTION_VIEW : url is null or empty.");
                 return false;
             }
-        } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {
-            String url = WebUtils.makeSearchUrlFromQuery(intent.getStringExtra(SearchManager.QUERY), AppData.search_url.get(), "%s");
-            if (!TextUtils.isEmpty(url))
-                openInNewTab(url, TabType.INTENT);
-            else {
-                Logger.w(TAG, "WEB_SEARCH : url is null or empty.");
-                return false;
-            }
-        } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS.equals(action)) {//API10
-            ArrayList<String> urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS);
-            if (urls == null || urls.isEmpty()) {
-                Logger.w(TAG, "VOICE_SEARCH : urls is null or empty.");
-                return false;
-            } else {
-                openInNewTab(urls.get(0), TabType.INTENT);
-            }
-        } else if (Intent.ACTION_SEND.equals(action)) {
-            String query = intent.getStringExtra(Intent.EXTRA_TEXT);
-            if (!TextUtils.isEmpty(query)) {
-                if (WebUtils.isUrl(query)) {
-                    openInNewTab(query, TabType.INTENT);
-                } else {
-                    String text = WebUtils.extractionUrl(query);
-                    if (query.equals(text)) {
-                        text = WebUtils.makeUrlFromQuery(query, AppData.search_url.get(), "%s");
-                    }
-                    openInNewTab(text, TabType.INTENT);
-                }
-            }
-
-            return false;
         } else {
             return false;
         }

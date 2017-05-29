@@ -223,4 +223,5 @@
     <string name="theme_broken_manifest">Broken manifest file</string>
     <string name="theme_same_name">There is already a theme with the same name as \"%1$s\"</string>
     <string name="theme_unknown_version">It does not support the theme of the format of this version.</string>
+    <string name="page_not_found">Page not found</string>
 </resources>

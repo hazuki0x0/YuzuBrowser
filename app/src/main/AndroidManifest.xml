@@ -52,6 +52,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".HandleIntentActivity"
+            android:theme="@style/BrowserMinThemeBlack.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
