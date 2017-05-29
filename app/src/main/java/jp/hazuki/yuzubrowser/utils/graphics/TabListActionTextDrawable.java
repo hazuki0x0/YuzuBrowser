@@ -34,7 +34,6 @@ public class TabListActionTextDrawable extends Drawable {
 
     private final String text;
     private final Paint paint;
-    private final int padding_x;
     private final int padding_y;
 
     public TabListActionTextDrawable(Context context, int tabs) {
@@ -46,14 +45,13 @@ public class TabListActionTextDrawable extends Drawable {
 
 
         paint = new Paint();
-        paint.setTextSize(DisplayUtils.convertDpToPx(context, 9));
+        paint.setTextSize(DisplayUtils.convertDpToPx(context, 10));
         paint.setAntiAlias(true);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setColor(Color.WHITE);
         paint.setFakeBoldText(true);
 
-        padding_x = DisplayUtils.convertDpToPx(context, 1.4f);
-        padding_y = DisplayUtils.convertDpToPx(context, 1);
+        padding_y = DisplayUtils.convertDpToPx(context, 2);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class TabListActionTextDrawable extends Drawable {
         paint.getTextBounds(text, 0, text.length(), r);
         Rect bounds = getBounds();
 
-        int xPos = bounds.left + bounds.width() / 2 + padding_x;
+        int xPos = bounds.left + bounds.width() / 2;
         int yPos = bounds.top + bounds.height() / 2 + r.height() / 2 + padding_y;
         canvas.drawText(text, xPos, yPos, paint);
     }

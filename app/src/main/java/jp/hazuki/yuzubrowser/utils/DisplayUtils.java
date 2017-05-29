@@ -10,11 +10,6 @@ public class DisplayUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static int convertDpToPx(Context context, float dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return (int) (density * dp + 0.5f);
-    }
-
     public static int convertDpToPx(Context context, int dp) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (density * dp + 0.5f);
