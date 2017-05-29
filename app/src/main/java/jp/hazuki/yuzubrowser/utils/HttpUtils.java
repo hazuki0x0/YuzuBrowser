@@ -52,6 +52,13 @@ public final class HttpUtils {
             }
         }
 
+        if (header.get("Content-Type") != null) {
+            List<String> lines = header.get("Content-Type");
+            if (lines.size() > 0) {
+                return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, lines.get(0), defaultExt);
+            }
+        }
+
         return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
     }
 }
