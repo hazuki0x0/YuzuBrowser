@@ -19,6 +19,8 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 public class WebViewProxy {
     private static final Pattern pattern = Pattern.compile("\\s*(.+?):(\\d+)\\s*");
 
+    private static boolean setProxy = false;
+
     public static boolean resetProxy(Context context) {
         return setProxy(context, "", 0);
     }
@@ -48,19 +50,23 @@ public class WebViewProxy {
                 }
             }
             return true;
-        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | NullPointerException e) {
             Logger.d("ProxySettings", "Exception setting WebKit proxy on Lollipop through ProxyChangeListener: " + e.toString());
+            setProxy = false;
         }
         return false;
     }
 
     public static boolean setProxy(Context context, boolean enable, String proxy_address) {
-        if (!WebViewProxy.resetProxy(BrowserApplication.getInstance()))
+        if (setProxy && !WebViewProxy.resetProxy(BrowserApplication.getInstance()))
             return false;
+
+        setProxy = false;
 
         if (enable) {
             Matcher matcher = pattern.matcher(proxy_address);
             if (matcher.find()) {
+                setProxy = true;
                 return WebViewProxy.setProxy(BrowserApplication.getInstance(), matcher.group(1), Integer.parseInt(matcher.group(2), 10));
             } else {
                 Toast.makeText(context, R.string.proxy_address_error, Toast.LENGTH_LONG).show();
