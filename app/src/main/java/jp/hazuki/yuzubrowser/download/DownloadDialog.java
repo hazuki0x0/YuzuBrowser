@@ -42,10 +42,10 @@ public class DownloadDialog {
 
     public void show() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.download_dialog, null);
+        view.setVisibility(View.GONE);
 
         filenameEditText = (EditText) view.findViewById(R.id.filenameEditText);
-        filenameEditText.setText(mInfo.getFile().getName());
-        setRealItemName();
+        setRealItemName(view);
 
         folderButton = (FileListButton) view.findViewById(R.id.folderButton);
         folderButton.setText(mInfo.getFile().getParentFile().getName());
@@ -126,7 +126,7 @@ public class DownloadDialog {
                 .show();
     }
 
-    private void setRealItemName() {
+    private void setRealItemName(final View view) {
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             @Override
@@ -135,6 +135,7 @@ public class DownloadDialog {
                     URL url = new URL(mInfo.getUrl());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("HEAD");
+                    conn.setConnectTimeout(1000);
                     String cookie = CookieManager.getInstance().getCookie(mInfo.getUrl());
                     if (!TextUtils.isEmpty(cookie)) {
                         conn.setRequestProperty("Cookie", cookie);
@@ -145,17 +146,19 @@ public class DownloadDialog {
                     }
                     conn.connect();
                     final File file = HttpUtils.getFileName(mInfo.getUrl(), null, conn.getHeaderFields());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (filenameEditText.getText().toString().equals(mInfo.getFile().getName()))
-                                filenameEditText.setText(file.getName());
-                        }
-                    });
+                    mInfo.setFile(file);
                     conn.disconnect();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        filenameEditText.setText(mInfo.getFile().getName());
+                        view.setVisibility(View.VISIBLE);
+                    }
+                });
             }
         }).start();
     }
