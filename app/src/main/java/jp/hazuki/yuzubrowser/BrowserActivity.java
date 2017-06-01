@@ -3875,7 +3875,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     Drawable icon = res.getDrawable(R.drawable.ic_arrow_back_white_24dp, getTheme());
-                    if (!tab.mWebView.canGoBack())
+                    if (tab.mWebView.canGoBack())
+                        icon.setAlpha(0xff);
+                    else
                         icon.setAlpha(0x80);
                     return icon;
                 }
@@ -3883,7 +3885,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
                     Drawable icon = res.getDrawable(R.drawable.ic_arrow_forward_white_24dp, getTheme());
-                    if (!tab.mWebView.canGoBack())
+                    if (tab.mWebView.canGoForward())
+                        icon.setAlpha(0xff);
+                    else
                         icon.setAlpha(0x80);
                     return icon;
                 }
