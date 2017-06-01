@@ -24,9 +24,23 @@ You can use it if you have the theme of Mikan Browser.
 
 However, as the theme has been expanded, not all displays change.
 
-#### Sample theme
-[Theme material dark](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_dark.zip)
+#### New theme pack sample
+for version 2.3 or later
+
+Just download the theme pack and tap it to import!
+
+[Theme material dark](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.3.0/theme_material_dark.yuzutheme)
 (default theme)
+
+[Theme material light](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.3.0/theme_material_light.yuzutheme)
+
+
+##### Classic theme sample
+For versions prior to version 2.3
+
+You should use new theme pack if you are using version 2.3 or later
+
+[Theme material dark](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_dark.zip)
 
 [Theme material light](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_light.zip)
 
