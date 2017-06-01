@@ -13,6 +13,7 @@ public class DownloadRequestInfo extends DownloadInfo {
     private int max_length;
     private int current_length;
     private String mDefaultExt;
+    private boolean solvedFileName;
 
     public DownloadRequestInfo() {
     }
@@ -21,6 +22,13 @@ public class DownloadRequestInfo extends DownloadInfo {
         super(url, file);
         this.referer = referer;
         this.default_contentlength = contentlength;
+    }
+
+    public DownloadRequestInfo(String url, File file, String referer, long contentlength, boolean solvedFileName) {
+        super(url, file);
+        this.referer = referer;
+        this.default_contentlength = contentlength;
+        this.solvedFileName = solvedFileName;
     }
 
     public long getDefaultContentLength() {
@@ -75,5 +83,9 @@ public class DownloadRequestInfo extends DownloadInfo {
 
     public void setDefaultExt(String defaultExt) {
         mDefaultExt = defaultExt;
+    }
+
+    public boolean isSolvedFileName() {
+        return solvedFileName;
     }
 }

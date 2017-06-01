@@ -40,6 +40,9 @@ public class WebDownloadUtils {
                 mimetype = data[0].split(Pattern.quote(";"))[0].substring(5);
             }
         }
+        if ("application/octet-stream".equals(mimetype))
+            mimetype = null;
+
         String filename = URLUtil.guessFileName(url, contentDisposition, mimetype);
         if (TextUtils.isEmpty(filename)) {
             filename = "index.html";

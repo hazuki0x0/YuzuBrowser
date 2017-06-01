@@ -128,39 +128,44 @@ public class DownloadDialog {
 
     private void setRealItemName(final View view) {
         final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(mInfo.getUrl());
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("HEAD");
-                    conn.setConnectTimeout(1000);
-                    String cookie = CookieManager.getInstance().getCookie(mInfo.getUrl());
-                    if (!TextUtils.isEmpty(cookie)) {
-                        conn.setRequestProperty("Cookie", cookie);
+        if (mInfo.isSolvedFileName()) {
+            filenameEditText.setText(mInfo.getFile().getName());
+            view.setVisibility(View.VISIBLE);
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(mInfo.getUrl());
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("HEAD");
+                        conn.setConnectTimeout(1000);
+                        String cookie = CookieManager.getInstance().getCookie(mInfo.getUrl());
+                        if (!TextUtils.isEmpty(cookie)) {
+                            conn.setRequestProperty("Cookie", cookie);
+                        }
+                        String referer = mInfo.getReferer();
+                        if (!TextUtils.isEmpty(referer)) {
+                            conn.setRequestProperty("Referer", referer);
+                        }
+                        conn.connect();
+                        final File file = HttpUtils.getFileName(mInfo.getUrl(), null, conn.getHeaderFields());
+                        mInfo.setFile(file);
+                        conn.disconnect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    String referer = mInfo.getReferer();
-                    if (!TextUtils.isEmpty(referer)) {
-                        conn.setRequestProperty("Referer", referer);
-                    }
-                    conn.connect();
-                    final File file = HttpUtils.getFileName(mInfo.getUrl(), null, conn.getHeaderFields());
-                    mInfo.setFile(file);
-                    conn.disconnect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        filenameEditText.setText(mInfo.getFile().getName());
-                        view.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }).start();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            filenameEditText.setText(mInfo.getFile().getName());
+                            view.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 
     protected Context getContext() {
@@ -198,7 +203,7 @@ public class DownloadDialog {
 
     public static DownloadDialog showDownloadDialog(Context context, String url, String userAgent, String contentDisposition, String mimetype, long contentLength, String referer) {
         File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, contentDisposition, mimetype);
-        DownloadRequestInfo info = new DownloadRequestInfo(url, file, null, contentLength);//TODO referer
+        DownloadRequestInfo info = new DownloadRequestInfo(url, file, null, contentLength, !TextUtils.isEmpty(contentDisposition));//TODO referer
         return showDownloadDialog(context, info);
     }
 
