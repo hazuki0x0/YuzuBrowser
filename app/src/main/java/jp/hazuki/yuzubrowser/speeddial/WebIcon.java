@@ -37,6 +37,8 @@ public class WebIcon implements Serializable {
     }
 
     public static WebIcon createIcon(Bitmap icon) {
+        if (icon == null) return null;
+
         int x = icon.getWidth();
         int y = icon.getHeight();
 

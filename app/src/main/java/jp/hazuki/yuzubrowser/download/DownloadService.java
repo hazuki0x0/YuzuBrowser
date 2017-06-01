@@ -138,6 +138,8 @@ public class DownloadService extends Service {
     }
 
     public static void unregisterObserver(Messenger serviceMessenger, Messenger activityMessenger) {
+        if (serviceMessenger == null) return;
+
         Message msg = Message.obtain(null, UNREGISTER_OBSERVER);
         msg.replyTo = activityMessenger;
         try {
