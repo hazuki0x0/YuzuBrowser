@@ -4115,7 +4115,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return null;
                 case SingleAction.PRIVATE: {
                     Drawable icon = res.getDrawable(R.drawable.ic_private_white_24dp, getTheme());
-                    if (!AppData.private_mode.get())
+                    if (AppData.private_mode.get())
+                        icon.setAlpha(0xff);
+                    else
                         icon.setAlpha(0x80);
                     return icon;
                 }
