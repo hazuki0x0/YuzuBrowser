@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
@@ -65,7 +64,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
 
         pickMode = getArguments().getBoolean(MODE_PICK);
 
-        mManager = new BookmarkManager(BrowserApplication.getInstance());
+        mManager = new BookmarkManager(getContext());
 
         setList(getRoot());
 
