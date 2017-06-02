@@ -1,5 +1,6 @@
 package jp.hazuki.yuzubrowser.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,8 +26,12 @@ public class WebDownloadUtils {
         if (context.getPackageManager().queryIntentActivities(intent, 0).isEmpty())
             return false;
 
-        context.startActivity(intent);
-        return true;
+        try {
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            return false;
+        }
     }
 
     public static File guessDownloadFile(String folder_path, String url, String contentDisposition, String mimetype) {
