@@ -37,6 +37,8 @@ public class MfsFragment extends PreferenceFragment {
         getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
         addPreferencesFromResource(R.xml.pref_multi_finger_settings);
 
+        setRetainInstance(true);
+
         findPreference("multi_finger_gesture_list").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

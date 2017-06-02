@@ -115,47 +115,47 @@
         </activity>
         <activity
             android:name=".settings.activity.MainSettingsActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:label="@string/pref_settings"
             android:theme="@style/CustomThemeBlack.Pref" />
         <activity
             android:name=".action.view.ActionActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_settings" />
         <activity
             android:name=".action.view.ActionListActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".action.view.ActionListManagerActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".search.SearchActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".pattern.url.PatternUrlActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_pattern_match" />
         <activity
             android:name=".debug.DebugActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />
         <activity
             android:name=".debug.DebugFileListActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".debug.TextEditActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".debug.ActivityListActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".debug.EnvironmentActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".action.view.ActionStringActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <provider
             android:name=".search.SuggestProvider"
@@ -171,7 +171,7 @@
 
         <activity
             android:name=".download.DownloadListActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/download" />
         <provider
             android:name=".browser.SafeFileProvider"
@@ -188,72 +188,72 @@
 
         <activity
             android:name=".history.BrowserHistoryActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/history" />
         <activity
             android:name=".bookmark.view.BookmarkActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/bookmark" />
         <activity
             android:name=".gesture.AddGestureActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".gesture.GestureListActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".gesture.GestureTestActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".action.item.startactivity.StartActivityPreferenceActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_start_activity_setting" />
         <activity
             android:name=".action.item.CustomPreferenceActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_custom_setting"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".useragent.UserAgentListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenSize"
             android:label="@string/action_useragent_setting"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".webencode.WebTextEncodeListActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_web_encode_setting"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".userjs.UserScriptListActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_userjs_manage" />
         <activity
             android:name=".userjs.UserScriptEditActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/userjs_edit" />
         <activity
             android:name=".utils.view.filelist.FileListActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".resblock.ResourceBlockListActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_resblock_manage" />
         <activity
             android:name=".action.view.SoftButtonActionArrayActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".action.view.SoftButtonActionActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".useragent.UserAgentSettingActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_useragent_setting" />
         <activity
             android:name=".webencode.WebTextEncodeSettingActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_web_encode_setting" />
         <activity
             android:name=".action.view.CloseAutoSelectActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_close_auto_select" />
         <activity
             android:name=".speeddial.view.SpeedDialSettingActivity"
@@ -261,7 +261,7 @@
         <activity
             android:name=".download.FastDownloadActivity"
             android:exported="false"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".gesture.multiFinger.MultiFingerSettingsActivity"
@@ -270,11 +270,12 @@
             android:name=".help.HelpActivity"
             android:label="@string/pref_help"
             android:exported="false"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".theme.ThemeImportActivity"
             android:label="@string/theme_importer"
-            android:theme="@style/BrowserMinThemeBlack.Transparent">
+            android:theme="@style/BrowserMinThemeBlack.Transparent"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
