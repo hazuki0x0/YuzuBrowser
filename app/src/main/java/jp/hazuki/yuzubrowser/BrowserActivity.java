@@ -1925,6 +1925,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setting.setCacheMode(AppData.web_cache.get());
         setting.setJavaScriptCanOpenWindowsAutomatically(AppData.web_popup.get());
         setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.valueOf(AppData.layout_algorithm.get()));
+        setting.setLoadsImagesAutomatically(!AppData.block_web_images.get());
 
         boolean noPrivate = !AppData.private_mode.get();
         setting.setSaveFormData(noPrivate && AppData.save_formdata.get());

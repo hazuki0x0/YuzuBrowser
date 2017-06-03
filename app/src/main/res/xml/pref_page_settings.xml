@@ -40,6 +40,9 @@
     <SwitchPreference
         android:key="fast_back"
         android:title="@string/pref_fast_back" />
+    <SwitchPreference
+        android:key="block_web_images"
+        android:title="@string/pref_block_images" />
 
     <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
         android:dependency="fast_back"
