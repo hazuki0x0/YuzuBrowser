@@ -3874,22 +3874,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.GO_BACK: {
                     MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
-                    Drawable icon = res.getDrawable(R.drawable.ic_arrow_back_white_24dp, getTheme());
                     if (tab.mWebView.canGoBack())
-                        icon.setAlpha(0xff);
+                        return res.getDrawable(R.drawable.ic_arrow_back_white_24dp, getTheme());
                     else
-                        icon.setAlpha(0x80);
-                    return icon;
+                        return res.getDrawable(R.drawable.ic_arrow_back_disable_white_24dp, getTheme());
                 }
                 case SingleAction.GO_FORWARD: {
                     MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
-                    Drawable icon = res.getDrawable(R.drawable.ic_arrow_forward_white_24dp, getTheme());
-                    if (tab.mWebView.canGoForward())
-                        icon.setAlpha(0xff);
+                    if (tab.mWebView.canGoBack())
+                        return res.getDrawable(R.drawable.ic_arrow_forward_white_24dp, getTheme());
                     else
-                        icon.setAlpha(0x80);
-                    return icon;
+                        return res.getDrawable(R.drawable.ic_arrow_forward_disable_white_24dp, getTheme());
                 }
                 case SingleAction.WEB_RELOAD_STOP: {
                     MainTabData tab = mTabManager.getCurrentTabData();
@@ -4113,14 +4109,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return null;
                 case SingleAction.TOAST:
                     return null;
-                case SingleAction.PRIVATE: {
-                    Drawable icon = res.getDrawable(R.drawable.ic_private_white_24dp, getTheme());
+                case SingleAction.PRIVATE:
                     if (AppData.private_mode.get())
-                        icon.setAlpha(0xff);
+                        return res.getDrawable(R.drawable.ic_private_white_24dp, getTheme());
                     else
-                        icon.setAlpha(0x80);
-                    return icon;
-                }
+                        return res.getDrawable(R.drawable.ic_private_white_disable_24dp, getTheme());
                 case SingleAction.VIEW_SOURCE:
                     return res.getDrawable(R.drawable.ic_view_source_white_24dp, getTheme());
                 case SingleAction.PRINT:
