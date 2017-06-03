@@ -3882,7 +3882,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.GO_FORWARD: {
                     MainTabData tab = mTabManager.getCurrentTabData();
                     if (tab == null) return null;
-                    if (tab.mWebView.canGoBack())
+                    if (tab.mWebView.canGoForward())
                         return res.getDrawable(R.drawable.ic_arrow_forward_white_24dp, getTheme());
                     else
                         return res.getDrawable(R.drawable.ic_arrow_forward_disable_white_24dp, getTheme());
