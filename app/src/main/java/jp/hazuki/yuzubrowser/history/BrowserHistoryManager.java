@@ -71,7 +71,7 @@ public class BrowserHistoryManager implements CursorLoadable {
         if (!checkUrl(url)) return;
 
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_ID}, COLUMN_URL + " = ?", new String[]{url}, null, null, null);
+        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_ID}, COLUMN_URL + " = ?", new String[]{url}, null, null, null, "1");
         if (c.moveToFirst()) {
             ContentValues values = new ContentValues();
             values.put(COLUMN_TIME, System.currentTimeMillis());
