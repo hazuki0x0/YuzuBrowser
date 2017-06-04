@@ -1224,6 +1224,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         if (ThemeData.isEnabled())
             tabdata.onMoveTabToBackground(getResources(), getTheme());
+
+        mToolbar.notifyChangeWebState();
         return tabdata;
     }
 
