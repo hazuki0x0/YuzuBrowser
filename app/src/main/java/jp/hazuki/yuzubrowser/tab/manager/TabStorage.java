@@ -237,6 +237,7 @@ class TabStorage {
     private static final String JSON_NAME_TITLE = "title";
     private static final String JSON_NAME_TAB_TYPE = "type";
     private static final String JSON_NAME_PARENT = "parent";
+    private static final String JSON_NAME_NAV_LOCK = "nav";
 
     private List<TabIndexData> loadIndexJson(File file) {
         List<TabIndexData> tabIndexDataList = new ArrayList<>();
@@ -268,6 +269,9 @@ class TabStorage {
                                     case JSON_NAME_PARENT:
                                         tabIndexData.setParent(parser.getLongValue());
                                         break;
+                                    case JSON_NAME_NAV_LOCK:
+                                        tabIndexData.setNavLock(parser.getBooleanValue());
+                                        break;
                                     default:
                                         parser.skipChildren();
                                         break;
@@ -298,6 +302,7 @@ class TabStorage {
                 generator.writeStringField(JSON_NAME_TITLE, data.getTitle());
                 generator.writeNumberField(JSON_NAME_TAB_TYPE, data.getTabType());
                 generator.writeNumberField(JSON_NAME_PARENT, data.getParent());
+                generator.writeBooleanField(JSON_NAME_NAV_LOCK, data.isNavLock());
                 generator.writeEndObject();
             }
             generator.writeEndArray();

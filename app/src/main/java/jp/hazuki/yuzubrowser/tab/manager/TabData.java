@@ -23,7 +23,6 @@ import jp.hazuki.yuzubrowser.webkit.TabType;
 
 public class TabData {
     protected static final int STATE_LOADING = 0x001;
-    protected static final int STATE_NAV_LOCK = 0x002;
 
     public final CustomWebView mWebView;
     private String mOriginalUrl;
@@ -104,14 +103,11 @@ public class TabData {
     }
 
     public boolean isNavLock() {
-        return (mState & STATE_NAV_LOCK) != 0;
+        return mIndexData.isNavLock();
     }
 
     public void setNavLock(boolean b) {
-        if (b)
-            mState |= STATE_NAV_LOCK;
-        else
-            mState &= ~STATE_NAV_LOCK;
+        mIndexData.setNavLock(b);
     }
 
     public void onPageStarted(String url, Bitmap favicon) {
