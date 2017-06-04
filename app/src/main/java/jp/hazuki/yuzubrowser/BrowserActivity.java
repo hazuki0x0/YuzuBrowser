@@ -2279,7 +2279,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (from_data != null)
                 from_data.onMoveTabToBackground(res, getTheme());
 
-            to_data.onMoveTabToForeground(res, getTheme());
+            if (to_data != null)
+                to_data.onMoveTabToForeground(res, getTheme());
         }
     }
 
