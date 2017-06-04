@@ -1356,16 +1356,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                             if (info != null) {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            } else {
-                                String fallbackUrl = intent.getStringExtra("browser_fallback_url");
-                                if (!TextUtils.isEmpty(fallbackUrl)) {
-                                    loadUrl(data, fallbackUrl);
+                                try {
+                                    startActivity(intent);
                                     return true;
+                                } catch (SecurityException e) {
+                                    e.printStackTrace();
                                 }
                             }
+                            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                            if (!TextUtils.isEmpty(fallbackUrl)) {
+                                loadUrl(data, fallbackUrl);
+                            }
                         }
-
                         return true;
                     }
                 } catch (URISyntaxException e) {
@@ -1432,14 +1434,16 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     ResolveInfo info = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                     if (info != null) {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                        startActivity(intent);
-                    } else {
-                        String fallbackUrl = intent.getStringExtra("browser_fallback_url");
-                        if (!TextUtils.isEmpty(fallbackUrl)) {
-                            loadUrl(data, fallbackUrl);
+                        try {
+                            startActivity(intent);
                             return true;
+                        } catch (SecurityException e) {
+                            e.printStackTrace();
                         }
+                    }
+                    String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                    if (!TextUtils.isEmpty(fallbackUrl)) {
+                        loadUrl(data, fallbackUrl);
                     }
                     return true;
                 }
