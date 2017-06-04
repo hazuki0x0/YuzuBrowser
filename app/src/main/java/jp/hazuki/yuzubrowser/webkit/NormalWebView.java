@@ -312,15 +312,10 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                 // start NestedScroll
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
                 break;
-            case MotionEvent.ACTION_UP:
-                /* no break */
-            case MotionEvent.ACTION_CANCEL:
+            default:
                 returnValue = super.onTouchEvent(ev);
                 // end NestedScroll
                 stopNestedScroll();
-                break;
-            default:
-                returnValue = super.onTouchEvent(ev);
                 break;
         }
         return returnValue;
