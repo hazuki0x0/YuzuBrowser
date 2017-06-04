@@ -68,7 +68,7 @@ public class CloseAutoSelectAction extends SingleAction implements Parcelable {
                 parser.skipChildren();
             }
         } else {
-            defaultAction.add(SingleAction.makeInstance(SingleAction.FINISH));
+            defaultAction.add(SingleAction.makeInstance(SingleAction.CLOSE_TAB));
             intentAction.add(new CloseTabSingleAction());
             intentAction.add(SingleAction.makeInstance(SingleAction.MINIMIZE));
             windowAction.add(SingleAction.makeInstance(SingleAction.CLOSE_TAB));
