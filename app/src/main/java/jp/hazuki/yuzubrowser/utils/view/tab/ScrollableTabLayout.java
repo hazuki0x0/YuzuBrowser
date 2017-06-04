@@ -96,6 +96,12 @@ public class ScrollableTabLayout extends HorizontalScrollView implements TabLayo
             public void run() {
                 int scrollX = getScrollX();
                 View view = mLayout.getChildAt(position);
+                if (view == null) {
+                    if (mLayout.getChildCount() > 1)
+                        view = mLayout.getChildAt(mLayout.getChildCount() - 1);
+                    else
+                        return;
+                }
                 int left = view.getLeft();
                 int right = view.getRight();
                 if (right <= scrollX || left >= getWidth() + scrollX)
