@@ -224,4 +224,5 @@
     <string name="theme_same_name">There is already a theme with the same name as \"%1$s\"</string>
     <string name="theme_unknown_version">It does not support the theme of the format of this version.</string>
     <string name="page_not_found">Page not found</string>
+    <string name="pinned_tab_warning">This tab is pinned.</string>
 </resources>

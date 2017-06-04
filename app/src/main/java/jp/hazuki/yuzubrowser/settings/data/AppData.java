@@ -164,6 +164,7 @@ public class AppData {
     public static final IntContainer multi_finger_gesture_sensitivity = new IntContainer("multi_finger_gesture_sensitivity", 30);
     public static final IntContainer menu_btn_list_mode = new IntContainer("menu_btn_list_mode", 1);
     public static final BooleanContainer block_web_images = new BooleanContainer("block_web_images", false);
+    public static final BooleanContainer save_pinned_tabs = new BooleanContainer("save_pinned_tabs", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

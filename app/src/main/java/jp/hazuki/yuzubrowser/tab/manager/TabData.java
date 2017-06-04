@@ -157,4 +157,12 @@ public class TabData {
         mIndexData.setThumbnail(thumbnail);
         mIndexData.setShotThumbnail(true);
     }
+
+    public boolean isPinning() {
+        return mIndexData.isPinning();
+    }
+
+    public void setPinning(boolean pinning) {
+        mIndexData.setPinning(pinning);
+    }
 }

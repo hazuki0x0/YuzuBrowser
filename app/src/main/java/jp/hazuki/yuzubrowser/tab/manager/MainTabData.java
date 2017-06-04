@@ -77,7 +77,12 @@ public class MainTabData extends TabData {
             mTabView.setBackgroundResource(R.drawable.tab_background_normal);
 
         TextView textView = (TextView) mTabView.findViewById(R.id.textView);
-        if (isNavLock())
+        if (isPinning())
+            if (themedata != null && themedata.tabTextColorPinning != 0)
+                textView.setTextColor(themedata.tabTextColorPinning);
+            else
+                textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_pinning, theme));
+        else if (isNavLock())
             if (themedata != null && themedata.tabTextColorLock != 0)
                 textView.setTextColor(themedata.tabTextColorLock);
             else
@@ -102,7 +107,12 @@ public class MainTabData extends TabData {
             mTabView.setBackgroundResource(R.drawable.tab_background_selected);
 
         TextView textView = (TextView) mTabView.findViewById(R.id.textView);
-        if (isNavLock())
+        if (isPinning())
+            if (themedata != null && themedata.tabTextColorPinning != 0)
+                textView.setTextColor(themedata.tabTextColorPinning);
+            else
+                textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_pinning, theme));
+        else if (isNavLock())
             if (themedata != null && themedata.tabTextColorLock != 0)
                 textView.setTextColor(themedata.tabTextColorLock);
             else

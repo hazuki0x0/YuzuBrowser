@@ -1507,13 +1507,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return mTabManager.size();
     }
 
-    private boolean removeTab(int no) {
+    private boolean removeTab(int no, boolean error) {
         if (mTabManager.size() <= 1) {
             //Last tab
             return false;
         }
 
         MainTabData old_data = mTabManager.get(no);
+
+        if (old_data.isPinning()) {
+            if (error)
+                Toast.makeText(getApplicationContext(), R.string.pinned_tab_warning, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         CustomWebView old_web = old_data.mWebView;
 
         if (AppData.save_closed_tab.get()) {
@@ -1554,6 +1561,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setCurrentTab(new_current_no);
 
         return true;
+    }
+
+    private boolean removeTab(int no) {
+        return removeTab(no, true);
     }
 
     private boolean moveTab(int from, int to) {
@@ -1980,6 +1991,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         mHandler.removeCallbacks(mSaveTabsRunnable);
         if (AppData.save_last_tabs.get() && (finish_clear & 0x1000) == 0) {
+            mTabManager.saveData();
+        } else if (AppData.save_pinned_tabs.get()) {
+            mTabManager.clearExceptPinnedTab();
             mTabManager.saveData();
         } else {
             mTabManager.clear();
@@ -3447,15 +3461,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.CLOSE_ALL:
                     openInBackground(AppData.home_page.get(), TabType.DEFAULT);
                     while (mTabManager.size() > 1) {
-                        removeTab(0);
+                        removeTab(0, false);
                     }
                     break;
                 case SingleAction.CLOSE_OTHERS:
                     for (int i = mTabManager.getLastTabNo(); i > target; --i) {
-                        removeTab(i);
+                        removeTab(i, false);
                     }
                     for (int i = 0; i < target; ++i) {
-                        removeTab(0);
+                        removeTab(0, false);
                     }
                     break;
                 case SingleAction.CLOSE_AUTO_SELECT:
@@ -3556,12 +3570,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
                 case SingleAction.CLOSE_ALL_LEFT:
                     for (int i = 0; i < target; ++i) {
-                        removeTab(0);
+                        removeTab(0, false);
                     }
                     break;
                 case SingleAction.CLOSE_ALL_RIGHT:
                     for (int i = mTabManager.getLastTabNo(); i > target; --i) {
-                        removeTab(i);
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.RESTORE_TAB: {
@@ -3867,6 +3881,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
                     }
                     break;
+                case SingleAction.TAB_PINNING: {
+                    MainTabData tab = mTabManager.get(target);
+                    tab.setPinning(!tab.isPinning());
+                    tab.invalidateView(target == mTabManager.getCurrentTabNo(), getResources(), getTheme());
+                    mToolbar.notifyChangeWebState();//icon change
+                    break;
+                }
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return false;
@@ -4126,6 +4147,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_view_source_white_24dp, getTheme());
                 case SingleAction.PRINT:
                     return res.getDrawable(R.drawable.ic_print_white_24dp, getTheme());
+                case SingleAction.TAB_PINNING: {
+                    MainTabData tab = mTabManager.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.isPinning())
+                        return res.getDrawable(R.drawable.ic_pin_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_pin_disable_24dp, getTheme());
+                }
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return null;

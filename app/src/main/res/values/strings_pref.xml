@@ -503,6 +503,7 @@
     <string name="pref_qc_level3">Level 3</string>
     <string name="pref_overlay_bottom_alpha">Alpha channel of bottom bar</string>
     <string name="pref_save_last_tabs">Save tabs on exit</string>
+    <string name="pref_save_pinned_tabs">Save pinned tabs on exit</string>
     <string name="pref_save_closed_tab">Save closed tabs</string>
     <string name="pref_flick_edge">Edge check</string>
     <string name="pref_import_export">Import/Export</string>

@@ -203,7 +203,8 @@
     <string name="pref_qc_level2">レベル 2</string>
     <string name="pref_qc_level3">レベル 3</string>
     <string name="pref_overlay_bottom_alpha">下部バーのアルファ値</string>
-    <string name="pref_save_last_tabs">終了時のタブを保存</string>
+    <string name="pref_save_last_tabs">終了時にタブを保存</string>
+    <string name="pref_save_pinned_tabs">終了時にピン留めタブを保存</string>
     <string name="pref_save_closed_tab">閉じたタブを保存</string>
     <string name="pref_flick_edge">画面端判定</string>
     <string name="pref_import_export">インポート/エクスポート</string>

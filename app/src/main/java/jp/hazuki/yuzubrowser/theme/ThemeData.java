@@ -49,7 +49,7 @@ public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
 
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
-    public int tabTextColorNormal, tabTextColorLock, tabTextColorSelect, tabAccentColor;
+    public int tabTextColorNormal, tabTextColorLock, tabTextColorPinning, tabTextColorSelect, tabAccentColor;
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
     public int toolbarTextColor, toolbarImageColor;
@@ -90,6 +90,14 @@ public class ThemeData {
                 if ("tabTextColorLock".equalsIgnoreCase(field)) {
                     try {
                         tabTextColorLock = Long.decode(parser.getText().trim()).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+                if ("tabTextColorPinning".equalsIgnoreCase(field)) {
+                    try {
+                        tabTextColorPinning = Long.decode(parser.getText().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -361,7 +369,8 @@ public class ThemeData {
     private static ThemeData createLightTheme(Context context) {
         ThemeData data = new ThemeData();
         data.tabTextColorNormal = 0xFF444444;
-        data.tabTextColorLock = 0xFF222222;
+        data.tabTextColorLock = 0xFF00B53C;
+        data.tabTextColorPinning = 0xFF3B4EF9;
         data.tabTextColorSelect = 0xFF222222;
 
         data.toolbarBackgroundColor = 0xFFDDDDDD;

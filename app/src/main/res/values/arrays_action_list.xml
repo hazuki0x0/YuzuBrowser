@@ -94,5 +94,6 @@
         <item>Distinction tab finish</item>
         <item>Show page source</item>
         <item>Print</item>
+        <item>Tab pinning</item>
     </string-array>
 </resources>

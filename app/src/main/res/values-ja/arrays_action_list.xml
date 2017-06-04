@@ -94,5 +94,6 @@
         <item>判別タブ終了</item>
         <item>ページのソースを表示</item>
         <item>印刷</item>
+        <item>タブのピン留め</item>
     </string-array>
 </resources>

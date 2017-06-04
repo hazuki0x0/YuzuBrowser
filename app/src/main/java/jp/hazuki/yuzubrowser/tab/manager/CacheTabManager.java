@@ -244,6 +244,17 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     }
 
     @Override
+    public void clearExceptPinnedTab() {
+        mTabStorage.clearExceptPinnedTab(new TabStorage.OnClearExceptPinnedTabListener() {
+            @Override
+            public void onRemove(int index, long id) {
+                if (mTabCache.containsKey(id))
+                    mTabCache.remove(id);
+            }
+        });
+    }
+
+    @Override
     public void onPreferenceReset() {
         mTabCache.setSize(AppData.tabs_cache_number.get());
     }
