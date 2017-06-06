@@ -58,7 +58,7 @@
     <string name="save_image">Save image</string>
     <string name="save_image_as">Save image As…</string>
     <string name="search_image">Search image</string>
-    <string name="block_image">Block image</string>
+    <string name="block_image">Add to resource block</string>
     <string name="add_image_pattern">Add image to pattern match</string>
     <string name="add_url_pattern">Add link to pattern match</string>
     <string name="open_all_new">Open all in new tab</string>
@@ -188,6 +188,7 @@
     <string name="undo">Undo</string>
 
     <string name="restoring">Restoring</string>
+    <string name="backing_up">Backing up…</string>
 
     <string name="new_tab">New tab</string>
 

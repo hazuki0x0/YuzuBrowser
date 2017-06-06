@@ -57,7 +57,7 @@
     <string name="save_image">画像を保存</string>
     <string name="save_image_as">名前をつけて画像を保存</string>
     <string name="search_image">画像を検索</string>
-    <string name="block_image">画像をブロック</string>
+    <string name="block_image">リソースブロックへ追加</string>
     <string name="add_image_pattern">画像をパターンマッチに追加</string>
     <string name="add_url_pattern">リンク先をパターンマッチに追加</string>
     <string name="open_all_new">新しいタブで全て開く</string>
@@ -187,6 +187,7 @@
     <string name="undo">取り消す</string>
 
     <string name="restoring">復元中</string>
+    <string name="backing_up">バックアップ中…</string>
 
     <string name="new_tab">新しいタブ</string>
 

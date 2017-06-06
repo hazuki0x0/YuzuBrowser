@@ -220,7 +220,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                                                     Bundle bundle = new Bundle();
                                                     bundle.putSerializable("file", file);
                                                     getLoaderManager().restartLoader(0, bundle, ImportExportFragment.this);
-                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.backing_up));
                                                     progress.show(getChildFragmentManager(), "progress");
                                                     handler.setDialog(progress);
                                                 }
