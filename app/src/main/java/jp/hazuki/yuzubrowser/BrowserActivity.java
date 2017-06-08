@@ -1081,6 +1081,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mPieControl.attachToLayout(webFrameLayout);
             }
             mPieControl.onPreferenceReset();
+            mPieControl.onThemeChanged(ThemeData.getInstance());
         } else {
             if (mPieControl != null) {
                 mPieControl.detachFromLayout(webFrameLayout);
