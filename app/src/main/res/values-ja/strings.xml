@@ -187,7 +187,9 @@
     <string name="undo">取り消す</string>
 
     <string name="restoring">復元中</string>
-    <string name="backing_up">バックアップ中…</string>
+    <string name="backing_up">バックアップ中</string>
+    <string name="importing">インポート中</string>
+    <string name="exporting">エクスポート中</string>
 
     <string name="new_tab">新しいタブ</string>
 

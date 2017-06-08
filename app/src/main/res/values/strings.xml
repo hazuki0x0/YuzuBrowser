@@ -188,7 +188,9 @@
     <string name="undo">Undo</string>
 
     <string name="restoring">Restoring</string>
-    <string name="backing_up">Backing up…</string>
+    <string name="backing_up">Backing up</string>
+    <string name="importing">Importing</string>
+    <string name="exporting">Exporting</string>
 
     <string name="new_tab">New tab</string>
 
