@@ -1,5 +1,6 @@
 package jp.hazuki.yuzubrowser.tab;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
@@ -7,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,7 +26,7 @@ public class TabListLayout extends LinearLayout {
     private TabManager tabManager;
     private Callback mCallback;
     private Snackbar snackbar;
-    private final View bottomBar;
+    private final LinearLayout bottomBar;
     private boolean reverse = false;
     private boolean horizontal = false;
 
@@ -39,11 +41,16 @@ public class TabListLayout extends LinearLayout {
         this(context, attrs, TabListSingleAction.MODE_NORMAL);
     }
 
-    public TabListLayout(Context context, int mode) {
-        this(context, null, mode);
+    public TabListLayout(Context context, int mode, boolean left) {
+        this(context, null, mode, left);
     }
 
     public TabListLayout(Context context, AttributeSet attrs, int mode) {
+        this(context, attrs, mode, false);
+    }
+
+    @SuppressLint("RtlHardcoded")
+    public TabListLayout(Context context, AttributeSet attrs, int mode, boolean left) {
         super(context, attrs);
 
         reverse = mode == TabListSingleAction.MODE_REVERSE;
@@ -64,7 +71,10 @@ public class TabListLayout extends LinearLayout {
             mLayoutInflater.inflate(R.layout.tab_list, this);
         }
 
-        bottomBar = findViewById(R.id.bottomBar);
+        bottomBar = (LinearLayout) findViewById(R.id.bottomBar);
+
+        if (left)
+            bottomBar.setGravity(Gravity.LEFT);
     }
 
     public void setTabManager(final TabManager manager) {

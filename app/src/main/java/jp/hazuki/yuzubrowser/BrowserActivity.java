@@ -3533,7 +3533,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (mTabManagerView != null)
                         break;
 
-                    mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).getMode());
+                    mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).getMode(), ((TabListSingleAction) action).isLeftButton());
                     mTabManagerView.setTabManager(mTabManager);
                     mTabManagerView.setCallback(new TabListLayout.Callback() {
                         @Override
