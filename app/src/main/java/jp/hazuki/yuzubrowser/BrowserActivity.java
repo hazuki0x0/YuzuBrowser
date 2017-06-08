@@ -165,6 +165,7 @@ import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager;
 import jp.hazuki.yuzubrowser.resblock.ResourceChecker;
 import jp.hazuki.yuzubrowser.search.SearchActivity;
 import jp.hazuki.yuzubrowser.search.SearchUtils;
+import jp.hazuki.yuzubrowser.search.SuggestProvider;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter;
@@ -1988,6 +1989,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if ((finish_clear & 0x20) != 0) {
             BrowserHistoryManager manager = new BrowserHistoryManager(this);
             manager.deleteAll();
+        }
+        if ((finish_clear & 0x40) != 0) {
+            getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);
+        }
+        if ((finish_clear & 0x80) != 0) {
+            BrowserManager.clearGeolocation();
         }
 
         mHandler.removeCallbacks(mSaveTabsRunnable);

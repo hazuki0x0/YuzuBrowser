@@ -26,6 +26,8 @@
     <string name="delete_all_favicon">Delete all favicon</string>
     <string name="delete_bookmark">Delete bookmark</string>
     <string name="delete_speedDial">Delete speed dial</string>
+    <string name="delete_search_query">Delete search queries</string>
+    <string name="remove_geo_permission">Remove all Geolocation Permissions</string>
     <string name="pattern_open_app_list">Show application list</string>
     <string name="pattern_open_app_chooser">Show application chooser</string>
     <string name="now_loading">Now loading</string>

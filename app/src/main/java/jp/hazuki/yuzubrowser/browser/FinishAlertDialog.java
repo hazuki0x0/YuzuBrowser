@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.browser;
 
 import android.app.AlertDialog;
@@ -54,6 +70,8 @@ public class FinishAlertDialog extends CustomDialogPreference {
         final CheckBox formdataCheckBox = (CheckBox) view.findViewById(R.id.formdataCheckBox);
         final CheckBox closeallCheckBox = (CheckBox) view.findViewById(R.id.closeallCheckBox);
         final CheckBox historyCheckBox = (CheckBox) view.findViewById(R.id.deleteHistoryCheckBox);
+        final CheckBox searchCheckBox = (CheckBox) view.findViewById(R.id.deleteSearchQueryCheckBox);
+        final CheckBox geoCheckBox = (CheckBox) view.findViewById(R.id.removeAllGeoPermissions);
 
         if (!mShowMessage)
             textView.setVisibility(View.GONE);
@@ -65,6 +83,8 @@ public class FinishAlertDialog extends CustomDialogPreference {
         passwordCheckBox.setChecked((def & 0x08) != 0);
         formdataCheckBox.setChecked((def & 0x10) != 0);
         historyCheckBox.setChecked((def & 0x20) != 0);
+        searchCheckBox.setChecked((def & 0x40) != 0);
+        geoCheckBox.setChecked((def & 0x80) != 0);
 
         if (!AppData.save_last_tabs.get())
             closeallCheckBox.setVisibility(View.GONE);
@@ -96,6 +116,12 @@ public class FinishAlertDialog extends CustomDialogPreference {
 
                         if (historyCheckBox.isChecked())
                             new_settings |= 0x20;
+
+                        if (searchCheckBox.isChecked())
+                            new_settings |= 0x40;
+
+                        if (geoCheckBox.isChecked())
+                            new_settings |= 0x80;
 
                         if (closeallCheckBox.isChecked())
                             new_settings |= 0x1000;
