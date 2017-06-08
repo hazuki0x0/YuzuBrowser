@@ -39,7 +39,7 @@ public class WebDownloadUtils {
     }
 
     public static File guessDownloadFile(String folder_path, String url, String contentDisposition, String mimetype, String defaultExt) {
-        if (url.startsWith("data:")) {
+        if (url != null && url.startsWith("data:")) {
             String[] data = url.split(Pattern.quote(","));
             if (data.length > 1) {
                 mimetype = data[0].split(Pattern.quote(";"))[0].substring(5);
