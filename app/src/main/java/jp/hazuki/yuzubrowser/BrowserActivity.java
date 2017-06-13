@@ -3657,6 +3657,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     startActivityForResult(intent, RESULT_REQUEST_SETTING);
                 }
                 break;
+                case SingleAction.OPEN_SPEED_DIAL:
+                    showSpeedDial(mTabManager.get(target));
+                    break;
                 case SingleAction.ADD_BOOKMARK: {
                     MainTabData tab = mTabManager.get(target);
                     new AddBookmarkSiteDialog(BrowserActivity.this, tab.getTitle(), tab.getUrl()).show();
@@ -4083,6 +4086,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_file_download_white_24dp, getTheme());
                 case SingleAction.SHOW_SETTINGS:
                     return res.getDrawable(R.drawable.ic_settings_white_24dp, getTheme());
+                case SingleAction.OPEN_SPEED_DIAL:
+                    return res.getDrawable(R.drawable.ic_speed_dial_white_24dp, getTheme());
                 case SingleAction.ADD_BOOKMARK:
                     return res.getDrawable(R.drawable.ic_star_white_24px, getTheme());
                 case SingleAction.ADD_SPEED_DIAL:
