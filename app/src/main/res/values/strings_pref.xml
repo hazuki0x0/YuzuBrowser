@@ -347,6 +347,7 @@
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="pref_accept_cookie">Accept cookie</string>
     <string name="pref_accept_third_cookie">Accept third party cookies</string>
+    <string name="pref_accept_cookie_private">Accept cookie in private mode</string>
     <string name="pref_web_cache">Cache mode</string>
 
     <string-array name="pref_web_cache_list">

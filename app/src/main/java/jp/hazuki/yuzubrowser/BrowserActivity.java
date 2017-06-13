@@ -959,7 +959,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        boolean cookie = !AppData.private_mode.get() && AppData.accept_cookie.get();
+        boolean cookie = AppData.private_mode.get()
+                ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                : AppData.accept_cookie.get();
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(cookie);
@@ -1202,8 +1204,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         web.getWebView().setDrawingCacheEnabled(true);
         web.getWebView().buildDrawingCache();
         initWebSetting(web);
-        web.setAcceptThirdPartyCookies(CookieManager.getInstance(),
-                !AppData.private_mode.get() && AppData.accept_cookie.get() && AppData.accept_third_cookie.get());
+        boolean enable_cookie = AppData.private_mode.get()
+                ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                : AppData.accept_cookie.get();
+        web.setAcceptThirdPartyCookies(CookieManager.getInstance(), enable_cookie && AppData.accept_third_cookie.get());
         return web;
     }
 
@@ -2094,7 +2098,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private void setPrivateMode(boolean isPrivate) {
         boolean noPrivate = !isPrivate;
-        boolean cookie = AppData.accept_cookie.get();
+        boolean enable_cookie = isPrivate
+                ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                : AppData.accept_cookie.get();
 
         if (noPrivate && AppData.save_history.get()) {
             if (mBrowserHistoryManager == null)
@@ -2104,7 +2110,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mBrowserHistoryManager.destroy();
             mBrowserHistoryManager = null;
         }
-        CookieManager.getInstance().setAcceptCookie(noPrivate && cookie);
+        CookieManager.getInstance().setAcceptCookie(enable_cookie);
 
         WebSettings setting;
 
@@ -2112,7 +2118,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             setting = tabData.mWebView.getSettings();
 
             tabData.mWebView.setAcceptThirdPartyCookies(
-                    CookieManager.getInstance(), noPrivate && cookie && AppData.accept_third_cookie.get());
+                    CookieManager.getInstance(), enable_cookie && AppData.accept_third_cookie.get());
 
             setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
             setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());

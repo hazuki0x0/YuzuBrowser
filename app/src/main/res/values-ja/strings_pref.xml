@@ -92,6 +92,7 @@
     <string name="pref_keep_screen_on">自動的に消灯しない</string>
     <string name="pref_accept_cookie">Cookieの許可</string>
     <string name="pref_accept_third_cookie">サードパーティCookieの許可</string>
+    <string name="pref_accept_cookie_private">プライベートモードでCookieを許可する</string>
     <string name="pref_web_cache">キャッシュ設定</string>
 
     <string-array name="pref_web_cache_list">
