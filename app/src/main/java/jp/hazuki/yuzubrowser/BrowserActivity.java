@@ -1269,11 +1269,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public void openInBackground(String url, @TabType int type) {
-        loadUrl(addNewTab(type), url);
+        MainTabData data = addNewTab(type);
+        data.setUpBgTab();
+        loadUrl(data, url);
     }
 
     private void openInBackground(WebViewTransport web_transport) {
-        web_transport.setWebView(addNewTab(TabType.WINDOW).mWebView.getWebView());
+        MainTabData data = addNewTab(TabType.WINDOW);
+        data.setUpBgTab();
+        web_transport.setWebView(data.mWebView.getWebView());
     }
 
     private MainTabData openRightNewTab(@TabType int type) {
@@ -1305,6 +1309,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         int from = mTabManager.getLastTabNo();
         int to = mTabManager.getCurrentTabNo() + 1;
         moveTab(from, to);
+        tab_data.setUpBgTab();
         return tab_data;
     }
 

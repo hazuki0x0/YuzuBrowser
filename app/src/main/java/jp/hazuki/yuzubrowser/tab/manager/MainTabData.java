@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
@@ -52,6 +53,11 @@ public class MainTabData extends TabData {
         super.onPageFinished(web, url);
         setText((getTitle() != null) ? getTitle() : url);
         finished = true;
+        if (bgTab) {
+            bgTab = false;
+            if (AppData.pause_web_tab_change.get())
+                mWebView.onPause();
+        }
     }
 
     @Override
@@ -137,6 +143,7 @@ public class MainTabData extends TabData {
     private final View mTabView;
     private WebSettingResetAction resetAction;
     private boolean finished;
+    private boolean bgTab;
 
     public WebSettingResetAction getResetAction() {
         return resetAction;
@@ -148,5 +155,10 @@ public class MainTabData extends TabData {
 
     public boolean isFinished() {
         return finished;
+    }
+
+    public void setUpBgTab() {
+        this.bgTab = true;
+        mWebView.onResume();
     }
 }
