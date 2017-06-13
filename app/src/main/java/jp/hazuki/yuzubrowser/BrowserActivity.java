@@ -4160,7 +4160,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.TOAST:
                     return null;
                 case SingleAction.PRIVATE:
-                    Logger.d("private", AppData.private_mode.get());
                     if (AppData.private_mode.get())
                         return res.getDrawable(R.drawable.ic_private_white_24dp, getTheme());
                     else

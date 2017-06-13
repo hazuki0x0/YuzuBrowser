@@ -41,7 +41,6 @@ import jp.hazuki.yuzubrowser.pattern.action.WebSettingPatternAction;
 import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.ImeUtils;
-import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 
 public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
@@ -356,7 +355,6 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
             view_urlEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    Logger.d("act", actionId);
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         ImeUtils.hideIme(getActivity(), view_urlEditText);
                         String url = view_urlEditText.getText().toString();

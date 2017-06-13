@@ -37,7 +37,6 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
-import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -137,7 +136,6 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                        Logger.d("event", event);
                         if (event != DISMISS_EVENT_ACTION && event != DISMISS_EVENT_MANUAL) {
                             mManager.remove(item);
                             reset();

@@ -56,7 +56,7 @@ public class SpeedDialAsyncManager extends SpeedDialManager {
                     update(queue.take());
                 }
             } catch (InterruptedException e) {
-                Logger.d("Speed dial", "thread stop");
+                Logger.i("Speed dial", "thread stop");
             }
         }
 
