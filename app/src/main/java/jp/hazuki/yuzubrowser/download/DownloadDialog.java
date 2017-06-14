@@ -48,8 +48,14 @@ public class DownloadDialog {
         setRealItemName(view);
 
         folderButton = (FileListButton) view.findViewById(R.id.folderButton);
-        folderButton.setText(mInfo.getFile().getParentFile().getName());
-        folderButton.setFilePath(mInfo.getFile().getParentFile());
+        if (mInfo.getFile() != null) {
+            folderButton.setText(mInfo.getFile().getParentFile().getName());
+            folderButton.setFilePath(mInfo.getFile().getParentFile());
+        } else {
+            File file = new File(AppData.download_folder.get());
+            folderButton.setText(file.getName());
+            folderButton.setFilePath(file);
+        }
         folderButton.setShowDirectoryOnly(true);
         folderButton.setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
             @Override
