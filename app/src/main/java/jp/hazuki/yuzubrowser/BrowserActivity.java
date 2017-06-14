@@ -1544,7 +1544,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
 
         old_web.setEmbeddedTitleBarMethod(null);
-        webFrameLayout.removeView(mTabManager.getCurrentTabData().mWebView.getView());
+        if (no == mTabManager.getCurrentTabNo())
+            webFrameLayout.removeView(mTabManager.getCurrentTabData().mWebView.getView());
 
         mTabManager.remove(no);
         mToolbar.removeTab(no);
