@@ -95,6 +95,7 @@ public class AppData {
     public static final BooleanContainer keep_screen_on = new BooleanContainer("keep_screen_on", false);
     public static final BooleanContainer accept_cookie = new BooleanContainer("accept_cookie", true);
     public static final BooleanContainer accept_third_cookie = new BooleanContainer("accept_third_cookie", false);
+    public static final BooleanContainer accept_cookie_private = new BooleanContainer("accept_cookie_private", false);
     public static final IntContainer web_cache = new IntContainer("web_cache", WebSettings.LOAD_DEFAULT);
     public static final BooleanContainer web_popup = new BooleanContainer("web_popup", true);
     public static final IntContainer download_action = new IntContainer("download_action", PreferenceConstants.DOWNLOAD_AUTO);
@@ -163,6 +164,8 @@ public class AppData {
     public static final BooleanContainer multi_finger_gesture_show_name = new BooleanContainer("multi_finger_gesture_show_name", false);
     public static final IntContainer multi_finger_gesture_sensitivity = new IntContainer("multi_finger_gesture_sensitivity", 30);
     public static final IntContainer menu_btn_list_mode = new IntContainer("menu_btn_list_mode", 1);
+    public static final BooleanContainer block_web_images = new BooleanContainer("block_web_images", false);
+    public static final BooleanContainer save_pinned_tabs = new BooleanContainer("save_pinned_tabs", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

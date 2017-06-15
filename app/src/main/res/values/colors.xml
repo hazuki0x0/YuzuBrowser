@@ -3,6 +3,7 @@
     <color name="tab_text_color_normal">#FF999999</color>
     <color name="tab_text_color_selected">#FFEEEEEE</color>
     <color name="tab_text_color_locked">#FF57FF2D</color>
+    <color name="tab_text_color_pinning">#6ae1ff</color>
     <color name="toolbar_text_color">#FFEEEEEE</color>
     <color name="web_gesture_color">#48FFFF00</color>
     <color name="add_gesture_color">#FFFFFF00</color>

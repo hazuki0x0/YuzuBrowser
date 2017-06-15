@@ -20,12 +20,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +38,9 @@ import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<TabListRecyclerBaseAdapter.ViewHolder> {
     private static final PorterDuffColorFilter IMAGE_FILTER = new PorterDuffColorFilter(0x64FFFFFF, PorterDuff.Mode.SRC_ATOP);
 
+    private final Drawable closeIcon;
+    private final Drawable pinIcon;
+
     private LayoutInflater mInflater;
     private TabManager tabManager;
     private OnRecyclerListener mListener;
@@ -44,6 +49,9 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
         mInflater = LayoutInflater.from(context);
         tabManager = list;
         mListener = listener;
+
+        closeIcon = context.getDrawable(R.drawable.ic_close_black_24dp);
+        pinIcon = context.getDrawable(R.drawable.ic_pin_24dp);
     }
 
     @Override
@@ -65,6 +73,13 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
                 holder.thumbNail.setImageResource(R.drawable.empty_thumbnail);
             }
             holder.title.setText(indexData.getTitle());
+            if (indexData.isPinning()) {
+                holder.closeButton.setImageDrawable(pinIcon);
+                holder.closeButton.setEnabled(false);
+            } else {
+                holder.closeButton.setImageDrawable(closeIcon);
+                holder.closeButton.setEnabled(true);
+            }
         }
 
         // クリック処理
@@ -121,7 +136,7 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
         ImageView thumbNail;
         TextView title;
         TextView url;
-        View closeButton;
+        ImageButton closeButton;
         View historyButton;
 
         public ViewHolder(View itemView) {
@@ -129,7 +144,7 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
             thumbNail = (ImageView) itemView.findViewById(R.id.thumbNailImageView);
             title = (TextView) itemView.findViewById(R.id.titleTextView);
             url = (TextView) itemView.findViewById(R.id.urlTextView);
-            closeButton = itemView.findViewById(R.id.closeImageButton);
+            closeButton = (ImageButton) itemView.findViewById(R.id.closeImageButton);
             historyButton = itemView.findViewById(R.id.tabHistoryImageButton);
 
             itemView.setOnTouchListener(new View.OnTouchListener() {

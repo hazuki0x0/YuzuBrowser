@@ -17,52 +17,64 @@
 
         <CheckBox
             android:id="@+id/closeallCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/close_all_tabs"
             android:textColor="@android:color/white" />
 
         <CheckBox
             android:id="@+id/cacheCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/clear_cache"
             android:textColor="@android:color/white" />
 
         <CheckBox
             android:id="@+id/cookieCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/clear_cookie"
             android:textColor="@android:color/white" />
 
         <CheckBox
             android:id="@+id/databaseCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/clear_database"
             android:textColor="@android:color/white" />
 
         <CheckBox
             android:id="@+id/passwordCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/clear_password"
             android:textColor="@android:color/white" />
 
         <CheckBox
             android:id="@+id/formdataCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/clear_formdata"
             android:textColor="@android:color/white" />
 
         <CheckBox
             android:id="@+id/deleteHistoryCheckBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/delete_history"
             android:textColor="@android:color/white" />
+
+        <CheckBox
+            android:id="@+id/deleteSearchQueryCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_search_query" />
+
+        <CheckBox
+            android:id="@+id/removeAllGeoPermissions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_geo_permission" />
     </LinearLayout>
 
 </ScrollView>

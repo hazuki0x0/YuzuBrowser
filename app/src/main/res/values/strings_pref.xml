@@ -347,6 +347,7 @@
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="pref_accept_cookie">Accept cookie</string>
     <string name="pref_accept_third_cookie">Accept third party cookies</string>
+    <string name="pref_accept_cookie_private">Accept cookie in private mode</string>
     <string name="pref_web_cache">Cache mode</string>
 
     <string-array name="pref_web_cache_list">
@@ -503,6 +504,7 @@
     <string name="pref_qc_level3">Level 3</string>
     <string name="pref_overlay_bottom_alpha">Alpha channel of bottom bar</string>
     <string name="pref_save_last_tabs">Save tabs on exit</string>
+    <string name="pref_save_pinned_tabs">Save pinned tabs on exit</string>
     <string name="pref_save_closed_tab">Save closed tabs</string>
     <string name="pref_flick_edge">Edge check</string>
     <string name="pref_import_export">Import/Export</string>
@@ -629,4 +631,5 @@
     <string name="pref_sensitivity">Sensitivity</string>
     <string name="pref_help">Help</string>
     <string name="pref_help_url">file:///android_asset/help/en/index.html</string>
+    <string name="pref_block_images">Block images</string>
 </resources>

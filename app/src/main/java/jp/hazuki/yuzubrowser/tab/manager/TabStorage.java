@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
@@ -87,6 +88,25 @@ class TabStorage {
         saveIndexData();
         deleteWebView(data);
         return data;
+    }
+
+    public void clearExceptPinnedTab(OnClearExceptPinnedTabListener listener) {
+        int index = 0;
+        Iterator<TabIndexData> itr = mTabIndexDataList.iterator();
+        while (itr.hasNext()) {
+            TabIndexData data = itr.next();
+            if (!data.isPinning()) {
+                itr.remove();
+                deleteWebView(data);
+                listener.onRemove(index, data.getId());
+            }
+            index++;
+        }
+        saveIndexData();
+    }
+
+    public interface OnClearExceptPinnedTabListener {
+        void onRemove(int index, long id);
     }
 
     public void move(int from, int to) {
@@ -237,6 +257,8 @@ class TabStorage {
     private static final String JSON_NAME_TITLE = "title";
     private static final String JSON_NAME_TAB_TYPE = "type";
     private static final String JSON_NAME_PARENT = "parent";
+    private static final String JSON_NAME_NAV_LOCK = "nav";
+    private static final String JSON_NAME_PINNING = "pin";
 
     private List<TabIndexData> loadIndexJson(File file) {
         List<TabIndexData> tabIndexDataList = new ArrayList<>();
@@ -268,6 +290,12 @@ class TabStorage {
                                     case JSON_NAME_PARENT:
                                         tabIndexData.setParent(parser.getLongValue());
                                         break;
+                                    case JSON_NAME_NAV_LOCK:
+                                        tabIndexData.setNavLock(parser.getBooleanValue());
+                                        break;
+                                    case JSON_NAME_PINNING:
+                                        tabIndexData.setPinning(parser.getBooleanValue());
+                                        break;
                                     default:
                                         parser.skipChildren();
                                         break;
@@ -298,6 +326,8 @@ class TabStorage {
                 generator.writeStringField(JSON_NAME_TITLE, data.getTitle());
                 generator.writeNumberField(JSON_NAME_TAB_TYPE, data.getTabType());
                 generator.writeNumberField(JSON_NAME_PARENT, data.getParent());
+                generator.writeBooleanField(JSON_NAME_NAV_LOCK, data.isNavLock());
+                generator.writeBooleanField(JSON_NAME_PINNING, data.isPinning());
                 generator.writeEndObject();
             }
             generator.writeEndArray();

@@ -44,6 +44,9 @@
         android:key="save_last_tabs"
         android:title="@string/pref_save_last_tabs" />
     <SwitchPreference
+        android:key="save_pinned_tabs"
+        android:title="@string/pref_save_pinned_tabs" />
+    <SwitchPreference
         android:key="save_closed_tab"
         android:title="@string/pref_save_closed_tab" />
     <SwitchPreference

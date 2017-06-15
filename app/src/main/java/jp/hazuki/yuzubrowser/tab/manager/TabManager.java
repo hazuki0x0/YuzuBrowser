@@ -70,6 +70,8 @@ public interface TabManager {
 
     void clear();
 
+    void clearExceptPinnedTab();
+
     void onPreferenceReset();
 
     List<MainTabData> getLoadedData();

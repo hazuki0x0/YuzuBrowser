@@ -26,6 +26,8 @@
     <string name="delete_all_favicon">Delete all favicon</string>
     <string name="delete_bookmark">Delete bookmark</string>
     <string name="delete_speedDial">Delete speed dial</string>
+    <string name="delete_search_query">Delete search queries</string>
+    <string name="remove_geo_permission">Remove all Geolocation Permissions</string>
     <string name="pattern_open_app_list">Show application list</string>
     <string name="pattern_open_app_chooser">Show application chooser</string>
     <string name="now_loading">Now loading</string>
@@ -188,7 +190,9 @@
     <string name="undo">Undo</string>
 
     <string name="restoring">Restoring</string>
-    <string name="backing_up">Backing up…</string>
+    <string name="backing_up">Backing up</string>
+    <string name="importing">Importing</string>
+    <string name="exporting">Exporting</string>
 
     <string name="new_tab">New tab</string>
 
@@ -225,4 +229,5 @@
     <string name="theme_same_name">There is already a theme with the same name as \"%1$s\"</string>
     <string name="theme_unknown_version">It does not support the theme of the format of this version.</string>
     <string name="page_not_found">Page not found</string>
+    <string name="pinned_tab_warning">This tab is pinned.</string>
 </resources>

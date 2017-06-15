@@ -32,6 +32,8 @@ public class TabIndexData implements Serializable {
     private Bitmap thumbnail;
     private boolean thumbnailUpdated;
     private boolean shotThumbnail;
+    private boolean navLock;
+    private boolean pinning;
 
     public TabIndexData() {
     }
@@ -127,5 +129,21 @@ public class TabIndexData implements Serializable {
         if (shotThumbnail) {
             thumbnailUpdated = true;
         }
+    }
+
+    public boolean isNavLock() {
+        return navLock;
+    }
+
+    public void setNavLock(boolean navLock) {
+        this.navLock = navLock;
+    }
+
+    public boolean isPinning() {
+        return pinning;
+    }
+
+    public void setPinning(boolean pinning) {
+        this.pinning = pinning;
     }
 }

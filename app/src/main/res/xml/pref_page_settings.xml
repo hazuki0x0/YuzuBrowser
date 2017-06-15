@@ -38,6 +38,9 @@
         android:key="show_zoom_button"
         android:title="@string/pref_show_zoom_button" />
     <SwitchPreference
+        android:key="block_web_images"
+        android:title="@string/pref_block_images" />
+    <SwitchPreference
         android:key="fast_back"
         android:title="@string/pref_fast_back" />
 

@@ -46,7 +46,6 @@ public class PrivacyFragment extends PreferenceFragment {
 
         SwitchPreference privateMode = (SwitchPreference) findPreference("private_mode");
 
-        final Preference cookie = findPreference("accept_cookie");
         final Preference formData = findPreference("save_formdata");
         final Preference webDB = findPreference("web_db");
         final Preference webDom = findPreference("web_dom_db");
@@ -55,7 +54,6 @@ public class PrivacyFragment extends PreferenceFragment {
 
         boolean enableSettings = !privateMode.isChecked();
 
-        cookie.setEnabled(enableSettings);
         formData.setEnabled(enableSettings);
         webDB.setEnabled(enableSettings);
         webDom.setEnabled(enableSettings);
@@ -67,7 +65,6 @@ public class PrivacyFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean enableSettings = !(boolean) newValue;
 
-                cookie.setEnabled(enableSettings);
                 formData.setEnabled(enableSettings);
                 webDB.setEnabled(enableSettings);
                 webDom.setEnabled(enableSettings);

@@ -165,6 +165,7 @@ import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager;
 import jp.hazuki.yuzubrowser.resblock.ResourceChecker;
 import jp.hazuki.yuzubrowser.search.SearchActivity;
 import jp.hazuki.yuzubrowser.search.SearchUtils;
+import jp.hazuki.yuzubrowser.search.SuggestProvider;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter;
@@ -958,7 +959,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        boolean cookie = !AppData.private_mode.get() && AppData.accept_cookie.get();
+        boolean cookie = AppData.private_mode.get()
+                ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                : AppData.accept_cookie.get();
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(cookie);
@@ -1201,8 +1204,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         web.getWebView().setDrawingCacheEnabled(true);
         web.getWebView().buildDrawingCache();
         initWebSetting(web);
-        web.setAcceptThirdPartyCookies(CookieManager.getInstance(),
-                !AppData.private_mode.get() && AppData.accept_cookie.get() && AppData.accept_third_cookie.get());
+        boolean enable_cookie = AppData.private_mode.get()
+                ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                : AppData.accept_cookie.get();
+        web.setAcceptThirdPartyCookies(CookieManager.getInstance(), enable_cookie && AppData.accept_third_cookie.get());
         return web;
     }
 
@@ -1264,11 +1269,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     @Override
     public void openInBackground(String url, @TabType int type) {
-        loadUrl(addNewTab(type), url);
+        MainTabData data = addNewTab(type);
+        data.setUpBgTab();
+        loadUrl(data, url);
     }
 
     private void openInBackground(WebViewTransport web_transport) {
-        web_transport.setWebView(addNewTab(TabType.WINDOW).mWebView.getWebView());
+        MainTabData data = addNewTab(TabType.WINDOW);
+        data.setUpBgTab();
+        web_transport.setWebView(data.mWebView.getWebView());
     }
 
     private MainTabData openRightNewTab(@TabType int type) {
@@ -1300,6 +1309,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         int from = mTabManager.getLastTabNo();
         int to = mTabManager.getCurrentTabNo() + 1;
         moveTab(from, to);
+        tab_data.setUpBgTab();
         return tab_data;
     }
 
@@ -1508,13 +1518,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return mTabManager.size();
     }
 
-    private boolean removeTab(int no) {
+    private boolean removeTab(int no, boolean error) {
         if (mTabManager.size() <= 1) {
             //Last tab
             return false;
         }
 
         MainTabData old_data = mTabManager.get(no);
+
+        if (old_data.isPinning()) {
+            if (error)
+                Toast.makeText(getApplicationContext(), R.string.pinned_tab_warning, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         CustomWebView old_web = old_data.mWebView;
 
         if (AppData.save_closed_tab.get()) {
@@ -1527,7 +1544,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
 
         old_web.setEmbeddedTitleBarMethod(null);
-        webFrameLayout.removeView(mTabManager.getCurrentTabData().mWebView.getView());
+        if (no == mTabManager.getCurrentTabNo())
+            webFrameLayout.removeView(mTabManager.getCurrentTabData().mWebView.getView());
 
         mTabManager.remove(no);
         mToolbar.removeTab(no);
@@ -1555,6 +1573,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setCurrentTab(new_current_no);
 
         return true;
+    }
+
+    private boolean removeTab(int no) {
+        return removeTab(no, true);
     }
 
     private boolean moveTab(int from, int to) {
@@ -1932,6 +1954,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         setting.setCacheMode(AppData.web_cache.get());
         setting.setJavaScriptCanOpenWindowsAutomatically(AppData.web_popup.get());
         setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.valueOf(AppData.layout_algorithm.get()));
+        setting.setLoadsImagesAutomatically(!AppData.block_web_images.get());
 
         boolean noPrivate = !AppData.private_mode.get();
         setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
@@ -1977,9 +2000,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             BrowserHistoryManager manager = new BrowserHistoryManager(this);
             manager.deleteAll();
         }
+        if ((finish_clear & 0x40) != 0) {
+            getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);
+        }
+        if ((finish_clear & 0x80) != 0) {
+            BrowserManager.clearGeolocation();
+        }
 
         mHandler.removeCallbacks(mSaveTabsRunnable);
         if (AppData.save_last_tabs.get() && (finish_clear & 0x1000) == 0) {
+            mTabManager.saveData();
+        } else if (AppData.save_pinned_tabs.get()) {
+            mTabManager.clearExceptPinnedTab();
             mTabManager.saveData();
         } else {
             mTabManager.clear();
@@ -2072,7 +2104,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private void setPrivateMode(boolean isPrivate) {
         boolean noPrivate = !isPrivate;
-        boolean cookie = AppData.accept_cookie.get();
+        boolean enable_cookie = isPrivate
+                ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                : AppData.accept_cookie.get();
 
         if (noPrivate && AppData.save_history.get()) {
             if (mBrowserHistoryManager == null)
@@ -2082,7 +2116,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mBrowserHistoryManager.destroy();
             mBrowserHistoryManager = null;
         }
-        CookieManager.getInstance().setAcceptCookie(noPrivate && cookie);
+        CookieManager.getInstance().setAcceptCookie(enable_cookie);
 
         WebSettings setting;
 
@@ -2090,7 +2124,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             setting = tabData.mWebView.getSettings();
 
             tabData.mWebView.setAcceptThirdPartyCookies(
-                    CookieManager.getInstance(), noPrivate && cookie && AppData.accept_third_cookie.get());
+                    CookieManager.getInstance(), enable_cookie && AppData.accept_third_cookie.get());
 
             setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
             setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());
@@ -3449,15 +3483,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.CLOSE_ALL:
                     openInBackground(AppData.home_page.get(), TabType.DEFAULT);
                     while (mTabManager.size() > 1) {
-                        removeTab(0);
+                        removeTab(0, false);
                     }
                     break;
                 case SingleAction.CLOSE_OTHERS:
                     for (int i = mTabManager.getLastTabNo(); i > target; --i) {
-                        removeTab(i);
+                        removeTab(i, false);
                     }
                     for (int i = 0; i < target; ++i) {
-                        removeTab(0);
+                        removeTab(0, false);
                     }
                     break;
                 case SingleAction.CLOSE_AUTO_SELECT:
@@ -3518,7 +3552,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     if (mTabManagerView != null)
                         break;
 
-                    mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).getMode());
+                    mTabManagerView = new TabListLayout(BrowserActivity.this, ((TabListSingleAction) action).getMode(), ((TabListSingleAction) action).isLeftButton());
                     mTabManagerView.setTabManager(mTabManager);
                     mTabManagerView.setCallback(new TabListLayout.Callback() {
                         @Override
@@ -3558,12 +3592,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 break;
                 case SingleAction.CLOSE_ALL_LEFT:
                     for (int i = 0; i < target; ++i) {
-                        removeTab(0);
+                        removeTab(0, false);
                     }
                     break;
                 case SingleAction.CLOSE_ALL_RIGHT:
                     for (int i = mTabManager.getLastTabNo(); i > target; --i) {
-                        removeTab(i);
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.RESTORE_TAB: {
@@ -3624,6 +3658,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     startActivityForResult(intent, RESULT_REQUEST_SETTING);
                 }
                 break;
+                case SingleAction.OPEN_SPEED_DIAL:
+                    showSpeedDial(mTabManager.get(target));
+                    break;
                 case SingleAction.ADD_BOOKMARK: {
                     MainTabData tab = mTabManager.get(target);
                     new AddBookmarkSiteDialog(BrowserActivity.this, tab.getTitle(), tab.getUrl()).show();
@@ -3869,6 +3906,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
                     }
                     break;
+                case SingleAction.TAB_PINNING: {
+                    MainTabData tab = mTabManager.get(target);
+                    tab.setPinning(!tab.isPinning());
+                    tab.invalidateView(target == mTabManager.getCurrentTabNo(), getResources(), getTheme());
+                    mToolbar.notifyChangeWebState();//icon change
+                    break;
+                }
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return false;
@@ -4043,6 +4087,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_file_download_white_24dp, getTheme());
                 case SingleAction.SHOW_SETTINGS:
                     return res.getDrawable(R.drawable.ic_settings_white_24dp, getTheme());
+                case SingleAction.OPEN_SPEED_DIAL:
+                    return res.getDrawable(R.drawable.ic_speed_dial_white_24dp, getTheme());
                 case SingleAction.ADD_BOOKMARK:
                     return res.getDrawable(R.drawable.ic_star_white_24px, getTheme());
                 case SingleAction.ADD_SPEED_DIAL:
@@ -4129,6 +4175,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_view_source_white_24dp, getTheme());
                 case SingleAction.PRINT:
                     return res.getDrawable(R.drawable.ic_print_white_24dp, getTheme());
+                case SingleAction.TAB_PINNING: {
+                    MainTabData tab = mTabManager.getCurrentTabData();
+                    if (tab == null) return null;
+                    if (tab.isPinning())
+                        return res.getDrawable(R.drawable.ic_pin_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_pin_disable_24dp, getTheme());
+                }
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return null;

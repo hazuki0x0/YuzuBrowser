@@ -21,7 +21,6 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.appinfo.AppInfo;
 import jp.hazuki.yuzubrowser.utils.appinfo.ApplicationListFragment;
 import jp.hazuki.yuzubrowser.utils.appinfo.ShortCutListFragment;
@@ -193,8 +192,6 @@ public class SpeedDialSettingActivity extends AppCompatActivity
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("main");
         if (fragment instanceof SpeedDialEditCallBack) {
             ((SpeedDialEditCallBack) fragment).onEdited(speedDial);
-        } else {
-            Logger.d("fragment", "null");
         }
     }
 

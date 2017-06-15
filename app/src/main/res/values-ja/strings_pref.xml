@@ -92,6 +92,7 @@
     <string name="pref_keep_screen_on">自動的に消灯しない</string>
     <string name="pref_accept_cookie">Cookieの許可</string>
     <string name="pref_accept_third_cookie">サードパーティCookieの許可</string>
+    <string name="pref_accept_cookie_private">プライベートモードでCookieを許可する</string>
     <string name="pref_web_cache">キャッシュ設定</string>
 
     <string-array name="pref_web_cache_list">
@@ -203,7 +204,8 @@
     <string name="pref_qc_level2">レベル 2</string>
     <string name="pref_qc_level3">レベル 3</string>
     <string name="pref_overlay_bottom_alpha">下部バーのアルファ値</string>
-    <string name="pref_save_last_tabs">終了時のタブを保存</string>
+    <string name="pref_save_last_tabs">終了時にタブを保存</string>
+    <string name="pref_save_pinned_tabs">終了時にピン留めタブを保存</string>
     <string name="pref_save_closed_tab">閉じたタブを保存</string>
     <string name="pref_flick_edge">画面端判定</string>
     <string name="pref_import_export">インポート/エクスポート</string>
@@ -304,4 +306,5 @@
     <string name="pref_sensitivity">感度</string>
     <string name="pref_help">ヘルプ</string>
     <string name="pref_help_url">file:///android_asset/help/ja/index.html</string>
+    <string name="pref_block_images">画像を読み込まない</string>
 </resources>

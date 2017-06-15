@@ -25,6 +25,8 @@
     <string name="delete_all_favicon">Faviconの全削除</string>
     <string name="delete_bookmark">ブックマークの削除</string>
     <string name="delete_speedDial">スピードダイアルの削除</string>
+    <string name="delete_search_query">検索履歴の削除</string>
+    <string name="remove_geo_permission">位置情報の許可を削除</string>
     <string name="pattern_open_app_list">アプリ一覧の表示</string>
     <string name="pattern_open_app_chooser">アプリ一覧の強制表示</string>
     <string name="now_loading">読み込み中</string>
@@ -187,7 +189,9 @@
     <string name="undo">取り消す</string>
 
     <string name="restoring">復元中</string>
-    <string name="backing_up">バックアップ中…</string>
+    <string name="backing_up">バックアップ中</string>
+    <string name="importing">インポート中</string>
+    <string name="exporting">エクスポート中</string>
 
     <string name="new_tab">新しいタブ</string>
 
@@ -224,4 +228,5 @@
     <string name="theme_same_name">\"%1$s\"と同名のテーマがすでにあります</string>
     <string name="theme_unknown_version">このバージョンの形式のテーマはサポートしていません。</string>
     <string name="page_not_found">ページが見つかりません</string>
+    <string name="pinned_tab_warning">このタブはピン留めされています。</string>
 </resources>

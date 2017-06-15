@@ -75,7 +75,7 @@ public class BrowserHistoryAsyncManager {
                     handleMessage(mMessageQueue.take());
                 }
             } catch (InterruptedException e) {
-                Logger.d("history", "thread stop");
+                Logger.i("history", "thread stop");
             }
         }
 

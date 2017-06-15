@@ -90,6 +90,7 @@ public class SingleAction implements Parcelable {
     public static final int SHOW_HISTORY = 35011;
     public static final int SHOW_DOWNLOADS = 35012;
     public static final int SHOW_SETTINGS = 35013;
+    public static final int OPEN_SPEED_DIAL = 35014;
     public static final int ADD_BOOKMARK = 35020;
     public static final int ADD_SPEED_DIAL = 35021;
     public static final int ADD_PATTERN = 35022;
@@ -125,6 +126,7 @@ public class SingleAction implements Parcelable {
     public static final int PRIVATE = 100110;
     public static final int VIEW_SOURCE = 101000;
     public static final int PRINT = 101010;
+    public static final int TAB_PINNING = 101020;
     public static final int LPRESS_OPEN = -10;
     public static final int LPRESS_OPEN_NEW = -11;
     public static final int LPRESS_OPEN_BG = -12;

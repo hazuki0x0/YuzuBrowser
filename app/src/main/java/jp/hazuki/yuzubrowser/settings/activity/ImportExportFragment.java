@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.Manifest;
@@ -37,10 +53,6 @@ import jp.hazuki.yuzubrowser.utils.PermissionUtils;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragment;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListDialog;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListViewController;
-
-/**
- * Created by hazuki on 17/01/25.
- */
 
 public class ImportExportFragment extends PreferenceFragment implements LoaderManager.LoaderCallbacks<Boolean> {
     private static final int REQUEST_IMPORT_FOLDER = 1;
@@ -151,7 +163,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                                                     bundle.putSerializable("manager", manager);
                                                     bundle.putSerializable("folder", root);
                                                     getLoaderManager().restartLoader(2, bundle, ImportExportFragment.this);
-                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.importing));
                                                     progress.show(getChildFragmentManager(), "progress");
                                                     handler.setDialog(progress);
                                                 }
@@ -189,7 +201,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                     bundle.putSerializable("file", external_file);
                     bundle.putSerializable("folder", manager.getRoot());
                     getLoaderManager().restartLoader(3, bundle, ImportExportFragment.this);
-                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                    progress = ProgressDialogFragment.newInstance(getString(R.string.exporting));
                     progress.show(getChildFragmentManager(), "progress");
                     handler.setDialog(progress);
                 } else {
@@ -249,7 +261,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("file", file);
                     getLoaderManager().restartLoader(1, bundle, ImportExportFragment.this);
-                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                    progress = ProgressDialogFragment.newInstance(getString(R.string.backing_up));
                     progress.show(getChildFragmentManager(), "progress");
                     handler.setDialog(progress);
                 } else {

@@ -20,6 +20,11 @@
         android:key="accept_third_cookie"
         android:title="@string/pref_accept_third_cookie" />
 
+    <SwitchPreference
+        android:dependency="accept_cookie"
+        android:key="accept_cookie_private"
+        android:title="@string/pref_accept_cookie_private" />
+
 
     <SwitchPreference
         android:key="save_formdata"

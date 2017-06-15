@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.settings.activity;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
@@ -41,6 +42,18 @@ public class BrowserSettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 suggest.setEnabled(((int) newValue) != 2);
+                return true;
+            }
+        });
+
+        final Preference savePinned = findPreference("save_pinned_tabs");
+        SwitchPreference saveLast = (SwitchPreference) findPreference("save_last_tabs");
+
+        savePinned.setEnabled(!saveLast.isChecked());
+        saveLast.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                savePinned.setEnabled(!(boolean) newValue);
                 return true;
             }
         });
