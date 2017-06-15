@@ -49,7 +49,7 @@ public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
 
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
-    public int tabTextColorNormal, tabTextColorLock, tabTextColorPinning, tabTextColorSelect, tabAccentColor;
+    public int tabTextColorNormal, tabTextColorLock, tabTextColorPin, tabTextColorSelect, tabAccentColor;
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
     public int toolbarTextColor, toolbarImageColor;
@@ -95,9 +95,9 @@ public class ThemeData {
                     }
                     continue;
                 }
-                if ("tabTextColorPinning".equalsIgnoreCase(field)) {
+                if ("tabTextColorPin".equalsIgnoreCase(field)) {
                     try {
-                        tabTextColorPinning = Long.decode(parser.getText().trim()).intValue();
+                        tabTextColorPin = Long.decode(parser.getText().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -370,7 +370,7 @@ public class ThemeData {
         ThemeData data = new ThemeData();
         data.tabTextColorNormal = 0xFF444444;
         data.tabTextColorLock = 0xFF00B53C;
-        data.tabTextColorPinning = 0xFF3B4EF9;
+        data.tabTextColorPin = 0xFF3B4EF9;
         data.tabTextColorSelect = 0xFF222222;
 
         data.toolbarBackgroundColor = 0xFFDDDDDD;
