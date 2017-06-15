@@ -29,10 +29,10 @@ for version 2.3 or later
 
 Just download the theme pack and tap it to import!
 
-[Theme material dark](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.3.0/theme_material_dark.yuzutheme)
+[Theme material dark](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.4/theme_material_dark.yuzutheme)
 (default theme)
 
-[Theme material light](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.3.0/theme_material_light.yuzutheme)
+[Theme material light](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.4/theme_material_light.yuzutheme)
 
 
 ##### Classic theme sample
