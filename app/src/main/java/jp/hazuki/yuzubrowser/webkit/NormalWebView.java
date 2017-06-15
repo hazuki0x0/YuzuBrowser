@@ -30,6 +30,7 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 
+import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
 public class NormalWebView extends WebView implements CustomWebView, NestedScrollingChild {
@@ -39,6 +40,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private OnScrollChangedListener mOnScrollChangedListener;
     private View mTitleBar;
 
+    private int firstY;
     private int mLastY;
     private ScrollController mScrollController;
     private final int[] mScrollOffset = new int[2];
@@ -48,6 +50,9 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private boolean firstScroll = true;
     private CustomWebViewClient webViewClient;
     private boolean doubleTapFling;
+
+    private boolean scrollExcessPlay;
+    private final int scrollExcessPlayDistance;
 
     public NormalWebView(Context context) {
         this(context, null);
@@ -59,6 +64,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     public NormalWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        scrollExcessPlayDistance = DisplayUtils.convertDpToPx(context, 12);
         mChildHelper = new NestedScrollingChildHelper(this);
         setNestedScrollingEnabled(true);
     }
@@ -277,40 +283,51 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         event.offsetLocation(0, mNestedOffsetY);
         switch (action) {
             case MotionEvent.ACTION_MOVE:
-                int deltaY = mLastY - eventY;
-                // NestedPreScroll
-                if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset)) {
-                    deltaY -= mScrollConsumed[1];
-                    mLastY = eventY - mScrollOffset[1];
-                    event.offsetLocation(0, -mScrollOffset[1]);
-                    mNestedOffsetY = mScrollOffset[1];
-                }
-                returnValue = super.onTouchEvent(ev);
-
-                // NestedScroll
-                if (dispatchNestedScroll(0, mScrollConsumed[1], 0, deltaY, mScrollOffset)) {
-                    event.offsetLocation(0, mScrollOffset[1]);
-                    mNestedOffsetY = mScrollOffset[1];
-                    mLastY -= deltaY;
-                    nestedScrolled = true;
+                if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollExcessPlayDistance) {
+                    returnValue = super.onTouchEvent(ev);
+                    mLastY = eventY;
                 } else {
-                    nestedScrolled = false;
-                }
+                    int deltaY = mLastY - eventY;
+                    if (scrollExcessPlay) {
+                        scrollExcessPlay = false;
+                        // start NestedScroll
+                        startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
+                    }
 
-                if (mScrollController != null) {
-                    mScrollController.onMove(getScrollY());
+                    // NestedPreScroll
+                    if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset)) {
+                        deltaY -= mScrollConsumed[1];
+                        mLastY = eventY - mScrollOffset[1];
+                        event.offsetLocation(0, -mScrollOffset[1]);
+                        mNestedOffsetY = mScrollOffset[1];
+                    }
+                    returnValue = super.onTouchEvent(ev);
+
+                    // NestedScroll
+                    if (dispatchNestedScroll(0, mScrollConsumed[1], 0, deltaY, mScrollOffset)) {
+                        event.offsetLocation(0, mScrollOffset[1]);
+                        mNestedOffsetY = mScrollOffset[1];
+                        mLastY -= deltaY;
+                        nestedScrolled = true;
+                    } else {
+                        nestedScrolled = false;
+                    }
+
+                    if (mScrollController != null) {
+                        mScrollController.onMove(getScrollY());
+                    }
                 }
                 break;
             case MotionEvent.ACTION_DOWN:
                 returnValue = super.onTouchEvent(ev);
+                scrollExcessPlay = true;
                 if (firstScroll) {
                     mLastY = eventY - 5;
                     firstScroll = false;
                 } else {
                     mLastY = eventY;
                 }
-                // start NestedScroll
-                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
+                firstY = eventY;
                 break;
             default:
                 returnValue = super.onTouchEvent(ev);
