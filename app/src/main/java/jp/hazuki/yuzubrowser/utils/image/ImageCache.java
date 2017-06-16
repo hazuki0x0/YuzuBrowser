@@ -38,6 +38,11 @@ public class ImageCache {
         }
     }
 
+    public void remove(String url) {
+        if (!TextUtils.isEmpty(url))
+            imageCache.remove(getKey(url));
+    }
+
     public void dispose() {
         imageCache.evictAll();
     }

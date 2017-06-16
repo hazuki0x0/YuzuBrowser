@@ -80,6 +80,8 @@ public interface TabManager {
 
     void takeThumbnailIfNeeded(MainTabData data);
 
+    void removeThumbnailCache(String url);
+
     void forceTakeThumbnail(MainTabData data);
 
     boolean hideItem(int index);

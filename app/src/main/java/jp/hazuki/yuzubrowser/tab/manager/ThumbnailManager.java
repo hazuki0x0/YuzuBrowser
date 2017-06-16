@@ -44,6 +44,10 @@ class ThumbnailManager {
         }
     }
 
+    void removeThumbnailCache(String url) {
+        cache.remove(url);
+    }
+
     private void createWithCache(MainTabData data) {
         Bitmap bitmap = cache.getBitmap(data.getUrl());
         if (bitmap != null) {
@@ -54,17 +58,6 @@ class ThumbnailManager {
     }
 
     private void create(final MainTabData data) {
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = createThumbnailImage(data.mWebView);
-                if (bitmap != null) {
-                    cache.putBitmap(data.getUrl(), bitmap);
-                    data.shotThumbnail(bitmap);
-                }
-            }
-        };
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,7 +67,11 @@ class ThumbnailManager {
                     e.printStackTrace();
                 }
 
-                data.mWebView.getWebView().post(runnable);
+                Bitmap bitmap = createThumbnailImage(data.mWebView);
+                if (bitmap != null) {
+                    cache.putBitmap(data.getUrl(), bitmap);
+                    data.shotThumbnail(bitmap);
+                }
             }
         }).start();
     }

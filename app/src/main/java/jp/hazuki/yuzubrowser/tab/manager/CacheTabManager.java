@@ -275,6 +275,11 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     }
 
     @Override
+    public void removeThumbnailCache(String url) {
+        thumbnailManager.removeThumbnailCache(url);
+    }
+
+    @Override
     public void forceTakeThumbnail(MainTabData data) {
         thumbnailManager.forceTakeThumbnail(data);
     }

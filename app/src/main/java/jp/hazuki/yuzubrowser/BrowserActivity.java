@@ -2369,6 +2369,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mWebViewAutoScrollManager.stop();
 
             data.onStartPage();
+
+            mTabManager.removeThumbnailCache(url);
         }
 
         @Override
@@ -3187,6 +3189,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             }
                         }
                         tab.mWebView.goForward();
+                        superFrameLayout.postDelayed(takeCurrentTabScreen, 500);
                     }
                 }
                 break;
