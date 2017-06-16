@@ -2225,7 +2225,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         @Override
         public void run() {
             MainTabData data = mTabManager.getCurrentTabData();
-            if (data.isShotThumbnail())
+            if (data != null && data.isShotThumbnail())
                 mTabManager.forceTakeThumbnail(mTabManager.getCurrentTabData());
         }
     };
