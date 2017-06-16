@@ -160,6 +160,7 @@ public class DownloadDialog {
                         conn.disconnect();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        mInfo.setFile(WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), mInfo.getUrl(), null, null, mInfo.getDefaultExt()));
                     }
 
                     handler.post(new Runnable() {
@@ -220,6 +221,7 @@ public class DownloadDialog {
     public static DownloadDialog showDownloadDialog(Context context, String url, String referer, String defaultExt) {
         File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
         DownloadRequestInfo info = new DownloadRequestInfo(url, file, referer, -1);
+        info.setDefaultExt(defaultExt);
         return showDownloadDialog(context, info);
     }
 
