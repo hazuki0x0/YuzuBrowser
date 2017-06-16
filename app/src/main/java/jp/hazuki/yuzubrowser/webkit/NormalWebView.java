@@ -64,7 +64,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     public NormalWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        scrollExcessPlayDistance = DisplayUtils.convertDpToPx(context, 12);
+        scrollExcessPlayDistance = DisplayUtils.convertDpToPx(context, 14);
         mChildHelper = new NestedScrollingChildHelper(this);
         setNestedScrollingEnabled(true);
     }
