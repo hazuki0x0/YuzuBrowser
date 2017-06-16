@@ -205,10 +205,8 @@ public class ThemeData {
                     }
                     continue;
                 }
-                if (parser.getCurrentToken() != JsonToken.START_OBJECT
-                        && parser.getCurrentToken() != JsonToken.START_ARRAY) {
-                    parser.nextValue();
-                } else {
+                if (parser.getCurrentToken() == JsonToken.START_OBJECT
+                        || parser.getCurrentToken() == JsonToken.START_ARRAY) {
                     parser.skipChildren();
                 }
             }
