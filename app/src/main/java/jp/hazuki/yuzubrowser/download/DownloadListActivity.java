@@ -74,14 +74,18 @@ public class DownloadListActivity extends AppCompatActivity implements LoaderCal
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
                 AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
                 final int position = info.position;
-                final Cursor cursor = (Cursor) mListAdapter.getItem(position);
+                Cursor cursor = (Cursor) mListAdapter.getItem(position);
+                final long id = cursor.getLong(DownloadInfoDatabase.COLUMN_ID_INDEX);
+                final String url = cursor.getString(DownloadInfoDatabase.COLUMN_URL_INDEX);
+
                 switch (cursor.getInt(DownloadInfoDatabase.COLUMN_STATE_INDEX)) {
                     case DownloadInfo.STATE_DOWNLOADED:
+                        final String filePath = cursor.getString(DownloadInfoDatabase.COLUMN_FILEPATH_INDEX);
                         menu.add(R.string.open_file).setOnMenuItemClickListener(new OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
                                 try {
-                                    startActivity(PackageUtils.createFileOpenIntent(getApplicationContext(), cursor.getString(DownloadInfoDatabase.COLUMN_FILEPATH_INDEX)));
+                                    startActivity(PackageUtils.createFileOpenIntent(getApplicationContext(), filePath));
                                 } catch (ActivityNotFoundException e) {
                                     e.printStackTrace();
                                     Toast.makeText(getApplicationContext(), R.string.app_notfound, Toast.LENGTH_SHORT).show();
@@ -94,7 +98,7 @@ public class DownloadListActivity extends AppCompatActivity implements LoaderCal
                         menu.add(R.string.cancel_download).setOnMenuItemClickListener(new OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
-                                DownloadService.cancelDownload(mServiceBindHelper.getBinder(), mActivityMessenger, cursor.getLong(DownloadInfoDatabase.COLUMN_ID_INDEX));
+                                DownloadService.cancelDownload(mServiceBindHelper.getBinder(), mActivityMessenger, id);
                                 return false;
                             }
                         });
@@ -106,7 +110,7 @@ public class DownloadListActivity extends AppCompatActivity implements LoaderCal
                     public boolean onMenuItemClick(MenuItem item) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setClass(getApplicationContext(), BrowserActivity.class);
-                        intent.putExtra(Intent.EXTRA_TEXT, cursor.getString(DownloadInfoDatabase.COLUMN_URL_INDEX));
+                        intent.putExtra(Intent.EXTRA_TEXT, url);
                         startActivity(intent);
                         finish();
                         return false;
@@ -116,7 +120,7 @@ public class DownloadListActivity extends AppCompatActivity implements LoaderCal
                 menu.add(R.string.clear_download).setOnMenuItemClickListener(new OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        mDb.delete(cursor.getLong(DownloadInfoDatabase.COLUMN_ID_INDEX));
+                        mDb.delete(id);
                         getSupportLoaderManager().restartLoader(0, null, DownloadListActivity.this);
                         return false;
                     }
