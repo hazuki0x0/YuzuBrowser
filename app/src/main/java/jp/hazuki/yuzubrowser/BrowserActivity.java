@@ -2501,6 +2501,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 else
                     mToolbar.notifyChangeWebState(data);
             }
+
+            if (data.isStartDocument() && newProgress > 35) {
+                applyUserScript(web, data.getUrl(), true);
+                data.setStartDocument(false);
+            }
         }
 
         @Override
