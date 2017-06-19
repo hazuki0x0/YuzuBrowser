@@ -312,10 +312,9 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                     } else {
                         nestedScrolled = false;
                     }
-
-                    if (mScrollController != null) {
-                        mScrollController.onMove(getScrollY());
-                    }
+                }
+                if (mScrollController != null) {
+                    mScrollController.onMove(getScrollY());
                 }
                 break;
             case MotionEvent.ACTION_DOWN:
