@@ -314,7 +314,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                     }
                 }
                 if (mScrollController != null) {
-                    mScrollController.onMove(getScrollY());
+                    mScrollController.onMove(scrollExcessPlay, mScrollConsumed[1], getScrollY());
                 }
                 break;
             case MotionEvent.ACTION_DOWN:
@@ -417,5 +417,9 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     public void setScrollController(ScrollController controller) {
         mScrollController = controller;
+    }
+
+    int getScrollExcessPlayDistance() {
+        return scrollExcessPlayDistance;
     }
 }

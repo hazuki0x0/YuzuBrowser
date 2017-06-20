@@ -18,10 +18,6 @@ package jp.hazuki.yuzubrowser.webkit;
 
 import android.support.annotation.NonNull;
 
-/**
- * Created by hazuki on 17/03/09.
- */
-
 public class ScrollController {
     private final OnScrollEnable mScrollEnableListener;
     private int mScrollY;
@@ -30,8 +26,8 @@ public class ScrollController {
         mScrollEnableListener = listener;
     }
 
-    public void onMove(int scrollY) {
-        mScrollEnableListener.onScrollEnable(mScrollY != 0);
+    public void onMove(boolean scrollExcessPlay, int scrollParent, int scrollY) {
+        mScrollEnableListener.onScrollEnable(!scrollExcessPlay && scrollParent == 0 && mScrollY != 0);
         if (scrollY > 0) {
             mScrollY = scrollY;
         }
