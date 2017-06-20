@@ -3486,17 +3486,17 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
                     break;
                 case SingleAction.CLOSE_ALL:
-                    openInBackground(AppData.home_page.get(), TabType.DEFAULT);
-                    while (mTabManager.size() > 1) {
-                        removeTab(0, false);
+                    openInNewTab(AppData.home_page.get(), TabType.DEFAULT);
+                    for (int i = mTabManager.getLastTabNo() - 1; i >= 0; --i) {
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.CLOSE_OTHERS:
                     for (int i = mTabManager.getLastTabNo(); i > target; --i) {
                         removeTab(i, false);
                     }
-                    for (int i = 0; i < target; ++i) {
-                        removeTab(0, false);
+                    for (int i = target - 1; i >= 0; --i) {
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.CLOSE_AUTO_SELECT:
@@ -3596,8 +3596,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.CLOSE_ALL_LEFT:
-                    for (int i = 0; i < target; ++i) {
-                        removeTab(0, false);
+                    for (int i = target - 1; i >= 0; --i) {
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.CLOSE_ALL_RIGHT:
