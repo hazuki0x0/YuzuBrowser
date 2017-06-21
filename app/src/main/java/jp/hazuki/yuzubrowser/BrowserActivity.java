@@ -1997,7 +1997,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             WebViewDatabase.getInstance(getApplicationContext()).clearFormData();
         }
         if ((finish_clear & 0x20) != 0) {
-            BrowserHistoryManager manager = new BrowserHistoryManager(this);
+            BrowserHistoryManager manager = BrowserHistoryManager.getInstance(this);
             manager.deleteAll();
         }
         if ((finish_clear & 0x40) != 0) {

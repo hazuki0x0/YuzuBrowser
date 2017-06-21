@@ -15,7 +15,7 @@ public class BrowserHistoryAsyncManager {
     private final BrowserHistoryManager mHistoryManager;
 
     public BrowserHistoryAsyncManager(Context context) {
-        mHistoryManager = new BrowserHistoryManager(context);
+        mHistoryManager = BrowserHistoryManager.getInstance(context);
         mThread = new MyThread(mHistoryManager);
         mThread.start();
     }

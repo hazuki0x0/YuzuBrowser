@@ -50,7 +50,15 @@ public class BrowserHistoryManager implements CursorLoadable {
 
     private MyOpenHelper mOpenHelper;
 
-    public BrowserHistoryManager(Context context) {
+    private static BrowserHistoryManager browserHistoryManager;
+
+    public static BrowserHistoryManager getInstance(Context context) {
+        if (browserHistoryManager == null)
+            browserHistoryManager = new BrowserHistoryManager(context);
+        return browserHistoryManager;
+    }
+
+    private BrowserHistoryManager(Context context) {
         mOpenHelper = new MyOpenHelper(context);
         int max_day = AppData.history_max_day.get();
         int max_count = AppData.history_max_count.get();

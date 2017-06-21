@@ -63,7 +63,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
             }
         });
 
-        manager = new BrowserHistoryManager(getActivity());
+        manager = BrowserHistoryManager.getInstance(getActivity());
         adapter = new BrowserHistoryAdapter(getActivity(), manager, pickMode, this);
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(adapter);
         adapter.setDecoration(decoration);
