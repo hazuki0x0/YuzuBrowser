@@ -120,6 +120,7 @@ public class SuggestProvider extends ContentProvider {
 
         List<String> list = uri.getPathSegments();
         String query = (list.size() > 1) ? list.get(1) : null;
+        if (query != null) query = query.trim();
         switch (type) {
             case TYPE_NET_ALL:
             case TYPE_NET:
