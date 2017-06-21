@@ -52,6 +52,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     public static final String EXTRA_SELECT_INITIAL_QUERY = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.selectinitquery";
     public static final String EXTRA_APP_DATA = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.appdata";
     public static final String EXTRA_SEARCH_MODE = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.searchmode";
+    public static final String EXTRA_OPEN_NEW_TAB = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.openNewTab";
     public static final int SEARCH_MODE_AUTO = 0;
     public static final int SEARCH_MODE_URL = 1;
     public static final int SEARCH_MODE_WORD = 2;
@@ -66,6 +67,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
     private String initQuery;
     private String initDecodedQuery;
+
+    private boolean openNewTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +190,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
             }
 
             mAppData = intent.getBundleExtra(EXTRA_APP_DATA);
+
+            openNewTab = intent.getBooleanExtra(EXTRA_OPEN_NEW_TAB, false);
         } else {
             throw new IllegalStateException("Intent is null");
         }
@@ -272,6 +277,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
         Intent data = new Intent();
         data.putExtra(EXTRA_QUERY, query);
         data.putExtra(EXTRA_SEARCH_MODE, mode);
+        data.putExtra(EXTRA_OPEN_NEW_TAB, openNewTab);
         if (mAppData != null)
             data.putExtra(EXTRA_APP_DATA, mAppData);
         setResult(RESULT_OK, data);

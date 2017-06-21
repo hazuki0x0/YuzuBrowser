@@ -20,8 +20,10 @@ import jp.hazuki.yuzubrowser.action.item.MousePointerSingleAction;
 import jp.hazuki.yuzubrowser.action.item.OpenOptionsMenuAction;
 import jp.hazuki.yuzubrowser.action.item.OpenUrlSingleAction;
 import jp.hazuki.yuzubrowser.action.item.PasteGoSingleAction;
+import jp.hazuki.yuzubrowser.action.item.PasteSearchBoxAction;
 import jp.hazuki.yuzubrowser.action.item.SaveScreenshotSingleAction;
 import jp.hazuki.yuzubrowser.action.item.ShareScreenshotSingleAction;
+import jp.hazuki.yuzubrowser.action.item.ShowSearchBoxAction;
 import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
 import jp.hazuki.yuzubrowser.action.item.ToastAction;
 import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
@@ -218,6 +220,10 @@ public class SingleAction implements Parcelable {
                 return new LeftRightTabSingleAction(id, parser);
             case TAB_LIST:
                 return new TabListSingleAction(id, parser);
+            case SHOW_SEARCHBOX:
+                return new ShowSearchBoxAction(id, parser);
+            case PASTE_SEARCHBOX:
+                return new PasteSearchBoxAction(id, parser);
             case PASTE_GO:
                 return new PasteGoSingleAction(id, parser);
             case START_ACTIVITY:
@@ -255,6 +261,8 @@ public class SingleAction implements Parcelable {
             case LEFT_TAB:
             case RIGHT_TAB:
             case TAB_LIST:
+            case SHOW_SEARCHBOX:
+            case PASTE_SEARCHBOX:
             case PASTE_GO:
             case START_ACTIVITY:
             case OPEN_OPTIONS_MENU:

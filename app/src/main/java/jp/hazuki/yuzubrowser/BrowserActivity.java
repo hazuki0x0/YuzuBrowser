@@ -116,8 +116,10 @@ import jp.hazuki.yuzubrowser.action.item.MousePointerSingleAction;
 import jp.hazuki.yuzubrowser.action.item.OpenOptionsMenuAction;
 import jp.hazuki.yuzubrowser.action.item.OpenUrlSingleAction;
 import jp.hazuki.yuzubrowser.action.item.PasteGoSingleAction;
+import jp.hazuki.yuzubrowser.action.item.PasteSearchBoxAction;
 import jp.hazuki.yuzubrowser.action.item.SaveScreenshotSingleAction;
 import jp.hazuki.yuzubrowser.action.item.ShareScreenshotSingleAction;
+import jp.hazuki.yuzubrowser.action.item.ShowSearchBoxAction;
 import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
 import jp.hazuki.yuzubrowser.action.item.ToastAction;
 import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
@@ -671,7 +673,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 Bundle appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA);
                 int target = appdata.getInt(APPDATA_EXTRA_TARGET, -1);
                 MainTabData tab = mTabManager.get(target);
-                if (tab == null)
+                if (data.getBooleanExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, false) || tab == null)
                     openInNewTab(url, TabType.DEFAULT);
                 else
                     loadUrl(tab, url);
@@ -1442,7 +1444,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
                     case "search":
-                        showSearchBox("", mTabManager.indexOf(data.getId()));
+                        showSearchBox("", mTabManager.indexOf(data.getId()), false);
                         return true;
                     case "speeddial":
                         showSpeedDial(data);
@@ -2062,7 +2064,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 .show();
     }
 
-    private void showSearchBox(String query, int target) {
+    private void showSearchBox(String query, int target, boolean openNewTab) {
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(SearchActivity.EXTRA_QUERY, query);
@@ -2070,6 +2072,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         Bundle appdata = new Bundle();
         appdata.putInt(APPDATA_EXTRA_TARGET, target);
         intent.putExtra(SearchActivity.EXTRA_APP_DATA, appdata);
+        intent.putExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, openNewTab);
 
         startActivityForResult(intent, RESULT_REQUEST_SEARCHBOX);
     }
@@ -3653,10 +3656,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.SHOW_SEARCHBOX:
-                    showSearchBox(mTabManager.get(target).getUrl(), target);
+                    showSearchBox(mTabManager.get(target).getUrl(), target, ((ShowSearchBoxAction) action).isOpenNewTab());
                     break;
                 case SingleAction.PASTE_SEARCHBOX:
-                    showSearchBox(ClipboardUtils.getClipboardText(getApplicationContext()), target);
+                    showSearchBox(ClipboardUtils.getClipboardText(getApplicationContext()), target, ((PasteSearchBoxAction) action).isOpenNewTab());
                     break;
                 case SingleAction.PASTE_GO: {
                     String text = ClipboardUtils.getClipboardText(getApplicationContext());

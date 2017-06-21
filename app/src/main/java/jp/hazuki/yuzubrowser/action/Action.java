@@ -92,7 +92,8 @@ public class Action extends ArrayList<SingleAction> implements Parcelable, JsonC
                 SingleAction action;
                 action = SingleAction.makeInstance(id, parser);
                 //parser.skipChildren();
-                if (parser.nextToken() != JsonToken.END_ARRAY) return false;
+                if (parser.getCurrentToken() != JsonToken.END_ARRAY && parser.nextToken() != JsonToken.END_ARRAY)
+                    return false;
                 if (action != null) add(action);
             } else if (parser.getCurrentToken() != JsonToken.END_ARRAY) {
                 return false;
