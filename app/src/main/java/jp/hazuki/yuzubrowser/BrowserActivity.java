@@ -267,6 +267,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     public static final String ACTION_FINISH = BrowserActivity.class.getName() + ".finish";
     public static final String ACTION_NEW_TAB = BrowserActivity.class.getName() + ".newTab";
     public static final String EXTRA_FORCE_DESTROY = "force_destroy";
+    public static final String EXTRA_WINDOW_MODE = "window_mode";
 
     private final MyActionCallback mActionCallback = new MyActionCallback();
     private final MyWebViewClient mWebViewClient = new MyWebViewClient();
@@ -481,7 +482,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         registerReceiver(mNetworkStateBroadcastReceiver, mNetworkStateChangedFilter);
 
-        if (mTabManager.get(getCurrentTab()).mWebView.getView().getParent() == null) {
+        MainTabData tabData = mTabManager.getCurrentTabData();
+        if (tabData != null && tabData.mWebView.getView().getParent() == null) {
             setCurrentTab(getCurrentTab());
         }
     }
@@ -905,10 +907,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         if (Intent.ACTION_VIEW.equals(action)) {
             String url = intent.getDataString();
+            boolean window = intent.getBooleanExtra(EXTRA_WINDOW_MODE, false);
             if (TextUtils.isEmpty(url))
                 url = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (!TextUtils.isEmpty(url))
-                openInNewTab(url, TabType.INTENT);
+                openInNewTab(url, window ? TabType.WINDOW : TabType.INTENT);
             else {
                 Logger.w(TAG, "ACTION_VIEW : url is null or empty.");
                 return false;
@@ -2020,7 +2023,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             WebViewDatabase.getInstance(getApplicationContext()).clearFormData();
         }
         if ((finish_clear & 0x20) != 0) {
-            BrowserHistoryManager manager = new BrowserHistoryManager(this);
+            BrowserHistoryManager manager = BrowserHistoryManager.getInstance(this);
             manager.deleteAll();
         }
         if ((finish_clear & 0x40) != 0) {
@@ -2526,6 +2529,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     mToolbar.notifyChangeProgress(data);
                 else
                     mToolbar.notifyChangeWebState(data);
+            }
+
+            if (data.isStartDocument() && newProgress > 35) {
+                applyUserScript(web, data.getUrl(), true);
+                data.setStartDocument(false);
             }
         }
 
@@ -3516,17 +3524,17 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
                     break;
                 case SingleAction.CLOSE_ALL:
-                    openInBackground(AppData.home_page.get(), TabType.DEFAULT);
-                    while (mTabManager.size() > 1) {
-                        removeTab(0, false);
+                    openInNewTab(AppData.home_page.get(), TabType.DEFAULT);
+                    for (int i = mTabManager.getLastTabNo() - 1; i >= 0; --i) {
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.CLOSE_OTHERS:
                     for (int i = mTabManager.getLastTabNo(); i > target; --i) {
                         removeTab(i, false);
                     }
-                    for (int i = 0; i < target; ++i) {
-                        removeTab(0, false);
+                    for (int i = target - 1; i >= 0; --i) {
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.CLOSE_AUTO_SELECT:
@@ -3626,8 +3634,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.CLOSE_ALL_LEFT:
-                    for (int i = 0; i < target; ++i) {
-                        removeTab(0, false);
+                    for (int i = target - 1; i >= 0; --i) {
+                        removeTab(i, false);
                     }
                     break;
                 case SingleAction.CLOSE_ALL_RIGHT:

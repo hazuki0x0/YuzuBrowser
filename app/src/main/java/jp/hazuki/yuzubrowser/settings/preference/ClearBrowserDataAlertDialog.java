@@ -105,7 +105,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                 BrowserManager.clearGeolocation();
                 break;
             case 6:
-                new BrowserHistoryManager(getContext().getApplicationContext()).deleteAll();
+                BrowserHistoryManager.getInstance(getContext().getApplicationContext()).deleteAll();
                 break;
             case 7:
                 getContext().getApplicationContext().getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);

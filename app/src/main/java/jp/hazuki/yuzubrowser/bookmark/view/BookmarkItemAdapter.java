@@ -66,7 +66,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         normalBackGround = a.getResourceId(0, 0);
         a.recycle();
 
-        historyManager = new BrowserHistoryManager(context);
+        historyManager = BrowserHistoryManager.getInstance(context);
 
         setRecyclerListener(new OnRecyclerListener() {
             @Override

@@ -46,6 +46,7 @@ public class MainTabData extends TabData {
         super.onPageStarted(url, favicon);
         setText(url);
         finished = false;
+        startDocument = true;
     }
 
     @Override
@@ -144,6 +145,7 @@ public class MainTabData extends TabData {
     private WebSettingResetAction resetAction;
     private boolean finished;
     private boolean bgTab;
+    private boolean startDocument;
 
     public WebSettingResetAction getResetAction() {
         return resetAction;
@@ -160,5 +162,13 @@ public class MainTabData extends TabData {
     public void setUpBgTab() {
         this.bgTab = true;
         mWebView.onResume();
+    }
+
+    public boolean isStartDocument() {
+        return startDocument;
+    }
+
+    public void setStartDocument(boolean startDocument) {
+        this.startDocument = startDocument;
     }
 }

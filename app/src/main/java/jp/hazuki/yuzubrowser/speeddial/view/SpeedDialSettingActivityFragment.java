@@ -68,7 +68,7 @@ public class SpeedDialSettingActivityFragment extends Fragment implements OnRecy
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
 
-        manager = new SpeedDialManager(getActivity().getApplicationContext());
+        manager = SpeedDialManager.getInstance(getContext().getApplicationContext());
         speedDialList = manager.getAll();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

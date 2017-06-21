@@ -20,6 +20,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.speech.RecognizerResultsIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,19 +54,19 @@ public class HandleIntentActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(url))
                 url = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (!TextUtils.isEmpty(url)) {
-                startBrowser(url);
+                startBrowser(url, false);
                 return;
             }
         } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {
             String url = WebUtils.makeSearchUrlFromQuery(intent.getStringExtra(SearchManager.QUERY), AppData.search_url.get(), "%s");
             if (!TextUtils.isEmpty(url)) {
-                startBrowser(url);
+                startBrowser(url, getPackageName().equals(intent.getStringExtra(Browser.EXTRA_APPLICATION_ID)));
                 return;
             }
         } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS.equals(action)) {
             ArrayList<String> urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS);
             if (urls != null && !urls.isEmpty()) {
-                startBrowser(urls.get(0));
+                startBrowser(urls.get(0), false);
                 return;
             }
         }
@@ -73,10 +74,11 @@ public class HandleIntentActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), R.string.page_not_found, Toast.LENGTH_SHORT).show();
     }
 
-    private void startBrowser(String url) {
+    private void startBrowser(String url, boolean window) {
         Intent send = new Intent(this, BrowserActivity.class);
         send.setAction(Intent.ACTION_VIEW);
         send.setData(Uri.parse(url));
+        send.putExtra(BrowserActivity.EXTRA_WINDOW_MODE, window);
         startActivity(send);
     }
 }

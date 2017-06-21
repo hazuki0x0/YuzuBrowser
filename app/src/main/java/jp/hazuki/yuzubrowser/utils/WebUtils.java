@@ -156,6 +156,7 @@ public class WebUtils {
     }
 
     public static Pattern makeUrlPatternWithThrow(String pattern_url) {
+        if (pattern_url == null) return null;
         if (!pattern_url.startsWith("?")) {
             pattern_url = pattern_url.replace("?", "\\?").replace(".", "\\.").replace("*", ".*?").replace("+", ".+?");
 

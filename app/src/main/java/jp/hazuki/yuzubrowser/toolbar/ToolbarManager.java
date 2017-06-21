@@ -193,6 +193,7 @@ public class ToolbarManager {
         tabBar.changeCurrentTab(to_id);
 
         if (from != null) from.mWebView.setEmbeddedTitleBarMethod(null);
+        if (to == null) return;
         setWebViewTitlebar(to.mWebView, !to.isInPageLoad());
 
         notifyChangeWebState(to);

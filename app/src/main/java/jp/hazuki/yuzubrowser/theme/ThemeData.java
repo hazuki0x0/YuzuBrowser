@@ -25,6 +25,7 @@ import android.graphics.NinePatch;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
@@ -262,7 +263,7 @@ public class ThemeData {
         } else {
             value = parser.getText();
             try {
-                return new ColorDrawable(Long.decode(value).intValue());
+                return new LayerDrawable(new Drawable[]{new ColorDrawable(Long.decode(value).intValue()), context.getDrawable(R.drawable.tab_background_normal)});
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
