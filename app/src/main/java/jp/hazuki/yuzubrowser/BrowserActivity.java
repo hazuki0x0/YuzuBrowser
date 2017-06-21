@@ -264,6 +264,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     public static final String ACTION_FINISH = BrowserActivity.class.getName() + ".finish";
     public static final String ACTION_NEW_TAB = BrowserActivity.class.getName() + ".newTab";
     public static final String EXTRA_FORCE_DESTROY = "force_destroy";
+    public static final String EXTRA_WINDOW_MODE = "window_mode";
 
     private final MyActionCallback mActionCallback = new MyActionCallback();
     private final MyWebViewClient mWebViewClient = new MyWebViewClient();
@@ -891,10 +892,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         if (Intent.ACTION_VIEW.equals(action)) {
             String url = intent.getDataString();
+            boolean window = intent.getBooleanExtra(EXTRA_WINDOW_MODE, false);
             if (TextUtils.isEmpty(url))
                 url = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (!TextUtils.isEmpty(url))
-                openInNewTab(url, TabType.INTENT);
+                openInNewTab(url, window ? TabType.WINDOW : TabType.INTENT);
             else {
                 Logger.w(TAG, "ACTION_VIEW : url is null or empty.");
                 return false;
