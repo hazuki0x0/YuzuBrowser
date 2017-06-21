@@ -58,22 +58,11 @@ class ThumbnailManager {
     }
 
     private void create(final MainTabData data) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                Bitmap bitmap = createThumbnailImage(data.mWebView);
-                if (bitmap != null) {
-                    cache.putBitmap(data.getUrl(), bitmap);
-                    data.shotThumbnail(bitmap);
-                }
-            }
-        }).start();
+        Bitmap bitmap = createThumbnailImage(data.mWebView);
+        if (bitmap != null) {
+            cache.putBitmap(data.getUrl(), bitmap);
+            data.shotThumbnail(bitmap);
+        }
     }
 
     void forceTakeThumbnail(MainTabData data) {
