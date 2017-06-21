@@ -50,7 +50,15 @@ public class SpeedDialManager {
 
     private MyOpenHelper mOpenHelper;
 
-    public SpeedDialManager(Context context) {
+    private static SpeedDialManager speedDialManager;
+
+    public static SpeedDialManager getInstance(Context context) {
+        if (speedDialManager == null)
+            speedDialManager = new SpeedDialManager(context);
+        return speedDialManager;
+    }
+
+    private SpeedDialManager(Context context) {
         mOpenHelper = new MyOpenHelper(context);
     }
 
