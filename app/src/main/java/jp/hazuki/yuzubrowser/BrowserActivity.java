@@ -478,7 +478,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         registerReceiver(mNetworkStateBroadcastReceiver, mNetworkStateChangedFilter);
 
-        if (mTabManager.get(getCurrentTab()).mWebView.getView().getParent() == null) {
+        MainTabData tabData = mTabManager.getCurrentTabData();
+        if (tabData != null && tabData.mWebView.getView().getParent() == null) {
             setCurrentTab(getCurrentTab());
         }
     }
