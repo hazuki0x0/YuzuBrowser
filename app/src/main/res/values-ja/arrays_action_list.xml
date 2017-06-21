@@ -24,6 +24,7 @@
         <item>フォーカスビューをクリック</item>
         <item>JavaScriptの切替</item>
         <item>画像読み込みの切替</item>
+        <item>Cookieの切替</item>
         <item>UserScriptの切替</item>
         <item>ナビゲートロックの切替</item>
         <item>ページ情報</item>
@@ -68,6 +69,7 @@
         <item>画面の向きの設定</item>
         <item>リンクを開くときの設定</item>
         <item>UserAgentの変更</item>
+        <item>デフォルトUserAgentの変更</item>
         <item>テキストサイズの設定</item>
         <item>UserScriptの設定</item>
         <item>テキストエンコードの設定</item>
@@ -80,6 +82,7 @@
         <item>Webジェスチャーの切替</item>
         <item>フリックアクションの切替</item>
         <item>クイックコントロールの切替</item>
+        <item>マルチタッチジェスチャの切替</item>
         <item>ページの共有</item>
         <item>他のアプリで開く</item>
         <item>Activityを開く</item>

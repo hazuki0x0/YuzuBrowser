@@ -24,6 +24,7 @@
         <item>Click focused view</item>
         <item>Toggle JavaScript</item>
         <item>Toggle loading image</item>
+        <item>Toggle Cookie</item>
         <item>Toggle UserScript</item>
         <item>Toggle navigate lock</item>
         <item>Page information</item>
@@ -68,6 +69,7 @@
         <item>Orientation settings</item>
         <item>Open link settings</item>
         <item>UserAgent settings</item>
+        <item>Default UserAgent settings</item>
         <item>Page text size settings</item>
         <item>UserScript settings</item>
         <item>Text encoding settings</item>
@@ -80,6 +82,7 @@
         <item>Toggle web gesture</item>
         <item>Toggle flick action</item>
         <item>Toggle quick control</item>
+        <item>Toggle multi touch gesture</item>
         <item>Share page</item>
         <item>Open in other app</item>
         <item>Start activity</item>

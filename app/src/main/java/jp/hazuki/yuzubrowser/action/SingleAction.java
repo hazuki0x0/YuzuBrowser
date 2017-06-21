@@ -55,6 +55,7 @@ public class SingleAction implements Parcelable {
     public static final int FOCUS_CLICK = 1224;
     public static final int TOGGLE_JS = 2000;
     public static final int TOGGLE_IMAGE = 2001;
+    public static final int TOGGLE_COOKIE = 2002;
     public static final int TOGGLE_USERJS = 2200;
     public static final int TOGGLE_NAV_LOCK = 2300;
     public static final int PAGE_INFO = 5000;
@@ -103,6 +104,7 @@ public class SingleAction implements Parcelable {
     public static final int TEXTSIZE_SETTING = 35306;
     public static final int USERJS_SETTING = 35307;
     public static final int WEB_ENCODE_SETTING = 35308;
+    public static final int DEFALUT_USERAGENT_SETTING = 35309;
     public static final int RENDER_SETTING = 35400;
     public static final int TOGGLE_VISIBLE_TAB = 38000;
     public static final int TOGGLE_VISIBLE_URL = 38001;
@@ -112,6 +114,7 @@ public class SingleAction implements Parcelable {
     public static final int TOGGLE_WEB_GESTURE = 38100;
     public static final int TOGGLE_FLICK = 38101;
     public static final int TOGGLE_QUICK_CONTROL = 38102;
+    public static final int TOGGLE_MULTI_FINGER_GESTURE = 38103;
     public static final int SHARE_WEB = 50000;
     public static final int OPEN_OTHER = 50001;
     public static final int START_ACTIVITY = 50005;

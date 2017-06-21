@@ -255,9 +255,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private static final int RESULT_REQUEST_HISTORY = 4;
     private static final int RESULT_REQUEST_SETTING = 5;
     private static final int RESULT_REQUEST_USERAGENT = 6;
-    private static final int RESULT_REQUEST_USERJS_SETTING = 7;
-    private static final int RESULT_REQUEST_WEB_ENCODE_SETTING = 8;
-    private static final int RESULT_REQUEST_SHARE_IMAGE = 9;
+    private static final int RESULT_DEFAULT_REQUEST_USERAGENT = 7;
+    private static final int RESULT_REQUEST_USERJS_SETTING = 8;
+    private static final int RESULT_REQUEST_WEB_ENCODE_SETTING = 9;
+    private static final int RESULT_REQUEST_SHARE_IMAGE = 10;
 
     private static final String APPDATA_EXTRA_TARGET = "BrowserActivity.target";
     private static final String TAB_TYPE = "tabType";
@@ -698,6 +699,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 tab.mWebView.reload();
             }
             break;
+            case RESULT_DEFAULT_REQUEST_USERAGENT: {
+                if (resultCode != RESULT_OK || data == null) break;
+                String ua = data.getStringExtra(Intent.EXTRA_TEXT);
+                if (ua == null) return;
+                AppData.user_agent.set(ua);
+                AppData.commit(this, AppData.user_agent);
+                for (MainTabData tabData : mTabManager.getLoadedData()) {
+                    tabData.mWebView.getSettings().setUserAgentString(ua);
+                    tabData.mWebView.reload();
+                }
+            }
+            break;
             case RESULT_REQUEST_USERJS_SETTING:
                 resetUserScript(AppData.userjs_enable.get());
                 break;
@@ -992,19 +1005,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             webGestureOverlayView.setEnabled(false);
         }
 
-        if (AppData.multi_finger_gesture.get()) {
-            multiFingerGestureManager = new MultiFingerGestureManager(this);
-            if (multiFingerGestureDetector == null)
-                multiFingerGestureDetector = new MultiFingerGestureDetector(this, new MyMfGestureListener());
-            multiFingerGestureDetector.setShowName(AppData.multi_finger_gesture_show_name.get());
-            multiFingerGestureDetector.setSensitivity(AppData.multi_finger_gesture_sensitivity.get());
-        } else {
-            if (multiFingerGestureDetector != null)
-                multiFingerGestureDetector = null;
-
-            if (multiFingerGestureManager != null)
-                multiFingerGestureManager = null;
-        }
+        setMultiFingerGestureEnabled(AppData.multi_finger_gesture.get());
 
         resetUserScript(AppData.userjs_enable.get());
 
@@ -1075,6 +1076,26 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     }
             }
         }
+    }
+
+    private void setMultiFingerGestureEnabled(boolean enable) {
+        if (enable) {
+            multiFingerGestureManager = new MultiFingerGestureManager(this);
+            if (multiFingerGestureDetector == null)
+                multiFingerGestureDetector = new MultiFingerGestureDetector(this, new MyMfGestureListener());
+            multiFingerGestureDetector.setShowName(AppData.multi_finger_gesture_show_name.get());
+            multiFingerGestureDetector.setSensitivity(AppData.multi_finger_gesture_sensitivity.get());
+        } else {
+            if (multiFingerGestureDetector != null)
+                multiFingerGestureDetector = null;
+
+            if (multiFingerGestureManager != null)
+                multiFingerGestureManager = null;
+        }
+    }
+
+    private boolean getMultiFingerGestureEnabled() {
+        return multiFingerGestureManager != null;
     }
 
     private void setQuickControlEnabled(boolean enable) {
@@ -3299,6 +3320,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     web.reload();
                 }
                 break;
+                case SingleAction.TOGGLE_COOKIE: {
+                    boolean cookie = !AppData.accept_cookie.get();
+                    AppData.accept_cookie.set(cookie);
+                    AppData.commit(BrowserActivity.this, AppData.accept_cookie);
+                    CookieManager.getInstance().setAcceptCookie(cookie);
+                    Toast.makeText(getApplicationContext(), cookie ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                }
+                break;
                 case SingleAction.TOGGLE_USERJS: {
                     boolean to = mUserScriptList == null;
                     Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
@@ -3735,11 +3764,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             })
                             .show();
                     break;
-                case SingleAction.USERAGENT_SETTING:
+                case SingleAction.USERAGENT_SETTING: {
                     Intent uaIntent = new Intent(getApplicationContext(), UserAgentListActivity.class);
                     uaIntent.putExtra(Intent.EXTRA_TEXT, mTabManager.get(target).mWebView.getSettings().getUserAgentString());
                     startActivityForResult(uaIntent, RESULT_REQUEST_USERAGENT);
-                    break;
+                }
+                break;
                 case SingleAction.TEXTSIZE_SETTING: {
                     final WebSettings setting = mTabManager.get(target).mWebView.getSettings();
                     new WebTextSizeDialog(BrowserActivity.this, WebViewUtils.getTextSize(setting)) {
@@ -3758,6 +3788,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     webEncode.putExtra(Intent.EXTRA_TEXT, mTabManager.get(target).mWebView.getSettings().getDefaultTextEncodingName());
                     startActivityForResult(webEncode, RESULT_REQUEST_WEB_ENCODE_SETTING);
                     break;
+                case SingleAction.DEFALUT_USERAGENT_SETTING: {
+                    Intent uaIntent = new Intent(getApplicationContext(), UserAgentListActivity.class);
+                    uaIntent.putExtra(Intent.EXTRA_TEXT, mTabManager.get(target).mWebView.getSettings().getUserAgentString());
+                    startActivityForResult(uaIntent, RESULT_DEFAULT_REQUEST_USERAGENT);
+                }
+                break;
                 case SingleAction.RENDER_SETTING: {
                     AlertDialog.Builder builder = new AlertDialog.Builder(BrowserActivity.this);
                     builder.setTitle(R.string.pref_rendering)
@@ -3811,6 +3847,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
                     setQuickControlEnabled(to);
                     mToolbar.notifyChangeWebState();//icon change
+                }
+                break;
+                case SingleAction.TOGGLE_MULTI_FINGER_GESTURE: {
+                    boolean to = !getMultiFingerGestureEnabled();
+                    Toast.makeText(getApplicationContext(), (to) ? R.string.toggle_enable : R.string.toggle_disable, Toast.LENGTH_SHORT).show();
+                    setMultiFingerGestureEnabled(to);
                 }
                 break;
                 case SingleAction.SHARE_WEB: {
@@ -4007,6 +4049,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     else
                         return res.getDrawable(R.drawable.ic_crop_original_disable_white_24px, getTheme());
                 }
+                case SingleAction.TOGGLE_COOKIE: {
+                    if (AppData.accept_cookie.get())
+                        return res.getDrawable(R.drawable.ic_cookie_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_cookie_disable_24dp, getTheme());
+                }
                 case SingleAction.TOGGLE_USERJS: {
                     if (mUserScriptList != null)
                         return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
@@ -4116,6 +4164,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_memory_white_24dp, getTheme());
                 case SingleAction.WEB_ENCODE_SETTING:
                     return res.getDrawable(R.drawable.ic_format_shapes_white_24dp, getTheme());
+                case SingleAction.DEFALUT_USERAGENT_SETTING:
+                    return res.getDrawable(R.drawable.ic_group_white_24dp, getTheme());
                 case SingleAction.RENDER_SETTING:
                     return res.getDrawable(R.drawable.ic_blur_linear_white_24dp, getTheme());
                 case SingleAction.TOGGLE_VISIBLE_TAB:
@@ -4145,6 +4195,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return res.getDrawable(R.drawable.ic_pie_chart_outlined_white_24px, getTheme());
                     else
                         return res.getDrawable(R.drawable.ic_pie_chart_outlined_disable_white_24px, getTheme());
+                }
+                case SingleAction.TOGGLE_MULTI_FINGER_GESTURE: {
+                    if (getMultiFingerGestureEnabled())
+                        return res.getDrawable(R.drawable.ic_gesture_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_gesture_white_disable_24px, getTheme());
                 }
                 case SingleAction.SHARE_WEB:
                     return res.getDrawable(R.drawable.ic_share_white_24dp, getTheme());
