@@ -27,6 +27,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 
@@ -131,6 +132,9 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                 removeView(mTitleBar);
             }
             if (view != null) {
+                if (view.getParent() != null) {
+                    ((ViewGroup) view.getParent()).removeView(view);
+                }
                 addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0, 0));
                 view.setTranslationX(getScrollX());//can move X
             }
