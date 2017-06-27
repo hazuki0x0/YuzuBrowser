@@ -1123,8 +1123,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return mPieControl != null;
     }
 
-    private boolean checkPatternMatch(MainTabData tab, String url) {
+    private int checkPatternMatch(MainTabData tab, String url) {
         boolean normalSettings = true;
+        boolean changeSetting = false;
         for (PatternUrlChecker pattern : mPatternManager.getList()) {
             if (!pattern.isMatchUrl(url)) continue;
             if (pattern.getAction() instanceof WebSettingPatternAction) {
@@ -1140,20 +1141,22 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
                 /* change web settings */
                 pattern.getAction().run(this, tab, url);
-                loadUrl(tab, url);
-                return true;
+                changeSetting = true;
             } else if (pattern.getAction().run(this, tab, url))
-                return true;
+                return 1;
+        }
+
+        if (changeSetting) {
+            return 0;
         }
 
         /* reset to normal */
         if (normalSettings && tab.getResetAction() != null) {
             tab.getResetAction().reset(tab.mWebView);
             tab.setResetAction(null);
-            loadUrl(tab, url);
-            return true;
+            return 0;
         }
-        return false;
+        return -1;
     }
 
     private boolean checkNewTabLink(int perform, WebViewTransport transport) {
@@ -1356,7 +1359,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
             url = SafeFileProvider.convertToSaferUrl(url);
         if (!preload(tab, url, Uri.parse(url))) {
-            if (!checkPatternMatch(tab, url))
+            if (checkPatternMatch(tab, url) <= 0)
                 tab.mWebView.loadUrl(url);
         }
     }
@@ -2364,7 +2367,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 loadUrl(data, url);
                 return true;
             }
-            if (checkPatternMatch(data, url) || checkNewTabLinkAuto(AppData.newtab_link.get(), data, url)) {
+            int patternResult = checkPatternMatch(data, url);
+            if (patternResult == 0) {
+                web.loadUrl(url);
+                return true;
+            }
+
+            if (patternResult == 1 || checkNewTabLinkAuto(AppData.newtab_link.get(), data, url)) {
                 if (web.getUrl() == null || data.mWebView.isBackForwardListEmpty()) {
                     removeTab(mTabManager.indexOf(data.getId()));
                 }
@@ -2590,7 +2599,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mWebUploadHandler = new WebUploadHandler();
 
             try {
-                startActivityForResult(mWebUploadHandler.onShowFileChooser(filePathCallback, fileChooserParams), RESULT_REQUEST_WEB_UPLOAD);
+                startActivityForResult(Intent.createChooser(mWebUploadHandler.onShowFileChooser(filePathCallback, fileChooserParams), getString(R.string.select_file)), RESULT_REQUEST_WEB_UPLOAD);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), R.string.app_notfound, Toast.LENGTH_SHORT).show();

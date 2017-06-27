@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.tab.manager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.graphics.Region;
 
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.image.ImageCache;
@@ -78,21 +78,15 @@ class ThumbnailManager {
         int y = (int) ((float) x / width * height + 0.5f);
         if (x <= 0 || y <= 0) return null;
         float scale = (float) width / x;
-        int scroll = (int) (webView.getWebView().getScrollY() * scale);
+        int scroll = (int) (webView.getWebView().getScrollY() * scale + 0.5f);
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height + scroll, Bitmap.Config.RGB_565);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         Canvas localCanvas = new Canvas(bitmap);
-        localCanvas.clipRect(new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()));
+        localCanvas.translate(0, -scroll);
+        localCanvas.clipRect(0, scroll, width, height + scroll, Region.Op.REPLACE);
         localCanvas.scale(scale, scale, 0.0f, 0.0f);
 
         webView.getWebView().draw(localCanvas);
-
-        if (scroll == 0) {
-            return bitmap;
-        } else {
-            Bitmap thumb = Bitmap.createBitmap(bitmap, 0, scroll, width, height);
-            bitmap.recycle();
-            return thumb;
-        }
+        return bitmap;
     }
 }

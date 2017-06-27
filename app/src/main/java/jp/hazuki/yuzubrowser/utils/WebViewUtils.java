@@ -2,6 +2,7 @@ package jp.hazuki.yuzubrowser.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Region;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -72,10 +73,13 @@ public class WebViewUtils {
         int width = web.getWidth();
         int height = web.getHeight();
         int scroll = web.getScrollY();
-        Bitmap bitmap = Bitmap.createBitmap(width, height + scroll, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
+        canvas.translate(0, -scroll);
+
+        canvas.clipRect(0, scroll, width, height + scroll, Region.Op.REPLACE);
         web.draw(canvas);
-        return Bitmap.createBitmap(bitmap, 0, scroll, width, height);
+        return bitmap;
     }
 
     public static boolean savePicturePart(WebView web, File file) throws IOException {
