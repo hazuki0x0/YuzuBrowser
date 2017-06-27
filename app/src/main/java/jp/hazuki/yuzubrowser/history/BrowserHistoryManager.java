@@ -123,6 +123,14 @@ public class BrowserHistoryManager implements CursorLoadable {
         db.delete(TABLE_NAME, COLUMN_URL + " = ?", new String[]{url});
     }
 
+    public void deleteWithSearch(String query) {
+        query = query.replace("%", "$%").replace("_", "$_");
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        db.delete(TABLE_NAME, COLUMN_TITLE + " LIKE '%' || ? || '%' OR "
+                        + COLUMN_URL + " LIKE '%' || ? || '%' ESCAPE '$'",
+                new String[]{query, query});
+    }
+
     public void deleteAll() {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);

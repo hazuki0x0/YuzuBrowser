@@ -16,6 +16,7 @@
     <string name="confirm_delete_action">Delete this action?</string>
     <string name="confirm_delete_history">Delete this history?</string>
     <string name="confirm_delete_all_history">Delete all history?</string>
+    <string name="confirm_delete_all_displayed_item">Delete all displayed items?</string>
     <string name="confirm_delete_all_favicon">Delete all favicon?</string>
     <string name="confirm_delete_bookmark">Delete this bookmark?</string>
     <string name="confirm_delete_button">Delete this button?</string>
@@ -23,6 +24,7 @@
     <string name="confirm_delete_gesture">Delete this gesture?</string>
     <string name="delete_history">Delete history</string>
     <string name="delete_all_history">Delete all history</string>
+    <string name="delete_all_displayed_item">Delete all displayed items</string>
     <string name="delete_all_favicon">Delete all favicon</string>
     <string name="delete_bookmark">Delete bookmark</string>
     <string name="delete_speedDial">Delete speed dial</string>

@@ -272,6 +272,26 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
                 return true;
+            case R.id.delete_all_displayed_item:
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.confirm)
+                        .setMessage(R.string.confirm_delete_all_displayed_item)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (searchView.isIconified() || TextUtils.isEmpty(searchView.getQuery())) {
+                                    manager.deleteAll();
+                                    adapter.reLoad();
+                                } else {
+                                    String query = searchView.getQuery().toString();
+                                    manager.deleteWithSearch(query);
+                                    adapter.search(query);
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
