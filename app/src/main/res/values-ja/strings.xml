@@ -229,4 +229,5 @@
     <string name="theme_unknown_version">このバージョンの形式のテーマはサポートしていません。</string>
     <string name="page_not_found">ページが見つかりません</string>
     <string name="pinned_tab_warning">このタブはピン留めされています。</string>
+    <string name="select_file">ファイルを選択</string>
 </resources>

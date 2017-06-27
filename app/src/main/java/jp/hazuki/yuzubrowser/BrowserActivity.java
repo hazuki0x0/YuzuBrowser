@@ -2573,7 +2573,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 mWebUploadHandler = new WebUploadHandler();
 
             try {
-                startActivityForResult(mWebUploadHandler.onShowFileChooser(filePathCallback, fileChooserParams), RESULT_REQUEST_WEB_UPLOAD);
+                startActivityForResult(Intent.createChooser(mWebUploadHandler.onShowFileChooser(filePathCallback, fileChooserParams), getString(R.string.select_file)), RESULT_REQUEST_WEB_UPLOAD);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), R.string.app_notfound, Toast.LENGTH_SHORT).show();
