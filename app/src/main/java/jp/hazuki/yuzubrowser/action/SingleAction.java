@@ -132,6 +132,7 @@ public class SingleAction implements Parcelable {
     public static final int VIEW_SOURCE = 101000;
     public static final int PRINT = 101010;
     public static final int TAB_PINNING = 101020;
+    public static final int ALL_ACTION = 101030;
     public static final int LPRESS_OPEN = -10;
     public static final int LPRESS_OPEN_NEW = -11;
     public static final int LPRESS_OPEN_BG = -12;

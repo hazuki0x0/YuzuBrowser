@@ -99,5 +99,6 @@
         <item>ページのソースを表示</item>
         <item>印刷</item>
         <item>タブのピン留め</item>
+        <item>アクション一覧</item>
     </string-array>
 </resources>

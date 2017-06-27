@@ -134,6 +134,7 @@ import jp.hazuki.yuzubrowser.action.manager.MenuActionManager;
 import jp.hazuki.yuzubrowser.action.manager.QuickControlActionManager;
 import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.action.manager.WebSwipeActionManager;
+import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.action.view.ActionListViewAdapter;
 import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity;
@@ -261,6 +262,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private static final int RESULT_REQUEST_USERJS_SETTING = 8;
     private static final int RESULT_REQUEST_WEB_ENCODE_SETTING = 9;
     private static final int RESULT_REQUEST_SHARE_IMAGE = 10;
+    private static final int RESULT_REQUEST_ACTION_LIST = 11;
 
     private static final String APPDATA_EXTRA_TARGET = "BrowserActivity.target";
     private static final String TAB_TYPE = "tabType";
@@ -742,6 +744,15 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 open.putExtra(Intent.EXTRA_STREAM, uri);
                 open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(open, getText(R.string.share)));
+                break;
+            case RESULT_REQUEST_ACTION_LIST:
+                if (resultCode != RESULT_OK || data == null) break;
+                Action action = data.getParcelableExtra(ActionActivity.EXTRA_ACTION);
+                if (action == null) {
+                    Logger.w(TAG, "Action is null");
+                    break;
+                }
+                mActionCallback.run(action);
                 break;
             default:
                 throw new IllegalStateException();
@@ -3978,6 +3989,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     mToolbar.notifyChangeWebState();//icon change
                     break;
                 }
+                case SingleAction.ALL_ACTION:
+                    startActivityForResult(
+                            new ActionActivity.Builder(BrowserActivity.this)
+                                    .setTitle(R.string.action_list)
+                                    .create(),
+                            RESULT_REQUEST_ACTION_LIST);
+                    break;
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return false;
@@ -4262,6 +4280,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     else
                         return res.getDrawable(R.drawable.ic_pin_disable_24dp, getTheme());
                 }
+                case SingleAction.ALL_ACTION:
+                    return res.getDrawable(R.drawable.ic_list_white_24dp, getTheme());
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return null;
