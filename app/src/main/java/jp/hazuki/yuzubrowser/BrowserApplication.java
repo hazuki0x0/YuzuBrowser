@@ -31,12 +31,15 @@ public class BrowserApplication extends Application {
     private static BrowserApplication instance;
     private static boolean needLoad;
 
+    public BrowserApplication() {
+        instance = this;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         Logger.d(TAG, "onCreate()");
-        instance = this;
         needLoad = false;
         ErrorReport.initialize(this);
         AppData.load(this);
