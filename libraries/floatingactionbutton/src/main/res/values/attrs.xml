@@ -29,6 +29,7 @@
 
     <declare-styleable name="FloatingActionMenu">
         <attr name="menu_showShadow" format="boolean" />
+        <attr name="menu_closeOnTouchOutside" format="boolean" />
         <attr name="menu_buttonSpacing" format="dimension" />
         <attr name="menu_labels_margin" format="dimension" />
         <attr name="menu_labels_showAnimation" format="reference" />
