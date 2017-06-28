@@ -107,6 +107,7 @@
     <string name="new_folder_name">新しいフォルダ</string>
     <string name="folder">フォルダ</string>
     <string name="sort">並べ替え</string>
+    <string name="end_sort_label">並べ替えを終了</string>
     <string name="start_sort">並べ替えするよ\u266a</string>
     <string name="end_sort">並べ替えできたよ！</string>
     <string name="edit_bookmark">ブックマークの編集</string>
@@ -163,6 +164,7 @@
     <string name="pattern_syntax_error">パターンの文法が違います</string>
     <string name="cannot_access_folder">ディレクトリにアクセスできません</string>
     <string name="add_by_edit">直接入力で追加</string>
+    <string name="add_from_file">ファイルから追加</string>
     <string name="set_folder_path">パスの直接入力</string>
     <string name="go_data_folder">データフォルダへ移動</string>
     <string name="go_sd_folder">外部ストレージフォルダへ移動</string>

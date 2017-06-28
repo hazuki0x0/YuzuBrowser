@@ -108,6 +108,7 @@
     <string name="new_folder_name">New folder</string>
     <string name="folder">Folder</string>
     <string name="sort">Sort</string>
+    <string name="end_sort_label">End sorting</string>
     <string name="start_sort">Let\'s sort\u266a</string>
     <string name="end_sort">Sorting complete!</string>
     <string name="edit_bookmark">Edit bookmark</string>
@@ -164,6 +165,7 @@
     <string name="pattern_syntax_error">Pattern syntax error</string>
     <string name="cannot_access_folder">Access denied</string>
     <string name="add_by_edit">Add by direct input</string>
+    <string name="add_from_file">Add from file</string>
     <string name="set_folder_path">Set current path</string>
     <string name="go_data_folder">Go to data directory</string>
     <string name="go_sd_folder">Go to external storage</string>

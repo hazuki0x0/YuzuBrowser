@@ -23,15 +23,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,9 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,29 +57,78 @@ import jp.hazuki.yuzubrowser.utils.IOUtils;
 import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListActivity;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
+import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
-import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerFabFragment;
 
 import static android.app.Activity.RESULT_OK;
 
-public class UserScriptListFragment extends RecyclerFabFragment implements OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
+public class UserScriptListFragment extends Fragment implements OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
     private static final int REQUEST_ADD_USERJS = 1;
     private static final int REQUEST_EDIT_USERJS = 2;
     private static final int REQUEST_ADD_FROM_FILE = 3;
     private UserScriptDatabase mDb;
     private UserJsAdapter adapter;
+    private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        setHasOptionsMenu(true);
+        rootView = inflater.inflate(R.layout.fragment_user_script_list, container, false);
+
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+        ItemTouchHelper helper = new ItemTouchHelper(new ListTouch());
+        helper.attachToRecyclerView(recyclerView);
+        recyclerView.addItemDecoration(helper);
+
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) rootView.findViewById(R.id.fabMenu);
+
+        final FloatingActionButton sortFab = (FloatingActionButton) rootView.findViewById(R.id.sortFab);
+
+        sortFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.close(true);
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        sortFab.setLabelText(adapter.isSortMode() ? getString(R.string.end_sort_label) : getString(R.string.sort));
+                    }
+                }, 500);
+            }
+        });
+
+        rootView.findViewById(R.id.addByEditFab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
+                startActivityForResult(intent, REQUEST_ADD_USERJS);
+                fabMenu.close(false);
+            }
+        });
+
+        rootView.findViewById(R.id.addFromFileFab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FileListActivity.class);
+                intent.putExtra(FileListActivity.EXTRA_FILE, Environment.getExternalStorageDirectory());
+                startActivityForResult(intent, REQUEST_ADD_FROM_FILE);
+                fabMenu.close(false);
+            }
+        });
+
         mDb = new UserScriptDatabase(getActivity().getApplicationContext());
         List<UserScript> scripts = mDb.getAllList();
         adapter = new UserJsAdapter(getActivity(), scripts, this);
-        setRecyclerViewAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
-        return getRootView();
+        return rootView;
     }
 
     private void reset() {
@@ -146,47 +201,6 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onAddButtonClick() {
-        Intent intent = new Intent(getActivity(), FileListActivity.class);
-        intent.putExtra(FileListActivity.EXTRA_FILE, Environment.getExternalStorageDirectory());
-        startActivityForResult(intent, REQUEST_ADD_FROM_FILE);
-    }
-
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, final int index) {
-        final UserScript js = adapter.getItems().remove(index);
-        adapter.notifyDataSetChanged();
-        Snackbar.make(getRootView(), R.string.deleted, Snackbar.LENGTH_SHORT)
-                .setAction(R.string.undo, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        adapter.getItems().add(index, js);
-                        adapter.notifyDataSetChanged();
-                    }
-                })
-                .addCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar transientBottomBar, int event) {
-                        if (event != DISMISS_EVENT_ACTION) {
-                            mDb.delete(js);
-                        }
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public boolean onMove(RecyclerView recyclerView, int item1, int item2) {
-        adapter.move(item1, item2);
-        return true;
-    }
-
-    @Override
-    public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
-        mDb.move(fromPos, toPos);
-        reset();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -240,31 +254,49 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(R.string.add_by_edit).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-                startActivityForResult(intent, REQUEST_ADD_USERJS);
-                return false;
-            }
-        });
-        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                boolean next = !adapter.isSortMode();
-                adapter.setSortMode(next);
+    private class ListTouch extends ItemTouchHelper.Callback {
 
-                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-    }
+        @Override
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) |
+                    makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+        }
 
-    @Override
-    public boolean isLongPressDragEnabled() {
-        return adapter.isSortMode();
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            adapter.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mDb.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            final int index = viewHolder.getAdapterPosition();
+            final UserScript js = adapter.getItems().remove(index);
+            adapter.notifyDataSetChanged();
+            Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            adapter.getItems().add(index, js);
+                            adapter.notifyDataSetChanged();
+                        }
+                    })
+                    .addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            if (event != DISMISS_EVENT_ACTION) {
+                                mDb.delete(js);
+                            }
+                        }
+                    })
+                    .show();
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return adapter.isSortMode();
+        }
     }
 
     public static class InfoDialog extends DialogFragment {
