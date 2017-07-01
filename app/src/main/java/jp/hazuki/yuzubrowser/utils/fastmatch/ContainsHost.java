@@ -29,7 +29,12 @@ class ContainsHost extends SimpleCountMatcher {
 
     @Override
     protected boolean matchItem(Uri uri) {
-        return host.contains(uri.getHost());
+        String req = uri.getHost();
+        if (req == null) {
+            return uri.toString().contains(host);
+        } else {
+            return req.contains(host);
+        }
     }
 
     @Override

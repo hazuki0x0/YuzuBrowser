@@ -28,7 +28,7 @@ class SimpleUrl extends SimpleCountMatcher {
 
     @Override
     protected boolean matchItem(Uri uri) {
-        return pattern.contains(uri.toString());
+        return uri.toString().contains(pattern);
     }
 
     @Override
