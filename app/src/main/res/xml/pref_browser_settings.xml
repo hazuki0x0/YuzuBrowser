@@ -15,6 +15,10 @@
             android:title="@string/pref_userjs_manage"
             app:intent="jp.hazuki.yuzubrowser.userjs.UserScriptListActivity" />
     </PreferenceScreen>
+    <Preference
+        android:key="ad_block_settings"
+        android:title="@string/pref_ad_block" />
+
     <PreferenceScreen
         android:key="resblock_settings"
         android:title="@string/pref_resblock_settings">

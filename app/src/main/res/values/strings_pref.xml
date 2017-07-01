@@ -632,4 +632,24 @@
     <string name="pref_help">Help</string>
     <string name="pref_help_url">file:///android_asset/help/en/index.html</string>
     <string name="pref_block_images">Block images</string>
+
+    <string name="pref_ad_block">Ad block settings</string>
+    <string name="pref_ad_block_enable">Enable ad block</string>
+    <string name="pref_ad_block_black">Black list</string>
+    <string name="pref_ad_block_white">White list</string>
+    <string name="pref_ad_block_white_page">White page list</string>
+    <string name="exclude_comment">Exclude comment lines</string>
+    <string name="pref_edit">Edit</string>
+    <string name="pref_delete">Delete</string>
+    <string name="pref_reset_count">Reset count</string>
+    <string name="pref_ad_block_delete_confirm">Are you sure you want to delete \"%1$s\"?</string>
+    <string name="pref_ad_block_delete_selected_confirm">Are you sure you want to delete selected items?</string>
+    <string name="pref_ad_block_delete">\"%1$s\" deleted.</string>
+
+    <string-array name="pref_ad_block_menu">
+        <item>@string/pref_edit</item>
+        <item>@string/pref_delete</item>
+        <item>@string/pref_reset_count</item>
+        <item>@string/multi_select</item>
+    </string-array>
 </resources>

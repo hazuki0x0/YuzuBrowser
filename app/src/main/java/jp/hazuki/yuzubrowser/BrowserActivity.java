@@ -136,6 +136,7 @@ import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.action.manager.WebSwipeActionManager;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.action.view.ActionListViewAdapter;
+import jp.hazuki.yuzubrowser.adblock.AdBlockController;
 import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
@@ -287,6 +288,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private HardButtonActionManager mHardButtonManager;
     private ArrayList<UserScript> mUserScriptList;
     private ArrayList<ResourceChecker> mResourceCheckerList;
+    private AdBlockController adBlockController;
     private View mVideoLoadingProgressView;
     private boolean mIsFullScreenMode = false;
     private boolean mIsActivityPaused = true;
@@ -510,6 +512,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         super.onStop();
         if (mTabManagerView != null)
             mTabManagerView.closeSnackBar();
+        if (adBlockController != null)
+            adBlockController.onResume();
 
         mTabManager.saveData();
         mHandler.removeCallbacks(mSaveTabsRunnable);
@@ -968,6 +972,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             mResourceCheckerList = new ResourceBlockManager(getApplicationContext()).getList();
         else
             mResourceCheckerList = null;
+
+        if (AppData.ad_block.get())
+            adBlockController = new AdBlockController(getApplicationContext());
+        else
+            adBlockController = null;
 
         for (MainTabData tabdata : mTabManager.getLoadedData()) {
             initWebSetting(tabdata.mWebView);
@@ -2513,6 +2522,16 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public WebResourceResponse shouldInterceptRequest(CustomWebView view, WebResourceRequest request) {
+            if (adBlockController != null) {
+                MainTabData tabData = mTabManager.get(view);
+                Uri uri = null;
+                if (tabData != null && tabData.getUrl() != null)
+                    uri = Uri.parse(tabData.getUrl());
+
+                if (adBlockController.isBlock(uri, request.getUrl())) {
+                    return adBlockController.createDummy(request.getUrl());
+                }
+            }
             if (mResourceCheckerList != null) {
                 for (ResourceChecker checker : mResourceCheckerList) {
                     switch (checker.check(request.getUrl())) {
@@ -4263,7 +4282,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 case SingleAction.TOAST:
                     return null;
                 case SingleAction.PRIVATE:
-                    Logger.d("private", AppData.private_mode.get());
                     if (AppData.private_mode.get())
                         return res.getDrawable(R.drawable.ic_private_white_24dp, getTheme());
                     else

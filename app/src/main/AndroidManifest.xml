@@ -287,6 +287,9 @@
                 <data android:scheme="content" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".adblock.AdBlockActivity"
+            android:label="@string/pref_ad_block" />
     </application>
 
 </manifest>

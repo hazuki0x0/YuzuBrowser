@@ -166,6 +166,7 @@ public class AppData {
     public static final IntContainer menu_btn_list_mode = new IntContainer("menu_btn_list_mode", 1);
     public static final BooleanContainer block_web_images = new BooleanContainer("block_web_images", false);
     public static final BooleanContainer save_pinned_tabs = new BooleanContainer("save_pinned_tabs", true);
+    public static final BooleanContainer ad_block = new BooleanContainer("ad_block", false);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

@@ -16,12 +16,14 @@
 
 package jp.hazuki.yuzubrowser.settings.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.adblock.AdBlockActivity;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference;
 
@@ -54,6 +56,14 @@ public class BrowserSettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 savePinned.setEnabled(!(boolean) newValue);
+                return true;
+            }
+        });
+
+        findPreference("ad_block_settings").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getActivity(), AdBlockActivity.class));
                 return true;
             }
         });
