@@ -51,7 +51,7 @@ public class WebViewProxy {
             }
             return true;
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | NullPointerException e) {
-            Logger.d("ProxySettings", "Exception setting WebKit proxy on Lollipop through ProxyChangeListener: " + e.toString());
+            Logger.d("ProxySettings", "Exception setting WebKit proxy on Lollipop through ProxyChangeListener: ", e.toString());
             setProxy = false;
         }
         return false;
