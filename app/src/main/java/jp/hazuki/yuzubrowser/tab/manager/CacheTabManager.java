@@ -38,9 +38,9 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     private boolean cleared = false;
 
     private BrowserActivity mWebBrowser;
-    private TabCache<MainTabData> mTabCache;
-    private TabStorage mTabStorage;
-    private ThumbnailManager thumbnailManager;
+    private final TabCache<MainTabData> mTabCache;
+    private final TabStorage mTabStorage;
+    private final ThumbnailManager thumbnailManager;
 
     private List<View> mTabView;
 
@@ -59,7 +59,9 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         MainTabData tabData = new MainTabData(web, view);
         mTabView.add(view);
         mTabStorage.addIndexData(tabData.getTabIndexData());
-        mTabCache.put(tabData.getId(), tabData);
+        synchronized (mTabCache) {
+            mTabCache.put(tabData.getId(), tabData);
+        }
         return tabData;
     }
 
@@ -68,7 +70,10 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         mCurrentNo = no;
         if (no >= 0 && no < mTabStorage.size()) {
             TabIndexData data = mTabStorage.getIndexData(no);
-            MainTabData tabData = mTabCache.get(data.getId());
+            MainTabData tabData;
+            synchronized (mTabCache) {
+                tabData = mTabCache.get(data.getId());
+            }
             if (tabData == null) {
                 getTabData(data, no);
             }
@@ -80,8 +85,10 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     public void remove(int no) {
         TabIndexData data = mTabStorage.removeAndDelete(no);
         mTabView.remove(no);
-        if (mTabCache.containsKey(data.getId()))
-            mTabCache.remove(data.getId());
+        synchronized (mTabCache) {
+            if (mTabCache.containsKey(data.getId()))
+                mTabCache.remove(data.getId());
+        }
     }
 
     @Override
@@ -164,7 +171,10 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     public MainTabData get(int no) {
         if (no < 0 || no >= mTabStorage.size()) return null;
         TabIndexData tabIndexData = mTabStorage.getIndexData(no);
-        MainTabData tabData = mTabCache.get(tabIndexData.getId());
+        MainTabData tabData;
+        synchronized (mTabCache) {
+            tabData = mTabCache.get(tabIndexData.getId());
+        }
         if (tabData == null) {
             tabData = getTabData(tabIndexData, no);
         }
@@ -173,8 +183,10 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     @Override
     public MainTabData get(CustomWebView web) {
-        for (MainTabData tabData : mTabCache.values()) {
-            if (tabData.mWebView == web) return tabData;
+        synchronized (mTabCache) {
+            for (MainTabData tabData : mTabCache.values()) {
+                if (tabData.mWebView == web) return tabData;
+            }
         }
         int index = mTabStorage.indexOf(web.getIdentityId());
         if (index < 0) return null;
@@ -192,9 +204,11 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     @Override
     public void destroy() {
-        for (MainTabData data : mTabCache.values()) {
-            data.mWebView.setEmbeddedTitleBarMethod(null);
-            data.mWebView.destroy();
+        synchronized (mTabCache) {
+            for (MainTabData data : mTabCache.values()) {
+                data.mWebView.setEmbeddedTitleBarMethod(null);
+                data.mWebView.destroy();
+            }
         }
         deleteHideItemIfNeed();
         thumbnailManager.destroy();
@@ -204,8 +218,10 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     public void saveData() {
         if (!cleared) {
             deleteHideItemIfNeed();
-            for (MainTabData tabData : mTabCache.values()) {
-                mTabStorage.saveWebView(tabData);
+            synchronized (mTabCache) {
+                for (MainTabData tabData : mTabCache.values()) {
+                    mTabStorage.saveWebView(tabData);
+                }
             }
             mTabStorage.saveIndexData();
             mTabStorage.saveCurrentTab(mCurrentNo);
@@ -253,20 +269,26 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         mTabStorage.clearExceptPinnedTab(new TabStorage.OnClearExceptPinnedTabListener() {
             @Override
             public void onRemove(int index, long id) {
-                if (mTabCache.containsKey(id))
-                    mTabCache.remove(id);
+                synchronized (mTabCache) {
+                    if (mTabCache.containsKey(id))
+                        mTabCache.remove(id);
+                }
             }
         });
     }
 
     @Override
     public void onPreferenceReset() {
-        mTabCache.setSize(AppData.tabs_cache_number.get());
+        synchronized (mTabCache) {
+            mTabCache.setSize(AppData.tabs_cache_number.get());
+        }
     }
 
     @Override
     public List<MainTabData> getLoadedData() {
-        return new ArrayList<>(mTabCache.values());
+        synchronized (mTabCache) {
+            return new ArrayList<>(mTabCache.values());
+        }
     }
 
     @Override
@@ -322,7 +344,9 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         if (hideItem != null) {
             mTabStorage.add(hideItem.index, hideItem.data);
             mTabStorage.removeAndDelete(hideItem.index);
-            mTabCache.remove(hideItem.data.getId());
+            synchronized (mTabCache) {
+                mTabCache.remove(hideItem.data.getId());
+            }
             hideItem = null;
         }
     }
@@ -340,7 +364,9 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     private MainTabData getTabData(TabIndexData tabIndexData, int no) {
         CustomWebView webView = mTabStorage.loadWebView(mWebBrowser, tabIndexData);
         MainTabData tabData = tabIndexData.getMainTabData(webView, mTabView.get(no));
-        mTabCache.put(tabIndexData.getId(), tabData);
+        synchronized (mTabCache) {
+            mTabCache.put(tabIndexData.getId(), tabData);
+        }
         if (ThemeData.isEnabled())
             tabData.onMoveTabToBackground(mWebBrowser.getResources(), mWebBrowser.getTheme());
         return tabData;
