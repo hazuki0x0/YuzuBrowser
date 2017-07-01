@@ -72,7 +72,7 @@ public class WebViewRenderingManager {
 
     public void setWebViewRendering(CustomWebView webView) {
         if (mode == 0) {
-            webView.setLayerType(View.LAYER_TYPE_NONE, null);
+            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         } else {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, paint);
         }
