@@ -1,0 +1,812 @@
+.ad-cloud.jp/ad
+.mediaplex.com/ad
+c .media-rep.com
+.statcounter.com/sitemeter.com
+.trackword.net/showads.jp
+/adimages
+/ads
+/ads/media/images
+/adserver
+/advert
+/apfbanners
+/banners
+/bannersource.
+/cgi-bin/ads
+/clicktrack
+/counter
+/hittrack
+/images/ads
+/images/banners
+/pagead
+/pics/banner
+/popunder.js
+/randomad.js
+/smartbanner
+/template/sideads
+/viewad
+/viewcgi?pool=
+_ads
+a/www/delivery/ajs.php
+adcent
+adclick
+adnet
+adpapri-*.js
+adrotat
+adroute.focas.jp/js
+adroute.focas.jp/tmp/bannars
+ads.
+ads.pubmatic.com$domain=~hackintosh.zone
+adsatt
+adserv
+ad-track.jp/ad/
+adver
+adx_click.
+affiliat
+ai.yimg.jp/images/listing
+api.b.st-hatena.com/entry.count
+axia-hakusan.com/lp-sp/iframe
+b.grvcdn.com
+b.hatena.ne.jp/entry/image/http
+b.hatena.ne.jp/entry/image/normal/http
+b.hatena.ne.jp/entry/image/small/http
+biuhuiiuniu.web.fc2.com
+black-diamond.asia/lp-sp/aso-ama
+bs.serving-sys.com
+c nend.net
+c .a8.net
+c .accesstrade.net
+c .ad.
+c .ad2net.com
+c .adbureau.net
+c .ad-count.jp
+c .addclips.org
+c .adform.net
+c .adimg.net
+c .adinfuse.com
+c .adingo.jp
+c .adition.com
+c .adjust-sp.jp
+c .adlantis.jp
+c .admob.com
+c .adpon.net
+c .adresult-sp.jp
+c .ads.
+c .ads.gree.
+c .adservinghost.com
+c .ad-stir.com
+c .adtune.jp
+c .ad-v.jp
+c .adwhirl.com
+c .afl.rakuten.co.jp
+c .amiami.jp
+c .amoad.com
+c .assoc-amazon.jp
+c .cpaclicks.com
+c .crispadvertising.com
+c .doubleclick.com
+c .doubleclick.net
+c .fout.jp
+c googleadservice.com
+c googlesyndication.com
+c googletagservices.com
+c .gsspcln.jp
+c .hitcents.com
+c .hitexchange.
+c .i2i.jp
+c .i2iserv.com
+c .intelliads.com
+c .intellitxt.com
+c .kau.li
+c .kusakage.com
+c .link-trade.net
+c .liveads.jp
+c .maist.jp
+c .mediba.jp
+c .microad.jp
+c .mobclix.com
+c .mojiva.com
+c .moras.jp
+c .mova8.net
+c .nend.net
+c .ormigo.com
+c .seoparts.net
+c .serving-sys.com
+c .smaato.net
+c .smartadserver.com
+c .tradedoubler.com
+c .trax-ad.jp
+c .trustclick.ne.jp
+c .unthem.com
+c .valuecommerce.com
+c .webtracker.jp
+c .yceml.net
+c .yesadvertising.com
+c .yieldmanager.com
+c .youclick2earn.com
+c .z5x.net
+c .zangocash.com
+c .zanox.com
+c .zedo.com
+c .zenzuu.com
+c .zintext.com
+c .ziyu.net
+c .zmedia.com
+c advision-adnw.jp
+c 2.chmato.me
+c 2mdn.info
+c 4clvr.jp
+c a1.goo.ne.jp
+c aaaf.jp
+c aag.yahooapis.jp
+c a-cast.jp
+c accessup.goldcows.com
+c a-c-engine.com
+c act.ameba.jp
+c ad.adresult.jp
+c ad.adsrvr.org
+c ad.angel-live.com
+c ad.api.fello.net
+c ad.applipromotion.com
+c ad.aspm.jp
+c ad.cq-andc.jp
+c ad.goo.ne.jp
+c ad.goodad.jp
+c ad.gunosy.com
+c ad.hatena.ne.jp
+c ad.internetcom.jp
+c ad.jorudan.co.jp
+c ad.maist.jp
+c ad.netowl.jp
+c ad.oret.jp
+c ad.searchteria.co.jp
+c ad.smaad.jp
+c ad.somewrite.jp
+c ad.val.jp
+c ad.xdomain.ne.jp
+c ad.yieldmanager.com
+c ad_banner
+c ad_creative.
+c ad_spot.
+c ad2.fm-p.jp
+c ad2.maho.jp
+c ad-alp.net
+c ad-analyze.jp
+c adap.tv
+c ad-apac
+c adapf.com
+c adapi.gunosy.com
+c ad-api-v01.uliza.jp
+c ad-arata.com
+h ad-arata.s3.amazonaws.com
+h adb.nikkei.co.jp
+adbanner
+c ad-beacon-v01.uliza.jp
+c ad-bemti.com
+c adboost.
+c adbot.
+c ad-brix.com
+c adbutler.
+c adc01.media-rep.com
+c adcdn.goo.ne.jp
+c adck.crooz.jp
+c adclick.
+c adcloud.jp
+c ad-cloud.jp
+c adclr.jp
+c adcolony.com
+c ad-count.jp
+c adcrops.net
+c adcv.jp
+c addeluxe.jp
+c adf.shinobi.jp
+c adfair.
+c ad-feed.com
+c adfiles.
+c adflare.bz
+c adflare.jp
+c adforest.net
+c adform.
+c adframe
+c adfurikun.jp
+c adgraphics.
+c adgrip.net
+c ad-house.mobi
+c ad-image.val.jp
+c adimg
+c adimg.net
+c adimp.excite.co.jp
+c ad-info.val.jp
+c adingo.jp.eimg.jp
+c adinte.jp
+c adition
+c adjug
+c adjust-net.jp
+c adjust-sp.jp
+c adk2x.com
+c adlantis.jp
+c adlink
+c ad-lista.com
+c adlpo.com
+c ad-m.asia
+c adm.fwmrm.net
+c adm.shinobi.jp
+c adman
+c admeme.net
+c adming.net
+c ad-move.jp
+c admtpmp123.com
+c admtpmp124.com
+c adnico.jp
+c adntokyo.gunosy.com
+c adnxs.com
+c adone.yicha.jp
+c adpdx.com
+c adpix.jp
+c adplan-ds.com
+c adplatform.jp
+c adpon.net
+c adpresso.valuecommerce.com
+c adpriv.nikkei.com
+c adrcf.com
+c adresult.jp
+c adresult-sp.jp
+c adroll.com
+c ads.doko.jp
+c ads.flurry.com
+c ads.gold
+c ads.heyzap.com
+c ads.mediasmart.es
+c ads.mixi.jp
+c ads.mopub.com
+c ads.nexage.com
+c ads.nikkeibp.co.jp
+c ads1.jp.msn.com
+c ads1.msads.net
+c ads-api.hackadoll.com
+c adsee.jp
+c ad-seek.jp
+c ad-shot.com
+c ads-i2i.jp
+c adsk2.co
+c ad-sp.biz
+c ad-srv.co
+c adsta.jp
+c ad-stir.com
+c ads-tool.jp
+c adtc.daum.net
+c adtdp.com
+c adtech.de
+c adtechjp.com
+c adtechus.com
+c adticker.net
+c adtilt.com
+c adtrack.king.com
+c adtracker.jp
+c ad-trip.com
+c adultmild.com
+c adultsuns.net
+c adv.
+c ad-v.jp
+c adv.mobsmart.net
+c advertising.com
+c advertising.jp.msn.com
+c advisionclick.yicha.jp
+c advisionweb.yicha.jp
+c advisionwebp.yicha.jp
+c advpic.yicha.jp
+c adxxx.org
+c adzerk.net
+c af.moshimo.com
+c aff.jskyservices.com
+c affil.jp
+c affiliate.dtiserv.com
+c affiliate.rakuten.co.jp
+c affiliate-b.com
+c affiliateone.jp
+c afte.mopo.jp
+c aid-ad.jp
+c aimg.fc2.com
+c alistcloud.com
+c amoad.com
+c analytics.cocolog-nifty.com
+c analytics.qlook.net
+c android.giveapp.jp
+c antennash.com
+c aos-creative.prf.hn
+c api.appsflyer.com
+c api.triver.jp
+c app.adjust.com$third-party
+c appad02.mbsp.jp
+c app-adforce.jp$third-party
+c appads.com
+c app-c.net
+c appier.mobi
+c applipromotion.com
+c applovin.com
+c appsdt.com
+c apserver.net
+c apvdr.com
+c aqua.dmm.co.jp
+c ard.gree.net
+c aspm.jp
+c assys01.fc2.com
+c astrsk.net
+c atech.ne.jp
+c atwola.com
+c avalon-ad.net
+c avdm.mobi
+c axia-hakusan.com
+c b.smartnews.be
+c b92.yahoo.co.jp
+c b97.yahoo.co.jp
+c banner.blogranking.net
+c bead-ad.com
+c bibincom.com
+c bidswitch.net
+c bizad.nikkeibp.co.jp
+c black-diamond.asia
+c blog.alivedoors.com
+c blog-livedorr.com
+c blogranking.fc2.com
+c blogroll.click
+c blogroll.livedoor.net
+c bluekai.com
+c bongacams.com
+c boxadstop.com
+c brandscreen.biz
+c broadstreetads.com
+c btstatic.com
+c bufferapp.com
+c bypass.jp
+c c1exchange.com
+c ca-conv.jp
+c caprofitx.adtop.com
+c caprofitx.com
+c cdn.alistcloud.com
+c cdn.pic.crooz.jp
+c cdn.taboolasyndication.com
+c cdn.treasuredata.com
+c cint.com
+c click.adv.livedoor.com
+c click.duga.jp
+c clickadu.com
+c comic-promotion.com
+c cosmi.io
+c count-ad.net
+c creativecarrer.com
+c crispadvertising.com
+c criteo.com
+c criteo.net
+c cs.r-ad.ne.jp
+c ct2.shinobi.jp
+c cyberwing.co.jp
+c d.5.to
+c d.pixiv.org
+c d1miuq6afqay8u.cloudfront.net
+c d28nwox1gdjlve.cloudfront.net
+c d2c.ne.jp
+c deliver.ads2.iid.jp
+c dietnavi.com
+c directlink.jp
+c directrev.com
+c dl.vntg.jp
+c dlsite
+c dlv.itmedia.jp
+c dominoad.com
+c doprads.jp
+c dtscout.com
+c durasite.net
+c dynalyst.jp
+c eco-tag.jp
+c emailretargeting.com
+c emp.aiasahi.jp
+c ero-advertising.com
+c etc.atja.jp
+c exaf.jp
+c exit-ad.com
+c exoclick.com
+c eyeota.net
+c fam-ad.com
+c fancrew.jp
+c fine-tv.net
+c fivecdm.com
+c fluct.jp
+c focas.jp
+c fout.jp
+c fractionalmedia.com
+c free2.jp
+c free-video-movie.com
+c fsitel.com
+c fukugan.com
+c garss.tv
+c geniee.jp
+c genieedmp.com
+c genieesspv.jp
+c gigazine.asia
+c girlsbatio.yahoo.co.jp
+c glam.com
+c global.msmtrakk06d.com
+c glossom.co.jp
+c gmossp-sp.jp
+c go.ad1data.com
+c gravity.com
+c gsspat.jp
+c gsspcln.jp
+c gssprt.jp
+c guile.jp
+c happymail.co.jp
+c hihumi.biz
+c histats.com
+c hitbox.com
+c hitgraph.jp
+c href.asia
+c i.image-ad.jp
+c i.tapit.com
+c i2i.com
+c i2i.jp
+c i2idata.com
+c i2iserv.com
+c ichi-ni-san.net
+c im.gmo.ov.yahoo.co.jp
+c im.ov.yahoo.co.jp
+c im.seesaa.ov.yahoo.co.jp
+c image-ad.jp
+c im-apps.net
+c img.bbchat.tv
+c i-mobile.co.jp
+c in.treasuredata.com
+c inmobi.com
+c inmobi-jp.com
+c inmobisdk-a.akamaihd.net
+c innovate-blog.info
+c interstitial.fyber.com
+c iogous.com
+c iwanttodeliver.com
+c j.gmodmp.jp
+c j.zucks.net.zimg.jp
+c japanmetrix.jp
+c juicyads.com
+c kau.li
+c ketchapp.org
+c kiosked.com
+c kochava.com
+c koukoku.red
+c krxd.net
+c ktai.pw
+c ladsp.com
+c lead-ad.jp
+c leadin.com
+c leaffi.jp
+c link-a.net
+c linkshare.com
+c linkshare.ne.jp
+c livead.jp
+c loading-delivery2.com
+c log000.goo.ne.jp
+c logly.co.jp
+c lp.vasta.co.jp
+c m.adsmatic.com
+c maad.maru.jp
+c m-arata.com
+c match.adsrvr.org
+c mb-click.jp
+c measure.ameblo.jp
+c med.heyzap.com
+c medi-8.net
+c media.fc2.com
+c media.gssp.asia
+c mediaad.com
+c media-api.maio.jp
+c media-b.jp
+c mediad.co.jp
+c mediad2.jp
+c mediaforge.com
+c mediaid.click
+c media-rep.com
+c medibaad.com
+c mgid.com
+c moatads.com
+c moba8.net
+c mobylog.jp
+c momoemoe.com
+c monbran.net
+c moras.jp
+c mreco0.jp
+c msg.simeji.baidu.jp
+c mucu.jp
+c nakanohito.jp
+c newrelic.com
+c newzia.jp
+c nex8.net
+c niconicoav.com
+c nr-data.net
+c nukiero.club
+c octopuspop.com
+c oct-pass.net
+c omotenashi.cygames.jp
+c omt.shinobi.jp
+c onclickads.net
+c onclicktop.com
+c online-dn.com
+c openx.net
+c opr.formulas.jp
+c orangemovie.link
+c otaimg.com
+c otapict.com
+c outbrain.com
+c overlay.top
+c owldata.com
+c p.rfihub.com
+c popads.net
+c porno-tv.com
+c ppgcm.profilepassport.jp
+c preaf.jp
+c prscripts.com
+c ptengine.com
+c ptengine.jp
+c quant.jp
+c quantcast.com
+c quantserve.com
+c r.edge.inmobicdn.com
+c r.profilepassport.jp
+c rayjump.com
+c rcm.shinobi.jp
+c red.hatena.ne.jp
+c red.st-hatena.com
+c red3.hatena.ne.jp
+c redge-a.akamaihd.net
+c reon.club
+c reporo.net
+c ressp.net
+c revsci.net
+c rinad.jp
+c rokushiki.nefficient.jp
+c rss-loader.com
+c rubiconproject.com
+c s.pagoda56.com
+c s0.2mdn.net
+c s1.yicha.jp
+c s3.mobile.val.jp
+c samuraiad.
+c san-ni-ichi.com
+c sbs-ad.com
+c sda.seesaa.jp
+c searchteria.co.jp
+c serve.richmediaads.com
+c servedby.openxmarket.jp
+c serving-sys.com
+c sharethrough.com
+c simplereach.com
+c skimresources.com
+c smaad.jp
+c smaad.net
+c smartaccess.biz
+c smart-ad.sakura.ne.jp
+c smartad-analytics.info
+c smartads.mobile.yahoo.co.jp
+c smart-c.jp
+c smartcanvas.net
+c smartnews-ads.com
+c socdm.com
+c soma.smaato.net
+c someapp.me
+c soraad.jp
+c sp.eroido.jp
+c spacenine.biz
+c sp-click2.jp
+c spe.atdmt.com
+c speead.jp
+c sprout-ad.com
+c sspintrafmsmt.com
+c st.shinobi.jp
+c static.zucks.net.zimg.jp
+c stats.wordpress.com
+c stats.wp.com
+c statsp.fpop.net
+c stimg.iand2ch.net
+c stimgc.iand2ch.net
+c swcs.jp
+c syaseigangan.club
+c sync.shinobi.jp
+c sync-tapi.admatrix.jp
+c taboola.com
+c tapad.
+c tapjoyads.com
+c taxel.jp
+c tcs-asp.net
+c teads.tv
+c techstats.net
+c trace.690.co
+c tracer.jp
+c track.appsflyer.com
+c track.bannerbridge.net
+c track.richmediaads.com
+c tracker.mca-analytics.com
+c trackfeed.com
+c trackword.net
+c tradedoubler.com
+c trafficfactory.biz
+c traffichaus.com
+c trafficjunky.net
+c trafficstars.com
+c trax-ad.jp
+c turn.com
+c umeng.com
+c unitedblades.co.jp
+c unthem.com
+c user.in.net
+c userdive.com
+c v2st.shinobi.jp
+c vizury.com
+c vungle.com
+webads
+c websponsors.com
+c webtracker.jp
+c webtrackerplus.com
+c webtrendslive.com
+c ww6z7lrg3a.top
+c www.image-rentracks.com
+c www.rentracks.jp
+c www.shisuh.com
+c www.sumapo.org
+c wwwpromoter.com
+c x9.shinobi.jp
+c x-lift.jp
+c xlisting.jp
+c yads.yahoo.co.jp
+c yicha.jp
+c zemanta.com
+c ziyu.net
+c zucks.net
+c.grymco.com
+cash?
+chat.shalove.net/PrintAd
+chesterstream.akamaized.net/chester-adcross/
+click.kau.li
+h cnt.affiliate.fc2.com
+d.href.asia/nw/d
+del.icio.us/static
+elog7.servequake.com/suma-img/aso-ama/banner
+e-nls.com
+free-video-movie.com/ssp
+h counter2.blog.livedoor.com
+h a.glcdn.co
+h ad.leadboltapps.net
+h ad.madvertise.de
+h ad.where.com
+h adc.media-rep.com
+h adcontent.saymedia.com
+h admicro1.vcmedia.vn
+h admicro2.vcmedia.vn
+h ads.adiquity.com
+h ads.admarvel.com
+h ads.admoda.com
+h ads.flurry.com
+h ads.justrelevant.com
+h ads.matomymobile.com
+h ads.mobgold.com
+h ads.mobilityware.com
+h ads.mopub.com
+h ads.n-ws.org 
+h ads.ookla.com
+h ads.saymedia.com
+h ads.smartdevicemedia.com
+h ads.xxxad.net
+h ads2.mediaarmor.com
+h adserver.ubiyoo.com
+h adsp.i2idata.com
+h adultmoda.com
+h advisionwebp.yicha.jp
+h aladdin.genieesspv.jp
+h amazlink.fuyu.gs
+h analyzer*.fc2.com
+h android.bcfads.com
+h android-sdk31.transpera.com
+h api.airpush.com
+h api.analytics.omgpop.com
+h api.unthem.com
+h api.yp.com
+h apps.buzzcity.net
+h apps.mobilityware.com
+h as.adfonic.net
+h asotrack1.fluentmobile.com
+h assets.cntdy.mobi
+h b.scorecardresearch.com
+h banner.dspcdn.com
+h banners.bigmobileads.com
+h bc.geocities.yahoo.co.jp
+h bigmobileads.com
+h c.vrvm.com
+h c753738.r38.cf2.rackcdn.com
+h cas.criteo.com
+h cdn.api.b.hatena.ne.jp
+h cdn.nearbyad.com
+h cdn.trafficforce.com
+h cdn.us.goldspotmedia.com
+h cdn.vdopia.com
+h cdn-guile.akamaized.net
+h click.buzzcity.net
+h crd.auctions.yahoo.co.jp
+h creative1cdn.mobfox.com
+h edge.reporo.net
+h ftpcontent.worldnow.com
+h gemini.yahoo.com
+h go.vrvm.com
+h googleads.g.doubleclick.net
+h gsmtop.net
+h gts-ads.twistbox.com
+h h.accesstrade.net
+h i.tapit.com
+h im.gmo.ov.yahoo.co.jp
+h images.millennialmedia.com
+h images.mpression.net
+h img.ads.huntmad.com
+h img.ads.mobilefuse.net
+h img.ads.mocean.mobi
+h img.ads.mojiva.com
+h img.ads.taptapnetworks.com
+h item.shopping.c.yimg.jp
+h lb.usemaxserver.de
+h m.adsymptotic.com
+h media.mobpartner.mobi
+h medrx.sensis.com.au
+h mobile.Banzai.it
+h mobiledl.adobe.com
+h nad.migch.com
+h netdna.reporo.net
+h oasc04012.247realmedia.com
+h r.edge.inmobicdn.net
+h rs-staticart.ybcdn.net
+h s0.2mdn.net
+h s3.phluant.com
+h show.buzzcity.net
+h smartads.mobile.yahoo.co.jp
+h static.cdn.gtsmobi.com
+h static.estebull.com
+h stats.pflexads.com
+h track.bannerbridge.net
+h tracking.klickthru.com
+h view.atdmt.com
+h www.ab.auone-net.jp
+h www.eltrafiko.com
+h www.mmnetwork.mobi
+h www.seo-stats.com
+h wwww.adleads.com
+h yjaxc.yahoo.co.jp
+i.yimg.jp/images/listing
+image.excite.co.jp/jp/ydn/sp/jsflat-overlay.min.js
+img.shinobi.jp/analyze
+imgad?
+imp.asahi.com/bservers/
+jbaf.info/af
+j-basketball.club/ad/
+k5ads.
+linkexchange.
+next.nikkei.com/.resources/components/ad/
+nkispa.nikkei.com/fh/showad_
+c one.impact-ad.
+otaimg.com/image
+otapict.com/images
+otapict.com/links
+c pcmax.jp
+pics.dmm.com/af
+pixel.wp.com
+c rankan.net
+rd.ane.yahoo.co.jp
+s.yimg.jp/images/finance/bnr
+san-ni-ichi.com/img
+smapo.org/iframe
+spad.js
+spinbox.
+sprout-ad.com/js
+c tacoda.net
+www.2219.net/img/adbata/
+www.2219.net/js/adbata
+www.2219.net/js/config-bbs_ad-
+www.delicious.com/static
+www.dxlive.com/affiliate/
+www.google.com/uds/Gfeeds
+www.recosoku.com/ads/
+c xn-cck5a8g8a2cyf.com
+xrwd.net/adnetwork/ad.js
+/advision.

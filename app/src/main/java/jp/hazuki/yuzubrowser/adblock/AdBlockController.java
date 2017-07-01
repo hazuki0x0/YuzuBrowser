@@ -59,9 +59,12 @@ public class AdBlockController {
 
     public boolean isBlock(Uri pageUri, Uri uri) {
         if (whitePageList == null || whiteList == null || blackList == null) return false;
-        for (FastMatcher matcher : whitePageList.getMatcherList())
-            if (matcher.match(pageUri))
-                return false;
+        if (pageUri != null) {
+            for (FastMatcher matcher : whitePageList.getMatcherList())
+                if (matcher.match(pageUri))
+                    return false;
+        }
+
 
         for (FastMatcher matcher : whiteList.getMatcherList())
             if (matcher.match(uri))

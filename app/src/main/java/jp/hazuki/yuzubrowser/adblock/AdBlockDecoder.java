@@ -25,8 +25,11 @@ import java.util.Scanner;
 public class AdBlockDecoder {
 
     public static List<AdBlock> decode(String text, boolean comment) {
+        return decode(new Scanner(text), comment);
+    }
+
+    public static List<AdBlock> decode(Scanner scanner, boolean comment) {
         List<AdBlock> adBlocks = new ArrayList<>();
-        Scanner scanner = new Scanner(text);
         while (scanner.hasNext()) {
             String line = scanner.nextLine().trim();
             if (!TextUtils.isEmpty(line)) {

@@ -22,8 +22,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcher;
 import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherCache;
@@ -57,8 +61,12 @@ public class AdBlockManager {
     private Context appContext;
 
     AdBlockManager(Context context) {
+        boolean first = !context.getDatabasePath(DB_NAME).exists();
         mOpenHelper = MyOpenHelper.getInstance(context);
         appContext = context.getApplicationContext();
+
+        if (first)
+            initList(context);
     }
 
     private void update(String table, AdBlock adBlock) {
@@ -194,6 +202,29 @@ public class AdBlockManager {
         ContentValues values = new ContentValues();
         values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis());
         db.update(INFO_TABLE_NAME, values, INFO_COLUMN_NAME + " = ?", new String[]{table});
+    }
+
+    private void initList(Context context) {
+        try (InputStream is = new BufferedInputStream(context.getAssets().open("adblock/blacklist.txt"))) {
+            List<AdBlock> adBlocks = AdBlockDecoder.decode(new Scanner(is), false);
+            addAll(BLACK_TABLE_NAME, adBlocks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (InputStream is = new BufferedInputStream(context.getAssets().open("adblock/whitelist.txt"))) {
+            List<AdBlock> adBlocks = AdBlockDecoder.decode(new Scanner(is), false);
+            addAll(WHITE_TABLE_NAME, adBlocks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (InputStream is = new BufferedInputStream(context.getAssets().open("adblock/whitepagelist.txt"))) {
+            List<AdBlock> adBlocks = AdBlockDecoder.decode(new Scanner(is), false);
+            addAll(WHITE_PAGE_TABLE_NAME, adBlocks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static AdBlockItemProvider getProvider(Context context, int type) {
