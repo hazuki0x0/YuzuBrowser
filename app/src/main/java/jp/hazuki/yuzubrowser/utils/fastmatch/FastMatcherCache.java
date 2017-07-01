@@ -99,6 +99,9 @@ public class FastMatcherCache {
                         case "4":
                             matcher = new RegexUrl(items[4]);
                             break;
+                        case "5":
+                            matcher = new ContainsHost(items[4]);
+                            break;
                         default:
                             continue;
                     }

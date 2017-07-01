@@ -48,6 +48,8 @@ public class ItemDecoder {
                 if ((IP_ADDRESS.matcher(ip).matches() && line.length() > space + 1)
                         || ip.equals("h") || ip.equals("host")) {
                     return factory.compileHost(line.substring(space + 1));
+                } else if (ip.equals("c")) {
+                    return new ContainsHost(line.substring(space + 1));
                 }
             }
             Matcher matcher = HOST.matcher(line);

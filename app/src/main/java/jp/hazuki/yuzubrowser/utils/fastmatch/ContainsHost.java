@@ -17,27 +17,28 @@
 package jp.hazuki.yuzubrowser.utils.fastmatch;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
-public interface FastMatcher {
-    int TYPE_SIMPLE_HOST = 1;
-    int TYPE_SIMPLE_URL = 2;
-    int TYPE_REGEX_HOST = 3;
-    int TYPE_REGEX_URL = 4;
-    int TYPE_CONTAINS_HOST = 5;
+class ContainsHost extends SimpleCountMatcher {
 
-    int getType();
+    private final String host;
 
-    int getId();
+    ContainsHost(@NonNull String host) {
+        this.host = host;
+    }
 
-    boolean match(Uri uri);
+    @Override
+    protected boolean matchItem(Uri uri) {
+        return host.contains(uri.getHost());
+    }
 
-    int getFrequency();
+    @Override
+    public int getType() {
+        return TYPE_CONTAINS_HOST;
+    }
 
-    String getPattern();
-
-    boolean isUpdate();
-
-    void saved();
-
-    long getTime();
+    @Override
+    public String getPattern() {
+        return host;
+    }
 }
