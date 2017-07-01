@@ -1,11 +1,29 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.utils.view.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +35,11 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     private LayoutInflater inflater;
     private boolean sortMode;
 
+    private boolean multiSelectMode;
+    private SparseBooleanArray itemSelected;
+
     public ArrayRecyclerAdapter(Context context, List<T> list, OnRecyclerListener listener) {
+        itemSelected = new SparseBooleanArray();
         items = list;
         recyclerListener = listener;
         inflater = LayoutInflater.from(context);
@@ -95,12 +117,14 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (recyclerListener != null)
+                if (multiSelectMode) {
+                    toggle(holder.getAdapterPosition());
+                } else if (recyclerListener != null)
                     recyclerListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
             }
         });
 
-        if (sortMode || recyclerListener == null) {
+        if (multiSelectMode || sortMode || recyclerListener == null) {
             holder.itemView.setOnLongClickListener(null);
         } else {
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -111,5 +135,48 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
                 }
             });
         }
+    }
+
+    public boolean isMultiSelectMode() {
+        return multiSelectMode;
+    }
+
+    public void setMultiSelectMode(boolean multiSelect) {
+        if (multiSelect != multiSelectMode) {
+            multiSelectMode = multiSelect;
+
+            if (!multiSelect) {
+                itemSelected.clear();
+            }
+
+            notifyDataSetChanged();
+        }
+    }
+
+    public void toggle(int position) {
+        setSelect(position, !itemSelected.get(position, false));
+    }
+
+    public void setSelect(int position, boolean isSelect) {
+        boolean old = itemSelected.get(position, false);
+        itemSelected.put(position, isSelect);
+
+        if (old != isSelect) {
+            notifyDataSetChanged();
+        }
+    }
+
+    public boolean isSelected(int position) {
+        return itemSelected.get(position, false);
+    }
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items = new ArrayList<>();
+        for (int i = 0; itemSelected.size() > i; i++) {
+            if (itemSelected.valueAt(i)) {
+                items.add(itemSelected.keyAt(i));
+            }
+        }
+        return items;
     }
 }

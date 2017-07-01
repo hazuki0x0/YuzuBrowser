@@ -22,14 +22,12 @@ import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
@@ -49,8 +47,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     private final int normalBackGround;
 
-    private boolean multiSelectMode;
-    private SparseBooleanArray itemSelected;
     private OnBookmarkRecyclerListener bookmarkItemListener;
     private BrowserHistoryManager historyManager;
     private boolean pickMode;
@@ -58,7 +54,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     public BookmarkItemAdapter(Context context, List<BookmarkItem> list, boolean pick, boolean openNewTab, OnBookmarkRecyclerListener listener) {
         super(context, list, null);
-        itemSelected = new SparseBooleanArray();
         bookmarkItemListener = listener;
         pickMode = pick;
         this.openNewTab = openNewTab;
@@ -71,7 +66,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         setRecyclerListener(new OnRecyclerListener() {
             @Override
             public void onRecyclerItemClicked(View v, int position) {
-                if (multiSelectMode) {
+                if (isMultiSelectMode()) {
                     toggle(position);
                 } else {
                     if (bookmarkItemListener != null)
@@ -90,7 +85,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     public void onBindViewHolder(final BookmarkFolderHolder holder, BookmarkItem item, final int position) {
         if (item instanceof BookmarkSite) {
             ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
-            if (!openNewTab || pickMode || multiSelectMode) {
+            if (!openNewTab || pickMode || isMultiSelectMode()) {
                 ((BookmarkSiteHolder) holder).imageButton.setEnabled(false);
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
             } else {
@@ -115,8 +110,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         }
         holder.title.setText(item.title);
 
-        if (multiSelectMode) {
-            setSelectedBackground(holder.itemView, itemSelected.get(position, false));
+        if (isMultiSelectMode()) {
+            setSelectedBackground(holder.itemView, isSelected(position));
         } else {
             holder.itemView.setBackgroundResource(normalBackGround);
         }
@@ -132,49 +127,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             default:
                 throw new IllegalStateException("Unknown BookmarkItem type");
         }
-    }
-
-    public boolean isMultiSelectMode() {
-        return multiSelectMode;
-    }
-
-    public void setMultiSelectMode(boolean multiSelect) {
-        if (multiSelect != multiSelectMode) {
-            multiSelectMode = multiSelect;
-
-            if (!multiSelect) {
-                itemSelected.clear();
-            }
-
-            notifyDataSetChanged();
-        }
-    }
-
-    public void toggle(int position) {
-        setSelect(position, !itemSelected.get(position, false));
-    }
-
-    public void setSelect(int position, boolean isSelect) {
-        boolean old = itemSelected.get(position, false);
-        itemSelected.put(position, isSelect);
-
-        if (old != isSelect) {
-            notifyDataSetChanged();
-        }
-    }
-
-    public boolean getSelected(int position) {
-        return itemSelected.get(position, false);
-    }
-
-    public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<>();
-        for (int i = 0; itemSelected.size() > i; i++) {
-            if (itemSelected.valueAt(i)) {
-                items.add(itemSelected.keyAt(i));
-            }
-        }
-        return items;
     }
 
     public byte[] getFavicon(BookmarkSite site) {
