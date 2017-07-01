@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/addFolder"
+        android:title="@string/add_folder"
+        android:icon="@drawable/ic_create_new_folder_white_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/sort"
+        android:title="@string/sort"
+        android:icon="@drawable/ic_sort_white_24dp"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/multiSelect"
+        android:title="@string/multi_select" />
+
+</menu>

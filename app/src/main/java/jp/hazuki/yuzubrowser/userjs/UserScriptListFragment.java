@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -35,6 +34,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +43,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.File;
@@ -74,6 +73,7 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_user_script_list, container, false);
+        setHasOptionsMenu(true);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -83,26 +83,6 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
         recyclerView.addItemDecoration(helper);
 
         final FloatingActionMenu fabMenu = (FloatingActionMenu) rootView.findViewById(R.id.fabMenu);
-
-        final FloatingActionButton sortFab = (FloatingActionButton) rootView.findViewById(R.id.sortFab);
-
-        sortFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fabMenu.close(true);
-                boolean next = !adapter.isSortMode();
-                adapter.setSortMode(next);
-
-                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        sortFab.setLabelText(adapter.isSortMode() ? getString(R.string.end_sort_label) : getString(R.string.sort));
-                    }
-                }, 500);
-            }
-        });
 
         rootView.findViewById(R.id.addByEditFab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,6 +232,24 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
             }
             break;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.sort, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort:
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
     }
 
     private class ListTouch extends ItemTouchHelper.Callback {

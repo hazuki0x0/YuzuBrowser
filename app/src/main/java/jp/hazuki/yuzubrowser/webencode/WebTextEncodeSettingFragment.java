@@ -127,16 +127,20 @@ public class WebTextEncodeSettingFragment extends Fragment implements OnRecycler
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
+        inflater.inflate(R.menu.sort, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort:
                 boolean next = !mAdapter.isSortMode();
                 mAdapter.setSortMode(next);
 
                 Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+                return true;
+        }
+        return false;
     }
 
     private class ListTouch extends ItemTouchHelper.Callback {

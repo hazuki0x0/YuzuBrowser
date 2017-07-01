@@ -23,15 +23,6 @@
         app:menu_closeOnTouchOutside="true">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/sortFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_sort_white_24dp"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/yuzu_orange"
-            app:fab_label="@string/sort" />
-
-        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/addByEditFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

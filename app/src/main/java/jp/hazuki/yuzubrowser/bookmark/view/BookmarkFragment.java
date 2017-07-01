@@ -186,40 +186,36 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (!pickMode) {
-            menu.add(R.string.add_folder).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    new AddBookmarkFolderDialog(getActivity(), mManager, getString(R.string.new_folder_name), mCurrentFolder)
-                            .setOnClickListener(new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
-                            .show();
-                    return false;
-                }
-            });
-            menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    boolean next = !adapter.isSortMode();
-                    adapter.setSortMode(next);
+        if (!pickMode) inflater.inflate(R.menu.bookmark, menu);
+    }
 
-                    Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
-            menu.add(R.string.multi_select).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    boolean next = !adapter.isMultiSelectMode();
-                    adapter.setMultiSelectMode(next);
-                    return false;
-                }
-            });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.addFolder:
+                new AddBookmarkFolderDialog(getActivity(), mManager, getString(R.string.new_folder_name), mCurrentFolder)
+                        .setOnClickListener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .show();
+                return true;
+            case R.id.sort: {
+                boolean next = !adapter.isSortMode();
+                adapter.setSortMode(next);
+
+                Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case R.id.multiSelect: {
+                boolean next = !adapter.isMultiSelectMode();
+                adapter.setMultiSelectMode(next);
+                return true;
+            }
         }
+        return false;
     }
 
     private List<BookmarkItem> getSelectedBookmark(List<Integer> items) {

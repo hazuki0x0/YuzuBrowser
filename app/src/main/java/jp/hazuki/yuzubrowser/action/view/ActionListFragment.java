@@ -166,25 +166,25 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(R.string.action_to_json).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getActivity(), ActionStringActivity.class);
-                intent.putExtra(ActionStringActivity.EXTRA_ACTION, (Parcelable) mList);
-                startActivity(intent);
-                return false;
-            }
-        });
-        menu.add(R.string.sort).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
+        inflater.inflate(R.menu.action_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort:
                 boolean next = !adapter.isSortMode();
                 adapter.setSortMode(next);
 
                 Toast.makeText(getActivity(), (next) ? R.string.start_sort : R.string.end_sort, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+                return true;
+            case R.id.actionToJson:
+                Intent intent = new Intent(getActivity(), ActionStringActivity.class);
+                intent.putExtra(ActionStringActivity.EXTRA_ACTION, (Parcelable) mList);
+                startActivity(intent);
+                return true;
+        }
+        return false;
     }
 
     @Override
