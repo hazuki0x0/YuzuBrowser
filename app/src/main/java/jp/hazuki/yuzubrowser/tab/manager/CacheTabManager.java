@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<MainTabData> {
     private int mCurrentNo = -1;
+    private long currentId = 0;
     private boolean cleared = false;
 
     private BrowserActivity mWebBrowser;
@@ -71,6 +72,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
             if (tabData == null) {
                 getTabData(data, no);
             }
+            currentId = data.getId();
         }
     }
 
@@ -152,6 +154,9 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     @Override
     public MainTabData getCurrentTabData() {
+        if (mCurrentNo >= mTabStorage.size()) {
+            mCurrentNo = mTabStorage.indexOf(currentId);
+        }
         return get(mCurrentNo);
     }
 
