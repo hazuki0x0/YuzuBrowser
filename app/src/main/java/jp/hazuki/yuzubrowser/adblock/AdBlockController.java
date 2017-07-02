@@ -47,6 +47,10 @@ public class AdBlockController {
             ErrorReport.printAndWriteLog(e);
         }
 
+        update();
+    }
+
+    public void update() {
         new Thread(new Runnable() {
             @Override
             public void run() {

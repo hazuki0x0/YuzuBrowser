@@ -65,6 +65,10 @@
     <string name="block_image">Add to resource block</string>
     <string name="add_image_pattern">Add image to pattern match</string>
     <string name="add_url_pattern">Add link to pattern match</string>
+    <string name="add_image_black_list">Add image to black list</string>
+    <string name="add_image_white_list">Add image to white list</string>
+    <string name="add_link_black_list">Add link to black list</string>
+    <string name="add_link_white_list">Add link to white list</string>
     <string name="open_all_new">Open all in new tab</string>
     <string name="open_all_bg">Open all in background tab</string>
     <string name="copy_clipboard_mes_before">Copied : </string>

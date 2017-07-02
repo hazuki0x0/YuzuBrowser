@@ -16,28 +16,23 @@
 
 package jp.hazuki.yuzubrowser.webkit.handler;
 
-import android.app.Activity;
-import android.content.Intent;
-
 import java.lang.ref.WeakReference;
 
-import jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity;
+public class WebSrcImageLinkHandler extends WebSrcImageHandler {
+    private final WeakReference<OnHandleUrlListener> listenerReference;
 
-public class WebSrcImageResBlockHandler extends WebSrcImageHandler {
-    private WeakReference<Activity> reference;
-
-    public WebSrcImageResBlockHandler(Activity activity) {
-        reference = new WeakReference<>(activity);
+    public WebSrcImageLinkHandler(OnHandleUrlListener listener) {
+        listenerReference = new WeakReference<>(listener);
     }
 
     @Override
     public void handleUrl(String url) {
-        Activity activity = reference.get();
-        if (activity != null) {
-            Intent intent = new Intent(activity, ResourceBlockListActivity.class);
-            intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
-            intent.putExtra(Intent.EXTRA_TEXT, url);
-            activity.startActivity(intent);
-        }
+        OnHandleUrlListener listener = listenerReference.get();
+        if (listener != null)
+            listener.onHandleUrl(url);
+    }
+
+    public interface OnHandleUrlListener {
+        void onHandleUrl(String url);
     }
 }

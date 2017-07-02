@@ -137,6 +137,7 @@ import jp.hazuki.yuzubrowser.action.manager.WebSwipeActionManager;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.action.view.ActionListViewAdapter;
 import jp.hazuki.yuzubrowser.adblock.AdBlockController;
+import jp.hazuki.yuzubrowser.adblock.AddAdBlockDialog;
 import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
@@ -240,17 +241,19 @@ import jp.hazuki.yuzubrowser.webkit.WebViewRenderingManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewType;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageCopyUrlHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageHandler;
+import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageLinkHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageLoadUrlHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenBackgroundHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenOtherAppHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightBgTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
-import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageResBlockHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
-public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener, GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener, MenuWindow.OnMenuCloseListener {
+public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
+        GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener,
+        MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -1641,6 +1644,12 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
         mTabManager.swap(a, b);
         mToolbar.swapTab(a, b);
+    }
+
+    @Override
+    public void onAdBlockListUpdate() {
+        if (adBlockController != null)
+            adBlockController.update();
     }
 
     private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
@@ -3061,6 +3070,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_COPY_LINK_TEXT:
                             webview.requestFocusNodeHref(new WebSrcLinkCopyHandler(BrowserActivity.this).obtainMessage());
                             return true;
+                        case SingleAction.LPRESS_ADD_BLACK_LIST:
+                            AddAdBlockDialog.addBackListInstance(extra)
+                                    .show(getSupportFragmentManager(), "add black");
+                            return true;
+                        case SingleAction.LPRESS_ADD_WHITE_LIST:
+                            AddAdBlockDialog.addWhiteListInstance(extra)
+                                    .show(getSupportFragmentManager(), "add white");
+                            return true;
                         default:
                             return run(action, target, null);
                     }
@@ -3123,6 +3140,14 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
                             info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
+                            return true;
+                        case SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST:
+                            AddAdBlockDialog.addBackListInstance(extra)
+                                    .show(getSupportFragmentManager(), "add black");
+                            return true;
+                        case SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST:
+                            AddAdBlockDialog.addWhiteListInstance(extra)
+                                    .show(getSupportFragmentManager(), "add white");
                             return true;
                         default:
                             return run(action, target, null);
@@ -3188,9 +3213,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
                             return true;
-                        case SingleAction.LPRESS_IMAGE_RES_BLOCK:
-                            webview.requestFocusNodeHref(new WebSrcImageResBlockHandler(BrowserActivity.this).obtainMessage());
+                        case SingleAction.LPRESS_IMAGE_RES_BLOCK: {
+                            Intent intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
+                            intent.setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE);
+                            intent.putExtra(Intent.EXTRA_TEXT, extra);
+                            startActivity(intent);
                             return true;
+                        }
                         case SingleAction.LPRESS_PATTERN_MATCH: {
                             Intent intent = new Intent(BrowserActivity.this, PatternUrlActivity.class);
                             intent.putExtra(Intent.EXTRA_TEXT, extra);
@@ -3209,6 +3238,31 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
                             info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
+                            return true;
+                        case SingleAction.LPRESS_ADD_BLACK_LIST:
+                            webview.requestFocusNodeHref(new WebSrcImageLinkHandler(new WebSrcImageLinkHandler.OnHandleUrlListener() {
+                                @Override
+                                public void onHandleUrl(String url) {
+                                    AddAdBlockDialog.addBackListInstance(url)
+                                            .show(getSupportFragmentManager(), "add black");
+                                }
+                            }).obtainMessage());
+                            return true;
+                        case SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST:
+                            AddAdBlockDialog.addBackListInstance(extra)
+                                    .show(getSupportFragmentManager(), "add black");
+                            return true;
+                        case SingleAction.LPRESS_ADD_WHITE_LIST:
+                            webview.requestFocusNodeHref(new WebSrcImageLinkHandler(new WebSrcImageLinkHandler.OnHandleUrlListener() {
+                                @Override
+                                public void onHandleUrl(String url) {
+                                    AddAdBlockDialog.addWhiteListInstance(url)
+                                            .show(getSupportFragmentManager(), "add white");
+                                }
+                            }).obtainMessage());
+                        case SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST:
+                            AddAdBlockDialog.addWhiteListInstance(extra)
+                                    .show(getSupportFragmentManager(), "add white");
                             return true;
                         default:
                             return run(action, target, null);

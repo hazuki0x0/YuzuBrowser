@@ -158,6 +158,11 @@ public class SingleAction implements Parcelable {
     public static final int LPRESS_COPY_LINK_TEXT = -157;
     public static final int LPRESS_SHARE_IMAGE = -158;
     public static final int LPRESS_SAVE_IMAGE = -159;
+    public static final int LPRESS_ADD_BLACK_LIST = -160;
+    public static final int LPRESS_ADD_IMAGE_BLACK_LIST = -161;
+    public static final int LPRESS_ADD_WHITE_LIST = -162;
+    public static final int LPRESS_ADD_IMAGE_WHITE_LIST = -163;
+
 
     public final int id;
 

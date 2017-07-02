@@ -64,6 +64,10 @@
     <string name="block_image">リソースブロックへ追加</string>
     <string name="add_image_pattern">画像をパターンマッチに追加</string>
     <string name="add_url_pattern">リンク先をパターンマッチに追加</string>
+    <string name="add_image_black_list">画像をブラックリストに追加</string>
+    <string name="add_image_white_list">画像をホワイトリストに追加</string>
+    <string name="add_link_black_list">リンク先をブラックリストに追加</string>
+    <string name="add_link_white_list">リンク先をホワイトリストに追加</string>
     <string name="open_all_new">新しいタブで全て開く</string>
     <string name="open_all_bg">バックグラウンドで全て開く</string>
     <string name="copy_clipboard_mes_before">コピーしました : </string>
