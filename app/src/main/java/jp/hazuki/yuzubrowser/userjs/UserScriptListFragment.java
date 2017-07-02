@@ -85,7 +85,7 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
     @Override
     public void onRecyclerItemClicked(View v, int position) {
         Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-        intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.getItems().get(position));
+        intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.getItems().get(position).getInfo());
         startActivityForResult(intent, REQUEST_EDIT_USERJS);
     }
 
@@ -194,7 +194,7 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
             case REQUEST_ADD_USERJS: {
                 if (resultCode != RESULT_OK || data == null)
                     break;
-                UserScript js = data.getParcelableExtra(UserScriptEditActivity.EXTRA_USERSCRIPT);
+                UserScriptInfo js = data.getParcelableExtra(UserScriptEditActivity.EXTRA_USERSCRIPT);
                 if (js == null)
                     throw new NullPointerException("UserJs is null");
                 mDb.add(js);
@@ -204,7 +204,7 @@ public class UserScriptListFragment extends RecyclerFabFragment implements OnUse
             case REQUEST_EDIT_USERJS: {
                 if (resultCode != RESULT_OK || data == null)
                     break;
-                UserScript js = data.getParcelableExtra(UserScriptEditActivity.EXTRA_USERSCRIPT);
+                UserScriptInfo js = data.getParcelableExtra(UserScriptEditActivity.EXTRA_USERSCRIPT);
                 if (js == null)
                     throw new NullPointerException("UserJs is null");
                 mDb.update(js);

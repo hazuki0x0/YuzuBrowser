@@ -18,9 +18,7 @@ import jp.hazuki.yuzubrowser.utils.WebUtils;
 public class UserScript implements Parcelable {
     private static final String TAG = "UserScript";
 
-    private long id = -1;
-    private String data = "";
-    private boolean enabled = true;
+    private final UserScriptInfo info;
 
     private String name;
     private String version;
@@ -31,17 +29,21 @@ public class UserScript implements Parcelable {
     private boolean unwrap;
     private boolean runStart;
     public UserScript() {
+        info = new UserScriptInfo();
     }
 
     public UserScript(long id, String data, boolean enabled) {
-        this.id = id;
-        this.data = data;
-        this.enabled = enabled;
+        info = new UserScriptInfo(id, data, enabled);
         loadData();
     }
 
     public UserScript(String data) {
-        this.data = data;
+        info = new UserScriptInfo(data);
+        loadData();
+    }
+
+    public UserScript(UserScriptInfo info) {
+        this.info = info;
         loadData();
     }
 
@@ -52,15 +54,16 @@ public class UserScript implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(data);
-        dest.writeInt(enabled ? 1 : 0);
+        dest.writeLong(info.getId());
+        dest.writeString(info.getData());
+        dest.writeInt(info.isEnabled() ? 1 : 0);
     }
 
     public UserScript(Parcel source) {
-        id = source.readLong();
-        data = source.readString();
-        enabled = source.readInt() == 1;
+        long id = source.readLong();
+        String data = source.readString();
+        boolean enabled = source.readInt() == 1;
+        info = new UserScriptInfo(id, data, enabled);
         loadData();
     }
 
@@ -77,36 +80,36 @@ public class UserScript implements Parcelable {
     };
 
     public long getId() {
-        return id;
+        return info.getId();
     }
 
     public void setId(long id) {
-        this.id = id;
+        info.setId(id);
     }
 
     public String getData() {
-        return data;
+        return info.getData();
     }
 
     public String getRunnable() {
         if (unwrap) {
-            return data;
+            return info.getData();
         } else {
-            return "(function() {\n" + data + "\n})()";
+            return "(function() {\n" + info.getData() + "\n})()";
         }
     }
 
     public void setData(String data) {
+        info.setData(data);
         loadData();
-        this.data = data;
     }
 
     public boolean isEnabled() {
-        return enabled;
+        return info.isEnabled();
     }
 
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        info.setEnabled(enabled);
     }
 
     public String getName() {
@@ -177,7 +180,7 @@ public class UserScript implements Parcelable {
         exclude = null;
 
         try {
-            BufferedReader reader = new BufferedReader(new StringReader(data));
+            BufferedReader reader = new BufferedReader(new StringReader(info.getData()));
             String line;
 
             if ((line = reader.readLine()) == null || !sHeaderStartPattern.matcher(line).matches()) {
@@ -242,6 +245,10 @@ public class UserScript implements Parcelable {
         } else {
             Logger.w(TAG, "Unknown header : " + line);
         }
+    }
+
+    public UserScriptInfo getInfo() {
+        return info;
     }
 
     private static final Pattern sHeaderStartPattern = Pattern.compile("\\s*//\\s*==UserScript==\\s*", Pattern.CASE_INSENSITIVE);
