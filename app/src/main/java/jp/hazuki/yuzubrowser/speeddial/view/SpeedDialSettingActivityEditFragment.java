@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -18,8 +19,11 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.io.File;
+
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.RootLayout;
+import jp.hazuki.yuzubrowser.download.DownloadFileProvider;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
@@ -135,8 +139,12 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
             case REQUEST_PICK_IMAGE:
                 if (resultCode == Activity.RESULT_OK) {
                     try {
+                        Uri uri = data.getData();
+                        if ("file".equals(uri.getScheme())) {
+                            uri = DownloadFileProvider.getUriForFIle(new File(uri.getPath()));
+                        }
                         Intent intent = new Intent("com.android.camera.action.CROP");
-                        intent.setData(data.getData());
+                        intent.setData(uri);
                         intent.putExtra("outputX", 200);
                         intent.putExtra("outputY", 200);
                         intent.putExtra("aspectX", 1);
