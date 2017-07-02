@@ -15,7 +15,7 @@ import jp.hazuki.yuzubrowser.R;
 public class UserScriptEditActivity extends AppCompatActivity {
     public static final String EXTRA_USERSCRIPT = "UserScriptEditActivity.extra.userscript";
 
-    private UserScript mUserScript;
+    private UserScriptInfo mUserScript;
     private EditText editText;
 
     @Override
@@ -29,9 +29,9 @@ public class UserScriptEditActivity extends AppCompatActivity {
             throw new NullPointerException("intent is null");
         mUserScript = intent.getParcelableExtra(EXTRA_USERSCRIPT);
         if (mUserScript == null) {
-            mUserScript = new UserScript();
+            mUserScript = new UserScriptInfo();
         } else {
-            setTitle(mUserScript.getName());
+            setTitle(new UserScript(mUserScript).getName());
             editText.setText(mUserScript.getData());
         }
     }

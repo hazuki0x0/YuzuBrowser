@@ -169,6 +169,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     @Override
     public MainTabData get(int no) {
+        if (no == mTabStorage.size()) no -= 1;
         if (no < 0 || no >= mTabStorage.size()) return null;
         TabIndexData tabIndexData = mTabStorage.getIndexData(no);
         MainTabData tabData;

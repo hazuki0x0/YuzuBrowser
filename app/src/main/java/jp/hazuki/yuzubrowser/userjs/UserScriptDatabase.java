@@ -65,7 +65,24 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
         js.setId(db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE));
     }
 
+    public void add(UserScriptInfo js) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_DATA, js.getData());
+        values.put(COLUMN_ENABLED, 1);
+        js.setId(db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE));
+    }
+
     public void update(UserScript js) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ID, js.getId());
+        values.put(COLUMN_DATA, js.getData());
+        values.put(COLUMN_ENABLED, js.isEnabled());
+        db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public void update(UserScriptInfo js) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, js.getId());
