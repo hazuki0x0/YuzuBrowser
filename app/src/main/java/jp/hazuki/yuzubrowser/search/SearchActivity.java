@@ -65,7 +65,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     private ListView listView;
 
     private String initQuery;
-    private String initDecodedQuery;
+    private String initDecodedQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
