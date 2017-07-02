@@ -30,7 +30,11 @@ class RegexHost extends SimpleCountMatcher {
 
     @Override
     protected boolean matchItem(Uri uri) {
-        return pattern.matcher(uri.getHost()).find();
+        String host = uri.getHost();
+        if (host != null)
+            return pattern.matcher(uri.getHost()).find();
+        else
+            return pattern.matcher(uri.toString()).find();
     }
 
     @Override
