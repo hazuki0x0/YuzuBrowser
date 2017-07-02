@@ -41,7 +41,7 @@ public class WebIcon implements Serializable {
     }
 
     public String getIconBase64() {
-        return "data:image/png;base64," + new String(Base64.encode(iconBytes, Base64.DEFAULT));
+        return new String(Base64.encode(iconBytes, Base64.DEFAULT));
     }
 
     public Bitmap getBitmap() {

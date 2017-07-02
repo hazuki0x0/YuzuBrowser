@@ -763,15 +763,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         }
     }
 
-    private void showSpeedDial(MainTabData tab) {
-        List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
-        String html = new SpeedDialHtml(getApplicationContext(), speedDials).getSpeedDialHtml();
-        if (tab == null) {
-            tab = addNewTab(TabType.DEFAULT);
-        }
-        tab.mWebView.loadDataWithBaseURL("yuzu:speeddial", html, "text/html", "UTF-8", "yuzu:speeddial");
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
@@ -1473,8 +1464,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         showSearchBox("", mTabManager.indexOf(data.getId()), false);
                         return true;
                     case "speeddial":
-                        showSpeedDial(data);
-                        return true;
+                        return false;
                     case "home":
                         loadUrl(data, AppData.home_page.get());
                         return true;
@@ -2522,6 +2512,18 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public WebResourceResponse shouldInterceptRequest(CustomWebView view, WebResourceRequest request) {
+            if ("yuzu".equalsIgnoreCase(request.getUrl().getScheme())) {
+                String action = request.getUrl().getSchemeSpecificPart();
+
+                if (action.startsWith("//")) {
+                    action = action.substring(2);
+                }
+                if ("speeddial".equalsIgnoreCase(action)) {
+                    List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
+                    return SpeedDialHtml.createResponse(getApplicationContext(), speedDials);
+                }
+            }
+
             if (adBlockController != null) {
                 MainTabData tabData = mTabManager.get(view);
                 Uri uri = null;
@@ -3741,7 +3743,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 }
                 break;
                 case SingleAction.OPEN_SPEED_DIAL:
-                    showSpeedDial(mTabManager.get(target));
+                    loadUrl(mTabManager.get(target), "yuzu:speeddial");
                     break;
                 case SingleAction.ADD_BOOKMARK: {
                     MainTabData tab = mTabManager.get(target);

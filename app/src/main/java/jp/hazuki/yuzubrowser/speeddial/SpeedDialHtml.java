@@ -17,7 +17,10 @@
 package jp.hazuki.yuzubrowser.speeddial;
 
 import android.content.Context;
+import android.webkit.WebResourceResponse;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
@@ -26,31 +29,25 @@ import jp.hazuki.yuzubrowser.utils.IOUtils;
 
 public class SpeedDialHtml {
 
-    private String html;
-
-    public SpeedDialHtml(Context context, List<SpeedDial> speedDialList) {
+    public static WebResourceResponse createResponse(Context context, List<SpeedDial> speedDialList) {
         StringBuilder builder = new StringBuilder(8000);
         String start = getResourceString(context, R.raw.speeddial_start);
         builder.append(start);
         for (SpeedDial speedDial : speedDialList) {
             builder.append("<div class=\"box\"><a href=\"")
                     .append(speedDial.getUrl())
-                    .append("\"><img src=\"")
+                    .append("\"><img src=\"data:image/png;base64,")
                     .append(speedDial.getIcon().getIconBase64())
                     .append("\" /><div class=\"name\">")
                     .append(HtmlUtils.sanitize(speedDial.getTitle()))
                     .append("</div></a></div>");
         }
         builder.append(getResourceString(context, R.raw.speeddial_end));
-        html = builder.toString();
+        return new WebResourceResponse("text/html", "UTF-8",
+                new ByteArrayInputStream(builder.toString().getBytes(StandardCharsets.UTF_8)));
     }
 
-    public String getSpeedDialHtml() {
-        return html;
-    }
-
-    private String getResourceString(Context context, int id) {
+    private static String getResourceString(Context context, int id) {
         return IOUtils.readString(context.getResources().openRawResource(id));
     }
-
 }
