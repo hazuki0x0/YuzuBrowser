@@ -47,7 +47,6 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
     private static final int RESULT_REQUEST_EDIT = 1;
     private static final String ITEM_ID = "id";
 
-    private ActionNameArray mActionNameArray;
     private GestureManager mManager;
     private int mGestureId;
     private GestureListAdapter adapter;
@@ -57,7 +56,6 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         dataInit();
-        reset();
         return getRootView();
     }
 
@@ -151,15 +149,19 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
     }
 
     private void dataInit() {
-        mActionNameArray = getArguments().getParcelable(ActionNameArray.INTENT_EXTRA);
+        ActionNameArray mActionNameArray = getArguments().getParcelable(ActionNameArray.INTENT_EXTRA);
         mGestureId = getArguments().getInt(GestureManager.INTENT_EXTRA_GESTURE_ID);
         mManager = GestureManager.getInstance(getActivity().getApplicationContext(), mGestureId);
+        mManager.load();
+        adapter = new GestureListAdapter(getActivity(), mManager.getList(), mActionNameArray, this);
+        setRecyclerViewAdapter(adapter);
     }
 
     private void reset() {
         mManager.load();
-        adapter = new GestureListAdapter(getActivity(), mManager.getList(), mActionNameArray, this);
-        setRecyclerViewAdapter(adapter);
+        adapter.getItems().clear();
+        adapter.getItems().addAll(mManager.getList());
+        adapter.notifyDataSetChanged();
     }
 
     public static Fragment newInstance(int gestureId, ActionNameArray nameArray) {
