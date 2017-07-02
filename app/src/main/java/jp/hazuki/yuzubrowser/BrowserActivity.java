@@ -1488,6 +1488,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     case "resblock":
                         intent = new Intent(BrowserActivity.this, ResourceBlockListActivity.class);
                         break;
+                    case "adblock":
+                        intent = new Intent(BrowserActivity.this, AdBlockActivity.class);
+                        break;
                     default:
                         return false;
                 }
