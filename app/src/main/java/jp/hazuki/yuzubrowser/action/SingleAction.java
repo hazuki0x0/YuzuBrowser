@@ -117,6 +117,11 @@ public class SingleAction implements Parcelable {
     public static final int TOGGLE_FLICK = 38101;
     public static final int TOGGLE_QUICK_CONTROL = 38102;
     public static final int TOGGLE_MULTI_FINGER_GESTURE = 38103;
+    public static final int TOGGLE_AD_BLOCK = 38200;
+    public static final int OPEN_BLACK_LIST = 38210;
+    public static final int OPEN_WHITE_LIST = 38211;
+    public static final int OPEN_WHITE_PATE_LIST = 38212;
+    public static final int ADD_WHITE_LIST_PAGE = 38220;
     public static final int SHARE_WEB = 50000;
     public static final int OPEN_OTHER = 50001;
     public static final int START_ACTIVITY = 50005;

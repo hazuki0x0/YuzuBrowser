@@ -30,6 +30,10 @@ import jp.hazuki.yuzubrowser.adblock.fragment.AdBlockImportFragment;
 import jp.hazuki.yuzubrowser.adblock.fragment.AdBlockMainFragment;
 
 public class AdBlockActivity extends AppCompatActivity implements AdBlockMainFragment.OnAdBlockMainListener, AdBlockFragment.AdBlockFragmentListener, AdBlockImportFragment.OnImportListener {
+    public static final String ACTION_OPEN_BLACK = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.black";
+    public static final String ACTION_OPEN_WHITE = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.white";
+    public static final String ACTION_OPEN_WHITE_PAGE = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.whitepage";
+
     private static final String TAG_LIST = "list";
 
 
@@ -42,6 +46,20 @@ public class AdBlockActivity extends AppCompatActivity implements AdBlockMainFra
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new AdBlockMainFragment())
                     .commit();
+
+        if (getIntent() != null && getIntent().getAction() != null) {
+            switch (getIntent().getAction()) {
+                case ACTION_OPEN_BLACK:
+                    openBlackList();
+                    break;
+                case ACTION_OPEN_WHITE:
+                    openWhiteList();
+                    break;
+                case ACTION_OPEN_WHITE_PAGE:
+                    openWhitePageList();
+                    break;
+            }
+        }
     }
 
     @Override

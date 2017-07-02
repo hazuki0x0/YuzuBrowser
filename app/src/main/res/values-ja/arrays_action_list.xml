@@ -83,6 +83,11 @@
         <item>フリックアクションの切替</item>
         <item>クイックコントロールの切替</item>
         <item>マルチタッチジェスチャの切替</item>
+        <item>広告ブロックの切替</item>
+        <item>ブラックリストを開く</item>
+        <item>ホワイトリストを開く</item>
+        <item>ホワイトページリストを開く</item>
+        <item>ホワイトページリストに追加</item>
         <item>ページの共有</item>
         <item>他のアプリで開く</item>
         <item>Activityを開く</item>

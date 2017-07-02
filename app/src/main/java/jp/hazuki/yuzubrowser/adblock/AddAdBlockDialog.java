@@ -88,6 +88,14 @@ public class AddAdBlockDialog extends DialogFragment {
         return newInstance(bundle);
     }
 
+    public static AddAdBlockDialog addWhitePageListInstance(String url) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_TYPE, 3);
+        bundle.putInt(ARG_TITLE, R.string.pref_ad_block_white_page);
+        bundle.putString(ARG_URL, trimUrl(url));
+        return newInstance(bundle);
+    }
+
     private static String trimUrl(String url) {
         int index = url.indexOf("://");
         if (index > -1) {

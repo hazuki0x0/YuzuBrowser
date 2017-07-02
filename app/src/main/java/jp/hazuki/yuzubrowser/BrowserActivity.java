@@ -136,6 +136,7 @@ import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.action.manager.WebSwipeActionManager;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.action.view.ActionListViewAdapter;
+import jp.hazuki.yuzubrowser.adblock.AdBlockActivity;
 import jp.hazuki.yuzubrowser.adblock.AdBlockController;
 import jp.hazuki.yuzubrowser.adblock.AddAdBlockDialog;
 import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
@@ -338,6 +339,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private TextView actionNameTextView;
     private boolean isShowActionName;
 
+    private boolean isResumed;
+    private Action delayAction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -493,11 +497,17 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (tabData != null && tabData.mWebView.getView().getParent() == null) {
             setCurrentTab(getCurrentTab());
         }
+
+        if (delayAction != null) {
+            mActionCallback.run(delayAction);
+            delayAction = null;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        isResumed = true;
         dialogHandler.resume();
         setFullscreenIfEnable();
         mToolbar.resetToolBar();
@@ -507,6 +517,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     @Override
     protected void onPause() {
         super.onPause();
+        isResumed = false;
         dialogHandler.pause();
     }
 
@@ -759,7 +770,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     Logger.w(TAG, "Action is null");
                     break;
                 }
-                mActionCallback.run(action);
+                if (isResumed)
+                    mActionCallback.run(action);
+                else
+                    delayAction = action;
                 break;
             default:
                 throw new IllegalStateException();
@@ -3961,6 +3975,32 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     setMultiFingerGestureEnabled(to);
                 }
                 break;
+                case SingleAction.TOGGLE_AD_BLOCK:
+                    if (adBlockController == null)
+                        adBlockController = new AdBlockController(BrowserActivity.this);
+                    else
+                        adBlockController = null;
+                    mTabManager.get(target).mWebView.reload();
+                    break;
+                case SingleAction.OPEN_BLACK_LIST:
+                    startActivity(
+                            new Intent(BrowserActivity.this, AdBlockActivity.class)
+                                    .setAction(AdBlockActivity.ACTION_OPEN_BLACK));
+                    break;
+                case SingleAction.OPEN_WHITE_LIST:
+                    startActivity(
+                            new Intent(BrowserActivity.this, AdBlockActivity.class)
+                                    .setAction(AdBlockActivity.ACTION_OPEN_WHITE));
+                    break;
+                case SingleAction.OPEN_WHITE_PATE_LIST:
+                    startActivity(
+                            new Intent(BrowserActivity.this, AdBlockActivity.class)
+                                    .setAction(AdBlockActivity.ACTION_OPEN_WHITE_PAGE));
+                    break;
+                case SingleAction.ADD_WHITE_LIST_PAGE:
+                    AddAdBlockDialog.addWhitePageListInstance(mTabManager.get(target).getUrl())
+                            .show(getSupportFragmentManager(), "add white page");
+                    break;
                 case SingleAction.SHARE_WEB: {
                     MainTabData tab = mTabManager.get(target);
                     WebUtils.shareWeb(BrowserActivity.this, tab.getUrl(), tab.getTitle());
@@ -4315,6 +4355,20 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     else
                         return res.getDrawable(R.drawable.ic_gesture_white_disable_24px, getTheme());
                 }
+                case SingleAction.TOGGLE_AD_BLOCK: {
+                    if (adBlockController != null)
+                        return res.getDrawable(R.drawable.ic_ad_block_enable_white_24dp, getTheme());
+                    else
+                        return res.getDrawable(R.drawable.ic_ad_block_disable_white_24dp, getTheme());
+                }
+                case SingleAction.OPEN_BLACK_LIST:
+                    return res.getDrawable(R.drawable.ic_open_ad_block_black_24dp, getTheme());
+                case SingleAction.OPEN_WHITE_LIST:
+                    return res.getDrawable(R.drawable.ic_open_ad_block_white_24dp, getTheme());
+                case SingleAction.OPEN_WHITE_PATE_LIST:
+                    return res.getDrawable(R.drawable.ic_open_ad_block_white_page_24dp, getTheme());
+                case SingleAction.ADD_WHITE_LIST_PAGE:
+                    return res.getDrawable(R.drawable.ic_add_white_page_24dp, getTheme());
                 case SingleAction.SHARE_WEB:
                     return res.getDrawable(R.drawable.ic_share_white_24dp, getTheme());
                 case SingleAction.OPEN_OTHER:

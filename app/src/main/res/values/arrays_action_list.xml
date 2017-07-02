@@ -83,6 +83,11 @@
         <item>Toggle flick action</item>
         <item>Toggle quick control</item>
         <item>Toggle multi touch gesture</item>
+        <item>Toggle ad block</item>
+        <item>Open black list</item>
+        <item>Open white list</item>
+        <item>Open white page list</item>
+        <item>Add to white page list</item>
         <item>Share page</item>
         <item>Open in other app</item>
         <item>Start activity</item>
