@@ -42,6 +42,9 @@ public class ItemDecoder {
 
     public SimpleCountMatcher singleDecode(String line) {
         if (line.length() > 2) {
+            if (line.charAt(0) == '[' && line.charAt(line.length() - 1) == ']') {
+                return new RegexUrl(line.substring(1, line.length() - 1));
+            }
             int space = line.indexOf(' ');
             if (space > 0) {
                 String ip = line.substring(0, space);
