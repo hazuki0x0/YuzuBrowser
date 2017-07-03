@@ -630,6 +630,7 @@
         <item>Invert</item>
         <item>Gray scale</item>
         <item>Invert gray scale</item>
+        <item>Night mode</item>
     </string-array>
 
     <integer-array name="pref_rendering_values">
@@ -637,7 +638,16 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </integer-array>
+
+    <string name="pref_night_mode_settings">Night mode settings</string>
+    <string name="pref_color_temperature">Color temperature</string>
+    <string name="pref_warm_color">Warm color</string>
+    <string name="pref_cool_color">Cool color</string>
+    <string name="pref_brightness">Brightness</string>
+    <string name="pref_dark">Dark</string>
+    <string name="pref_bright">Bright</string>
 
     <string name="pref_move_to_parent">Move to parent tab when tab closed</string>
     <string name="pref_multi_finger_gesture_settings">Multi touch gesture settings</string>

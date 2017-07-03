@@ -65,6 +65,10 @@
         android:key="rendering"
         android:title="@string/pref_rendering" />
 
+    <jp.hazuki.yuzubrowser.settings.preference.NightModePreference
+        android:key="night_mode"
+        android:title="@string/pref_night_mode_settings" />
+
 
     <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
         android:key="minimum_font"

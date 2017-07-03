@@ -296,7 +296,16 @@
         <item>反転</item>
         <item>グレースケール</item>
         <item>反転グレースケール</item>
+        <item>ナイトモード</item>
     </string-array>
+
+    <string name="pref_night_mode_settings">ナイトモード設定</string>
+    <string name="pref_color_temperature">色温度</string>
+    <string name="pref_warm_color">暖色</string>
+    <string name="pref_cool_color">寒色</string>
+    <string name="pref_brightness">明るさ</string>
+    <string name="pref_dark">暗い</string>
+    <string name="pref_bright">明るい</string>
 
     <string name="pref_move_to_parent">タブを閉じた時に親タブに移動</string>
     <string name="pref_multi_finger_gesture_settings">マルチタッチジェスチャ設定</string>

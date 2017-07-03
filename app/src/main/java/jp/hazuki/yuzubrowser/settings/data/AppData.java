@@ -167,6 +167,8 @@ public class AppData {
     public static final BooleanContainer block_web_images = new BooleanContainer("block_web_images", false);
     public static final BooleanContainer save_pinned_tabs = new BooleanContainer("save_pinned_tabs", true);
     public static final BooleanContainer ad_block = new BooleanContainer("ad_block", false);
+    public static final IntContainer night_mode_color = new IntContainer("night_mode_color", 5000);
+    public static final IntContainer night_mode_bright = new IntContainer("night_mode_bright", 100);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

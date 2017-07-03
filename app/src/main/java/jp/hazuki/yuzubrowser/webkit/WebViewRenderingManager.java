@@ -22,6 +22,7 @@ import android.graphics.Paint;
 import android.view.View;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.ColorFilterUtils;
 
 public class WebViewRenderingManager {
     private static final float[] NEGATIVE_COLOR = new float[]{
@@ -30,10 +31,15 @@ public class WebViewRenderingManager {
             0, 0, -1, 0, 255,
             0, 0, 0, 1, 0};
 
+    private int colorTemp;
+    private int nightBright;
+
     private final Paint paint = new Paint();
     private int mode;
 
     public void onPreferenceReset() {
+        colorTemp = AppData.night_mode_color.get();
+        nightBright = AppData.night_mode_bright.get();
         setMode(AppData.rendering.get());
     }
 
@@ -63,6 +69,9 @@ public class WebViewRenderingManager {
                 paint.setColorFilter(new ColorMatrixColorFilter(matrix));
                 break;
             }
+            case 4:
+                paint.setColorFilter(new ColorMatrixColorFilter(ColorFilterUtils.colorTemperatureToMatrix(colorTemp, nightBright)));
+                break;
         }
     }
 
