@@ -208,11 +208,14 @@ public class AppData {
             MenuActionManager menuManager = MenuActionManager.getInstance(context);
             menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
             menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
+            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.GO_HOME));
             menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.FINISH));
+            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
             menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK));
             menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
+            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.ALL_ACTION));
             menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHOW_SETTINGS));
+            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.FINISH));
             menuManager.save(context);
 
             LongPressActionManager manager = LongPressActionManager.getInstance(context);
@@ -229,6 +232,8 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_BLACK_LIST));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_WHITE_LIST));
                 manager.link.action.add(action);
             }
             {
@@ -243,8 +248,9 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_IMAGE_RES_BLOCK));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST));
                 manager.image.action.add(action);
             }
             {
@@ -257,6 +263,8 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_PAGE_AS));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_BLACK_LIST));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_WHITE_LIST));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_NEW));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_BG));
@@ -266,8 +274,9 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SAVE_IMAGE_AS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH));
-                list.add(SingleAction.makeInstance(SingleAction.LPRESS_IMAGE_RES_BLOCK));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_PATTERN_MATCH));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST));
                 manager.image_link.action.add(action);
             }
             manager.save(context);
