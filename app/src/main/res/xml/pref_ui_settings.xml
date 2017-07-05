@@ -70,6 +70,12 @@
                 android:title="@string/pref_tab_font_size"
                 app:seekMax="50"
                 app:seekMin="1" />
+
+            <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+                android:key="show_tab_divider"
+                android:title="@string/pref_show_divider"
+                android:entries="@array/pref_show_divider_list"
+                android:entryValues="@array/pref_show_divider_values" />
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/pref_url_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference

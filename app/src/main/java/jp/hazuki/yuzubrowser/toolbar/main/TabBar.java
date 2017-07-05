@@ -92,6 +92,7 @@ public class TabBar extends ToolbarBase {
         super.applyTheme(themedata);
         applyTheme(themedata, mLeftButtonController);
         applyTheme(themedata, mRightButtonController);
+        mTabLayout.applyTheme(themedata);
     }
 
     private void addButtons() {
@@ -114,6 +115,7 @@ public class TabBar extends ToolbarBase {
         super.onPreferenceReset();
         addButtons();
 
+        mTabLayout.onPreferenceReset();
         mTabLayout.setSense(AppData.tab_action_sensitivity.get());
     }
 

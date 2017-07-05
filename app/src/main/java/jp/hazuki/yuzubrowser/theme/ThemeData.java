@@ -50,7 +50,8 @@ public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
 
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
-    public int tabTextColorNormal, tabTextColorLock, tabTextColorPin, tabTextColorSelect, tabAccentColor;
+    public int tabTextColorNormal, tabTextColorLock, tabTextColorPin, tabTextColorSelect, tabAccentColor, tabDividerColor;
+    public boolean showTabDivider;
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
     public int toolbarTextColor, toolbarImageColor;
@@ -118,6 +119,18 @@ public class ThemeData {
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
+                    continue;
+                }
+                if ("tabDividerColor".equalsIgnoreCase(field)) {
+                    try {
+                        tabDividerColor = Long.decode(parser.getText().trim()).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+                if ("showTabDivider".equalsIgnoreCase(field)) {
+                    showTabDivider = Boolean.parseBoolean(parser.getText().trim());
                     continue;
                 }
                 if ("progressColor".equalsIgnoreCase(field)) {
@@ -371,6 +384,7 @@ public class ThemeData {
         data.tabTextColorLock = 0xFF00B53C;
         data.tabTextColorPin = 0xFF3B4EF9;
         data.tabTextColorSelect = 0xFF222222;
+        data.showTabDivider = true;
 
         data.toolbarBackgroundColor = 0xFFDDDDDD;
         data.toolbarTextColor = 0xFF222222;

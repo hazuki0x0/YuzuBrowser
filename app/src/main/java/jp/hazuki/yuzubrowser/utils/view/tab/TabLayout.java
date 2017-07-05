@@ -4,6 +4,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import jp.hazuki.yuzubrowser.theme.ThemeData;
+
 public interface TabLayout {
     interface OnTabClickListener {
         void onTabDoubleClick(int id);
@@ -40,4 +42,8 @@ public interface TabLayout {
     void swapTab(int a, int b);
 
     void moveTab(int from, int to, int new_curernt);
+
+    void onPreferenceReset();
+
+    void applyTheme(ThemeData themedata);
 }

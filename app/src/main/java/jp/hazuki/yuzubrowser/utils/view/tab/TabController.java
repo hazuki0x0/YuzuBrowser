@@ -1,13 +1,18 @@
 package jp.hazuki.yuzubrowser.utils.view.tab;
 
+import android.graphics.Color;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
+import jp.hazuki.yuzubrowser.utils.graphics.DividerDrawable;
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout.OnTabClickListener;
 
 public abstract class TabController {
@@ -149,5 +154,32 @@ public abstract class TabController {
         for (int i = 0; i < count; ++i) {
             settingTab(mViewList.get(i), i);
         }
+    }
+
+    public abstract DividerDrawable newDividerInstance();
+
+    public void applyTheme(LinearLayout layout, ThemeData themedata) {
+        DividerDrawable divider = (DividerDrawable) layout.getDividerDrawable();
+        if (isShowDivider(AppData.show_tab_divider.get(), themedata == null || themedata.showTabDivider)) {
+            if (divider == null) {
+                divider = newDividerInstance();
+                layout.setDividerDrawable(divider);
+            }
+        } else {
+            layout.setDividerDrawable(null);
+            return;
+        }
+
+        if (themedata != null && themedata.tabDividerColor != 0) {
+            divider.setColor(themedata.tabDividerColor);
+        } else if (themedata != null && themedata.toolbarTextColor != 0) {
+            divider.setWithTextColor(themedata.toolbarTextColor);
+        } else {
+            divider.setWithTextColor(Color.WHITE);
+        }
+    }
+
+    private boolean isShowDivider(int mode, boolean show) {
+        return mode == 1 || mode == 0 && show;
     }
 }

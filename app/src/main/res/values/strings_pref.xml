@@ -678,4 +678,17 @@
         <item>@string/pref_reset_count</item>
         <item>@string/multi_select</item>
     </string-array>
+
+    <string name="pref_show_divider">Dividers Display</string>
+    <string-array name="pref_show_divider_list">
+        <item>Auto</item>
+        <item>Show</item>
+        <item>Hide</item>
+    </string-array>
+
+    <integer-array name="pref_show_divider_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 </resources>

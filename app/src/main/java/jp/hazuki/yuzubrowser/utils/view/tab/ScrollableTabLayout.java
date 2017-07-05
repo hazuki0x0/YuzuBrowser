@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
+import jp.hazuki.yuzubrowser.theme.ThemeData;
+import jp.hazuki.yuzubrowser.utils.graphics.DividerDrawable;
+
 public class ScrollableTabLayout extends HorizontalScrollView implements TabLayout {
     private final TabController mController = new TabController() {
         @Override
@@ -17,6 +20,11 @@ public class ScrollableTabLayout extends HorizontalScrollView implements TabLayo
         @Override
         public void requestRemoveViewAt(int id) {
             mLayout.removeViewAt(id);
+        }
+
+        @Override
+        public DividerDrawable newDividerInstance() {
+            return new DividerDrawable(getContext());
         }
     };
     private final LinearLayout mLayout;
@@ -34,6 +42,7 @@ public class ScrollableTabLayout extends HorizontalScrollView implements TabLayo
 
         mLayout = new LinearLayout(context);
         mLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         addView(mLayout);
     }
 
@@ -118,5 +127,15 @@ public class ScrollableTabLayout extends HorizontalScrollView implements TabLayo
     @Override
     public void moveTab(int from, int to, int new_curernt) {
         mController.moveTab(from, to, new_curernt);
+    }
+
+    @Override
+    public void onPreferenceReset() {
+        applyTheme(ThemeData.getInstance());
+    }
+
+    @Override
+    public void applyTheme(ThemeData themedata) {
+        mController.applyTheme(mLayout, themedata);
     }
 }

@@ -329,4 +329,11 @@
     <string name="pref_ad_block_delete_confirm">「%1$s」を削除してもよろしいですか？</string>
     <string name="pref_ad_block_delete_selected_confirm">選択済みのアイテムを削除してもよろしいですか？</string>
     <string name="pref_ad_block_delete">「%1$s」を削除しました</string>
+
+    <string name="pref_show_divider">区切り線表示</string>
+    <string-array name="pref_show_divider_list">
+        <item>自動</item>
+        <item>表示</item>
+        <item>非表示</item>
+    </string-array>
 </resources>
