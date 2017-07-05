@@ -158,7 +158,7 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
                 }
                 break;
             case REQUEST_CROP_IMAGE:
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
                     Bitmap bitmap = data.getExtras().getParcelable("data");
                     speedDial.setIcon(WebIcon.createIcon(bitmap));
                     icon.setImageBitmap(bitmap);
