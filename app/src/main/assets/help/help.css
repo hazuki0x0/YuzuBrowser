@@ -34,10 +34,14 @@ summary:active {
     transform: translateY(2px);
 }
 
-p.details_info {
+.details_info {
     margin: 0px 8px 30px;
     padding: 5px 10px;
     border-left: solid 1px #ccc;
+}
+
+.li_info {
+    margin-left: 40px;
 }
 
 div.button  {

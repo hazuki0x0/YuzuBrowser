@@ -1,0 +1,148 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+</head>
+<body>
+<h1 class="head">パターンの仕様</h1>
+<details>
+    <summary>基本</summary>
+    <div class="details_info">
+        ワイルドカード
+        <ul>
+            <li>'#'</li>
+            数値(0-9)1文字とマッチ('\d'として解釈)
+            <li>'?'</li>
+            任意の文字1文字とマッチ('.'として解釈)
+            <li>'*'</li>
+            任意の0文字以上の文字とマッチ('.*'として解釈)
+            <li>'+'</li>
+            任意の1文字以上の文字とマッチ('.+'として解釈)
+        </ul>
+        これらの文字を通常の文字として使用したい場合円マーク(バックスラッシュ)を前につけます。<br>
+        '\#', '\?', '\*', '\+'<br><br>
+        また<code>[]</code>で囲うことで正規表現を使用できます。<br>
+        全てのパターンにおいて大文字と小文字は区別されます。
+    </div>
+</details>
+<details>
+    <summary>ワイルドカードの説明</summary>
+    <div class="details_info">
+        <ul>
+            <li>ワイルドカード'#'</li>
+        </ul>
+        <div class="li_info">
+            '#'は数字の0～9のいずれかにマッチします。<br>
+            例1)パターン文字列:<code>IMG#.jpg</code><br>
+            URL中に<code>IMG0.jpg</code>, <code>IMG1.jpg</code>, ..., <code>IMG8.jpg</code>, <code>IMG9.jpg</code>が含む時にマッチします。<br>
+            しかし<code>http://www.test.com/IMG.jpg</code>の場合<code>IMG</code>の後に数字が来ていないのでマッチしません。<br>
+            例2)パターン文字列:<code>IMG###.jpg</code><br>
+            URL中に<code>IMG000.jpg</code>, <code>IMG001.jpg</code>, ..., <code>IMG998.jpg</code>,
+            <code>IMG999.jpg</code>が含む時にマッチします。<br>
+            しかし<code>http://www.test.com/IMG0a1.jpg</code>のように間に数字以外が含まれるような場合は<code>###</code>が示すように3つの連続した数値になっていないためマッチしません。
+        </div>
+        <ul>
+            <li>ワイルドカード'?'</li>
+        </ul>
+        <div class="li_info">
+            '?'は任意の1文字のいずれかにマッチします。<br>
+            例1)パターン文字列:<code>IMG_?.jpg</code><br>
+            <code>IMG_</code>と<code>.jpg</code>の間に何か1文字が挟まっているURLがマッチします。<br>
+            <code>http://www.test.com/IMG_l.jpg</code>はこのパターンにマッチします。<br>
+            しかし<code>http://www.test.com/IMG_00.jpg</code>は<code>IMG_</code>と<code>.jpg</code>の間に2文字(<code>00</code>)が挟まれているためこのパターンにはマッチしません。<br>
+            例2)パターン文字列:<code>IMG_???.jpg</code><br>
+            <code>IMG_</code>と<code>.jpg</code>の間に何か3文字が挟まっているURLがマッチします。
+        </div>
+        <ul>
+            <li>ワイルドカード'*'</li>
+        </ul>
+        <div class="li_info">
+            '*'は0文字以上の任意文字とマッチします。<br>
+            例)パターン文字列:<code>IMG_*.jpg</code><br>
+            <code>IMG_</code>と<code>.jpg</code>の間に何もないか、何か挟まっているときマッチします。<br>
+            そのため<code>IMG_.jpg</code>, <code>IMG_000.jpg</code>, <code>IMG_000abc.jpg</code>のいずれにもマッチします。
+        </div>
+        <ul>
+            <li>ワイルドカード'+'</li>
+        </ul>
+        <div class="li_info">
+            '+'は1文字以上の任意文字とマッチします。<br>
+            例)パターン文字列:<code>IMG_+.jpg</code><br>
+            <code>IMG_</code>と<code>.jpg</code>の間に何か挟まっているときマッチします。<br>
+            <font color="red"><code>IMG_</code>と<code>.jpg</code>の間に何もない場合マッチしません。</font><br>
+            そのため<code>IMG_000.jpg</code>, <code>IMG_000abc.jpg</code>にマッチします。
+        </div>
+        <ul>
+            <li>正規表現</li>
+        </ul>
+        <div class="li_info">
+            <code>[]</code>で囲んだパターンを正規表現として認識します。<br>
+            正規表現はJavaの仕様に準じます。<br>
+            例)<code>[https?://www\.test\.com/IMG_*\.jpg]</code>
+        </div>
+    </div>
+</details>
+<details id="insecure_content">
+    <summary>パターンマッチ</summary>
+    <div class="details_info">
+        先頭に<code>http://</code>などのスキームをつけない場合内部で自動的に補完されます。(<code>^\w+://</code>を追加)<br>
+        また<code>*test.com</code>のようにすると<code>http://other.com/?page=test.com</code>などのURLにもマッチしてしまいます。
+    </div>
+</details>
+<details>
+    <summary>広告ブロック</summary>
+    <div class="details_info">
+        ワイルドカードを使用しない方が処理が早くなります。<br>
+        また、正規表現は複雑なパターンを指定するとパフォーマンスが悪化します。<br>
+        <ul>
+            <li>ワイルドカード(<code>#?*+</code>)を使用しない場合</li>
+        </ul>
+        <div class="li_info">
+            URLに指定の文字列がある場合ブロックします。<br>
+            例)パターン文字列:<code>ad.jpg</code><br>
+            <code>http://test.com/ad/ad.jpg</code>, <code>https://test.jp/ad/img/ad.jpg</code>をブロックします。
+        </div>
+        <ul>
+            <li>パターン文字(<code>#?*+</code>)を使用する場合</li>
+        </ul>
+        <div class="li_info">
+            詳しくはワイルドカードの説明を参照してください。<br>
+            例)パターン文字列:<code>/ad/+.jpg</code><br>
+            <code>http://test.com/ad/01.jpg</code>,
+            <code>https://test.jp/ad/img/advertisement.jpg</code>をブロックします。
+        </div>
+        <ul>
+            <li>ホストブロック</li>
+        </ul>
+        <div class="li_info">
+            指定のホストを全てブロックします。<br>
+            <ul>
+                <li>完全一致</li>
+            </ul>
+            <div class="li_info">
+                <code>h ad.test.com</code>のように'h'のあとに半角スペースを入れて指定します。<br>
+                <code>http://ad.com</code>などをブロックせず、<code>http://ad.test.com</code>のみブロックしたい場合に有効です。<br>
+                ワイルドカードも使用できます。<br>
+                例)<code>h ad.+.com</code>, <code>h ad.test.*</code><br>
+                <code>127.0.0.1 ad.com</code>のようなhosts形式でも指定できます。
+            </div>
+            <ul>
+                <li>部分一致</li>
+            </ul>
+            <div class="li_info">
+                <code>c ad.com</code>のように'c'のあとに半角スペースを入れて指定します。<br>
+                <code>http://ad.com</code>, <code>http://abc.ad.com</code>, <code>http://ad001.ad.com</code>などをブロックすることができます。<br>
+                <font color="red">ワイルドカードは使用できません。</font>
+            </div>
+            <ul>
+                <li>ホストブロックで正規表現を使用する場合</li>
+            </ul>
+            <div class="li_info">
+                <code>h [test\.com]</code>のように指定します>。
+            </div>
+        </div>
+    </div>
+</details>
+</body>
+</html>

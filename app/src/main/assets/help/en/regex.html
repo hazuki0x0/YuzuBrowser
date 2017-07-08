@@ -1,0 +1,163 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+</head>
+<body>
+<h1 class="head">Pattern specification</h1>
+<details>
+    <summary>Basic</summary>
+    <div class="details_info">
+        Wildcard
+        <ul>
+            <li>'#'</li>
+            Match a single numeric(0-9) character (interpreted as '\d')
+            <li>'?'</li>
+            Match any single character (interpreted as '.')
+            <li>'*'</li>
+            Match any zero or more characters (interpreted as '.*')
+            <li>'+'</li>
+            Match any one or more characters (interpreted as '.+')
+        </ul>
+        If you want to use these characters as ordinary letters, prepend the backslash. <br>
+        '\#', '\?', '\*', '\+'<br><br>
+        Also, you can use the regular expression by surrounding with<code>[]</code>.<br>
+        All patterns are distinguished between uppercase and lowercase letters.
+    </div>
+</details>
+<details>
+    <summary>Wildcard description</summary>
+    <div class="details_info">
+        <ul>
+            <li>Wildcard'#'</li>
+        </ul>
+        <div class="li_info">
+            '#' matches 0-9 one of the numbers.<br>
+            ex.1)Pattern string = <code>IMG#.jpg</code><br>
+            If a URL includes <code>IMG0.jpg</code> or <code>IMG1.jpg</code> or ... or <code>IMG8.jpg</code>
+            or <code>IMG9.jpg</code>, it is matched.<br>
+            In the case of <code>http://www.test.com/IMG.jpg</code>, because a number doesn't come
+            after "IMG", this URL isn't matched.<br>
+            例2)Pattern string = <code>IMG###.jpg</code><br>
+            If a URL includes <code>IMG000.jpg</code> or <code>IMG001.jpg</code> or ... or <code>IMG998.jpg</code>
+            or <code>IMG999.jpg</code>, it is matched.<br>
+            In the case of <code>http://www.test.com/IMG0a1.jpg</code>, because it doesn't include
+            three consecutive numerical value, this URL isn't matched.
+        </div>
+        <ul>
+            <li>Wildcard'?'</li>
+        </ul>
+        <div class="li_info">
+            '?' matches with any single character.<br>
+            ex.1)Pattern string = <code>IMG_?.jpg</code><br>
+            If a URL includes the expression that some one character is inserted between
+            <code>IMG_</code> and <code>.jpg</code>, it is matched.<br>
+            In the case of <code>http://www.test.com/IMG_l.jpg</code>, this URL is matched.<br>
+            In the case of <code>http://www.test.com/IMG_00.jpg</code> ,two
+            characters(<code>00</code>) are sandwiched between <code>IMG_</code> snd
+            <code>.jpg</code>, it isn't matched.<br>
+            例2)Pattern string = <code>IMG_???.jpg</code><br>
+            This pattern matches the URL that some three characters are inserted between between
+            <code>IMG_</code> and <code>.jpg</code>.
+        </div>
+        <ul>
+            <li>Wildcard'*'</li>
+        </ul>
+        <div class="li_info">
+            '*' matches with any zero or more characters.<br>
+            例)Pattern string = <code>IMG_*.jpg</code><br>
+            If a URL includes the expression that some zero or more characters is inserted between
+            <code>IMG_</code> and <code>.jpg</code>, it is matched.<br>
+            Therefore it matches both of <code>IMG_.jpg</code>, <code>IMG_000.jpg</code> and <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Wildcard'+'</li>
+        </ul>
+        <div class="li_info">
+            '+' matches with any one or more characters.<br>
+            例)Pattern string = <code>IMG_+.jpg</code><br>
+            If a URL includes the expression that some one or more characters is inserted between
+            <code>IMG_</code> and <code>.jpg</code>, it is matched.<br>
+            Therefore it matches both of <code>IMG_.jpg</code>, <code>IMG_000.jpg</code> and <code>IMG_000abc.jpg</code>.
+            <font color="red">It don't match, if there is nothing between <code>IMG_</code> and
+                <code>.jpg</code>.</font><br>
+            Therefore it matches both of <code>IMG_000.jpg</code> and <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Regular expression</li>
+        </ul>
+        <div class="li_info">
+            The pattern enclosed in '[]' is treated as a regular expression.<br>
+            Regular expressions conform to Java specifications. <br>
+            ex)<code>[https?://www\.test\.com/IMG_*\.jpg]</code>
+        </div>
+    </div>
+</details>
+<details id="insecure_content">
+    <summary>Pattern match</summary>
+    <div class="details_info">
+        If you do not apply a scheme such as <code>http://</code>, it will be automatically
+        supplemented.(add <code>^\w+://</code>)<br>
+        If you make a pattern like <code>*test.com</code>, it will match the URL, such as <code>http://other.com/?page=test.com</code>.
+    </div>
+</details>
+<details>
+    <summary>Ad block</summary>
+    <div class="details_info">
+        If you do not use wildcard, it will be faster.<br>
+        In addition, performance is worse if there is a complex pattern in the regular
+        expression.<br>
+        <ul>
+            <li>If you do not use wildcard(<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            If there is a specified string in the URL, block it.<br>
+            ex.)Pattern string =<code>ad.jpg</code><br>
+            Block <code>http://test.com/ad/ad.jpg</code>, <code>https://test.jp/ad/img/ad.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>If you do not use wildcard(<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            See the wildcard description for more information.<br>
+            ex.)Pattern string =<code>/ad/+.jpg</code><br>
+            Block <code>http://test.com/ad/01.jpg</code>, <code>https://test.jp/ad/img/advertisement.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Host block</li>
+        </ul>
+        <div class="li_info">
+            Block all specified hosts.<br>
+            <ul>
+                <li>Perfect match</li>
+            </ul>
+            <div class="li_info">
+                <code>h ad.test.com</code> Specify put a space after the the 'h' as.<br>
+                It is useful to block <code>http://ad.test.com</code> without blocking <code>http://test.com</code>.<br>
+                Wild cards can also be used. <br>
+                ex.)<code>h ad.+.com</code>, <code>h ad.test.*</code><br>
+                <code>127.0.0.1 ad.com</code> can also be specified in a host format, such as.
+            </div>
+            <ul>
+                <li>Partial Match</li>
+            </ul>
+            <div class="li_info">
+                <code>c ad.com</code> Specify put a space after the the 'c' as.<br>
+                Block <code>http://ad.com</code>, <code>http://abc.ad.com</code>, <code>http://ad001.ad.com</code>
+                etc.<br>
+                <font color="red">Wild cards can NOT be used.</font>
+            </div>
+            <ul>
+                <li>When using regular expressions in host block</li>
+            </ul>
+            <div class="li_info">
+                <code>h [test\.com]</code> can be specified as.
+            </div>
+        </div>
+    </div>
+</details>
+</body>
+</html>
