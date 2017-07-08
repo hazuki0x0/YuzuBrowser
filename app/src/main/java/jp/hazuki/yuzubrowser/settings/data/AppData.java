@@ -95,7 +95,7 @@ public class AppData {
     public static final BooleanContainer fullscreen = new BooleanContainer("fullscreen", false);
     public static final BooleanContainer keep_screen_on = new BooleanContainer("keep_screen_on", false);
     public static final BooleanContainer accept_cookie = new BooleanContainer("accept_cookie", true);
-    public static final BooleanContainer accept_third_cookie = new BooleanContainer("accept_third_cookie", false);
+    public static final BooleanContainer accept_third_cookie = new BooleanContainer("accept_third_cookie", true);
     public static final BooleanContainer accept_cookie_private = new BooleanContainer("accept_cookie_private", false);
     public static final IntContainer web_cache = new IntContainer("web_cache", WebSettings.LOAD_DEFAULT);
     public static final BooleanContainer web_popup = new BooleanContainer("web_popup", true);
