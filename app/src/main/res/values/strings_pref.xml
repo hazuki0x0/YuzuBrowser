@@ -515,6 +515,20 @@
     <string name="pref_qc_rad_start">Radius</string>
     <string name="pref_qc_rad_inc">Radius increment</string>
     <string name="pref_qc_slop">Slop</string>
+    <string name="pref_qc_r_pos">Reacting position</string>
+
+    <string-array name="pref_qc_r_pos_list">
+        <item>Left and Right</item>
+        <item>Left</item>
+        <item>Right</item>
+    </string-array>
+
+    <integer-array name="pref_qc_r_pos_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
     <string name="pref_qc_level1">Level 1</string>
     <string name="pref_qc_level2">Level 2</string>
     <string name="pref_qc_level3">Level 3</string>

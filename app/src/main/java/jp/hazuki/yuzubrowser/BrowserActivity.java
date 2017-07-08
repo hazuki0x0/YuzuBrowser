@@ -2954,6 +2954,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             pie.setRadiusStart((int) (AppData.qc_rad_start.get() * density + 0.5f));
             pie.setRadiusIncrement((int) (AppData.qc_rad_inc.get() * density + 0.5f));
             pie.setSlop((int) (AppData.qc_slop.get() * density + 0.5f));
+            pie.setPosition(AppData.qc_position.get());
         }
 
         public void onThemeChanged(ThemeData themedata) {

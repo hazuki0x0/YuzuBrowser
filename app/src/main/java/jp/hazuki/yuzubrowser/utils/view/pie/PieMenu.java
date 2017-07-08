@@ -79,6 +79,7 @@ public class PieMenu extends FrameLayout {
     private int mSlop;
     private int mTouchOffset;
 
+    private int mPosition;
     private boolean mOpen;
     private PieController mController;
 
@@ -187,6 +188,7 @@ public class PieMenu extends FrameLayout {
 
     private void setCenter(int x, int y) {
         if (x < mSlop) {
+
             mCenter.x = 0;
         } else {
             mCenter.x = getWidth();
@@ -300,7 +302,7 @@ public class PieMenu extends FrameLayout {
         float y = evt.getY();
         int action = evt.getActionMasked();
         if (MotionEvent.ACTION_DOWN == action) {
-            if ((x > getWidth() - mSlop) || (x < mSlop)) {
+            if ((mPosition != 1 && x > getWidth() - mSlop) || (mPosition != 2 && x < mSlop)) {
                 setCenter((int) x, (int) y);
                 show(true);
                 return true;
@@ -446,6 +448,10 @@ public class PieMenu extends FrameLayout {
 
     public void setSlop(int slop) {
         this.mSlop = slop;
+    }
+
+    public void setPosition(int position) {
+        this.mPosition = position;
     }
 
     public void setTouchOffset(int touchOffset) {

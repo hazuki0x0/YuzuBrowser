@@ -260,6 +260,11 @@
             android:title="@string/pref_qc_slop"
             app:seekMax="300"
             app:seekMin="1" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:key="qc_position"
+            android:title="@string/pref_qc_r_pos"
+            android:entries="@array/pref_qc_r_pos_list"
+            android:entryValues="@array/pref_qc_r_pos_values" />
 
         <jp.hazuki.yuzubrowser.settings.preference.ActionListPreference
             android:title="@string/pref_qc_level1"

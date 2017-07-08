@@ -127,6 +127,7 @@ public class AppData {
     public static final IntContainer qc_rad_start = new IntContainer("qc_rad_start", 50);
     public static final IntContainer qc_rad_inc = new IntContainer("qc_rad_inc", 70);
     public static final IntContainer qc_slop = new IntContainer("qc_slop", 10);
+    public static final IntContainer qc_position = new IntContainer("qc_position", 0);
     public static final IntContainer overlay_bottom_alpha = new IntContainer("overlay_bottom_alpha", 0xee);
     public static final BooleanContainer save_last_tabs = new BooleanContainer("save_last_tabs", false);
     public static final BooleanContainer save_closed_tab = new BooleanContainer("save_closed_tab", false);
