@@ -14,18 +14,19 @@ import java.util.regex.PatternSyntaxException;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
 import jp.hazuki.yuzubrowser.pattern.PatternChecker;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherFactory;
 
 public class PatternUrlChecker extends PatternChecker {
     private static final String FIELD_PATTERN_URL = "0";
     private String mPatternUrl;
     private Pattern mPattern;
 
-    public PatternUrlChecker(PatternAction pattern_action, String pattern_url) throws PatternSyntaxException {
+    public PatternUrlChecker(PatternAction pattern_action, FastMatcherFactory factory, String pattern_url) throws PatternSyntaxException {
         super(pattern_action);
-        setPatternUrlWithThrow(pattern_url);
+        setPatternUrlWithThrow(factory, pattern_url);
     }
 
-    public PatternUrlChecker(JsonParser parser) throws PatternSyntaxException, IOException {
+    public PatternUrlChecker(JsonParser parser, FastMatcherFactory factory) throws PatternSyntaxException, IOException {
         super(PatternAction.newInstance(parser));
         //TODO not set mPattern
         if (parser.nextToken() != JsonToken.START_OBJECT) return;
@@ -33,7 +34,7 @@ public class PatternUrlChecker extends PatternChecker {
             if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return;
             if (FIELD_PATTERN_URL.equals(parser.getCurrentName())) {
                 if (parser.nextToken() != JsonToken.VALUE_STRING) return;
-                setPatternUrlWithThrow(parser.getText());
+                setPatternUrlWithThrow(factory, parser.getText());
                 continue;
             }
             parser.skipChildren();
@@ -44,8 +45,8 @@ public class PatternUrlChecker extends PatternChecker {
         return mPatternUrl;
     }
 
-    private void setPatternUrlWithThrow(String pattern_url) throws PatternSyntaxException {
-        mPattern = WebUtils.makeUrlPatternWithThrow(pattern_url);
+    private void setPatternUrlWithThrow(FastMatcherFactory factory, String pattern_url) throws PatternSyntaxException {
+        mPattern = WebUtils.makeUrlPatternWithThrow(factory, pattern_url);
         this.mPatternUrl = pattern_url;
     }
 

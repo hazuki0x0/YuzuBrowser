@@ -20,7 +20,7 @@ import android.text.TextUtils;
 
 import java.nio.CharBuffer;
 
-final class FastMatcherFactory {
+public final class FastMatcherFactory {
 
     private CharBuffer mainBuffer;
 
@@ -73,11 +73,11 @@ final class FastMatcherFactory {
         return mainBuffer;
     }
 
-    void release() {
+    public void release() {
         mainBuffer = null;
     }
 
-    private String fastCompile(String item) {
+    public String fastCompile(String item) {
         return fastCompile(getBuffer(item.length()), item);
     }
 

@@ -42,6 +42,7 @@ import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.ImeUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherFactory;
 
 public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
     private EditText urlEditText;
@@ -94,7 +95,7 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
     public PatternUrlChecker makeActionChecker(PatternAction pattern_action, View header_view) {
         String pattern_url = ((EditText) header_view.findViewById(R.id.urlEditText)).getText().toString();
         try {
-            return new PatternUrlChecker(pattern_action, pattern_url);
+            return new PatternUrlChecker(pattern_action, new FastMatcherFactory(), pattern_url);
         } catch (PatternSyntaxException e) {
             ErrorReport.printAndWriteLog(e);
             Toast.makeText(getApplicationContext(), R.string.pattern_syntax_error, Toast.LENGTH_SHORT).show();

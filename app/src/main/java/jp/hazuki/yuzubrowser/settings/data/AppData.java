@@ -55,6 +55,7 @@ import jp.hazuki.yuzubrowser.useragent.UserAgentList;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
+import jp.hazuki.yuzubrowser.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.webencode.WebTextEncode;
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeList;
 
@@ -324,6 +325,11 @@ public class AppData {
                     BundleDataBaseConverter converter = new BundleDataBaseConverter(context.getFileStreamPath("last_url_2.dat"));
                     converter.readList(context);
                     converter.clear();
+                }
+
+                if (lastLaunch < 300000) {
+                    PatternUrlConverter converter = new PatternUrlConverter();
+                    converter.convert(context);
                 }
             }
 

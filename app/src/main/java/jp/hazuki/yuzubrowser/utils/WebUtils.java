@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherFactory;
 
 public class WebUtils {
     private WebUtils() {
@@ -147,26 +148,30 @@ public class WebUtils {
     }
 
     public static Pattern makeUrlPattern(String pattern_url) {
-        try {
-            return makeUrlPatternWithThrow(pattern_url);
-        } catch (PatternSyntaxException e) {
-            ErrorReport.printAndWriteLog(e);
-        }
-        return null;
-    }
-
-    public static Pattern makeUrlPatternWithThrow(String pattern_url) {
         if (pattern_url == null) return null;
-        if (!pattern_url.startsWith("?")) {
+        try {
             pattern_url = pattern_url.replace("?", "\\?").replace(".", "\\.").replace("*", ".*?").replace("+", ".+?");
 
             if (maybeContainsUrlScheme(pattern_url))
                 return Pattern.compile("^" + pattern_url);
             else
                 return Pattern.compile("^\\w+://" + pattern_url);
+        } catch (PatternSyntaxException e) {
+            ErrorReport.printAndWriteLog(e);
+        }
+        return null;
+    }
+
+    public static Pattern makeUrlPatternWithThrow(FastMatcherFactory factory, String pattern_url) {
+        if (pattern_url == null) return null;
+        if (pattern_url.charAt(0) == '[' && pattern_url.charAt(pattern_url.length() - 1) == ']') {
+            return Pattern.compile(pattern_url.substring(1, pattern_url.length() - 1));
         } else {
-            pattern_url = pattern_url.substring(1);
-            return Pattern.compile(pattern_url);
+            pattern_url = factory.fastCompile(pattern_url);
+            if (maybeContainsUrlScheme(pattern_url))
+                return Pattern.compile("^" + pattern_url);
+            else
+                return Pattern.compile("^\\w+://" + pattern_url);
         }
     }
 

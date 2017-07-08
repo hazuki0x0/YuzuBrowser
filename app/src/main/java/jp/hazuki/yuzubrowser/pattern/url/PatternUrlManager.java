@@ -7,14 +7,27 @@ import com.fasterxml.jackson.core.JsonParser;
 import java.io.IOException;
 
 import jp.hazuki.yuzubrowser.pattern.PatternManager;
+import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherFactory;
 
 public class PatternUrlManager extends PatternManager<PatternUrlChecker> {
+
+    private FastMatcherFactory factory;
+
     public PatternUrlManager(Context context) {
         super(context, "url_1.dat");
+        factory = new FastMatcherFactory();
     }
 
     @Override
     protected PatternUrlChecker newInstance(JsonParser parser) throws IOException {
-        return new PatternUrlChecker(parser);
+        if (factory == null) factory = new FastMatcherFactory();
+        return new PatternUrlChecker(parser, factory);
+    }
+
+    @Override
+    public boolean load(Context context) {
+        boolean result = super.load(context);
+        factory.release();
+        return result;
     }
 }
