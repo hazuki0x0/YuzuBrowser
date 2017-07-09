@@ -40,8 +40,12 @@ summary:active {
     border-left: solid 1px #ccc;
 }
 
+ul {
+    padding-left: 20px;
+}
+
 .li_info {
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 div.button  {

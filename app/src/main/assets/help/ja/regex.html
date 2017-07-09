@@ -14,13 +14,13 @@
             <li>'#'</li>
             数値(0-9)1文字とマッチ('\d'として解釈)
             <li>'?'</li>
-            任意の文字1文字とマッチ('.'として解釈)
+            文字1文字とマッチ('.'として解釈)
             <li>'*'</li>
-            任意の0文字以上の文字とマッチ('.*'として解釈)
+            0文字以上の文字とマッチ('.*'として解釈)
             <li>'+'</li>
-            任意の1文字以上の文字とマッチ('.+'として解釈)
+            1文字以上の文字とマッチ('.+'として解釈)
         </ul>
-        これらの文字を通常の文字として使用したい場合円マーク(バックスラッシュ)を前につけます。<br>
+        これらの文字を通常の文字として使用したい場合バックスラッシュ(円マーク)を前につけます。<br>
         '\#', '\?', '\*', '\+'<br><br>
         また<code>[]</code>で囲うことで正規表現を使用できます。<br>
         全てのパターンにおいて大文字と小文字は区別されます。
@@ -36,21 +36,21 @@
             '#'は数字の0～9のいずれかにマッチします。<br>
             例1)パターン文字列:<code>IMG#.jpg</code><br>
             URL中に<code>IMG0.jpg</code>, <code>IMG1.jpg</code>, ..., <code>IMG8.jpg</code>, <code>IMG9.jpg</code>が含む時にマッチします。<br>
-            しかし<code>http://www.test.com/IMG.jpg</code>の場合<code>IMG</code>の後に数字が来ていないのでマッチしません。<br>
+            しかし<code>http://www.test.com/IMG.jpg</code>のときは<code>IMG</code>の後に数字が来ていないのでマッチしません。<br>
             例2)パターン文字列:<code>IMG###.jpg</code><br>
             URL中に<code>IMG000.jpg</code>, <code>IMG001.jpg</code>, ..., <code>IMG998.jpg</code>,
             <code>IMG999.jpg</code>が含む時にマッチします。<br>
-            しかし<code>http://www.test.com/IMG0a1.jpg</code>のように間に数字以外が含まれるような場合は<code>###</code>が示すように3つの連続した数値になっていないためマッチしません。
+            しかし<code>http://www.test.com/IMG0a1.jpg</code>のようなときは<code>###</code>が示す3つの連続した数値になっていないためマッチしません。
         </div>
         <ul>
             <li>ワイルドカード'?'</li>
         </ul>
         <div class="li_info">
-            '?'は任意の1文字のいずれかにマッチします。<br>
+            '?'は1文字にマッチします。<br>
             例1)パターン文字列:<code>IMG_?.jpg</code><br>
             <code>IMG_</code>と<code>.jpg</code>の間に何か1文字が挟まっているURLがマッチします。<br>
             <code>http://www.test.com/IMG_l.jpg</code>はこのパターンにマッチします。<br>
-            しかし<code>http://www.test.com/IMG_00.jpg</code>は<code>IMG_</code>と<code>.jpg</code>の間に2文字(<code>00</code>)が挟まれているためこのパターンにはマッチしません。<br>
+            しかし<code>http://www.test.com/IMG_00.jpg</code>は<code>IMG_</code>と<code>.jpg</code>の間に2文字(<code>00</code>)あるためマッチしません。<br>
             例2)パターン文字列:<code>IMG_???.jpg</code><br>
             <code>IMG_</code>と<code>.jpg</code>の間に何か3文字が挟まっているURLがマッチします。
         </div>
@@ -58,7 +58,7 @@
             <li>ワイルドカード'*'</li>
         </ul>
         <div class="li_info">
-            '*'は0文字以上の任意文字とマッチします。<br>
+            '*'は0文字以上の文字とマッチします。<br>
             例)パターン文字列:<code>IMG_*.jpg</code><br>
             <code>IMG_</code>と<code>.jpg</code>の間に何もないか、何か挟まっているときマッチします。<br>
             そのため<code>IMG_.jpg</code>, <code>IMG_000.jpg</code>, <code>IMG_000abc.jpg</code>のいずれにもマッチします。
@@ -67,7 +67,7 @@
             <li>ワイルドカード'+'</li>
         </ul>
         <div class="li_info">
-            '+'は1文字以上の任意文字とマッチします。<br>
+            '+'は1文字以上の文字とマッチします。<br>
             例)パターン文字列:<code>IMG_+.jpg</code><br>
             <code>IMG_</code>と<code>.jpg</code>の間に何か挟まっているときマッチします。<br>
             <font color="red"><code>IMG_</code>と<code>.jpg</code>の間に何もない場合マッチしません。</font><br>
@@ -139,7 +139,7 @@
                 <li>ホストブロックで正規表現を使用する場合</li>
             </ul>
             <div class="li_info">
-                <code>h [test\.com]</code>のように指定します>。
+                <code>h [test\.com]</code>のように指定します。
             </div>
         </div>
     </div>
