@@ -95,7 +95,9 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
     public PatternUrlChecker makeActionChecker(PatternAction pattern_action, View header_view) {
         String pattern_url = ((EditText) header_view.findViewById(R.id.urlEditText)).getText().toString();
         try {
-            return new PatternUrlChecker(pattern_action, new FastMatcherFactory(), pattern_url);
+            PatternUrlChecker checker = new PatternUrlChecker(pattern_action, new FastMatcherFactory(), pattern_url);
+            urlEditText.setText("");
+            return checker;
         } catch (PatternSyntaxException e) {
             ErrorReport.printAndWriteLog(e);
             Toast.makeText(getApplicationContext(), R.string.pattern_syntax_error, Toast.LENGTH_SHORT).show();
