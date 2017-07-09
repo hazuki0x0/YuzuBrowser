@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 
 public class HandleIntentActivity extends AppCompatActivity {
+    public static final String EXTRA_OPEN_FROM_YUZU = "jp.hazuki.yuzubrowser.extra.open.from.yuzu";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,19 +55,20 @@ public class HandleIntentActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(url))
                 url = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (!TextUtils.isEmpty(url)) {
-                startBrowser(url, false);
+                boolean openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false);
+                startBrowser(url, openInNewTab, openInNewTab);
                 return;
             }
         } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {
             String url = WebUtils.makeSearchUrlFromQuery(intent.getStringExtra(SearchManager.QUERY), AppData.search_url.get(), "%s");
             if (!TextUtils.isEmpty(url)) {
-                startBrowser(url, getPackageName().equals(intent.getStringExtra(Browser.EXTRA_APPLICATION_ID)));
+                startBrowser(url, getPackageName().equals(intent.getStringExtra(Browser.EXTRA_APPLICATION_ID)), false);
                 return;
             }
         } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS.equals(action)) {
             ArrayList<String> urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS);
             if (urls != null && !urls.isEmpty()) {
-                startBrowser(urls.get(0), false);
+                startBrowser(urls.get(0), false, false);
                 return;
             }
         }
@@ -74,11 +76,12 @@ public class HandleIntentActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), R.string.page_not_found, Toast.LENGTH_SHORT).show();
     }
 
-    private void startBrowser(String url, boolean window) {
+    private void startBrowser(String url, boolean window, boolean openInNewTab) {
         Intent send = new Intent(this, BrowserActivity.class);
         send.setAction(Intent.ACTION_VIEW);
         send.setData(Uri.parse(url));
         send.putExtra(BrowserActivity.EXTRA_WINDOW_MODE, window);
+        send.putExtra(BrowserActivity.EXTRA_SHOULD_OPEN_IN_NEW_TAB, openInNewTab);
         startActivity(send);
     }
 }

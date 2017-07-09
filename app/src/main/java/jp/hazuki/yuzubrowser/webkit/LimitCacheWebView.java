@@ -940,7 +940,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
     @Override
     public boolean isBackForwardListEmpty() {
-        return mCurrent == 0 && tabIndexList.size() == 1 && tabIndexList.get(0).getUrl() == null;
+        return isFirst || mCurrent == 0 && tabIndexList.size() == 1 && tabIndexList.get(0).getUrl() == null;
     }
 
     @Override

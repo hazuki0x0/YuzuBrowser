@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import jp.hazuki.yuzubrowser.HandleIntentActivity;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.PatternAction;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
@@ -130,6 +131,7 @@ public class OpenOthersPatternAction extends PatternAction {
                 throw new IllegalStateException();
         }
         try {
+            intent.putExtra(HandleIntentActivity.EXTRA_OPEN_FROM_YUZU, true);
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();

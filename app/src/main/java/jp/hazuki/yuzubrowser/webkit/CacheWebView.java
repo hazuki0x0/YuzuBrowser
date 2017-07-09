@@ -796,8 +796,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
     @Override
     public boolean isBackForwardListEmpty() {
-        //return mList.size() == 1 && mList.get(0).mWebView.getUrl() == null;
-        return mCurrent == 0 && mList.size() == 1 && mList.get(0).mWebView.getUrl() == null;
+        return isFirst || mCurrent == 0 && mList.size() == 1 && mList.get(0).mWebView.getUrl() == null;
     }
 
     @Override

@@ -162,6 +162,7 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.menuwindow.MenuWindow;
+import jp.hazuki.yuzubrowser.pattern.action.OpenOthersPatternAction;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingPatternAction;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity;
@@ -276,6 +277,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     public static final String ACTION_NEW_TAB = BrowserActivity.class.getName() + ".newTab";
     public static final String EXTRA_FORCE_DESTROY = "force_destroy";
     public static final String EXTRA_WINDOW_MODE = "window_mode";
+    public static final String EXTRA_SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab";
 
     private final MyActionCallback mActionCallback = new MyActionCallback();
     private final MyWebViewClient mWebViewClient = new MyWebViewClient();
@@ -941,7 +943,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             if (TextUtils.isEmpty(url))
                 url = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (!TextUtils.isEmpty(url))
-                openInNewTab(url, window ? TabType.WINDOW : TabType.INTENT);
+                openInNewTab(url, window ? TabType.WINDOW : TabType.INTENT, intent.getBooleanExtra(EXTRA_SHOULD_OPEN_IN_NEW_TAB, false));
             else {
                 Logger.w(TAG, "ACTION_VIEW : url is null or empty.");
                 return false;
@@ -1158,7 +1160,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         return mPieControl != null;
     }
 
-    private int checkPatternMatch(MainTabData tab, String url) {
+    private int checkPatternMatch(MainTabData tab, String url, boolean shouldOpenInNewTab) {
         boolean normalSettings = true;
         boolean changeSetting = false;
         for (PatternUrlChecker pattern : mPatternManager.getList()) {
@@ -1177,6 +1179,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 /* change web settings */
                 pattern.getAction().run(this, tab, url);
                 changeSetting = true;
+            } else if (shouldOpenInNewTab && pattern.getAction() instanceof OpenOthersPatternAction) {
+                continue;
             } else if (pattern.getAction().run(this, tab, url))
                 return 1;
         }
@@ -1318,6 +1322,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         loadUrl(openNewTab(type), url);
     }
 
+    public void openInNewTab(String url, @TabType int type, boolean shouldOpenInNewTab) {
+        loadUrl(openNewTab(type), url, shouldOpenInNewTab);
+    }
+
     private void openInNewTab(WebViewTransport web_transport) {
         web_transport.setWebView(openNewTab(TabType.WINDOW).mWebView.getWebView());
     }
@@ -1387,6 +1395,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     }
 
     private void loadUrl(MainTabData tab, String url) {
+        loadUrl(tab, url, false);
+    }
+
+    private void loadUrl(MainTabData tab, String url, boolean shouldOpenInNewTab) {
         if (tab.isNavLock() && !WebViewUtils.shouldLoadSameTabUser(url)) {
             performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW);
             return;
@@ -1394,7 +1406,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
             url = SafeFileProvider.convertToSaferUrl(url);
         if (!preload(tab, url, Uri.parse(url))) {
-            if (checkPatternMatch(tab, url) <= 0)
+            if (checkPatternMatch(tab, url, shouldOpenInNewTab) <= 0)
                 tab.mWebView.loadUrl(url);
         }
     }
@@ -2410,7 +2422,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 loadUrl(data, url);
                 return true;
             }
-            int patternResult = checkPatternMatch(data, url);
+            int patternResult = checkPatternMatch(data, url, false);
             if (patternResult == 0) {
                 web.loadUrl(url);
                 return true;

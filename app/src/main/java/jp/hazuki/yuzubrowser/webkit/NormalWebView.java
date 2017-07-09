@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.webkit;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.net.Uri;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
@@ -358,12 +357,6 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                 NormalWebView.super.destroy();
             }
         });
-    }
-
-    @Override
-    public void loadUrl(String url) {
-        if (webViewClient == null || !webViewClient.shouldOverrideUrlLoading(this, url, Uri.parse(url)))
-            super.loadUrl(url);
     }
 
     @Override
