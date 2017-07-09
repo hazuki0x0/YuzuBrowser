@@ -66,6 +66,7 @@
     <string name="pref_btn_serach_press">検索ボタン</string>
     <string name="pref_btn_volume_up">ボリュームアップボタン</string>
     <string name="pref_btn_volume_down">ボリュームダウンボタン</string>
+    <string name="pref_btn_volume_default_play">動画再生中は音量を変更する</string>
     <string name="pref_btn_camera_press">カメラボタン</string>
     <string name="pref_btn_menu_press">メニューボタン</string>
     <string name="pref_load_overview">ページを全体表示で開く</string>

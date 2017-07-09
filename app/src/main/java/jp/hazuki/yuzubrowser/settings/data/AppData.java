@@ -172,6 +172,7 @@ public class AppData {
     public static final IntContainer night_mode_color = new IntContainer("night_mode_color", 5000);
     public static final IntContainer night_mode_bright = new IntContainer("night_mode_bright", 100);
     public static final IntContainer show_tab_divider = new IntContainer("show_tab_divider", 0);
+    public static final BooleanContainer volume_default_playing = new BooleanContainer("volume_default_playing", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

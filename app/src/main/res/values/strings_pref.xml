@@ -187,6 +187,7 @@
     <string name="pref_btn_serach_press">Search press</string>
     <string name="pref_btn_volume_up">Volume up</string>
     <string name="pref_btn_volume_down">Volume down</string>
+    <string name="pref_btn_volume_default_play">Change the volume while playing video</string>
     <string name="pref_btn_camera_press">Camera press</string>
     <string name="pref_btn_menu_press">Menu press</string>
     <string name="pref_load_overview">Load with overview mode</string>

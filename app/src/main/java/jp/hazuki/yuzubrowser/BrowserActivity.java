@@ -33,6 +33,7 @@ import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -784,13 +785,19 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-                if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
+                if (AppData.volume_default_playing.get() && ((AudioManager) getSystemService(AUDIO_SERVICE)).isMusicActive()) {
+                    return super.onKeyDown(keyCode, event);
+
+                } else if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
                     if (mActionCallback.run(mHardButtonManager.volume_up.action))
                         return true;
                 }
                 break;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
+                if (AppData.volume_default_playing.get() && ((AudioManager) getSystemService(AUDIO_SERVICE)).isMusicActive()) {
+                    return super.onKeyDown(keyCode, event);
+
+                } else if (mWebCustomViewHandler == null || !mWebCustomViewHandler.isCustomViewShowing()) {
                     if (mActionCallback.run(mHardButtonManager.volume_down.action))
                         return true;
                 }
