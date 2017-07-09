@@ -115,4 +115,18 @@ public class AdBlockActivity extends AppCompatActivity implements AdBlockMainFra
                 .addToBackStack("")
                 .commit();
     }
+
+    @Override
+    public String getExportFileName(int type) {
+        switch (type) {
+            case AdBlockManager.TYPE_BLACK_TABLE:
+                return "black_list.txt";
+            case AdBlockManager.TYPE_WHITE_TABLE:
+                return "white_list.txt";
+            case AdBlockManager.TYPE_WHITE_PAGE_TABLE:
+                return "white_page_list.txt";
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
 }

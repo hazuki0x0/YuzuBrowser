@@ -686,6 +686,10 @@
     <string name="pref_ad_block_delete_confirm">Are you sure you want to delete \"%1$s\"?</string>
     <string name="pref_ad_block_delete_selected_confirm">Are you sure you want to delete selected items?</string>
     <string name="pref_ad_block_delete">\"%1$s\" deleted.</string>
+    <string name="pref_export">Export</string>
+    <string name="pref_exported">Export completed</string>
+    <string name="pref_delete_all">Delete all</string>
+    <string name="pref_delete_all_confirm">pref_delete_all_confirm</string>
 
     <string-array name="pref_ad_block_menu">
         <item>@string/pref_edit</item>

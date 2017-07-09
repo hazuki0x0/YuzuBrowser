@@ -137,6 +137,26 @@ public class AdBlockManager {
         return adBlocks;
     }
 
+    private ArrayList<AdBlock> getEnableItems(String table) {
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        Cursor c = db.query(table, null, COLUMN_ENABLE + " = 1", null, null, null, COLUMN_COUNT + " DESC");
+        int id = c.getColumnIndex(COLUMN_ID);
+        int match = c.getColumnIndex(COLUMN_MATCH);
+        int enable = c.getColumnIndex(COLUMN_ENABLE);
+        int count = c.getColumnIndex(COLUMN_COUNT);
+        int time = c.getColumnIndex(COLUMN_TIME);
+        ArrayList<AdBlock> adBlocks = new ArrayList<>();
+        while (c.moveToNext())
+            adBlocks.add(new AdBlock(c.getInt(id), c.getString(match), c.getInt(enable) != 0, c.getInt(count), c.getLong(time)));
+        c.close();
+        return adBlocks;
+    }
+
+    private void deleteAll(String table) {
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        db.delete(table, null, null);
+    }
+
     void updateOrder(String table, FastMatcherList list) {
         if (list == null) return;
         list.sort();
@@ -262,8 +282,16 @@ public class AdBlockManager {
             return manager.getAllItems(table);
         }
 
+        public ArrayList<AdBlock> getEnableItems() {
+            return manager.getEnableItems(table);
+        }
+
         public void addAll(List<AdBlock> adBlocks) {
             manager.addAll(table, adBlocks);
+        }
+
+        public void deleteAll() {
+            manager.deleteAll(table);
         }
     }
 

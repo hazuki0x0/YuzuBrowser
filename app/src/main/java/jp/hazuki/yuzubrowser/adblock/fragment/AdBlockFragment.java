@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -29,12 +30,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,24 +53,27 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener,
         AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback,
-        DeleteSelectedDialog.OnDeleteSelectedListener {
+        DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener {
     private static final String ARG_TYPE = "type";
     private static final int REQUEST_SELECT_FILE = 1;
+    private static final int REQUEST_SELECT_EXPORT = 2;
 
     private AdBlockManager.AdBlockItemProvider provider;
     private AdBlockArrayRecyclerAdapter adapter;
     private AdBlockFragmentListener listener;
     private ActionMode actionMode;
+    private int type;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_ad_block_list, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        int type = getArguments().getInt(ARG_TYPE);
+        type = getArguments().getInt(ARG_TYPE);
         listener.setFragmentTitle(type);
         provider = AdBlockManager.getProvider(BrowserApplication.getInstance(), type);
 
@@ -144,12 +153,37 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         switch (requestCode) {
             case REQUEST_SELECT_FILE:
                 if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
                     listener.requestImport(data.getData());
                 }
+                break;
+            case REQUEST_SELECT_EXPORT:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+                    final Handler handler = new Handler();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try (OutputStream os = getContext().getContentResolver().openOutputStream(data.getData());
+                                 PrintWriter pw = new PrintWriter(os)) {
+                                List<AdBlock> adBlockList = provider.getEnableItems();
+                                for (AdBlock adBlock : adBlockList)
+                                    pw.println(adBlock.getMatch());
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), R.string.pref_exported, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).run();
+                }
+                break;
         }
     }
 
@@ -251,6 +285,35 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         return null;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.ad_block_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.export:
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_TITLE, listener.getExportFileName(type));
+                startActivityForResult(intent, REQUEST_SELECT_EXPORT);
+                return true;
+            case R.id.deleteAll:
+                AdBlockDeleteAllDialog.newInstance()
+                        .show(getChildFragmentManager(), "delete_all");
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDeleteAll() {
+        provider.deleteAll();
+        adapter.getItems().clear();
+        adapter.notifyDataSetChanged();
+    }
+
     public static AdBlockFragment newInstance(int type) {
         AdBlockFragment fragment = new AdBlockFragment();
         Bundle bundle = new Bundle();
@@ -275,5 +338,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         void setFragmentTitle(int type);
 
         void requestImport(Uri uri);
+
+        String getExportFileName(int type);
     }
 }
