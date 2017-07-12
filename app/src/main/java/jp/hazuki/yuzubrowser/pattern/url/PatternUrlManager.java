@@ -27,7 +27,8 @@ public class PatternUrlManager extends PatternManager<PatternUrlChecker> {
     @Override
     public boolean load(Context context) {
         boolean result = super.load(context);
-        factory.release();
+        if (factory != null)
+            factory.release();
         return result;
     }
 }
