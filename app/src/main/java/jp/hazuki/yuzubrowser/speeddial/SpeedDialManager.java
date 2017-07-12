@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpeedDialManager {
-    private static final String DB_NAME = "speeddial1.db";
+    public static final String DB_NAME = "speeddial1.db";
     private static final int DB_VERSION = 2;
     private static final String TABLE_NAME = "main_table";
 

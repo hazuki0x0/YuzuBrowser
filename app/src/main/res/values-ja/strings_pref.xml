@@ -349,4 +349,9 @@
         <item>表示</item>
         <item>非表示</item>
     </string-array>
+
+    <string name="pref_speed_dial">スピードダイアル</string>
+    <string name="pref_restore_speed_dial">スピードダイアルの復元</string>
+    <string name="pref_backup_speed_dial">スピードダイアルのバックアップ</string>
+    <string name="pref_backup_speed_dial_confirm">スピードダイアルをバックアップしてもよろしいですか？</string>
 </resources>

@@ -710,4 +710,9 @@
         <item>1</item>
         <item>2</item>
     </integer-array>
+
+    <string name="pref_speed_dial">Speed dial</string>
+    <string name="pref_restore_speed_dial">Restore speed dial</string>
+    <string name="pref_backup_speed_dial">Backup speed dial</string>
+    <string name="pref_backup_speed_dial_confirm">Are you sure you want to backup speed dial?</string>
 </resources>

@@ -47,6 +47,8 @@ import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask;
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference;
+import jp.hazuki.yuzubrowser.speeddial.io.SpeedDialBackupTask;
+import jp.hazuki.yuzubrowser.speeddial.io.SpeedDialRestoreTask;
 import jp.hazuki.yuzubrowser.utils.AppUtils;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.PermissionUtils;
@@ -59,6 +61,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
     private static final int REQUEST_EXPORT_FOLDER = 2;
 
     private static final String EXT = ".yuzubackup";
+    private static final String EXT_SPEED_DIAL = ".yuzudial";
     private DialogFragment progress;
 
     @Override
@@ -210,6 +213,55 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
             }
         });
 
+        findPreference("restore_speed_dial").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                File dir = new File(BrowserApplication.getExternalUserDirectory(), "speedDial");
+                if (!dir.exists())
+                    dir.mkdirs();
+                new FileListDialog(getActivity())
+                        .setFilePath(dir)
+                        .setShowExtensionOnly(EXT_SPEED_DIAL)
+                        .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
+                            @Override
+                            public void onFileSelected(File file) {
+                                if (file.exists()) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("file", file);
+                                    getLoaderManager().restartLoader(4, bundle, ImportExportFragment.this);
+                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
+                                    progress.show(getChildFragmentManager(), "progress");
+                                    handler.setDialog(progress);
+                                }
+                            }
+
+                            @Override
+                            public boolean onDirectorySelected(File file) {
+                                return false;
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
+
+        ((AlertDialogPreference) findPreference("backup_speed_dial")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick() {
+                if (PermissionUtils.checkWriteStorage(getActivity())) {
+                    File file = new File(BrowserApplication.getExternalUserDirectory(), "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("file", file);
+                    getLoaderManager().restartLoader(5, bundle, ImportExportFragment.this);
+                    progress = ProgressDialogFragment.newInstance(getString(R.string.backing_up));
+                    progress.show(getChildFragmentManager(), "progress");
+                    handler.setDialog(progress);
+                } else {
+                    PermissionUtils.requestStorage(getActivity());
+                }
+            }
+        });
+
         findPreference("restore_settings").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
@@ -232,7 +284,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                                                     Bundle bundle = new Bundle();
                                                     bundle.putSerializable("file", file);
                                                     getLoaderManager().restartLoader(0, bundle, ImportExportFragment.this);
-                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.backing_up));
+                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
                                                     progress.show(getChildFragmentManager(), "progress");
                                                     handler.setDialog(progress);
                                                 }
@@ -302,6 +354,10 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
                 return new BookmarkHtmlExportTask(getActivity(),
                         (File) args.getSerializable("file"),
                         (BookmarkFolder) args.getSerializable("folder"));
+            case 4:
+                return new SpeedDialRestoreTask(getActivity(), (File) args.getSerializable("file"));
+            case 5:
+                return new SpeedDialBackupTask(getActivity(), (File) args.getSerializable("file"));
         }
         return null;
     }

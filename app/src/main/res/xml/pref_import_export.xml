@@ -18,6 +18,18 @@
             android:key="export_html_bookmark"
             android:title="@string/pref_export_html_bookmark" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_speed_dial">
+        <Preference
+            android:key="restore_speed_dial"
+            android:title="@string/pref_restore_speed_dial" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference
+            android:dialogMessage="@string/pref_backup_speed_dial_confirm"
+            android:dialogTitle="@string/pref_backup_speed_dial"
+            android:key="backup_speed_dial"
+            android:title="@string/pref_backup_speed_dial" />
+
+
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_settings">
         <Preference
             android:key="restore_settings"
