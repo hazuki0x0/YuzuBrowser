@@ -10,8 +10,8 @@ android {
         applicationId "jp.hazuki.yuzubrowser"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 200404
-        versionName "2.4.4"
+        versionCode Integer.parseInt(project.VERSION_CODE)
+        versionName project.VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "GIT_HASH", "\"${gitHash}\""
@@ -22,6 +22,9 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            lintOptions {
+                disable 'MissingTranslation'
+            }
         }
     }
     packagingOptions {
@@ -37,7 +40,11 @@ android {
                     def versionCode = defaultConfig.versionCode
                     def versionName = defaultConfig.versionName
                     def newName = "${applicationId}_v${versionName}_${versionCode}.apk"
-                    output.outputFile = new File(output.outputFile.parent, newName)
+                    if (output.hasProperty('outputFileName')) {
+                        output.outputFileName = newName
+                    } else {
+                        output.outputFile = new File(output.outputFile.parent, newName)
+                    }
                 }
             }
         }
