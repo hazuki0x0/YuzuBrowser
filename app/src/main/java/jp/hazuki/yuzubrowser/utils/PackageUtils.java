@@ -8,15 +8,20 @@ import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
+import android.webkit.URLUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.BrowserActivity;
+import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.browser.SafeFileProvider;
 import jp.hazuki.yuzubrowser.download.DownloadFileProvider;
 
 public class PackageUtils {
@@ -93,5 +98,25 @@ public class PackageUtils {
         }
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[intents.size()]));
         return chooser;
+    }
+
+    public static Intent createShortCutIntent(Context context, String title, String url, Bitmap icon) {
+        Intent target = new Intent(context, BrowserActivity.class);
+        target.setAction(Intent.ACTION_VIEW);
+        if (URLUtil.isFileUrl(url)) {
+            url = SafeFileProvider.convertToSaferUrl(url);
+        }
+        target.setData(Uri.parse(url));
+
+        Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, target);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+        if (icon != null) {
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
+        } else {
+            Intent.ShortcutIconResource resource = Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_link_shortcut);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, resource);
+        }
+        return intent;
     }
 }

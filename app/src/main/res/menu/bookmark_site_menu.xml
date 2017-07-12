@@ -30,6 +30,10 @@
         android:title="@string/copy_url" />
 
     <item
+        android:id="@+id/addToHome"
+        android:title="@string/add_to_home" />
+
+    <item
         android:id="@+id/editBookmark"
         android:title="@string/edit_bookmark" />
 

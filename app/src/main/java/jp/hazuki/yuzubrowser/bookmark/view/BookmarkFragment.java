@@ -3,6 +3,7 @@ package jp.hazuki.yuzubrowser.bookmark.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,8 +34,10 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrl;
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrlList;
+import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
+import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 
 import static android.app.Activity.RESULT_OK;
@@ -311,6 +314,13 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.copyUrl:
                 ClipboardUtils.setClipboardText(getActivity(), ((BookmarkSite) item).url);
                 break;
+            case R.id.addToHome: {
+                String url = ((BookmarkSite) item).url;
+                Bitmap bitmap = BrowserHistoryManager.getInstance(getActivity()).getFavicon(url);
+                Intent intent = PackageUtils.createShortCutIntent(getActivity(), item.title, url, bitmap);
+                getActivity().sendBroadcast(intent);
+                break;
+            }
             case R.id.editBookmark:
                 if (item instanceof BookmarkSite) {
                     new AddBookmarkSiteDialog(getActivity(), mManager, (BookmarkSite) item)

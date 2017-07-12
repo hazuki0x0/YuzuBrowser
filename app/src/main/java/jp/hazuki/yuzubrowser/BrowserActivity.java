@@ -3858,6 +3858,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     startActivity(intent);
                 }
                 break;
+                case SingleAction.ADD_TO_HOME: {
+                    BrowserHistoryManager manager = BrowserHistoryManager.getInstance(BrowserActivity.this);
+                    MainTabData tab = mTabManager.get(target);
+                    Bitmap bitmap = manager.getFavicon(tab.getUrl());
+                    sendBroadcast(PackageUtils.createShortCutIntent(BrowserActivity.this, tab.getTitle(), tab.getUrl(), bitmap));
+                    break;
+                }
                 case SingleAction.SUB_GESTURE: {
                     final GestureManager manager = GestureManager.getInstance(getApplicationContext(), GestureManager.GESTURE_TYPE_SUB);
 
@@ -4322,6 +4329,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return res.getDrawable(R.drawable.ic_speed_dial_add_white_24dp, getTheme());
                 case SingleAction.ADD_PATTERN:
                     return res.getDrawable(R.drawable.ic_pattern_add_white_24dp, getTheme());
+                case SingleAction.ADD_TO_HOME:
+                    return res.getDrawable(R.drawable.ic_add_to_home_white_24dp, getTheme());
                 case SingleAction.SUB_GESTURE:
                     return res.getDrawable(R.drawable.ic_gesture_white_24dp, getTheme());
                 case SingleAction.CLEAR_DATA:
