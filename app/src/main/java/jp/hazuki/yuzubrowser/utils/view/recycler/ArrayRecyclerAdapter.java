@@ -124,7 +124,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
             }
         });
 
-        if (multiSelectMode || sortMode || recyclerListener == null) {
+        if (sortMode || recyclerListener == null) {
             holder.itemView.setOnLongClickListener(null);
         } else {
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

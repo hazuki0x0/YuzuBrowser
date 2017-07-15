@@ -116,8 +116,10 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        AdBlockMenuDialog.newInstance(position, adapter.getItem(position).getId())
-                .show(getChildFragmentManager(), "menu");
+        if (!adapter.isMultiSelectMode()) {
+            AdBlockMenuDialog.newInstance(position, adapter.getItem(position).getId())
+                    .show(getChildFragmentManager(), "menu");
+        }
         return true;
     }
 
