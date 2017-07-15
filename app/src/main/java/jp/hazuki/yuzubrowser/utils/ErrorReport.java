@@ -20,7 +20,7 @@ public class ErrorReport implements UncaughtExceptionHandler {
 
     public static void initialize(Context context) {
         filesDir = context.getExternalFilesDir("");
-        Thread.setDefaultUncaughtExceptionHandler(new ErrorReport());
+        //Thread.setDefaultUncaughtExceptionHandler(new ErrorReport());
     }
 
     public static void setDetailedLog(boolean enable) {
