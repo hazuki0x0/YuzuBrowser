@@ -30,6 +30,7 @@ import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 
 public class MenuWindow implements PopupWindow.OnDismissListener {
@@ -48,7 +49,6 @@ public class MenuWindow implements PopupWindow.OnDismissListener {
         window = new PopupWindow(context);
         window.setContentView(v);
         window.setOutsideTouchable(true);
-        window.setFocusable(true);
         window.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         window.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         window.setBackgroundDrawable(context.getDrawable(R.drawable.menu_drop_down_background));
@@ -81,16 +81,37 @@ public class MenuWindow implements PopupWindow.OnDismissListener {
             child.setText(action.toString(array));
             layout.addView(child);
         }
+
+        if (AppData.fullscreen.get())
+            setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     public void show(View root, int gravity) {
-        if (!locking)
+        if (!locking) {
+            //This is a magic!
+            window.setFocusable(false);
+
             window.showAtLocation(root, gravity, 0, 0);
+
+            //Reset focusable
+            window.setFocusable(true);
+        }
     }
 
     public void showAsDropDown(View anchor) {
-        if (!locking)
+        if (!locking) {
+            //This is a magic!
+            window.setFocusable(false);
+
             window.showAsDropDown(anchor);
+
+            //Reset focusable
+            window.setFocusable(true);
+        }
+    }
+
+    public void setSystemUiVisibility(int flags) {
+        window.getContentView().setSystemUiVisibility(flags);
     }
 
     public boolean isShowing() {

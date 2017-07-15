@@ -912,9 +912,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         if (enable) {
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            if (menuWindow != null)
+                menuWindow.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         } else {
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            if (menuWindow != null)
+                menuWindow.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
     }
 
