@@ -80,10 +80,13 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
         listView = (ListView) findViewById(R.id.listView);
 
         if (ThemeData.isEnabled()) {
-            findViewById(R.id.search_bar_container).setBackgroundColor(ThemeData.getInstance().toolbarBackgroundColor);
+            if (ThemeData.getInstance().toolbarBackgroundColor != 0)
+                findViewById(R.id.search_bar_container).setBackgroundColor(ThemeData.getInstance().toolbarBackgroundColor);
             int textColor = ThemeData.getInstance().toolbarTextColor;
-            editText.setTextColor(textColor);
-            editText.setHintTextColor(textColor & 0xffffff | 0x55000000);
+            if (textColor != 0) {
+                editText.setTextColor(textColor);
+                editText.setHintTextColor(textColor & 0xffffff | 0x55000000);
+            }
             if (ThemeData.getInstance().toolbarImageColor != 0)
                 searchButton.setColorFilter(ThemeData.getInstance().toolbarImageColor);
             if (ThemeData.getInstance().statusBarColor != 0) {
