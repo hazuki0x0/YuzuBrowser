@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.utils;
 
 import android.content.Context;
+import android.util.AndroidRuntimeException;
 import android.webkit.WebSettings;
 
 import com.crashlytics.android.Crashlytics;
@@ -29,9 +30,13 @@ public final class CrashlyticsUtils {
     private static final String CHROME_VERSION = "chrome version";
 
     public static void setChromeVersion(Context context) {
-        Matcher chrome = VERSION_REGEX.matcher(WebSettings.getDefaultUserAgent(context));
-        if (chrome.find()) {
-            Crashlytics.setString(CHROME_VERSION, chrome.group(1));
+        try {
+            Matcher chrome = VERSION_REGEX.matcher(WebSettings.getDefaultUserAgent(context));
+            if (chrome.find()) {
+                Crashlytics.setString(CHROME_VERSION, chrome.group(1));
+            }
+        } catch (AndroidRuntimeException e) {
+            Crashlytics.setString(CHROME_VERSION, "unknown");
         }
     }
 }
