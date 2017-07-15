@@ -163,7 +163,7 @@ public class WebUtils {
     }
 
     public static Pattern makeUrlPatternWithThrow(FastMatcherFactory factory, String pattern_url) {
-        if (pattern_url == null) return null;
+        if (pattern_url == null || pattern_url.length() == 0) return null;
         if (pattern_url.charAt(0) == '[' && pattern_url.charAt(pattern_url.length() - 1) == ']') {
             return Pattern.compile(pattern_url.substring(1, pattern_url.length() - 1));
         } else {
