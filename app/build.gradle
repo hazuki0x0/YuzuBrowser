@@ -27,6 +27,9 @@ android {
                 disable 'MissingTranslation'
             }
         }
+        debug {
+            ext.enableCrashlytics = false
+        }
     }
     packagingOptions {
         exclude 'META-INF/LICENSE'
