@@ -4041,8 +4041,13 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     break;
                 case SingleAction.START_ACTIVITY: {
                     Intent intent = ((StartActivitySingleAction) action).getIntent(mTabManager.get(target));
-                    if (intent != null)
-                        startActivity(intent);
+                    if (intent != null) {
+                        try {
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(BrowserActivity.this, R.string.app_notfound, Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 break;
                 case SingleAction.TOGGLE_FULL_SCREEN:
