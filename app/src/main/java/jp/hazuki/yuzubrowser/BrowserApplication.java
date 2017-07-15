@@ -19,8 +19,12 @@ package jp.hazuki.yuzubrowser;
 import android.app.Application;
 import android.os.Environment;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+
 import java.io.File;
 
+import io.fabric.sdk.android.Fabric;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
@@ -38,6 +42,10 @@ public class BrowserApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Crashlytics crashlytics = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+        Fabric.with(this, crashlytics);
 
         Logger.d(TAG, "onCreate()");
         needLoad = false;

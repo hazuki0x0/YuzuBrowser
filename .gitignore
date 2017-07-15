@@ -60,3 +60,4 @@ captures/
 *.iws
 
 /reference
+app/fabric.properties
