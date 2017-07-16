@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
@@ -128,23 +129,31 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         if (index >= 0 && index < adapter.getItemCount()) {
             AdBlock adBlock = adapter.getItem(index);
             adBlock.setMatch(text);
-            provider.update(adBlock);
+            if (!provider.update(adBlock)) {
+                adapter.remove(index);
+                provider.delete(adBlock.getId());
+            }
         } else {
             if (id > -1) {
-                for (AdBlock adBlock : adapter.getItems()) {
+                Iterator<AdBlock> it = adapter.getItems().iterator();
+                while (it.hasNext()) {
+                    AdBlock adBlock = it.next();
                     if (adBlock.getId() == id) {
                         adBlock.setMatch(text);
-                        provider.update(adBlock);
+                        if (!provider.update(adBlock)) {
+                            it.remove();
+                            provider.delete(adBlock.getId());
+                        }
                         break;
                     }
                 }
             } else {
                 AdBlock adBlock = new AdBlock(text);
-                adapter.getItems().add(adBlock);
-                adapter.notifyDataSetChanged();
-                provider.update(adBlock);
+                if (provider.update(adBlock))
+                    adapter.getItems().add(adBlock);
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
     public void addAll(List<AdBlock> adBlocks) {
