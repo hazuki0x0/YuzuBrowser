@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,12 +76,45 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         return items;
     }
 
-    public T getItem(int index) {
+    public int size() {
+        return items.size();
+    }
+
+    public T get(int index) {
         return items.get(index);
     }
 
+    public void add(T item) {
+        items.add(item);
+    }
+
+    public void add(int index, T item) {
+        items.add(index, item);
+    }
+
+    public void addAll(Collection<T> collections) {
+        items.addAll(collections);
+    }
+
     public T remove(int index) {
-        return items.remove(index);
+        T item = items.remove(index);
+        notifyItemRemoved(index);
+        notifyItemRangeRemoved(index, items.size());
+        return item;
+    }
+
+    public boolean remove(T item) {
+        int index = items.indexOf(item);
+        if (index >= 0) {
+            remove(index);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void clear() {
+        items.clear();
     }
 
     public OnRecyclerListener getListener() {

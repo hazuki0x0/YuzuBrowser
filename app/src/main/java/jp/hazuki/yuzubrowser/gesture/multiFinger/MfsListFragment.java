@@ -85,7 +85,7 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
     @Override
     public void onRecyclerItemClicked(View v, int position) {
         if (listener != null)
-            listener.goEdit(position, adapter.getItem(position));
+            listener.goEdit(position, adapter.get(position));
     }
 
     public void onEdited(int index, MultiFingerGestureItem item) {
@@ -172,7 +172,6 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
             final int position = viewHolder.getAdapterPosition();
             final MultiFingerGestureItem item = adapter.remove(position);
 
-            adapter.notifyDataSetChanged();
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override

@@ -143,7 +143,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     @Override
     public int getItemViewType(int position) {
-        BookmarkItem item = getItem(position);
+        BookmarkItem item = get(position);
         if (item instanceof BookmarkSite) {
             return TYPE_SITE;
         } else if (item instanceof BookmarkFolder) {

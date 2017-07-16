@@ -112,15 +112,15 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
     }
 
     private void reset() {
-        adapter.getItems().clear();
-        adapter.getItems().addAll(mDb.getAllList());
+        adapter.clear();
+        adapter.addAll(mDb.getAllList());
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onRecyclerItemClicked(View v, int position) {
         Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-        intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.getItems().get(position).getInfo());
+        intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position).getInfo());
         startActivityForResult(intent, REQUEST_EDIT_USERJS);
     }
 
@@ -141,7 +141,7 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-                intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.getItems().get(position));
+                intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position));
                 startActivityForResult(intent, REQUEST_EDIT_USERJS);
                 return false;
             }
@@ -163,19 +163,18 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
     @Override
     public void onDelete(int position) {
         UserScript js = adapter.remove(position);
-        adapter.notifyDataSetChanged();
         mDb.delete(js);
     }
 
     @Override
     public void onInfoButtonClick(View v, int index) {
-        InfoDialog.newInstance(adapter.getItems().get(index))
+        InfoDialog.newInstance(adapter.get(index))
                 .show(getChildFragmentManager(), "info");
     }
 
     @Override
     public void onCheckBoxClicked(View v, int index) {
-        UserScript script = adapter.getItems().get(index);
+        UserScript script = adapter.get(index);
         script.setEnabled(!script.isEnabled());
         mDb.update(script);
         adapter.notifyDataSetChanged();
@@ -270,13 +269,12 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             final int index = viewHolder.getAdapterPosition();
-            final UserScript js = adapter.getItems().remove(index);
-            adapter.notifyDataSetChanged();
+            final UserScript js = adapter.remove(index);
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            adapter.getItems().add(index, js);
+                            adapter.add(index, js);
                             adapter.notifyDataSetChanged();
                         }
                     })

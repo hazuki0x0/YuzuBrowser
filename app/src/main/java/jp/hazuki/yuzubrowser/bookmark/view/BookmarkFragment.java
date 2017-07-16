@@ -137,7 +137,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
 
     @Override
     public void onIconClick(View v, int position) {
-        BookmarkItem item = adapter.getItem(position);
+        BookmarkItem item = adapter.get(position);
         if (item instanceof BookmarkSite) {
             sendUrl(((BookmarkSite) item).url, AppData.open_bookmark_icon_action.get());
         }
@@ -234,7 +234,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         MenuInflater inflater = menu.getMenuInflater();
         final BookmarkItem bookmarkItem;
         if (pickMode) {
-            bookmarkItem = adapter.getItem(index);
+            bookmarkItem = adapter.get(index);
             menu.getMenu().add(R.string.select_this_item).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -260,10 +260,10 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 bookmarkItem = null;
             } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
                 inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
-                bookmarkItem = adapter.getItem(index);
+                bookmarkItem = adapter.get(index);
             } else {
                 inflater.inflate(R.menu.bookmark_folder_menu, menu.getMenu());
-                bookmarkItem = adapter.getItem(index);
+                bookmarkItem = adapter.get(index);
             }
         }
 
