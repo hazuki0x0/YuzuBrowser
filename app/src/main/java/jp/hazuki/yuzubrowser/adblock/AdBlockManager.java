@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.adblock;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -69,34 +70,46 @@ public class AdBlockManager {
             initList(context);
     }
 
-    private void update(String table, AdBlock adBlock) {
+    private boolean update(String table, AdBlock adBlock) {
+        boolean result;
         if (adBlock.getId() > -1) {
-            _update(table, adBlock);
+            result = _update(table, adBlock);
         } else {
-            _add(table, adBlock);
+            result = _add(table, adBlock);
         }
         updateListTime(table);
+        return result;
     }
 
-    private void _add(String table, AdBlock adBlock) {
+    private boolean _add(String table, AdBlock adBlock) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_MATCH, adBlock.getMatch());
         values.put(COLUMN_ENABLE, adBlock.isEnable() ? 1 : 0);
         values.put(COLUMN_COUNT, adBlock.getCount());
         values.put(COLUMN_TIME, adBlock.getTime());
-        long id = db.insert(table, null, values);
-        adBlock.setId((int) id);
+        try {
+            long id = db.insert(table, null, values);
+            adBlock.setId((int) id);
+            return true;
+        } catch (SQLiteConstraintException e) {
+            return false;
+        }
     }
 
-    private void _update(String table, AdBlock adBlock) {
+    private boolean _update(String table, AdBlock adBlock) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_MATCH, adBlock.getMatch());
         values.put(COLUMN_ENABLE, adBlock.isEnable() ? 1 : 0);
         values.put(COLUMN_COUNT, adBlock.getCount());
         values.put(COLUMN_TIME, adBlock.getTime());
-        db.update(table, values, COLUMN_ID + " = ?", new String[]{Integer.toString(adBlock.getId())});
+        try {
+            db.update(table, values, COLUMN_ID + " = ?", new String[]{Integer.toString(adBlock.getId())});
+            return true;
+        } catch (SQLiteConstraintException e) {
+            return false;
+        }
     }
 
     private void delete(String table, int id) {
@@ -113,7 +126,11 @@ public class AdBlockManager {
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_MATCH, adBlock.getMatch());
                 values.put(COLUMN_ENABLE, adBlock.isEnable() ? 1 : 0);
-                db.insert(table, null, values);
+                try {
+                    db.insert(table, null, values);
+                } catch (SQLiteConstraintException e) {
+                    e.printStackTrace();
+                }
             }
             db.setTransactionSuccessful();
         } finally {
@@ -270,8 +287,8 @@ public class AdBlockManager {
             this.table = table;
         }
 
-        public void update(AdBlock adBlock) {
-            manager.update(table, adBlock);
+        public boolean update(AdBlock adBlock) {
+            return manager.update(table, adBlock);
         }
 
         public void delete(int id) {
