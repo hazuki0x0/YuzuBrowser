@@ -141,7 +141,7 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-                intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position));
+                intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position).getInfo());
                 startActivityForResult(intent, REQUEST_EDIT_USERJS);
                 return false;
             }
