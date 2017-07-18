@@ -99,7 +99,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     public T remove(int index) {
         T item = items.remove(index);
         notifyItemRemoved(index);
-        notifyItemRangeRemoved(index, items.size());
         return item;
     }
 
