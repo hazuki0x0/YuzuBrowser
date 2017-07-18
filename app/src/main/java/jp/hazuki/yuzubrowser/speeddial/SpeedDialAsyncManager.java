@@ -40,7 +40,8 @@ public class SpeedDialAsyncManager {
     }
 
     public void updateAsync(String url, Bitmap icon) {
-        sdThread.addQueue(new SDItem(url, icon));
+        if (url != null && icon != null)
+            sdThread.addQueue(new SDItem(url, icon));
     }
 
     private static final class SDItem {
