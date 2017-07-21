@@ -1739,6 +1739,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return false;
                 if (Math.abs(dist) < AppData.flick_sensitivity_distance.get() * 10)
                     return false;
+                if (e2.getEventTime() - e1.getEventTime() > 300L)
+                    return false;
 
                 if (AppData.flick_edge.get()) {
                     float x = e1.getX();
@@ -1849,6 +1851,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 return false;
 
             if (e1 == null || e2 == null)
+                return false;
+
+            if (e2.getEventTime() - e1.getEventTime() > 300L)
                 return false;
 
             MainTabData tab = mTabManager.getCurrentTabData();
