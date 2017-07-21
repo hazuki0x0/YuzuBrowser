@@ -60,10 +60,13 @@ public class HandleIntentActivity extends AppCompatActivity {
                 return;
             }
         } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {
-            String url = WebUtils.makeSearchUrlFromQuery(intent.getStringExtra(SearchManager.QUERY), AppData.search_url.get(), "%s");
-            if (!TextUtils.isEmpty(url)) {
-                startBrowser(url, getPackageName().equals(intent.getStringExtra(Browser.EXTRA_APPLICATION_ID)), false);
-                return;
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            if (query != null) {
+                String url = WebUtils.makeSearchUrlFromQuery(query, AppData.search_url.get(), "%s");
+                if (!TextUtils.isEmpty(url)) {
+                    startBrowser(url, getPackageName().equals(intent.getStringExtra(Browser.EXTRA_APPLICATION_ID)), false);
+                    return;
+                }
             }
         } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS.equals(action)) {
             ArrayList<String> urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS);
