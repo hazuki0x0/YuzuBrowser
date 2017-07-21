@@ -107,6 +107,7 @@ public class TabListLayout extends LinearLayout {
             @Override
             public void onCloseButtonClicked(View v, int position) {
                 mCallback.requestRemoveTab(position);
+                mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -195,7 +196,7 @@ public class TabListLayout extends LinearLayout {
                     deleteHideItem();
                     snackbar.dismiss();
                 }
-                int position = viewHolder.getAdapterPosition();
+                final int position = viewHolder.getAdapterPosition();
 
                 if (tabManager.getCurrentTabNo() == position) {
                     mCallback.requestSelectTab(position == tabManager.size() - 1 ? position - 1 : position + 1);
@@ -213,6 +214,7 @@ public class TabListLayout extends LinearLayout {
                 if (!tabManager.hideItem(position) && changeCurrent) {
                     tabManager.setCurrentTab(oldCurrent);
                 }
+                mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                 mAdapter.notifyDataSetChanged();
                 snackbar = Snackbar.make(bottomBar, getContext().getString(R.string.closed_tab,
                         ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle()), Snackbar.LENGTH_SHORT)
@@ -223,6 +225,7 @@ public class TabListLayout extends LinearLayout {
                                 if (changeCurrent)
                                     tabManager.setCurrentTab(oldCurrent);
                                 changeCurrent = false;
+                                mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
                                 mAdapter.notifyDataSetChanged();
                             }
                         })
