@@ -188,6 +188,7 @@ import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
 import jp.hazuki.yuzubrowser.tab.TabListLayout;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.TabManagerFactory;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
@@ -2570,10 +2571,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
 
             if (adBlockController != null) {
-                MainTabData tabData = mTabManager.get(view);
+                TabIndexData tabIndexData = mTabManager.getIndexData(view.getIdentityId());
                 Uri uri = null;
-                if (tabData != null && tabData.getUrl() != null)
-                    uri = Uri.parse(tabData.getUrl());
+                if (tabIndexData != null && tabIndexData.getOriginalUrl() != null)
+                    uri = Uri.parse(tabIndexData.getOriginalUrl());
 
                 if (adBlockController.isBlock(uri, request.getUrl())) {
                     return adBlockController.createDummy(request.getUrl());

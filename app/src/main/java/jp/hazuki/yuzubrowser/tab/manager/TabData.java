@@ -25,7 +25,6 @@ public class TabData {
     protected static final int STATE_LOADING = 0x001;
 
     public final CustomWebView mWebView;
-    private String mOriginalUrl;
     private TabIndexData mIndexData;
     public int mProgress = -1;
 
@@ -62,9 +61,7 @@ public class TabData {
     }
 
     public String getOriginalUrl() {
-        if (mOriginalUrl == null)
-            return mIndexData.getUrl();
-        return mOriginalUrl;
+        return mIndexData.getOriginalUrl();
     }
 
     public String getUrl() {
@@ -114,14 +111,14 @@ public class TabData {
         mState |= STATE_LOADING;
         mProgress = 0;
         mIndexData.setUrl(url);
-        mOriginalUrl = url;
+        mIndexData.setOriginalUrl(url);
         mIndexData.setTitle(null);
     }
 
     public void onPageFinished(CustomWebView web, String url) {
         mState &= ~STATE_LOADING;//moved from onProgressChanged
         mIndexData.setUrl(web.getUrl());
-        mOriginalUrl = web.getOriginalUrl();
+        mIndexData.setOriginalUrl(web.getOriginalUrl());
         mIndexData.setTitle(web.getTitle());
     }
 
@@ -133,7 +130,7 @@ public class TabData {
         mProgress = tabdata.mProgress;
         mIndexData.setTitle(tabdata.getTitle());
         mIndexData.setUrl(tabdata.getUrl());
-        mOriginalUrl = tabdata.mOriginalUrl;
+        mIndexData.setOriginalUrl(tabdata.getOriginalUrl());
         setInPageLoad(tabdata.isInPageLoad());
     }
 

@@ -25,6 +25,7 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class TabIndexData implements Serializable {
     private String mUrl;
+    private String mOriginalUrl;
     private String mTitle;
     private int tabType;
     private long mId;
@@ -51,6 +52,10 @@ public class TabIndexData implements Serializable {
 
     public String getUrl() {
         return mUrl;
+    }
+
+    public String getOriginalUrl() {
+        return mOriginalUrl != null ? mOriginalUrl : mUrl;
     }
 
     public String getTitle() {
@@ -86,6 +91,10 @@ public class TabIndexData implements Serializable {
             this.mUrl = url;
         else
             mUrl = "";
+    }
+
+    public void setOriginalUrl(String url) {
+        mOriginalUrl = url;
     }
 
     public void setTitle(String title) {

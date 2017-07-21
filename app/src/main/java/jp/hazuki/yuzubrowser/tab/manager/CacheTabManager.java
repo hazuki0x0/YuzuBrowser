@@ -199,6 +199,16 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     }
 
     @Override
+    public TabIndexData getIndexData(long id) {
+        int index = mTabStorage.indexOf(id);
+        if (index > -1) {
+            return mTabStorage.getIndexData(index);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public int searchParentTabNo(long id) {
         return mTabStorage.searchParentTabNo(id);
     }
