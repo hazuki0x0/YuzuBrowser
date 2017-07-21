@@ -206,6 +206,7 @@ import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
+import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.MathUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
@@ -3849,7 +3850,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     intent.setAction(SpeedDialSettingActivity.ACTION_ADD_SPEED_DIAL);
                     intent.putExtra(Intent.EXTRA_TITLE, tab.getTitle());
                     intent.putExtra(Intent.EXTRA_TEXT, tab.getUrl());
-                    intent.putExtra(SpeedDialSettingActivity.EXTRA_ICON, tab.mWebView.getFavicon());
+                    intent.putExtra(SpeedDialSettingActivity.EXTRA_ICON, ImageUtils.trimSquare(tab.mWebView.getFavicon(), 200));
                     startActivity(intent);
                 }
                 break;
