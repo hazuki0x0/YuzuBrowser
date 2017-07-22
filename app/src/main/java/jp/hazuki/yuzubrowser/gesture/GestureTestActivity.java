@@ -59,6 +59,8 @@ public class GestureTestActivity extends Activity {
             @Override
             public void onGesturePerformed(GestureOverlayView overlay, final Gesture gesture) {
                 overlay.clear(false);
+                if (gesture.getStrokesCount() == 0)
+                    return;
                 GestureScore score = manager.getScore(gesture);
                 if (score == null || score.action == null)
                     return;
