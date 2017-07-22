@@ -146,7 +146,13 @@ public final class FastMatcherFactory {
                     cb.put('\\').put('{');
                     break;
                 case '}':
-                    cb.put("\\").put('}');
+                    cb.put('\\').put('}');
+                    break;
+                case '[':
+                    cb.put('\\').put('[');
+                    break;
+                case ']':
+                    cb.put('\\').put(']');
                     break;
                 default:
                     cb.put(c);
