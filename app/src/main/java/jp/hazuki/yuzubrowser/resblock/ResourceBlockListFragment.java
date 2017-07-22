@@ -76,13 +76,13 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, final int index) {
         final ResourceChecker checker = mManager.remove(index);
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemRemoved(index);
         Snackbar.make(getRootView(), R.string.deleted, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mManager.add(index, checker);
-                        adapter.notifyDataSetChanged();
+                        adapter.notifyItemInserted(index);
                     }
                 })
                 .addCallback(new Snackbar.Callback() {
@@ -110,10 +110,10 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
 
     @Override
     public void onDelete(int position) {
-        if (position > 0 && position < mManager.getList().size()) {
+        if (position >= 0 && position < mManager.getList().size()) {
             mManager.remove(position);
             mManager.save(getActivity().getApplicationContext());
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRemoved(position);
         }
     }
 
@@ -131,11 +131,12 @@ public class ResourceBlockListFragment extends RecyclerFabFragment implements On
     public void onCheckerEdited(int index, ResourceChecker checker) {
         if (index >= 0) {
             mManager.set(index, checker);
+            adapter.notifyItemChanged(index);
         } else {
             mManager.add(checker);
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
         }
         mManager.save(BrowserApplication.getInstance());
-        adapter.notifyDataSetChanged();
     }
 
     @Override
