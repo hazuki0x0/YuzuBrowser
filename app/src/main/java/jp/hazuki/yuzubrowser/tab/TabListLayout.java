@@ -106,8 +106,10 @@ public class TabListLayout extends LinearLayout {
 
             @Override
             public void onCloseButtonClicked(View v, int position) {
+                int size = tabManager.size();
                 mCallback.requestRemoveTab(position);
-                mAdapter.notifyDataSetChanged();
+                if (size != tabManager.size())
+                    mAdapter.notifyItemRemoved(position);
             }
 
             @Override
@@ -210,10 +212,12 @@ public class TabListLayout extends LinearLayout {
                     changeCurrent = false;
                 }
 
-                if (!tabManager.hideItem(position) && changeCurrent) {
-                    tabManager.setCurrentTab(oldCurrent);
+                if (!tabManager.hideItem(position)) {
+                    if (changeCurrent)
+                        tabManager.setCurrentTab(oldCurrent);
+                    return;
                 }
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRemoved(position);
                 snackbar = Snackbar.make(bottomBar, getContext().getString(R.string.closed_tab,
                         ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle()), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
@@ -223,7 +227,11 @@ public class TabListLayout extends LinearLayout {
                                 if (changeCurrent)
                                     tabManager.setCurrentTab(oldCurrent);
                                 changeCurrent = false;
-                                mAdapter.notifyDataSetChanged();
+                                if (position > tabManager.size()) {
+                                    mAdapter.notifyItemInserted(tabManager.size() - 1);
+                                } else {
+                                    mAdapter.notifyItemInserted(position);
+                                }
                             }
                         })
                         .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
