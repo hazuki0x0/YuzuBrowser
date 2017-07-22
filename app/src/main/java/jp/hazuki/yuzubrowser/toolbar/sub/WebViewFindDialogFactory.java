@@ -1,6 +1,23 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.toolbar.sub;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,13 +64,31 @@ public class WebViewFindDialogFactory {
 
             if (ThemeData.isEnabled()) {
                 ThemeData data = ThemeData.getInstance();
-                root.setBackgroundColor(data.toolbarBackgroundColor);
-                editText.setTextColor(data.toolbarTextColor);
-                editText.setHintTextColor(data.toolbarTextColor & 0xffffff | 0x88000000);
-                match.setTextColor(data.toolbarTextColor);
-                buttonLeft.setColorFilter(data.toolbarImageColor);
-                buttonRight.setColorFilter(data.toolbarImageColor);
-                buttonEnd.setColorFilter(data.toolbarImageColor);
+
+                if (data.toolbarBackgroundColor != 0)
+                    root.setBackgroundColor(data.toolbarBackgroundColor);
+                else
+                    root.setBackgroundResource(R.color.deep_gray);
+
+                if (data.toolbarTextColor != 0) {
+                    editText.setTextColor(data.toolbarTextColor);
+                    editText.setHintTextColor(data.toolbarTextColor & 0xffffff | 0x88000000);
+                    match.setTextColor(data.toolbarTextColor);
+                } else {
+                    editText.setTextColor(Color.WHITE);
+                    editText.setHintTextColor(0x88ffffff);
+                    match.setTextColor(Color.WHITE);
+                }
+
+                if (data.toolbarImageColor != 0) {
+                    buttonLeft.setColorFilter(data.toolbarImageColor);
+                    buttonRight.setColorFilter(data.toolbarImageColor);
+                    buttonEnd.setColorFilter(data.toolbarImageColor);
+                } else {
+                    buttonLeft.clearColorFilter();
+                    buttonRight.clearColorFilter();
+                    buttonEnd.clearColorFilter();
+                }
             }
 
             root.setVisibility(View.VISIBLE);
