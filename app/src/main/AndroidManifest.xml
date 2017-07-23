@@ -93,6 +93,7 @@
                 <data android:mimeType="text/plain" />
                 <data android:mimeType="application/xhtml+xml" />
                 <data android:mimeType="application/x-webarchive-xml" />
+                <data android:mimeType="multipart/related" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.WEB_SEARCH" />

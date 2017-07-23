@@ -53,6 +53,10 @@ public class WebDownloadUtils {
             filename = "index.html";
         }
 
+        if (filename.endsWith(".htm")) {
+            filename += "l";
+        }
+
         if (filename.endsWith(".bin") && defaultExt != null) {
             String decodedUrl = Uri.decode(url);
             if (decodedUrl != null) {

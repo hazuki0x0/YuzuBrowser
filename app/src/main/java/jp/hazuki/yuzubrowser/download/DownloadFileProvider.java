@@ -96,6 +96,9 @@ public class DownloadFileProvider extends ContentProvider {
             if (mime != null) {
                 return mime;
             }
+            if ("mht".equals(extension) || "mhtml".equals(extension)) {
+                return "multipart/related";
+            }
         }
 
         return "application/octet-stream";
