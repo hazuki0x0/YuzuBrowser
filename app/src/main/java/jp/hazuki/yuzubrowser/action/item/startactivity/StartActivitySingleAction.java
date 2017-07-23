@@ -30,6 +30,7 @@ import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
+import jp.hazuki.yuzubrowser.utils.graphics.LauncherIconDrawable;
 
 public class StartActivitySingleAction extends SingleAction implements Parcelable {
     private static final String TAG = "StartActivitySingleAction";
@@ -212,13 +213,13 @@ public class StartActivitySingleAction extends SingleAction implements Parcelabl
         if (mIconCache == null || (icon = mIconCache.get()) == null) {
             if (mIcon == null) {
                 try {
-                    icon = context.getPackageManager().getActivityIcon(mIntent.getComponent());//Does not return null.
+                    icon = new LauncherIconDrawable(context.getPackageManager().getActivityIcon(mIntent.getComponent()));//Does not return null.
                 } catch (NameNotFoundException e) {
                     e.printStackTrace();
                     return null;
                 }
             } else {
-                icon = new BitmapDrawable(context.getResources(), mIcon);
+                icon = new LauncherIconDrawable(new BitmapDrawable(context.getResources(), mIcon));
             }
             mIconCache = new WeakReference<>(icon);
         }
