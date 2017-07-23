@@ -3006,9 +3006,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private static class WebImageHandler extends WebSrcImageHandler {
         private final WeakReference<BrowserActivity> refBrowserActivity;
+        private String userAgent;
 
-        public WebImageHandler(BrowserActivity activity) {
+        public WebImageHandler(BrowserActivity activity, String userAgent) {
             refBrowserActivity = new WeakReference<>(activity);
+            this.userAgent = userAgent;
         }
 
 
@@ -3016,7 +3018,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         public void handleUrl(String url) {
             BrowserActivity activity = refBrowserActivity.get();
             if (activity != null)
-                DownloadDialog.showDownloadDialog(activity, url);//TODO referer
+                DownloadDialog.showDownloadDialog(activity, url, userAgent);//TODO referer
         }
     }
 
@@ -3100,10 +3102,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_PAGE_AS:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra);//TODO referer
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getSettings().getUserAgentString());//TODO referer
                             return true;
                         case SingleAction.LPRESS_SAVE_PAGE:
-                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, null, -1);
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, null, webview.getSettings().getUserAgentString(), -1);
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
                         case SingleAction.LPRESS_PATTERN_MATCH: {
@@ -3155,7 +3157,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE_AS:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), webview.getSettings().getUserAgentString(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
@@ -3182,7 +3184,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             return true;
                         }
                         case SingleAction.LPRESS_SAVE_IMAGE:
-                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), webview.getSettings().getUserAgentString(), -1);
                             info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
@@ -3226,7 +3228,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             webview.requestFocusNodeHref(new WebSrcImageCopyUrlHandler(getApplicationContext()).obtainMessage());
                             return true;
                         case SingleAction.LPRESS_SAVE_PAGE_AS:
-                            webview.requestFocusNodeHref(new WebImageHandler(BrowserActivity.this).obtainMessage());
+                            webview.requestFocusNodeHref(new WebImageHandler(BrowserActivity.this, webview.getSettings().getUserAgentString()).obtainMessage());
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE:
                             webview.loadUrl(extra);
@@ -3253,7 +3255,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE_AS:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), webview.getSettings().getUserAgentString(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
@@ -3280,7 +3282,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             return true;
                         }
                         case SingleAction.LPRESS_SAVE_IMAGE:
-                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), webview.getSettings().getUserAgentString(), -1);
                             info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;

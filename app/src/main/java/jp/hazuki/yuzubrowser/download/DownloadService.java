@@ -33,6 +33,7 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.widget.Toast;
 
 import java.io.File;
@@ -306,6 +307,14 @@ public class DownloadService extends Service {
             String referer = mData.getReferer();
             if (!TextUtils.isEmpty(referer)) {
                 httpClient.setHeader("Referer", referer);
+            }
+
+            httpClient.setHeader("Connection", "close");
+
+            if (TextUtils.isEmpty(mData.getUserAgent())) {
+                httpClient.setHeader("User-Agent", WebSettings.getDefaultUserAgent(getApplicationContext()));
+            } else {
+                httpClient.setHeader("User-Agent", mData.getUserAgent());
             }
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());

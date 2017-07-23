@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -174,6 +175,11 @@ public class DownloadDialog {
                         if (!TextUtils.isEmpty(referer)) {
                             conn.setRequestProperty("Referer", referer);
                         }
+                        if (TextUtils.isEmpty(mInfo.getUserAgent())) {
+                            conn.setRequestProperty("User-Agent", WebSettings.getDefaultUserAgent(mContext));
+                        } else {
+                            conn.setRequestProperty("User-Agent", mInfo.getUserAgent());
+                        }
                         conn.connect();
                         final File file = HttpUtils.getFileName(mInfo.getUrl(), null, conn.getHeaderFields());
                         mInfo.setFile(file);
@@ -249,17 +255,17 @@ public class DownloadDialog {
 
     public static DownloadDialog showDownloadDialog(Context context, String url, String userAgent, String contentDisposition, String mimetype, long contentLength, String referer) {
         File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, contentDisposition, mimetype);
-        DownloadRequestInfo info = new DownloadRequestInfo(url, file, null, contentLength, !TextUtils.isEmpty(contentDisposition));//TODO referer
+        DownloadRequestInfo info = new DownloadRequestInfo(url, file, null, userAgent, contentLength, !TextUtils.isEmpty(contentDisposition));//TODO referer
         return showDownloadDialog(context, info);
     }
 
-    public static DownloadDialog showDownloadDialog(Context context, String url) {
-        return showDownloadDialog(context, url, null, null);
+    public static DownloadDialog showDownloadDialog(Context context, String url, String userAgent) {
+        return showDownloadDialog(context, url, null, userAgent, null);
     }
 
-    public static DownloadDialog showDownloadDialog(Context context, String url, String referer, String defaultExt) {
+    public static DownloadDialog showDownloadDialog(Context context, String url, String referer, String userAgent, String defaultExt) {
         File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
-        DownloadRequestInfo info = new DownloadRequestInfo(url, file, referer, -1);
+        DownloadRequestInfo info = new DownloadRequestInfo(url, file, referer, userAgent, -1);
         info.setDefaultExt(defaultExt);
         return showDownloadDialog(context, info);
     }
@@ -271,7 +277,7 @@ public class DownloadDialog {
     }
 
     public static DownloadDialog showArchiveDownloadDialog(Context context, String url, CustomWebView webview) {
-        DownloadDialog dialog = showDownloadDialog(context, url, null, ".html");
+        DownloadDialog dialog = showDownloadDialog(context, url, null, webview.getWebView().getSettings().getUserAgentString(), ".html");
         dialog.setCanSaveArchive(webview);
         return dialog;
     }
