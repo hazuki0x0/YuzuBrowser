@@ -348,6 +348,8 @@ public class DownloadService extends Service {
                 mData.setFile(file);
             }
 
+            mData.setFile(FileUtils.replaceProhibitionWord(mData.getFile()));
+
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
             }
@@ -464,6 +466,9 @@ public class DownloadService extends Service {
 
             if (mData.getFile() == null)
                 mData.setFile(DownloadUtils.getFile(image));
+
+            mData.setFile(FileUtils.replaceProhibitionWord(mData.getFile()));
+
             long id = mDb.insert(mData);
 
             if (DownloadUtils.saveBase64Image(image, mData.file) != null) {

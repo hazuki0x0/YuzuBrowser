@@ -201,6 +201,28 @@ public class FileUtils {
         return new File(folder, fileName);
     }
 
+    public static File replaceProhibitionWord(File file) {
+        String fileName = file.getName();
+        String newName = replaceProhibitionWord(fileName);
+        if (fileName.equals(newName))
+            return file;
+        else
+            return new File(file.getParentFile(), newName);
+    }
+
+    public static String replaceProhibitionWord(String name) {
+        return name
+                .replace('<', '_')
+                .replace('>', '_')
+                .replace(':', '_')
+                .replace('*', '_')
+                .replace('?', '_')
+                .replace('"', '_')
+                .replace('\\', '_')
+                .replace('/', '_')
+                .replace('|', '_');
+    }
+
     public static final FileComparator FILE_COMPARATOR = new FileComparator();
 
     public static class FileComparator implements Comparator<File> {
