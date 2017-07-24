@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,7 +73,21 @@ public class SafeFileProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-        throw new UnsupportedOperationException();
+        URI normalUri = URI.create(uri.buildUpon().scheme("file").authority("").build().toString()).normalize();
+        File file = new File(normalUri);
+        final int lastDot = file.getName().lastIndexOf('.');
+        if (lastDot >= 0) {
+            final String extension = file.getName().substring(lastDot + 1);
+            final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            if (mime != null) {
+                return mime;
+            }
+            if ("mht".equals(extension) || "mhtml".equals(extension)) {
+                return "multipart/related";
+            }
+        }
+
+        return "application/octet-stream";
     }
 
     @Override

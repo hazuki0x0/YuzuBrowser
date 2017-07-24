@@ -60,6 +60,8 @@ public interface TabManager {
 
     TabIndexData getIndexData(int no);
 
+    TabIndexData getIndexData(long id);
+
     int searchParentTabNo(long id);
 
     void destroy();

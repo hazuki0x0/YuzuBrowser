@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.debug;
 
 import android.content.Intent;
@@ -8,7 +24,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.view.ActionStringActivity;
 
@@ -42,7 +60,10 @@ public class DebugActivity extends AppCompatActivity {
                     startActivity(new Intent(getActivity(), DebugFileListActivity.class));
                     break;
                 case 1:
-                    startActivity(new Intent(getActivity(), ActivityListActivity.class));
+                    if (BuildConfig.DEBUG)
+                        startActivity(new Intent(getActivity(), ActivityListActivity.class));
+                    else
+                        Toast.makeText(getActivity(), "This feature is only valid for debug builds", Toast.LENGTH_SHORT).show();
                     break;
                 case 2: {
                     Intent intent = new Intent(getActivity(), ActionStringActivity.class);

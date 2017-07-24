@@ -43,7 +43,7 @@ class SpeedDialRecyclerAdapter extends ArrayRecyclerAdapter<SpeedDial, SpeedDial
         mData.set(pos, appData);
     }
 
-    public SpeedDial getItem(int pos) {
+    public SpeedDial get(int pos) {
         return mData.get(pos);
     }
 

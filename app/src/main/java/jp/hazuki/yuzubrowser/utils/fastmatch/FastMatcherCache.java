@@ -71,7 +71,7 @@ public class FastMatcherCache {
         return -1;
     }
 
-    public static FastMatcherList getMatcher(Context context, String fileName) {
+    public static FastMatcherList getMatcher(Context context, String fileName) throws IllegalCacheException {
         File file = new File(context.getCacheDir(), FOLDER + "/" + fileName);
         FastMatcherList matcherList = new FastMatcherList();
         if (!file.exists()) return matcherList;
@@ -85,6 +85,8 @@ public class FastMatcherCache {
 
                 while (scanner.hasNext()) {
                     String[] items = scanner.nextLine().split(ASCII_RS);
+                    if (items.length != 5)
+                        throw new IllegalCacheException();
                     SimpleCountMatcher matcher;
                     switch (items[0]) {
                         case "1":
@@ -116,5 +118,8 @@ public class FastMatcherCache {
         }
 
         return matcherList;
+    }
+
+    public static class IllegalCacheException extends Exception {
     }
 }

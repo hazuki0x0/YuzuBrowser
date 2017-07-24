@@ -42,7 +42,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
@@ -109,16 +108,16 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
 
     @Override
     public void onRecyclerItemClicked(View v, int position) {
-        AdBlock adBlock = adapter.getItem(position);
+        AdBlock adBlock = adapter.get(position);
         adBlock.setEnable(!adBlock.isEnable());
         provider.update(adBlock);
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemChanged(position);
     }
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
         if (!adapter.isMultiSelectMode()) {
-            AdBlockMenuDialog.newInstance(position, adapter.getItem(position).getId())
+            AdBlockMenuDialog.newInstance(position, adapter.get(position).getId())
                     .show(getChildFragmentManager(), "menu");
         }
         return true;
@@ -127,21 +126,24 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
     @Override
     public void onEdited(int index, int id, String text) {
         if (index >= 0 && index < adapter.getItemCount()) {
-            AdBlock adBlock = adapter.getItem(index);
+            AdBlock adBlock = adapter.get(index);
             adBlock.setMatch(text);
-            if (!provider.update(adBlock)) {
+            if (provider.update(adBlock)) {
+                adapter.notifyItemChanged(index);
+            } else {
                 adapter.remove(index);
                 provider.delete(adBlock.getId());
             }
         } else {
             if (id > -1) {
-                Iterator<AdBlock> it = adapter.getItems().iterator();
-                while (it.hasNext()) {
-                    AdBlock adBlock = it.next();
+                for (int i = 0; adapter.size() > i; i++) {
+                    AdBlock adBlock = adapter.get(i);
                     if (adBlock.getId() == id) {
                         adBlock.setMatch(text);
-                        if (!provider.update(adBlock)) {
-                            it.remove();
+                        if (provider.update(adBlock)) {
+                            adapter.notifyItemChanged(i);
+                        } else {
+                            adapter.remove(i);
                             provider.delete(adBlock.getId());
                         }
                         break;
@@ -149,17 +151,19 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
                 }
             } else {
                 AdBlock adBlock = new AdBlock(text);
-                if (provider.update(adBlock))
-                    adapter.getItems().add(adBlock);
+                if (provider.update(adBlock)) {
+                    adapter.add(adBlock);
+                    adapter.notifyDataSetChanged();
+                }
+
             }
         }
-        adapter.notifyDataSetChanged();
     }
 
     public void addAll(List<AdBlock> adBlocks) {
         provider.addAll(adBlocks);
-        adapter.getItems().clear();
-        adapter.getItems().addAll(provider.getAllItems());
+        adapter.clear();
+        adapter.addAll(provider.getAllItems());
         adapter.notifyDataSetChanged();
     }
 
@@ -200,7 +204,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
 
     @Override
     public void onAskDelete(int index, int id) {
-        AdBlockItemDeleteDialog.newInstance(index, id, adapter.getItem(index).getMatch())
+        AdBlockItemDeleteDialog.newInstance(index, id, adapter.get(index).getMatch())
                 .show(getChildFragmentManager(), "delete");
     }
 
@@ -208,7 +212,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
     public void onDelete(int index, int id) {
         AdBlock adBlock = getItem(index, id);
         if (adBlock != null) {
-            adapter.getItems().remove(adBlock);
+            adapter.remove(adBlock);
             provider.delete(adBlock.getId());
             adapter.notifyDataSetChanged();
         }
@@ -256,7 +260,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         List<Integer> items = adapter.getSelectedItems();
         Collections.sort(items, Collections.<Integer>reverseOrder());
         for (int index : items) {
-            AdBlock adBlock = adapter.getItems().remove(index);
+            AdBlock adBlock = adapter.remove(index);
             provider.delete(adBlock.getId());
         }
         actionMode.finish();
@@ -282,7 +286,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
     private AdBlock getItem(int index, int id) {
         if (index < adapter.getItemCount()) {
             AdBlock adBlock;
-            adBlock = adapter.getItem(index);
+            adBlock = adapter.get(index);
             if (adBlock.getId() == id)
                 return adBlock;
         }
@@ -321,7 +325,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
     @Override
     public void onDeleteAll() {
         provider.deleteAll();
-        adapter.getItems().clear();
+        adapter.clear();
         adapter.notifyDataSetChanged();
     }
 

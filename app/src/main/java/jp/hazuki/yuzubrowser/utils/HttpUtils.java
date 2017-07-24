@@ -55,7 +55,12 @@ public final class HttpUtils {
         if (header.get("Content-Type") != null) {
             List<String> lines = header.get("Content-Type");
             if (lines.size() > 0) {
-                return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, lines.get(0), defaultExt);
+                String mineType = lines.get(0);
+                int index = mineType.indexOf(';');
+                if (index > -1) {
+                    mineType = mineType.substring(0, index);
+                }
+                return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, mineType, defaultExt);
             }
         }
 

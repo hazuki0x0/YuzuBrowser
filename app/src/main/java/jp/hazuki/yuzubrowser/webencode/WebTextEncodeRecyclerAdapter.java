@@ -39,7 +39,7 @@ public class WebTextEncodeRecyclerAdapter extends ArrayRecyclerAdapter<WebTextEn
         mData.set(pos, encode);
     }
 
-    public WebTextEncode getItem(int pos) {
+    public WebTextEncode get(int pos) {
         return mData.get(pos);
     }
 }

@@ -226,7 +226,7 @@ class TabStorage {
                 parcel.recycle();
 
                 return bundle != null ? bundle : new Bundle();
-            } catch (IOException e) {
+            } catch (IOException | IllegalArgumentException e) {
                 ErrorReport.printAndWriteLog(e);
             }
         }

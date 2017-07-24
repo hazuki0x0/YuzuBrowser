@@ -77,9 +77,8 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
 
     @Override
     public void onDelete(int position) {
-        mUserAgentList.remove(position);
+        mAdapter.remove(position);
         mUserAgentList.write(getActivity());
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -87,14 +86,14 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
         if (position < 0) {
             mUserAgentList.add(new UserAgent(name, ua));
             mUserAgentList.write(getActivity());
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemInserted(mAdapter.size() - 1);
         } else {
             UserAgent userAgent = mUserAgentList.get(position);
             userAgent.name = name;
             userAgent.useragent = ua;
             mUserAgentList.set(position, userAgent);
             mUserAgentList.write(getActivity());
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemInserted(position);
         }
     }
 
@@ -162,15 +161,14 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             final int position = viewHolder.getAdapterPosition();
-            final UserAgent ua = mUserAgentList.remove(position);
+            final UserAgent ua = mAdapter.remove(position);
 
-            mAdapter.notifyDataSetChanged();
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mUserAgentList.add(position, ua);
-                            mAdapter.notifyDataSetChanged();
+                            mAdapter.add(position, ua);
+                            mAdapter.notifyItemInserted(position);
                         }
                     })
                     .addCallback(new Snackbar.Callback() {

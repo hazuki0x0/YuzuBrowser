@@ -188,6 +188,7 @@ import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
 import jp.hazuki.yuzubrowser.tab.TabListLayout;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
+import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.tab.manager.TabManagerFactory;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
@@ -205,6 +206,7 @@ import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
+import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.MathUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
@@ -1741,6 +1743,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return false;
                 if (Math.abs(dist) < AppData.flick_sensitivity_distance.get() * 10)
                     return false;
+                if (e2.getEventTime() - e1.getEventTime() > 300L)
+                    return false;
 
                 if (AppData.flick_edge.get()) {
                     float x = e1.getX();
@@ -1851,6 +1855,9 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                 return false;
 
             if (e1 == null || e2 == null)
+                return false;
+
+            if (e2.getEventTime() - e1.getEventTime() > 300L)
                 return false;
 
             MainTabData tab = mTabManager.getCurrentTabData();
@@ -2574,10 +2581,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             }
 
             if (adBlockController != null) {
-                MainTabData tabData = mTabManager.get(view);
+                TabIndexData tabIndexData = mTabManager.getIndexData(view.getIdentityId());
                 Uri uri = null;
-                if (tabData != null && tabData.getUrl() != null)
-                    uri = Uri.parse(tabData.getUrl());
+                if (tabIndexData != null && tabIndexData.getOriginalUrl() != null)
+                    uri = Uri.parse(tabIndexData.getOriginalUrl());
 
                 if (adBlockController.isBlock(uri, request.getUrl())) {
                     return adBlockController.createDummy(request.getUrl());
@@ -2711,28 +2718,29 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public boolean onJsConfirm(CustomWebView view, String url, String message, final JsResult result) {
-            (new AlertDialog.Builder(BrowserActivity.this))
-                    .setTitle(url)
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            result.confirm();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            result.cancel();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            result.cancel();
-                        }
-                    })
-                    .show();
+            if (!isFinishing())
+                (new AlertDialog.Builder(BrowserActivity.this))
+                        .setTitle(url)
+                        .setMessage(message)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                result.confirm();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                result.cancel();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                result.cancel();
+                            }
+                        })
+                        .show();
             return true;
         }
 
@@ -3002,9 +3010,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
     private static class WebImageHandler extends WebSrcImageHandler {
         private final WeakReference<BrowserActivity> refBrowserActivity;
+        private String userAgent;
 
-        public WebImageHandler(BrowserActivity activity) {
+        public WebImageHandler(BrowserActivity activity, String userAgent) {
             refBrowserActivity = new WeakReference<>(activity);
+            this.userAgent = userAgent;
         }
 
 
@@ -3012,7 +3022,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         public void handleUrl(String url) {
             BrowserActivity activity = refBrowserActivity.get();
             if (activity != null)
-                DownloadDialog.showDownloadDialog(activity, url);//TODO referer
+                DownloadDialog.showDownloadDialog(activity, url, userAgent);//TODO referer
         }
     }
 
@@ -3096,10 +3106,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_PAGE_AS:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra);//TODO referer
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getSettings().getUserAgentString());//TODO referer
                             return true;
                         case SingleAction.LPRESS_SAVE_PAGE:
-                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, null, -1);
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, null, webview.getSettings().getUserAgentString(), -1);
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
                         case SingleAction.LPRESS_PATTERN_MATCH: {
@@ -3151,7 +3161,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE_AS:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), webview.getSettings().getUserAgentString(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
@@ -3178,7 +3188,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             return true;
                         }
                         case SingleAction.LPRESS_SAVE_IMAGE:
-                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), webview.getSettings().getUserAgentString(), -1);
                             info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
@@ -3222,7 +3232,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             webview.requestFocusNodeHref(new WebSrcImageCopyUrlHandler(getApplicationContext()).obtainMessage());
                             return true;
                         case SingleAction.LPRESS_SAVE_PAGE_AS:
-                            webview.requestFocusNodeHref(new WebImageHandler(BrowserActivity.this).obtainMessage());
+                            webview.requestFocusNodeHref(new WebImageHandler(BrowserActivity.this, webview.getSettings().getUserAgentString()).obtainMessage());
                             return true;
                         case SingleAction.LPRESS_OPEN_IMAGE:
                             webview.loadUrl(extra);
@@ -3249,7 +3259,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             ClipboardUtils.setClipboardText(getApplicationContext(), extra);
                             return true;
                         case SingleAction.LPRESS_SAVE_IMAGE_AS:
-                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), ".jpg");
+                            DownloadDialog.showDownloadDialog(BrowserActivity.this, extra, webview.getUrl(), webview.getSettings().getUserAgentString(), ".jpg");
                             return true;
                         case SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH:
                             openInNewTabPost(SearchUtils.makeGoogleImageSearch(extra), TabType.WINDOW);
@@ -3276,7 +3286,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             return true;
                         }
                         case SingleAction.LPRESS_SAVE_IMAGE:
-                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), -1);
+                            DownloadRequestInfo info = new DownloadRequestInfo(extra, null, webview.getUrl(), webview.getSettings().getUserAgentString(), -1);
                             info.setDefaultExt(".jpg");
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
@@ -3851,7 +3861,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     intent.setAction(SpeedDialSettingActivity.ACTION_ADD_SPEED_DIAL);
                     intent.putExtra(Intent.EXTRA_TITLE, tab.getTitle());
                     intent.putExtra(Intent.EXTRA_TEXT, tab.getUrl());
-                    intent.putExtra(SpeedDialSettingActivity.EXTRA_ICON, tab.mWebView.getFavicon());
+                    intent.putExtra(SpeedDialSettingActivity.EXTRA_ICON, ImageUtils.trimSquare(tab.mWebView.getFavicon(), 200));
                     startActivity(intent);
                 }
                 break;

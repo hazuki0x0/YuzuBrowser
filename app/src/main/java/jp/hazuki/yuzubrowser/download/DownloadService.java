@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.download;
 
 import android.app.Notification;
@@ -17,6 +33,7 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.widget.Toast;
 
 import java.io.File;
@@ -175,7 +192,7 @@ public class DownloadService extends Service {
         super.onCreate();
         mMessenger = new Messenger(new ServiceHandler());
         mHandler = new Handler();
-        mDb = new DownloadInfoDatabase(getApplicationContext());
+        mDb = DownloadInfoDatabase.getInstance(getApplicationContext());
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 
@@ -292,6 +309,14 @@ public class DownloadService extends Service {
                 httpClient.setHeader("Referer", referer);
             }
 
+            httpClient.setHeader("Connection", "close");
+
+            if (TextUtils.isEmpty(mData.getUserAgent())) {
+                httpClient.setHeader("User-Agent", WebSettings.getDefaultUserAgent(getApplicationContext()));
+            } else {
+                httpClient.setHeader("User-Agent", mData.getUserAgent());
+            }
+
             NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
 
             HttpResponseData response = httpClient.connect();
@@ -322,6 +347,8 @@ public class DownloadService extends Service {
                 file = HttpUtils.getFileName(mData.getUrl(), mData.getDefaultExt(), response.getHeaderFields());
                 mData.setFile(file);
             }
+
+            mData.setFile(FileUtils.replaceProhibitionWord(mData.getFile()));
 
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
@@ -439,6 +466,9 @@ public class DownloadService extends Service {
 
             if (mData.getFile() == null)
                 mData.setFile(DownloadUtils.getFile(image));
+
+            mData.setFile(FileUtils.replaceProhibitionWord(mData.getFile()));
+
             long id = mDb.insert(mData);
 
             if (DownloadUtils.saveBase64Image(image, mData.file) != null) {

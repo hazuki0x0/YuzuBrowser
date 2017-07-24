@@ -198,10 +198,15 @@ public class AdBlockManager {
     }
 
     FastMatcherList getFastMatcherCachedList(String table) {
-        if (getListUpdateTime(table) > FastMatcherCache.getLastTime(appContext, table))
+        if (getListUpdateTime(table) > FastMatcherCache.getLastTime(appContext, table)) {
             return getFastMatcherList(table);
-        else
-            return FastMatcherCache.getMatcher(appContext, table);
+        } else {
+            try {
+                return FastMatcherCache.getMatcher(appContext, table);
+            } catch (FastMatcherCache.IllegalCacheException e) {
+                return getFastMatcherList(table);
+            }
+        }
     }
 
     private FastMatcherList getFastMatcherList(String table) {

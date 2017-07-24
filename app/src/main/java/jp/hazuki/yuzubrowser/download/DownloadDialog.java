@@ -1,13 +1,33 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.download;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -22,6 +42,7 @@ import java.net.URL;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.HttpUtils;
+import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListButton;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListViewController;
@@ -77,9 +98,9 @@ public class DownloadDialog {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, "application/x-webarchive-xml"));//TODO contentDisposition
+                    mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, "message/rfc822", ".mhtml"));//TODO contentDisposition
                 } else {
-                    mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, null));//TODO contentDisposition, mimetype
+                    mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, null, ".html"));//TODO contentDisposition, mimetype
                 }
                 filenameEditText.setText(mInfo.getFile().getName());
             }
@@ -154,6 +175,11 @@ public class DownloadDialog {
                         if (!TextUtils.isEmpty(referer)) {
                             conn.setRequestProperty("Referer", referer);
                         }
+                        if (TextUtils.isEmpty(mInfo.getUserAgent())) {
+                            conn.setRequestProperty("User-Agent", WebSettings.getDefaultUserAgent(mContext));
+                        } else {
+                            conn.setRequestProperty("User-Agent", mInfo.getUserAgent());
+                        }
                         conn.connect();
                         final File file = HttpUtils.getFileName(mInfo.getUrl(), null, conn.getHeaderFields());
                         mInfo.setFile(file);
@@ -188,10 +214,29 @@ public class DownloadDialog {
             File file = info.getFile();
             mWebView.saveWebArchiveMethod(file.getAbsolutePath());
             Context context = getContext().getApplicationContext();
-            if (file.exists())
+            boolean success = file.exists();
+            info.setState(success ? DownloadInfo.STATE_DOWNLOADED : DownloadInfo.STATE_UNKNOWN_ERROR);
+            DownloadInfoDatabase db = DownloadInfoDatabase.getInstance(mContext.getApplicationContext());
+            long id = db.insert(info);
+
+            if (success) {
                 Toast.makeText(context, context.getString(R.string.saved_file) + info.getFile().getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            else
+
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext);
+                notification.setWhen(System.currentTimeMillis());
+                notification.setProgress(0, 0, false);
+                notification.setAutoCancel(true);
+                notification.setContentTitle(info.getFile().getName());
+                notification.setContentText(mContext.getText(R.string.download_success));
+                notification.setSmallIcon(android.R.drawable.stat_sys_download_done);
+
+                notification.setContentIntent(PendingIntent.getActivity(mContext, 0, PackageUtils.createFileOpenIntent(mContext, info.getFile()), 0));
+
+                NotificationManager manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify((int) id, notification.build());
+            } else {
                 Toast.makeText(context, context.getString(R.string.failed), Toast.LENGTH_SHORT).show();
+            }
         } else {
             DownloadService.startDownloadService(mContext, mInfo);
         }
@@ -210,17 +255,17 @@ public class DownloadDialog {
 
     public static DownloadDialog showDownloadDialog(Context context, String url, String userAgent, String contentDisposition, String mimetype, long contentLength, String referer) {
         File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, contentDisposition, mimetype);
-        DownloadRequestInfo info = new DownloadRequestInfo(url, file, null, contentLength, !TextUtils.isEmpty(contentDisposition));//TODO referer
+        DownloadRequestInfo info = new DownloadRequestInfo(url, file, null, userAgent, contentLength, !TextUtils.isEmpty(contentDisposition));//TODO referer
         return showDownloadDialog(context, info);
     }
 
-    public static DownloadDialog showDownloadDialog(Context context, String url) {
-        return showDownloadDialog(context, url, null, null);
+    public static DownloadDialog showDownloadDialog(Context context, String url, String userAgent) {
+        return showDownloadDialog(context, url, null, userAgent, null);
     }
 
-    public static DownloadDialog showDownloadDialog(Context context, String url, String referer, String defaultExt) {
+    public static DownloadDialog showDownloadDialog(Context context, String url, String referer, String userAgent, String defaultExt) {
         File file = WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
-        DownloadRequestInfo info = new DownloadRequestInfo(url, file, referer, -1);
+        DownloadRequestInfo info = new DownloadRequestInfo(url, file, referer, userAgent, -1);
         info.setDefaultExt(defaultExt);
         return showDownloadDialog(context, info);
     }
@@ -232,7 +277,7 @@ public class DownloadDialog {
     }
 
     public static DownloadDialog showArchiveDownloadDialog(Context context, String url, CustomWebView webview) {
-        DownloadDialog dialog = showDownloadDialog(context, url);
+        DownloadDialog dialog = showDownloadDialog(context, url, null, webview.getWebView().getSettings().getUserAgentString(), ".html");
         dialog.setCanSaveArchive(webview);
         return dialog;
     }

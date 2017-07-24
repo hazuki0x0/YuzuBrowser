@@ -61,7 +61,7 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
 
     @Override
     public void onRecyclerItemClicked(View v, int position) {
-        GestureItem item = adapter.getItems().get(position);
+        GestureItem item = adapter.get(position);
         Bundle bundle = new Bundle();
         bundle.putLong(ITEM_ID, item.getId());
         Intent intent = new ActionActivity.Builder(getActivity())
@@ -84,7 +84,6 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
     public void onDelete(int position) {
         GestureItem item = adapter.remove(position);
         mManager.remove(item);
-        reset();
     }
 
     @Override
@@ -121,14 +120,13 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, final int index) {
-        final GestureItem item = adapter.getItems().remove(index);
-        adapter.notifyDataSetChanged();
+        final GestureItem item = adapter.remove(index);
         Snackbar.make(getRootView(), R.string.deleted, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        adapter.getItems().add(index, item);
-                        adapter.notifyDataSetChanged();
+                        adapter.add(index, item);
+                        adapter.notifyItemInserted(index);
                     }
                 })
                 .addCallback(new Snackbar.Callback() {
@@ -136,7 +134,6 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
                     public void onDismissed(Snackbar transientBottomBar, int event) {
                         if (event != DISMISS_EVENT_ACTION && event != DISMISS_EVENT_MANUAL) {
                             mManager.remove(item);
-                            reset();
                         }
                     }
                 })
@@ -159,8 +156,8 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
 
     private void reset() {
         mManager.load();
-        adapter.getItems().clear();
-        adapter.getItems().addAll(mManager.getList());
+        adapter.clear();
+        adapter.addAll(mManager.getList());
         adapter.notifyDataSetChanged();
     }
 

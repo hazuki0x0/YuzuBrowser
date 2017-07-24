@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.speeddial;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.util.Base64;
 
 import java.io.Serializable;
@@ -51,24 +50,6 @@ public class WebIcon implements Serializable {
     public static WebIcon createIcon(Bitmap icon) {
         if (icon == null) return null;
 
-        int x = icon.getWidth();
-        int y = icon.getHeight();
-
-        if (x == y && x <= 200) {
-            return new WebIcon(icon);
-        }
-
-        float scale;
-        if (Math.max(x, y) <= 200) {
-            scale = 1f;
-        } else {
-            scale = Math.max((float) 200 / x, (float) 200 / y);
-        }
-        int size = Math.min(x, y);
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-        Bitmap bmp = Bitmap.createBitmap(icon, (x - size) / 2, (y - size) / 2, size, size, matrix, true);
-
-        return new WebIcon(bmp);
+        return new WebIcon(ImageUtils.trimSquare(icon, 200));
     }
 }

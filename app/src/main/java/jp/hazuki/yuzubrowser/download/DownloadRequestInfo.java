@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.download;
 
 import android.content.Context;
@@ -12,21 +28,24 @@ public class DownloadRequestInfo extends DownloadInfo {
     private String referer;
     private int max_length;
     private int current_length;
+    private String userAgent;
     private String mDefaultExt;
     private boolean solvedFileName;
 
     public DownloadRequestInfo() {
     }
 
-    public DownloadRequestInfo(String url, File file, String referer, long contentlength) {
+    public DownloadRequestInfo(String url, File file, String referer, String userAgent, long contentlength) {
         super(url, file);
         this.referer = referer;
+        this.userAgent = userAgent;
         this.default_contentlength = contentlength;
     }
 
-    public DownloadRequestInfo(String url, File file, String referer, long contentlength, boolean solvedFileName) {
+    public DownloadRequestInfo(String url, File file, String referer, String userAgent, long contentlength, boolean solvedFileName) {
         super(url, file);
         this.referer = referer;
+        this.userAgent = userAgent;
         this.default_contentlength = contentlength;
         this.solvedFileName = solvedFileName;
     }
@@ -45,6 +64,10 @@ public class DownloadRequestInfo extends DownloadInfo {
 
     public void setReferer(String referer) {
         this.referer = referer;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
     }
 
     public int getMaxLength() {
