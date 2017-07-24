@@ -182,7 +182,7 @@ public class FileUtils {
     }
 
     public static File createUniqueFile(String folderPath, String fileName) {
-        FileUtils.ParsedFileName pFname = FileUtils.getParsedFileName(fileName);
+        FileUtils.ParsedFileName pFname = FileUtils.getParsedFileName(replaceProhibitionWord(fileName));
         int i = 1;
         final File folder = new File(folderPath);
         String[] fileList = folder.list();
