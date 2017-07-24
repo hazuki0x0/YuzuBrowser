@@ -1254,7 +1254,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     @Override
     public CustomWebView makeWebView(@WebViewType int cacheType) {
         CustomWebView web = WebViewFactory.create(this, cacheType);
-        web.getWebView().setDrawingCacheEnabled(true);
+        web.getView().setId(View.generateViewId());
+        web.getWebView().setDrawingCacheEnabled(false);
         web.getWebView().buildDrawingCache();
         initWebSetting(web);
         boolean enable_cookie = AppData.private_mode.get()
