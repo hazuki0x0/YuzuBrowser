@@ -20,12 +20,13 @@ import jp.hazuki.yuzubrowser.tab.adapter.TabListRecyclerBaseAdapter;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.templatepreserving.TemplatePreservingSnackBar;
 
 public class TabListLayout extends LinearLayout {
     private TabListRecyclerBaseAdapter mAdapter;
     private TabManager tabManager;
     private Callback mCallback;
-    private Snackbar snackbar;
+    private TemplatePreservingSnackBar snackbar;
     private final LinearLayout bottomBar;
     private boolean reverse = false;
     private boolean horizontal = false;
@@ -218,8 +219,8 @@ public class TabListLayout extends LinearLayout {
                     return;
                 }
                 mAdapter.notifyItemRemoved(position);
-                snackbar = Snackbar.make(bottomBar, getContext().getString(R.string.closed_tab,
-                        ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle()), Snackbar.LENGTH_SHORT)
+                snackbar = TemplatePreservingSnackBar.make(bottomBar, getContext().getString(R.string.closed_tab),
+                        ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle(), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -234,10 +235,10 @@ public class TabListLayout extends LinearLayout {
                                 }
                             }
                         })
-                        .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                        .addCallback(new BaseTransientBottomBar.BaseCallback<TemplatePreservingSnackBar>() {
                             @Override
-                            public void onDismissed(Snackbar transientBottomBar, int event) {
-                                if (event != DISMISS_EVENT_ACTION && tabManager.isHideItem()) {
+                            public void onDismissed(TemplatePreservingSnackBar transientBottomBar, int event) {
+                                if (!transientBottomBar.isDismissByAction() && tabManager.isHideItem()) {
                                     deleteHideItem();
                                 }
                                 snackbar = null;
