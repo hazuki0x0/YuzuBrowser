@@ -209,10 +209,8 @@ public class PieMenu extends FrameLayout {
             for (PieItem item : mItems) {
                 if (item.getLevel() == level) {
                     View view = item.getView();
-                    view.measure(view.getLayoutParams().width,
-                            view.getLayoutParams().height);
-                    int w = view.getMeasuredWidth();
-                    int h = view.getMeasuredHeight();
+                    int w = view.getLayoutParams().width;
+                    int h = view.getLayoutParams().height;
                     int r = inner + (outer - inner) * 55 / 100;
                     int x = (int) (r * Math.sin(angle));
                     int y = mCenter.y - (int) (r * Math.cos(angle)) - h / 2;
