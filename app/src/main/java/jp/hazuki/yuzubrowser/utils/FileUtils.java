@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -221,6 +222,26 @@ public class FileUtils {
                 .replace('\\', '_')
                 .replace('/', '_')
                 .replace('|', '_');
+    }
+
+    public static String getMineType(File file) {
+        final int lastDot = file.getName().lastIndexOf('.');
+        if (lastDot >= 0) {
+            final String extension = file.getName().substring(lastDot + 1).toLowerCase();
+            final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            if (mime != null) {
+                return mime;
+            }
+
+            switch (extension) {
+                case "mht":
+                case "mhtml":
+                    return "multipart/related";
+                case "js":
+                    return "application/javascript";
+            }
+        }
+        return "application/octet-stream";
     }
 
     public static final FileComparator FILE_COMPARATOR = new FileComparator();
