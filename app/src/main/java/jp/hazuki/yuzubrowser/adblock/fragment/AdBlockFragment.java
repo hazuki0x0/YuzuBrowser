@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
@@ -60,6 +61,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
 
     private AdBlockManager.AdBlockItemProvider provider;
     private AdBlockArrayRecyclerAdapter adapter;
+    private LinearLayoutManager layoutManager;
     private AdBlockFragmentListener listener;
     private ActionMode actionMode;
     private int type;
@@ -78,7 +80,8 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         provider = AdBlockManager.getProvider(BrowserApplication.getInstance(), type);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
 
         adapter = new AdBlockArrayRecyclerAdapter(getActivity(), provider.getAllItems(), this);
@@ -317,6 +320,36 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
             case R.id.deleteAll:
                 AdBlockDeleteAllDialog.newInstance()
                         .show(getChildFragmentManager(), "delete_all");
+                return true;
+            case R.id.sort_count:
+                Collections.sort(adapter.getItems(), new Comparator<AdBlock>() {
+                    @Override
+                    public int compare(AdBlock o1, AdBlock o2) {
+                        return o2.getCount() - o1.getCount();
+                    }
+                });
+                adapter.notifyDataSetChanged();
+                layoutManager.scrollToPosition(0);
+                return true;
+            case R.id.sort_date:
+                Collections.sort(adapter.getItems(), new Comparator<AdBlock>() {
+                    @Override
+                    public int compare(AdBlock o1, AdBlock o2) {
+                        return Long.compare(o2.getTime(), o1.getTime());
+                    }
+                });
+                adapter.notifyDataSetChanged();
+                layoutManager.scrollToPosition(0);
+                return true;
+            case R.id.sort_name:
+                Collections.sort(adapter.getItems(), new Comparator<AdBlock>() {
+                    @Override
+                    public int compare(AdBlock o1, AdBlock o2) {
+                        return o1.getMatch().compareTo(o2.getMatch());
+                    }
+                });
+                adapter.notifyDataSetChanged();
+                layoutManager.scrollToPosition(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

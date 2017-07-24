@@ -343,6 +343,10 @@
     <string name="pref_exported">エクスポートが完了しました</string>
     <string name="pref_delete_all">全削除</string>
     <string name="pref_delete_all_confirm">このリストを全て削除してよろしいですか？</string>
+    <string name="pref_sort">ソート</string>
+    <string name="pref_sort_count">回数順</string>
+    <string name="pref_sort_date">日付順</string>
+    <string name="pref_sort_name">名前順</string>
 
     <string name="pref_show_divider">区切り線表示</string>
     <string-array name="pref_show_divider_list">

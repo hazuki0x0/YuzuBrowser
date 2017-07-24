@@ -691,6 +691,10 @@
     <string name="pref_exported">Export completed</string>
     <string name="pref_delete_all">Delete all</string>
     <string name="pref_delete_all_confirm">pref_delete_all_confirm</string>
+    <string name="pref_sort">Sort</string>
+    <string name="pref_sort_count">By count</string>
+    <string name="pref_sort_date">By date</string>
+    <string name="pref_sort_name">By name</string>
 
     <string-array name="pref_ad_block_menu">
         <item>@string/pref_edit</item>
