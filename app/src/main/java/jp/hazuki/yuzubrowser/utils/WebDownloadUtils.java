@@ -57,6 +57,21 @@ public class WebDownloadUtils {
             filename += "l";
         }
 
+        if (filename.endsWith(".bin") && mimetype != null && defaultExt == null) {
+            switch (mimetype) {
+                case "multipart/related":
+                case "message/rfc822":
+                case "application/x-mimearchive":
+                    defaultExt = ".mhtml";
+                    break;
+                case "application/javascript":
+                case "application/x-javascript":
+                case "text/javascript":
+                    defaultExt = ".js";
+                    break;
+            }
+        }
+
         if (filename.endsWith(".bin") && defaultExt != null) {
             String decodedUrl = Uri.decode(url);
             if (decodedUrl != null) {
