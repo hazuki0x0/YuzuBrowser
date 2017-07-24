@@ -201,7 +201,6 @@ import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity;
 import jp.hazuki.yuzubrowser.userjs.UserScript;
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase;
 import jp.hazuki.yuzubrowser.userjs.UserScriptListActivity;
-import jp.hazuki.yuzubrowser.utils.Api24LongPressFix;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
@@ -215,6 +214,7 @@ import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
+import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity;
 import jp.hazuki.yuzubrowser.utils.graphics.SimpleLayerDrawable;
 import jp.hazuki.yuzubrowser.utils.graphics.TabListActionTextDrawable;
 import jp.hazuki.yuzubrowser.utils.handler.PauseHandler;
@@ -256,9 +256,8 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageOpenRightNewTabHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
-public class BrowserActivity extends AppCompatActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
-        GestureOverlayView.OnGesturePerformedListener, Api24LongPressFix.OnBackLongClickListener,
-        MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener {
+public class BrowserActivity extends LongPressFixActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
+        GestureOverlayView.OnGesturePerformedListener, MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -336,8 +335,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     private CustomCoordinatorLayout coordinatorLayout;
 
     private MenuWindow menuWindow;
-
-    private Api24LongPressFix api24LongPressFix;
 
     private MultiFingerGestureManager multiFingerGestureManager;
     private MultiFingerGestureDetector multiFingerGestureDetector;
@@ -455,8 +452,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
         MenuActionManager action_manager = MenuActionManager.getInstance(appContext);
         menuWindow = new MenuWindow(this, action_manager.browser_activity.list, mActionCallback);
         menuWindow.setListener(this);
-
-        api24LongPressFix = new Api24LongPressFix(this);
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
@@ -806,13 +801,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         return true;
                 }
                 break;
-            case KeyEvent.KEYCODE_BACK:
-                if (event.getRepeatCount() == 0) {
-                    event.startTracking();
-                    api24LongPressFix.onBackKeyDown();
-                    return true;
-                }
-                break;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -837,37 +825,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     return true;
                 }
                 break;
-            case KeyEvent.KEYCODE_BACK:
-                if (api24LongPressFix.onBackKeyUp()) {
-                    return true;
-                }
-                if (event.isTracking() && !event.isCanceled()) {
-                    if (mWebCustomViewHandler != null && mWebCustomViewHandler.isCustomViewShowing()) {
-                        mWebCustomViewHandler.hideCustomView(this);
-                    } else if (mSubGestureView != null) {
-                        superFrameLayout.removeView(mSubGestureView);
-                        mSubGestureView = null;
-                    } else if (mCursorView != null && mCursorView.getBackFinish()) {
-                        mCursorView.setView(null);
-                        webFrameLayout.removeView(mCursorView);
-                        mCursorView = null;
-                    } else if (mTabManagerView != null) {
-                        mTabManagerView.close();
-                    } else if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible()) {
-                        mWebViewFindDialog.hide();
-                    } else if (mWebViewPageFastScroller != null) {
-                        mWebViewPageFastScroller.close();
-                    } else if (mWebViewAutoScrollManager != null) {
-                        mWebViewAutoScrollManager.stop();
-                    } else if (mTabManager.getCurrentTabData().mWebView.canGoBack()) {
-                        mTabManager.getCurrentTabData().mWebView.goBack();
-                        superFrameLayout.postDelayed(takeCurrentTabScreen, 500);
-                    } else {
-                        mActionCallback.run(mHardButtonManager.back_press.action);
-                    }
-                    return true;
-                }
-                break;
             case KeyEvent.KEYCODE_MENU:
                 if (!event.isCanceled()) {
                     if (menuWindow.isShowing()) {
@@ -884,12 +841,34 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     }
 
     @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        return super.onKeyLongPress(keyCode, event);
+    public void onBackPressed() {
+        if (mWebCustomViewHandler != null && mWebCustomViewHandler.isCustomViewShowing()) {
+            mWebCustomViewHandler.hideCustomView(this);
+        } else if (mSubGestureView != null) {
+            superFrameLayout.removeView(mSubGestureView);
+            mSubGestureView = null;
+        } else if (mCursorView != null && mCursorView.getBackFinish()) {
+            mCursorView.setView(null);
+            webFrameLayout.removeView(mCursorView);
+            mCursorView = null;
+        } else if (mTabManagerView != null) {
+            mTabManagerView.close();
+        } else if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible()) {
+            mWebViewFindDialog.hide();
+        } else if (mWebViewPageFastScroller != null) {
+            mWebViewPageFastScroller.close();
+        } else if (mWebViewAutoScrollManager != null) {
+            mWebViewAutoScrollManager.stop();
+        } else if (mTabManager.getCurrentTabData().mWebView.canGoBack()) {
+            mTabManager.getCurrentTabData().mWebView.goBack();
+            superFrameLayout.postDelayed(takeCurrentTabScreen, 500);
+        } else {
+            mActionCallback.run(mHardButtonManager.back_press.action);
+        }
     }
 
     @Override
-    public void onBackLongClick() {
+    public void onBackKeyLongPressed() {
         mActionCallback.run(mHardButtonManager.back_lpress.action);
     }
 
@@ -2784,7 +2763,6 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
 
         @Override
         public void onHideCustomView() {
-            api24LongPressFix.cancel();
             if (mWebCustomViewHandler != null)
                 mWebCustomViewHandler.hideCustomView(BrowserActivity.this);
         }

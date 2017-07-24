@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.app.AlertDialog;
@@ -9,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -39,11 +56,12 @@ import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkRecyclerListener {
+public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback {
     private static final String MODE_PICK = "pick";
     private static final String ITEM_ID = "id";
 
@@ -215,6 +233,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.multiSelect: {
                 boolean next = !adapter.isMultiSelectMode();
                 adapter.setMultiSelectMode(next);
+                ((AppCompatActivity) getActivity()).startSupportActionMode(this);
                 return true;
             }
         }
@@ -447,6 +466,91 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                         .show();
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.bookmark_action_mode, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.openAllNew: {
+                List<BookmarkItem> items;
+                if (item instanceof BookmarkFolder) {
+                    items = ((BookmarkFolder) item).list;
+                } else {
+                    items = getSelectedBookmark(adapter.getSelectedItems());
+                }
+                sendUrl(items, BrowserManager.LOAD_URL_TAB_NEW);
+                return true;
+            }
+            case R.id.openAllBg: {
+                List<BookmarkItem> items;
+                if (item instanceof BookmarkFolder) {
+                    items = ((BookmarkFolder) item).list;
+                } else {
+                    items = getSelectedBookmark(adapter.getSelectedItems());
+                }
+                sendUrl(items, BrowserManager.LOAD_URL_TAB_BG);
+                return true;
+            }
+            case R.id.selectAll:
+                for (int i = 0; adapter.getItemCount() > i; i++) {
+                    adapter.setSelect(i, true);
+                }
+                return true;
+            case R.id.moveAllBookmark:
+                final List<BookmarkItem> bookmarkItems = getSelectedBookmark(adapter.getSelectedItems());
+                new BookmarkFoldersDialog(getActivity(), mManager)
+                        .setTitle(R.string.move_bookmark)
+                        .setCurrentFolder(mCurrentFolder, bookmarkItems)
+                        .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
+                            @Override
+                            public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
+                                mCurrentFolder.list.removeAll(bookmarkItems);
+                                folder.addAll(bookmarkItems);
+
+                                mManager.write();
+                                mode.finish();
+                                return false;
+                            }
+                        })
+                        .show();
+                return true;
+            case R.id.deleteAllBookmark:
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.confirm)
+                        .setMessage(R.string.confirm_delete_bookmark)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
+
+                                mCurrentFolder.list.removeAll(selectedList);
+                                mManager.write();
+
+                                mode.finish();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        ((LongPressFixActivity) getActivity()).onDestroyActionMode();
+        adapter.setMultiSelectMode(false);
     }
 
     @Override
