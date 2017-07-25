@@ -86,14 +86,14 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
+                mListener.onRecyclerItemClicked(v, holder.getLayoutPosition());
             }
         });
 
         holder.closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onCloseButtonClicked(v, holder.getAdapterPosition());
+                mListener.onCloseButtonClicked(v, holder.getLayoutPosition());
             }
         });
 
