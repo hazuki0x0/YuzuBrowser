@@ -145,6 +145,7 @@ public class BrowserHistoryManager implements CursorLoadable {
     }
 
     public byte[] getFaviconImage(String url) {
+        if (url == null) return null;
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_URL + " = ?", new String[]{url}, null, null, null);
         byte[] icon = null;
