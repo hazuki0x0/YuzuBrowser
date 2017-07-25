@@ -341,14 +341,14 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
                 @Override
                 public void onClick(View v) {
                     ((OnUserJsItemClickListener) getListener())
-                            .onInfoButtonClick(v, holder.getAdapterPosition());
+                            .onInfoButtonClick(v, holder.getLayoutPosition());
                 }
             });
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((OnUserJsItemClickListener) getListener())
-                            .onCheckBoxClicked(v, holder.getAdapterPosition());
+                            .onCheckBoxClicked(v, holder.getLayoutPosition());
                 }
             });
         }

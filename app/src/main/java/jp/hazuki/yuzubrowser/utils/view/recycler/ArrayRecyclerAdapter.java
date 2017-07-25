@@ -29,10 +29,12 @@ import java.util.Collections;
 import java.util.List;
 
 
-public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>
+        implements View.OnClickListener, View.OnLongClickListener {
 
     private List<T> items;
     private OnRecyclerListener recyclerListener;
+    private RecyclerView recyclerView;
     private LayoutInflater inflater;
     private boolean sortMode;
 
@@ -136,6 +138,18 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     }
 
     @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
+    }
+
+    @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         return onCreateViewHolder(inflater, parent, viewType);
     }
@@ -147,27 +161,29 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
             onBindViewHolder(holder, items.get(pos), pos);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (multiSelectMode) {
-                    toggle(holder.getAdapterPosition());
-                } else if (recyclerListener != null)
-                    recyclerListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
-            }
-        });
+        holder.itemView.setOnClickListener(this);
 
         if (sortMode || recyclerListener == null) {
             holder.itemView.setOnLongClickListener(null);
         } else {
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return recyclerListener
-                            .onRecyclerItemLongClicked(v, holder.getAdapterPosition());
-                }
-            });
+            holder.itemView.setOnLongClickListener(this);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (recyclerView != null) {
+            if (multiSelectMode) {
+                toggle(recyclerView.getChildAdapterPosition(v));
+            } else if (recyclerListener != null)
+                recyclerListener.onRecyclerItemClicked(v, recyclerView.getChildLayoutPosition(v));
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return recyclerListener != null && recyclerView != null
+                && recyclerListener.onRecyclerItemLongClicked(v, recyclerView.getChildLayoutPosition(v));
     }
 
     public boolean isMultiSelectMode() {
