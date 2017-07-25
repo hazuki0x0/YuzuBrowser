@@ -184,30 +184,32 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, GestureItem item, int position) {
-            holder.imageView.setImageBitmap(item.getBitmap(size, size, color));
-            Action action = item.getAction();
-
-            if (action == null || action.isEmpty())
-                holder.title.setText(R.string.action_empty);
-            else
-                holder.title.setText(action.toString(nameList));
-        }
-
-        @Override
         protected ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            return new ViewHolder(inflater.inflate(R.layout.image_text_list_item, parent, false));
+            return new ViewHolder(inflater.inflate(R.layout.image_text_list_item, parent, false), this);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<GestureItem> {
 
             TextView title;
             ImageView imageView;
 
-            public ViewHolder(View itemView) {
-                super(itemView);
+            public ViewHolder(View itemView, GestureListAdapter adapter) {
+                super(itemView, adapter);
                 title = (TextView) itemView.findViewById(R.id.textView);
                 imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            }
+
+            @Override
+            public void setUp(GestureItem item) {
+                super.setUp(item);
+                imageView.setImageBitmap(item.getBitmap(size, size, color));
+
+                Action action = item.getAction();
+
+                if (action == null || action.isEmpty())
+                    title.setText(R.string.action_empty);
+                else
+                    title.setText(action.toString(nameList));
             }
         }
     }

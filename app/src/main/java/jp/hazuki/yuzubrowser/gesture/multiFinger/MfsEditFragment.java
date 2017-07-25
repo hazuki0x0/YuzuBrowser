@@ -223,44 +223,44 @@ public class MfsEditFragment extends Fragment {
             super(context, list, listener);
         }
 
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void onBindViewHolder(ViewHolder holder, Integer item, int position) {
-            holder.title.setText((position + 1) + ".");
-            holder.icon.setImageResource(getImage(item));
-        }
-
-        private
-        @DrawableRes
-        int getImage(int type) {
-            switch (type) {
-                case MultiFingerGestureDetector.SWIPE_UP:
-                    return R.drawable.ic_arrow_upward_white_24dp;
-                case MultiFingerGestureDetector.SWIPE_DOWN:
-                    return R.drawable.ic_arrow_downward_white_24dp;
-                case MultiFingerGestureDetector.SWIPE_LEFT:
-                    return R.drawable.ic_arrow_back_white_24dp;
-                case MultiFingerGestureDetector.SWIPE_RIGHT:
-                    return R.drawable.ic_arrow_forward_white_24dp;
-                default:
-                    throw new IllegalArgumentException();
-            }
-        }
-
         @Override
         protected ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            return new ViewHolder(inflater.inflate(R.layout.fragment_multi_finger_edit_item, parent, false));
+            return new ViewHolder(inflater.inflate(R.layout.fragment_multi_finger_edit_item, parent, false), this);
         }
 
-        static class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<Integer> {
 
             TextView title;
             ImageView icon;
 
-            ViewHolder(View itemView) {
-                super(itemView);
+            ViewHolder(View itemView, MfsFingerAdapter adapter) {
+                super(itemView, adapter);
                 title = (TextView) itemView.findViewById(R.id.numTextView);
                 icon = (ImageView) itemView.findViewById(R.id.imageView);
+            }
+
+            @Override
+            public void setUp(Integer item) {
+                super.setUp(item);
+                title.setText((getAdapterPosition() + 1) + ".");
+                icon.setImageResource(getImage(item));
+            }
+
+            private static
+            @DrawableRes
+            int getImage(int type) {
+                switch (type) {
+                    case MultiFingerGestureDetector.SWIPE_UP:
+                        return R.drawable.ic_arrow_upward_white_24dp;
+                    case MultiFingerGestureDetector.SWIPE_DOWN:
+                        return R.drawable.ic_arrow_downward_white_24dp;
+                    case MultiFingerGestureDetector.SWIPE_LEFT:
+                        return R.drawable.ic_arrow_back_white_24dp;
+                    case MultiFingerGestureDetector.SWIPE_RIGHT:
+                        return R.drawable.ic_arrow_forward_white_24dp;
+                    default:
+                        throw new IllegalArgumentException();
+                }
             }
         }
     }

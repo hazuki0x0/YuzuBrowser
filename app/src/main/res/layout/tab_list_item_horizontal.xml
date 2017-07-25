@@ -20,6 +20,17 @@
         android:scaleType="fitXY"
         android:src="@drawable/empty_thumbnail" />
 
+    <View
+        android:id="@+id/disable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#66000000"
+        android:visibility="visible"
+        android:layout_alignEnd="@+id/thumbNailImageView"
+        android:layout_alignBottom="@+id/titleTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
 
     <ImageButton
         android:id="@+id/closeImageButton"
@@ -57,7 +68,7 @@
         android:layout_alignEnd="@+id/thumbNailImageView"
         android:layout_alignStart="@+id/thumbNailImageView"
         android:layout_below="@+id/thumbNailImageView"
-        android:layout_marginBottom="4dp"
+        android:paddingBottom="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"

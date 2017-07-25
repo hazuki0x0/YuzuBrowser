@@ -29,12 +29,10 @@ import java.util.Collections;
 import java.util.List;
 
 
-public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>
-        implements View.OnClickListener, View.OnLongClickListener {
+public abstract class ArrayRecyclerAdapter<T, VH extends ArrayRecyclerAdapter.ArrayViewHolder<T>> extends RecyclerView.Adapter<VH> {
 
     private List<T> items;
     private OnRecyclerListener recyclerListener;
-    private RecyclerView recyclerView;
     private LayoutInflater inflater;
     private boolean sortMode;
 
@@ -49,7 +47,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         sortMode = false;
     }
 
-    public abstract void onBindViewHolder(VH holder, T item, int position);
+    public void onBindViewHolder(VH holder, T item, int position) {
+    }
+
+    ;
 
     protected abstract VH onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType);
 
@@ -138,18 +139,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        this.recyclerView = null;
-    }
-
-    @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         return onCreateViewHolder(inflater, parent, viewType);
     }
@@ -158,32 +147,35 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     public void onBindViewHolder(final VH holder, int position) {
         int pos = holder.getAdapterPosition();
         if (items != null && items.size() > pos && items.get(pos) != null) {
+            holder.setUp(items.get(pos));
             onBindViewHolder(holder, items.get(pos), pos);
         }
-
-        holder.itemView.setOnClickListener(this);
-
-        if (sortMode || recyclerListener == null) {
-            holder.itemView.setOnLongClickListener(null);
-        } else {
-            holder.itemView.setOnLongClickListener(this);
-        }
     }
 
-    @Override
-    public void onClick(View v) {
-        if (recyclerView != null) {
-            if (multiSelectMode) {
-                toggle(recyclerView.getChildAdapterPosition(v));
-            } else if (recyclerListener != null)
-                recyclerListener.onRecyclerItemClicked(v, recyclerView.getChildLayoutPosition(v));
-        }
+    private void onItemClick(View v, int position, T item) {
+        position = searchPosition(position, item);
+        if (position < 0) return;
+        if (multiSelectMode) {
+            toggle(position);
+        } else if (recyclerListener != null)
+            recyclerListener.onRecyclerItemClicked(v, position);
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        return recyclerListener != null && recyclerView != null
-                && recyclerListener.onRecyclerItemLongClicked(v, recyclerView.getChildLayoutPosition(v));
+    private boolean onItemLongClick(View v, int position, T item) {
+        position = searchPosition(position, item);
+        return position >= 0 && !sortMode && recyclerListener != null && recyclerListener.onRecyclerItemLongClicked(v, position);
+    }
+
+    protected int searchPosition(int position, T item) {
+        if (position < 0 || position >= getItemCount() || !get(position).equals(item)) {
+            if (position > 0 && get(position - 1).equals(item))
+                return position - 1;
+
+            position = items.indexOf(item);
+            if (position < 0) notifyDataSetChanged();
+            return position;
+        }
+        return position;
     }
 
     public boolean isMultiSelectMode() {
@@ -227,5 +219,35 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
             }
         }
         return items;
+    }
+
+    public static class ArrayViewHolder<I> extends RecyclerView.ViewHolder {
+
+        private I item;
+
+        public ArrayViewHolder(View itemView, final ArrayRecyclerAdapter<I, ?> adapter) {
+            super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.onItemClick(v, getAdapterPosition(), item);
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return adapter.onItemLongClick(v, getAdapterPosition(), item);
+                }
+            });
+        }
+
+        public void setUp(I item) {
+            this.item = item;
+        }
+
+        protected I getItem() {
+            return item;
+        }
     }
 }

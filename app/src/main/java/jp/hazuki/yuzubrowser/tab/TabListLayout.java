@@ -201,6 +201,7 @@ public class TabListLayout extends LinearLayout {
 
                 if (tabManager.getCurrentTabNo() == position) {
                     mCallback.requestSelectTab(position == tabManager.size() - 1 ? position - 1 : position + 1);
+                    mAdapter.notifyItemChanged(tabManager.getCurrentTabNo());
                 }
 
                 oldCurrent = tabManager.getCurrentTabNo();

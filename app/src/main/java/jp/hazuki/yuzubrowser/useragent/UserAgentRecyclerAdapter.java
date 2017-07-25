@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.useragent;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,26 +35,27 @@ public class UserAgentRecyclerAdapter extends ArrayRecyclerAdapter<UserAgent, Us
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, UserAgent userAgent, int position) {
-        holder.title.setText(userAgent.name);
-        holder.userAgent.setText(userAgent.useragent);
-    }
-
-    @Override
     protected ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         return new ViewHolder(inflater.inflate(R.layout.simple_recycler_list_item_2
-                , parent, false));
+                , parent, false), this);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<UserAgent> {
 
         TextView title;
         TextView userAgent;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(View itemView, UserAgentRecyclerAdapter adapter) {
+            super(itemView, adapter);
             title = (TextView) itemView.findViewById(android.R.id.text1);
             userAgent = (TextView) itemView.findViewById(android.R.id.text2);
+        }
+
+        @Override
+        public void setUp(UserAgent item) {
+            super.setUp(item);
+            title.setText(item.name);
+            userAgent.setText(item.useragent);
         }
     }
 }

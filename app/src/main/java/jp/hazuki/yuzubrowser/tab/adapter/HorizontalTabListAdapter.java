@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.tab.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import jp.hazuki.yuzubrowser.R;
@@ -33,7 +34,7 @@ class HorizontalTabListAdapter extends TabListRecyclerBaseAdapter {
 
     @Override
     ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.tab_list_item_horizontal, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.tab_list_item_horizontal, parent, false), this);
     }
 
     @Override
@@ -42,8 +43,8 @@ class HorizontalTabListAdapter extends TabListRecyclerBaseAdapter {
             holder.title.setText(UrlUtils.decodeUrl(indexData.getUrl()));
 
         if (holder.getAdapterPosition() == getTabManager().getCurrentTabNo())
-            holder.itemView.setAlpha(1.0f);
+            holder.disable.setVisibility(View.GONE);
         else
-            holder.itemView.setAlpha(0.6f);
+            holder.disable.setVisibility(View.VISIBLE);
     }
 }

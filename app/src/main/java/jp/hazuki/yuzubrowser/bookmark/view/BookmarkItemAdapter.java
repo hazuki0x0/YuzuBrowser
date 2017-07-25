@@ -21,7 +21,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,12 +90,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             } else {
                 ((BookmarkSiteHolder) holder).imageButton.setEnabled(true);
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
-                ((BookmarkSiteHolder) holder).imageButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bookmarkItemListener.onIconClick(v, holder.getAdapterPosition());
-                    }
-                });
             }
 
             Bitmap bitmap = historyManager.getFavicon(((BookmarkSite) item).url);
@@ -108,7 +101,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                 ((BookmarkSiteHolder) holder).imageButton.setColorFilter(defaultColorFilter);
             }
         }
-        holder.title.setText(item.title);
 
         if (isMultiSelectMode()) {
             setSelectedBackground(holder.itemView, isSelected(position));
@@ -117,13 +109,19 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         }
     }
 
+    private void onIconClick(View v, int position, BookmarkItem item) {
+        position = searchPosition(position, item);
+        if (position < 0) return;
+        bookmarkItemListener.onIconClick(v, position);
+    }
+
     @Override
     protected BookmarkFolderHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_SITE:
-                return new BookmarkSiteHolder(inflater.inflate(R.layout.bookmark_item_site, parent, false));
+                return new BookmarkSiteHolder(inflater.inflate(R.layout.bookmark_item_site, parent, false), this);
             case TYPE_FOLDER:
-                return new BookmarkFolderHolder(inflater.inflate(R.layout.bookmark_item_folder, parent, false));
+                return new BookmarkFolderHolder(inflater.inflate(R.layout.bookmark_item_folder, parent, false), this);
             default:
                 throw new IllegalStateException("Unknown BookmarkItem type");
         }
@@ -158,12 +156,19 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         super.onBindViewHolder(holder, position);
     }
 
-    static class BookmarkFolderHolder extends RecyclerView.ViewHolder {
+    static class BookmarkFolderHolder extends ArrayRecyclerAdapter.ArrayViewHolder<BookmarkItem> {
         TextView title;
 
-        BookmarkFolderHolder(View itemView) {
-            super(itemView);
+
+        public BookmarkFolderHolder(View itemView, BookmarkItemAdapter adapter) {
+            super(itemView, adapter);
             title = (TextView) itemView.findViewById(android.R.id.text1);
+        }
+
+        @Override
+        public void setUp(BookmarkItem item) {
+            super.setUp(item);
+            title.setText(item.title);
         }
     }
 
@@ -171,10 +176,17 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         ImageButton imageButton;
         TextView url;
 
-        BookmarkSiteHolder(View itemView) {
-            super(itemView);
+        BookmarkSiteHolder(View itemView, final BookmarkItemAdapter adapter) {
+            super(itemView, adapter);
             imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
             url = (TextView) itemView.findViewById(android.R.id.text2);
+
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.onIconClick(v, getAdapterPosition(), getItem());
+                }
+            });
         }
     }
 

@@ -66,6 +66,7 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
         // データ表示
         TabIndexData indexData = getItem(holder.getAdapterPosition());
         if (indexData != null) {
+            holder.setIndexData(indexData);
             Bitmap thumbNail = indexData.getThumbnail();
             if (thumbNail != null) {
                 holder.thumbNail.setImageBitmap(thumbNail);
@@ -82,30 +83,38 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
             }
         }
 
-        // クリック処理
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onRecyclerItemClicked(v, holder.getLayoutPosition());
-            }
-        });
-
-        holder.closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onCloseButtonClicked(v, holder.getLayoutPosition());
-            }
-        });
-
-        holder.historyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onHistoryButtonClicked(v, holder.getAdapterPosition());
-            }
-        });
-
         onBindViewHolder(holder, indexData);
 
+    }
+
+    private void onItemClicked(View v, int position, TabIndexData data) {
+        position = searchPosition(position, data);
+        if (position < 0) return;
+        mListener.onRecyclerItemClicked(v, position);
+    }
+
+    private void onCloseClicked(View v, int position, TabIndexData data) {
+        position = searchPosition(position, data);
+        if (position < 0) return;
+        mListener.onCloseButtonClicked(v, position);
+    }
+
+    private void onHistoryClicked(View v, int position, TabIndexData data) {
+        position = searchPosition(position, data);
+        if (position < 0) return;
+        mListener.onHistoryButtonClicked(v, position);
+    }
+
+    protected int searchPosition(int position, TabIndexData item) {
+        if (position < 0 || position >= getItemCount() || !getItem(position).equals(item)) {
+            if (position > 0 && getItem(position - 1).equals(item))
+                return position - 1;
+
+            position = tabManager.indexOf(item.getId());
+            if (position < 0) notifyDataSetChanged();
+            return position;
+        }
+        return position;
     }
 
     abstract void onBindViewHolder(ViewHolder holder, TabIndexData indexData);
@@ -133,17 +142,21 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        private TabIndexData indexData;
+
         ImageView thumbNail;
         TextView title;
         TextView url;
+        View disable;
         ImageButton closeButton;
         View historyButton;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, final TabListRecyclerBaseAdapter adapter) {
             super(itemView);
             thumbNail = (ImageView) itemView.findViewById(R.id.thumbNailImageView);
             title = (TextView) itemView.findViewById(R.id.titleTextView);
             url = (TextView) itemView.findViewById(R.id.urlTextView);
+            disable = itemView.findViewById(R.id.disable);
             closeButton = (ImageButton) itemView.findViewById(R.id.closeImageButton);
             historyButton = itemView.findViewById(R.id.tabHistoryImageButton);
 
@@ -162,6 +175,27 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
                     return false;
                 }
             });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.onItemClicked(v, getAdapterPosition(), indexData);
+                }
+            });
+
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.onCloseClicked(v, getAdapterPosition(), indexData);
+                }
+            });
+
+            historyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.onHistoryClicked(v, getAdapterPosition(), indexData);
+                }
+            });
         }
 
         public CharSequence getTitle() {
@@ -169,6 +203,10 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
                 return url.getText();
             else
                 return title.getText();
+        }
+
+        public void setIndexData(TabIndexData indexData) {
+            this.indexData = indexData;
         }
     }
 }

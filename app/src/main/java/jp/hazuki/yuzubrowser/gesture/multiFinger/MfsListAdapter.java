@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.gesture.multiFinger;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,15 +53,15 @@ public class MfsListAdapter extends ArrayRecyclerAdapter<MultiFingerGestureItem,
 
     @Override
     protected ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), this);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<MultiFingerGestureItem> {
 
         TextView title;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(View itemView, MfsListAdapter adapter) {
+            super(itemView, adapter);
             title = (TextView) itemView.findViewById(android.R.id.text1);
         }
     }
