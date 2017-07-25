@@ -334,40 +334,55 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, UserScript item, int position) {
-            holder.textView.setText(item.getName());
-            holder.checkBox.setChecked(item.isEnabled());
-            holder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((OnUserJsItemClickListener) getListener())
-                            .onInfoButtonClick(v, holder.getLayoutPosition());
-                }
-            });
-            holder.checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((OnUserJsItemClickListener) getListener())
-                            .onCheckBoxClicked(v, holder.getLayoutPosition());
-                }
-            });
-        }
-
-        @Override
         protected ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            return new ViewHolder(inflater.inflate(R.layout.fragment_userjs_item, parent, false));
+            return new ViewHolder(inflater.inflate(R.layout.fragment_userjs_item, parent, false), this);
         }
 
-        static class ViewHolder extends RecyclerView.ViewHolder {
+        private void onInfoButtonClick(View v, int position, UserScript js) {
+            position = searchPosition(position, js);
+            if (position < 0) return;
+            ((OnUserJsItemClickListener) getListener())
+                    .onInfoButtonClick(v, position);
+        }
+
+        private void onCheckBoxClick(View v, int position, UserScript js) {
+            position = searchPosition(position, js);
+            if (position < 0) return;
+            ((OnUserJsItemClickListener) getListener())
+                    .onCheckBoxClicked(v, position);
+        }
+
+        static class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<UserScript> {
             TextView textView;
             ImageButton button;
             CheckBox checkBox;
 
-            public ViewHolder(View itemView) {
-                super(itemView);
+            public ViewHolder(View itemView, final UserJsAdapter adapter) {
+                super(itemView, adapter);
                 textView = (TextView) itemView.findViewById(R.id.textView);
                 button = (ImageButton) itemView.findViewById(R.id.infoButton);
                 checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adapter.onInfoButtonClick(v, getAdapterPosition(), getItem());
+                    }
+                });
+
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adapter.onCheckBoxClick(v, getAdapterPosition(), getItem());
+                    }
+                });
+            }
+
+            @Override
+            public void setUp(UserScript item) {
+                super.setUp(item);
+                textView.setText(item.getName());
+                checkBox.setChecked(item.isEnabled());
             }
         }
     }

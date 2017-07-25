@@ -32,7 +32,7 @@ class VerticalTabListAdapter extends TabListRecyclerBaseAdapter {
 
     @Override
     ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.tab_list_item, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.tab_list_item, parent, false), this);
     }
 
     @Override

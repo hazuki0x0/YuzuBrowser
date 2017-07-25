@@ -199,7 +199,7 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
         return fragment;
     }
 
-    private static class ActionListAdapter extends ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder> {
+    private static class ActionListAdapter extends ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder<SoftButtonActionFile>> {
         private ActionNameArray actionNameArray;
 
 
@@ -214,10 +214,12 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
         }
 
         @Override
-        protected SimpleViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            return new SimpleViewHolder(
-                    inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
-                    android.R.id.text1);
+        protected SimpleViewHolder<SoftButtonActionFile> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+            return new SimpleViewHolder<>(
+                    inflater.inflate(
+                            R.layout.simple_recycler_list_item_1, parent, false),
+                    android.R.id.text1,
+                    this);
         }
 
 

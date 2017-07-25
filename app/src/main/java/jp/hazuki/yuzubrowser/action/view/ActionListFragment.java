@@ -230,7 +230,7 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
         return adapter.isSortMode();
     }
 
-    private static class ActionListAdapter extends ArrayRecyclerAdapter<Action, SimpleViewHolder> {
+    private static class ActionListAdapter extends ArrayRecyclerAdapter<Action, SimpleViewHolder<Action>> {
 
         private final ActionNameArray nameList;
 
@@ -245,9 +245,11 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
         }
 
         @Override
-        protected SimpleViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            return new SimpleViewHolder(inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
-                    android.R.id.text1);
+        protected SimpleViewHolder<Action> onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+            return new SimpleViewHolder<>(
+                    inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
+                    android.R.id.text1,
+                    this);
         }
     }
 }

@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.adblock.fragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,18 +74,18 @@ public class AdBlockArrayRecyclerAdapter extends ArrayRecyclerAdapter<AdBlock, A
 
     @Override
     protected ItemHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return new ItemHolder(inflater.inflate(R.layout.fragment_ad_block_list_item, parent, false));
+        return new ItemHolder(inflater.inflate(R.layout.fragment_ad_block_list_item, parent, false), this);
     }
 
-    static class ItemHolder extends RecyclerView.ViewHolder {
+    static class ItemHolder extends ArrayRecyclerAdapter.ArrayViewHolder<AdBlock> {
 
         TextView match;
         TextView count;
         TextView time;
         CheckBox checkBox;
 
-        ItemHolder(View itemView) {
-            super(itemView);
+        ItemHolder(View itemView, AdBlockArrayRecyclerAdapter adapter) {
+            super(itemView, adapter);
 
             match = (TextView) itemView.findViewById(R.id.matchTextView);
             count = (TextView) itemView.findViewById(R.id.countTextView);
