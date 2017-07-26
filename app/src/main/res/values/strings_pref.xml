@@ -720,4 +720,5 @@
     <string name="pref_restore_speed_dial">Restore speed dial</string>
     <string name="pref_backup_speed_dial">Backup speed dial</string>
     <string name="pref_backup_speed_dial_confirm">Are you sure you want to backup speed dial?</string>
+    <string name="pref_snap_toolbar">Snap Toolbar</string>
 </resources>

@@ -12,6 +12,9 @@
         android:title="@string/theme_setting" />
 
     <PreferenceScreen android:title="@string/pref_toolbar_settings">
+        <SwitchPreference
+            android:key="snap_toolbar"
+            android:title="@string/pref_snap_toolbar" />
         <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
             android:key="overlay_bottom_alpha"
             android:title="@string/pref_overlay_bottom_alpha"

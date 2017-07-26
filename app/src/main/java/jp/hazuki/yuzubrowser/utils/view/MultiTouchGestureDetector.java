@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2017 Hazuki
  * fixed by Cynthia Project
  * Copyright (C) 2008 The Android Open Source Project
  *
@@ -26,6 +27,8 @@ import android.view.ViewConfiguration;
 
 public class MultiTouchGestureDetector {
     public interface OnMultiTouchGestureListener {
+        void onUp(MotionEvent e);
+
         boolean onDown(MotionEvent e);
 
         boolean onPointerDown(MotionEvent e);
@@ -74,6 +77,10 @@ public class MultiTouchGestureDetector {
         }
 
         public void onShowPress(MotionEvent e) {
+        }
+
+        @Override
+        public void onUp(MotionEvent e) {
         }
 
         public boolean onDown(MotionEvent e) {
@@ -410,6 +417,7 @@ public class MultiTouchGestureDetector {
                 mIsDoubleTapping = false;
                 mHandler.removeMessages(SHOW_PRESS);
                 mHandler.removeMessages(LONG_PRESS);
+                mListener.onUp(ev);
                 break;
 
             case MotionEvent.ACTION_CANCEL:

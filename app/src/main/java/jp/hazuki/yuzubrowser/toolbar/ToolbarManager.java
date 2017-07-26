@@ -1,10 +1,28 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.toolbar;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
@@ -213,6 +231,15 @@ public class ToolbarManager {
         progressBar.onPreferenceReset();
         customBar.onPreferenceReset();
 
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) topToolbarLayout.getLayoutParams();
+        if (AppData.snap_toolbar.get()) {
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                    | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+                    | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+        } else {
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                    | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+        }
         bottomToolbarLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());
     }
 
@@ -407,6 +434,23 @@ public class ToolbarManager {
 
             ViewCompat.setTranslationY(bottomToolbarLayout, newTrans);
 
+        }
+    }
+
+    public void onWebViewTapUp() {
+        if (bottomBarBehavior.isNoTopBar() && AppData.snap_toolbar.get()) {
+            float trans = ViewCompat.getTranslationY(bottomToolbarLayout);
+            ObjectAnimator animator;
+            int duration;
+            if (trans > bottomBarHeight / 2) {
+                animator = ObjectAnimator.ofFloat(bottomToolbarLayout, "translationY", trans, bottomBarHeight);
+                duration = (int) (((bottomBarHeight - trans) / bottomBarHeight + 1) * 150);
+            } else {
+                animator = ObjectAnimator.ofFloat(bottomToolbarLayout, "translationY", trans, 0);
+                duration = (int) ((trans / bottomBarHeight + 1) * 150);
+            }
+            animator.setDuration(duration);
+            animator.start();
         }
     }
 }

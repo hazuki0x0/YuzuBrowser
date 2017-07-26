@@ -1784,6 +1784,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
 
         @Override
+        public void onUp(MotionEvent e) {
+            mToolbar.onWebViewTapUp();
+        }
+
+        @Override
         public boolean onDown(MotionEvent e) {
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
