@@ -57,6 +57,7 @@ public class MfsFragment extends PreferenceFragment {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

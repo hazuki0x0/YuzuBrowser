@@ -201,6 +201,7 @@ public class MfsEditFragment extends Fragment {
             listener = (OnMfsEditFragmentListener) getActivity();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

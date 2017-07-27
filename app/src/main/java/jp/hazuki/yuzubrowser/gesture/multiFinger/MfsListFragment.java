@@ -117,6 +117,7 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
             listener = (OnMfsListListener) getActivity();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

@@ -50,8 +50,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends ArrayRecyclerAdapter.Ar
     public void onBindViewHolder(VH holder, T item, int position) {
     }
 
-    ;
-
     protected abstract VH onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType);
 
     public void move(int fromPosition, int toPosition) {

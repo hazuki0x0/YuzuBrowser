@@ -32,9 +32,9 @@ public class Action extends ArrayList<SingleAction> implements Parcelable, JsonC
         add(action);
     }
 
-    public Action(String jsonstr) {
+    public Action(String jsonStr) {
         super(1);
-        fromJsonString(jsonstr);
+        fromJsonString(jsonStr);
     }
 
     public Action(Parcel source) {
