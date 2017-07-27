@@ -18,6 +18,9 @@ package jp.hazuki.yuzubrowser.utils.fastmatch;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import jp.hazuki.yuzubrowser.utils.ErrorReport;
 
 public class ItemDecoder {
 
@@ -43,7 +46,13 @@ public class ItemDecoder {
     public SimpleCountMatcher singleDecode(String line) {
         if (line.length() > 2) {
             if (line.charAt(0) == '[' && line.charAt(line.length() - 1) == ']') {
-                return new RegexUrl(line.substring(1, line.length() - 1));
+                try {
+                    return new RegexUrl(line.substring(1, line.length() - 1));
+                } catch (PatternSyntaxException e) {
+                    ErrorReport.printAndWriteLog(e);
+                    return null;
+                }
+
             }
             int space = line.indexOf(' ');
             if (space > 0) {
