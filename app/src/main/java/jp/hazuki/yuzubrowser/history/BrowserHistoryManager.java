@@ -193,12 +193,14 @@ public class BrowserHistoryManager implements CursorLoadable {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         ArrayList<BrowserHistory> histories = new ArrayList<>();
         Cursor c = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
-        while (c.moveToNext()) {
-            histories.add(new BrowserHistory(
-                    c.getLong(COLUMN_ID_INDEX),
-                    c.getString(COLUMN_TITLE_INDEX),
-                    c.getString(COLUMN_URL_INDEX),
-                    c.getLong(COLUMN_TIME_INDEX)));
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                histories.add(new BrowserHistory(
+                        c.getLong(COLUMN_ID_INDEX),
+                        c.getString(COLUMN_TITLE_INDEX),
+                        c.getString(COLUMN_URL_INDEX),
+                        c.getLong(COLUMN_TIME_INDEX)));
+            }
         }
         c.close();
         return histories;
