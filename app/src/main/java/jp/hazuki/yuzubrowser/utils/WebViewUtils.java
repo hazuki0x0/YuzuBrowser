@@ -62,7 +62,7 @@ public class WebViewUtils {
         Bitmap bitmap = null;
         try {
             bitmap = capturePictureOverall(web);
-            return ImageUtils.saveBitmap(bitmap, file);
+            return bitmap != null && ImageUtils.saveBitmap(bitmap, file);
         } finally {
             if (bitmap != null)
                 bitmap.recycle();
@@ -73,6 +73,9 @@ public class WebViewUtils {
         int width = web.getWidth();
         int height = web.getHeight();
         int scroll = web.getScrollY();
+        if (width == 0 || height == 0)
+            return null;
+
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.translate(0, -scroll);
@@ -86,7 +89,7 @@ public class WebViewUtils {
         Bitmap bitmap = null;
         try {
             bitmap = capturePicturePart(web);
-            return ImageUtils.saveBitmap(bitmap, file);
+            return bitmap != null && ImageUtils.saveBitmap(bitmap, file);
         } finally {
             if (bitmap != null)
                 bitmap.recycle();
