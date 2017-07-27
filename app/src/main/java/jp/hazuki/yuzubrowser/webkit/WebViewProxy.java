@@ -31,14 +31,14 @@ public class WebViewProxy {
         System.setProperty("https.proxyHost", host);
         System.setProperty("https.proxyPort", Integer.toString(port));
         try {
-            Class applictionClass = Class.forName("android.app.Application");
-            Field mLoadedApkField = applictionClass.getDeclaredField("mLoadedApk");
+            Class applicationClass = Class.forName("android.app.Application");
+            Field mLoadedApkField = applicationClass.getDeclaredField("mLoadedApk");
             mLoadedApkField.setAccessible(true);
-            Object mloadedApk = mLoadedApkField.get(context);
+            Object loadedApk = mLoadedApkField.get(context);
             Class loadedApkClass = Class.forName("android.app.LoadedApk");
             Field mReceiversField = loadedApkClass.getDeclaredField("mReceivers");
             mReceiversField.setAccessible(true);
-            ArrayMap receivers = (ArrayMap) mReceiversField.get(mloadedApk);
+            ArrayMap receivers = (ArrayMap) mReceiversField.get(loadedApk);
             for (Object receiverMap : receivers.values()) {
                 for (Object receiver : ((ArrayMap) receiverMap).keySet()) {
                     Class<?> clazz = receiver.getClass();

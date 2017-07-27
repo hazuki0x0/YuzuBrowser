@@ -27,7 +27,7 @@ public class AbstractToolbar extends LinearLayout {
         super(context);
     }
 
-    //themedata maybe null
+    //ThemeData maybe null
     public void onThemeChanged(ThemeData themedata) {
         if (themedata != null && themedata.toolbarImageColor != 0)
             THEME_IMAGE_COLOR_FILTER = new PorterDuffColorFilter(themedata.toolbarImageColor, PorterDuff.Mode.SRC_ATOP);

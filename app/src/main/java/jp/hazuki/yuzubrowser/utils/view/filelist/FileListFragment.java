@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,10 +37,6 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.util.Predicate;
-
-/**
- * Created by fimex on 17/03/08.
- */
 
 public class FileListFragment extends ListFragment {
     private static final String EXTRA_FILE = "file";
