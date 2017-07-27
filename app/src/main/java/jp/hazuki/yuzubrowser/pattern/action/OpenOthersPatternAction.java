@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -133,9 +134,11 @@ public class OpenOthersPatternAction extends PatternAction {
         try {
             intent.putExtra(HandleIntentActivity.EXTRA_OPEN_FROM_YUZU, true);
             context.startActivity(intent);
-        } catch (ActivityNotFoundException e) {
+            return true;
+        } catch (ActivityNotFoundException | IllegalArgumentException e) {
             e.printStackTrace();
+            Toast.makeText(context, R.string.app_notfound, Toast.LENGTH_SHORT).show();
         }
-        return true;
+        return false;
     }
 }
