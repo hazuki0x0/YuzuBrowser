@@ -205,6 +205,7 @@ public class SuggestProvider extends ContentProvider {
         try {
             URL url = mSuggestEngine.getUrl(query);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(2000);
             connection.setRequestMethod("GET");
             connection.connect();
             if (connection.getResponseCode() == 200) {
