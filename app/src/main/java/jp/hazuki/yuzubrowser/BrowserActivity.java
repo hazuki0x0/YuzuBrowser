@@ -4146,7 +4146,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                             title = tab.mWebView.getTitle();
                         if (TextUtils.isEmpty(title))
                             title = "document";
-                        manager.print(tab.getUrl(), tab.mWebView.createPrintDocumentAdapter(title), null);
+                        String jobName = tab.getUrl();
+                        if (TextUtils.isEmpty(jobName))
+                            jobName = "about:blank";
+                        manager.print(jobName, tab.mWebView.createPrintDocumentAdapter(title), null);
                     } else {
                         Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
                     }
