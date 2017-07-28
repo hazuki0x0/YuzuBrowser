@@ -514,6 +514,11 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
     protected void onResume() {
         super.onResume();
         isResumed = true;
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         dialogHandler.resume();
         setFullscreenIfEnable();
         mToolbar.resetToolBar();
