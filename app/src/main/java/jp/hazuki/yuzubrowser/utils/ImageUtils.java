@@ -82,7 +82,8 @@ public class ImageUtils {
     public static boolean saveBitmap(Bitmap bitmap, File file) throws IOException {
         File parent = file.getParentFile();
         if (parent != null)
-            parent.mkdirs();
+            if (!parent.exists() && !parent.mkdirs())
+                return false;
 
         OutputStream os = null;
         try {

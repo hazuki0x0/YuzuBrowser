@@ -149,6 +149,7 @@ import jp.hazuki.yuzubrowser.browser.SafeFileProvider;
 import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable;
 import jp.hazuki.yuzubrowser.debug.DebugActivity;
 import jp.hazuki.yuzubrowser.download.DownloadDialog;
+import jp.hazuki.yuzubrowser.download.DownloadFileProvider;
 import jp.hazuki.yuzubrowser.download.DownloadListActivity;
 import jp.hazuki.yuzubrowser.download.DownloadRequestInfo;
 import jp.hazuki.yuzubrowser.download.DownloadService;
@@ -508,6 +509,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     protected void onResume() {
         super.onResume();
         isResumed = true;
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         dialogHandler.resume();
         setFullscreenIfEnable();
         mToolbar.resetToolBar();
@@ -3564,13 +3570,17 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     try {
                         switch (type) {
                             case SaveScreenshotSingleAction.SS_TYPE_ALL:
-                                WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file);
-                                Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                if (WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file))
+                                    Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_SHORT).show();
                                 FileUtils.notifyImageFile(getApplicationContext(), file.getAbsolutePath());
                                 break;
                             case SaveScreenshotSingleAction.SS_TYPE_PART:
-                                WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file);
-                                Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                if (WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file))
+                                    Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_SHORT).show();
                                 FileUtils.notifyImageFile(getApplicationContext(), file.getAbsolutePath());
                                 break;
                             default:
@@ -3587,25 +3597,28 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     File file = new File(getExternalCacheDir(), "ss_" + System.currentTimeMillis() + ".png");
                     int type = ((ShareScreenshotSingleAction) action).getType();
                     try {
+                        boolean result = false;
                         switch (type) {
                             case ShareScreenshotSingleAction.SS_TYPE_ALL:
-                                WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file);
+                                result = WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file);
                                 break;
                             case ShareScreenshotSingleAction.SS_TYPE_PART:
-                                WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file);
+                                result = WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file);
                                 break;
                             default:
                                 Toast.makeText(getApplicationContext(), "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show();
                                 break;
                         }
 
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("image/png");
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                        try {
-                            startActivity(PackageUtils.createChooser(BrowserActivity.this, intent, null));
-                        } catch (ActivityNotFoundException e) {
-                            e.printStackTrace();
+                        if (result) {
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("image/png");
+                            intent.putExtra(Intent.EXTRA_STREAM, DownloadFileProvider.getUriForFIle(file));
+                            try {
+                                startActivity(PackageUtils.createChooser(BrowserActivity.this, intent, null));
+                            } catch (ActivityNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
                     } catch (IOException e) {
                         ErrorReport.printAndWriteLog(e);
@@ -4125,7 +4138,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                             title = tab.mWebView.getTitle();
                         if (TextUtils.isEmpty(title))
                             title = "document";
-                        manager.print(tab.getUrl(), tab.mWebView.createPrintDocumentAdapter(title), null);
+                        String jobName = tab.getUrl();
+                        if (TextUtils.isEmpty(jobName))
+                            jobName = "about:blank";
+                        manager.print(jobName, tab.mWebView.createPrintDocumentAdapter(title), null);
                     } else {
                         Toast.makeText(BrowserActivity.this, R.string.print_not_support, Toast.LENGTH_SHORT).show();
                     }
