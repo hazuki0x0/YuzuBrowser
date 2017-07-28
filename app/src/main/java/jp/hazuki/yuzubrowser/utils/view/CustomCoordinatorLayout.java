@@ -51,9 +51,7 @@ public class CustomCoordinatorLayout extends CoordinatorLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (toolbarHeight > 0) {
-            return ev.getY() > toolbarHeight && super.onInterceptTouchEvent(ev);
-        }
-        return super.onInterceptTouchEvent(ev);
+        super.onInterceptTouchEvent(ev);
+        return false;
     }
 }
