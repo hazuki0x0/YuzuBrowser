@@ -361,6 +361,7 @@
     <string name="pref_tab_action">Tab action</string>
     <string name="pref_show_zoom_button">Display zoom buttons</string>
     <string name="pref_fullscreen">Fullscreen</string>
+    <string name="pref_fullscreen_hide_nav">Hide NavBar when fullscreen</string>
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="pref_accept_cookie">Accept cookie</string>
     <string name="pref_accept_third_cookie">Accept third party cookies</string>

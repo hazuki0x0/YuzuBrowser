@@ -90,6 +90,7 @@
     <string name="pref_tab_action">タブアクション</string>
     <string name="pref_show_zoom_button">ズームボタンの表示</string>
     <string name="pref_fullscreen">フルスクリーン</string>
+    <string name="pref_fullscreen_hide_nav">フルスクリーン時にナビバーを隠す</string>
     <string name="pref_keep_screen_on">自動的に消灯しない</string>
     <string name="pref_accept_cookie">Cookieの許可</string>
     <string name="pref_accept_third_cookie">サードパーティCookieの許可</string>

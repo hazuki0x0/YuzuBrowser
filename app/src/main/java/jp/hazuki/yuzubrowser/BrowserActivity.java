@@ -380,7 +380,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
                     if (!visible && mIsFullScreenMode) {
                         getWindow().getDecorView()
-                                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                                .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get()));
                     }
                 }
             }
@@ -628,7 +628,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private void setFullscreenIfEnable() {
         if (mIsFullScreenMode) {
             getWindow().getDecorView()
-                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get()));
         }
     }
 
@@ -897,15 +897,18 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
 
         if (enable) {
+            int visibility = DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get());
             getWindow().getDecorView()
-                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    .setSystemUiVisibility(visibility);
             if (menuWindow != null)
-                menuWindow.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                menuWindow.setSystemUiVisibility(visibility);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             if (menuWindow != null)
                 menuWindow.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
 
@@ -1472,7 +1475,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "histories":
                     case "history":
                         intent = new Intent(BrowserActivity.this, BrowserHistoryActivity.class);
-                        intent.putExtra(SearchActivity.EXTRA_QUERY, data.mWebView.getUrl());
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
                         startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                         return true;
                     case "downloads":
@@ -1485,7 +1488,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "bookmarks":
                     case "bookmark":
                         intent = new Intent(BrowserActivity.this, BookmarkActivity.class);
-                        intent.putExtra(SearchActivity.EXTRA_QUERY, data.mWebView.getUrl());
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
                     case "search":
@@ -3823,13 +3826,13 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 break;
                 case SingleAction.SHOW_BOOKMARK: {
                     Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabManager.get(target).getUrl());
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
                     startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                 }
                 break;
                 case SingleAction.SHOW_HISTORY: {
                     Intent intent = new Intent(getApplicationContext(), BrowserHistoryActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabManager.get(target).getUrl());
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
                     startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                 }
                 break;

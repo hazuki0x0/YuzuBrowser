@@ -207,6 +207,9 @@
         android:key="fullscreen"
         android:title="@string/pref_fullscreen" />
     <SwitchPreference
+        android:key="fullscreen_hide_nav"
+        android:title="@string/pref_fullscreen_hide_nav" />
+    <SwitchPreference
         android:key="keep_screen_on"
         android:title="@string/pref_keep_screen_on" />
 </PreferenceScreen>

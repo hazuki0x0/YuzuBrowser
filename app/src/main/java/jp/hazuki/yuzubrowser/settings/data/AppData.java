@@ -174,6 +174,7 @@ public class AppData {
     public static final IntContainer show_tab_divider = new IntContainer("show_tab_divider", 0);
     public static final BooleanContainer volume_default_playing = new BooleanContainer("volume_default_playing", true);
     public static final BooleanContainer snap_toolbar = new BooleanContainer("snap_toolbar", false);
+    public static final BooleanContainer fullscreen_hide_nav = new BooleanContainer("fullscreen_hide_nav", false);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
