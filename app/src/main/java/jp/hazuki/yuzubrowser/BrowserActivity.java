@@ -1476,6 +1476,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "history":
                         intent = new Intent(BrowserActivity.this, BrowserHistoryActivity.class);
                         intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                         startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                         return true;
                     case "downloads":
@@ -1489,6 +1490,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "bookmark":
                         intent = new Intent(BrowserActivity.this, BookmarkActivity.class);
                         intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
                     case "search":
@@ -3827,12 +3829,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 case SingleAction.SHOW_BOOKMARK: {
                     Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
                     intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                 }
                 break;
                 case SingleAction.SHOW_HISTORY: {
                     Intent intent = new Intent(getApplicationContext(), BrowserHistoryActivity.class);
                     intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                 }
                 break;

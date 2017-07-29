@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser;
 
 public final class Constants {
     public static final class intent {
-        public static final String EXTRA_MODE_FULLSCREEN = "jp.hazuki.yuzubrowser.fullscreen";
+        public static final String EXTRA_MODE_FULLSCREEN = "jp.hazuki.yuzubrowser.extra.fullscreen";
+        public static final String EXTRA_MODE_ORIENTATION = "jp.hazuki.yuzubrowser.extra.orientation";
     }
 }

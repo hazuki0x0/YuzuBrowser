@@ -25,15 +25,18 @@ public class BrowserHistoryActivity extends AppCompatActivity {
 
         boolean pickMode = false;
         boolean fullscreen = AppData.fullscreen.get();
+        int orientation = AppData.oritentation.get();
         if (getIntent() != null) {
             if (Intent.ACTION_PICK.equals(getIntent().getAction()))
                 pickMode = true;
 
             fullscreen = getIntent().getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen);
+            orientation = getIntent().getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation);
         }
 
         if (fullscreen)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(orientation);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, BrowserHistoryFragment.newInstance(pickMode))

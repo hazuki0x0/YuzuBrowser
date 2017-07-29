@@ -21,21 +21,22 @@ public class BookmarkActivity extends LongPressFixActivity {
         boolean pickMode = false;
         long itemId = -1;
         boolean fullscreen = AppData.fullscreen.get();
+        int orientation = AppData.oritentation.get();
         if (intent != null) {
             pickMode = Intent.ACTION_PICK.equals(intent.getAction());
             itemId = intent.getLongExtra("id", -1);
 
             fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen);
+            orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation);
         }
 
-
+        if (fullscreen)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(orientation);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, BookmarkFragment.newInstance(pickMode, itemId))
                 .commit();
-
-        if (fullscreen)
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     @Override
