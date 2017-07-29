@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class AddGestureActivity extends AppCompatActivity {
+public class AddGestureActivity extends ThemeActivity {
     private static final int RESULT_REQUEST_ADD = 0;
     private static final String ITEM_GESTURE = "item";
     private ActionNameArray mActionNameArray;

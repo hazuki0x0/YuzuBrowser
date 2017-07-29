@@ -24,6 +24,7 @@
         android:layout_height="48dp"
         android:src="@drawable/ic_info_white_24dp"
         android:id="@+id/infoButton"
+        android:tint="?attr/iconColor"
         android:background="?android:attr/selectableItemBackground"
         android:padding="10dp"
         android:layout_weight="0"

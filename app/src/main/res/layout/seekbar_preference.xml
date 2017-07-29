@@ -23,7 +23,7 @@
         android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white" />
+        android:textColor="?android:attr/textColorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,6 +35,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:contentDescription="@string/previous"
+            android:tint="?attr/iconColor"
             android:src="@drawable/ic_skip_previous_white_24dp" />
 
         <ImageButton
@@ -43,6 +44,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:contentDescription="@string/next"
+            android:tint="?attr/iconColor"
             android:src="@drawable/ic_skip_next_white_24dp" />
     </LinearLayout>
 

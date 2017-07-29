@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class BrowserHistoryActivity extends AppCompatActivity {
+public class BrowserHistoryActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,9 +2,11 @@ package jp.hazuki.yuzubrowser.webencode;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class WebTextEncodeListActivity extends AppCompatActivity {
+import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
+
+public class WebTextEncodeListActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,6 +14,11 @@ public class WebTextEncodeListActivity extends AppCompatActivity {
         WebTextEncodeListDialog
                 .newInstance(getIntent().getStringExtra(Intent.EXTRA_TEXT))
                 .show(getSupportFragmentManager(), "list");
+    }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.BrowserMinThemeLight_Transparent;
     }
 
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -14,9 +13,10 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.util.JsonConvertable;
 
-public class ActionStringActivity extends AppCompatActivity {
+public class ActionStringActivity extends ThemeActivity {
     public static final String EXTRA_ACTIVITY = "MakeActionStringActivity.extra.activity";
     public static final String EXTRA_ACTION = "MakeActionStringActivity.extra.action";
     public static final int ACTION_ACTIVITY = 1;

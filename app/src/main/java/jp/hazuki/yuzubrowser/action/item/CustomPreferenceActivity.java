@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +35,10 @@ import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.utils.Logger;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.view.SpinnerButton;
 
-public class CustomPreferenceActivity extends AppCompatActivity {
+public class CustomPreferenceActivity extends ThemeActivity {
     private static final String TAG = "CustomPreferenceActivity";
 
     public static final String EXTRA_ACTION = "CustomPreferenceActivity.extra.action";
@@ -57,6 +57,11 @@ public class CustomPreferenceActivity extends AppCompatActivity {
 
         CustomDialog.newInstance(name, action, actionNameArray)
                 .show(getSupportFragmentManager(), "custom");
+    }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.BrowserMinThemeLight_Transparent;
     }
 
     public static class CustomDialog extends DialogFragment {

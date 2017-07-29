@@ -40,7 +40,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         String[] arrays = context.getResources().getStringArray(R.array.clear_browser_data);
 
         final ListView listView = new ListView(context);
-        listView.setAdapter(new ArrayAdapter<>(context.getApplicationContext(), R.layout.select_dialog_multichoice, arrays));
+        listView.setAdapter(new ArrayAdapter<>(context, R.layout.select_dialog_multichoice, arrays));
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 

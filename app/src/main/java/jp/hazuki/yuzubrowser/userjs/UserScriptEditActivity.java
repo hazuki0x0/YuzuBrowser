@@ -4,15 +4,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.EditText;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class UserScriptEditActivity extends AppCompatActivity {
+public class UserScriptEditActivity extends ThemeActivity {
     public static final String EXTRA_USERSCRIPT = "UserScriptEditActivity.extra.userscript";
 
     private UserScriptInfo mUserScript;

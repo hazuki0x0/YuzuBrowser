@@ -26,7 +26,6 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -46,11 +45,12 @@ import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.database.ImplementedCursorLoader;
 import jp.hazuki.yuzubrowser.utils.service.ServiceBindHelper;
 import jp.hazuki.yuzubrowser.utils.service.ServiceConnectionHelper;
 
-public class DownloadListActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ServiceConnectionHelper<Messenger> {
+public class DownloadListActivity extends ThemeActivity implements LoaderCallbacks<Cursor>, ServiceConnectionHelper<Messenger> {
     //private static final String TAG = "DownloadListActivity";
     private ServiceBindHelper<Messenger> mServiceBindHelper;
     private Messenger mActivityMessenger;

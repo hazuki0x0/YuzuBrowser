@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import jp.hazuki.yuzubrowser.R;
@@ -21,12 +20,13 @@ import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.WebIcon;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.appinfo.AppInfo;
 import jp.hazuki.yuzubrowser.utils.appinfo.ApplicationListFragment;
 import jp.hazuki.yuzubrowser.utils.appinfo.ShortCutListFragment;
 import jp.hazuki.yuzubrowser.utils.stack.SingleStack;
 
-public class SpeedDialSettingActivity extends AppCompatActivity
+public class SpeedDialSettingActivity extends ThemeActivity
         implements SpeedDialEditCallBack, FragmentManager.OnBackStackChangedListener,
         SpeedDialSettingActivityFragment.OnSpeedDialAddListener, SpeedDialSettingActivityEditFragment.GoBackController,
         ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {

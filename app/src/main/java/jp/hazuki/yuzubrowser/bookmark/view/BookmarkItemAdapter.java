@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
+import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
@@ -41,7 +42,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private static final int TYPE_SITE = 1;
     private static final int TYPE_FOLDER = 2;
 
-    private static final PorterDuffColorFilter defaultColorFilter = new PorterDuffColorFilter(0xffe6e6e6, PorterDuff.Mode.SRC_ATOP);
+    private final PorterDuffColorFilter defaultColorFilter;
     private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
     private final int normalBackGround;
@@ -59,6 +60,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
         normalBackGround = a.getResourceId(0, 0);
         a.recycle();
+
+        defaultColorFilter = new PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
 
         historyManager = BrowserHistoryManager.getInstance(context);
 

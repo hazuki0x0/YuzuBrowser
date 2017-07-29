@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.gesture;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
@@ -25,8 +24,9 @@ import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class GestureTestActivity extends Activity {
+public class GestureTestActivity extends ThemeActivity {
     private ActionNameArray mActionNameArray;
 
     @Override

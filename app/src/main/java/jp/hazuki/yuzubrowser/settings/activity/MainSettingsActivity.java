@@ -12,11 +12,16 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.debug.DebugActivity;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
 
 public class MainSettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
+            setTheme(R.style.CustomThemeLight_Pref);
+        }
+
         super.onCreate(savedInstanceState);
 
         setupActionBar();

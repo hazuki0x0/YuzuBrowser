@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -15,8 +14,9 @@ import android.widget.EditText;
 import java.io.File;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class FileListActivity extends AppCompatActivity implements FileListFragment.OnFileSelectedListener {
+public class FileListActivity extends ThemeActivity implements FileListFragment.OnFileSelectedListener {
     public static final String EXTRA_FILE = "FileListActivity.extra.EXTRA_TARGET_DIRECTORY";
 
     @Override

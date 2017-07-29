@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -36,8 +35,9 @@ import java.io.Reader;
 import java.io.Writer;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class TextEditActivity extends AppCompatActivity {
+public class TextEditActivity extends ThemeActivity {
     private File mFile;
     private EditText editText;
 

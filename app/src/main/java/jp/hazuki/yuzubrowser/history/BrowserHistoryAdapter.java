@@ -2,6 +2,8 @@ package jp.hazuki.yuzubrowser.history;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +19,15 @@ import java.util.List;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>
         implements StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
+
+    private final PorterDuffColorFilter defaultColorFilter;
+    private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
     private DateFormat dateFormat;
     private BrowserHistoryManager mManager;
@@ -42,6 +48,8 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         mQuery = null;
         calendar = Calendar.getInstance();
         pickMode = pick;
+
+        defaultColorFilter = new PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
@@ -57,8 +65,10 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
 
         if (image == null) {
             holder.imageButton.setImageResource(R.drawable.ic_public_white_24dp);
+            holder.imageButton.setColorFilter(defaultColorFilter);
         } else {
             holder.imageButton.setImageBitmap(image);
+            holder.imageButton.setColorFilter(faviconColorFilter);
         }
         holder.titleTextView.setText(item.getTitle());
         holder.urlTextView.setText(url);

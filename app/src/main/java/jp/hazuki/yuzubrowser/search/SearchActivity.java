@@ -36,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
@@ -164,6 +165,9 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
         Intent intent = getIntent();
         if (intent != null) {
+            if (intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, AppData.fullscreen.get()))
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             Uri uri = intent.getParcelableExtra(EXTRA_URI);
             if (uri != null) {
                 mContentUri = uri;

@@ -19,12 +19,12 @@ package jp.hazuki.yuzubrowser.gesture.multiFinger;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class MultiFingerSettingsActivity extends AppCompatActivity implements MfsFragment.OnMfsFragmentListener, MfsListFragment.OnMfsListListener, MfsEditFragment.OnMfsEditFragmentListener {
+public class MultiFingerSettingsActivity extends ThemeActivity implements MfsFragment.OnMfsFragmentListener, MfsListFragment.OnMfsListListener, MfsEditFragment.OnMfsEditFragmentListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

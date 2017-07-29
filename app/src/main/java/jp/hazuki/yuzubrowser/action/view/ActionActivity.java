@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -29,8 +28,9 @@ import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class ActionActivity extends AppCompatActivity {
+public class ActionActivity extends ThemeActivity {
     private static final String TAG = "ActionActivity";
     public static final String ACTION_ALL_ACTION = "ActionActivity.action.allaction";
     public static final String EXTRA_ACTION = "ActionActivity.extra.action";

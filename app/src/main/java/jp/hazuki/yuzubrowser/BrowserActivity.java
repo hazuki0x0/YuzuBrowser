@@ -625,6 +625,16 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             setFullscreenIfEnable();
     }
 
+    @Override
+    protected boolean isLoadThemeData() {
+        return true;
+    }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.BrowserMinThemeLight_NoTitle;
+    }
+
     private void setFullscreenIfEnable() {
         if (mIsFullScreenMode) {
             getWindow().getDecorView()
@@ -2138,6 +2148,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(SearchActivity.EXTRA_QUERY, query);
+        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
 
         Bundle appdata = new Bundle();
         appdata.putInt(APPDATA_EXTRA_TARGET, target);

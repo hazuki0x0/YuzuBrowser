@@ -3,14 +3,14 @@ package jp.hazuki.yuzubrowser.resblock;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.resblock.checker.NormalChecker;
 import jp.hazuki.yuzubrowser.resblock.data.EmptyImageData;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class ResourceBlockListActivity extends AppCompatActivity {
+public class ResourceBlockListActivity extends ThemeActivity {
     public static final String ACTION_BLOCK_IMAGE = BuildConfig.APPLICATION_ID + ".action_block_image";
 
     @Override

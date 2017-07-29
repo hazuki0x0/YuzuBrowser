@@ -22,6 +22,7 @@
         <item name="android:colorAccent">@color/accent</item>
         <item name="colorAccent">@color/accent</item>
         <item name="spinnerButtonStyle">@style/Widget.Yuzu.SpinnerButton</item>
+        <item name="iconColor">@color/white_gray</item>
     </style>
 
     <style name="BrowserMinThemeBlack.NoTitle" parent="@style/BrowserMinThemeBlack">
@@ -45,6 +46,40 @@
 
     <style name="CustomThemeBlack.Pref" parent="CustomThemeBlack">
         <item name="android:textColorPrimary">@color/pref_text_color</item>
+    </style>
+
+    <style name="BrowserMinThemeLight" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColorPrimary">@color/light_primary_text</item>
+        <item name="android:textColorSecondary">@color/light_secondary_text</item>
+        <item name="android:colorControlNormal">@color/light_content_normal</item>
+        <item name="android:colorAccent">@color/light_accent</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="spinnerButtonStyle">@style/Widget.Yuzu.SpinnerButton</item>
+        <item name="iconColor">@color/deep_gray</item>
+        <item name="android:scrollbarSize">4dp</item>
+    </style>
+
+    <style name="BrowserMinThemeLight.NoTitle" parent="@style/BrowserMinThemeLight">
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="BrowserMinThemeLight.Transparent" parent="BrowserMinThemeLight.NoTitle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="CustomThemeLight" parent="@style/BrowserMinThemeLight">
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary_dark</item>
+    </style>
+
+    <style name="CustomThemeLight.Pref" parent="CustomThemeLight">
+        <item name="android:textColorPrimary">@color/pref_text_color_light</item>
     </style>
 
     <style name="Widget.Yuzu.SpinnerButton" parent="Widget.AppCompat.Spinner">

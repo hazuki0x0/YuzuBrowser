@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,8 +18,9 @@ import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.pattern.action.BlockPatternAction;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public abstract class PatternActivity<T extends PatternChecker> extends AppCompatActivity implements View.OnClickListener, OnItemClickListener, OnItemLongClickListener {
+public abstract class PatternActivity<T extends PatternChecker> extends ThemeActivity implements View.OnClickListener, OnItemClickListener, OnItemLongClickListener {
 
     private PatternManager<T> mManager;
 
@@ -51,7 +51,7 @@ public abstract class PatternActivity<T extends PatternChecker> extends AppCompa
     protected void setPatternManager(PatternManager<T> manager) {
         mManager = manager;
 
-        listView.setAdapter(new ArrayAdapter<T>(getApplicationContext(), 0, mManager.getList()) {
+        listView.setAdapter(new ArrayAdapter<T>(this, 0, mManager.getList()) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {

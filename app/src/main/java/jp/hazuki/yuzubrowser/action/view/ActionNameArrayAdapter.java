@@ -17,6 +17,8 @@
 package jp.hazuki.yuzubrowser.action.view;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.SingleAction;
+import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 
 public class ActionNameArrayAdapter extends BaseAdapter {
 
@@ -36,10 +39,17 @@ public class ActionNameArrayAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     private OnSettingButtonListener mListener;
 
+    private final PorterDuffColorFilter iconColor;
+    private final PorterDuffColorFilter disableIconColor;
+
     public ActionNameArrayAdapter(Context context, ActionNameArray array) {
         nameArray = array;
         inflater = LayoutInflater.from(context);
         checked = new boolean[getCount()];
+
+        int color = ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor);
+        iconColor = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        disableIconColor = new PorterDuffColorFilter(color & 0xffffff | 0x88000000, PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
@@ -98,7 +108,7 @@ public class ActionNameArrayAdapter extends BaseAdapter {
         if (SingleAction.checkSubPreference(getItemValue(position))) {
             holder.setting.setVisibility(View.VISIBLE);
             holder.setting.setClickable(isChecked(position));
-            holder.setting.setColorFilter(isChecked(position) ? 0xffffffff : 0x88000000);
+            holder.setting.setColorFilter(isChecked(position) ? iconColor : disableIconColor);
             holder.setting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

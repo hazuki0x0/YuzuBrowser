@@ -2,12 +2,12 @@ package jp.hazuki.yuzubrowser.action.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionManager;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class SoftButtonActionArrayActivity extends AppCompatActivity {
+public class SoftButtonActionArrayActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

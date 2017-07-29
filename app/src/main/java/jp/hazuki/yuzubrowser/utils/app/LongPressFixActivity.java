@@ -17,11 +17,10 @@
 package jp.hazuki.yuzubrowser.utils.app;
 
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 
-public class LongPressFixActivity extends AppCompatActivity {
+public class LongPressFixActivity extends ThemeActivity {
     private final int longPressTimeout = ViewConfiguration.getLongPressTimeout();
     private final Handler handler = new Handler();
 

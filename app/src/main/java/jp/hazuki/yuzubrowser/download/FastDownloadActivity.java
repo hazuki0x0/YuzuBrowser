@@ -22,16 +22,16 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.File;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 
-public class FastDownloadActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<File> {
+public class FastDownloadActivity extends ThemeActivity implements LoaderManager.LoaderCallbacks<File> {
 
     public static final String EXTRA_FILE_URL = "fileURL";
     public static final String EXTRA_FILE_REFERER = "fileReferer";
@@ -114,5 +114,10 @@ public class FastDownloadActivity extends AppCompatActivity implements LoaderMan
     @Override
     public void onLoaderReset(Loader<File> loader) {
 
+    }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.BrowserMinThemeLight_Transparent;
     }
 }

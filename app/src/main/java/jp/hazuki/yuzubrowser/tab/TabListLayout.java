@@ -52,12 +52,12 @@ public class TabListLayout extends LinearLayout {
 
     @SuppressLint("RtlHardcoded")
     public TabListLayout(Context context, AttributeSet attrs, int mode, boolean left) {
-        super(context, attrs);
+        super(context.getApplicationContext(), attrs);
 
         reverse = mode == TabListSingleAction.MODE_REVERSE;
         horizontal = mode == TabListSingleAction.MODE_HORIZONTAL;
 
-        LayoutInflater mLayoutInflater = LayoutInflater.from(context);
+        LayoutInflater mLayoutInflater = LayoutInflater.from(context.getApplicationContext());
         if (horizontal) {
             mLayoutInflater.inflate(R.layout.tab_list_horizontal, this);
             setOnClickListener(new OnClickListener() {
