@@ -27,6 +27,7 @@ public class TabData {
     public final CustomWebView mWebView;
     private TabIndexData mIndexData;
     public int mProgress = -1;
+    private int scrollRange;
 
     protected int mState;
 
@@ -148,6 +149,16 @@ public class TabData {
 
     public boolean isShotThumbnail() {
         return mIndexData.isShotThumbnail();
+    }
+
+    public boolean isNeedShotThumbnail() {
+        if (mWebView.computeVerticalScrollRangeMethod() == 0)
+            return false;
+
+        int old = scrollRange;
+        scrollRange = mWebView.computeVerticalScrollRangeMethod();
+
+        return old != scrollRange || !isShotThumbnail();
     }
 
     public void shotThumbnail(Bitmap thumbnail) {
