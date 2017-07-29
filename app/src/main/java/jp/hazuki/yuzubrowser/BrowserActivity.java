@@ -1482,6 +1482,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "downloads":
                     case "download":
                         intent = new Intent(BrowserActivity.this, DownloadListActivity.class);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                         break;
                     case "debug":
                         intent = new Intent(BrowserActivity.this, DebugActivity.class);
@@ -3842,7 +3844,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 break;
                 case SingleAction.SHOW_DOWNLOADS: {
                     Intent intent = new Intent(getApplicationContext(), DownloadListActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_QUERY, mTabManager.get(target).getUrl());
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivity(intent);
                 }
                 break;
@@ -4164,7 +4167,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     startActivityForResult(
                             new ActionActivity.Builder(BrowserActivity.this)
                                     .setTitle(R.string.action_list)
-                                    .create(),
+                                    .create()
+                                    .setAction(ActionActivity.ACTION_ALL_ACTION)
+                                    .putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode)
+                                    .putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation()),
                             RESULT_REQUEST_ACTION_LIST);
                     break;
                 default:

@@ -42,6 +42,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
@@ -61,9 +62,17 @@ public class DownloadListActivity extends AppCompatActivity implements LoaderCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (AppData.fullscreen.get()) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        boolean fullscreen = AppData.fullscreen.get();
+        int orientation = AppData.oritentation.get();
+        if (getIntent() != null) {
+            fullscreen = getIntent().getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen);
+            orientation = getIntent().getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation);
         }
+
+        if (fullscreen)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(orientation);
+
         setContentView(R.layout.download_activity);
         listView = (ListView) findViewById(R.id.listView);
 
