@@ -285,6 +285,14 @@
     <string name="pref_share_unkown_scheme_summary">未知のURLスキームを他のアプリで開きます</string>
 
     <string name="pref_speed_dial_setting">スピードダイアル設定</string>
+    <string name="pref_edit_speeddial">スピードダイアルの編集</string>
+    <string name="pref_speeddial_ui_settings">スピードダイアルの表示設定</string>
+    <string name="pref_speeddial_show_header">ヘッダーを表示</string>
+    <string name="pref_speeddial_show_search_bar">サーチバーの表示</string>
+    <string name="pref_speeddial_show_icon">アイコンの表示</string>
+    <string name="pref_speeddial_column">縦画面の列数</string>
+    <string name="pref_speeddial_column_landscape">横画面の列数</string>
+    <string name="pref_speeddial_column_max_width">アイテムの最大幅</string>
 
     <string name="pref_double_tap_flick_settings">ダブルタップフリック設定</string>
     <string name="pref_double_tap_flick_enable">ダブルタップフリックを有効にする</string>

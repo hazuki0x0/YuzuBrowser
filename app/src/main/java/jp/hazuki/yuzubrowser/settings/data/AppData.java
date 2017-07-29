@@ -175,6 +175,12 @@ public class AppData {
     public static final BooleanContainer volume_default_playing = new BooleanContainer("volume_default_playing", true);
     public static final BooleanContainer snap_toolbar = new BooleanContainer("snap_toolbar", false);
     public static final BooleanContainer fullscreen_hide_nav = new BooleanContainer("fullscreen_hide_nav", false);
+    public static final BooleanContainer speeddial_show_header = new BooleanContainer("speeddial_show_header", true);
+    public static final BooleanContainer speeddial_show_search = new BooleanContainer("speeddial_show_search", true);
+    public static final BooleanContainer speeddial_show_icon = new BooleanContainer("speeddial_show_icon", true);
+    public static final IntContainer speeddial_column = new IntContainer("speeddial_column", 4);
+    public static final IntContainer speeddial_column_landscape = new IntContainer("speeddial_column_landscape", 5);
+    public static final IntContainer speeddial_column_width = new IntContainer("speeddial_column_width", 80);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

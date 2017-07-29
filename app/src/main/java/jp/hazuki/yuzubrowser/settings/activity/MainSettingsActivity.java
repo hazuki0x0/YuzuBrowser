@@ -72,7 +72,8 @@ public class MainSettingsActivity extends AppCompatPreferenceActivity {
                 || UiSettingFragment.class.getName().equals(fragmentName)
                 || PrivacyFragment.class.getName().equals(fragmentName)
                 || ImportExportFragment.class.getName().equals(fragmentName)
-                || OperationSettingsFragment.class.getName().equals(fragmentName);
+                || OperationSettingsFragment.class.getName().equals(fragmentName)
+                || SpeeddialFragment.class.getName().equals(fragmentName);
     }
 
     @Override

@@ -2575,6 +2575,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 if ("speeddial".equalsIgnoreCase(action)) {
                     List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
                     return SpeedDialHtml.createResponse(getApplicationContext(), speedDials);
+                } else if ("speeddial/base.css".equals(action)) {
+                    return SpeedDialHtml.getBaseCss(getApplicationContext());
+                } else if ("speeddial/custom.css".equals(action)) {
+                    return SpeedDialHtml.getCustomCss();
                 }
             }
 
