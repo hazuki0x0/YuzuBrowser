@@ -22,6 +22,7 @@
         <item name="android:colorAccent">@color/accent</item>
         <item name="colorAccent">@color/accent</item>
         <item name="spinnerButtonStyle">@style/Widget.Yuzu.SpinnerButton</item>
+        <item name="android:webViewStyle">@style/Widget.Yuzu.WebView</item>
         <item name="iconColor">@color/white_gray</item>
     </style>
 
@@ -55,6 +56,7 @@
         <item name="android:colorAccent">@color/light_accent</item>
         <item name="colorAccent">@color/light_accent</item>
         <item name="spinnerButtonStyle">@style/Widget.Yuzu.SpinnerButton</item>
+        <item name="android:webViewStyle">@style/Widget.Yuzu.WebView</item>
         <item name="iconColor">@color/deep_gray</item>
         <item name="android:scrollbarSize">4dp</item>
     </style>
@@ -91,5 +93,11 @@
         <item name="android:textAlignment">inherit</item>
         <item name="android:paddingStart">8dp</item>
         <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <style name="Widget.Yuzu.WebView" parent="@android:style/Widget.WebView">
+        <item name="android:scrollbarThumbVertical">@color/scroll_bar</item>
+        <item name="android:scrollbarThumbHorizontal">@color/scroll_bar</item>
+        <item name="android:scrollbarSize">4dp</item>
     </style>
 </resources>
