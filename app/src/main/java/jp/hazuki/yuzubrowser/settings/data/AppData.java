@@ -124,6 +124,7 @@ public class AppData {
     public static final IntContainer flick_sensitivity_speed = new IntContainer("flick_sensitivity_speed", 20);
     public static final IntContainer flick_sensitivity_distance = new IntContainer("flick_sensitivity_distance", 15);
     public static final BooleanContainer flick_edge = new BooleanContainer("flick_edge", true);
+    public static final BooleanContainer flick_disable_scroll = new BooleanContainer("flick_disable_scroll", true);
     public static final BooleanContainer qc_enable = new BooleanContainer("qc_enable", false);
     public static final IntContainer qc_rad_start = new IntContainer("qc_rad_start", 50);
     public static final IntContainer qc_rad_inc = new IntContainer("qc_rad_inc", 70);

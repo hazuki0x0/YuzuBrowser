@@ -28,6 +28,7 @@ public class TabData {
     private TabIndexData mIndexData;
     public int mProgress = -1;
     private int scrollRange;
+    private int scrollXOffset;
 
     protected int mState;
 
@@ -164,6 +165,14 @@ public class TabData {
     public void shotThumbnail(Bitmap thumbnail) {
         mIndexData.setThumbnail(thumbnail);
         mIndexData.setShotThumbnail(true);
+    }
+
+    public void onDown() {
+        scrollXOffset = mWebView.computeHorizontalScrollOffsetMethod();
+    }
+
+    public boolean isMoved() {
+        return scrollXOffset != mWebView.computeHorizontalScrollOffsetMethod();
     }
 
     public boolean isPinning() {

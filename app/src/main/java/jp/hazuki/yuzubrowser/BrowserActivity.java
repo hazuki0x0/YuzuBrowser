@@ -1736,6 +1736,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 if (!AppData.flick_enable.get())
                     return false;
 
+                if (AppData.flick_disable_scroll.get() && tab.isMoved())
+                    return false;
+
                 final float dx = Math.abs(velocityX);
                 final float dy = Math.abs(velocityY);
                 final float dist = e2.getX() - e1.getX();
@@ -1816,7 +1819,13 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             if (mWebViewAutoScrollManager != null)
                 mWebViewAutoScrollManager.stop();
 
-            mTabManager.takeThumbnailIfNeeded(mTabManager.get(getCurrentTab()));
+            MainTabData tabData = mTabManager.getCurrentTabData();
+
+            if (tabData == null) return false;
+
+            tabData.onDown();
+
+            mTabManager.takeThumbnailIfNeeded(tabData);
             return false;
         }
 

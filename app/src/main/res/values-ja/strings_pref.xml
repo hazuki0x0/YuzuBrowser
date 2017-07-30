@@ -197,6 +197,7 @@
     <string name="pref_flick_down">下フリック</string>
     <string name="pref_sensitivity_speed">感度 (速度)</string>
     <string name="pref_flick_enable">フリックアクションを有効にする</string>
+    <string name="pref_flick_disable_scrolling">横スクロール中はフリックを無効にする</string>
     <string name="pref_qc_settings">クイックコントロール設定</string>
     <string name="pref_qc_enable">クイックコントロールを有効にする</string>
     <string name="pref_qc_rad_start">半径</string>

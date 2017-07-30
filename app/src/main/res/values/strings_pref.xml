@@ -512,6 +512,7 @@
     <string name="pref_flick_down">Flick down action</string>
     <string name="pref_sensitivity_speed">Sensitivity (speed)</string>
     <string name="pref_flick_enable">Enable flick action</string>
+    <string name="pref_flick_disable_scrolling">Disable flick while horizontal scrolling</string>
     <string name="pref_qc_settings">Quick control settings</string>
     <string name="pref_qc_enable">Enable quick control</string>
     <string name="pref_qc_rad_start">Radius</string>
