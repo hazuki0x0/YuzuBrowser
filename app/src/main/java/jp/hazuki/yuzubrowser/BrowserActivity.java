@@ -865,7 +865,8 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                         mWebViewPageFastScroller.close();
                     } else if (mWebViewAutoScrollManager != null) {
                         mWebViewAutoScrollManager.stop();
-                    } else if (mTabManager.getCurrentTabData().mWebView.canGoBack()) {
+                    } else if (mTabManager.getCurrentTabData() != null
+                            && mTabManager.getCurrentTabData().mWebView.canGoBack()) {
                         mTabManager.getCurrentTabData().mWebView.goBack();
                         superFrameLayout.postDelayed(takeCurrentTabScreen, 500);
                     } else {
