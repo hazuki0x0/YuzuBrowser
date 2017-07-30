@@ -90,7 +90,7 @@ public class SoftButtonActionArrayFragment extends RecyclerFabFragment implement
     public boolean onRecyclerItemLongClicked(View v, int position) {
         DeleteDialogCompat.newInstance(getActivity(), R.string.confirm, R.string.confirm_delete_button, position)
                 .show(getChildFragmentManager(), "delete");
-        return false;
+        return true;
     }
 
     @Override
