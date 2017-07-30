@@ -379,7 +379,7 @@ public class ThemeData {
             case VALUE_FALSE:
                 return false;
             default:
-                return Boolean.getBoolean(parser.getText().trim());
+                return Boolean.valueOf(parser.getText().trim());
         }
     }
 
