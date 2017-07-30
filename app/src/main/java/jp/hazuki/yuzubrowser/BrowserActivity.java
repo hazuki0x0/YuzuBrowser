@@ -1511,6 +1511,10 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
                     case "speeddial":
                         return false;
                     case "home":
+                        if ("yuzu:home".equalsIgnoreCase(AppData.home_page.get()) || "yuzu://home".equalsIgnoreCase(AppData.home_page.get())) {
+                            AppData.home_page.set("about:blank");
+                            AppData.commit(this, AppData.home_page);
+                        }
                         loadUrl(data, AppData.home_page.get());
                         return true;
                     case "resblock":
