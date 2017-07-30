@@ -439,7 +439,7 @@ public class BrowserActivity extends AppCompatActivity implements WebBrowser, Ge
             cookieManager.removeSessionCookies(null);
 
             mTabManager.loadData();
-            if (mTabManager.size() > 0) {
+            if (mTabManager.size() > 0 && mTabManager.getCurrentTabNo() >= 0 && mTabManager.getCurrentTabNo() < mTabManager.size()) {
                 setCurrentTab(mTabManager.getCurrentTabNo());
                 mToolbar.scrollTabTo(mTabManager.getCurrentTabNo());
             }
