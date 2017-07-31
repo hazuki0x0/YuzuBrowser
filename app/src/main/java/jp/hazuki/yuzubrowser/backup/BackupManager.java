@@ -67,6 +67,7 @@ public class BackupManager {
             case "app_public_html":
             case "app_appcache":
             case "app_tabs":
+            case "app_favicon":
             case "instant-run":
                 return false;
             default:

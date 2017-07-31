@@ -33,7 +33,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
-import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -48,7 +48,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private final int normalBackGround;
 
     private OnBookmarkRecyclerListener bookmarkItemListener;
-    private BrowserHistoryManager historyManager;
+    private FaviconManager faviconManager;
     private boolean pickMode;
     private boolean openNewTab;
 
@@ -61,9 +61,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         normalBackGround = a.getResourceId(0, 0);
         a.recycle();
 
+        faviconManager = FaviconManager.getInstance(context);
         defaultColorFilter = new PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
-
-        historyManager = BrowserHistoryManager.getInstance(context);
 
         setRecyclerListener(new OnRecyclerListener() {
             @Override
@@ -95,7 +94,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
             }
 
-            Bitmap bitmap = historyManager.getFavicon(((BookmarkSite) item).url);
+            Bitmap bitmap = faviconManager.get(((BookmarkSite) item).url);
             if (bitmap != null) {
                 ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
                 ((BookmarkSiteHolder) holder).imageButton.setColorFilter(faviconColorFilter);
@@ -131,7 +130,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     }
 
     public byte[] getFavicon(BookmarkSite site) {
-        return historyManager.getFaviconImage(site.url);
+        return faviconManager.getFaviconBytes(site.url);
     }
 
     private void setSelectedBackground(View view, boolean selected) {

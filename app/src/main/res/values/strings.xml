@@ -97,6 +97,7 @@
     <string name="clear_database">Clear HTML5 databases</string>
     <string name="clear_password">Clear passwords</string>
     <string name="clear_formdata">Clear formdata</string>
+    <string name="clear_favicon">Clear favicon cache</string>
     <string name="close_all_tabs">Close all tabs</string>
     <string name="search">Search</string>
     <string name="previous">Previous</string>

@@ -1,7 +1,6 @@
 package jp.hazuki.yuzubrowser.history;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -10,7 +9,6 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 public class BrowserHistoryAsyncManager {
     private static final int ADD_URL = 1;
     private static final int UPDATE_TITLE = 2;
-    private static final int UPDATE_FAVICON = 3;
     private final MyThread mThread;
     private final BrowserHistoryManager mHistoryManager;
 
@@ -30,10 +28,6 @@ public class BrowserHistoryAsyncManager {
 
     public void update(String url, String title) {
         mThread.sendMessage(new MyMessage(UPDATE_TITLE, url, title));
-    }
-
-    public void update(String url, Bitmap favicon) {
-        mThread.sendMessage(new MyMessage(UPDATE_FAVICON, url, favicon));
     }
 
     public String[] getHistoryArray(int limit) {
@@ -86,9 +80,6 @@ public class BrowserHistoryAsyncManager {
                     break;
                 case UPDATE_TITLE:
                     mHistoryManager.update(msg.url, (String) msg.obj);
-                    break;
-                case UPDATE_FAVICON:
-                    mHistoryManager.update(msg.url, (Bitmap) msg.obj);
                     break;
             }
         }

@@ -51,7 +51,7 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrl;
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrlList;
-import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
@@ -335,7 +335,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 break;
             case R.id.addToHome: {
                 String url = ((BookmarkSite) item).url;
-                Bitmap bitmap = BrowserHistoryManager.getInstance(getActivity()).getFavicon(url);
+                Bitmap bitmap = FaviconManager.getInstance(getActivity()).get(url);
                 Intent intent = PackageUtils.createShortCutIntent(getActivity(), item.title, url, bitmap);
                 getActivity().sendBroadcast(intent);
                 break;

@@ -10,6 +10,7 @@
         <item>Geolocation permissions</item>
         <item>History</item>
         <item>Recent search queries</item>
+        <item>Favicon cache</item>
     </string-array>
     <string-array name="enable_disable">
         <item>Enable</item>

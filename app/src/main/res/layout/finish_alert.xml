@@ -51,6 +51,12 @@
             android:text="@string/clear_formdata" />
 
         <CheckBox
+            android:id="@+id/faviconCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/clear_favicon" />
+
+        <CheckBox
             android:id="@+id/deleteHistoryCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

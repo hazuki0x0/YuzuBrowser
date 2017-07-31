@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.search.SuggestProvider;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
@@ -109,6 +110,9 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                 break;
             case 7:
                 getContext().getApplicationContext().getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);
+                break;
+            case 8:
+                FaviconManager.getInstance(getContext()).clear();
                 break;
         }
     }

@@ -154,6 +154,8 @@ import jp.hazuki.yuzubrowser.download.DownloadListActivity;
 import jp.hazuki.yuzubrowser.download.DownloadRequestInfo;
 import jp.hazuki.yuzubrowser.download.DownloadService;
 import jp.hazuki.yuzubrowser.download.FastDownloadActivity;
+import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.gesture.GestureManager;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
@@ -294,6 +296,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private PatternUrlManager mPatternManager;
     private BrowserHistoryAsyncManager mBrowserHistoryManager;
     private SpeedDialAsyncManager mSpeedDialAsyncManager;
+    private FaviconAsyncManager mFaviconAsyncManager;
     private HardButtonActionManager mHardButtonManager;
     private ArrayList<UserScript> mUserScriptList;
     private ArrayList<ResourceChecker> mResourceCheckerList;
@@ -426,6 +429,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         };
 
         mSpeedDialAsyncManager = new SpeedDialAsyncManager(getApplicationContext());
+        mFaviconAsyncManager = new FaviconAsyncManager(getApplicationContext());
 
         onPreferenceReset();
 
@@ -601,6 +605,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             mBrowserHistoryManager = null;
         }
         mSpeedDialAsyncManager.destroy();
+        mFaviconAsyncManager.destroy();
+        FaviconManager.destroyInstance();
         mIsDestroyed = true;
     }
 
@@ -2118,6 +2124,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         if ((finish_clear & 0x80) != 0) {
             BrowserManager.clearGeolocation();
         }
+        if ((finish_clear & 0x100) != 0) {
+            FaviconManager.getInstance(getApplicationContext()).clear();
+        }
 
         mHandler.removeCallbacks(mSaveTabsRunnable);
         if (AppData.save_last_tabs.get() && (finish_clear & 0x1000) == 0) {
@@ -2676,9 +2685,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             if (data == null) return;
 
             mSpeedDialAsyncManager.updateAsync(data.getOriginalUrl(), icon);
-
-            if (mBrowserHistoryManager != null)
-                mBrowserHistoryManager.update(data.getOriginalUrl(), icon);
+            mFaviconAsyncManager.updateAsync(data.getOriginalUrl(), icon);
         }
 
         @Override
@@ -3904,9 +3911,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 }
                 break;
                 case SingleAction.ADD_TO_HOME: {
-                    BrowserHistoryManager manager = BrowserHistoryManager.getInstance(BrowserActivity.this);
                     MainTabData tab = mTabManager.get(target);
-                    Bitmap bitmap = manager.getFavicon(tab.getUrl());
+                    Bitmap bitmap = FaviconManager.getInstance(getApplicationContext()).get(tab.getOriginalUrl());
                     sendBroadcast(PackageUtils.createShortCutIntent(BrowserActivity.this, tab.getTitle(), tab.getUrl(), bitmap));
                     break;
                 }

@@ -23,6 +23,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.view.AddBookmarkSiteDialog;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrl;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
@@ -194,7 +195,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_TITLE, history.getTitle());
         intent.putExtra(Intent.EXTRA_TEXT, history.getUrl());
-        intent.putExtra(Intent.EXTRA_STREAM, manager.getFaviconImage(history.getId()));
+        intent.putExtra(Intent.EXTRA_STREAM, FaviconManager.getInstance(getActivity()).getFaviconBytes(history.getUrl()));
         getActivity().setResult(RESULT_OK, intent);
         getActivity().finish();
     }
@@ -250,7 +251,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                manager.deleteFavicon();
+                                FaviconManager.getInstance(getActivity()).clear();
                                 adapter.notifyDataSetChanged();
                             }
                         })

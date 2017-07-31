@@ -10,6 +10,7 @@
         <item>位置情報の許可設定</item>
         <item>履歴</item>
         <item>検索クエリの履歴</item>
+        <item>faviconキャッシュ</item>
     </string-array>
     <string-array name="enable_disable">
         <item>有効</item>

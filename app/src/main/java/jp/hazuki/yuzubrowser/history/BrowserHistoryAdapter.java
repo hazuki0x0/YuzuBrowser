@@ -19,6 +19,7 @@ import java.util.List;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -31,6 +32,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
 
     private DateFormat dateFormat;
     private BrowserHistoryManager mManager;
+    private FaviconManager faviconManager;
     private List<BrowserHistory> histories;
     private OnHistoryRecyclerListener mListener;
     private String mQuery;
@@ -43,6 +45,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         inflater = LayoutInflater.from(context);
         dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         mManager = manager;
+        faviconManager = FaviconManager.getInstance(context.getApplicationContext());
         mListener = listener;
         histories = mManager.getList(0, 100);
         mQuery = null;
@@ -61,7 +64,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     public void onBindViewHolder(final HistoryHolder holder, int position) {
         BrowserHistory item = histories.get(holder.getAdapterPosition());
         String url = UrlUtils.decodeUrlHost(item.getUrl());
-        Bitmap image = mManager.getFavicon(item.getId());
+        Bitmap image = faviconManager.get(item.getUrl());
 
         if (image == null) {
             holder.imageButton.setImageResource(R.drawable.ic_public_white_24dp);

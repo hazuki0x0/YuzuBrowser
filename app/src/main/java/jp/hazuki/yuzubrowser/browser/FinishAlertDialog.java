@@ -68,6 +68,7 @@ public class FinishAlertDialog extends CustomDialogPreference {
         final CheckBox databaseCheckBox = (CheckBox) view.findViewById(R.id.databaseCheckBox);
         final CheckBox passwordCheckBox = (CheckBox) view.findViewById(R.id.passwordCheckBox);
         final CheckBox formdataCheckBox = (CheckBox) view.findViewById(R.id.formdataCheckBox);
+        final CheckBox faviconCheckBox = (CheckBox) view.findViewById(R.id.faviconCheckBox);
         final CheckBox closeallCheckBox = (CheckBox) view.findViewById(R.id.closeallCheckBox);
         final CheckBox historyCheckBox = (CheckBox) view.findViewById(R.id.deleteHistoryCheckBox);
         final CheckBox searchCheckBox = (CheckBox) view.findViewById(R.id.deleteSearchQueryCheckBox);
@@ -85,6 +86,7 @@ public class FinishAlertDialog extends CustomDialogPreference {
         historyCheckBox.setChecked((def & 0x20) != 0);
         searchCheckBox.setChecked((def & 0x40) != 0);
         geoCheckBox.setChecked((def & 0x80) != 0);
+        faviconCheckBox.setChecked((def & 0x100) != 0);
 
         if (!AppData.save_last_tabs.get())
             closeallCheckBox.setVisibility(View.GONE);
@@ -122,6 +124,9 @@ public class FinishAlertDialog extends CustomDialogPreference {
 
                         if (geoCheckBox.isChecked())
                             new_settings |= 0x80;
+
+                        if (faviconCheckBox.isChecked())
+                            new_settings |= 0x100;
 
                         if (closeallCheckBox.isChecked())
                             new_settings |= 0x1000;

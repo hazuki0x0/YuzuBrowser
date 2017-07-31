@@ -96,6 +96,7 @@
     <string name="clear_database">HTML5データベースの削除</string>
     <string name="clear_password">パスワードの削除</string>
     <string name="clear_formdata">フォームデータの削除</string>
+    <string name="clear_favicon">faviconキャッシュの削除</string>
     <string name="close_all_tabs">タブをすべて閉じる</string>
     <string name="search">検索</string>
     <string name="previous">前</string>
