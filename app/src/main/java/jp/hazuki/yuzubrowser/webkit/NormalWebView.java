@@ -288,7 +288,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         switch (action) {
             case MotionEvent.ACTION_MOVE:
                 if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollExcessPlayDistance
-                        || scrollY != 0 && scrollY == computeVerticalScrollOffset() && scrollY + computeVerticalScrollExtent() != computeVerticalScrollRange()) {
+                        || scrollY != 0 && scrollY == getScrollY()) {
                     returnValue = super.onTouchEvent(ev);
                     mLastY = eventY;
                 } else {
@@ -332,7 +332,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                     mLastY = eventY;
                 }
                 firstY = eventY;
-                scrollY = computeVerticalScrollOffset();
+                scrollY = getScrollY();
                 break;
             default:
                 returnValue = super.onTouchEvent(ev);
