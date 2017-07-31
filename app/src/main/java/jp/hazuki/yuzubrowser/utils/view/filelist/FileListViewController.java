@@ -104,6 +104,12 @@ public class FileListViewController {
         }
 
         File[] file_list = file.listFiles();
+
+        if (file_list == null) {
+            Toast.makeText(mContext, R.string.cannot_access_folder, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         if (mShowDirectoryOnly) {
             file_list = ArrayUtils.copyIf(file_list, new Predicate<File>() {
                 @Override
