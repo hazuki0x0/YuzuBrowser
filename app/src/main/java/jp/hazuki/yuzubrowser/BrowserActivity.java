@@ -97,7 +97,6 @@ import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import jp.hazuki.yuzubrowser.action.Action;
@@ -184,7 +183,6 @@ import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.ClearBrowserDataAlertDialog;
 import jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog;
 import jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog;
-import jp.hazuki.yuzubrowser.speeddial.SpeedDial;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialAsyncManager;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
 import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
@@ -296,6 +294,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private PatternUrlManager mPatternManager;
     private BrowserHistoryAsyncManager mBrowserHistoryManager;
     private SpeedDialAsyncManager mSpeedDialAsyncManager;
+    private SpeedDialHtml speedDialHtml;
     private FaviconAsyncManager mFaviconAsyncManager;
     private HardButtonActionManager mHardButtonManager;
     private ArrayList<UserScript> mUserScriptList;
@@ -429,6 +428,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         };
 
         mSpeedDialAsyncManager = new SpeedDialAsyncManager(getApplicationContext());
+        speedDialHtml = new SpeedDialHtml(getApplicationContext());
         mFaviconAsyncManager = new FaviconAsyncManager(getApplicationContext());
 
         onPreferenceReset();
@@ -2602,12 +2602,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     action = action.substring(2);
                 }
                 if ("speeddial".equalsIgnoreCase(action)) {
-                    List<SpeedDial> speedDials = mSpeedDialAsyncManager.getAll();
-                    return SpeedDialHtml.createResponse(getApplicationContext(), speedDials);
+                    return speedDialHtml.createResponse();
                 } else if ("speeddial/base.css".equals(action)) {
-                    return SpeedDialHtml.getBaseCss(getApplicationContext());
+                    return speedDialHtml.getBaseCss();
                 } else if ("speeddial/custom.css".equals(action)) {
-                    return SpeedDialHtml.getCustomCss();
+                    return speedDialHtml.getCustomCss();
                 }
             }
 

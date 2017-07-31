@@ -20,6 +20,11 @@ import android.content.Context;
 import android.webkit.WebResourceResponse;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +36,27 @@ import jp.hazuki.yuzubrowser.utils.HtmlUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 
 public class SpeedDialHtml {
+    private static final String FOLDER = "speeddial";
 
-    public static WebResourceResponse createResponse(Context context, List<SpeedDial> speedDialList) {
+    private final File cache;
+    private final File cacheIndex;
+
+    private SpeedDialManager manager;
+    private Context context;
+
+    public SpeedDialHtml(Context context) {
+        this.context = context.getApplicationContext();
+        File cacheFolder = new File(context.getCacheDir(), FOLDER);
+
+        cache = new File(cacheFolder, "cache");
+        cacheIndex = new File(cacheFolder, "index");
+
+        manager = SpeedDialManager.getInstance(context.getApplicationContext());
+    }
+
+    private CharSequence createCache(Context context) {
+        long time = System.currentTimeMillis();
+        List<SpeedDial> speedDialList = manager.getAll();
         StringBuilder builder = new StringBuilder(8000);
         String start = getResourceString(context, R.raw.speeddial_start);
         builder.append(start);
@@ -45,15 +69,48 @@ public class SpeedDialHtml {
                     .append(HtmlUtils.sanitize(speedDial.getTitle()))
                     .append("</div></a></div>");
         }
+
         builder.append(getResourceString(context, R.raw.speeddial_end));
-        return getNoCacheResponse("text/html", builder);
+
+        if (!cache.getParentFile().exists())
+            cache.getParentFile().mkdirs();
+
+        try (FileOutputStream fos = new FileOutputStream(cache)) {
+            fos.write(builder.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return builder;
+        }
+
+        try (FileOutputStream fos = new FileOutputStream(cacheIndex)) {
+            fos.write(Long.toString(time).getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return builder;
     }
 
-    public static WebResourceResponse getBaseCss(Context context) {
+    public WebResourceResponse createResponse() {
+
+        if (cacheIndex.exists() && cache.exists()) {
+            try {
+                long time = Long.parseLong(IOUtils.readFile(cacheIndex, "UTF-8"));
+                if (manager.getListUpdateTime() < time) {
+                    return getNoCacheResponse("text/html", new FileInputStream(cache));
+                }
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return getNoCacheResponse("text/html", createCache(context));
+    }
+
+    public WebResourceResponse getBaseCss() {
         return new WebResourceResponse("text/css", "UTF-8", context.getResources().openRawResource(R.raw.speeddial_css));
     }
 
-    public static WebResourceResponse getCustomCss() {
+    public WebResourceResponse getCustomCss() {
         StringBuilder builder = new StringBuilder(400);
 
         if (!AppData.speeddial_show_header.get())
@@ -90,8 +147,11 @@ public class SpeedDialHtml {
     }
 
     private static WebResourceResponse getNoCacheResponse(String mimeType, CharSequence sequence) {
-        WebResourceResponse response = new WebResourceResponse(mimeType, "UTF-8",
-                new ByteArrayInputStream(sequence.toString().getBytes(StandardCharsets.UTF_8)));
+        return getNoCacheResponse(mimeType, new ByteArrayInputStream(sequence.toString().getBytes(StandardCharsets.UTF_8)));
+    }
+
+    private static WebResourceResponse getNoCacheResponse(String mimeType, InputStream is) {
+        WebResourceResponse response = new WebResourceResponse(mimeType, "UTF-8", is);
         Map<String, String> headers = new HashMap<>();
         headers.put("Cache-Control", "no-cache");
         response.setResponseHeaders(headers);
