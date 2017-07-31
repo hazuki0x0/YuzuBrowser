@@ -205,6 +205,10 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
                 return title.getText();
         }
 
+        public TabIndexData getIndexData() {
+            return indexData;
+        }
+
         public void setIndexData(TabIndexData indexData) {
             this.indexData = indexData;
         }

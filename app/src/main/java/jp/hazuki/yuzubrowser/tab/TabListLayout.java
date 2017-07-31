@@ -162,7 +162,7 @@ public class TabListLayout extends LinearLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (mAdapter.getItem(viewHolder.getAdapterPosition()).isPinning()) {
+            if (((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getIndexData().isPinning()) {
                 if (horizontal) {
                     return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
                 } else {
