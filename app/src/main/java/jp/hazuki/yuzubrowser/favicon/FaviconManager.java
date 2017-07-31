@@ -31,7 +31,7 @@ import java.util.Map;
 
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 import jp.hazuki.yuzubrowser.utils.image.DiskLruCache;
-import jp.hazuki.yuzubrowser.utils.image.Gochiusarch;
+import jp.hazuki.yuzubrowser.utils.image.Gochiusearch;
 
 public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener, DiskLruCache.OnTrimCacheListener {
 
@@ -40,7 +40,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
     private static final String CACHE_FOLDER = "favicon";
     private static final int DISK_CACHE_INDEX = 0;
 
-    private DiskLruCache diskCache;
+    private final DiskLruCache diskCache;
     private final FaviconCacheIndex diskCacheIndex;
     private final FaviconCache ramCache;
     private final Map<String, Long> ramCacheIndex;
@@ -81,8 +81,8 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
         url = getNormalUrl(url);
 
-        Long vec = Gochiusarch.getVectorHash(icon);
-        String hash = Gochiusarch.getHashString(vec);
+        Long vec = Gochiusearch.getVectorHash(icon);
+        String hash = Gochiusearch.getHashString(vec);
         if (!ramCache.containsKey(vec)) {
             ramCache.put(vec, icon);
             addToDiskCache(hash, icon);
@@ -109,7 +109,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
         FaviconCacheIndex.Result result = diskCacheIndex.get(url);
         if (result.exists) {
-            Bitmap icon = getFromDiskCache(Gochiusarch.getHashString(result.hash));
+            Bitmap icon = getFromDiskCache(Gochiusearch.getHashString(result.hash));
             if (icon != null) {
                 ramCache.put(result.hash, icon);
                 synchronized (ramCacheIndex) {
@@ -140,7 +140,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
         FaviconCacheIndex.Result result = diskCacheIndex.get(url);
         if (result.exists) {
-            return getFromDiskCacheBytes(Gochiusarch.getHashString(result.hash));
+            return getFromDiskCacheBytes(Gochiusearch.getHashString(result.hash));
         }
 
         return null;
@@ -157,16 +157,10 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
     }
 
     public void clear() {
-        try {
-            diskCacheIndex.close();
-            diskCache.delete();
-            ramCacheIndex.clear();
-            ramCache.clear();
-            diskCache.close();
-            diskCache = DiskLruCache.open(diskCache.getDirectory(), 1, 1, DISK_CACHE_SIZE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        diskCacheIndex.close();
+        diskCache.clear();
+        ramCacheIndex.clear();
+        ramCache.clear();
     }
 
     private String getNormalUrl(String url) {
@@ -205,6 +199,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
                         out.close();
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -231,6 +226,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
                         inputStream.close();
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             return bitmap;
@@ -257,6 +253,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
                         inputStream.close();
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -278,6 +275,6 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
     @Override
     public void onTrim(String key) {
-        diskCacheIndex.remove(Gochiusarch.parseHashString(key));
+        diskCacheIndex.remove(Gochiusearch.parseHashString(key));
     }
 }

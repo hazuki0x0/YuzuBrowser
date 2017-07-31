@@ -21,7 +21,7 @@ import android.support.annotation.NonNull;
 
 import java.nio.ByteBuffer;
 
-public class Gochiusarch {
+public class Gochiusearch {
 
     /**
      * 画像ファイルから類似画像が近い値を持つようなハッシュ値を計算します

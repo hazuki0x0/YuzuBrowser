@@ -18,7 +18,7 @@ package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.graphics.Bitmap;
 
-import jp.hazuki.yuzubrowser.utils.image.Gochiusarch;
+import jp.hazuki.yuzubrowser.utils.image.Gochiusearch;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 
@@ -169,7 +169,7 @@ public class TabData {
     public void shotThumbnail(Bitmap thumbnail) {
         mIndexData.setThumbnail(thumbnail);
         mIndexData.setShotThumbnail(true);
-        thumbnailHash = Gochiusarch.getVectorHash(thumbnail);
+        thumbnailHash = Gochiusearch.getVectorHash(thumbnail);
         canRetry = true;
     }
 
