@@ -72,15 +72,17 @@ public class WebViewUtils {
     public static Bitmap capturePicturePart(WebView web) {
         int width = web.getWidth();
         int height = web.getHeight();
-        int scroll = web.getScrollY();
         if (width == 0 || height == 0)
             return null;
 
+        int scrollY = web.getScrollY();
+        int scrollX = web.getScrollX();
+
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        canvas.translate(0, -scroll);
+        canvas.translate(-scrollX, -scrollY);
 
-        canvas.clipRect(0, scroll, width, height + scroll, Region.Op.REPLACE);
+        canvas.clipRect(scrollX, scrollY, width + scrollX, height + scrollY, Region.Op.REPLACE);
         web.draw(canvas);
         return bitmap;
     }
