@@ -36,8 +36,10 @@ import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
 
 public class PasteSearchBoxAction extends SingleAction {
     private static final String FIELD_OPEN_NEW_TAB = "0";
+    private static final String FIELD_REVERSE = "1";
 
     private boolean openNewTab;
+    private boolean reverse;
 
     public PasteSearchBoxAction(int id, JsonParser parser) throws IOException {
         super(id);
@@ -47,6 +49,10 @@ public class PasteSearchBoxAction extends SingleAction {
                 if (FIELD_OPEN_NEW_TAB.equals(parser.getCurrentName())) {
                     if (parser.nextValue().isBoolean())
                         openNewTab = parser.getBooleanValue();
+                }
+                if (FIELD_REVERSE.equals(parser.getCurrentName())) {
+                    if (parser.nextValue().isBoolean())
+                        reverse = parser.getBooleanValue();
                 }
 
                 if (parser.getCurrentToken() == JsonToken.START_OBJECT
@@ -62,6 +68,7 @@ public class PasteSearchBoxAction extends SingleAction {
         generator.writeNumber(id);
         generator.writeStartObject();
         generator.writeBooleanField(FIELD_OPEN_NEW_TAB, openNewTab);
+        generator.writeBooleanField(FIELD_REVERSE, reverse);
         generator.writeEndObject();
     }
 
@@ -69,11 +76,13 @@ public class PasteSearchBoxAction extends SingleAction {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeInt(openNewTab ? 1 : 0);
+        dest.writeInt(reverse ? 1 : 0);
     }
 
     protected PasteSearchBoxAction(Parcel source) {
         super(source);
         openNewTab = source.readInt() != 0;
+        reverse = source.readInt() != 0;
     }
 
     public static final Creator<PasteSearchBoxAction> CREATOR = new Creator<PasteSearchBoxAction>() {
@@ -92,7 +101,9 @@ public class PasteSearchBoxAction extends SingleAction {
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_show_search_box, null);
         final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+        final CheckBox bottom = (CheckBox) view.findViewById(R.id.checkBox2);
         checkBox.setChecked(openNewTab);
+        bottom.setChecked(reverse);
         new AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)
                 .setView(view)
@@ -100,6 +111,7 @@ public class PasteSearchBoxAction extends SingleAction {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         openNewTab = checkBox.isChecked();
+                        reverse = bottom.isChecked();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -109,5 +121,9 @@ public class PasteSearchBoxAction extends SingleAction {
 
     public boolean isOpenNewTab() {
         return openNewTab;
+    }
+
+    public boolean isReverse() {
+        return reverse;
     }
 }

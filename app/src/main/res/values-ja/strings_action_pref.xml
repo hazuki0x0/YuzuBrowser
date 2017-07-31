@@ -63,4 +63,6 @@
         <item>中央</item>
         <item>右寄せ</item>
     </string-array>
+
+    <string name="action_bottom_search_bar">検索バーを下に表示</string>
 </resources>

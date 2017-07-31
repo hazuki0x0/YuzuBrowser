@@ -1512,7 +1512,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
                     case "search":
-                        showSearchBox("", mTabManager.indexOf(data.getId()), false);
+                        showSearchBox("", mTabManager.indexOf(data.getId()), false, "reverse".equalsIgnoreCase(uri.getFragment()));
                         return true;
                     case "speeddial":
                         return false;
@@ -2162,11 +2162,12 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 .show();
     }
 
-    private void showSearchBox(String query, int target, boolean openNewTab) {
+    private void showSearchBox(String query, int target, boolean openNewTab, boolean reverse) {
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(SearchActivity.EXTRA_QUERY, query);
         intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+        intent.putExtra(SearchActivity.EXTRA_REVERSE, reverse);
 
         Bundle appdata = new Bundle();
         appdata.putInt(APPDATA_EXTRA_TARGET, target);
@@ -3844,10 +3845,16 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 }
                 break;
                 case SingleAction.SHOW_SEARCHBOX:
-                    showSearchBox(mTabManager.get(target).getUrl(), target, ((ShowSearchBoxAction) action).isOpenNewTab());
+                    showSearchBox(mTabManager.get(target).getUrl(),
+                            target,
+                            ((ShowSearchBoxAction) action).isOpenNewTab(),
+                            ((ShowSearchBoxAction) action).isReverse());
                     break;
                 case SingleAction.PASTE_SEARCHBOX:
-                    showSearchBox(ClipboardUtils.getClipboardText(getApplicationContext()), target, ((PasteSearchBoxAction) action).isOpenNewTab());
+                    showSearchBox(ClipboardUtils.getClipboardText(getApplicationContext()),
+                            target,
+                            ((PasteSearchBoxAction) action).isOpenNewTab(),
+                            ((PasteSearchBoxAction) action).isReverse());
                     break;
                 case SingleAction.PASTE_GO: {
                     String text = ClipboardUtils.getClipboardText(getApplicationContext());

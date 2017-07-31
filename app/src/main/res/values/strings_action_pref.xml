@@ -73,4 +73,6 @@
         <item>1</item>
         <item>2</item>
     </integer-array>
+
+    <string name="action_bottom_search_bar">Show Search bar at bottom</string>
 </resources>
