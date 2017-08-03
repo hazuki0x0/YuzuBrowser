@@ -24,6 +24,8 @@ public class WebUtils {
 
     private static final Pattern URL_EXTRACTION = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu):)(\\S*)", Pattern.CASE_INSENSITIVE);
 
+    private static final Pattern URL_SUB_DOMAIN = Pattern.compile("://.*\\.", Pattern.LITERAL);
+
     public static boolean isUrl(String query) {
         query = query.trim();
         boolean hasSpace = (query.indexOf(' ') != -1);
@@ -168,6 +170,14 @@ public class WebUtils {
             return Pattern.compile(pattern_url.substring(1, pattern_url.length() - 1));
         } else {
             pattern_url = factory.fastCompile(pattern_url);
+            if (pattern_url.startsWith(".*\\.")) {
+                pattern_url = "((?![./]).)*" + pattern_url.substring(3);
+            } else if (pattern_url.contains("://.*\\.")) {
+                pattern_url = URL_SUB_DOMAIN.matcher(pattern_url).replaceFirst("://((?![\\./]).)*\\.");
+            }
+            if (pattern_url.startsWith("http.*://") && pattern_url.length() >= 10) {
+                pattern_url = "https?://" + pattern_url.substring(9);
+            }
             if (maybeContainsUrlScheme(pattern_url))
                 return Pattern.compile("^" + pattern_url);
             else
