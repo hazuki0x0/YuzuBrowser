@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.util.JsonConvertable;
@@ -35,6 +36,10 @@ public class Action extends ArrayList<SingleAction> implements Parcelable, JsonC
     public Action(String jsonStr) {
         super(1);
         fromJsonString(jsonStr);
+    }
+
+    public Action(Collection<SingleAction> actions) {
+        super(actions);
     }
 
     public Action(Parcel source) {

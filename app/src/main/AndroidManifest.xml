@@ -214,10 +214,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_start_activity_setting" />
         <activity
-            android:name=".action.item.CustomPreferenceActivity"
+            android:name=".action.item.CustomSingleActionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/action_custom_setting"
-            android:theme="@style/BrowserMinThemeBlack.Transparent" />
+            android:label="@string/action_custom_setting" />
         <activity
             android:name=".useragent.UserAgentListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenSize"

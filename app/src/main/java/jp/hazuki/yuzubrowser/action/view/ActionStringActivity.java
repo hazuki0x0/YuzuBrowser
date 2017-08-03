@@ -48,7 +48,7 @@ public class ActionStringActivity extends ThemeActivity {
                 editText.setText(((JsonConvertable) action).toJsonString());
                 return;
             }
-            throw new IllegalArgumentException("EXTRA_ACTION is not action or actionlist");
+            throw new IllegalArgumentException("ARG_ACTION is not action or actionlist");
         } else {
             mTarget = getIntent().getIntExtra(EXTRA_ACTIVITY, ACTION_ACTIVITY);
 
