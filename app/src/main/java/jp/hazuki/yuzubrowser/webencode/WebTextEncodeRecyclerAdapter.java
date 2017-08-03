@@ -47,10 +47,6 @@ public class WebTextEncodeRecyclerAdapter extends ArrayRecyclerAdapter<WebTextEn
                 android.R.id.text1, this);
     }
 
-    public void set(int pos, WebTextEncode encode) {
-        mData.set(pos, encode);
-    }
-
     public WebTextEncode get(int pos) {
         return mData.get(pos);
     }

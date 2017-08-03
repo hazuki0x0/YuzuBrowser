@@ -43,10 +43,6 @@ class SpeedDialRecyclerAdapter extends ArrayRecyclerAdapter<SpeedDial, SpeedDial
         return new ViewHolder(inflater.inflate(R.layout.simple_recycler_list_item_2, parent, false), this);
     }
 
-    public void set(int pos, SpeedDial appData) {
-        mData.set(pos, appData);
-    }
-
     public SpeedDial get(int pos) {
         return mData.get(pos);
     }
