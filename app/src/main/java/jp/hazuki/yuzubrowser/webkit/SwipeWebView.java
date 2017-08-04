@@ -160,6 +160,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         return webView.getHitTestResult();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String[] getHttpAuthUsernamePassword(String host, String realm) {
         return webView.getHttpAuthUsernamePassword(host, realm);
@@ -280,6 +281,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         webView.setDownloadListener(listener);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setHttpAuthUsernamePassword(String host, String realm, String username, String password) {
         webView.setHttpAuthUsernamePassword(host, realm, username, password);

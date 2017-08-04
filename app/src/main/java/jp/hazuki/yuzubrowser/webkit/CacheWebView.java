@@ -323,6 +323,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         return mList.get(mCurrent).mWebView.getHitTestResult();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String[] getHttpAuthUsernamePassword(String host, String realm) {
         return mList.get(mCurrent).mWebView.getHttpAuthUsernamePassword(host, realm);
@@ -531,6 +532,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setHttpAuthUsernamePassword(String host, String realm, String username, String password) {
         for (TabData web : mList) {

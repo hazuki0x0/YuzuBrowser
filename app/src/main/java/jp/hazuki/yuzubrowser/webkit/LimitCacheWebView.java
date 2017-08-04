@@ -384,6 +384,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
         return currentTab.mWebView.getHitTestResult();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String[] getHttpAuthUsernamePassword(String host, String realm) {
         return currentTab.mWebView.getHttpAuthUsernamePassword(host, realm);
@@ -678,6 +679,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setHttpAuthUsernamePassword(String host, String realm, String username, String password) {
         for (TabData web : tabCache.values()) {

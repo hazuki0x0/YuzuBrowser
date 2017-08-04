@@ -1,10 +1,13 @@
 package jp.hazuki.yuzubrowser.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Region;
+import android.os.Build;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewDatabase;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,5 +113,24 @@ public class WebViewUtils {
 
     public static boolean isRedirect(CustomWebView webView) {
         return webView.getHitTestResult().getType() <= 0;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static String[] getHttpAuthUsernamePassword(Context context, CustomWebView webView, String host, String realm) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return WebViewDatabase.getInstance(context).getHttpAuthUsernamePassword(host, realm);
+        } else {
+            return webView.getHttpAuthUsernamePassword(host, realm);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setHttpAuthUsernamePassword(Context context, CustomWebView webView,
+                                                   String host, String realm, String username, String password) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WebViewDatabase.getInstance(context).setHttpAuthUsernamePassword(host, realm, username, password);
+        } else {
+            webView.setHttpAuthUsernamePassword(host, realm, username, password);
+        }
     }
 }
