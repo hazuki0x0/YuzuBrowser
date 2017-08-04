@@ -76,6 +76,7 @@ public class AppData {
     public static final ToolbarContainer toolbar_url = new ToolbarContainer("url", 1);
     public static final ToolbarContainer toolbar_progress = new ToolbarContainer("progress", 1);
     public static final ToolbarContainer toolbar_custom1 = new ToolbarContainer("custom1", 1);
+    public static final BooleanContainer toolbar_always_show_url = new BooleanContainer("toolbar_always_show_url", true);
     public static final IntContainer swipebtn_sensitivity = new IntContainer("swipebtn_sensitivity", 150);
     public static final StringContainer default_encoding = new StringContainer("default_encoding", "UTF-8");
     public static final StringContainer user_agent = new StringContainer("user_agent", "");

@@ -2,6 +2,7 @@ package jp.hazuki.yuzubrowser.utils.view.swipebutton;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -9,9 +10,15 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionCallback;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionFile;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
+import jp.hazuki.yuzubrowser.utils.UrlUtils;
 
 public class SwipeTextButton extends AppCompatButton implements SwipeController.OnChangeListener {
     private final SwipeSoftButtonController mController;
+
+    private CharSequence content = "";
+    private CharSequence visibleText;
+
+    private boolean typeUrl;
 
     public SwipeTextButton(Context context) {
         this(context, null);
@@ -34,6 +41,10 @@ public class SwipeTextButton extends AppCompatButton implements SwipeController.
 
     public void setSense(int sense) {
         mController.setSense(sense);
+    }
+
+    public void setTypeUrl(boolean typeUrl) {
+        this.typeUrl = typeUrl;
     }
 
     @Override
@@ -75,5 +86,37 @@ public class SwipeTextButton extends AppCompatButton implements SwipeController.
 
     @Override
     public void onChangeState(int whatNo) {
+    }
+
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        content = text != null ? text : "";
+        setContentDescription(content);
+        updateVisibleText(getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int availWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
+        updateVisibleText(availWidth);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    private CharSequence getTruncatedText(int availWidth) {
+        if (typeUrl) {
+            return UrlUtils.ellipsizeUrl(content, getPaint(), availWidth);
+        } else {
+            return TextUtils.ellipsize(content, getPaint(), availWidth, TextUtils.TruncateAt.END);
+        }
+    }
+
+    private void updateVisibleText(int availWidth) {
+        CharSequence newText = getTruncatedText(availWidth);
+
+        if (!newText.equals(visibleText)) {
+            visibleText = newText;
+
+            super.setText(visibleText, BufferType.SPANNABLE);
+        }
     }
 }

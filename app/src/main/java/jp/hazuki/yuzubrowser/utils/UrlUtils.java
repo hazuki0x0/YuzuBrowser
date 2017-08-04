@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.utils;
 
 import android.net.Uri;
+import android.text.TextPaint;
 import android.text.TextUtils;
 
 import java.net.IDN;
@@ -102,6 +103,19 @@ public class UrlUtils {
         }
 
         return builder.toString();
+    }
+
+    public static CharSequence ellipsizeUrl(CharSequence text, TextPaint p, float avail) {
+        int len = text.length();
+
+        float wid = p.measureText(text, 0, len);
+        if (wid <= avail) {
+            return text;
+        }
+
+        int fit = p.breakText(text, 0, len, true, avail, null);
+
+        return text.toString().substring(0, fit);
     }
 
     private static final char INVALID_CHAR = '\uFFFD';

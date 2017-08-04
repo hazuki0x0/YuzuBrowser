@@ -119,6 +119,9 @@
                 android:title="@string/pref_toolbar_text_size"
                 app:seekMax="50"
                 app:seekMin="1" />
+            <SwitchPreference
+                android:key="toolbar_always_show_url"
+                android:title="@string/pref_always_show_url" />
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/pref_progress_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
