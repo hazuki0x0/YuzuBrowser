@@ -42,6 +42,10 @@
         android:key="web_app_cache"
         android:title="@string/pref_web_app_cache" />
 
+    <SwitchPreference
+        android:key="safe_browsing"
+        android:title="@string/pref_enable_safe_browsing" />
+
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_web_cache_list"
         android:entryValues="@array/pref_web_cache_values"

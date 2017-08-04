@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.print.PrintDocumentAdapter;
@@ -929,8 +930,13 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
         WebViewUtils.setDisplayZoomButtons(from_setting, to_setting);
         to_setting.setCacheMode(from_setting.getCacheMode());
         to_setting.setJavaScriptCanOpenWindowsAutomatically(from_setting.getJavaScriptCanOpenWindowsAutomatically());
-        to_setting.setSaveFormData(from_setting.getSaveFormData());
         to_setting.setLayoutAlgorithm(from_setting.getLayoutAlgorithm());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            to_setting.setSafeBrowsingEnabled(from_setting.getSafeBrowsingEnabled());
+        } else {
+            //noinspection deprecation
+            to_setting.setSaveFormData(from_setting.getSaveFormData());
+        }
 
         //Unknown get
         to_setting.setAppCacheEnabled(AppData.web_app_cache.get());

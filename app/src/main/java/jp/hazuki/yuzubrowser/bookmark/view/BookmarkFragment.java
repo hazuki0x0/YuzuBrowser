@@ -336,8 +336,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.addToHome: {
                 String url = ((BookmarkSite) item).url;
                 Bitmap bitmap = FaviconManager.getInstance(getActivity()).get(url);
-                Intent intent = PackageUtils.createShortCutIntent(getActivity(), item.title, url, bitmap);
-                getActivity().sendBroadcast(intent);
+                PackageUtils.createShortcut(getActivity(), item.title, url, bitmap);
                 break;
             }
             case R.id.editBookmark:

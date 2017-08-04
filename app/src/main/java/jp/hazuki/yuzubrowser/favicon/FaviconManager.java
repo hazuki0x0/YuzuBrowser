@@ -157,7 +157,6 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
     }
 
     public void clear() {
-        diskCacheIndex.close();
         diskCache.clear();
         ramCacheIndex.clear();
         ramCache.clear();

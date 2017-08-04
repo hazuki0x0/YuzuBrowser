@@ -732,4 +732,6 @@
     <string name="pref_backup_speed_dial">Backup speed dial</string>
     <string name="pref_backup_speed_dial_confirm">Are you sure you want to backup speed dial?</string>
     <string name="pref_snap_toolbar">Snap Toolbar</string>
+    <string name="pref_enable_safe_browsing">Enable safe browsing</string>
+    <string name="pref_required_android_O">Android 8.0 (O) or higher is required</string>
 </resources>

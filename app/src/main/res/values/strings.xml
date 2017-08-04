@@ -243,4 +243,13 @@
     <string name="select_file">Select file</string>
     <string name="action_list">Action list</string>
     <string name="add_to_home">Add to home screen</string>
+
+    <string name="caches">Caches</string>
+    <string name="cookies">Cookies</string>
+    <string name="passwords">Passwords</string>
+    <string name="formData">Form data</string>
+    <string name="html5Database">HTML5 Databases</string>
+    <string name="geolocation_permissions">Geolocation permissions</string>
+    <string name="recent_search_queries">Recent search queries</string>
+    <string name="favicon_cache">Favicon caches</string>
 </resources>

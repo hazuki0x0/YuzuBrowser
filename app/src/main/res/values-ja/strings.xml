@@ -242,4 +242,13 @@
     <string name="select_file">ファイルを選択</string>
     <string name="action_list">アクション一覧</string>
     <string name="add_to_home">ホーム画面へ追加</string>
+
+    <string name="caches">キャッシュ</string>
+    <string name="cookies">Cookies</string>
+    <string name="passwords">パスワード</string>
+    <string name="formData">フォームデータ</string>
+    <string name="html5Database">HTML5 データベース</string>
+    <string name="geolocation_permissions">位置情報の許可</string>
+    <string name="recent_search_queries">検索クエリの履歴</string>
+    <string name="favicon_cache">faviconキャッシュ</string>
 </resources>

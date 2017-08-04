@@ -38,6 +38,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -364,10 +365,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         dialogHandler = new PermissionDialogHandler(this);
         mTabManager = TabManagerFactory.newInstance(this);
 
-        webFrameLayout = (FrameLayout) findViewById(R.id.webFrameLayout);
-        webGestureOverlayView = (GestureOverlayView) findViewById(R.id.webGestureOverlayView);
-        coordinatorLayout = (CustomCoordinatorLayout) findViewById(R.id.coordinator);
-        superFrameLayout = (RootLayout) findViewById(R.id.superFrameLayout);
+        webFrameLayout = findViewById(R.id.webFrameLayout);
+        webGestureOverlayView = findViewById(R.id.webGestureOverlayView);
+        coordinatorLayout = findViewById(R.id.coordinator);
+        superFrameLayout = findViewById(R.id.superFrameLayout);
         superFrameLayout.setOnImeShownListener(new RootLayout.OnImeShownListener() {
             @Override
             public void onImeVisibilityChanged(boolean visible) {
@@ -465,7 +466,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             }
         });
 
-        actionNameTextView = (TextView) findViewById(R.id.actionNameTextView);
+        actionNameTextView = findViewById(R.id.actionNameTextView);
         webGestureOverlayView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -2075,11 +2076,18 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         setting.setLoadsImagesAutomatically(!AppData.block_web_images.get());
 
         boolean noPrivate = !AppData.private_mode.get();
-        setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
         setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());
         setting.setDomStorageEnabled(noPrivate && AppData.web_dom_db.get());
         setting.setGeolocationEnabled(noPrivate && AppData.web_geolocation.get());
         setting.setAppCacheEnabled(noPrivate && AppData.web_app_cache.get());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setting.setSafeBrowsingEnabled(AppData.safe_browsing.get());
+        } else {
+            //noinspection deprecation
+            setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
+        }
+
         setting.setAppCachePath(BrowserManager.getAppCacheFilePath(getApplicationContext()));
 
         web.resetTheme();
@@ -2111,7 +2119,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         if ((finish_clear & 0x08) != 0) {
             WebViewDatabase.getInstance(getApplicationContext()).clearHttpAuthUsernamePassword();
         }
-        if ((finish_clear & 0x10) != 0) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && (finish_clear & 0x10) != 0) {
+            //noinspection deprecation
             WebViewDatabase.getInstance(getApplicationContext()).clearFormData();
         }
         if ((finish_clear & 0x20) != 0) {
@@ -3538,8 +3547,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     MainTabData tab = mTabManager.get(target);
 
                     View view = getLayoutInflater().inflate(R.layout.page_info_dialog, null);
-                    final CopyableTextView titleTextView = (CopyableTextView) view.findViewById(R.id.titleTextView);
-                    final CopyableTextView urlTextView = (CopyableTextView) view.findViewById(R.id.urlTextView);
+                    final CopyableTextView titleTextView = view.findViewById(R.id.titleTextView);
+                    final CopyableTextView urlTextView = view.findViewById(R.id.urlTextView);
 
                     titleTextView.setText(tab.getTitle());
                     final String url = tab.getUrl();
@@ -3919,7 +3928,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 case SingleAction.ADD_TO_HOME: {
                     MainTabData tab = mTabManager.get(target);
                     Bitmap bitmap = FaviconManager.getInstance(getApplicationContext()).get(tab.getOriginalUrl());
-                    sendBroadcast(PackageUtils.createShortCutIntent(BrowserActivity.this, tab.getTitle(), tab.getUrl(), bitmap));
+                    PackageUtils.createShortcut(BrowserActivity.this, tab.getTitle(), tab.getUrl(), bitmap);
                     break;
                 }
                 case SingleAction.SUB_GESTURE: {
