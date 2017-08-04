@@ -76,6 +76,8 @@ public interface TabManager {
 
     void onPreferenceReset();
 
+    void onLayoutCreated();
+
     List<MainTabData> getLoadedData();
 
     List<TabIndexData> getIndexDataList();

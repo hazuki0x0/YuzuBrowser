@@ -79,6 +79,10 @@
                 android:title="@string/pref_show_divider"
                 android:entries="@array/pref_show_divider_list"
                 android:entryValues="@array/pref_show_divider_values" />
+
+            <SwitchPreference
+                android:key="toolbar_show_favicon"
+                android:title="@string/pref_show_favicon" />
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/pref_url_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference

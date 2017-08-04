@@ -394,6 +394,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     @Override
                     public void onGlobalLayout() {
                         coordinatorLayout.setToolbarHeight(findViewById(R.id.topToolbarLayout).getHeight());
+                        mTabManager.onLayoutCreated();
                     }
                 });
 
@@ -2687,14 +2688,13 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
         @Override
         public void onReceivedIcon(CustomWebView web, Bitmap icon) {
-            if (!AppData.save_history.get())
-                return;
-
             MainTabData data = mTabManager.get(web);
             if (data == null) return;
 
             mSpeedDialAsyncManager.updateAsync(data.getOriginalUrl(), icon);
             mFaviconAsyncManager.updateAsync(data.getOriginalUrl(), icon);
+
+            data.onReceivedIcon(icon);
         }
 
         @Override

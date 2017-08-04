@@ -17,6 +17,9 @@
 package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
@@ -41,6 +45,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     private final TabCache<MainTabData> mTabCache;
     private final TabStorage mTabStorage;
     private final ThumbnailManager thumbnailManager;
+    private final TabFaviconManager tabFaviconManager;
 
     private List<View> mTabView;
 
@@ -52,6 +57,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         mTabStorage = new TabStorage(activity);
         mTabView = new ArrayList<>();
         thumbnailManager = new ThumbnailManager(activity);
+        tabFaviconManager = new TabFaviconManager(activity);
     }
 
     @Override
@@ -247,6 +253,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
             moveTabToBackground(v, mWebBrowser.getResources(), mWebBrowser.getTheme());
             mTabView.add(v);
             setText(v, data);
+            setIcon(v, data);
         }
         mCurrentNo = mTabStorage.loadCurrentTab();
 
@@ -262,7 +269,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         else
             v.setBackgroundResource(R.drawable.tab_background_normal);
 
-        TextView textView = (TextView) v.findViewById(R.id.textView);
+        TextView textView = v.findViewById(R.id.textView);
         if (themedata != null && themedata.tabTextColorNormal != 0)
             textView.setTextColor(themedata.tabTextColorNormal);
         else
@@ -293,6 +300,12 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         synchronized (mTabCache) {
             mTabCache.setSize(AppData.tabs_cache_number.get());
         }
+        onLayoutCreated();
+    }
+
+    @Override
+    public void onLayoutCreated() {
+        tabFaviconManager.onPreferenceReset(mTabView, mTabStorage.getTabIndexDataList());
     }
 
     @Override
@@ -377,6 +390,26 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         ((TextView) view.findViewById(R.id.textView)).setText(text);
     }
 
+    private void setIcon(View view, TabIndexData indexData) {
+        if (indexData.getOriginalUrl() == null || indexData.getOriginalUrl().startsWith("yuzu:")) {
+            return;
+        }
+
+        Bitmap icon = FaviconManager.getInstance(view.getContext()).get(indexData.getOriginalUrl());
+        Drawable drawable;
+        if (icon != null) {
+            drawable = new BitmapDrawable(view.getResources(), icon);
+        } else {
+            drawable = view.getContext().getDrawable(R.drawable.ic_page_white_24px);
+        }
+        TextView titleTextView = view.findViewById(R.id.textView);
+        int size = titleTextView.getHeight() - titleTextView.getPaddingTop() - titleTextView.getPaddingBottom();
+
+        assert drawable != null;
+        drawable.setBounds(0, 0, size, size);
+        titleTextView.setCompoundDrawables(drawable, null, null, null);
+    }
+
     private MainTabData getTabData(TabIndexData tabIndexData, int no) {
         CustomWebView webView = mTabStorage.loadWebView(mWebBrowser, tabIndexData);
         MainTabData tabData = tabIndexData.getMainTabData(webView, mTabView.get(no));
@@ -394,6 +427,8 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         mTabStorage.saveIndexData();
         tabData.mWebView.setEmbeddedTitleBarMethod(null);
         tabData.mWebView.destroy();
+        int index = mTabStorage.indexOf(tabData.getId());
+        tabFaviconManager.setFavicon(mTabView.get(index), mTabStorage.getIndexData(index));
     }
 
     private static class HideItem {
