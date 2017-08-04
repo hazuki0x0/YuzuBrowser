@@ -58,6 +58,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
     public static void destroyInstance() {
         if (faviconManager != null) {
             faviconManager.destroy();
+            faviconManager = null;
         }
     }
 
