@@ -249,7 +249,7 @@ class TabStorage {
     }
 
     public void clear() {
-        FileUtils.deleteFile(tabPath);
+        FileUtils.deleteDirectoryContents(tabPath);
     }
 
     private static final String JSON_NAME_ID = "id";

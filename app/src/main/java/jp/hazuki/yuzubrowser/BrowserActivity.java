@@ -1568,6 +1568,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         mTabManager.setCurrentTab(no);
         mToolbar.changeCurrentTab(no, old_data, new_data);
 
+        mTabManager.saveData();
+
         if (mWebViewFindDialog != null && mWebViewFindDialog.isVisible())
             mWebViewFindDialog.hide();
 
@@ -2510,6 +2512,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
             data.onStartPage();
 
+            if (AppData.save_tabs_for_crash.get())
+                mTabManager.saveData();
+
             mTabManager.removeThumbnailCache(url);
         }
 
@@ -2531,6 +2536,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             }
 
             mTabManager.takeThumbnailIfNeeded(data);
+
+            if (AppData.save_tabs_for_crash.get())
+                mTabManager.saveData();
         }
 
         @Override

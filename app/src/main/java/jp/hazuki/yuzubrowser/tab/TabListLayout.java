@@ -72,7 +72,7 @@ public class TabListLayout extends LinearLayout {
             mLayoutInflater.inflate(R.layout.tab_list, this);
         }
 
-        bottomBar = (LinearLayout) findViewById(R.id.bottomBar);
+        bottomBar = findViewById(R.id.bottomBar);
 
         if (left)
             bottomBar.setGravity(Gravity.LEFT);
@@ -81,7 +81,7 @@ public class TabListLayout extends LinearLayout {
     public void setTabManager(final TabManager manager) {
         tabManager = manager;
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
@@ -101,12 +101,18 @@ public class TabListLayout extends LinearLayout {
         mAdapter = TabListRecyclerAdapterFactory.create(getContext(), tabManager, horizontal, new TabListRecyclerBaseAdapter.OnRecyclerListener() {
             @Override
             public void onRecyclerItemClicked(View v, int position) {
+                if (snackbar != null)
+                    snackbar.dismiss();
+
                 mCallback.requestSelectTab(position);
                 close();
             }
 
             @Override
             public void onCloseButtonClicked(View v, int position) {
+                if (snackbar != null)
+                    snackbar.dismiss();
+
                 int size = tabManager.size();
                 mCallback.requestRemoveTab(position);
                 if (size != tabManager.size())
@@ -115,6 +121,9 @@ public class TabListLayout extends LinearLayout {
 
             @Override
             public void onHistoryButtonClicked(View v, int position) {
+                if (snackbar != null)
+                    snackbar.dismiss();
+
                 mCallback.requestShowTabHistory(position);
             }
         });
