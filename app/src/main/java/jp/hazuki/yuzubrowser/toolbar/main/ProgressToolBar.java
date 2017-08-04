@@ -22,7 +22,7 @@ public class ProgressToolBar extends ToolbarBase {
 
         int TOOLBAR_SIZE_Y = DisplayUtils.convertDpToPx(context, AppData.toolbar_progress.size.get());
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         ButtonToolbarController.settingButtonSizeHeight(progressBar, TOOLBAR_SIZE_Y);
     }
 

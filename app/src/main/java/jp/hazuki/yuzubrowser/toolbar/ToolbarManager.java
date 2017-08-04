@@ -24,7 +24,6 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,14 +80,14 @@ public class ToolbarManager {
     }
 
     public ToolbarManager(Activity activity, ActionCallback action_callback, RequestCallback request_callback) {
-        topToolbarLayout = (LinearLayout) activity.findViewById(R.id.topToolbarLayout);
-        bottomToolbarLayout = (LinearLayout) activity.findViewById(R.id.bottomToolbarLayout);
-        bottomOverlayLayout = (LinearLayout) activity.findViewById(R.id.bottomOverlayLayout);
-        bottomOverlayItemLayout = (LinearLayout) activity.findViewById(R.id.bottomOverlayItemLayout);
-        topToolbarAlwaysLayout = (LinearLayout) activity.findViewById(R.id.topAlwaysToolbarLayout);
-        bottomToolbarAlwaysLayout = (LinearLayout) activity.findViewById(R.id.bottomAlwaysToolbarLayout);
-        leftToolbarLayout = (LinearLayout) activity.findViewById(R.id.leftToolbarLayout);
-        rightToolbarLayout = (LinearLayout) activity.findViewById(R.id.rightToolbarLayout);
+        topToolbarLayout = activity.findViewById(R.id.topToolbarLayout);
+        bottomToolbarLayout = activity.findViewById(R.id.bottomToolbarLayout);
+        bottomOverlayLayout = activity.findViewById(R.id.bottomOverlayLayout);
+        bottomOverlayItemLayout = activity.findViewById(R.id.bottomOverlayItemLayout);
+        topToolbarAlwaysLayout = activity.findViewById(R.id.topAlwaysToolbarLayout);
+        bottomToolbarAlwaysLayout = activity.findViewById(R.id.bottomAlwaysToolbarLayout);
+        leftToolbarLayout = activity.findViewById(R.id.leftToolbarLayout);
+        rightToolbarLayout = activity.findViewById(R.id.rightToolbarLayout);
         findOnPage = activity.findViewById(R.id.find);
 
         webToolbarLayout = new LinearLayout(activity);
@@ -432,14 +431,13 @@ public class ToolbarManager {
                 return;
             }
 
-            ViewCompat.setTranslationY(bottomToolbarLayout, newTrans);
-
+            bottomToolbarLayout.setTranslationY(newTrans);
         }
     }
 
     public void onWebViewTapUp() {
         if (bottomBarBehavior.isNoTopBar() && AppData.snap_toolbar.get()) {
-            float trans = ViewCompat.getTranslationY(bottomToolbarLayout);
+            float trans = bottomToolbarLayout.getTranslationY();
             ObjectAnimator animator;
             int duration;
             if (trans > bottomBarHeight / 2) {

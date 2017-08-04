@@ -22,10 +22,10 @@ public class WebViewPageFastScroller extends SubToolbar {
         super(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.page_fast_scroll, this);
-        buttonUp = (ImageButton) view.findViewById(R.id.buttonUp);
-        buttonDown = (ImageButton) view.findViewById(R.id.buttonDown);
-        ImageButton buttonEnd = (ImageButton) view.findViewById(R.id.buttonEnd);
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        buttonUp = view.findViewById(R.id.buttonUp);
+        buttonDown = view.findViewById(R.id.buttonDown);
+        ImageButton buttonEnd = view.findViewById(R.id.buttonEnd);
+        seekBar = view.findViewById(R.id.seekBar);
 
         buttonEnd.setOnClickListener(new View.OnClickListener() {
             @Override
