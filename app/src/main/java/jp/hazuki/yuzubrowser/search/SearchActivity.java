@@ -13,7 +13,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -44,6 +44,7 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView;
 
 public class SearchActivity extends AppCompatActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
     private static final String TAG = "SearchActivity";
@@ -64,7 +65,6 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     private Bundle mAppData;
 
     private EditText editText;
-    private RecyclerView recyclerView;
     private SearchRecyclerAdapter adapter;
 
     private String initQuery;
@@ -82,9 +82,16 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
         else
             setContentView(R.layout.search_activity);
 
-        editText = (EditText) findViewById(R.id.editText);
-        SearchButton searchButton = (SearchButton) findViewById(R.id.searchButton);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        editText = findViewById(R.id.editText);
+        SearchButton searchButton = findViewById(R.id.searchButton);
+        OutSideClickableRecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+        recyclerView.setOnOutSideClickListener(new OutSideClickableRecyclerView.OnOutSideClickListener() {
+            @Override
+            public void onOutSideClick() {
+                finish();
+            }
+        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -96,6 +103,13 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
         adapter = new SearchRecyclerAdapter(this, new ArrayList<Suggestion>(), this);
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         if (ThemeData.isEnabled()) {
             if (ThemeData.getInstance().toolbarBackgroundColor != 0)
