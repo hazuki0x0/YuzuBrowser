@@ -97,6 +97,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -220,8 +221,6 @@ import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity;
 import jp.hazuki.yuzubrowser.utils.graphics.SimpleLayerDrawable;
 import jp.hazuki.yuzubrowser.utils.graphics.TabListActionTextDrawable;
 import jp.hazuki.yuzubrowser.utils.handler.PauseHandler;
-import jp.hazuki.yuzubrowser.utils.util.ArrayDequeCompat;
-import jp.hazuki.yuzubrowser.utils.util.DequeCompat;
 import jp.hazuki.yuzubrowser.utils.view.CopyableTextView;
 import jp.hazuki.yuzubrowser.utils.view.CustomCoordinatorLayout;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
@@ -310,7 +309,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private WebViewPageFastScroller mWebViewPageFastScroller;
     private WebViewAutoScrollManager mWebViewAutoScrollManager;
     private WebViewRenderingManager webViewRenderingManager = new WebViewRenderingManager();
-    private DequeCompat<Bundle> mClosedTabs;
+    private ArrayDeque<Bundle> mClosedTabs;
     private MultiTouchGestureDetector mGestureDetector;
     private PointerView mCursorView;
     private Handler mHandler;
@@ -1644,7 +1643,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             old_web.saveState(outState);
             outState.putInt(TAB_TYPE, old_data.getTabType());
             if (mClosedTabs == null)
-                mClosedTabs = ArrayDequeCompat.makeDeque();
+                mClosedTabs = new ArrayDeque<>();
             mClosedTabs.push(outState);
         }
 
@@ -1666,7 +1665,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             mToolbar.moveCurrentTabPosition(mTabManager.getCurrentTabNo());
         }
         if (AppData.save_closed_tab.get()) {
-            mClosedTabs.pop();
+            mClosedTabs.poll();
         }
     }
 
