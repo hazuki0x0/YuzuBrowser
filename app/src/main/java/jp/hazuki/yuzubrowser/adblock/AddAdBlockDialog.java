@@ -97,9 +97,11 @@ public class AddAdBlockDialog extends DialogFragment {
     }
 
     private static String trimUrl(String url) {
-        int index = url.indexOf("://");
-        if (index > -1) {
-            return url.substring(index + 3);
+        if (url != null) {
+            int index = url.indexOf("://");
+            if (index > -1) {
+                return url.substring(index + 3);
+            }
         }
         return url;
     }

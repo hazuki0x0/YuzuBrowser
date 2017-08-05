@@ -219,7 +219,8 @@ public class SuggestProvider extends ContentProvider {
             }
         } catch (UnknownHostException e) {
             throw e;
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ArrayIndexOutOfBoundsException e) {
+            // ArrayIndexOutOfBoundsException - workaround for OkHttp
             ErrorReport.printAndWriteLog(e);
         } finally {
             if (parser != null)

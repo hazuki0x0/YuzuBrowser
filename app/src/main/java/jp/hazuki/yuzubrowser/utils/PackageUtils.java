@@ -104,7 +104,7 @@ public class PackageUtils {
     }
 
     public static void createShortcut(Context context, String title, String url, Bitmap favicon) {
-        if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+        if (url != null && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
             Intent target = new Intent(context, BrowserActivity.class);
             target.setAction(Intent.ACTION_VIEW);
             if (URLUtil.isFileUrl(url)) {
