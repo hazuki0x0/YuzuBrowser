@@ -4,8 +4,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
+import jp.hazuki.yuzubrowser.BuildConfig;
 
 public class AppUtils {
     public static void restartApp(Context context) {
@@ -22,5 +24,13 @@ public class AppUtils {
         start.putExtra(BrowserActivity.EXTRA_FORCE_DESTROY, forceDestroy);
         context.startActivity(start);
         manager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 800, pendingIntent);
+    }
+
+    public static String getVersionDeviceInfo(Context context) {
+        return "Yuzu " + BuildConfig.VERSION_NAME + "/" +
+                Build.MANUFACTURER + "/" +
+                Build.MODEL + "/" +
+                Build.VERSION.RELEASE + "/" +
+                "Chrome " + CrashlyticsUtils.getChromeVersion(context);
     }
 }

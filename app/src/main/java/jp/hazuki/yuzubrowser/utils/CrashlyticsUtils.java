@@ -39,4 +39,16 @@ public final class CrashlyticsUtils {
             Crashlytics.setString(CHROME_VERSION, "unknown");
         }
     }
+
+    public static String getChromeVersion(Context context) {
+        try {
+            Matcher chrome = VERSION_REGEX.matcher(WebSettings.getDefaultUserAgent(context));
+            if (chrome.find()) {
+                return chrome.group(1);
+            }
+        } catch (AndroidRuntimeException e) {
+            e.printStackTrace();
+        }
+        return "unknown";
+    }
 }
