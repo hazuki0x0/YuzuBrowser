@@ -24,4 +24,8 @@
         android:id="@+id/delete_all_favicon"
         android:title="@string/delete_all_favicon"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/multiSelect"
+        android:title="@string/multi_select" />
 </menu>

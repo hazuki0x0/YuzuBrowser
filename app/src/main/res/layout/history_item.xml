@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
+    android:clipToPadding="false"
     android:background="?attr/selectableItemBackground"
     android:descendantFocusability="blocksDescendants">
 
@@ -34,4 +35,15 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="72dp"
         android:maxLines="1" />
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-8dp"
+        android:layout_marginBottom="-8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/urlTextView" />
 </RelativeLayout>
