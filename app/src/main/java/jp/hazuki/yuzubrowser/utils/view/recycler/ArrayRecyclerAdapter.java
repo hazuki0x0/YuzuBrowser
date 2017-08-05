@@ -205,7 +205,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends ArrayRecyclerAdapter.Ar
         itemSelected.put(position, isSelect);
 
         if (old != isSelect) {
-            notifyDataSetChanged();
+            notifyItemChanged(position);
         }
     }
 

@@ -17,10 +17,12 @@
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private final PorterDuffColorFilter defaultColorFilter;
     private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
-    private final int normalBackGround;
+    private final Drawable foregroundOverlay;
 
     private OnBookmarkRecyclerListener bookmarkItemListener;
     private FaviconManager faviconManager;
@@ -57,9 +59,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         bookmarkItemListener = listener;
         pickMode = pick;
         this.openNewTab = openNewTab;
-        TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
-        normalBackGround = a.getResourceId(0, 0);
-        a.recycle();
+        foregroundOverlay = new ColorDrawable(ResourcesCompat.getColor(
+                context.getResources(), R.color.selected_overlay, context.getTheme()));
 
         faviconManager = FaviconManager.getInstance(context);
         defaultColorFilter = new PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
@@ -104,10 +105,10 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             }
         }
 
-        if (isMultiSelectMode()) {
-            setSelectedBackground(holder.itemView, isSelected(position));
+        if (isMultiSelectMode() && isSelected(position)) {
+            holder.foreground.setBackground(foregroundOverlay);
         } else {
-            holder.itemView.setBackgroundResource(normalBackGround);
+            holder.foreground.setBackground(null);
         }
     }
 
@@ -133,14 +134,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         return faviconManager.getFaviconBytes(site.url);
     }
 
-    private void setSelectedBackground(View view, boolean selected) {
-        if (selected) {
-            view.setBackgroundResource(R.drawable.selectable_selected_item_background);
-        } else {
-            view.setBackgroundResource(normalBackGround);
-        }
-    }
-
     @Override
     public int getItemViewType(int position) {
         BookmarkItem item = get(position);
@@ -160,11 +153,13 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     static class BookmarkFolderHolder extends ArrayRecyclerAdapter.ArrayViewHolder<BookmarkItem> {
         TextView title;
+        View foreground;
 
 
         public BookmarkFolderHolder(View itemView, BookmarkItemAdapter adapter) {
             super(itemView, adapter);
-            title = (TextView) itemView.findViewById(android.R.id.text1);
+            title = itemView.findViewById(android.R.id.text1);
+            foreground = itemView.findViewById(R.id.foreground);
         }
 
         @Override
@@ -180,8 +175,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
         BookmarkSiteHolder(View itemView, final BookmarkItemAdapter adapter) {
             super(itemView, adapter);
-            imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
-            url = (TextView) itemView.findViewById(android.R.id.text2);
+            imageButton = itemView.findViewById(R.id.imageButton);
+            url = itemView.findViewById(android.R.id.text2);
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
