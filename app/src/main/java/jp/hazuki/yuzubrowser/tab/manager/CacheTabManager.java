@@ -49,8 +49,6 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     private List<View> mTabView;
 
-    private HideItem hideItem;
-
     CacheTabManager(BrowserActivity activity) {
         mWebBrowser = activity;
         mTabCache = new TabCache<>(AppData.tabs_cache_number.get(), this);
@@ -72,6 +70,18 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     }
 
     @Override
+    public void addTab(int index, MainTabData tabData) {
+        mTabView.add(index, tabData.getTabView());
+        mTabStorage.addIndexData(index, tabData.getTabIndexData());
+        synchronized (mTabCache) {
+            mTabCache.put(tabData.getId(), tabData);
+        }
+        if (mCurrentNo >= index) {
+            mCurrentNo++;
+        }
+    }
+
+    @Override
     public void setCurrentTab(int no) {
         mCurrentNo = no;
         if (no >= 0 && no < mTabStorage.size()) {
@@ -89,11 +99,17 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     @Override
     public void remove(int no) {
+        if (no == mCurrentNo)
+            throw new IllegalArgumentException("Remove tab is current tab");
+
         TabIndexData data = mTabStorage.removeAndDelete(no);
         mTabView.remove(no);
         synchronized (mTabCache) {
             if (mTabCache.containsKey(data.getId()))
                 mTabCache.remove(data.getId());
+        }
+        if (mCurrentNo > no) {
+            mCurrentNo -= 1;
         }
     }
 
@@ -227,14 +243,12 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
                 data.mWebView.destroy();
             }
         }
-        deleteHideItemIfNeed();
         thumbnailManager.destroy();
     }
 
     @Override
     public void saveData() {
         if (!cleared) {
-            deleteHideItemIfNeed();
             synchronized (mTabCache) {
                 for (MainTabData tabData : mTabCache.values()) {
                     mTabStorage.saveWebView(tabData);
@@ -335,51 +349,6 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         thumbnailManager.forceTakeThumbnail(data);
     }
 
-    @Override
-    public boolean hideItem(int index) {
-        if (hideItem == null) {
-            hideItem = new HideItem(index, mTabStorage.remove(index));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public TabIndexData unHideItem() {
-        if (hideItem != null) {
-            if (hideItem.index > mTabStorage.size()) {
-                mTabStorage.addIndexData(hideItem.data);
-            } else {
-                mTabStorage.add(hideItem.index, hideItem.data);
-            }
-            TabIndexData data = hideItem.data;
-            hideItem = null;
-            return data;
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isHideItem() {
-        return hideItem != null;
-    }
-
-    private void deleteHideItemIfNeed() {
-        if (hideItem != null) {
-            if (hideItem.index > mTabStorage.size()) {
-                mTabStorage.addIndexData(hideItem.data);
-                mTabStorage.removeAndDelete(mTabStorage.size() - 1);
-            } else {
-                mTabStorage.add(hideItem.index, hideItem.data);
-                mTabStorage.removeAndDelete(hideItem.index);
-            }
-            synchronized (mTabCache) {
-                mTabCache.remove(hideItem.data.getId());
-            }
-            hideItem = null;
-        }
-    }
-
     private void setText(View view, TabIndexData indexData) {
         String text;
         if (indexData.getTitle() != null) {
@@ -429,15 +398,5 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         tabData.mWebView.destroy();
         int index = mTabStorage.indexOf(tabData.getId());
         tabFaviconManager.setFavicon(mTabView.get(index), mTabStorage.getIndexData(index));
-    }
-
-    private static class HideItem {
-        final int index;
-        final TabIndexData data;
-
-        HideItem(int index, TabIndexData data) {
-            this.index = index;
-            this.data = data;
-        }
     }
 }

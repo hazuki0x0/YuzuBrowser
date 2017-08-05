@@ -123,6 +123,11 @@ public class TabBar extends ToolbarBase {
         mTabLayout.removeTabAt(no);
     }
 
+    public void addTab(int id, View view) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(TAB_SIZE_X, TAB_SIZE_Y);
+        mTabLayout.addTabView(id, view, params);
+    }
+
     public void setOnTabClickListener(TabLayout.OnTabClickListener l) {
         mTabLayout.setOnTabClickListener(l);
     }

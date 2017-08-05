@@ -67,6 +67,10 @@ class TabStorage {
         mTabIndexDataList.add(data);
     }
 
+    public void addIndexData(int index, TabIndexData data) {
+        mTabIndexDataList.add(index, data);
+    }
+
     public TabIndexData getIndexData(int index) {
         return mTabIndexDataList.get(index);
     }

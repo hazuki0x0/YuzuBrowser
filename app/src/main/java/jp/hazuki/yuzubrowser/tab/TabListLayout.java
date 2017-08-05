@@ -17,7 +17,7 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.item.TabListSingleAction;
 import jp.hazuki.yuzubrowser.tab.adapter.TabListRecyclerAdapterFactory;
 import jp.hazuki.yuzubrowser.tab.adapter.TabListRecyclerBaseAdapter;
-import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.templatepreserving.TemplatePreservingSnackBar;
@@ -31,8 +31,7 @@ public class TabListLayout extends LinearLayout {
     private boolean reverse = false;
     private boolean horizontal = false;
 
-    private boolean changeCurrent;
-    private int oldCurrent;
+    private RemovedTab removedTab;
 
     public TabListLayout(Context context) {
         this(context, null);
@@ -114,9 +113,15 @@ public class TabListLayout extends LinearLayout {
                     snackbar.dismiss();
 
                 int size = tabManager.size();
-                mCallback.requestRemoveTab(position);
-                if (size != tabManager.size())
+                boolean current = position == tabManager.getCurrentTabNo();
+                mCallback.requestRemoveTab(position, true);
+                if (size != tabManager.size()) {
                     mAdapter.notifyItemRemoved(position);
+                    if (current) {
+                        mAdapter.notifyItemChanged(tabManager.getCurrentTabNo());
+                    }
+                }
+
             }
 
             @Override
@@ -159,15 +164,6 @@ public class TabListLayout extends LinearLayout {
         }
     }
 
-    private void deleteHideItem() {
-        TabIndexData data = tabManager.unHideItem();
-        if (changeCurrent)
-            tabManager.setCurrentTab(oldCurrent);
-        changeCurrent = false;
-        if (data != null)
-            mCallback.requestRemoveTab(tabManager.indexOf(data.getId()));
-    }
-
     private class ListTouch extends ItemTouchHelper.Callback {
 
         @Override
@@ -192,7 +188,6 @@ public class TabListLayout extends LinearLayout {
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             if (snackbar != null && snackbar.isShown()) {
-                deleteHideItem();
                 snackbar.dismiss();
             }
             mCallback.requestMoveTab(viewHolder.getAdapterPosition(), target.getAdapterPosition());
@@ -204,52 +199,37 @@ public class TabListLayout extends LinearLayout {
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             if (mAdapter.getItemCount() > 1) {
                 if (snackbar != null && snackbar.isShown()) {
-                    deleteHideItem();
                     snackbar.dismiss();
                 }
                 final int position = viewHolder.getAdapterPosition();
 
-                if (tabManager.getCurrentTabNo() == position) {
-                    mCallback.requestSelectTab(position == tabManager.size() - 1 ? position - 1 : position + 1);
+                boolean current = position == tabManager.getCurrentTabNo();
+
+                removedTab = new RemovedTab(position, tabManager.get(position));
+
+                mCallback.requestRemoveTab(position, false);
+
+                mAdapter.notifyItemRemoved(position);
+
+                if (current) {
                     mAdapter.notifyItemChanged(tabManager.getCurrentTabNo());
                 }
-
-                oldCurrent = tabManager.getCurrentTabNo();
-
-                if ((position < oldCurrent && oldCurrent > 0)) {
-                    tabManager.setCurrentTab(oldCurrent - 1);
-                    changeCurrent = true;
-                } else {
-                    changeCurrent = false;
-                }
-
-                if (!tabManager.hideItem(position)) {
-                    if (changeCurrent)
-                        tabManager.setCurrentTab(oldCurrent);
-                    return;
-                }
-                mAdapter.notifyItemRemoved(position);
                 snackbar = TemplatePreservingSnackBar.make(bottomBar, getContext().getString(R.string.closed_tab),
                         ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle(), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                tabManager.unHideItem();
-                                if (changeCurrent)
-                                    tabManager.setCurrentTab(oldCurrent);
-                                changeCurrent = false;
-                                if (position > tabManager.size()) {
-                                    mAdapter.notifyItemInserted(tabManager.size() - 1);
-                                } else {
-                                    mAdapter.notifyItemInserted(position);
-                                }
+                                mCallback.requestAddTab(removedTab.getIndex(), removedTab.getData());
+                                mAdapter.notifyItemInserted(removedTab.getIndex());
+                                removedTab = null;
                             }
                         })
                         .addCallback(new BaseTransientBottomBar.BaseCallback<TemplatePreservingSnackBar>() {
                             @Override
                             public void onDismissed(TemplatePreservingSnackBar transientBottomBar, int event) {
-                                if (!transientBottomBar.isDismissByAction() && tabManager.isHideItem()) {
-                                    deleteHideItem();
+                                if (removedTab != null) {
+                                    removedTab.destroy();
+                                    removedTab = null;
                                 }
                                 snackbar = null;
                             }
@@ -271,16 +251,40 @@ public class TabListLayout extends LinearLayout {
 
         void requestMoveTab(int positionFrom, int positionTo);
 
-        void requestRemoveTab(int no);
+        void requestRemoveTab(int no, boolean destroy);
 
         void requestAddTab();
 
         void requestSelectTab(int no);
 
         void requestShowTabHistory(int no);
+
+        void requestAddTab(int index, MainTabData data);
     }
 
     public void setCallback(Callback l) {
         mCallback = l;
+    }
+
+    private static class RemovedTab {
+        private final int index;
+        private final MainTabData data;
+
+        RemovedTab(int index, MainTabData data) {
+            this.index = index;
+            this.data = data;
+        }
+
+        int getIndex() {
+            return index;
+        }
+
+        MainTabData getData() {
+            return data;
+        }
+
+        void destroy() {
+            data.mWebView.destroy();
+        }
     }
 }

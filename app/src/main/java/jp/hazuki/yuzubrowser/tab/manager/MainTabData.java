@@ -219,4 +219,8 @@ public class MainTabData extends TabData {
     public void setStartDocument(boolean startDocument) {
         this.startDocument = startDocument;
     }
+
+    public View getTabView() {
+        return mTabView;
+    }
 }

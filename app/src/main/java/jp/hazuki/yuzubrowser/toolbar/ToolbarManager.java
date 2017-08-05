@@ -216,6 +216,10 @@ public class ToolbarManager {
         notifyChangeWebState(to);
     }
 
+    public void moveCurrentTabPosition(int id) {
+        tabBar.changeCurrentTab(id);
+    }
+
     public void swapTab(int a, int b) {
         tabBar.swapTab(a, b);
     }
@@ -356,6 +360,10 @@ public class ToolbarManager {
 
     public void removeTab(int no) {
         tabBar.removeTab(no);
+    }
+
+    public void addTab(int id, View view) {
+        tabBar.addTab(id, view);
     }
 
     public void setWebViewTitlebar(CustomWebView web, boolean combine) {

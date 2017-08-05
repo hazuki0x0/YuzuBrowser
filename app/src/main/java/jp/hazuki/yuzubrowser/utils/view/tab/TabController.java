@@ -30,6 +30,14 @@ public abstract class TabController {
         mViewList.add(view);
     }
 
+    public void addTabView(int id, View view) {
+        mViewList.add(id, view);
+        int count = mViewList.size();
+        for (int i = 0; i < count; ++i) {
+            settingTab(mViewList.get(i), i);
+        }
+    }
+
     public abstract void requestAddView(View view, int index);
 
     public void setCurrentTab(int id) {

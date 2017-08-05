@@ -1616,6 +1616,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     }
 
     private boolean removeTab(int no, boolean error) {
+        return removeTab(no, error, true);
+    }
+
+    public boolean removeTab(int no, boolean error, boolean destroy) {
         if (mTabManager.size() <= 1) {
             //Last tab
             return false;
@@ -1627,6 +1631,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             if (error)
                 Toast.makeText(getApplicationContext(), R.string.pinned_tab_warning, Toast.LENGTH_SHORT).show();
             return true;
+        }
+
+        if (mTabManager.getCurrentTabNo() == no) {
+            setCurrentTab(getNewTabNo(no, old_data));
         }
 
         CustomWebView old_web = old_data.mWebView;
@@ -1641,35 +1649,39 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
 
         old_web.setEmbeddedTitleBarMethod(null);
-        if (no == mTabManager.getCurrentTabNo())
-            webFrameLayout.removeView(mTabManager.getCurrentTabData().mWebView.getView());
 
         mTabManager.remove(no);
         mToolbar.removeTab(no);
 
-        int new_current_no = mTabManager.getCurrentTabNo();
-        int last_tab_no = mTabManager.getLastTabNo();
+        if (destroy)
+            old_web.destroy();
+        return true;
+    }
 
-        old_web.destroy();
+    private void addTab(int index, MainTabData tabData) {
+        int current = mTabManager.getCurrentTabNo();
+        mTabManager.addTab(index, tabData);
+        mToolbar.addTab(index, tabData.getTabView());
+        if (current != mTabManager.getCurrentTabNo()) {
+            mToolbar.moveCurrentTabPosition(mTabManager.getCurrentTabNo());
+        }
+        if (AppData.save_closed_tab.get()) {
+            mClosedTabs.pop();
+        }
+    }
 
+    private int getNewTabNo(int no, MainTabData old_data) {
         if (AppData.move_to_parent.get() && old_data.getTabType() == TabType.WINDOW && old_data.getParent() != 0) {
             int new_no = mTabManager.searchParentTabNo(old_data.getParent());
-            if (new_no >= 0)
-                new_current_no = new_no;
+            if (new_no >= 0) {
+                return new_no;
+            }
         }
-
-        if (no < new_current_no) {
-            --new_current_no;
+        if (no == mTabManager.getLastTabNo()) {
+            return no - 1;
+        } else {
+            return no + 1;
         }
-
-        if (last_tab_no < new_current_no) {
-            new_current_no = last_tab_no;
-        }
-
-        mTabManager.setCurrentTab(-1);
-        setCurrentTab(new_current_no);
-
-        return true;
     }
 
     private boolean removeTab(int no) {
@@ -3808,14 +3820,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         }
 
                         @Override
-                        public void requestSelectTab(int no) {
-                            setCurrentTab(no);
-                            mToolbar.scrollTabTo(no);
+                        public void requestAddTab(int index, MainTabData data) {
+                            addTab(index, data);
                         }
 
                         @Override
-                        public void requestRemoveTab(int no) {
-                            removeTab(no);
+                        public void requestSelectTab(int no) {
+                            setCurrentTab(no);
+                            mToolbar.scrollTabTo(no);
                         }
 
                         @Override
@@ -3826,6 +3838,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         @Override
                         public void requestMoveTab(int positionFrom, int positionTo) {
                             moveTab(positionFrom, positionTo);
+                        }
+
+                        @Override
+                        public void requestRemoveTab(int no, boolean destroy) {
+                            removeTab(no, false, destroy);
                         }
                     });
                     superFrameLayout.addView(mTabManagerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
