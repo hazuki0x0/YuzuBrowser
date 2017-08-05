@@ -43,6 +43,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.print.PrintManager;
 import android.provider.ContactsContract;
@@ -2273,7 +2274,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             tabData.mWebView.setAcceptThirdPartyCookies(
                     CookieManager.getInstance(), enable_cookie && AppData.accept_third_cookie.get());
 
-            setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                //noinspection deprecation
+                setting.setSaveFormData(noPrivate && AppData.save_formdata.get());
+            }
             setting.setDatabaseEnabled(noPrivate && AppData.web_db.get());
             setting.setDomStorageEnabled(noPrivate && AppData.web_dom_db.get());
             setting.setGeolocationEnabled(noPrivate && AppData.web_geolocation.get());
@@ -2316,12 +2320,12 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
     }
 
-    static class PermissionDialogHandler extends PauseHandler {
+    private static class PermissionDialogHandler extends PauseHandler {
 
         static final int SHOW_DIALOG = 1;
         private WeakReference<AppCompatActivity> activityReference;
 
-        public PermissionDialogHandler(AppCompatActivity activity) {
+        PermissionDialogHandler(AppCompatActivity activity) {
             activityReference = new WeakReference<>(activity);
         }
 
@@ -4192,7 +4196,13 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     return run(((CustomSingleAction) action).getAction());
                 case SingleAction.VIBRATION:
                     Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                    vibrator.vibrate(((VibrationSingleAction) action).getTime());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(
+                                ((VibrationSingleAction) action).getTime(), VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        //noinspection deprecation
+                        vibrator.vibrate(((VibrationSingleAction) action).getTime());
+                    }
                     break;
                 case SingleAction.TOAST:
                     Toast.makeText(getApplicationContext(), ((ToastAction) action).getText(), Toast.LENGTH_SHORT).show();

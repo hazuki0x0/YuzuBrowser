@@ -20,7 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +48,8 @@ public class TemplatePreservingSnackBar extends BaseTransientBottomBar<TemplateP
     private TemplatePreservingSnackBar(@NonNull ViewGroup parent, @NonNull View content, @NonNull ContentViewCallback contentViewCallback) {
         super(parent, content, contentViewCallback);
 
-        textView = (TemplatePreservingTextView) content.findViewById(R.id.snackbarText);
-        action = (TextView) content.findViewById(R.id.snackbarAction);
+        textView = content.findViewById(R.id.snackbarText);
+        action = content.findViewById(R.id.snackbarAction);
     }
 
     public static TemplatePreservingSnackBar make(@NonNull ViewGroup view, String template, CharSequence title, @Duration int duration) {
@@ -142,7 +141,7 @@ public class TemplatePreservingSnackBar extends BaseTransientBottomBar<TemplateP
 
         private View content;
 
-        public ContentViewCallback(View content) {
+        ContentViewCallback(View content) {
             this.content = content;
         }
 
@@ -150,9 +149,10 @@ public class TemplatePreservingSnackBar extends BaseTransientBottomBar<TemplateP
         public void animateContentIn(int delay, int duration) {
             // add custom *in animations for your views
             // e.g. original snackbar uses alpha animation, from 0 to 1
-            ViewCompat.setScaleY(content, 0f);
-            ViewCompat.animate(content)
-                    .scaleY(1f).setDuration(duration)
+            content.setScaleY(0f);
+            content.animate()
+                    .scaleY(1f)
+                    .setDuration(duration)
                     .setStartDelay(delay);
         }
 
@@ -160,8 +160,8 @@ public class TemplatePreservingSnackBar extends BaseTransientBottomBar<TemplateP
         public void animateContentOut(int delay, int duration) {
             // add custom *out animations for your views
             // e.g. original snackbar uses alpha animation, from 1 to 0
-            ViewCompat.setScaleY(content, 1f);
-            ViewCompat.animate(content)
+            content.setScaleY(1f);
+            content.animate()
                     .scaleY(0f)
                     .setDuration(duration)
                     .setStartDelay(delay);
