@@ -39,13 +39,14 @@ public class FullFillTextView extends AppCompatTextView {
     public void setText(CharSequence text, BufferType type) {
         content = text != null ? text : "";
         setContentDescription(content);
-        updateVisibleText(0);
+        updateVisibleText(0, true);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int availWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
-        updateVisibleText(availWidth);
+        updateVisibleText(availWidth,
+                MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.UNSPECIFIED);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -54,8 +55,13 @@ public class FullFillTextView extends AppCompatTextView {
         return TextUtils.ellipsize(content, getPaint(), availWidth, TextUtils.TruncateAt.END);
     }
 
-    private void updateVisibleText(int availWidth) {
-        CharSequence newText = getTruncatedText(availWidth);
+    private void updateVisibleText(int availWidth, boolean unspecifiedWidth) {
+        CharSequence newText;
+        if (unspecifiedWidth) {
+            newText = content;
+        } else {
+            newText = getTruncatedText(availWidth);
+        }
 
         if (!newText.equals(visibleText)) {
             visibleText = newText;
