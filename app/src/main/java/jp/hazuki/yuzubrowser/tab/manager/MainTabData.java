@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
@@ -106,6 +107,16 @@ public class MainTabData extends TabData {
             setText(getTitle());
         else
             setText(getUrl());
+
+        String url = getOriginalUrl();
+        if (url != null && AppData.toolbar_show_favicon.get()) {
+            if (url.startsWith("yuzu:")) {
+                removeIcon();
+            } else {
+                setIcon(new BitmapDrawable(context.getResources(),
+                        FaviconManager.getInstance(context).get(url)));
+            }
+        }
     }
 
     public void onMoveTabToBackground(Resources res, Resources.Theme theme) {
