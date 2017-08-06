@@ -26,6 +26,7 @@ import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.AppUtils;
 import jp.hazuki.yuzubrowser.utils.CrashlyticsUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
@@ -48,6 +49,7 @@ public class BrowserApplication extends Application {
                 .build();
         Fabric.with(this, crashlytics);
         CrashlyticsUtils.setChromeVersion(this);
+        AppUtils.registNotification(this);
 
         Logger.d(TAG, "onCreate()");
         needLoad = false;

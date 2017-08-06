@@ -1,13 +1,21 @@
 package jp.hazuki.yuzubrowser.utils;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.NotificationManagerCompat;
+
+import java.util.Arrays;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.BuildConfig;
+import jp.hazuki.yuzubrowser.Constants;
+import jp.hazuki.yuzubrowser.R;
 
 public class AppUtils {
     public static void restartApp(Context context) {
@@ -32,5 +40,28 @@ public class AppUtils {
                 Build.MODEL + "/" +
                 Build.VERSION.RELEASE + "/" +
                 "Chrome " + CrashlyticsUtils.getChromeVersion(context);
+    }
+
+    public static void registNotification(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            NotificationChannel service = new NotificationChannel(
+                    Constants.notification.CHANNEL_DOWNLOAD_SERVICE,
+                    context.getString(R.string.download_service),
+                    NotificationManagerCompat.IMPORTANCE_MIN);
+
+            service.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+
+            NotificationChannel notify = new NotificationChannel(
+                    Constants.notification.CHANNEL_DOWNLOAD_NOTIFY,
+                    context.getString(R.string.download_notify),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            notify.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+
+            manager.createNotificationChannels(Arrays.asList(service, notify));
+        }
     }
 }
