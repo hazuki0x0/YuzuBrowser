@@ -4,5 +4,6 @@
         android:duration="1000"
         android:propertyName="rotation"
         android:valueFrom="0"
-        android:valueTo="360" />
+        android:valueTo="360"
+        android:repeatCount="-1" />
 </set>
