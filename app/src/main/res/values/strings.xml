@@ -214,6 +214,7 @@
     <string name="deleted">Deleted</string>
 
     <string name="download_service">download service</string>
+    <string name="download_notify">Download state</string>
 
     <string name="permission_probrem">Insufficient permission</string>
     <string name="request_permission_storage_setting">Please tap [access right] and enable storage</string>
