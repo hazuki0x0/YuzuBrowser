@@ -51,12 +51,12 @@ public class TabListLayout extends LinearLayout {
 
     @SuppressLint("RtlHardcoded")
     public TabListLayout(Context context, AttributeSet attrs, int mode, boolean left) {
-        super(context.getApplicationContext(), attrs);
+        super(context, attrs);
 
         reverse = mode == TabListSingleAction.MODE_REVERSE;
         horizontal = mode == TabListSingleAction.MODE_HORIZONTAL;
 
-        LayoutInflater mLayoutInflater = LayoutInflater.from(context.getApplicationContext());
+        LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         if (horizontal) {
             mLayoutInflater.inflate(R.layout.tab_list_horizontal, this);
             setOnClickListener(new OnClickListener() {
@@ -95,7 +95,11 @@ public class TabListLayout extends LinearLayout {
         ItemTouchHelper helper = new ItemTouchHelper(new ListTouch());
         helper.attachToRecyclerView(recyclerView);
         recyclerView.addItemDecoration(helper);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+
+        if (!horizontal) {
+
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext().getApplicationContext()));
+        }
 
         mAdapter = TabListRecyclerAdapterFactory.create(getContext(), tabManager, horizontal, new TabListRecyclerBaseAdapter.OnRecyclerListener() {
             @Override
