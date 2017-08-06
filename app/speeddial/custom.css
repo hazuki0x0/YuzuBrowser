@@ -1,0 +1,35 @@
+.browserName {
+    display: block;
+}
+
+#searchBox {
+    display: block;
+}
+
+@media screen and (orientation: portrait) {
+    .linkBox {
+         max-width: 320px;
+    }
+
+    .box {
+        width: 23%;
+    }
+
+    .box:nth-child(n + 5) {
+        order: 1;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .linkBox {
+         max-width: 400px;
+    }
+
+    .box {
+        width: 18%;
+    }
+
+    .box:nth-child(n + 6) {
+        order: 1;
+    }
+}

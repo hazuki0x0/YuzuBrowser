@@ -16,5 +16,8 @@
     <exclude
         domain="root"
         path="app_tabs" />
+    <exclude
+        domain="root"
+        path="app_favicon" />
 
 </full-backup-content>

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2017 Hazuki
  * fixed by Cynthia Project
  * Copyright (C) 2011 The Android Open Source Project
  *
@@ -55,9 +56,7 @@ public class PieItem implements View.OnClickListener {
         mPieView = sym;
 
         mView = new ImageView(context);
-        mView.setMinimumWidth(itemsize);
-        mView.setMinimumHeight(itemsize);
-        mView.setScaleType(ScaleType.CENTER);
+        mView.setScaleType(ScaleType.FIT_CENTER);
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(itemsize, itemsize);
         mView.setLayoutParams(lp);
         mView.setOnClickListener(this);

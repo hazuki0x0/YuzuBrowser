@@ -17,7 +17,9 @@
 package jp.hazuki.yuzubrowser.adblock.fragment;
 
 import android.content.Context;
-import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +37,14 @@ import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 public class AdBlockArrayRecyclerAdapter extends ArrayRecyclerAdapter<AdBlock, AdBlockArrayRecyclerAdapter.ItemHolder> {
 
-    private final int normalBackGround;
     private final DateFormat dateFormat;
+    private final Drawable foregroundOverlay;
 
     public AdBlockArrayRecyclerAdapter(Context context, List<AdBlock> list, OnRecyclerListener listener) {
         super(context, list, listener);
-        TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
-        normalBackGround = a.getResourceId(0, 0);
-        a.recycle();
         dateFormat = android.text.format.DateFormat.getMediumDateFormat(context);
+        foregroundOverlay = new ColorDrawable(ResourcesCompat.getColor(
+                context.getResources(), R.color.selected_overlay, context.getTheme()));
     }
 
     @Override
@@ -57,18 +58,10 @@ public class AdBlockArrayRecyclerAdapter extends ArrayRecyclerAdapter<AdBlock, A
             holder.time.setText("");
         }
 
-        if (isMultiSelectMode()) {
-            setSelectedBackground(holder.itemView, isSelected(position));
+        if (isMultiSelectMode() && isSelected(position)) {
+            holder.foreground.setBackground(foregroundOverlay);
         } else {
-            holder.itemView.setBackgroundResource(normalBackGround);
-        }
-    }
-
-    private void setSelectedBackground(View view, boolean selected) {
-        if (selected) {
-            view.setBackgroundResource(R.drawable.selectable_selected_item_background);
-        } else {
-            view.setBackgroundResource(normalBackGround);
+            holder.foreground.setBackground(null);
         }
     }
 
@@ -83,14 +76,16 @@ public class AdBlockArrayRecyclerAdapter extends ArrayRecyclerAdapter<AdBlock, A
         TextView count;
         TextView time;
         CheckBox checkBox;
+        View foreground;
 
         ItemHolder(View itemView, AdBlockArrayRecyclerAdapter adapter) {
             super(itemView, adapter);
 
-            match = (TextView) itemView.findViewById(R.id.matchTextView);
-            count = (TextView) itemView.findViewById(R.id.countTextView);
-            time = (TextView) itemView.findViewById(R.id.timeTextView);
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            match = itemView.findViewById(R.id.matchTextView);
+            count = itemView.findViewById(R.id.countTextView);
+            time = itemView.findViewById(R.id.timeTextView);
+            checkBox = itemView.findViewById(R.id.checkBox);
+            foreground = itemView.findViewById(R.id.foreground);
         }
     }
 }

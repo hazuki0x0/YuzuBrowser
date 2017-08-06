@@ -6,12 +6,12 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
+    <jp.hazuki.yuzubrowser.utils.view.FullFillTextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:ellipsize="marquee"
+        android:drawablePadding="2dp"
         android:textColor="@color/tab_text_color_normal" />
 
 </LinearLayout>

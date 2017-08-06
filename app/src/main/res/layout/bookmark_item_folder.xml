@@ -10,6 +10,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
+        android:tint="?attr/iconColor"
         android:src="@drawable/ic_folder_l_gray_24dp"
         android:layout_centerVertical="true" />
 
@@ -28,8 +29,16 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/white"
+            android:textColor="?android:attr/textColorPrimary"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

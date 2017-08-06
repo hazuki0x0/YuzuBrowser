@@ -158,6 +158,9 @@
                 android:title="@string/pref_sensitivity_distance"
                 app:seekMax="100"
                 app:seekMin="0" />
+            <SwitchPreference
+                android:key="flick_disable_scroll"
+                android:title="@string/pref_flick_disable_scrolling" />
         </PreferenceCategory>
         <PreferenceCategory>
             <jp.hazuki.yuzubrowser.settings.preference.ActionPreference

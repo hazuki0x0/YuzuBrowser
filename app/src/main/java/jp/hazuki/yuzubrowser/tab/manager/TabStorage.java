@@ -67,6 +67,10 @@ class TabStorage {
         mTabIndexDataList.add(data);
     }
 
+    public void addIndexData(int index, TabIndexData data) {
+        mTabIndexDataList.add(index, data);
+    }
+
     public TabIndexData getIndexData(int index) {
         return mTabIndexDataList.get(index);
     }
@@ -249,7 +253,7 @@ class TabStorage {
     }
 
     public void clear() {
-        FileUtils.deleteFile(tabPath);
+        FileUtils.deleteDirectoryContents(tabPath);
     }
 
     private static final String JSON_NAME_ID = "id";

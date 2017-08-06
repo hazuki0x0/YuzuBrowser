@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.WebViewUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class HttpAuthRequestDialog {
@@ -25,7 +26,7 @@ public class HttpAuthRequestDialog {
         String username = null;
         String password = null;
         if (handler.useHttpAuthUsernamePassword()) {
-            String[] credentials = view.getHttpAuthUsernamePassword(host, realm);
+            String[] credentials = WebViewUtils.getHttpAuthUsernamePassword(mContext, view, host, realm);
             if (credentials != null && credentials.length == 2) {
                 username = credentials[0];
                 password = credentials[1];
@@ -54,7 +55,7 @@ public class HttpAuthRequestDialog {
                         public void onClick(DialogInterface dialog, int which) {
                             String username = nameEditText.getText().toString();
                             String password = passEditText.getText().toString();
-                            view.setHttpAuthUsernamePassword(host, realm, username, password);
+                            WebViewUtils.setHttpAuthUsernamePassword(mContext, view, host, realm, username, password);
                             handler.proceed(username, password);
                         }
                     })

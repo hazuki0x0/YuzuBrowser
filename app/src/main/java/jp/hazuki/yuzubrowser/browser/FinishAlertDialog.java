@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.browser;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,16 +63,17 @@ public class FinishAlertDialog extends CustomDialogPreference {
     @Override
     public void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.finish_alert, null);
-        TextView textView = (TextView) view.findViewById(R.id.textView);
-        final CheckBox cacheCheckBox = (CheckBox) view.findViewById(R.id.cacheCheckBox);
-        final CheckBox cookieCheckBox = (CheckBox) view.findViewById(R.id.cookieCheckBox);
-        final CheckBox databaseCheckBox = (CheckBox) view.findViewById(R.id.databaseCheckBox);
-        final CheckBox passwordCheckBox = (CheckBox) view.findViewById(R.id.passwordCheckBox);
-        final CheckBox formdataCheckBox = (CheckBox) view.findViewById(R.id.formdataCheckBox);
-        final CheckBox closeallCheckBox = (CheckBox) view.findViewById(R.id.closeallCheckBox);
-        final CheckBox historyCheckBox = (CheckBox) view.findViewById(R.id.deleteHistoryCheckBox);
-        final CheckBox searchCheckBox = (CheckBox) view.findViewById(R.id.deleteSearchQueryCheckBox);
-        final CheckBox geoCheckBox = (CheckBox) view.findViewById(R.id.removeAllGeoPermissions);
+        TextView textView = view.findViewById(R.id.textView);
+        final CheckBox cacheCheckBox = view.findViewById(R.id.cacheCheckBox);
+        final CheckBox cookieCheckBox = view.findViewById(R.id.cookieCheckBox);
+        final CheckBox databaseCheckBox = view.findViewById(R.id.databaseCheckBox);
+        final CheckBox passwordCheckBox = view.findViewById(R.id.passwordCheckBox);
+        final CheckBox formdataCheckBox = view.findViewById(R.id.formdataCheckBox);
+        final CheckBox faviconCheckBox = view.findViewById(R.id.faviconCheckBox);
+        final CheckBox closeallCheckBox = view.findViewById(R.id.closeallCheckBox);
+        final CheckBox historyCheckBox = view.findViewById(R.id.deleteHistoryCheckBox);
+        final CheckBox searchCheckBox = view.findViewById(R.id.deleteSearchQueryCheckBox);
+        final CheckBox geoCheckBox = view.findViewById(R.id.removeAllGeoPermissions);
 
         if (!mShowMessage)
             textView.setVisibility(View.GONE);
@@ -85,11 +87,17 @@ public class FinishAlertDialog extends CustomDialogPreference {
         historyCheckBox.setChecked((def & 0x20) != 0);
         searchCheckBox.setChecked((def & 0x40) != 0);
         geoCheckBox.setChecked((def & 0x80) != 0);
+        faviconCheckBox.setChecked((def & 0x100) != 0);
 
         if (!AppData.save_last_tabs.get())
             closeallCheckBox.setVisibility(View.GONE);
         //else
         //	closeallCheckBox.setChecked((def & 0x1000) != 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formdataCheckBox.setVisibility(View.GONE);
+            formdataCheckBox.setChecked(false);
+        }
 
         builder
                 .setTitle((mShowMessage) ? R.string.confirm : R.string.pref_clear_data_at_finish)
@@ -122,6 +130,9 @@ public class FinishAlertDialog extends CustomDialogPreference {
 
                         if (geoCheckBox.isChecked())
                             new_settings |= 0x80;
+
+                        if (faviconCheckBox.isChecked())
+                            new_settings |= 0x100;
 
                         if (closeallCheckBox.isChecked())
                             new_settings |= 0x1000;

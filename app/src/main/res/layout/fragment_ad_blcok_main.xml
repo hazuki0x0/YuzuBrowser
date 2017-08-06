@@ -27,7 +27,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:gravity="center_vertical"
-        android:textColor="@color/pref_text_color"
+        android:textColor="?android:attr/textColorPrimary"
         android:text="@string/pref_ad_block_black" />
 
     <View
@@ -45,7 +45,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:gravity="center_vertical"
-        android:textColor="@color/pref_text_color"
+        android:textColor="?android:attr/textColorPrimary"
         android:text="@string/pref_ad_block_white" />
 
     <View
@@ -63,6 +63,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:gravity="center_vertical"
-        android:textColor="@color/pref_text_color"
+        android:textColor="?android:attr/textColorPrimary"
         android:text="@string/pref_ad_block_white_page" />
 </LinearLayout>

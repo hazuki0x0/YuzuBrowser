@@ -27,9 +27,11 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.utils.image.Gochiusearch;
+
 public class SpeedDialManager {
     public static final String DB_NAME = "speeddial1.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String TABLE_NAME = "main_table";
 
     private static final String COLUMN_ID = "_id";
@@ -39,6 +41,12 @@ public class SpeedDialManager {
     private static final String COLUMN_ICON = "icon";
     private static final String COLUMN_FAVICON = "favicon";
     private static final String COLUMN_LAST_UPDATE = "last_update";
+    private static final String COLUMN_FAVICON_HASH = "favicon_hash";
+
+    private static final String INFO_TABLE_NAME = "info";
+
+    private static final String INFO_COLUMN_NAME = "name";
+    private static final String INFO_COLUMN_LAST_TIME = "time";
 
     public static final int COLUMN_ID_INDEX = 0;
     public static final int COLUMN_URL_INDEX = 1;
@@ -47,6 +55,7 @@ public class SpeedDialManager {
     public static final int COLUMN_ICON_INDEX = 4;
     public static final int COLUMN_FAVICON_INDEX = 5;
     private static final int COLUMN_LAST_UPDATE_INDEX = 6;
+    private static final int COLUMN_FAVICON_HASH_INDEX = 7;
 
     private MyOpenHelper mOpenHelper;
 
@@ -68,6 +77,7 @@ public class SpeedDialManager {
         } else {
             _add(speedDial);
         }
+        updateListTime();
     }
 
     private synchronized void _add(SpeedDial speedDial) {
@@ -103,14 +113,25 @@ public class SpeedDialManager {
                 COLUMN_FAVICON + " = 1 AND " +
                         COLUMN_URL + " = ? AND " +
                         COLUMN_LAST_UPDATE + " <= ?", new String[]{url, Long.toString(time)}, null, null, null);
+
+        boolean updated = false;
+
         if (c.moveToFirst()) {
+            long hash = Gochiusearch.getVectorHash(icon);
             do {
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_ICON, WebIcon.createIcon(icon).getIconBytes());
-                db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{Integer.toString(c.getInt(COLUMN_ID_INDEX))});
+                if (c.getLong(COLUMN_FAVICON_HASH_INDEX) != hash) {
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_ICON, WebIcon.createIcon(icon).getIconBytes());
+                    values.put(COLUMN_LAST_UPDATE, System.currentTimeMillis());
+                    db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{Integer.toString(c.getInt(COLUMN_ID_INDEX))});
+                    updated = true;
+                }
             } while (c.moveToNext());
         }
         c.close();
+
+        if (updated)
+            updateListTime();
     }
 
 
@@ -157,12 +178,14 @@ public class SpeedDialManager {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        updateListTime();
     }
 
 
     public synchronized void delete(int id) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{Integer.toString(id)});
+        updateListTime();
     }
 
     private static boolean checkUrl(String url) {
@@ -180,6 +203,23 @@ public class SpeedDialManager {
         return id;
     }
 
+    private void updateListTime() {
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis());
+        db.update(INFO_TABLE_NAME, values, INFO_COLUMN_NAME + " = ?", new String[]{TABLE_NAME});
+    }
+
+    public long getListUpdateTime() {
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        Cursor c = db.query(INFO_TABLE_NAME, null, INFO_COLUMN_NAME + " = ?", new String[]{TABLE_NAME}, null, null, null, "1");
+        long time = -1;
+        if (c.moveToFirst())
+            time = c.getLong(c.getColumnIndex(INFO_COLUMN_LAST_TIME));
+        c.close();
+        return time;
+    }
+
     private static final class MyOpenHelper extends SQLiteOpenHelper {
         public MyOpenHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
@@ -189,6 +229,11 @@ public class SpeedDialManager {
         public void onCreate(SQLiteDatabase db) {
             db.beginTransaction();
             try {
+                db.execSQL("CREATE TABLE " + INFO_TABLE_NAME + " (" +
+                        COLUMN_ID + " INTEGER PRIMARY KEY" +
+                        ", " + INFO_COLUMN_NAME + " TEXT NOT NULL" +
+                        ", " + INFO_COLUMN_LAST_TIME + " INTEGER DEFAULT 0" +
+                        ")");
                 db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY" +
                         ", " + COLUMN_URL + " TEXT NOT NULL" +
@@ -197,7 +242,14 @@ public class SpeedDialManager {
                         ", " + COLUMN_ICON + " BLOB" +
                         ", " + COLUMN_FAVICON + " INTEGER DEFAULT 0" +
                         ", " + COLUMN_LAST_UPDATE + " INTEGER DEFAULT 0" +
+                        ", " + COLUMN_FAVICON_HASH + " INTEGER DEFAULT 0" +
                         ")");
+
+                ContentValues values = new ContentValues();
+                values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis());
+                values.put(INFO_COLUMN_NAME, TABLE_NAME);
+                db.insert(INFO_TABLE_NAME, null, values);
+
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -209,9 +261,22 @@ public class SpeedDialManager {
             switch (oldVersion) {
                 case 1:
                     db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_LAST_UPDATE + " INTEGER DEFAULT 0");
+                case 2:
+                    db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_FAVICON_HASH + " INTEGER DEFAULT 0");
+                    db.execSQL("CREATE TABLE " + INFO_TABLE_NAME + " (" +
+                            COLUMN_ID + " INTEGER PRIMARY KEY" +
+                            ", " + INFO_COLUMN_NAME + " TEXT NOT NULL" +
+                            ", " + INFO_COLUMN_LAST_TIME + " INTEGER DEFAULT 0" +
+                            ")");
+
+                    ContentValues values = new ContentValues();
+                    values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis());
+                    values.put(INFO_COLUMN_NAME, TABLE_NAME);
+                    db.insert(INFO_TABLE_NAME, null, values);
                     break;
                 default:
                     db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+                    db.execSQL("DROP TABLE IF EXISTS " + INFO_TABLE_NAME);
                     onCreate(db);
                     break;
             }

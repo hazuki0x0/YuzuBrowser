@@ -76,6 +76,8 @@ public class AppData {
     public static final ToolbarContainer toolbar_url = new ToolbarContainer("url", 1);
     public static final ToolbarContainer toolbar_progress = new ToolbarContainer("progress", 1);
     public static final ToolbarContainer toolbar_custom1 = new ToolbarContainer("custom1", 1);
+    public static final BooleanContainer toolbar_always_show_url = new BooleanContainer("toolbar_always_show_url", true);
+    public static final BooleanContainer toolbar_show_favicon = new BooleanContainer("toolbar_show_favicon", false);
     public static final IntContainer swipebtn_sensitivity = new IntContainer("swipebtn_sensitivity", 150);
     public static final StringContainer default_encoding = new StringContainer("default_encoding", "UTF-8");
     public static final StringContainer user_agent = new StringContainer("user_agent", "");
@@ -124,6 +126,7 @@ public class AppData {
     public static final IntContainer flick_sensitivity_speed = new IntContainer("flick_sensitivity_speed", 20);
     public static final IntContainer flick_sensitivity_distance = new IntContainer("flick_sensitivity_distance", 15);
     public static final BooleanContainer flick_edge = new BooleanContainer("flick_edge", true);
+    public static final BooleanContainer flick_disable_scroll = new BooleanContainer("flick_disable_scroll", true);
     public static final BooleanContainer qc_enable = new BooleanContainer("qc_enable", false);
     public static final IntContainer qc_rad_start = new IntContainer("qc_rad_start", 50);
     public static final IntContainer qc_rad_inc = new IntContainer("qc_rad_inc", 70);
@@ -173,6 +176,16 @@ public class AppData {
     public static final IntContainer night_mode_bright = new IntContainer("night_mode_bright", 100);
     public static final IntContainer show_tab_divider = new IntContainer("show_tab_divider", 0);
     public static final BooleanContainer volume_default_playing = new BooleanContainer("volume_default_playing", true);
+    public static final BooleanContainer snap_toolbar = new BooleanContainer("snap_toolbar", false);
+    public static final BooleanContainer fullscreen_hide_nav = new BooleanContainer("fullscreen_hide_nav", false);
+    public static final BooleanContainer speeddial_show_header = new BooleanContainer("speeddial_show_header", true);
+    public static final BooleanContainer speeddial_show_search = new BooleanContainer("speeddial_show_search", true);
+    public static final BooleanContainer speeddial_show_icon = new BooleanContainer("speeddial_show_icon", true);
+    public static final IntContainer speeddial_column = new IntContainer("speeddial_column", 4);
+    public static final IntContainer speeddial_column_landscape = new IntContainer("speeddial_column_landscape", 5);
+    public static final IntContainer speeddial_column_width = new IntContainer("speeddial_column_width", 80);
+    public static final BooleanContainer safe_browsing = new BooleanContainer("safe_browsing", true);
+    public static final BooleanContainer save_tabs_for_crash = new BooleanContainer("save_tabs_for_crash", false);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

@@ -35,7 +35,6 @@
         <item>慣性スクロール</item>
     </string-array>
 
-    <string name="action_custom_base">ベースアクション</string>
     <string name="action_custom_name">アクション名</string>
     <string name="action_useragent_setting">UserAgent設定</string>
     <string name="action_custom_setting">カスタムアクション設定</string>
@@ -63,4 +62,6 @@
         <item>中央</item>
         <item>右寄せ</item>
     </string-array>
+
+    <string name="action_bottom_search_bar">検索バーを下に表示</string>
 </resources>

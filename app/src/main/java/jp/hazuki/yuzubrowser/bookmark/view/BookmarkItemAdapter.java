@@ -17,10 +17,12 @@
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +35,8 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
-import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
+import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
@@ -41,13 +44,13 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private static final int TYPE_SITE = 1;
     private static final int TYPE_FOLDER = 2;
 
-    private static final PorterDuffColorFilter defaultColorFilter = new PorterDuffColorFilter(0xffe6e6e6, PorterDuff.Mode.SRC_ATOP);
+    private final PorterDuffColorFilter defaultColorFilter;
     private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
-    private final int normalBackGround;
+    private final Drawable foregroundOverlay;
 
     private OnBookmarkRecyclerListener bookmarkItemListener;
-    private BrowserHistoryManager historyManager;
+    private FaviconManager faviconManager;
     private boolean pickMode;
     private boolean openNewTab;
 
@@ -56,11 +59,11 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         bookmarkItemListener = listener;
         pickMode = pick;
         this.openNewTab = openNewTab;
-        TypedArray a = context.obtainStyledAttributes(R.style.CustomThemeBlack, new int[]{android.R.attr.selectableItemBackground});
-        normalBackGround = a.getResourceId(0, 0);
-        a.recycle();
+        foregroundOverlay = new ColorDrawable(ResourcesCompat.getColor(
+                context.getResources(), R.color.selected_overlay, context.getTheme()));
 
-        historyManager = BrowserHistoryManager.getInstance(context);
+        faviconManager = FaviconManager.getInstance(context);
+        defaultColorFilter = new PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
 
         setRecyclerListener(new OnRecyclerListener() {
             @Override
@@ -92,7 +95,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
             }
 
-            Bitmap bitmap = historyManager.getFavicon(((BookmarkSite) item).url);
+            Bitmap bitmap = faviconManager.get(((BookmarkSite) item).url);
             if (bitmap != null) {
                 ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
                 ((BookmarkSiteHolder) holder).imageButton.setColorFilter(faviconColorFilter);
@@ -102,10 +105,10 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             }
         }
 
-        if (isMultiSelectMode()) {
-            setSelectedBackground(holder.itemView, isSelected(position));
+        if (isMultiSelectMode() && isSelected(position)) {
+            holder.foreground.setBackground(foregroundOverlay);
         } else {
-            holder.itemView.setBackgroundResource(normalBackGround);
+            holder.foreground.setBackground(null);
         }
     }
 
@@ -128,15 +131,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     }
 
     public byte[] getFavicon(BookmarkSite site) {
-        return historyManager.getFaviconImage(site.url);
-    }
-
-    private void setSelectedBackground(View view, boolean selected) {
-        if (selected) {
-            view.setBackgroundResource(R.drawable.selectable_selected_item_background);
-        } else {
-            view.setBackgroundResource(normalBackGround);
-        }
+        return faviconManager.getFaviconBytes(site.url);
     }
 
     @Override
@@ -158,11 +153,13 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
     static class BookmarkFolderHolder extends ArrayRecyclerAdapter.ArrayViewHolder<BookmarkItem> {
         TextView title;
+        View foreground;
 
 
         public BookmarkFolderHolder(View itemView, BookmarkItemAdapter adapter) {
             super(itemView, adapter);
-            title = (TextView) itemView.findViewById(android.R.id.text1);
+            title = itemView.findViewById(android.R.id.text1);
+            foreground = itemView.findViewById(R.id.foreground);
         }
 
         @Override
@@ -178,8 +175,8 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
 
         BookmarkSiteHolder(View itemView, final BookmarkItemAdapter adapter) {
             super(itemView, adapter);
-            imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
-            url = (TextView) itemView.findViewById(android.R.id.text2);
+            imageButton = itemView.findViewById(R.id.imageButton);
+            url = itemView.findViewById(android.R.id.text2);
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override

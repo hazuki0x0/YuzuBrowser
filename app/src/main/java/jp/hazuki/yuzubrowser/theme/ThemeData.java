@@ -59,6 +59,7 @@ public class ThemeData {
     public int qcItemBackgroundColorNormal, qcItemBackgroundColorSelect, qcItemColor;
     public int statusBarColor;
     public boolean refreshUseDark;
+    public boolean lightTheme;
 
     private ThemeData() {
     }
@@ -73,6 +74,9 @@ public class ThemeData {
                 if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return;
                 String field = parser.getText();
                 parser.nextToken();
+                if ("lightTheme".equals(field)) {
+                    lightTheme = getBoolean(parser);
+                }
                 if ("tabBackgroundNormal".equalsIgnoreCase(field)) {
                     tabBackgroundNormal = getColorOrBitmapDrawable(context, folder, parser);
                     continue;
@@ -130,7 +134,7 @@ public class ThemeData {
                     continue;
                 }
                 if ("showTabDivider".equalsIgnoreCase(field)) {
-                    showTabDivider = Boolean.parseBoolean(parser.getText().trim());
+                    showTabDivider = getBoolean(parser);
                     continue;
                 }
                 if ("progressColor".equalsIgnoreCase(field)) {
@@ -259,11 +263,13 @@ public class ThemeData {
                     continue;
                 }
                 if ("autoScale".equalsIgnoreCase(field)) {
-                    autoScale = parser.nextBooleanValue();
+                    parser.nextToken();
+                    autoScale = getBoolean(parser);
                     continue;
                 }
                 if ("scaleFilter".equalsIgnoreCase(field)) {
-                    scaleFilter = parser.nextBooleanValue();
+                    parser.nextToken();
+                    autoScale = getBoolean(parser);
                     continue;
                 }
                 if (parser.getCurrentToken() != JsonToken.START_OBJECT
@@ -366,6 +372,17 @@ public class ThemeData {
 
     private static ThemeData sInstance;
 
+    private static boolean getBoolean(JsonParser parser) throws IOException {
+        switch (parser.getCurrentToken()) {
+            case VALUE_TRUE:
+                return true;
+            case VALUE_FALSE:
+                return false;
+            default:
+                return Boolean.valueOf(parser.getText().trim());
+        }
+    }
+
     private boolean isColorLight(int color) {
         double lightness = (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
         return lightness > 0.8;
@@ -380,6 +397,8 @@ public class ThemeData {
 
     private static ThemeData createLightTheme(Context context) {
         ThemeData data = new ThemeData();
+        data.lightTheme = true;
+
         data.tabTextColorNormal = 0xFF444444;
         data.tabTextColorLock = 0xFF00B53C;
         data.tabTextColorPin = 0xFF3B4EF9;

@@ -26,7 +26,6 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -42,14 +41,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.database.ImplementedCursorLoader;
 import jp.hazuki.yuzubrowser.utils.service.ServiceBindHelper;
 import jp.hazuki.yuzubrowser.utils.service.ServiceConnectionHelper;
 
-public class DownloadListActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ServiceConnectionHelper<Messenger> {
+public class DownloadListActivity extends ThemeActivity implements LoaderCallbacks<Cursor>, ServiceConnectionHelper<Messenger> {
     //private static final String TAG = "DownloadListActivity";
     private ServiceBindHelper<Messenger> mServiceBindHelper;
     private Messenger mActivityMessenger;
@@ -61,9 +62,17 @@ public class DownloadListActivity extends AppCompatActivity implements LoaderCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (AppData.fullscreen.get()) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        boolean fullscreen = AppData.fullscreen.get();
+        int orientation = AppData.oritentation.get();
+        if (getIntent() != null) {
+            fullscreen = getIntent().getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen);
+            orientation = getIntent().getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation);
         }
+
+        if (fullscreen)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(orientation);
+
         setContentView(R.layout.download_activity);
         listView = (ListView) findViewById(R.id.listView);
 

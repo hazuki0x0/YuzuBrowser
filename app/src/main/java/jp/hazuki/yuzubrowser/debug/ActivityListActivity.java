@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class ActivityListActivity extends AppCompatActivity {
+public class ActivityListActivity extends ThemeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

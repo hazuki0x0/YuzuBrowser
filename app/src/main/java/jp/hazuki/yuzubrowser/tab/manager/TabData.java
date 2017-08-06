@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.tab.manager;
 
 import android.graphics.Bitmap;
 
+import jp.hazuki.yuzubrowser.utils.image.Gochiusearch;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 
@@ -27,6 +28,10 @@ public class TabData {
     public final CustomWebView mWebView;
     private TabIndexData mIndexData;
     public int mProgress = -1;
+    private int scrollRange;
+    private int scrollXOffset;
+    private boolean canRetry;
+    private long thumbnailHash;
 
     protected int mState;
 
@@ -150,9 +155,38 @@ public class TabData {
         return mIndexData.isShotThumbnail();
     }
 
+    public boolean isNeedShotThumbnail() {
+        int sr = mWebView.computeVerticalScrollRangeMethod();
+        if (sr == 0)
+            return false;
+
+        int old = scrollRange;
+        scrollRange = sr;
+
+        return old != scrollRange || !isShotThumbnail();
+    }
+
     public void shotThumbnail(Bitmap thumbnail) {
         mIndexData.setThumbnail(thumbnail);
         mIndexData.setShotThumbnail(true);
+        thumbnailHash = Gochiusearch.getVectorHash(thumbnail);
+        canRetry = true;
+    }
+
+    public boolean needRetry() {
+        return canRetry && thumbnailHash == 0;
+    }
+
+    public void setCanRetry(boolean canRetry) {
+        this.canRetry = canRetry;
+    }
+
+    public void onDown() {
+        scrollXOffset = mWebView.computeHorizontalScrollOffsetMethod();
+    }
+
+    public boolean isMoved() {
+        return scrollXOffset != mWebView.computeHorizontalScrollOffsetMethod();
     }
 
     public boolean isPinning() {

@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.search.SuggestProvider;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
@@ -22,6 +23,8 @@ import jp.hazuki.yuzubrowser.settings.preference.common.CustomDialogPreference;
 public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
     private int mSelected = 0;
     private int mArrayMax;
+
+    private int[] ids;
 
     public ClearBrowserDataAlertDialog(Context context) {
         this(context, null);
@@ -38,13 +41,19 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         final Context context = getContext();
 
         String[] arrays = context.getResources().getStringArray(R.array.clear_browser_data);
+        ids = context.getResources().getIntArray(R.array.clear_browser_data_id);
+
+        if (arrays.length != ids.length) {
+            throw new RuntimeException();
+        }
+
+        mArrayMax = arrays.length;
 
         final ListView listView = new ListView(context);
-        listView.setAdapter(new ArrayAdapter<>(context.getApplicationContext(), R.layout.select_dialog_multichoice, arrays));
+        listView.setAdapter(new ArrayAdapter<>(context, R.layout.select_dialog_multichoice, arrays));
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        mArrayMax = arrays.length;
         for (int i = 0; i < mArrayMax; ++i) {
             int shifted = 1 << i;
             listView.setItemChecked(i, ((mSelected & shifted) == shifted));
@@ -76,7 +85,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         for (int i = 0; i < mArrayMax; ++i) {
             int shifted = 1 << i;
             if ((mSelected & shifted) == shifted)
-                runAction(i);
+                runAction(ids[i]);
         }
 
         AppData.clear_data_default.set(mSelected);
@@ -96,6 +105,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                 WebViewDatabase.getInstance(getContext().getApplicationContext()).clearHttpAuthUsernamePassword();
                 break;
             case 3:
+                //noinspection deprecation
                 WebViewDatabase.getInstance(getContext()).clearFormData();
                 break;
             case 4:
@@ -109,6 +119,9 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                 break;
             case 7:
                 getContext().getApplicationContext().getContentResolver().delete(SuggestProvider.URI_LOCAL, null, null);
+                break;
+            case 8:
+                FaviconManager.getInstance(getContext()).clear();
                 break;
         }
     }

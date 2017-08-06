@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -17,11 +16,12 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.appinfo.AppInfo;
 import jp.hazuki.yuzubrowser.utils.appinfo.ApplicationListFragment;
 import jp.hazuki.yuzubrowser.utils.appinfo.ShortCutListFragment;
 
-public class StartActivityPreferenceActivity extends AppCompatActivity implements StartActivityPreferenceFragment.OnActionListener,
+public class StartActivityPreferenceActivity extends ThemeActivity implements StartActivityPreferenceFragment.OnActionListener,
         ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {
     private static final int RESULT_REQUEST_APP = 0;
     private static final int RESULT_REQUEST_SHARE = 1;

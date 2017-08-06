@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
@@ -28,8 +27,9 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.adblock.fragment.AdBlockFragment;
 import jp.hazuki.yuzubrowser.adblock.fragment.AdBlockImportFragment;
 import jp.hazuki.yuzubrowser.adblock.fragment.AdBlockMainFragment;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class AdBlockActivity extends AppCompatActivity implements AdBlockMainFragment.OnAdBlockMainListener, AdBlockFragment.AdBlockFragmentListener, AdBlockImportFragment.OnImportListener {
+public class AdBlockActivity extends ThemeActivity implements AdBlockMainFragment.OnAdBlockMainListener, AdBlockFragment.AdBlockFragmentListener, AdBlockImportFragment.OnImportListener {
     public static final String ACTION_OPEN_BLACK = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.black";
     public static final String ACTION_OPEN_WHITE = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.white";
     public static final String ACTION_OPEN_WHITE_PAGE = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.whitepage";

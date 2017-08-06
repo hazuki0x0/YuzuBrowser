@@ -97,6 +97,7 @@
     <string name="clear_database">Clear HTML5 databases</string>
     <string name="clear_password">Clear passwords</string>
     <string name="clear_formdata">Clear formdata</string>
+    <string name="clear_favicon">Clear favicon cache</string>
     <string name="close_all_tabs">Close all tabs</string>
     <string name="search">Search</string>
     <string name="previous">Previous</string>
@@ -192,6 +193,7 @@
     <string name="refresh">Refresh</string>
 
     <string name="default_text">Default</string>
+    <string name="delete">Delete</string>
 
     <string name="find_on_page">Find on page</string>
 
@@ -212,6 +214,7 @@
     <string name="deleted">Deleted</string>
 
     <string name="download_service">download service</string>
+    <string name="download_notify">Download state</string>
 
     <string name="permission_probrem">Insufficient permission</string>
     <string name="request_permission_storage_setting">Please tap [access right] and enable storage</string>
@@ -241,4 +244,14 @@
     <string name="select_file">Select file</string>
     <string name="action_list">Action list</string>
     <string name="add_to_home">Add to home screen</string>
+
+    <string name="caches">Caches</string>
+    <string name="cookies">Cookies</string>
+    <string name="passwords">Passwords</string>
+    <string name="formData">Form data</string>
+    <string name="html5Database">HTML5 Databases</string>
+    <string name="geolocation_permissions">Geolocation permissions</string>
+    <string name="recent_search_queries">Recent search queries</string>
+    <string name="favicon_cache">Favicon caches</string>
+    <string name="pref_save_tab_for_crash">Save tabs in a high frequency</string>
 </resources>

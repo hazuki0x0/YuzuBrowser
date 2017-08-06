@@ -40,7 +40,6 @@
         <item>1</item>
     </integer-array>
 
-    <string name="action_custom_base">Base action</string>
     <string name="action_custom_name">Action name</string>
     <string name="action_useragent_setting">UserAgent setting</string>
     <string name="action_custom_setting">Custom action setting</string>
@@ -73,4 +72,6 @@
         <item>1</item>
         <item>2</item>
     </integer-array>
+
+    <string name="action_bottom_search_bar">Show Search bar at bottom</string>
 </resources>

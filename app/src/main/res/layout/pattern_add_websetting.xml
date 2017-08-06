@@ -37,6 +37,7 @@
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:background="?android:attr/selectableItemBackground"
+                android:tint="?attr/iconColor"
                 android:src="@drawable/ic_add_white_24dp"
                 android:id="@+id/uaButton" />
 

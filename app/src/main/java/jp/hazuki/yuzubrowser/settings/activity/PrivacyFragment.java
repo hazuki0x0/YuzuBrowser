@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.settings.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -60,12 +61,22 @@ public class PrivacyFragment extends PreferenceFragment {
         geo.setEnabled(enableSettings);
         appCache.setEnabled(enableSettings);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getPreferenceScreen().removePreference(formData);
+        } else {
+            Preference safeBrowsing = findPreference("safe_browsing");
+            safeBrowsing.setEnabled(false);
+            safeBrowsing.setSummary(R.string.pref_required_android_O);
+        }
+
         privateMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean enableSettings = !(boolean) newValue;
 
-                formData.setEnabled(enableSettings);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                    formData.setEnabled(enableSettings);
+
                 webDB.setEnabled(enableSettings);
                 webDom.setEnabled(enableSettings);
                 geo.setEnabled(enableSettings);

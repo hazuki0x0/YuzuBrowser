@@ -97,6 +97,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends ArrayRecyclerAdapter.Ar
         items.addAll(collections);
     }
 
+    public T set(int index, T item) {
+        return items.set(index, item);
+    }
+
     public T remove(int index) {
         T item = items.remove(index);
         notifyItemRemoved(index);
@@ -201,7 +205,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends ArrayRecyclerAdapter.Ar
         itemSelected.put(position, isSelect);
 
         if (old != isSelect) {
-            notifyDataSetChanged();
+            notifyItemChanged(position);
         }
     }
 

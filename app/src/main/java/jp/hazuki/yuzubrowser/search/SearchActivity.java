@@ -3,7 +3,6 @@ package jp.hazuki.yuzubrowser.search;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,31 +11,31 @@ import android.speech.RecognizerIntent;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.search.suggest.Suggestion;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
@@ -44,8 +43,10 @@ import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
+import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView;
 
-public class SearchActivity extends AppCompatActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback {
+public class SearchActivity extends AppCompatActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
     private static final String TAG = "SearchActivity";
     public static final String EXTRA_URI = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.uri";
     public static final String EXTRA_QUERY = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.query";
@@ -53,6 +54,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     public static final String EXTRA_APP_DATA = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.appdata";
     public static final String EXTRA_SEARCH_MODE = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.searchmode";
     public static final String EXTRA_OPEN_NEW_TAB = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.openNewTab";
+    public static final String EXTRA_REVERSE = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.reverse";
     public static final int SEARCH_MODE_AUTO = 0;
     public static final int SEARCH_MODE_URL = 1;
     public static final int SEARCH_MODE_WORD = 2;
@@ -63,7 +65,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     private Bundle mAppData;
 
     private EditText editText;
-    private ListView listView;
+    private SearchRecyclerAdapter adapter;
 
     private String initQuery;
     private String initDecodedQuery = "";
@@ -73,11 +75,41 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_activity);
+        boolean reverse = getIntent().getBooleanExtra(EXTRA_REVERSE, false);
 
-        editText = (EditText) findViewById(R.id.editText);
-        SearchButton searchButton = (SearchButton) findViewById(R.id.searchButton);
-        listView = (ListView) findViewById(R.id.listView);
+        if (reverse)
+            setContentView(R.layout.search_activity_reverse);
+        else
+            setContentView(R.layout.search_activity);
+
+        editText = findViewById(R.id.editText);
+        SearchButton searchButton = findViewById(R.id.searchButton);
+        OutSideClickableRecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+        recyclerView.setOnOutSideClickListener(new OutSideClickableRecyclerView.OnOutSideClickListener() {
+            @Override
+            public void onOutSideClick() {
+                finish();
+            }
+        });
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this));
+
+        if (reverse) {
+            layoutManager.setReverseLayout(true);
+        }
+
+        adapter = new SearchRecyclerAdapter(this, new ArrayList<Suggestion>(), this);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         if (ThemeData.isEnabled()) {
             if (ThemeData.getInstance().toolbarBackgroundColor != 0)
@@ -164,6 +196,9 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
         Intent intent = getIntent();
         if (intent != null) {
+            if (intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, AppData.fullscreen.get()))
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             Uri uri = intent.getParcelableExtra(EXTRA_URI);
             if (uri != null) {
                 mContentUri = uri;
@@ -233,42 +268,50 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
         if (c == null) {
             Logger.d(TAG, "Cursor is null");
-            listView.setAdapter(null);
             return;
         }
+        List<Suggestion> suggestions = new ArrayList<>();
+        int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
+        int COL_HISTORY = c.getColumnIndex(SuggestProvider.SUGGEST_HISTORY);
+        while (c.moveToNext()) {
+            suggestions.add(new Suggestion(c.getString(COL_QUERY), c.getInt(COL_HISTORY) == 1));
+        }
 
-        final int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
-        CursorAdapter adapter = new CursorAdapter(getApplicationContext(), c, 0) {
-            @Override
-            public void bindView(View view, Context context, Cursor cursor) {
-                final String query = cursor.getString(COL_QUERY);
-                ((TextView) view.findViewById(R.id.textView)).setText(query);
-                view.findViewById(R.id.textView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finishWithResult(query, SEARCH_MODE_AUTO);
-                    }
-                });
-                view.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View arg0) {
-                        editText.setText(query);
-                        editText.setSelection(query.length());
-                    }
-                });
-            }
-
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.search_activity_list_item, null);
-            }
-        };
-        listView.setAdapter(adapter);
+        adapter.clear();
+        adapter.addAll(suggestions);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> arg0) {
-        listView.setAdapter(null);
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSelectSuggest(String query) {
+        finishWithResult(query, SEARCH_MODE_AUTO);
+    }
+
+    @Override
+    public void onInputSuggest(String query) {
+        editText.setText(query);
+        editText.selectAll();
+    }
+
+    @Override
+    public void onLongClicked(String query) {
+        SuggestDeleteDialog.newInstance(query)
+                .show(getSupportFragmentManager(), "delete");
+    }
+
+    @Override
+    public void onDelete(String query) {
+        getContentResolver()
+                .delete(mContentUri, SearchManager.SUGGEST_COLUMN_QUERY + " = ?", new String[]{query});
+        Bundle bundle = new Bundle();
+        bundle.putString("QUERY", editText.getText().toString());
+        getSupportLoaderManager().restartLoader(0, bundle, this);
     }
 
     private void finishWithResult(String query, int mode) {

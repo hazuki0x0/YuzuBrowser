@@ -2,7 +2,13 @@ package jp.hazuki.yuzubrowser.history;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,14 +24,20 @@ import java.util.List;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
+import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
 public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>
         implements StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
 
+    private final PorterDuffColorFilter defaultColorFilter;
+    private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
+
     private DateFormat dateFormat;
     private BrowserHistoryManager mManager;
+    private FaviconManager faviconManager;
     private List<BrowserHistory> histories;
     private OnHistoryRecyclerListener mListener;
     private String mQuery;
@@ -33,15 +46,25 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     private Calendar calendar;
     private boolean pickMode;
 
+    private boolean multiSelectMode;
+    private SparseBooleanArray itemSelected = new SparseBooleanArray();
+    private Drawable foregroundOverlay;
+
     public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, boolean pick, OnHistoryRecyclerListener listener) {
         inflater = LayoutInflater.from(context);
         dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         mManager = manager;
+        faviconManager = FaviconManager.getInstance(context.getApplicationContext());
         mListener = listener;
         histories = mManager.getList(0, 100);
         mQuery = null;
         calendar = Calendar.getInstance();
         pickMode = pick;
+
+        defaultColorFilter = new PorterDuffColorFilter(
+                ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
+        foregroundOverlay = new ColorDrawable(ResourcesCompat.getColor(context.getResources(),
+                R.color.selected_overlay, context.getTheme()));
     }
 
     @Override
@@ -53,12 +76,20 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     public void onBindViewHolder(final HistoryHolder holder, int position) {
         BrowserHistory item = histories.get(holder.getAdapterPosition());
         String url = UrlUtils.decodeUrlHost(item.getUrl());
-        Bitmap image = mManager.getFavicon(item.getId());
+        Bitmap image = faviconManager.get(item.getUrl());
 
         if (image == null) {
             holder.imageButton.setImageResource(R.drawable.ic_public_white_24dp);
+            holder.imageButton.setColorFilter(defaultColorFilter);
         } else {
             holder.imageButton.setImageBitmap(image);
+            holder.imageButton.setColorFilter(faviconColorFilter);
+        }
+
+        if (multiSelectMode && isSelected(position)) {
+            holder.foreground.setBackground(foregroundOverlay);
+        } else {
+            holder.foreground.setBackground(null);
         }
         holder.titleTextView.setText(item.getTitle());
         holder.urlTextView.setText(url);
@@ -66,7 +97,11 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
+                if (multiSelectMode) {
+                    toggle(holder.getAdapterPosition());
+                } else {
+                    mListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
+                }
             }
         });
 
@@ -150,8 +185,52 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         viewHolder.header.setText(dateFormat.format(new Date(histories.get(position).getTime())));
     }
 
+    public boolean isMultiSelectMode() {
+        return multiSelectMode;
+    }
+
+    public void setMultiSelectMode(boolean multiSelect) {
+        if (multiSelect != multiSelectMode) {
+            multiSelectMode = multiSelect;
+
+            if (!multiSelect) {
+                itemSelected.clear();
+            }
+
+            notifyDataSetChanged();
+        }
+    }
+
+    public void toggle(int position) {
+        setSelect(position, !itemSelected.get(position, false));
+    }
+
+    public void setSelect(int position, boolean isSelect) {
+        boolean old = itemSelected.get(position, false);
+        itemSelected.put(position, isSelect);
+
+        if (old != isSelect) {
+            notifyDataSetChanged();
+        }
+    }
+
+    public boolean isSelected(int position) {
+        return itemSelected.get(position, false);
+    }
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items = new ArrayList<>();
+        for (int i = 0; itemSelected.size() > i; i++) {
+            if (itemSelected.valueAt(i)) {
+                items.add(itemSelected.keyAt(i));
+            }
+        }
+        return items;
+    }
+
     static class HistoryHolder extends RecyclerView.ViewHolder {
 
+        View foreground;
         ImageButton imageButton;
         TextView titleTextView;
         TextView urlTextView;
@@ -159,9 +238,10 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         HistoryHolder(View itemView) {
             super(itemView);
 
-            imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
-            titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
-            urlTextView = (TextView) itemView.findViewById(R.id.urlTextView);
+            foreground = itemView.findViewById(R.id.foreground);
+            imageButton = itemView.findViewById(R.id.imageButton);
+            titleTextView = itemView.findViewById(R.id.titleTextView);
+            urlTextView = itemView.findViewById(R.id.urlTextView);
         }
     }
 

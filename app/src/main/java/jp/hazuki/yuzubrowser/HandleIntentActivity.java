@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.speech.RecognizerResultsIntent;
@@ -55,8 +56,12 @@ public class HandleIntentActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(url))
                 url = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (!TextUtils.isEmpty(url)) {
-                boolean openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false);
-                startBrowser(url, openInNewTab, openInNewTab);
+                try {
+                    boolean openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false);
+                    startBrowser(url, openInNewTab, openInNewTab);
+                } catch (BadParcelableException e) {
+                    startBrowser(url, false, false);
+                }
                 return;
             }
         } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {

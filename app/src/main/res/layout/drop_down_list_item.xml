@@ -9,4 +9,4 @@
     android:clickable="true"
     android:background="?attr/selectableItemBackground"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textColor="@color/white" />
+    android:textColor="?android:attr/textColorPrimary" />

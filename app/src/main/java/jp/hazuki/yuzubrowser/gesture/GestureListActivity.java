@@ -2,15 +2,15 @@ package jp.hazuki.yuzubrowser.gesture;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class GestureListActivity extends AppCompatActivity {
+public class GestureListActivity extends ThemeActivity {
 
     private int mGestureId;
 

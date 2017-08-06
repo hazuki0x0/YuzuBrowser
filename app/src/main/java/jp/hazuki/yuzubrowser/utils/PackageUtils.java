@@ -12,6 +12,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
+import android.support.v4.content.pm.ShortcutInfoCompat;
+import android.support.v4.content.pm.ShortcutManagerCompat;
+import android.support.v4.graphics.drawable.IconCompat;
 import android.webkit.URLUtil;
 
 import java.io.File;
@@ -100,23 +103,30 @@ public class PackageUtils {
         return chooser;
     }
 
-    public static Intent createShortCutIntent(Context context, String title, String url, Bitmap icon) {
-        Intent target = new Intent(context, BrowserActivity.class);
-        target.setAction(Intent.ACTION_VIEW);
-        if (URLUtil.isFileUrl(url)) {
-            url = SafeFileProvider.convertToSaferUrl(url);
-        }
-        target.setData(Uri.parse(url));
+    public static void createShortcut(Context context, String title, String url, Bitmap favicon) {
+        if (url != null && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+            Intent target = new Intent(context, BrowserActivity.class);
+            target.setAction(Intent.ACTION_VIEW);
+            if (URLUtil.isFileUrl(url)) {
+                url = SafeFileProvider.convertToSaferUrl(url);
+            }
+            target.setData(Uri.parse(url));
 
-        Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, target);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-        if (icon != null) {
-            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
-        } else {
-            Intent.ShortcutIconResource resource = Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_link_shortcut);
-            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, resource);
+            IconCompat icon;
+
+            if (favicon != null) {
+                icon = IconCompat.createWithBitmap(favicon);
+            } else {
+                icon = IconCompat.createWithResource(context, R.mipmap.ic_link_shortcut);
+            }
+
+            ShortcutInfoCompat shortcutInfo = new ShortcutInfoCompat.Builder(context, Long.toString(System.currentTimeMillis()))
+                    .setShortLabel(title)
+                    .setIcon(icon)
+                    .setIntent(target)
+                    .build();
+
+            ShortcutManagerCompat.requestPinShortcut(context, shortcutInfo, null);
         }
-        return intent;
     }
 }

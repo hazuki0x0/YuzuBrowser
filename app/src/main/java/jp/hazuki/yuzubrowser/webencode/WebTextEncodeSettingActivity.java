@@ -18,12 +18,12 @@ package jp.hazuki.yuzubrowser.webencode;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class WebTextEncodeSettingActivity extends AppCompatActivity {
+public class WebTextEncodeSettingActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

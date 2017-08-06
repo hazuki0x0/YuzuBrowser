@@ -52,7 +52,7 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
         super.onCreate(savedInstanceState);
 
         View header_view = getLayoutInflater().inflate(R.layout.pattern_list_url, null);
-        urlEditText = (EditText) header_view.findViewById(R.id.urlEditText);
+        urlEditText = header_view.findViewById(R.id.urlEditText);
         addHeaderView(header_view);
 
         if (getIntent() != null) {
@@ -64,7 +64,7 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
 
     protected View makeHeaderView(PatternUrlChecker checker) {
         View header_view = getLayoutInflater().inflate(R.layout.pattern_list_url, null);
-        EditText view_urlEditText = (EditText) header_view.findViewById(R.id.urlEditText);
+        EditText view_urlEditText = header_view.findViewById(R.id.urlEditText);
         CharSequence url;
         if (checker == null) {
             url = urlEditText.getText();
@@ -134,11 +134,11 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                     ((LinearLayout) view.findViewById(R.id.inner)).addView(header, 0);
             }
 
-            final CheckBox view_uaCheckBox = (CheckBox) view.findViewById(R.id.uaCheckBox);
-            view_uaEditText = (EditText) view.findViewById(R.id.uaEditText);
-            final ImageButton view_uaButton = (ImageButton) view.findViewById(R.id.uaButton);
-            final CheckBox view_jsCheckBox = (CheckBox) view.findViewById(R.id.jsCheckBox);
-            final Spinner view_jsSpinner = (Spinner) view.findViewById(R.id.jsSpinner);
+            final CheckBox view_uaCheckBox = view.findViewById(R.id.uaCheckBox);
+            view_uaEditText = view.findViewById(R.id.uaEditText);
+            final ImageButton view_uaButton = view.findViewById(R.id.uaButton);
+            final CheckBox view_jsCheckBox = view.findViewById(R.id.jsCheckBox);
+            final Spinner view_jsSpinner = view.findViewById(R.id.jsSpinner);
 
             if (checker != null) {
                 WebSettingPatternAction action = (WebSettingPatternAction) checker.getAction();
@@ -240,18 +240,28 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
 
             final LayoutInflater inflater = LayoutInflater.from(getActivity());
             final View header_view = inflater.inflate(R.layout.pattern_list_url, null);
-            final EditText view_urlEditText = (EditText) header_view.findViewById(R.id.urlEditText);
+            final EditText view_urlEditText = header_view.findViewById(R.id.urlEditText);
             if (checker != null) {
                 url = checker.getPatternUrl();
+            }
+            if (url == null) {
+                url = "";
             }
             view_urlEditText.setText(url);
 
             ViewGroup view = (ViewGroup) inflater.inflate(R.layout.pattern_add_open, null);
             view.addView(header_view, 0);
-            ListView view_listView = (ListView) view.findViewById(R.id.listView);
+            ListView view_listView = view.findViewById(R.id.listView);
 
             final PackageManager pm = getActivity().getPackageManager();
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse((WebUtils.maybeContainsUrlScheme(url)) ? url : "http://" + url));
+            if (url.startsWith("*.") && url.length() >= 3) {
+                url = url.substring(2);
+            } else {
+                url = url.replace("://*.", "://");
+            }
+            String intentUrl = url.replace("*", "");
+            intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse((WebUtils.maybeContainsUrlScheme(intentUrl)) ? intentUrl : "http://" + intentUrl));
             final int flag;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 flag = PackageManager.MATCH_ALL;
@@ -269,7 +279,7 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                 public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                     if (convertView == null) {
                         convertView = inflater.inflate(R.layout.image_text_list_item, null);
-                        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+                        ImageView imageView = convertView.findViewById(R.id.imageView);
 
                         ViewGroup.LayoutParams params = imageView.getLayoutParams();
                         params.height = app_icon_size;
@@ -277,8 +287,8 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                         imageView.setLayoutParams(params);
                     }
 
-                    ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
-                    TextView textView = (TextView) convertView.findViewById(R.id.textView);
+                    ImageView imageView = convertView.findViewById(R.id.imageView);
+                    TextView textView = convertView.findViewById(R.id.textView);
 
                     if (position == 0) {
                         imageView.setImageDrawable(null);

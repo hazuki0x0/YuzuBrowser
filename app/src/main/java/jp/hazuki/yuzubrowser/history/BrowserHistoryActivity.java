@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class BrowserHistoryActivity extends AppCompatActivity {
+public class BrowserHistoryActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +24,19 @@ public class BrowserHistoryActivity extends AppCompatActivity {
         }
 
         boolean pickMode = false;
-        if (getIntent() != null && Intent.ACTION_PICK.equals(getIntent().getAction())) {
-            pickMode = true;
+        boolean fullscreen = AppData.fullscreen.get();
+        int orientation = AppData.oritentation.get();
+        if (getIntent() != null) {
+            if (Intent.ACTION_PICK.equals(getIntent().getAction()))
+                pickMode = true;
+
+            fullscreen = getIntent().getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen);
+            orientation = getIntent().getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation);
         }
+
+        if (fullscreen)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(orientation);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, BrowserHistoryFragment.newInstance(pickMode))

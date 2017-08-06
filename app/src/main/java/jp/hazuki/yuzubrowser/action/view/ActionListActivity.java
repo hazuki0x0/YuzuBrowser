@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionList;
@@ -13,8 +12,9 @@ import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class ActionListActivity extends AppCompatActivity {
+public class ActionListActivity extends ThemeActivity {
     public static final String EXTRA_ACTION_LIST = "ActionListActivity.extra.actionList";
 
     @Override

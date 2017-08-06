@@ -58,6 +58,12 @@ public class ScrollableTabLayout extends HorizontalScrollView implements TabLayo
     }
 
     @Override
+    public void addTabView(int id, View view, LinearLayout.LayoutParams params) {
+        mController.addTabView(id, view);
+        mLayout.addView(view, id, params);
+    }
+
+    @Override
     public void setCurrentTab(int id) {
         mController.setCurrentTab(id);
     }

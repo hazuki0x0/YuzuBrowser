@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -14,8 +13,9 @@ import android.widget.ListView;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionManager;
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionFile;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class SoftButtonActionActivity extends AppCompatActivity {
+public class SoftButtonActionActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

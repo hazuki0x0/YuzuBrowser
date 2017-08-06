@@ -26,6 +26,8 @@ public interface TabManager {
 
     MainTabData add(CustomWebView web, View view);
 
+    void addTab(int index, MainTabData tabData);
+
     void setCurrentTab(int no);
 
     void remove(int no);
@@ -76,6 +78,8 @@ public interface TabManager {
 
     void onPreferenceReset();
 
+    void onLayoutCreated();
+
     List<MainTabData> getLoadedData();
 
     List<TabIndexData> getIndexDataList();
@@ -85,10 +89,4 @@ public interface TabManager {
     void removeThumbnailCache(String url);
 
     void forceTakeThumbnail(MainTabData data);
-
-    boolean hideItem(int index);
-
-    TabIndexData unHideItem();
-
-    boolean isHideItem();
 }

@@ -25,7 +25,6 @@ import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +32,7 @@ import java.io.IOException;
 
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 
 public class DownloadFileProvider extends ContentProvider {
     private static final String[] COLUMNS = {
@@ -88,20 +88,7 @@ public class DownloadFileProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        File file = getFileForUri(uri);
-        final int lastDot = file.getName().lastIndexOf('.');
-        if (lastDot >= 0) {
-            final String extension = file.getName().substring(lastDot + 1);
-            final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            if (mime != null) {
-                return mime;
-            }
-            if ("mht".equals(extension) || "mhtml".equals(extension)) {
-                return "multipart/related";
-            }
-        }
-
-        return "application/octet-stream";
+        return FileUtils.getMineType(getFileForUri(uri));
     }
 
     @Nullable

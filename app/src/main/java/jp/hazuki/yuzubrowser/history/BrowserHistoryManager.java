@@ -21,32 +21,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
-import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.database.CursorLoadable;
 
 public class BrowserHistoryManager implements CursorLoadable {
     private static final String DB_NAME = "webhistory1.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String TABLE_NAME = "main_table1";
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_URL = "url";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_TIME = "time";
-    public static final String COLUMN_FAVICON = "favicon";
 
     public static final int COLUMN_ID_INDEX = 0;
     public static final int COLUMN_URL_INDEX = 1;
     public static final int COLUMN_TITLE_INDEX = 2;
     public static final int COLUMN_TIME_INDEX = 3;
-    public static final int COLUMN_FAVICON_INDEX = 4;
 
     private MyOpenHelper mOpenHelper;
 
@@ -102,22 +97,6 @@ public class BrowserHistoryManager implements CursorLoadable {
         db.update(TABLE_NAME, values, COLUMN_URL + " = ?", new String[]{url});
     }
 
-    public void update(String url, Bitmap favicon) {
-        if (!checkUrl(url)) return;
-
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_FAVICON, ImageUtils.convertToByteArray(favicon));
-        db.update(TABLE_NAME, values, COLUMN_URL + " = ?", new String[]{url});
-    }
-
-    public void deleteFavicon() {
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.putNull(COLUMN_FAVICON);
-        db.update(TABLE_NAME, values, COLUMN_FAVICON + " IS NOT NULL", null);
-    }
-
     public void delete(String url) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_URL + " = ?", new String[]{url});
@@ -134,45 +113,6 @@ public class BrowserHistoryManager implements CursorLoadable {
     public void deleteAll() {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
-    }
-
-    public Bitmap getFavicon(String url) {
-        Bitmap bitmap = null;
-        byte[] icon = getFaviconImage(url);
-        if (icon != null)
-            bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
-        return bitmap;
-    }
-
-    public byte[] getFaviconImage(String url) {
-        if (url == null) return null;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_URL + " = ?", new String[]{url}, null, null, null);
-        byte[] icon = null;
-        if (c.moveToFirst()) {
-            icon = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
-        }
-        c.close();
-        return icon;
-    }
-
-    public Bitmap getFavicon(long id) {
-        Bitmap bitmap = null;
-        byte[] icon = getFaviconImage(id);
-        if (icon != null)
-            bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
-        return bitmap;
-    }
-
-    public byte[] getFaviconImage(long id) {
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_FAVICON}, COLUMN_ID + " = ?", new String[]{Long.toString(id)}, null, null, null);
-        byte[] image = null;
-        if (c.moveToFirst()) {
-            image = c.getBlob(c.getColumnIndex(COLUMN_FAVICON));
-        }
-        c.close();
-        return image;
     }
 
     public String[] getHistoryArray(int limit) {
@@ -249,7 +189,6 @@ public class BrowserHistoryManager implements CursorLoadable {
                         ", " + COLUMN_URL + " TEXT NOT NULL" +
                         ", " + COLUMN_TITLE + " TEXT" +
                         ", " + COLUMN_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
-                        ", " + COLUMN_FAVICON + " BLOB" +
                         ")");
                 db.execSQL("CREATE UNIQUE INDEX url_index_1 ON " + TABLE_NAME + "(" + COLUMN_URL + ")");
                 db.setTransactionSuccessful();
@@ -262,7 +201,26 @@ public class BrowserHistoryManager implements CursorLoadable {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             switch (oldVersion) {
                 case 1:
-                    db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_FAVICON + " BLOB");
+                    break;
+                case 2:
+                    db.beginTransaction();
+                    try {
+                        db.execSQL("ALTER TABLE " + TABLE_NAME + " RENAME TO " + TABLE_NAME + "_old;");
+                        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
+                                COLUMN_ID + " INTEGER PRIMARY KEY" +
+                                ", " + COLUMN_URL + " TEXT NOT NULL" +
+                                ", " + COLUMN_TITLE + " TEXT" +
+                                ", " + COLUMN_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
+                                ")");
+                        db.execSQL("INSERT INTO " + TABLE_NAME + "(" +
+                                COLUMN_ID + ", " + COLUMN_URL + ", " + COLUMN_TITLE + ", " + COLUMN_TIME + ") SELECT " +
+                                COLUMN_ID + ", " + COLUMN_URL + ", " + COLUMN_TITLE + ", " + COLUMN_TIME + " FROM " + TABLE_NAME + "_old;");
+                        db.execSQL("DROP TABLE " + TABLE_NAME + "_old;");
+                        db.execSQL("CREATE UNIQUE INDEX url_index_1 ON " + TABLE_NAME + "(" + COLUMN_URL + ")");
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
                     break;
                 default:
                     db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);

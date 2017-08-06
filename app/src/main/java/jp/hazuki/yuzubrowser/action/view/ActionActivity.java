@@ -5,17 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.action.ActionManager;
@@ -23,12 +24,15 @@ import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.ListActionManager;
 import jp.hazuki.yuzubrowser.action.SingleAction;
 import jp.hazuki.yuzubrowser.action.SingleActionManager;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class ActionActivity extends AppCompatActivity {
+public class ActionActivity extends ThemeActivity {
     private static final String TAG = "ActionActivity";
+    public static final String ACTION_ALL_ACTION = "ActionActivity.action.allaction";
     public static final String EXTRA_ACTION = "ActionActivity.extra.action";
     public static final String EXTRA_RETURN = "ActionActivity.extra.return";
     public static final int RESULT_REQUEST_PREFERENCE = 1;
@@ -53,6 +57,15 @@ public class ActionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent == null) throw new NullPointerException("intent is null");
+
+        if (ACTION_ALL_ACTION.equals(intent.getAction())) {
+            boolean fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, AppData.fullscreen.get());
+            int orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, AppData.oritentation.get());
+
+            if (fullscreen)
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            setRequestedOrientation(orientation);
+        }
 
         mActionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA);
         ActionNameArray actionNameArray = (mActionNameArray == null) ? new ActionNameArray(getApplicationContext()) : mActionNameArray;

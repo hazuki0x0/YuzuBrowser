@@ -46,6 +46,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
@@ -201,10 +202,11 @@ public class DownloadService extends Service {
     }
 
     private Notification getNotify() {
-        Notification.Builder builder = new Notification.Builder(this);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this, Constants.notification.CHANNEL_DOWNLOAD_SERVICE);
         builder.setContentTitle(getString(R.string.download_service));
         builder.setSmallIcon(R.drawable.ic_yuzubrowser_white);
-        builder.setPriority(Notification.PRIORITY_MIN);
+        builder.setPriority(NotificationCompat.PRIORITY_MIN);
         return builder.build();
     }
 
@@ -241,27 +243,27 @@ public class DownloadService extends Service {
         context.startService(dintent);
     }
 
-    public class DownloadThread extends Thread {
+    private class DownloadThread extends Thread {
         private static final int DOWNLOAD_BUFFER_SIZE = 1024 * 10;
         private final DownloadRequestInfo mData;
         private boolean mAbort = false;
         private boolean mForceAbort = false;
 
-        public DownloadThread(DownloadRequestInfo data) {
+        DownloadThread(DownloadRequestInfo data) {
             mData = data;
         }
 
-        public void forceAbort() {
+        void forceAbort() {
             mForceAbort = true;
             mAbort = true;
         }
 
-        public void abort() {
+        void abort() {
             mForceAbort = false;
             mAbort = true;
         }
 
-        public DownloadRequestInfo getDownloadRequestInfo() {
+        DownloadRequestInfo getDownloadRequestInfo() {
             return mData;
         }
 
@@ -317,7 +319,8 @@ public class DownloadService extends Service {
                 httpClient.setHeader("User-Agent", mData.getUserAgent());
             }
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+            NotificationCompat.Builder notification =
+                    new NotificationCompat.Builder(getApplicationContext(), Constants.notification.CHANNEL_DOWNLOAD_NOTIFY);
 
             HttpResponseData response = httpClient.connect();
             if (response == null) {
@@ -351,6 +354,7 @@ public class DownloadService extends Service {
             mData.setFile(FileUtils.replaceProhibitionWord(mData.getFile()));
 
             if (file.getParentFile() != null) {
+                //noinspection ResultOfMethodCallIgnored
                 file.getParentFile().mkdirs();
             }
 
@@ -474,7 +478,8 @@ public class DownloadService extends Service {
             if (DownloadUtils.saveBase64Image(image, mData.file) != null) {
                 mData.setState(DownloadInfo.STATE_DOWNLOADED);
 
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+                NotificationCompat.Builder notification =
+                        new NotificationCompat.Builder(getApplicationContext(), Constants.notification.CHANNEL_DOWNLOAD_NOTIFY);
                 notification.setWhen(System.currentTimeMillis());
                 notification.setProgress(0, 0, false);
                 notification.setAutoCancel(true);
@@ -488,7 +493,8 @@ public class DownloadService extends Service {
                 FileUtils.notifyImageFile(getApplicationContext(), mData.file.getAbsolutePath());
             } else {
                 mData.setState(DownloadInfo.STATE_UNKNOWN_ERROR);
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext());
+                NotificationCompat.Builder notification =
+                        new NotificationCompat.Builder(getApplicationContext(), Constants.notification.CHANNEL_DOWNLOAD_NOTIFY);
                 notification.setOngoing(false);
                 notification.setContentTitle(mData.getFile().getName());
                 notification.setWhen(System.currentTimeMillis());

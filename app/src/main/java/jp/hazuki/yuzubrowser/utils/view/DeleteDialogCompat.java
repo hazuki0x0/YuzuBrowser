@@ -30,6 +30,8 @@ public class DeleteDialogCompat extends DialogFragment {
     private static final String TITLE = "title";
     private static final String MES = "mes";
 
+    private boolean canOkPress = true;
+
     public static DeleteDialogCompat newInstance(Context context, int title, int message, int pos) {
         return newInstance(context.getString(title), context.getString(message), pos);
     }
@@ -53,8 +55,11 @@ public class DeleteDialogCompat extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (getParentFragment() instanceof OnDelete) {
-                            ((OnDelete) getParentFragment()).onDelete(getArguments().getInt(POS));
+                        if (canOkPress) {
+                            canOkPress = false;
+                            if (getParentFragment() instanceof OnDelete) {
+                                ((OnDelete) getParentFragment()).onDelete(getArguments().getInt(POS));
+                            }
                         }
                     }
                 })

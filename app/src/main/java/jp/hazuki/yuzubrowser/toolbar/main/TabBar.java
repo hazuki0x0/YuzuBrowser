@@ -53,7 +53,7 @@ public class TabBar extends ToolbarBase {
         mLeftButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.leftLinearLayout), action_callback, TAB_SIZE_Y);
         mRightButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.rightLinearLayout), action_callback, TAB_SIZE_Y);
 
-        LinearLayout tabLayoutBase = (LinearLayout) findViewById(R.id.tabLayoutBase);
+        LinearLayout tabLayoutBase = findViewById(R.id.tabLayoutBase);
         switch (AppData.tab_type.get()) {
             case TAB_TYPE_SCROLLABLE: {
                 ScrollableTabLayout tab_layout = new ScrollableTabLayout(context);
@@ -121,6 +121,11 @@ public class TabBar extends ToolbarBase {
 
     public void removeTab(int no) {
         mTabLayout.removeTabAt(no);
+    }
+
+    public void addTab(int id, View view) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(TAB_SIZE_X, TAB_SIZE_Y);
+        mTabLayout.addTabView(id, view, params);
     }
 
     public void setOnTabClickListener(TabLayout.OnTabClickListener l) {

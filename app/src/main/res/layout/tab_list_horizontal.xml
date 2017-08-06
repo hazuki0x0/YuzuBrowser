@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom">
+    android:divider="@drawable/divider"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/tab_list_background" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/tab_list_background" />
 
     <LinearLayout
         android:id="@+id/bottomBar"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:gravity="right"
         android:background="@color/tab_list_background"
         android:clickable="true"
-        style="?android:attr/buttonBarStyle"
+        android:gravity="right"
+        android:orientation="horizontal"
         tools:ignore="RtlHardcoded">
 
         <ImageButton
-            android:src="@drawable/ic_add_box_white_24dp"
-            android:contentDescription="@string/new_tab"
+            android:id="@+id/newTabButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/newTabButton"
-            android:paddingStart="30dp"
+            android:contentDescription="@string/new_tab"
             android:paddingEnd="30dp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:paddingStart="30dp"
+            android:src="@drawable/ic_add_box_white_24dp" />
     </LinearLayout>
 </LinearLayout>

@@ -93,9 +93,9 @@ public class CustomSingleAction extends SingleAction {
 
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
-        Intent intent = new Intent(context, CustomPreferenceActivity.class);
-        intent.putExtra(CustomPreferenceActivity.EXTRA_ACTION, (Parcelable) mAction);
-        intent.putExtra(CustomPreferenceActivity.EXTRA_NAME, mName);
+        Intent intent = new Intent(context, CustomSingleActionActivity.class);
+        intent.putExtra(CustomSingleActionActivity.EXTRA_ACTION, (Parcelable) mAction);
+        intent.putExtra(CustomSingleActionActivity.EXTRA_NAME, mName);
         intent.putExtra(ActionNameArray.INTENT_EXTRA, (Parcelable) context.getActionNameArray());
 
         OnActivityResultListener l = new OnActivityResultListener() {
@@ -103,8 +103,8 @@ public class CustomSingleAction extends SingleAction {
             public void onActivityResult(Context context, int resultCode, Intent intent) {
                 if (resultCode != Activity.RESULT_OK || intent == null)
                     return;
-                mAction = intent.getParcelableExtra(CustomPreferenceActivity.EXTRA_ACTION);
-                mName = intent.getStringExtra(CustomPreferenceActivity.EXTRA_NAME);
+                mAction = intent.getParcelableExtra(CustomSingleActionActivity.EXTRA_ACTION);
+                mName = intent.getStringExtra(CustomSingleActionActivity.EXTRA_NAME);
             }
         };
 

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.utils.view;
 
 import android.content.Context;
@@ -91,20 +107,16 @@ public class PointerView extends RelativeLayout {
 
             final long time = SystemClock.uptimeMillis();
             final MotionEvent ev_down = MotionEvent.obtain(time, time, MotionEvent.ACTION_DOWN, x, y, 0);
-            //final MotionEvent ev_up = MotionEvent.obtain(time, time + TAP_TIMEOUT + LONGPRESS_TIMEOUT, MotionEvent.ACTION_UP, x, y, 0);
             mView.dispatchTouchEvent(ev_down);
-
-			/*mView.postDelayed(new Runnable() {
-                @Override
-				public void run() {
-					mView.dispatchTouchEvent(ev_up);
-				}
-			}, TAP_TIMEOUT + LONGPRESS_TIMEOUT);*/
         }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             return false;
+        }
+
+        @Override
+        public void onUp(MotionEvent e) {
         }
 
         @Override
@@ -157,11 +169,6 @@ public class PointerView extends RelativeLayout {
     public boolean getBackFinish() {
         return backFinish;
     }
-
-    //private static final int TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
-    //private static final int LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
-
-    //private Handler mHandler = new Handler();
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

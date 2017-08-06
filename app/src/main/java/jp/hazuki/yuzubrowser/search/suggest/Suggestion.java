@@ -19,9 +19,16 @@ package jp.hazuki.yuzubrowser.search.suggest;
 public class Suggestion {
     public Suggestion(String word) {
         this.word = word;
+        this.history = false;
+    }
+
+    public Suggestion(String word, boolean history) {
+        this.word = word;
+        this.history = history;
     }
 
     public final String word;
+    public final boolean history;
 
     @Override
     public boolean equals(Object obj) {

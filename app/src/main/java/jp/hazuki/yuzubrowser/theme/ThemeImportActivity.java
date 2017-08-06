@@ -24,14 +24,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 
-public class ThemeImportActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ThemeImportTask.Result> {
+public class ThemeImportActivity extends ThemeActivity implements LoaderManager.LoaderCallbacks<ThemeImportTask.Result> {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,5 +78,10 @@ public class ThemeImportActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoaderReset(Loader<ThemeImportTask.Result> loader) {
 
+    }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.BrowserMinThemeLight_Transparent;
     }
 }

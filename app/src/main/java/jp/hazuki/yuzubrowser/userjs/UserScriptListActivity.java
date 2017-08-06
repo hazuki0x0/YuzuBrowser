@@ -1,11 +1,11 @@
 package jp.hazuki.yuzubrowser.userjs;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class UserScriptListActivity extends AppCompatActivity {
+public class UserScriptListActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/pref_speed_dial">
+        <Preference
+            android:key="edit_speeddial"
+            android:title="@string/pref_edit_speeddial" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_speeddial_ui_settings">
+        <SwitchPreference
+            android:key="speeddial_show_header"
+            android:title="@string/pref_speeddial_show_header" />
+        <SwitchPreference
+            android:key="speeddial_show_search"
+            android:title="@string/pref_speeddial_show_search_bar" />
+        <SwitchPreference
+            android:key="speeddial_show_icon"
+            android:title="@string/pref_speeddial_show_icon" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+            android:key="speeddial_column"
+            android:title="@string/pref_speeddial_column"
+            app:seekMax="10"
+            app:seekMin="1" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+            android:key="speeddial_column_landscape"
+            android:title="@string/pref_speeddial_column_landscape"
+            app:seekMax="10"
+            app:seekMin="1" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
+            android:key="speeddial_column_width"
+            android:title="@string/pref_speeddial_column_max_width"
+            app:seekMax="200"
+            app:seekMin="10" />
+    </PreferenceCategory>
+</PreferenceScreen>

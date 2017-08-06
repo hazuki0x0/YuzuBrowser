@@ -88,6 +88,22 @@
     <div class="details_info">
         先頭に<code>http://</code>などのスキームをつけない場合内部で自動的に補完されます。(<code>^\w+://</code>を追加)<br>
         また<code>*test.com</code>のようにすると<code>http://other.com/?page=test.com</code>などのURLにもマッチしてしまいます。
+        <ul>
+            <li>サブドメインを置き換える場合</li>
+        </ul>
+        <div class="li_info">
+            <code>*.</code>または<code>http://*.</code>で始めます (<code>*.</code>を<code>((?![./]).)*</code>で置き換え)<br>
+            例)パターン文字列:<code>*.test.com</code><br>
+            <code>mobile.test.com</code>, <code>doc.test.com</code>にマッチします。<br>
+            しかし、<code>mobile.doc.test.com</code>はサブドメインに相当する部分に<code>.</code>が含まれるためマッチしません。
+        </div>
+        <ul>
+            <li><code>http*://</code>で始める場合</li>
+        </ul>
+        <div class="li_info">
+            このブラウザではこの部分は自動で補完されるため不要です。<br>
+            また、この記述は誤判定防止の為、内部で<code>https?://</code>に置き換えられます。
+        </div>
     </div>
 </details>
 <details>

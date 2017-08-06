@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/search_ripple"
+        android:focusable="true"
         android:clickable="true"
         android:gravity="center_vertical"
         android:maxLines="2"
         android:minHeight="@dimen/search_list_size"
-        android:paddingStart="6dp"
         android:paddingEnd="6dp"
+        android:paddingStart="6dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
@@ -24,8 +26,9 @@
         android:id="@+id/imageButton"
         android:layout_width="@dimen/search_list_size"
         android:layout_height="@dimen/search_list_size"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/search_ripple"
         android:scaleType="center"
+        android:tint="@color/deep_gray"
         android:src="@drawable/ic_reply_black_24dp" />
 
 </LinearLayout>

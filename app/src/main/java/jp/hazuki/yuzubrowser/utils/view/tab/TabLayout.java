@@ -27,6 +27,8 @@ public interface TabLayout {
 
     void addTabView(View view, LinearLayout.LayoutParams params);
 
+    void addTabView(int id, View view, LinearLayout.LayoutParams params);
+
     void setCurrentTab(int id);
 
     void removeTabAt(int id);

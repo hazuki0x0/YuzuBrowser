@@ -16,8 +16,12 @@
 
 package jp.hazuki.yuzubrowser.tab.manager;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.res.ResourcesCompat;
@@ -25,6 +29,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
@@ -34,11 +39,17 @@ public class MainTabData extends TabData {
     public MainTabData(CustomWebView web, View view) {
         super(web);
         mTabView = view;
+        titleTextView = view.findViewById(R.id.textView);
+        context = view.getContext();
+        loadingIcon = (AnimatedVectorDrawable) context.getDrawable(R.drawable.ic_loading_circle_24dp);
     }
 
     public MainTabData(CustomWebView web, View view, TabIndexData data) {
         super(web, data);
         mTabView = view;
+        titleTextView = view.findViewById(R.id.textView);
+        context = view.getContext();
+        loadingIcon = (AnimatedVectorDrawable) context.getDrawable(R.drawable.ic_loading_circle_24dp);
     }
 
     @Override
@@ -47,6 +58,15 @@ public class MainTabData extends TabData {
         setText(url);
         finished = false;
         startDocument = true;
+        iconReceived = false;
+        if (AppData.toolbar_show_favicon.get()) {
+            if (url.startsWith("yuzu:")) {
+                removeIcon();
+            } else {
+                setIcon(loadingIcon);
+                loadingIcon.start();
+            }
+        }
     }
 
     @Override
@@ -59,12 +79,25 @@ public class MainTabData extends TabData {
             if (AppData.pause_web_tab_change.get())
                 mWebView.onPause();
         }
+        if (AppData.toolbar_show_favicon.get() && !url.startsWith("yuzu:") && !iconReceived) {
+            setIcon(context.getDrawable(R.drawable.ic_page_white_24px));
+        }
     }
 
     @Override
     public void onReceivedTitle(String title) {
         super.onReceivedTitle(title);
         setText(getTitle());
+    }
+
+    public void onReceivedIcon(Bitmap bitmap) {
+        if (loadingIcon.isRunning()) {
+            loadingIcon.stop();
+        }
+        iconReceived = true;
+        if (AppData.toolbar_show_favicon.get()) {
+            setIcon(new BitmapDrawable(context.getResources(), bitmap));
+        }
     }
 
     @Override
@@ -74,6 +107,16 @@ public class MainTabData extends TabData {
             setText(getTitle());
         else
             setText(getUrl());
+
+        String url = getOriginalUrl();
+        if (url != null && AppData.toolbar_show_favicon.get()) {
+            if (url.startsWith("yuzu:")) {
+                removeIcon();
+            } else {
+                setIcon(new BitmapDrawable(context.getResources(),
+                        FaviconManager.getInstance(context).get(url)));
+            }
+        }
     }
 
     public void onMoveTabToBackground(Resources res, Resources.Theme theme) {
@@ -83,21 +126,20 @@ public class MainTabData extends TabData {
         else
             mTabView.setBackgroundResource(R.drawable.tab_background_normal);
 
-        TextView textView = (TextView) mTabView.findViewById(R.id.textView);
         if (isPinning())
             if (themedata != null && themedata.tabTextColorPin != 0)
-                textView.setTextColor(themedata.tabTextColorPin);
+                titleTextView.setTextColor(themedata.tabTextColorPin);
             else
-                textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_pinning, theme));
+                titleTextView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_pinning, theme));
         else if (isNavLock())
             if (themedata != null && themedata.tabTextColorLock != 0)
-                textView.setTextColor(themedata.tabTextColorLock);
+                titleTextView.setTextColor(themedata.tabTextColorLock);
             else
-                textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_locked, theme));
+                titleTextView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_locked, theme));
         else if (themedata != null && themedata.tabTextColorNormal != 0)
-            textView.setTextColor(themedata.tabTextColorNormal);
+            titleTextView.setTextColor(themedata.tabTextColorNormal);
         else
-            textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_normal, theme));
+            titleTextView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_normal, theme));
     }
 
     public void onMoveTabToForeground(Resources res, Resources.Theme theme) {
@@ -113,21 +155,24 @@ public class MainTabData extends TabData {
         } else
             mTabView.setBackgroundResource(R.drawable.tab_background_selected);
 
-        TextView textView = (TextView) mTabView.findViewById(R.id.textView);
+        if (themedata != null && themedata.progressColor != 0) {
+            loadingIcon.setTint(themedata.progressColor);
+        }
+
         if (isPinning())
             if (themedata != null && themedata.tabTextColorPin != 0)
-                textView.setTextColor(themedata.tabTextColorPin);
+                titleTextView.setTextColor(themedata.tabTextColorPin);
             else
-                textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_pinning, theme));
+                titleTextView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_pinning, theme));
         else if (isNavLock())
             if (themedata != null && themedata.tabTextColorLock != 0)
-                textView.setTextColor(themedata.tabTextColorLock);
+                titleTextView.setTextColor(themedata.tabTextColorLock);
             else
-                textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_locked, theme));
+                titleTextView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_locked, theme));
         else if (themedata != null && themedata.tabTextColorSelect != 0)
-            textView.setTextColor(themedata.tabTextColorSelect);
+            titleTextView.setTextColor(themedata.tabTextColorSelect);
         else
-            textView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_selected, theme));
+            titleTextView.setTextColor(ResourcesCompat.getColor(res, R.color.tab_text_color_selected, theme));
     }
 
     public void invalidateView(boolean isCurrent, Resources res, Resources.Theme theme) {
@@ -138,14 +183,28 @@ public class MainTabData extends TabData {
     }
 
     private void setText(String text) {
-        ((TextView) mTabView.findViewById(R.id.textView)).setText(text);
+        titleTextView.setText(text);
+    }
+
+    private void setIcon(Drawable drawable) {
+        int size = titleTextView.getHeight() - titleTextView.getPaddingTop() - titleTextView.getPaddingBottom();
+        drawable.setBounds(0, 0, size, size);
+        titleTextView.setCompoundDrawables(drawable, null, null, null);
+    }
+
+    private void removeIcon() {
+        titleTextView.setCompoundDrawables(null, null, null, null);
     }
 
     private final View mTabView;
+    private final TextView titleTextView;
+    private final AnimatedVectorDrawable loadingIcon;
+    private final Context context;
     private WebSettingResetAction resetAction;
     private boolean finished;
     private boolean bgTab;
     private boolean startDocument;
+    private boolean iconReceived;
 
     public WebSettingResetAction getResetAction() {
         return resetAction;
@@ -170,5 +229,9 @@ public class MainTabData extends TabData {
 
     public void setStartDocument(boolean startDocument) {
         this.startDocument = startDocument;
+    }
+
+    public View getTabView() {
+        return mTabView;
     }
 }

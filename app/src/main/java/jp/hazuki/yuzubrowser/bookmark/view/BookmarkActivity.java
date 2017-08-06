@@ -3,32 +3,36 @@ package jp.hazuki.yuzubrowser.bookmark.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
+import android.view.WindowManager;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.Api24LongPressFix;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity;
 
-public class BookmarkActivity extends AppCompatActivity implements Api24LongPressFix.OnBackLongClickListener {
-
-    private Api24LongPressFix api24LongPressFix;
+public class BookmarkActivity extends LongPressFixActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_base);
 
-        api24LongPressFix = new Api24LongPressFix(this);
-
         Intent intent = getIntent();
         boolean pickMode = false;
         long itemId = -1;
+        boolean fullscreen = AppData.fullscreen.get();
+        int orientation = AppData.oritentation.get();
         if (intent != null) {
             pickMode = Intent.ACTION_PICK.equals(intent.getAction());
             itemId = intent.getLongExtra("id", -1);
+
+            fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen);
+            orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation);
         }
 
-
+        if (fullscreen)
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(orientation);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, BookmarkFragment.newInstance(pickMode, itemId))
@@ -36,36 +40,17 @@ public class BookmarkActivity extends AppCompatActivity implements Api24LongPres
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            event.startTracking();
-            api24LongPressFix.onBackKeyDown();
-            return true;
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment instanceof BookmarkFragment) {
+            if (((BookmarkFragment) fragment).onBack()) {
+                finish();
+            }
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (api24LongPressFix.onBackKeyUp()) {
-                return true;
-            }
-            if (event.isTracking() && !event.isCanceled()) {
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-                if (fragment instanceof BookmarkFragment) {
-                    if (((BookmarkFragment) fragment).onBack()) {
-                        finish();
-                    }
-                    return true;
-                }
-            }
-        }
-        return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
-    public void onBackLongClick() {
+    public void onBackKeyLongPressed() {
         finish();
     }
 }

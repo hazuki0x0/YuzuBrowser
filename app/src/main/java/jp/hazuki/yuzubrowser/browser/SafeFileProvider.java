@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
-import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class SafeFileProvider extends ContentProvider {
@@ -31,6 +31,7 @@ public class SafeFileProvider extends ContentProvider {
             mAllowedFolder = new String[]{
                     getContext().getDir("public_html", Context.MODE_PRIVATE).getCanonicalPath(),
                     Environment.getExternalStorageDirectory().getCanonicalPath(),
+                    "/storage/"
             };
         } catch (IOException e) {
             ErrorReport.printAndWriteLog(e);
@@ -73,20 +74,7 @@ public class SafeFileProvider extends ContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         URI normalUri = URI.create(uri.buildUpon().scheme("file").authority("").build().toString()).normalize();
-        File file = new File(normalUri);
-        final int lastDot = file.getName().lastIndexOf('.');
-        if (lastDot >= 0) {
-            final String extension = file.getName().substring(lastDot + 1);
-            final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            if (mime != null) {
-                return mime;
-            }
-            if ("mht".equals(extension) || "mhtml".equals(extension)) {
-                return "multipart/related";
-            }
-        }
-
-        return "application/octet-stream";
+        return FileUtils.getMineType(new File(normalUri));
     }
 
     @Override

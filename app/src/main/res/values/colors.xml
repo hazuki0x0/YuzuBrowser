@@ -17,4 +17,7 @@
     <color name="white">#FFFFFF</color>
     <color name="ripple">#42ffffff</color>
     <color name="tab_list_background">#f5222222</color>
+    <color name="white_gray">#e6e6e6</color>
+    <color name="scroll_bar">#95959595</color>
+    <color name="selected_overlay">#8033b5e5</color>
 </resources>

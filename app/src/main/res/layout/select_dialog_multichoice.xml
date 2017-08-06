@@ -10,4 +10,4 @@
     android:paddingStart="12dp"
     android:paddingEnd="7dp"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textColor="@android:color/white" />
+    android:textColor="?android:attr/textColorPrimary" />

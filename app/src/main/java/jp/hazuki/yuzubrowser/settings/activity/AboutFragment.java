@@ -31,6 +31,8 @@ import java.io.File;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.AppUtils;
+import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 
 public class AboutFragment extends PreferenceFragment {
@@ -40,7 +42,16 @@ public class AboutFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
         addPreferencesFromResource(R.xml.pref_about);
-        findPreference("version").setSummary(BuildConfig.VERSION_NAME);
+        Preference version = findPreference("version");
+        version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                ClipboardUtils.setClipboardText(getActivity(), AppUtils.getVersionDeviceInfo(getActivity()));
+                return true;
+            }
+        });
+
+        version.setSummary(BuildConfig.VERSION_NAME);
         findPreference("build").setSummary(BuildConfig.GIT_HASH);
         findPreference("build_time").setSummary(BuildConfig.BUILD_TIME);
 

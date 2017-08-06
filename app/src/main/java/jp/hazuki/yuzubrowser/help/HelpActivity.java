@@ -20,14 +20,14 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class HelpActivity extends AppCompatActivity {
+public class HelpActivity extends ThemeActivity {
 
     private WebView webView;
 

@@ -41,6 +41,7 @@ import java.net.URL;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.HttpUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.WebDownloadUtils;
@@ -98,7 +99,7 @@ public class DownloadDialog {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, "message/rfc822", ".mhtml"));//TODO contentDisposition
+                    mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, "multipart/related", ".mhtml"));//TODO contentDisposition
                 } else {
                     mInfo.setFile(WebDownloadUtils.guessDownloadFile(mInfo.getFile().getParent(), mInfo.getUrl(), null, null, ".html"));//TODO contentDisposition, mimetype
                 }
@@ -118,7 +119,7 @@ public class DownloadDialog {
                             return;
                         }
 
-                        File file = new File(folderButton.getCurrentFolder(), filename);
+                        File file = new File(folderButton.getCurrentFolder(), FileUtils.replaceProhibitionWord(filename));
                         mInfo.setFile(file);
 
                         if (!file.exists()) {

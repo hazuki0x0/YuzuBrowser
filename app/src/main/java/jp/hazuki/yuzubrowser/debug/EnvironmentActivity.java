@@ -2,7 +2,6 @@ package jp.hazuki.yuzubrowser.debug;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import java.io.File;
@@ -11,8 +10,9 @@ import java.io.IOException;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.EnvironmentUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class EnvironmentActivity extends AppCompatActivity {
+public class EnvironmentActivity extends ThemeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

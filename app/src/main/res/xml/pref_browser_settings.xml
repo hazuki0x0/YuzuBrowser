@@ -45,6 +45,9 @@
     <jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
 
     <SwitchPreference
+        android:key="save_tabs_for_crash"
+        android:title="@string/pref_save_tab_for_crash" />
+    <SwitchPreference
         android:key="save_last_tabs"
         android:title="@string/pref_save_last_tabs" />
     <SwitchPreference

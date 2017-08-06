@@ -94,7 +94,8 @@ public class AdBlockController {
 
     public WebResourceResponse createDummy(Uri uri) {
         String last = uri.getLastPathSegment();
-        if (last != null && (last.endsWith(".js") || last.endsWith(".css"))) {
+        if (last != null && (!last.contains(".") || last.endsWith(".js") || last.endsWith(".css")
+                || last.endsWith(".html") || last.endsWith(".htm"))) {
             return new WebResourceResponse("text/html", "UTF-8", DUMMY_TEXT);
         } else {
             return new WebResourceResponse("image/png", null, new ByteArrayInputStream(DUMMY_IMAGE));

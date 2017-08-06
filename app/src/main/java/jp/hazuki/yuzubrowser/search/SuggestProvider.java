@@ -55,6 +55,7 @@ public class SuggestProvider extends ContentProvider {
     public static final Uri URI_NET = Uri.parse("content://" + AUTHORITY + "/net");
     public static final Uri URI_LOCAL = Uri.parse("content://" + AUTHORITY + "/local");
     public static final Uri URI_NORMAL = Uri.parse("content://" + AUTHORITY + "/normal");
+    public static final String SUGGEST_HISTORY = "suggest_history";
     private static final int TYPE_NET_ALL = 1;
     private static final int TYPE_LOCAL_ALL = 2;
     private static final int TYPE_NORMAL_ALL = 3;
@@ -82,6 +83,7 @@ public class SuggestProvider extends ContentProvider {
     //private static final int COL_ICON_1 = 3;
     //private static final int COL_ICON_2 = 4;
     private static final int COL_QUERY = 5;
+    private static final int COL_HISTORY = 6;
 
     private static final String[] COLUMNS = new String[]{
             BaseColumns._ID,
@@ -90,6 +92,7 @@ public class SuggestProvider extends ContentProvider {
             SearchManager.SUGGEST_COLUMN_ICON_1,
             SearchManager.SUGGEST_COLUMN_ICON_2,
             SearchManager.SUGGEST_COLUMN_QUERY,
+            SUGGEST_HISTORY,
     };
 
     private static final String DB_NAME = "searchsuggest.db";
@@ -150,7 +153,8 @@ public class SuggestProvider extends ContentProvider {
                 Cursor c = db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " LIKE '%' || ? || '%' ESCAPE '$'", new String[]{dbQuery}, null, null, BaseColumns._ID + " DESC", "3");
                 int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
                 while (c.moveToNext()) {
-                    Suggestion suggestion = new Suggestion(c.getString(COL_QUERY));
+                    Suggestion suggestion = new Suggestion(c.getString(COL_QUERY), true);
+
                     suggestions.add(suggestion);
                     net.remove(suggestion);
                 }
@@ -215,7 +219,8 @@ public class SuggestProvider extends ContentProvider {
             }
         } catch (UnknownHostException e) {
             throw e;
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ArrayIndexOutOfBoundsException e) {
+            // ArrayIndexOutOfBoundsException - workaround for OkHttp
             ErrorReport.printAndWriteLog(e);
         } finally {
             if (parser != null)
@@ -231,7 +236,7 @@ public class SuggestProvider extends ContentProvider {
     private Cursor queryLocal(String query) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         if (TextUtils.isEmpty(query))
-            return db.query(TABLE_NAME, null, null, null, null, null, BaseColumns._ID + " DESC");
+            return wrapCursor(db.query(TABLE_NAME, null, null, null, null, null, BaseColumns._ID + " DESC"));
         else {
             String dbQuery = query.replace("%", "$%").replace("_", "$_");
             return addYuzuPrefix(query, db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " LIKE '%' || ? || '%' ESCAPE '$'", new String[]{dbQuery}, null, null, BaseColumns._ID + " DESC"));
@@ -250,7 +255,19 @@ public class SuggestProvider extends ContentProvider {
         if (c != null) {
             final int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
             while (c.moveToNext()) {
-                suggestions.add(new Suggestion(c.getString(COL_QUERY)));
+                suggestions.add(new Suggestion(c.getString(COL_QUERY), true));
+            }
+            c.close();
+        }
+        return new SuggestionsCursor(suggestions);
+    }
+
+    private Cursor wrapCursor(Cursor c) {
+        ArrayList<Suggestion> suggestions = new ArrayList<>();
+        if (c != null) {
+            final int COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY);
+            while (c.moveToNext()) {
+                suggestions.add(new Suggestion(c.getString(COL_QUERY), true));
             }
             c.close();
         }
@@ -268,7 +285,7 @@ public class SuggestProvider extends ContentProvider {
         }
     }
 
-    private static class SuggestionsCursor extends AbstractCursor {
+    public static class SuggestionsCursor extends AbstractCursor {
         private List<Suggestion> mList;
 
         public SuggestionsCursor(List<Suggestion> list) {
@@ -318,7 +335,12 @@ public class SuggestProvider extends ContentProvider {
 
         @Override
         public int getInt(int column) {
-            throw new UnsupportedOperationException();
+            if (getPosition() == -1) return 0;
+            if (column == COL_HISTORY) {
+                return mList.get(getPosition()).history ? 1 : 0;
+            } else {
+                return 0;
+            }
         }
 
         @Override

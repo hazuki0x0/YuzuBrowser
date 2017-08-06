@@ -23,7 +23,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,8 +32,9 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 
-public class CloseAutoSelectActivity extends AppCompatActivity {
+public class CloseAutoSelectActivity extends ThemeActivity {
 
     private static final String DEFAULT = "0";
     private static final String INTENT = "1";

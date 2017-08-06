@@ -39,6 +39,7 @@ import java.util.Map;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
+import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
 public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, SwipeRefreshLayout.OnRefreshListener, ScrollController.OnScrollEnable {
@@ -159,6 +160,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         return webView.getHitTestResult();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String[] getHttpAuthUsernamePassword(String host, String realm) {
         return webView.getHttpAuthUsernamePassword(host, realm);
@@ -279,6 +281,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
         webView.setDownloadListener(listener);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setHttpAuthUsernamePassword(String host, String realm, String username, String password) {
         webView.setHttpAuthUsernamePassword(host, realm, username, password);
@@ -456,7 +459,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
                 setProgressBackgroundColorSchemeColor(ResourcesCompat.getColor(getResources(), R.color.deep_gray, getContext().getTheme()));
             }
         } else {
-            setColorSchemeResources(R.color.accent);
+            setColorSchemeResources(ThemeUtils.getIdFromThemeRes(getContext(), R.attr.colorAccent));
         }
     }
 

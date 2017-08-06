@@ -3,6 +3,7 @@ package jp.hazuki.yuzubrowser.utils;
 import android.content.Context;
 import android.graphics.Point;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 
 public class DisplayUtils {
@@ -24,5 +25,13 @@ public class DisplayUtils {
         Point point = new Point();
         display.getSize(point);
         return point.y;
+    }
+
+    public static int getFullScreenVisibility(boolean showNavBar) {
+        if (showNavBar) {
+            return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        } else {
+            return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        }
     }
 }

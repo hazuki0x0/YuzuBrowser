@@ -65,6 +65,7 @@ public interface CustomWebView {
 
     WebView.HitTestResult getHitTestResult();
 
+    @Deprecated
     String[] getHttpAuthUsernamePassword(String host, String realm);
 
     String getOriginalUrl();
@@ -115,6 +116,7 @@ public interface CustomWebView {
 
     void setDownloadListener(DownloadListener listener);
 
+    @Deprecated
     void setHttpAuthUsernamePassword(String host, String realm, String username, String password);
 
     void setNetworkAvailable(boolean networkUp);

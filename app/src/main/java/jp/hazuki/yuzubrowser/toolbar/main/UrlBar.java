@@ -33,7 +33,7 @@ public class UrlBar extends ToolbarBase {
         mLeftButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.leftLinearLayout), action_callback, TOOLBAR_SIZE_Y);
         mRightButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.rightLinearLayout), action_callback, TOOLBAR_SIZE_Y);
 
-        centerUrlButton = (SwipeTextButton) findViewById(R.id.centerUrlButton);
+        centerUrlButton = findViewById(R.id.centerUrlButton);
         centerUrlButton.setActionData(softbtnManager.btn_url_center, action_callback);
         ButtonToolbarController.settingButtonSize(centerUrlButton, TOOLBAR_SIZE_Y);
 
@@ -87,10 +87,12 @@ public class UrlBar extends ToolbarBase {
             @SuppressLint("RtlHardcoded")
             @Override
             public void run() {
-                if (data.getTitle() != null && !data.isInPageLoad()) {
+                if (!AppData.toolbar_always_show_url.get() && data.getTitle() != null && !data.isInPageLoad()) {
+                    centerUrlButton.setTypeUrl(false);
                     centerUrlButton.setText(data.getTitle());
                     centerUrlButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                 } else {
+                    centerUrlButton.setTypeUrl(true);
                     centerUrlButton.setText(UrlUtils.decodeUrl(data.getUrl()));
                     centerUrlButton.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 }

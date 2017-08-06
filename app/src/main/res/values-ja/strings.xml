@@ -96,6 +96,7 @@
     <string name="clear_database">HTML5データベースの削除</string>
     <string name="clear_password">パスワードの削除</string>
     <string name="clear_formdata">フォームデータの削除</string>
+    <string name="clear_favicon">faviconキャッシュの削除</string>
     <string name="close_all_tabs">タブをすべて閉じる</string>
     <string name="search">検索</string>
     <string name="previous">前</string>
@@ -191,6 +192,7 @@
     <string name="refresh">更新</string>
 
     <string name="default_text">デフォルト</string>
+    <string name="delete">削除</string>
 
     <string name="find_on_page">ページ内検索</string>
 
@@ -211,6 +213,7 @@
     <string name="deleted">削除しました</string>
 
     <string name="download_service">ダウンロードサービス</string>
+    <string name="download_notify">ダウンロードの状態</string>
 
     <string name="permission_probrem">パーミッション不足</string>
     <string name="request_permission_storage_setting">[アクセス権]をタップしてからストレージを有効にしてください</string>
@@ -240,4 +243,13 @@
     <string name="select_file">ファイルを選択</string>
     <string name="action_list">アクション一覧</string>
     <string name="add_to_home">ホーム画面へ追加</string>
+
+    <string name="caches">キャッシュ</string>
+    <string name="cookies">Cookies</string>
+    <string name="passwords">パスワード</string>
+    <string name="formData">フォームデータ</string>
+    <string name="html5Database">HTML5 データベース</string>
+    <string name="geolocation_permissions">位置情報の許可</string>
+    <string name="recent_search_queries">検索クエリの履歴</string>
+    <string name="favicon_cache">faviconキャッシュ</string>
 </resources>

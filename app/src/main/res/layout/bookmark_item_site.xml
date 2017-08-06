@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:paddingStart="16dp"
         android:paddingEnd="13dp"
-        android:tint="#e6e6e6"
+        android:tint="?attr/iconColor"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_bookmark_white_24dp"
         android:layout_centerVertical="true"
@@ -42,5 +42,13 @@
             android:maxLines="1"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

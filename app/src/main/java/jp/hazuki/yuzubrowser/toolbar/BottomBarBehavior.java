@@ -3,7 +3,6 @@ package jp.hazuki.yuzubrowser.toolbar;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -35,19 +34,19 @@ public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, LinearLayout bottomBar, View dependency) {
-        if (dependency != null) {
+        if (dependency != null && bottomBar != null) {
             noTopBar = false;
             if (topBarHeight == -1) {
                 topBarHeight = dependency.getHeight();
             }
-            if (bottomBarHeight == -1 && bottomBar != null) {
+            if (bottomBarHeight == -1) {
                 bottomBarHeight = bottomBar.findViewById(R.id.bottomToolbarLayout).getHeight();
             }
 
             if (topBarHeight != 0) {
                 int height = -dependency.getTop() * bottomBarHeight / topBarHeight;
 
-                ViewCompat.setTranslationY(bottomBar, Math.min(height, bottomBarHeight));
+                bottomBar.setTranslationY(Math.min(height, bottomBarHeight));
             } else {
                 noTopBar = true;
             }

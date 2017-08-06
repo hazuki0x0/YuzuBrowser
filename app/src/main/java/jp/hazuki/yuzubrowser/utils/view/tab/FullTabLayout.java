@@ -48,6 +48,12 @@ public class FullTabLayout extends LinearLayout implements TabLayout {
     }
 
     @Override
+    public void addTabView(int id, View view, LayoutParams params) {
+        mController.addTabView(id, view);
+        addView(view, id, params);
+    }
+
+    @Override
     public void setCurrentTab(int id) {
         mController.setCurrentTab(id);
     }

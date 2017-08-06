@@ -39,8 +39,15 @@ class ThumbnailManager {
     }
 
     void takeThumbnailIfNeeded(MainTabData data) {
-        if (data != null && data.isFinished() && !data.isShotThumbnail()) {
-            createWithCache(data);
+        if (data != null && data.isFinished()) {
+            if (data.isNeedShotThumbnail()) {
+                createWithCache(data);
+            } else if (data.needRetry()) {
+                create(data);
+                data.setCanRetry(false);
+            } else {
+                data.setCanRetry(false);
+            }
         }
     }
 
@@ -62,6 +69,8 @@ class ThumbnailManager {
         if (bitmap != null) {
             cache.putBitmap(data.getUrl(), bitmap);
             data.shotThumbnail(bitmap);
+        } else {
+            data.setCanRetry(true);
         }
     }
 
@@ -78,12 +87,13 @@ class ThumbnailManager {
         int y = (int) ((float) x / width * height + 0.5f);
         if (x <= 0 || y <= 0) return null;
         float scale = (float) width / x;
-        int scroll = (int) (webView.getWebView().getScrollY() * scale + 0.5f);
+        int scrollY = (int) (webView.getWebView().getScrollY() * scale + 0.5f);
+        int scrollX = (int) (webView.getWebView().getScrollX() * scale + 0.5f);
 
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         Canvas localCanvas = new Canvas(bitmap);
-        localCanvas.translate(0, -scroll);
-        localCanvas.clipRect(0, scroll, width, height + scroll, Region.Op.REPLACE);
+        localCanvas.translate(-scrollX, -scrollY);
+        localCanvas.clipRect(scrollX, scrollY, width + scrollX, height + scrollY, Region.Op.REPLACE);
         localCanvas.scale(scale, scale, 0.0f, 0.0f);
 
         webView.getWebView().draw(localCanvas);

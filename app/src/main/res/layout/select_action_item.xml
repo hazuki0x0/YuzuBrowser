@@ -20,6 +20,7 @@
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:tint="?attr/iconColor"
         android:src="@drawable/ic_settings_white_24dp"
         android:id="@+id/settingsButton"
         android:background="?android:attr/selectableItemBackground"
