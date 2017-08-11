@@ -19,13 +19,11 @@ package jp.hazuki.yuzubrowser.utils;
 import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.TypedValue;
 
 public final class ThemeUtils {
 
-    @IdRes
     public static int getIdFromThemeRes(Context context, @AttrRes int id) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(id, outValue, true);
