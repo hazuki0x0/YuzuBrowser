@@ -126,6 +126,7 @@
     <string name="open_url">Open URL</string>
     <string name="cancel_download">Cancel download</string>
     <string name="clear_download">Remove from list</string>
+    <string name="delete_download">Delete file</string>
     <string name="ssl_error_title">Security warning</string>
     <string name="ssl_error_mes">There are problems with the security certificate for this site. Continue?</string>
     <string name="username">User name</string>

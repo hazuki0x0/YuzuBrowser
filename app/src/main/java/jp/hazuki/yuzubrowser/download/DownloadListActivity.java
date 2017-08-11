@@ -26,6 +26,7 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -40,10 +41,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.database.ImplementedCursorLoader;
@@ -102,10 +106,10 @@ public class DownloadListActivity extends ThemeActivity implements LoaderCallbac
                 Cursor cursor = (Cursor) mListAdapter.getItem(position);
                 final long id = cursor.getLong(DownloadInfoDatabase.COLUMN_ID_INDEX);
                 final String url = cursor.getString(DownloadInfoDatabase.COLUMN_URL_INDEX);
+                final String filePath = cursor.getString(DownloadInfoDatabase.COLUMN_FILEPATH_INDEX);
 
                 switch (cursor.getInt(DownloadInfoDatabase.COLUMN_STATE_INDEX)) {
                     case DownloadInfo.STATE_DOWNLOADED:
-                        final String filePath = cursor.getString(DownloadInfoDatabase.COLUMN_FILEPATH_INDEX);
                         menu.add(R.string.open_file).setOnMenuItemClickListener(new OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
@@ -150,6 +154,22 @@ public class DownloadListActivity extends ThemeActivity implements LoaderCallbac
                         return false;
                     }
                 });
+
+                if (!TextUtils.isEmpty(filePath) &&
+                        cursor.getInt(DownloadInfoDatabase.COLUMN_STATE_INDEX) == DownloadInfo.STATE_DOWNLOADED) {
+                    final File file = new File(filePath);
+                    if (file.exists()) {
+                        menu.add(R.string.delete_download).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                FileUtils.deleteFile(file);
+                                mDb.delete(id);
+                                getSupportLoaderManager().restartLoader(0, null, DownloadListActivity.this);
+                                return false;
+                            }
+                        });
+                    }
+                }
             }
         });
 

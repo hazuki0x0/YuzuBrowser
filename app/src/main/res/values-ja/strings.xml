@@ -125,6 +125,7 @@
     <string name="open_url">URLを開く</string>
     <string name="cancel_download">ダウンロードの中止</string>
     <string name="clear_download">リストから削除</string>
+    <string name="delete_download">ファイルを削除</string>
     <string name="ssl_error_title">セキュリティ警告</string>
     <string name="ssl_error_mes">このサイトのセキュリティ証明書には問題があります。続けますか？</string>
     <string name="username">ユーザー名</string>
