@@ -121,8 +121,7 @@ public class SuggestProvider extends ContentProvider {
             return null;
         }
 
-        List<String> list = uri.getPathSegments();
-        String query = (list.size() > 1) ? list.get(1) : null;
+        String query = uri.getQueryParameter("q");
         if (query != null) query = query.trim();
         switch (type) {
             case TYPE_NET_ALL:

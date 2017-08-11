@@ -28,8 +28,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +37,6 @@ import jp.hazuki.yuzubrowser.search.suggest.Suggestion;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
-import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
@@ -254,14 +251,10 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int arg0, Bundle bundle) {
-        String query;
-        try {
-            query = URLEncoder.encode(bundle.getString("QUERY"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            ErrorReport.printAndWriteLog(e);
-            query = bundle.getString("QUERY");
-        }
-        return new CursorLoader(getApplicationContext(), Uri.withAppendedPath(mContentUri, query), null, null, null, null);
+        Uri uri = mContentUri.buildUpon()
+                .appendQueryParameter("q", bundle.getString("QUERY"))
+                .build();
+        return new CursorLoader(getApplicationContext(), uri, null, null, null, null);
     }
 
     @Override
