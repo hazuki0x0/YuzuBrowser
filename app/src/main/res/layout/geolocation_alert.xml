@@ -17,14 +17,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/location_mes"
-            android:textColor="@color/toolbar_text_color" />
+            android:textColor="?android:textColorPrimary" />
 
         <TextView
             android:id="@+id/urlTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/infoTextView"
-            android:textColor="@color/toolbar_text_color" />
+            android:textColor="?android:textColorPrimary"
+            tools:text="http://test.com" />
 
         <CheckBox
             android:id="@+id/rememberCheckBox"
@@ -33,7 +34,7 @@
             android:text="@string/remember"
             android:layout_alignParentStart="true"
             android:layout_alignBaseline="@+id/okButton"
-            android:textColor="@color/toolbar_text_color" />
+            android:textColor="?android:textColorPrimary" />
 
         <Button
             android:id="@+id/cancelButton"
