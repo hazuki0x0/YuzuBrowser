@@ -117,28 +117,40 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
     public ArrayList<UserScript> getAllList() {
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<UserScript> list = new ArrayList<>();
-        Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            do {
-                UserScript data = new UserScript(c.getLong(COLUMN_ID_INDEX), c.getString(COLUMN_DATA_INDEX), c.getInt(COLUMN_ENABLED_INDEX) != 0);
-                list.add(data);
-            } while (c.moveToNext());
-        }
-        c.close();
+        int offset = 0;
+        do {
+            Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null, offset + ", 10");
+            if (c.moveToFirst()) {
+                do {
+                    UserScript data = new UserScript(c.getLong(COLUMN_ID_INDEX), c.getString(COLUMN_DATA_INDEX), c.getInt(COLUMN_ENABLED_INDEX) != 0);
+                    list.add(data);
+                } while (c.moveToNext());
+            }
+            c.close();
+
+            offset += 10;
+        } while (list.size() == offset);
+
         return list;
     }
 
     public ArrayList<UserScript> getEnableJsDataList() {
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<UserScript> list = new ArrayList<>();
-        Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_ID, COLUMN_DATA}, COLUMN_ENABLED + " <> 0", null, null, null, null);
-        if (c.moveToFirst()) {
-            do {
-                UserScript data = new UserScript(c.getLong(0), c.getString(1), true);
-                list.add(data);
-            } while (c.moveToNext());
-        }
-        c.close();
+        int offset = 0;
+        do {
+            Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_ID, COLUMN_DATA}, COLUMN_ENABLED + " <> 0", null, null, null, null, offset + ", 10");
+            if (c.moveToFirst()) {
+                do {
+                    UserScript data = new UserScript(c.getLong(0), c.getString(1), true);
+                    list.add(data);
+                } while (c.moveToNext());
+            }
+            c.close();
+
+            offset += 10;
+        } while (list.size() == offset);
+
         return list;
     }
 
