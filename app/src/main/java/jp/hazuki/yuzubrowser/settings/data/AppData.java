@@ -346,7 +346,7 @@ public class AppData {
                     converter.convert(context);
                 }
 
-                if (lastLaunch == 300100 && "NORMAL>".equals(AppData.layout_algorithm.get())) {
+                if (lastLaunch <= 300100 && "NORMAL>".equals(AppData.layout_algorithm.get())) {
                     AppData.layout_algorithm.set("NORMAL");
                     AppData.commit(context, AppData.layout_algorithm);
                 }
