@@ -502,4 +502,9 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     public void setDoubleTapFling(boolean fling) {
         webView.setDoubleTapFling(fling);
     }
+
+    @Override
+    public boolean isTouching() {
+        return webView.isTouching();
+    }
 }

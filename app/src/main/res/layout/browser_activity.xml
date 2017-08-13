@@ -63,10 +63,11 @@
 
 
                 <LinearLayout
+                    android:id="@+id/webOuterFrameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+                    app:layout_behavior="jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior">
 
                     <FrameLayout
                         android:id="@+id/webFrameLayout"

@@ -16,6 +16,7 @@
 #   public *;
 #}
 
+-keep class jp.hazuki.yuzubrowser.utils.view.behavior.** { *; }
 -keep class jp.fimex.yuzubrowser.toolbar.BottomBarBehavior {
     *;
 }

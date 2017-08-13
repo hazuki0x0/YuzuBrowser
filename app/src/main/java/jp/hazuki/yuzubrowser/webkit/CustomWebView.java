@@ -203,6 +203,8 @@ public interface CustomWebView {
 
     void setDoubleTapFling(boolean fling);
 
+    boolean isTouching();
+
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);
     }

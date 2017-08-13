@@ -19,18 +19,17 @@ package jp.hazuki.yuzubrowser.webkit;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 
-import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
 public class NormalWebView extends WebView implements CustomWebView, NestedScrollingChild {
@@ -53,7 +52,8 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private boolean doubleTapFling;
 
     private boolean scrollExcessPlay;
-    private final int scrollExcessPlayDistance;
+    private final int scrollSlop;
+    private boolean touching = false;
 
     public NormalWebView(Context context) {
         this(context, null);
@@ -65,7 +65,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     public NormalWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        scrollExcessPlayDistance = DisplayUtils.convertDpToPx(context, 14);
+        scrollSlop = ViewConfiguration.get(context).getScaledPagingTouchSlop();
         mChildHelper = new NestedScrollingChildHelper(this);
         setNestedScrollingEnabled(true);
     }
@@ -271,7 +271,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         }
 
         MotionEvent event = MotionEvent.obtain(ev);
-        final int action = MotionEventCompat.getActionMasked(event);
+        final int action = event.getActionMasked();
 
         if (doubleTapFling) {
             if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_OUTSIDE)
@@ -282,12 +282,15 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         boolean returnValue;
         if (action == MotionEvent.ACTION_DOWN) {
             mNestedOffsetY = 0;
+            touching = true;
         }
         int eventY = (int) event.getY();
         event.offsetLocation(0, mNestedOffsetY);
         switch (action) {
             case MotionEvent.ACTION_MOVE:
-                if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollExcessPlayDistance
+                if (event.getPointerCount() != 1) {
+                    returnValue = super.onTouchEvent(event);
+                } else if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollSlop
                         || scrollY != 0 && scrollY == getScrollY()) {
                     returnValue = super.onTouchEvent(ev);
                     mLastY = eventY;
@@ -306,7 +309,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                         event.offsetLocation(0, -mScrollOffset[1]);
                         mNestedOffsetY = mScrollOffset[1];
                     }
-                    returnValue = super.onTouchEvent(ev);
+                    returnValue = super.onTouchEvent(event);
 
                     // NestedScroll
                     if (dispatchNestedScroll(0, mScrollConsumed[1], 0, deltaY, mScrollOffset)) {
@@ -335,6 +338,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                 scrollY = getScrollY();
                 break;
             default:
+                touching = false;
                 returnValue = super.onTouchEvent(ev);
                 // end NestedScroll
                 stopNestedScroll();
@@ -419,7 +423,12 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         mScrollController = controller;
     }
 
-    int getScrollExcessPlayDistance() {
-        return scrollExcessPlayDistance;
+    int getScrollSlop() {
+        return scrollSlop;
+    }
+
+    @Override
+    public boolean isTouching() {
+        return touching;
     }
 }

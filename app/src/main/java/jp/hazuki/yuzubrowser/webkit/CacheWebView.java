@@ -838,4 +838,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     public void setDoubleTapFling(boolean fling) {
         mList.get(mCurrent).mWebView.setDoubleTapFling(fling);
     }
+
+    @Override
+    public boolean isTouching() {
+        return mList.get(mCurrent).mWebView.isTouching();
+    }
 }
