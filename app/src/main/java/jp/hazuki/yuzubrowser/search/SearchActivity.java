@@ -289,7 +289,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
     @Override
     public void onInputSuggest(String query) {
         editText.setText(query);
-        editText.selectAll();
+        editText.setSelection(query.length());
     }
 
     @Override
