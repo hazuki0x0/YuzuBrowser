@@ -57,6 +57,7 @@ import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
 import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity;
+import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -72,12 +73,14 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     private BookmarkManager mManager;
     private BookmarkFolder mCurrentFolder;
 
+    private RecyclerTouchLocationDetector locationDetector;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragent_bookark, container, false);
         setHasOptionsMenu(true);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ItemTouchHelper helper = new ItemTouchHelper(new Touch());
         helper.attachToRecyclerView(recyclerView);
@@ -86,6 +89,10 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         pickMode = getArguments().getBoolean(MODE_PICK);
 
         mManager = new BookmarkManager(getContext());
+
+        locationDetector = new RecyclerTouchLocationDetector();
+
+        recyclerView.addOnItemTouchListener(locationDetector);
 
         setList(getRoot());
 
@@ -249,7 +256,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     }
 
     private void showContextMenu(View v, final int index) {
-        PopupMenu menu = new PopupMenu(getActivity(), v);
+        PopupMenu menu = new PopupMenu(getActivity(), v, locationDetector.getGravity());
         MenuInflater inflater = menu.getMenuInflater();
         final BookmarkItem bookmarkItem;
         if (pickMode) {

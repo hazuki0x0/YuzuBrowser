@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -45,6 +46,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
     private RecyclerView recyclerView;
     private BrowserHistoryAdapter adapter;
     private BrowserHistoryManager manager;
+    private RecyclerTouchLocationDetector locationDetector;
 
     private SearchView searchView;
 
@@ -79,6 +81,9 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
         adapter.setDecoration(decoration);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(adapter);
+
+        locationDetector = new RecyclerTouchLocationDetector();
+        recyclerView.addOnItemTouchListener(locationDetector);
         return v;
     }
 
@@ -94,7 +99,7 @@ public class BrowserHistoryFragment extends Fragment implements BrowserHistoryAd
             final String url = history.getUrl();
             final String title = history.getTitle();
 
-            PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+            PopupMenu popupMenu = new PopupMenu(getActivity(), v, locationDetector.getGravity());
             Menu menu = popupMenu.getMenu();
             menu.add(R.string.open).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
