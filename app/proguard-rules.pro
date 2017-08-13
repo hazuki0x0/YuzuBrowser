@@ -17,9 +17,6 @@
 #}
 
 -keep class jp.hazuki.yuzubrowser.utils.view.behavior.** { *; }
--keep class jp.fimex.yuzubrowser.toolbar.BottomBarBehavior {
-    *;
-}
 
 -keepnames class com.fasterxml.jackson.** { *; }
 -dontwarn com.fasterxml.jackson.databind.**

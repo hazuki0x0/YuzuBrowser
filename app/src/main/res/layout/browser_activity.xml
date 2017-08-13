@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    app:layout_behavior="jp.hazuki.yuzubrowser.toolbar.BottomBarBehavior">
+                    app:layout_behavior="jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior">
 
                     <LinearLayout
                         android:id="@+id/bottomOverlayItemLayout"
