@@ -47,6 +47,7 @@
 
     <style name="CustomThemeBlack.Pref" parent="CustomThemeBlack">
         <item name="android:textColorPrimary">@color/pref_text_color</item>
+        <item name="android:textColorSecondary">@color/pref_text_secondary_color</item>
     </style>
 
     <style name="BrowserMinThemeLight" parent="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -82,6 +83,7 @@
 
     <style name="CustomThemeLight.Pref" parent="CustomThemeLight">
         <item name="android:textColorPrimary">@color/pref_text_color_light</item>
+        <item name="android:textColorSecondary">@color/pref_text_secondary_color_light</item>
     </style>
 
     <style name="Widget.Yuzu.SpinnerButton" parent="Widget.AppCompat.Spinner">

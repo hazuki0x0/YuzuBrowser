@@ -11,6 +11,7 @@ import android.speech.RecognizerIntent;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
@@ -92,7 +93,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(
+                this, ResourcesCompat.getColor(getResources(), R.color.divider, getTheme())));
 
         if (reverse) {
             layoutManager.setReverseLayout(true);
