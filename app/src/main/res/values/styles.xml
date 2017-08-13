@@ -41,8 +41,8 @@
     </style>
 
     <style name="CustomThemeBlack" parent="@style/BrowserMinThemeBlack">
-        <item name="colorPrimary">@color/light_primary</item>
-        <item name="colorPrimaryDark">@color/light_primary_dark</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
     <style name="CustomThemeBlack.Pref" parent="CustomThemeBlack">
