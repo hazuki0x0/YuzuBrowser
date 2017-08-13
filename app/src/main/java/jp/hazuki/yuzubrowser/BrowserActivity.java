@@ -866,7 +866,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
     @Override
     public void onBackPressed() {
-        if (mWebCustomViewHandler != null && mWebCustomViewHandler.isCustomViewShowing()) {
+        if (menuWindow != null && menuWindow.isShowing()) {
+            menuWindow.dismiss();
+        } else if (mWebCustomViewHandler != null && mWebCustomViewHandler.isCustomViewShowing()) {
             mWebCustomViewHandler.hideCustomView(this);
         } else if (mSubGestureView != null) {
             superFrameLayout.removeView(mSubGestureView);
