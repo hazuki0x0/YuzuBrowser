@@ -43,6 +43,11 @@ public class FullFillTextView extends AppCompatTextView {
     }
 
     @Override
+    public CharSequence getText() {
+        return content;
+    }
+
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int availWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
         updateVisibleText(availWidth,
