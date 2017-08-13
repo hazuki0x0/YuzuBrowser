@@ -47,6 +47,7 @@ captures/
 .idea/inspectionProfiles/
 .idea/markdown-exported-files.xml
 .idea/markdown-navigator.xml
+.idea/codeStyleSettings.xml
 
 # Keystore files
 *.jks
