@@ -30,14 +30,7 @@ public final class CrashlyticsUtils {
     private static final String CHROME_VERSION = "chrome version";
 
     public static void setChromeVersion(Context context) {
-        try {
-            Matcher chrome = VERSION_REGEX.matcher(WebSettings.getDefaultUserAgent(context));
-            if (chrome.find()) {
-                Crashlytics.setString(CHROME_VERSION, chrome.group(1));
-            }
-        } catch (AndroidRuntimeException e) {
-            Crashlytics.setString(CHROME_VERSION, "unknown");
-        }
+        Crashlytics.setString(CHROME_VERSION, getChromeVersion(context));
     }
 
     public static String getChromeVersion(Context context) {
