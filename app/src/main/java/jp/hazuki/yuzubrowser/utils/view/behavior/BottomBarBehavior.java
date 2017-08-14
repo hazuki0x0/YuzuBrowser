@@ -28,9 +28,8 @@ import jp.hazuki.yuzubrowser.R;
 
 public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> {
 
-    private int bottomBarHeight = -1;
-    private int topBarHeight = -1;
-    private boolean noTopBar;
+    private View topToolbar;
+    private View bottomToolbar;
 
     public BottomBarBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,10 +38,8 @@ public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, LinearLayout bottomBar, View dependency) {
         if (dependency instanceof AppBarLayout) {
-            View view = dependency.findViewById(R.id.topToolbarLayout);
-            if (view != null) {
-                topBarHeight = view.getHeight();
-            }
+            topToolbar = dependency.findViewById(R.id.topToolbarLayout);
+            bottomToolbar = bottomBar.findViewById(R.id.bottomToolbarLayout);
             return true;
         }
         return false;
@@ -50,39 +47,13 @@ public class BottomBarBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, LinearLayout bottomBar, View dependency) {
-        if (dependency != null && bottomBar != null) {
-            noTopBar = false;
-            if (topBarHeight == -1) {
-                topBarHeight = dependency.getHeight();
-            }
-            if (bottomBarHeight == -1) {
-                bottomBarHeight = bottomBar.findViewById(R.id.bottomToolbarLayout).getHeight();
-            }
+        int bottomBarHeight = bottomToolbar.getHeight();
 
-            if (topBarHeight != 0) {
-                int height = -dependency.getTop() * bottomBarHeight / topBarHeight;
+        if (topToolbar.getHeight() != 0) {
+            int height = -dependency.getTop() * bottomBarHeight / dependency.getHeight();
 
-                bottomBar.setTranslationY(Math.min(height, bottomBarHeight));
-            } else {
-                noTopBar = true;
-            }
-        } else {
-            noTopBar = true;
+            bottomBar.setTranslationY(Math.min(height, bottomBarHeight));
         }
-
         return true;
-    }
-
-    public void setTopBarHeight(int height) {
-        topBarHeight = height;
-    }
-
-    public void setBarSize(int topHeight, int bottomHeight) {
-        topBarHeight = topHeight;
-        bottomBarHeight = bottomHeight;
-    }
-
-    public boolean isNoTopBar() {
-        return noTopBar;
     }
 }

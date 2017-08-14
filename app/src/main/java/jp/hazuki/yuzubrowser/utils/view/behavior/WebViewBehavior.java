@@ -30,9 +30,6 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
     private CustomWebView webView;
     private int prevY;
     private View topToolBar;
-    private View bottomToolbar;
-    private View topAlwaysToolbar;
-    private View findView;
 
     public WebViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,9 +38,6 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
         topToolBar = parent.findViewById(R.id.topToolbarLayout);
-        bottomToolbar = parent.findViewById(R.id.bottomToolbarLayout);
-        topAlwaysToolbar = parent.findViewById(R.id.topAlwaysToolbarLayout);
-        findView = parent.findViewById(R.id.find);
         return super.layoutDependsOn(parent, child, dependency);
     }
 
@@ -57,8 +51,10 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
         prevY = bottom;
 
-        if (topToolBar.getHeight() != 0 && dependency.getHeight() == dependency.getBottom()) {
-            child.setPadding(0, 0, 0, getPadding(dependency));
+        int toolbarHeight = topToolBar.getHeight();
+
+        if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
+            child.setPadding(0, 0, 0, toolbarHeight);
         } else {
             child.setPadding(0, 0, 0, 0);
         }
@@ -68,9 +64,5 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     public void setWebView(CustomWebView webView) {
         this.webView = webView;
-    }
-
-    private int getPadding(View dependency) {
-        return dependency.getHeight() - topAlwaysToolbar.getHeight() - findView.getHeight();
     }
 }
