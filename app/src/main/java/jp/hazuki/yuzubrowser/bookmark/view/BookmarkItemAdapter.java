@@ -45,7 +45,6 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     private static final int TYPE_FOLDER = 2;
 
     private final PorterDuffColorFilter defaultColorFilter;
-    private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
     private final Drawable foregroundOverlay;
 
@@ -98,7 +97,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             Bitmap bitmap = faviconManager.get(((BookmarkSite) item).url);
             if (bitmap != null) {
                 ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
-                ((BookmarkSiteHolder) holder).imageButton.setColorFilter(faviconColorFilter);
+                ((BookmarkSiteHolder) holder).imageButton.clearColorFilter();
             } else {
                 ((BookmarkSiteHolder) holder).imageButton.setImageResource(R.drawable.ic_bookmark_white_24dp);
                 ((BookmarkSiteHolder) holder).imageButton.setColorFilter(defaultColorFilter);
