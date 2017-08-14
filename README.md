@@ -18,7 +18,7 @@ https://github.com/Hazuki0x0/YuzuBrowser/releases
 ## Theme
 Yuzu Browser supports custom theme.
 
-For installation method and specifications, please check the Readme.txt in the archive.
+You can create custom theme with [theme creator app](https://play.google.com/store/apps/details?id=jp.hazuki.yuzubrowser.themecreator).
 
 You can use it if you have the theme of Mikan Browser.
 
@@ -41,6 +41,8 @@ You can unzip and edit this theme.
 
 ##### Classic theme sample
 For versions prior to version 2.3
+
+For installation method and specifications, please check the Readme.txt in the archive.
 
 You should use new theme pack if you are using version 2.3 or later
 
