@@ -13,7 +13,7 @@ This browser based on Mikan Browser.
 
 Or prebuilt apk file is here
 
-https://github.com/Hazuki0x0/YuzuBrowser/releases/latest
+https://github.com/Hazuki0x0/YuzuBrowser/releases
 
 ## Theme
 Yuzu Browser supports custom theme.
@@ -29,10 +29,14 @@ for version 2.3 or later
 
 Just download the theme pack and tap it to import!
 
-[Theme material dark](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.4/theme_material_dark.yuzutheme)
+You can unzip and edit this theme.
+
+[Theme material dark](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v3.1.1/theme_material_dark.yuzutheme)
 (default theme)
 
-[Theme material light](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v2.4/theme_material_light.yuzutheme)
+[Theme material light](https://github.com/hazuki0x0/YuzuBrowser/releases/download/v3.1.1/theme_material_light.yuzutheme)
+
+> Aug. 14, 2017 update for 3.1.1
 
 
 ##### Classic theme sample
