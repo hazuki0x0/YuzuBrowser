@@ -1249,6 +1249,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
     }
 
+    private int getNewTabPerformType(MainTabData tab) {
+        if (UrlUtils.isSpeedDial(tab.getOriginalUrl())) {
+            return AppData.newtab_speeddial.get();
+        } else {
+            return AppData.newtab_link.get();
+        }
+    }
+
     private boolean checkNewTabLinkAuto(int perform, MainTabData tab, String url) {
         if (tab.isNavLock() && !WebViewUtils.shouldLoadSameTabAuto(url)) {
             performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW);
@@ -1259,6 +1267,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             return false;
 
         if (WebViewUtils.shouldLoadSameTabAuto(url))
+            return false;
+
+        if (WebViewUtils.shouldLoadSameTabScheme(url))
             return false;
 
         return !(TextUtils.equals(url, tab.getUrl()) || tab.mWebView.isBackForwardListEmpty()) && performNewTabLink(perform, tab, url, TabType.WINDOW);
@@ -1488,9 +1499,6 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
                 String action = uri.getSchemeSpecificPart();
 
-                if (action.startsWith("//")) {
-                    action = action.substring(2);
-                }
                 Intent intent;
                 if (TextUtils.isEmpty(action)) {
                     return false;
@@ -2510,7 +2518,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 return true;
             }
 
-            if (patternResult == 1 || checkNewTabLinkAuto(AppData.newtab_link.get(), data, url)) {
+            if (patternResult == 1 || checkNewTabLinkAuto(getNewTabPerformType(data), data, url)) {
                 if (web.getUrl() == null || data.mWebView.isBackForwardListEmpty()) {
                     removeTab(mTabManager.indexOf(data.getId()));
                 }
@@ -2648,9 +2656,6 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             if ("yuzu".equalsIgnoreCase(request.getUrl().getScheme())) {
                 String action = request.getUrl().getSchemeSpecificPart();
 
-                if (action.startsWith("//")) {
-                    action = action.substring(2);
-                }
                 if ("speeddial".equalsIgnoreCase(action)) {
                     return speedDialHtml.createResponse();
                 } else if ("speeddial/base.css".equals(action)) {

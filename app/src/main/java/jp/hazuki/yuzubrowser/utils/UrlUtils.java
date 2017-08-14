@@ -123,4 +123,8 @@ public class UrlUtils {
     private static boolean isValid(String str) {
         return str != null && !(str.indexOf(INVALID_CHAR) > -1);
     }
+
+    public static boolean isSpeedDial(String url) {
+        return "yuzu:speeddial".equalsIgnoreCase(url);
+    }
 }

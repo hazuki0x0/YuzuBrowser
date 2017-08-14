@@ -24,6 +24,11 @@ public class WebViewUtils {
         return url.regionMatches(true, 0, "about:", 0, 6);
     }
 
+    public static boolean shouldLoadSameTabScheme(String url) {
+        return url.regionMatches(true, 0, "intent:", 0, 7)
+                || url.regionMatches(true, 0, "yuzu:", 0, 5) && !UrlUtils.isSpeedDial(url);
+    }
+
     public static boolean shouldLoadSameTabUser(String url) {
         return url.regionMatches(true, 0, "javascript:", 0, 11);
     }

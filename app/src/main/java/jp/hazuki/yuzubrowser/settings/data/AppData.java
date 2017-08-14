@@ -111,6 +111,7 @@ public class AppData {
     public static final StringContainer layout_algorithm = new StringContainer("layout_algorithm", "TEXT_AUTOSIZING");
     public static final BooleanContainer save_history = new BooleanContainer("save_history", true);
     public static final IntContainer newtab_link = new IntContainer("newtab_link", BrowserManager.LOAD_URL_TAB_CURRENT);
+    public static final IntContainer newtab_speeddial = new IntContainer("newtab_speeddial", BrowserManager.LOAD_URL_TAB_CURRENT);
     public static final IntContainer newtab_bookmark = new IntContainer("newtab_bookmark", BrowserManager.LOAD_URL_TAB_CURRENT);
     public static final IntContainer newtab_history = new IntContainer("newtab_history", BrowserManager.LOAD_URL_TAB_CURRENT);
     public static final IntContainer newtab_blank = new IntContainer("newtab_blank", BrowserManager.LOAD_URL_TAB_NEW_RIGHT);

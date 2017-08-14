@@ -79,6 +79,11 @@
         <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
+            android:key="newtab_speeddial"
+            android:title="@string/pref_speed_dial"/>
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_newtab_list"
+            android:entryValues="@array/pref_newtab_values"
             android:key="newtab_blank"
             android:title="@string/pref_newtab_blank" />
     </PreferenceScreen>
