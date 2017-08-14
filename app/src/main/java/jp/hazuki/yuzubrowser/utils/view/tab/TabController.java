@@ -32,6 +32,9 @@ public abstract class TabController {
 
     public void addTabView(int id, View view) {
         mViewList.add(id, view);
+        if (mCurrentId >= id) {
+            mCurrentId++;
+        }
         int count = mViewList.size();
         for (int i = 0; i < count; ++i) {
             settingTab(mViewList.get(i), i);
@@ -58,6 +61,9 @@ public abstract class TabController {
         }
 
         requestRemoveViewAt(id);
+        if (mCurrentId > id) {
+            mCurrentId--;
+        }
     }
 
     public abstract void requestRemoveViewAt(int id);
