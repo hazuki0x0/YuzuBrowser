@@ -426,7 +426,7 @@ public class ToolbarManager {
                 bottomBarHeight = bottomToolbarLayout.getHeight();
             }
 
-            float translationY = bottomToolbarLayout.getTranslationY();
+            float translationY = bottomOverlayLayout.getTranslationY();
             float newTrans;
 
             if (distanceY < 0) {
@@ -440,20 +440,20 @@ public class ToolbarManager {
                 return;
             }
 
-            bottomToolbarLayout.setTranslationY(newTrans);
+            bottomOverlayLayout.setTranslationY(newTrans);
         }
     }
 
     public void onWebViewTapUp() {
         if (bottomBarBehavior.isNoTopBar() && AppData.snap_toolbar.get()) {
-            float trans = bottomToolbarLayout.getTranslationY();
+            float trans = bottomOverlayLayout.getTranslationY();
             ObjectAnimator animator;
             int duration;
             if (trans > bottomBarHeight / 2) {
-                animator = ObjectAnimator.ofFloat(bottomToolbarLayout, "translationY", trans, bottomBarHeight);
+                animator = ObjectAnimator.ofFloat(bottomOverlayLayout, "translationY", trans, bottomBarHeight);
                 duration = (int) (((bottomBarHeight - trans) / bottomBarHeight + 1) * 150);
             } else {
-                animator = ObjectAnimator.ofFloat(bottomToolbarLayout, "translationY", trans, 0);
+                animator = ObjectAnimator.ofFloat(bottomOverlayLayout, "translationY", trans, 0);
                 duration = (int) ((trans / bottomBarHeight + 1) * 150);
             }
             animator.setDuration(duration);

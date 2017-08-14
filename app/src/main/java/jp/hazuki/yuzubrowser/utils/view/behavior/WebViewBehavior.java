@@ -55,7 +55,7 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
         prevY = bottom;
 
-        if (dependency.getHeight() == dependency.getBottom()) {
+        if (dependency.getHeight() != 0 && dependency.getHeight() == dependency.getBottom()) {
             child.setPadding(0, 0, 0, getPadding(dependency));
         } else {
             child.setPadding(0, 0, 0, 0);
