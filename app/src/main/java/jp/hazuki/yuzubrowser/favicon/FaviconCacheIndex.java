@@ -62,6 +62,10 @@ class FaviconCacheIndex {
 
     public void remove(long hash) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        if (db.isReadOnly()) {
+            db.close();
+            db = mOpenHelper.getWritableDatabase();
+        }
         db.delete(TABLE_NAME, COLUMN_HASH + " = ?", new String[]{Long.toString(hash)});
     }
 

@@ -161,6 +161,7 @@ public final class DiskLruCache implements Closeable {
     private Writer journalWriter;
     private final LinkedHashMap<String, Entry> lruEntries = new LinkedHashMap<>(0, 0.75f, true);
     private int redundantOpCount;
+    private boolean destroied = false;
 
     private OnTrimCacheListener listener;
     /**
@@ -683,6 +684,13 @@ public final class DiskLruCache implements Closeable {
     }
 
     private void checkNotClosed() {
+        if (journalWriter == null && !destroied) {
+            try {
+                rebuildJournal();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if (journalWriter == null) {
             throw new IllegalStateException("cache is closed");
         }
@@ -704,6 +712,8 @@ public final class DiskLruCache implements Closeable {
         if (journalWriter == null) {
             return; // already closed
         }
+
+        destroied = true;
         for (Entry entry : new ArrayList<>(lruEntries.values())) {
             if (entry.currentEditor != null) {
                 entry.currentEditor.abort();
