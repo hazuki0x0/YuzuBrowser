@@ -75,14 +75,14 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
         rootView = inflater.inflate(R.layout.fragment_user_script_list, container, false);
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         ItemTouchHelper helper = new ItemTouchHelper(new ListTouch());
         helper.attachToRecyclerView(recyclerView);
         recyclerView.addItemDecoration(helper);
 
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) rootView.findViewById(R.id.fabMenu);
+        final FloatingActionMenu fabMenu = rootView.findViewById(R.id.fabMenu);
 
         rootView.findViewById(R.id.addByEditFab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,6 +352,14 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
                     .onCheckBoxClicked(v, position);
         }
 
+        @Override
+        public void move(int fromPosition, int toPosition) {
+            super.move(fromPosition, toPosition);
+            for (int i = 0; i < size(); i++) {
+                get(i).setId(i + 1);
+            }
+        }
+
         static class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<UserScript> {
             TextView textView;
             ImageButton button;
@@ -359,9 +367,9 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
 
             public ViewHolder(View itemView, final UserJsAdapter adapter) {
                 super(itemView, adapter);
-                textView = (TextView) itemView.findViewById(R.id.textView);
-                button = (ImageButton) itemView.findViewById(R.id.infoButton);
-                checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+                textView = itemView.findViewById(R.id.textView);
+                button = itemView.findViewById(R.id.infoButton);
+                checkBox = itemView.findViewById(R.id.checkBox);
 
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
