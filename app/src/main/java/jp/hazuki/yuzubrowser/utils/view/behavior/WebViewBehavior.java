@@ -22,15 +22,27 @@ import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.View;
 
+import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     private CustomWebView webView;
     private int prevY;
+    private View bottomToolbar;
+    private View topAlwaysToolbar;
+    private View findView;
 
     public WebViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
+        bottomToolbar = parent.findViewById(R.id.bottomToolbarLayout);
+        topAlwaysToolbar = parent.findViewById(R.id.topAlwaysToolbarLayout);
+        findView = parent.findViewById(R.id.find);
+        return super.layoutDependsOn(parent, child, dependency);
     }
 
     @Override
@@ -43,10 +55,21 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
         prevY = bottom;
 
+        if (dependency.getHeight() == dependency.getBottom()) {
+            child.setPadding(0, 0, 0, getPadding(dependency));
+        } else {
+            child.setPadding(0, 0, 0, 0);
+        }
+
         return super.onDependentViewChanged(parent, child, dependency);
     }
 
     public void setWebView(CustomWebView webView) {
         this.webView = webView;
+    }
+
+    private int getPadding(View dependency) {
+        return dependency.getHeight() + bottomToolbar.getHeight()
+                - topAlwaysToolbar.getHeight() - findView.getHeight();
     }
 }

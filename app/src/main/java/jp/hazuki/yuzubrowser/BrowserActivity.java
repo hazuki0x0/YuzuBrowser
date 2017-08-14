@@ -1667,6 +1667,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
         mTabManager.remove(no);
         mToolbar.removeTab(no);
+        mToolbar.notifyChangeWebState();
 
         if (destroy)
             old_web.destroy();
