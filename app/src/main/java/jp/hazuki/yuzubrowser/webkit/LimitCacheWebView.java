@@ -246,11 +246,6 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
         return data;
     }
 
-    private void setCurrentTab(int index, TabData data) {
-        mCurrent = index;
-        currentTab = data;
-    }
-
     private TabData moveTo(boolean next) {
         mCurrent += next ? 1 : -1;
 

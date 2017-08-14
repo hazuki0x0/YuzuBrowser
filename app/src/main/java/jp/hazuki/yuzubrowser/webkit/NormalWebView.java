@@ -48,7 +48,6 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private int mNestedOffsetY;
     private NestedScrollingChildHelper mChildHelper;
     private boolean firstScroll = true;
-    private CustomWebViewClient webViewClient;
     private boolean doubleTapFling;
 
     private boolean scrollExcessPlay;
@@ -87,7 +86,6 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     @Override
     public void setMyWebViewClient(CustomWebViewClient client) {
-        webViewClient = client;
         setWebViewClient(client);
     }
 
@@ -108,6 +106,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     @Override
     public void setSwipeEnable(boolean enable) {
+        //do nothing
     }
 
     @Override
@@ -154,7 +153,6 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     @Override
     public boolean notifyFindDialogDismissedMethod() {
-
         return false;
     }
 
@@ -421,10 +419,6 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     public void setScrollController(ScrollController controller) {
         mScrollController = controller;
-    }
-
-    int getScrollSlop() {
-        return scrollSlop;
     }
 
     @Override

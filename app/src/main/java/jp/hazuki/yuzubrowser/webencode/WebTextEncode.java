@@ -24,9 +24,6 @@ public class WebTextEncode implements Serializable {
     @JsonProperty("0")
     public String encoding;
 
-    public WebTextEncode() {
-    }
-
     public WebTextEncode(String encoding) {
         this.encoding = encoding;
     }
