@@ -223,9 +223,11 @@ public class TabListLayout extends LinearLayout {
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mCallback.requestAddTab(removedTab.getIndex(), removedTab.getData());
-                                mAdapter.notifyItemInserted(removedTab.getIndex());
-                                removedTab = null;
+                                if (removedTab != null) {
+                                    mCallback.requestAddTab(removedTab.getIndex(), removedTab.getData());
+                                    mAdapter.notifyItemInserted(removedTab.getIndex());
+                                    removedTab = null;
+                                }
                             }
                         })
                         .addCallback(new BaseTransientBottomBar.BaseCallback<TemplatePreservingSnackBar>() {

@@ -62,10 +62,6 @@ class FaviconCacheIndex {
 
     public void remove(long hash) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        if (db.isReadOnly()) {
-            db.close();
-            db = mOpenHelper.getWritableDatabase();
-        }
         db.delete(TABLE_NAME, COLUMN_HASH + " = ?", new String[]{Long.toString(hash)});
     }
 
@@ -80,6 +76,11 @@ class FaviconCacheIndex {
         }
         c.close();
         return result;
+    }
+
+    public void clear() {
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
     }
 
     public void close() {

@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.webkit.WebView;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class BrowserApplication extends Application {
         Crashlytics crashlytics = new Crashlytics.Builder()
                 .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                 .build();
-        Fabric.with(this, crashlytics);
+        Fabric.with(this, crashlytics, new Answers());
         CrashlyticsUtils.setChromeVersion(this);
         AppUtils.registNotification(this);
         WebView.enableSlowWholeDocumentDraw();

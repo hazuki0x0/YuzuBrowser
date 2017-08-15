@@ -17,9 +17,12 @@
 package jp.hazuki.yuzubrowser.favicon;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+
+import com.crashlytics.android.Crashlytics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -117,7 +120,11 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
                     ramCacheIndex.put(url, result.hash);
                 }
             } else {
-                diskCacheIndex.remove(result.hash);
+                try {
+                    diskCacheIndex.remove(result.hash);
+                } catch (SQLiteException e) {
+                    Crashlytics.logException(e);
+                }
             }
             return icon;
         }
@@ -158,6 +165,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
     }
 
     public void clear() {
+        diskCacheIndex.clear();
         diskCache.clear();
         ramCacheIndex.clear();
         ramCache.clear();

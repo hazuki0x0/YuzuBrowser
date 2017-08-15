@@ -16,6 +16,8 @@
 
 package jp.hazuki.yuzubrowser.utils.image;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.Closeable;
@@ -261,6 +263,10 @@ public final class DiskLruCache implements Closeable {
             if (file.isDirectory()) {
                 deleteContents(file);
             }
+            String name = file.getName();
+            if (name.equals("indexTable") || name.equals("indexTable-journal")) {
+                continue;
+            }
             if (!file.delete()) {
                 throw new IOException("failed to delete file: " + file);
             }
@@ -467,7 +473,11 @@ public final class DiskLruCache implements Closeable {
         }
 
         writer.close();
-        journalFileTmp.renameTo(journalFile);
+        if (!journalFileTmp.renameTo(journalFile)) {
+            throw new IllegalStateException("journal file rename failed : " + journalFile.getAbsolutePath()
+                    + "; directory:" + journalFile.getParentFile().exists()
+                    + "; from file:" + journalFileTmp.exists() + "; dest file:" + journalFile.exists());
+        }
         journalWriter = new BufferedWriter(new FileWriter(journalFile, true), IO_BUFFER_SIZE);
     }
 
@@ -688,6 +698,7 @@ public final class DiskLruCache implements Closeable {
             try {
                 rebuildJournal();
             } catch (IOException e) {
+                Crashlytics.logException(e);
                 e.printStackTrace();
             }
         }
