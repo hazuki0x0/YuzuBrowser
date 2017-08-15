@@ -51,6 +51,7 @@ public class ThemeData {
 
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
     public int tabTextColorNormal, tabTextColorLock, tabTextColorPin, tabTextColorSelect, tabAccentColor, tabDividerColor;
+    public int scrollbarAccentColor;
     public boolean showTabDivider;
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
@@ -132,6 +133,13 @@ public class ThemeData {
                         e.printStackTrace();
                     }
                     continue;
+                }
+                if ("scrollbarAccentColor".equalsIgnoreCase(field)) {
+                    try {
+                        scrollbarAccentColor = Long.decode(parser.getText().trim()).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if ("showTabDivider".equalsIgnoreCase(field)) {
                     showTabDivider = getBoolean(parser);

@@ -736,4 +736,17 @@
     <string name="pref_required_android_O">Android 8.0 (O) or higher is required</string>
     <string name="pref_always_show_url">Always show URL</string>
     <string name="pref_show_favicon">Show favicon</string>
+
+    <string name="pref_touch_scrollbar">Touch scrollbar</string>
+    <string-array name="pref_touch_scrollbar_list">
+        <item>Hide</item>
+        <item>Right</item>
+        <item>Left</item>
+    </string-array>
+
+    <integer-array name="pref_touch_scrollbar_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
 </resources>

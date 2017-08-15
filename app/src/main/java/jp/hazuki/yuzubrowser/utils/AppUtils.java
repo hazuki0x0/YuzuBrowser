@@ -7,8 +7,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v4.app.NotificationManagerCompat;
+import android.view.View;
 
 import java.util.Arrays;
 
@@ -63,5 +65,10 @@ public class AppUtils {
 
             manager.createNotificationChannels(Arrays.asList(service, notify));
         }
+    }
+
+    public static boolean isRTL(Context context) {
+        Configuration config = context.getResources().getConfiguration();
+        return config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
     }
 }

@@ -381,6 +381,11 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     }
 
     @Override
+    public void setScrollBarListener(OnScrollChangedListener l) {
+        webView.setScrollBarListener(l);
+    }
+
+    @Override
     public boolean setEmbeddedTitleBarMethod(View view) {
         return webView.setEmbeddedTitleBarMethod(view);
     }
@@ -476,7 +481,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
     @Override
     public void onScrollEnable(boolean enable) {
-        setEnabled(enable);
+        setEnabled(isScrollable() && enable);
     }
 
     @Override
@@ -506,5 +511,15 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     @Override
     public boolean isTouching() {
         return webView.isTouching();
+    }
+
+    @Override
+    public boolean isScrollable() {
+        return webView.isScrollable();
+    }
+
+    @Override
+    public void setVerticalScrollBarEnabled(boolean verticalScrollBarEnabled) {
+        webView.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
     }
 }

@@ -70,8 +70,10 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     private int layerType;
     private Paint layerPaint;
     private boolean acceptThirdPartyCookies;
+    private boolean verticalScrollBarEnabled;
     private OnWebStateChangeListener mStateChangeListener;
     private OnScrollChangedListener mOnScrollChangedListener;
+    private OnScrollChangedListener mScrollBarListener;
     private DownloadListener mDownloadListener;
     private final DownloadListener mDownloadListenerWrapper = new DownloadListener() {
         @Override
@@ -882,6 +884,8 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
         to.setDownloadListener(mDownloadListenerWrapper);
         from.setMyOnScrollChangedListener(null);
         to.setMyOnScrollChangedListener(mOnScrollChangedListener);
+        from.setScrollBarListener(null);
+        to.setScrollBarListener(mScrollBarListener);
 
         if (mStateChangeListener != null)
             mStateChangeListener.onStateChanged(this, todata);
@@ -897,6 +901,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
         to.resetTheme();
         to.setSwipeEnable(from.getSwipeEnable());
+        to.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
 
         to.setLayerType(layerType, layerPaint);
         to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies);
@@ -953,6 +958,12 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     }
 
     @Override
+    public void setScrollBarListener(OnScrollChangedListener l) {
+        mScrollBarListener = l;
+        currentTab.mWebView.setScrollBarListener(l);
+    }
+
+    @Override
     public void setLayerType(int layerType, @Nullable Paint paint) {
         this.layerType = layerType;
         layerPaint = paint;
@@ -982,6 +993,19 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     @Override
     public boolean isTouching() {
         return currentTab.mWebView.isTouching();
+    }
+
+    @Override
+    public boolean isScrollable() {
+        return currentTab.mWebView.isScrollable();
+    }
+
+    @Override
+    public void setVerticalScrollBarEnabled(boolean enabled) {
+        verticalScrollBarEnabled = enabled;
+        for (TabData web : tabCache.values()) {
+            web.mWebView.setVerticalScrollBarEnabled(enabled);
+        }
     }
 
     @Override

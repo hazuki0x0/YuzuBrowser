@@ -49,6 +49,7 @@ import android.print.PrintManager;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Intents.Insert;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -231,6 +232,7 @@ import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior;
 import jp.hazuki.yuzubrowser.utils.view.pie.PieControlBase;
 import jp.hazuki.yuzubrowser.utils.view.pie.PieMenu;
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout;
+import jp.hazuki.yuzubrowser.utils.view.webviewfastscroll.WebViewFastScroller;
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity;
 import jp.hazuki.yuzubrowser.webkit.CustomOnCreateContextMenuListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebBackForwardList;
@@ -339,6 +341,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private GestureOverlayView webGestureOverlayView, mSubGestureView;
     private RootLayout superFrameLayout;
     private CustomCoordinatorLayout coordinatorLayout;
+    private WebViewFastScroller webViewFastScroller;
     private WebViewBehavior webViewBehavior;
 
     private MenuWindow menuWindow;
@@ -403,6 +406,12 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         mTabManager.onLayoutCreated();
                     }
                 });
+
+        AppBarLayout appBarLayout = findViewById(R.id.appbar);
+
+        webViewFastScroller = findViewById(R.id.webViewFastScroller);
+
+        webViewFastScroller.attachAppBarLayout(coordinatorLayout, appBarLayout);
 
         final Context appContext = getApplicationContext();
 
@@ -995,6 +1004,12 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.setStatusBarColor(themedata.statusBarColor);
             }
+
+            if (themedata.scrollbarAccentColor != 0) {
+                webViewFastScroller.setHandlePressedColor(themedata.scrollbarAccentColor);
+            } else if (themedata.tabAccentColor != 0) {
+                webViewFastScroller.setHandlePressedColor(themedata.tabAccentColor);
+            }
         }
 
         if (!AppData.private_mode.get() && AppData.save_history.get()) {
@@ -1071,6 +1086,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         setMultiFingerGestureEnabled(AppData.multi_finger_gesture.get());
 
         resetUserScript(AppData.userjs_enable.get());
+
+        int touchScrollbar = AppData.touch_scrollbar.get();
+        if (touchScrollbar >= 0) {
+            webViewFastScroller.setScrollEnabled(true);
+            webViewFastScroller.setShowLeft(touchScrollbar == 1);
+        } else {
+            webViewFastScroller.setScrollEnabled(false);
+        }
 
 
         MenuActionManager action_manager = MenuActionManager.getInstance(getApplicationContext());
@@ -1605,6 +1628,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             old_data.mWebView.setGestureDetector(null);
             webFrameLayout.removeView(old_data.mWebView.getView());
             webViewBehavior.setWebView(null);
+            webViewFastScroller.detachWebView();
 
             if (AppData.pause_web_tab_change.get())
                 old_data.mWebView.onPause();
@@ -1617,6 +1641,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
         webFrameLayout.addView(new_web.getView(), 0);
         webViewBehavior.setWebView(new_web);
+        webViewFastScroller.attachWebView(new_web);
 
         new_web.setOnMyCreateContextMenuListener(mOnCreateContextMenuListener);
         new_web.setGestureDetector(mGestureDetector);

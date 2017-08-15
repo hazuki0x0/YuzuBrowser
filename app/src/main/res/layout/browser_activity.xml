@@ -63,7 +63,7 @@
                 </android.support.design.widget.AppBarLayout>
 
 
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/webOuterFrameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -74,7 +74,16 @@
                         android:id="@+id/webFrameLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
-                </LinearLayout>
+
+                    <jp.hazuki.yuzubrowser.utils.view.webviewfastscroll.WebViewFastScroller
+                        android:id="@+id/webViewFastScroller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        app:wfs_hideDelay="1200"
+                        app:wfs_barColor="@color/deep_gray"
+                        app:wfs_handleNormalColor="@color/scroll_bar"/>
+                </FrameLayout>
 
                 <LinearLayout
                     android:id="@+id/bottomOverlayLayout"

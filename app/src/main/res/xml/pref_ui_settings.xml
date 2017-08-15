@@ -200,6 +200,12 @@
     </PreferenceScreen>
 
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_touch_scrollbar_list"
+        android:entryValues="@array/pref_touch_scrollbar_values"
+        android:key="touch_scrollbar"
+        android:title="@string/pref_touch_scrollbar"/>
+
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_oritentation_list"
         android:entryValues="@array/pref_oritentation_values"
         android:key="oritentation"

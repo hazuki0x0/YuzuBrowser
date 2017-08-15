@@ -30,6 +30,7 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
     private CustomWebView webView;
     private int prevY;
     private View topToolBar;
+    private View webFrame;
 
     public WebViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +39,7 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
         topToolBar = parent.findViewById(R.id.topToolbarLayout);
+        webFrame = child.findViewById(R.id.webFrameLayout);
         return super.layoutDependsOn(parent, child, dependency);
     }
 
@@ -54,9 +56,9 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
         int toolbarHeight = topToolBar.getHeight();
 
         if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
-            child.setPadding(0, 0, 0, toolbarHeight);
+            webFrame.setPadding(0, 0, 0, toolbarHeight);
         } else {
-            child.setPadding(0, 0, 0, 0);
+            webFrame.setPadding(0, 0, 0, 0);
         }
 
         return super.onDependentViewChanged(parent, child, dependency);
