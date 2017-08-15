@@ -427,6 +427,9 @@ public class ToolbarManager {
                 animator = ObjectAnimator.ofFloat(bottomOverlayLayout, "translationY", trans, 0);
                 duration = (int) ((trans / bottomBarHeight + 1) * 150);
             }
+            if (duration < 0) {
+                duration = 0;
+            }
             animator.setDuration(duration);
             animator.start();
         }
