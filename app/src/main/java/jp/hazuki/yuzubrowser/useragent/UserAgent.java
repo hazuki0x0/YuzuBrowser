@@ -26,6 +26,9 @@ public class UserAgent implements Serializable {
     @JsonProperty("1")
     public String name;
 
+    /**
+     * Constructor for Jackson Databind
+     */
     public UserAgent() {
     }
 

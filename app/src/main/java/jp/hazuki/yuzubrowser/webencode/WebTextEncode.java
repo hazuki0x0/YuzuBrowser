@@ -24,6 +24,12 @@ public class WebTextEncode implements Serializable {
     @JsonProperty("0")
     public String encoding;
 
+    /**
+     * Constructor for Jackson Databind
+     */
+    public WebTextEncode() {
+    }
+
     public WebTextEncode(String encoding) {
         this.encoding = encoding;
     }
