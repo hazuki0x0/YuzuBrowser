@@ -132,22 +132,19 @@ public class WebViewFastScroller extends FrameLayout {
 
         final int eightDp = DisplayUtils.convertDpToPx(getContext(), 8);
         mHiddenTranslationX = (showLeft ? -1 : 1) * eightDp;
-        mHide = new Runnable() {
-            @Override
-            public void run() {
-                if (!mHandle.isPressed()) {
-                    if (mAnimator != null && mAnimator.isStarted()) {
-                        mAnimator.cancel();
-                    }
-                    mAnimator = new AnimatorSet();
-                    ObjectAnimator animator2 = ObjectAnimator.ofFloat(WebViewFastScroller.this, View.TRANSLATION_X,
-                            mHiddenTranslationX);
-                    animator2.setInterpolator(new FastOutLinearInInterpolator());
-                    animator2.setDuration(150);
-                    mHandle.setEnabled(false);
-                    mAnimator.play(animator2);
-                    mAnimator.start();
+        mHide = () -> {
+            if (!mHandle.isPressed()) {
+                if (mAnimator != null && mAnimator.isStarted()) {
+                    mAnimator.cancel();
                 }
+                mAnimator = new AnimatorSet();
+                ObjectAnimator animator2 = ObjectAnimator.ofFloat(WebViewFastScroller.this, View.TRANSLATION_X,
+                        mHiddenTranslationX);
+                animator2.setInterpolator(new FastOutLinearInInterpolator());
+                animator2.setDuration(150);
+                mHandle.setEnabled(false);
+                mAnimator.play(animator2);
+                mAnimator.start();
             }
         };
 
@@ -176,16 +173,17 @@ public class WebViewFastScroller extends FrameLayout {
                     mInitialBarHeight = mBar.getHeight();
                     mLastPressedYAdjustedToInitial = event.getY() + mHandle.getY() + mBar.getY();
                 } else if (action == MotionEvent.ACTION_MOVE) {
-                    float newHandlePressedY = event.getY() + mHandle.getY() + mBar.getY();
+                    float newHandlePressedY = event.getY() + mHandle.getY();
                     int barHeight = mBar.getHeight();
                     float newHandlePressedYAdjustedToInitial =
-                            newHandlePressedY + (mInitialBarHeight - barHeight);
+                            newHandlePressedY + (mInitialBarHeight - barHeight) + mBar.getY();
 
                     float deltaPressedYFromLastAdjustedToInitial =
                             newHandlePressedYAdjustedToInitial - mLastPressedYAdjustedToInitial;
 
                     int dY = (int) ((deltaPressedYFromLastAdjustedToInitial / mInitialBarHeight) *
-                            (mWebView.computeVerticalScrollRangeMethod() + (mAppBarLayout == null ? 0 : mAppBarLayout.getTotalScrollRange())));
+                            (mWebView.computeVerticalScrollRangeMethod() + (mAppBarLayout == null ? 0 : mAppBarLayout.getTotalScrollRange()))
+                            * computeDeltaScale(event));
 
                     if (mCoordinatorLayout != null && mAppBarLayout != null) {
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
@@ -213,6 +211,18 @@ public class WebViewFastScroller extends FrameLayout {
         });
 
         setTranslationX(mHiddenTranslationX);
+    }
+
+    private float computeDeltaScale(MotionEvent e) {
+        int width = mWebView.getWebView().getWidth();
+        float scrollbarX = showLeft ? getX() : (getX() + getWidth());
+        float scale = (Math.abs(width - scrollbarX + mWebView.getWebView().getX() - e.getRawX())) / width;
+        if (scale < 0.1f) {
+            scale = 0.1f;
+        } else if (scale > 0.9f) {
+            scale = 1.0f;
+        }
+        return scale;
     }
 
     @ColorInt
