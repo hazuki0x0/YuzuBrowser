@@ -19,6 +19,11 @@ android {
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -29,6 +34,7 @@ android {
         }
         debug {
             ext.enableCrashlytics = false
+            ext.alwaysUpdateBuildId = false
         }
     }
     packagingOptions {
