@@ -106,5 +106,6 @@
         <item>Print</item>
         <item>Pin tab</item>
         <item>Action list</item>
+        <item>Reader mode</item>
     </string-array>
 </resources>

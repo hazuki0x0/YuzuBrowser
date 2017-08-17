@@ -24,11 +24,14 @@ import jp.hazuki.yuzubrowser.BuildConfig;
 
 public class Logger {
 
-    public static void d(String tag, String... msg) {
+    public static void d(String tag, Object... msg) {
         if (BuildConfig.DEBUG) {
             StringBuilder builder = new StringBuilder();
-            for (String m : msg)
-                builder.append(m);
+            for (Object m : msg) {
+                if (m != null)
+                    builder.append(m.toString());
+            }
+
             Log.d(tag, builder.toString());
         }
     }
@@ -54,6 +57,26 @@ public class Logger {
     public static void w(String tag, String msg) {
         if (BuildConfig.DEBUG) {
             Log.w(tag, msg);
+        }
+    }
+
+    public static void w(String tag, Object... msg) {
+        if (BuildConfig.DEBUG) {
+            StringBuilder builder = new StringBuilder();
+            for (Object m : msg)
+                if (m != null)
+                    builder.append(m.toString());
+            Log.w(tag, builder.toString());
+        }
+    }
+
+    public static void w(String tag, Exception e, Object... msg) {
+        if (BuildConfig.DEBUG) {
+            StringBuilder builder = new StringBuilder();
+            for (Object m : msg)
+                if (m != null)
+                    builder.append(m.toString());
+            Log.w(tag, builder.toString(), e);
         }
     }
 

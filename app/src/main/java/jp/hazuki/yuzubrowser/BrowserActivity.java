@@ -175,6 +175,7 @@ import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager;
+import jp.hazuki.yuzubrowser.reader.ReaderActivity;
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity;
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager;
 import jp.hazuki.yuzubrowser.resblock.ResourceChecker;
@@ -4294,6 +4295,16 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                                     .putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation()),
                             RESULT_REQUEST_ACTION_LIST);
                     break;
+                case SingleAction.READER_MODE: {
+                    MainTabData tab = mTabManager.get(target);
+                    Intent intent = new Intent(BrowserActivity.this, ReaderActivity.class);
+                    intent.putExtra(Constants.intent.EXTRA_URL, tab.getOriginalUrl());
+                    intent.putExtra(Constants.intent.EXTRA_USER_AGENT, tab.mWebView.getSettings().getUserAgentString());
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
+                    startActivity(intent);
+                    break;
+                }
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return false;
@@ -4595,6 +4606,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 }
                 case SingleAction.ALL_ACTION:
                     return res.getDrawable(R.drawable.ic_list_white_24dp, getTheme());
+                case SingleAction.READER_MODE:
+                    return res.getDrawable(R.drawable.ic_chrome_reader_mode_white_24dp, getTheme());
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return null;

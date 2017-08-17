@@ -20,6 +20,8 @@ public final class Constants {
     public static final class intent {
         public static final String EXTRA_MODE_FULLSCREEN = "jp.hazuki.yuzubrowser.extra.fullscreen";
         public static final String EXTRA_MODE_ORIENTATION = "jp.hazuki.yuzubrowser.extra.orientation";
+        public static final String EXTRA_URL = "jp.hazuki.yuzubrowser.extra.url";
+        public static final String EXTRA_USER_AGENT = "jp.hazuki.yuzubrowser.extra.user_agent";
     }
 
     public static final class notification {

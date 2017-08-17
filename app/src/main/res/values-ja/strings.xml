@@ -253,4 +253,6 @@
     <string name="geolocation_permissions">位置情報の許可</string>
     <string name="recent_search_queries">検索クエリの履歴</string>
     <string name="favicon_cache">faviconキャッシュ</string>
+    <string name="untitled">無題</string>
+    <string name="loading_failed">ページから何も読み込めませんでした。</string>
 </resources>

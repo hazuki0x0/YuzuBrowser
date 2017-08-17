@@ -17,6 +17,8 @@
     </style>
 
     <style name="BrowserMinThemeBlack" parent="@style/Base.Theme.AppCompat">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:colorAccent">@color/accent</item>
@@ -51,6 +53,8 @@
     </style>
 
     <style name="BrowserMinThemeLight" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="android:textColorPrimary">@color/light_primary_text</item>
         <item name="android:textColorSecondary">@color/light_secondary_text</item>
         <item name="android:colorControlNormal">@color/light_content_normal</item>

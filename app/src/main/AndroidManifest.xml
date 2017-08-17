@@ -295,6 +295,9 @@
         <activity
             android:name=".adblock.AdBlockActivity"
             android:label="@string/pref_ad_block" />
+        <activity
+            android:name=".reader.ReaderActivity"
+            android:theme="@style/BrowserMinThemeBlack.NoTitle"/>
     </application>
 
 </manifest>
