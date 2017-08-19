@@ -2,7 +2,7 @@ package jp.hazuki.yuzubrowser.settings.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.Preference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 import jp.hazuki.yuzubrowser.R;

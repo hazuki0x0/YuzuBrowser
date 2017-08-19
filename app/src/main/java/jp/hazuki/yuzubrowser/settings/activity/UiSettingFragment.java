@@ -17,34 +17,25 @@
 package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.AppUtils;
 
-public class UiSettingFragment extends PreferenceFragment {
+public class UiSettingFragment extends YuzuPreferenceFragment {
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_ui_settings);
 
-        findPreference("theme_setting").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                AppUtils.restartApp(getActivity());
-                return true;
-            }
+        findPreference("theme_setting").setOnPreferenceChangeListener((preference, newValue) -> {
+            AppUtils.restartApp(getActivity());
+            return true;
         });
 
-        findPreference("restart").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                AppUtils.restartApp(getActivity());
-                return true;
-            }
+        findPreference("restart").setOnPreferenceClickListener(preference -> {
+            AppUtils.restartApp(getActivity());
+            return true;
         });
     }
 }

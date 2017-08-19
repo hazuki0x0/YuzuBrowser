@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.settings.preference.common;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -89,32 +89,26 @@ public class SeekBarPreferenceController {
             }
         });
 
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditText edittext = new EditText(mContext);
-                edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
-                edittext.setText(String.valueOf(mTempValue + mSeekMin));
+        textView.setOnClickListener(v -> {
+            final EditText edittext = new EditText(mContext);
+            edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+            edittext.setText(String.valueOf(mTempValue + mSeekMin));
 
-                new AlertDialog.Builder(mContext)
-                        .setView(edittext)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    int value = Integer.parseInt(edittext.getText().toString(), 10);
-                                    if (value >= mSeekMin && value <= mSeekMax)
-                                        seekbar.setProgress(mTempValue = value - mSeekMin);
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
-                                }
-                                ImeUtils.hideIme(mContext.getApplicationContext(), edittext);
-                                SeekBarPreferenceController.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            }
+            new AlertDialog.Builder(mContext)
+                    .setView(edittext)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        try {
+                            int value = Integer.parseInt(edittext.getText().toString(), 10);
+                            if (value >= mSeekMin && value <= mSeekMax)
+                                seekbar.setProgress(mTempValue = value - mSeekMin);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        ImeUtils.hideIme(mContext.getApplicationContext(), edittext);
+                        onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
         });
 
         if (!TextUtils.isEmpty(comment)) {

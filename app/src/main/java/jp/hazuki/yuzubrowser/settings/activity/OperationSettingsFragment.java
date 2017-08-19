@@ -17,18 +17,14 @@
 package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 
-public class OperationSettingsFragment extends PreferenceFragment {
+public class OperationSettingsFragment extends YuzuPreferenceFragment {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_ope_settings);
     }
 }

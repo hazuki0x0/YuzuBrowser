@@ -18,27 +18,20 @@ package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.MultiFingerSettingsActivity;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 
-public class ActionSettingsFragment extends PreferenceFragment {
+public class ActionSettingsFragment extends YuzuPreferenceFragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_action_settings);
 
-        findPreference("mf_gesture").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), MultiFingerSettingsActivity.class));
-                return false;
-            }
+        findPreference("mf_gesture").setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(getActivity(), MultiFingerSettingsActivity.class));
+            return false;
         });
     }
 }

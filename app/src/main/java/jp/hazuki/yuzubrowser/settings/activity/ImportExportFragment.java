@@ -19,18 +19,17 @@ package jp.hazuki.yuzubrowser.settings.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.LoaderManager;
 import android.content.DialogInterface;
-import android.content.Loader;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.widget.Toast;
 
 import java.io.File;
@@ -45,18 +44,17 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask;
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask;
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference;
 import jp.hazuki.yuzubrowser.speeddial.io.SpeedDialBackupTask;
 import jp.hazuki.yuzubrowser.speeddial.io.SpeedDialRestoreTask;
 import jp.hazuki.yuzubrowser.utils.AppUtils;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.PermissionUtils;
-import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragment;
+import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListDialog;
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListViewController;
 
-public class ImportExportFragment extends PreferenceFragment implements LoaderManager.LoaderCallbacks<Boolean> {
+public class ImportExportFragment extends YuzuPreferenceFragment implements LoaderManager.LoaderCallbacks<Boolean> {
     private static final int REQUEST_IMPORT_FOLDER = 1;
     private static final int REQUEST_EXPORT_FOLDER = 2;
 
@@ -65,55 +63,50 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
     private DialogFragment progress;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_import_export);
 
-        findPreference("import_sd_bookmark").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final BookmarkManager manager = new BookmarkManager(getActivity());
-                final File internal_file = manager.getBookmarkFile();
+        findPreference("import_sd_bookmark").setOnPreferenceClickListener(preference -> {
+            final BookmarkManager manager = new BookmarkManager(getActivity());
+            final File internal_file = manager.getBookmarkFile();
 
-                File def_folder = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator);
-                if (!def_folder.exists())
-                    def_folder = Environment.getExternalStorageDirectory();
+            File def_folder = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator);
+            if (!def_folder.exists())
+                def_folder = Environment.getExternalStorageDirectory();
 
-                new FileListDialog(getActivity())
-                        .setFilePath(def_folder)
-                        .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
-                            @Override
-                            public void onFileSelected(final File file) {
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle(R.string.pref_import_bookmark)
-                                        .setMessage(R.string.pref_import_bookmark_confirm)
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (file.exists())
-                                                    if (FileUtils.copySingleFile(file, internal_file)) {
-                                                        manager.load();
-                                                        manager.write();
-                                                        Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
-                                                        return;
-                                                    }
-                                                Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
-                                            }
-                                        })
-                                        .setNegativeButton(android.R.string.cancel, null)
-                                        .show();
-                            }
+            new FileListDialog(getActivity())
+                    .setFilePath(def_folder)
+                    .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
+                        @Override
+                        public void onFileSelected(final File file) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(R.string.pref_import_bookmark)
+                                    .setMessage(R.string.pref_import_bookmark_confirm)
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (file.exists())
+                                                if (FileUtils.copySingleFile(file, internal_file)) {
+                                                    manager.load();
+                                                    manager.write();
+                                                    Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
+                                                    return;
+                                                }
+                                            Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .show();
+                        }
 
-                            @Override
-                            public boolean onDirectorySelected(File file) {
-                                return false;
-                            }
-                        })
-                        .show();
+                        @Override
+                        public boolean onDirectorySelected(File file) {
+                            return false;
+                        }
+                    })
+                    .show();
 
-                return false;
-            }
+            return false;
         });
 
         ((AlertDialogPreference) findPreference("export_sd_bookmark")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
@@ -141,184 +134,160 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
             }
         });
 
-        findPreference("import_html_bookmark").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final BookmarkManager manager = new BookmarkManager(getActivity());
-                File def_folder = Environment.getExternalStorageDirectory();
+        findPreference("import_html_bookmark").setOnPreferenceClickListener(preference -> {
+            final BookmarkManager manager = new BookmarkManager(getActivity());
+            File def_folder = Environment.getExternalStorageDirectory();
 
-                new FileListDialog(getActivity())
-                        .setFilePath(def_folder)
-                        .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
-                            @Override
-                            public void onFileSelected(final File file) {
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle(R.string.pref_import_html_bookmark)
-                                        .setMessage(R.string.pref_import_html_bookmark_confirm)
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (file.exists()) {
-                                                    BookmarkFolder root = new BookmarkFolder(file.getName(), manager.getRoot(), BookmarkIdGenerator.getNewId());
-                                                    manager.add(root);
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putSerializable("file", file);
-                                                    bundle.putSerializable("manager", manager);
-                                                    bundle.putSerializable("folder", root);
-                                                    getLoaderManager().restartLoader(2, bundle, ImportExportFragment.this);
-                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.importing));
-                                                    progress.show(getChildFragmentManager(), "progress");
-                                                    handler.setDialog(progress);
-                                                }
-                                            }
-                                        })
-                                        .setNegativeButton(android.R.string.cancel, null)
-                                        .show();
-                            }
-
-                            @Override
-                            public boolean onDirectorySelected(File file) {
-                                return false;
-                            }
-                        })
-                        .show();
-
-                return false;
-            }
-        });
-
-        ((AlertDialogPreference) findPreference("export_html_bookmark")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                if (PermissionUtils.checkWriteStorage(getActivity())) {
-                    BookmarkManager manager = new BookmarkManager(getActivity());
-                    File external_file = new File(BrowserApplication.getExternalUserDirectory(), manager.getBookmarkFile().getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".html");
-                    if (!external_file.getParentFile().exists()) {
-                        if (!external_file.getParentFile().mkdirs()) {
-                            Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
-                            return;
+            new FileListDialog(getActivity())
+                    .setFilePath(def_folder)
+                    .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
+                        @Override
+                        public void onFileSelected(final File file) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(R.string.pref_import_html_bookmark)
+                                    .setMessage(R.string.pref_import_html_bookmark_confirm)
+                                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                        if (file.exists()) {
+                                            BookmarkFolder root = new BookmarkFolder(file.getName(), manager.getRoot(), BookmarkIdGenerator.getNewId());
+                                            manager.add(root);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("file", file);
+                                            bundle.putSerializable("manager", manager);
+                                            bundle.putSerializable("folder", root);
+                                            getLoaderManager().restartLoader(2, bundle, ImportExportFragment.this);
+                                            progress = ProgressDialogFragmentCompat.newInstance(getString(R.string.importing));
+                                            progress.show(getChildFragmentManager(), "progress");
+                                            handler.setDialog(progress);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .show();
                         }
+
+                        @Override
+                        public boolean onDirectorySelected(File file) {
+                            return false;
+                        }
+                    })
+                    .show();
+
+            return false;
+        });
+
+        ((AlertDialogPreference) findPreference("export_html_bookmark")).setOnPositiveButtonListener(() -> {
+            if (PermissionUtils.checkWriteStorage(getActivity())) {
+                BookmarkManager manager = new BookmarkManager(getActivity());
+                File external_file = new File(BrowserApplication.getExternalUserDirectory(), manager.getBookmarkFile().getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".html");
+                if (!external_file.getParentFile().exists()) {
+                    if (!external_file.getParentFile().mkdirs()) {
+                        Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
+                        return;
                     }
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("file", external_file);
-                    bundle.putSerializable("folder", manager.getRoot());
-                    getLoaderManager().restartLoader(3, bundle, ImportExportFragment.this);
-                    progress = ProgressDialogFragment.newInstance(getString(R.string.exporting));
-                    progress.show(getChildFragmentManager(), "progress");
-                    handler.setDialog(progress);
-                } else {
-                    PermissionUtils.requestStorage(getActivity());
                 }
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("file", external_file);
+                bundle.putSerializable("folder", manager.getRoot());
+                getLoaderManager().restartLoader(3, bundle, ImportExportFragment.this);
+                progress = ProgressDialogFragmentCompat.newInstance(getString(R.string.exporting));
+                progress.show(getChildFragmentManager(), "progress");
+                handler.setDialog(progress);
+            } else {
+                PermissionUtils.requestStorage(getActivity());
             }
         });
 
-        findPreference("restore_speed_dial").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                File dir = new File(BrowserApplication.getExternalUserDirectory(), "speedDial");
-                if (!dir.exists())
-                    dir.mkdirs();
-                new FileListDialog(getActivity())
-                        .setFilePath(dir)
-                        .setShowExtensionOnly(EXT_SPEED_DIAL)
-                        .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
-                            @Override
-                            public void onFileSelected(File file) {
-                                if (file.exists()) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("file", file);
-                                    getLoaderManager().restartLoader(4, bundle, ImportExportFragment.this);
-                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
-                                    progress.show(getChildFragmentManager(), "progress");
-                                    handler.setDialog(progress);
-                                }
+        findPreference("restore_speed_dial").setOnPreferenceClickListener(preference -> {
+            File dir = new File(BrowserApplication.getExternalUserDirectory(), "speedDial");
+            if (!dir.exists())
+                dir.mkdirs();
+            new FileListDialog(getActivity())
+                    .setFilePath(dir)
+                    .setShowExtensionOnly(EXT_SPEED_DIAL)
+                    .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
+                        @Override
+                        public void onFileSelected(File file) {
+                            if (file.exists()) {
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("file", file);
+                                getLoaderManager().restartLoader(4, bundle, ImportExportFragment.this);
+                                progress = ProgressDialogFragmentCompat.newInstance(getString(R.string.restoring));
+                                progress.show(getChildFragmentManager(), "progress");
+                                handler.setDialog(progress);
                             }
+                        }
 
-                            @Override
-                            public boolean onDirectorySelected(File file) {
-                                return false;
-                            }
-                        })
-                        .show();
-                return true;
+                        @Override
+                        public boolean onDirectorySelected(File file) {
+                            return false;
+                        }
+                    })
+                    .show();
+            return true;
+        });
+
+        ((AlertDialogPreference) findPreference("backup_speed_dial")).setOnPositiveButtonListener(() -> {
+            if (PermissionUtils.checkWriteStorage(getActivity())) {
+                File file = new File(BrowserApplication.getExternalUserDirectory(), "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("file", file);
+                getLoaderManager().restartLoader(5, bundle, ImportExportFragment.this);
+                progress = ProgressDialogFragmentCompat.newInstance(getString(R.string.backing_up));
+                progress.show(getChildFragmentManager(), "progress");
+                handler.setDialog(progress);
+            } else {
+                PermissionUtils.requestStorage(getActivity());
             }
         });
 
-        ((AlertDialogPreference) findPreference("backup_speed_dial")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                if (PermissionUtils.checkWriteStorage(getActivity())) {
-                    File file = new File(BrowserApplication.getExternalUserDirectory(), "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("file", file);
-                    getLoaderManager().restartLoader(5, bundle, ImportExportFragment.this);
-                    progress = ProgressDialogFragment.newInstance(getString(R.string.backing_up));
-                    progress.show(getChildFragmentManager(), "progress");
-                    handler.setDialog(progress);
-                } else {
-                    PermissionUtils.requestStorage(getActivity());
-                }
-            }
+        findPreference("restore_settings").setOnPreferenceClickListener(preference -> {
+            File dir = new File(BrowserApplication.getExternalUserDirectory(), "backup");
+            if (!dir.exists())
+                dir.mkdirs();
+            new FileListDialog(getActivity())
+                    .setFilePath(dir)
+                    .setShowExtensionOnly(EXT)
+                    .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
+                        @Override
+                        public void onFileSelected(final File file) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(R.string.restore_settings)
+                                    .setMessage(R.string.pref_restore_settings_confirm)
+                                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                        if (file.exists()) {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("file", file);
+                                            getLoaderManager().restartLoader(0, bundle, ImportExportFragment.this);
+                                            progress = ProgressDialogFragmentCompat.newInstance(getString(R.string.restoring));
+                                            progress.show(getChildFragmentManager(), "progress");
+                                            handler.setDialog(progress);
+                                        }
+
+                                    })
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .show();
+                        }
+
+                        @Override
+                        public boolean onDirectorySelected(File file) {
+                            return false;
+                        }
+                    })
+                    .show();
+            return true;
         });
 
-        findPreference("restore_settings").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(final Preference preference) {
-                File dir = new File(BrowserApplication.getExternalUserDirectory(), "backup");
-                if (!dir.exists())
-                    dir.mkdirs();
-                new FileListDialog(getActivity())
-                        .setFilePath(dir)
-                        .setShowExtensionOnly(EXT)
-                        .setOnFileSelectedListener(new FileListViewController.OnFileSelectedListener() {
-                            @Override
-                            public void onFileSelected(final File file) {
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle(R.string.restore_settings)
-                                        .setMessage(R.string.pref_restore_settings_confirm)
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (file.exists()) {
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putSerializable("file", file);
-                                                    getLoaderManager().restartLoader(0, bundle, ImportExportFragment.this);
-                                                    progress = ProgressDialogFragment.newInstance(getString(R.string.restoring));
-                                                    progress.show(getChildFragmentManager(), "progress");
-                                                    handler.setDialog(progress);
-                                                }
-
-                                            }
-                                        })
-                                        .setNegativeButton(android.R.string.cancel, null)
-                                        .show();
-                            }
-
-                            @Override
-                            public boolean onDirectorySelected(File file) {
-                                return false;
-                            }
-                        })
-                        .show();
-                return true;
-            }
-        });
-
-        ((AlertDialogPreference) findPreference("backup_settings")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                if (PermissionUtils.checkWriteStorage(getActivity())) {
-                    File file = new File(BrowserApplication.getExternalUserDirectory(), "backup" + File.separator + FileUtils.getTimeFileName() + EXT);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("file", file);
-                    getLoaderManager().restartLoader(1, bundle, ImportExportFragment.this);
-                    progress = ProgressDialogFragment.newInstance(getString(R.string.backing_up));
-                    progress.show(getChildFragmentManager(), "progress");
-                    handler.setDialog(progress);
-                } else {
-                    PermissionUtils.requestStorage(getActivity());
-                }
+        ((AlertDialogPreference) findPreference("backup_settings")).setOnPositiveButtonListener(() -> {
+            if (PermissionUtils.checkWriteStorage(getActivity())) {
+                File file = new File(BrowserApplication.getExternalUserDirectory(), "backup" + File.separator + FileUtils.getTimeFileName() + EXT);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("file", file);
+                getLoaderManager().restartLoader(1, bundle, ImportExportFragment.this);
+                progress = ProgressDialogFragmentCompat.newInstance(getString(R.string.backing_up));
+                progress.show(getChildFragmentManager(), "progress");
+                handler.setDialog(progress);
+            } else {
+                PermissionUtils.requestStorage(getActivity());
             }
         });
     }
@@ -363,7 +332,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
     }
 
     @Override
-    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+    public void onLoadFinished(android.support.v4.content.Loader<Boolean> loader, Boolean data) {
         handler.sendEmptyMessage(0);
 
         if (data) {
@@ -377,7 +346,7 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
     }
 
     @Override
-    public void onLoaderReset(Loader<Boolean> loader) {
+    public void onLoaderReset(android.support.v4.content.Loader<Boolean> loader) {
 
     }
 
@@ -410,19 +379,10 @@ public class ImportExportFragment extends PreferenceFragment implements LoaderMa
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.permission_probrem)
                     .setMessage(R.string.confirm_permission_storage)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            PermissionUtils.openRequestPermissionSettings(getActivity(),
-                                    getString(R.string.request_permission_storage_setting));
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().onBackPressed();
-                        }
-                    });
+                    .setPositiveButton(android.R.string.ok,
+                            (dialog, which) -> PermissionUtils.openRequestPermissionSettings(getActivity(),
+                                    getString(R.string.request_permission_storage_setting)))
+                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> getActivity().onBackPressed());
             setCancelable(false);
             return builder.create();
         }

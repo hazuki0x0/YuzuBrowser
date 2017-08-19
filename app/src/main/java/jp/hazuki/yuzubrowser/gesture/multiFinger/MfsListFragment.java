@@ -16,13 +16,11 @@
 
 package jp.hazuki.yuzubrowser.gesture.multiFinger;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -40,11 +38,11 @@ import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
-import jp.hazuki.yuzubrowser.utils.view.DeleteDialog;
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
 
-public class MfsListFragment extends Fragment implements OnRecyclerListener, DeleteDialog.OnDelete {
+public class MfsListFragment extends Fragment implements OnRecyclerListener, DeleteDialogCompat.OnDelete {
 
     private View rootView;
     private MultiFingerGestureManager manager;
@@ -57,8 +55,8 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
         setHasOptionsMenu(true);
         rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ItemTouchHelper helper = new ItemTouchHelper(new ListTouch());
@@ -71,12 +69,9 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
 
         recyclerView.setAdapter(adapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null)
-                    listener.goEdit(-1, new MultiFingerGestureItem());
-            }
+        fab.setOnClickListener(v -> {
+            if (listener != null)
+                listener.goEdit(-1, new MultiFingerGestureItem());
         });
 
         return rootView;
@@ -99,7 +94,7 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
 
     @Override
     public boolean onRecyclerItemLongClicked(View v, int position) {
-        DeleteDialog.newInstance(getActivity(), R.string.delete_mf_gesture, R.string.confirm_delete_mf_gesture, position)
+        DeleteDialogCompat.newInstance(getActivity(), R.string.delete_mf_gesture, R.string.confirm_delete_mf_gesture, position)
                 .show(getChildFragmentManager(), "delete");
         return true;
     }
@@ -114,14 +109,6 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
     public void onAttach(Context context) {
         super.onAttach(context);
         if (getActivity() instanceof OnMfsListListener)
-            listener = (OnMfsListListener) getActivity();
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && getActivity() instanceof OnMfsListListener)
             listener = (OnMfsListListener) getActivity();
     }
 
@@ -174,12 +161,9 @@ public class MfsListFragment extends Fragment implements OnRecyclerListener, Del
             final MultiFingerGestureItem item = adapter.remove(position);
 
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            manager.add(position, item);
-                            adapter.notifyDataSetChanged();
-                        }
+                    .setAction(R.string.undo, v -> {
+                        manager.add(position, item);
+                        adapter.notifyDataSetChanged();
                     })
                     .addCallback(new Snackbar.Callback() {
                         @Override

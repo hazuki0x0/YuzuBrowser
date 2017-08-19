@@ -27,4 +27,7 @@
     <dimen name="tab_list_item_h_button_padding">4dp</dimen>
     <dimen name="tab_list_item_h_button_margin">4dp</dimen>
     <dimen name="tab_list_item_h_text_size">12sp</dimen>
+
+    <dimen name="custom_match_parent">-1px</dimen>
+    <dimen name="preference_width">@dimen/custom_match_parent</dimen>
 </resources>

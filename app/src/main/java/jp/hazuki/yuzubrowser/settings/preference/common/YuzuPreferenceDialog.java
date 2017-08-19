@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.settings.preference;
+package jp.hazuki.yuzubrowser.settings.preference.common;
 
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.preference.Preference;
-import android.util.AttributeSet;
+import android.support.v7.preference.PreferenceDialogFragmentCompat;
 
-import jp.hazuki.yuzubrowser.useragent.UserAgentSettingActivity;
+public abstract class YuzuPreferenceDialog extends PreferenceDialogFragmentCompat {
 
-public class UserAgentListSettingsPreference extends Preference {
-    public UserAgentListSettingsPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    protected static YuzuPreferenceDialog newInstance(YuzuPreferenceDialog dialog, Preference preference) {
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_KEY, preference.getKey());
+        dialog.setArguments(bundle);
+        return dialog;
     }
 
-    @Override
-    protected void onClick() {
-        super.onClick();
-        Intent intent = new Intent(getContext(), UserAgentSettingActivity.class);
-        getContext().startActivity(intent);
+    public <T extends Preference> T getParentPreference() {
+        return (T) getPreference();
     }
 }

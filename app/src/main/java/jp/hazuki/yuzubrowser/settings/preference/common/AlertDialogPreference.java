@@ -1,7 +1,8 @@
 package jp.hazuki.yuzubrowser.settings.preference.common;
 
 import android.content.Context;
-import android.preference.DialogPreference;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 public class AlertDialogPreference extends DialogPreference {
@@ -27,12 +28,19 @@ public class AlertDialogPreference extends DialogPreference {
         mPositiveButtonListener = l;
     }
 
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        if (mPositiveButtonListener != null) {
-            if (positiveResult)
-                mPositiveButtonListener.onPositiveButtonClick();
+    public static class PreferenceDialog extends YuzuPreferenceDialog {
+
+        public static YuzuPreferenceDialog newInstance(Preference preference) {
+            return newInstance(new PreferenceDialog(), preference);
         }
-        super.onDialogClosed(positiveResult);
+
+        @Override
+        public void onDialogClosed(boolean positiveResult) {
+            OnButtonClickListener listener = ((AlertDialogPreference) getPreference()).mPositiveButtonListener;
+            if (listener != null) {
+                if (positiveResult)
+                    listener.onPositiveButtonClick();
+            }
+        }
     }
 }

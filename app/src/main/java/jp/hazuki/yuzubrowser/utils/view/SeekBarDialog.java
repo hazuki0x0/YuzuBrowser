@@ -1,10 +1,10 @@
 package jp.hazuki.yuzubrowser.utils.view;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import jp.hazuki.yuzubrowser.settings.preference.common.SeekBarPreferenceController;
@@ -38,12 +38,8 @@ public class SeekBarDialog {
     }
 
     public SeekBarDialog setPositiveButton(int textId, final OnClickListener listener) {
-        mBuilder.setPositiveButton(textId, (listener == null) ? null : new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.onClick(dialog, which, mController.getCurrentValue());
-            }
-        });
+        mBuilder.setPositiveButton(textId, (listener == null) ? null :
+                (DialogInterface.OnClickListener) (dialog, which) -> listener.onClick(dialog, which, mController.getCurrentValue()));
         return this;
     }
 

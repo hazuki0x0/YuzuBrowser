@@ -1,8 +1,8 @@
 package jp.hazuki.yuzubrowser.bookmark.netscape;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.content.AsyncTaskLoader;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;

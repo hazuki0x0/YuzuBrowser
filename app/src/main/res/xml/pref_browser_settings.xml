@@ -6,7 +6,9 @@
         android:title="@string/pref_pattern_match"
         app:intent="jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity" />
 
-    <PreferenceScreen android:title="@string/pref_userjs_settings">
+    <PreferenceScreen
+        android:key="ps_user_script"
+        android:title="@string/pref_userjs_settings">
         <CheckBoxPreference
             android:key="userjs_enable"
             android:title="@string/pref_userjs_enable" />
@@ -60,7 +62,9 @@
         android:key="move_to_parent"
         android:title="@string/pref_move_to_parent" />
 
-    <PreferenceScreen android:title="@string/pref_newtab_settings">
+    <PreferenceScreen
+        android:key="ps_new_tab_settings"
+        android:title="@string/pref_newtab_settings">
         <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"

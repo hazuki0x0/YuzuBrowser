@@ -11,7 +11,9 @@
         android:key="theme_setting"
         android:title="@string/theme_setting" />
 
-    <PreferenceScreen android:title="@string/pref_toolbar_settings">
+    <PreferenceScreen
+        android:key="ps_toolbar"
+        android:title="@string/pref_toolbar_settings">
         <SwitchPreference
             android:key="snap_toolbar"
             android:title="@string/pref_snap_toolbar" />
@@ -21,7 +23,9 @@
             app:seekMax="255"
             app:seekMin="0" />
 
-        <PreferenceScreen android:title="@string/pref_tab_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_tab"
+            android:title="@string/pref_tab_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_list"
                 android:entryValues="@array/pref_toolbar_location_values"
@@ -84,7 +88,9 @@
                 android:key="toolbar_show_favicon"
                 android:title="@string/pref_show_favicon" />
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/pref_url_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_url"
+            android:title="@string/pref_url_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_list"
                 android:entryValues="@array/pref_toolbar_location_values"
@@ -127,7 +133,9 @@
                 android:key="toolbar_always_show_url"
                 android:title="@string/pref_always_show_url" />
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/pref_progress_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_progress"
+            android:title="@string/pref_progress_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_list"
                 android:entryValues="@array/pref_toolbar_location_values"
@@ -162,7 +170,9 @@
                 app:seekMax="100"
                 app:seekMin="1" />
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/pref_custom_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_custom"
+            android:title="@string/pref_custom_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_custom_list"
                 android:entryValues="@array/pref_toolbar_location_custom_values"

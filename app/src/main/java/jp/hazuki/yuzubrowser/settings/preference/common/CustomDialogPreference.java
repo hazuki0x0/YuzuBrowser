@@ -1,8 +1,11 @@
 package jp.hazuki.yuzubrowser.settings.preference.common;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.preference.DialogPreference;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 public abstract class CustomDialogPreference extends DialogPreference {
@@ -14,11 +17,20 @@ public abstract class CustomDialogPreference extends DialogPreference {
         super(context, attrs);
     }
 
-    public void show() {
-        //showDialog(null);//NullPointerException at getPreferenceManager()
+    public void show(FragmentManager manager) {
+        crateCustomDialog().show(manager, getKey());
+    }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        onPrepareDialogBuilder(builder);
-        builder.show();
+    @NonNull
+    protected abstract CustomDialogFragment crateCustomDialog();
+
+    public static class CustomDialogFragment extends DialogFragment implements TargetFragment {
+
+        @Override
+        public Preference findPreference(CharSequence key) {
+            DialogPreference.TargetFragment fragment =
+                    (DialogPreference.TargetFragment) getTargetFragment();
+            return fragment.findPreference(key);
+        }
     }
 }

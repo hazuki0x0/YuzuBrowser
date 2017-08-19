@@ -20,32 +20,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.settings.activity.YuzuPreferenceFragment;
 
-public class MfsFragment extends PreferenceFragment {
+public class MfsFragment extends YuzuPreferenceFragment {
 
     private OnMfsFragmentListener listener;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_multi_finger_settings);
 
         setRetainInstance(true);
 
-        findPreference("multi_finger_gesture_list").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (listener != null)
-                    listener.onGoToList();
-                return false;
-            }
+        findPreference("multi_finger_gesture_list").setOnPreferenceClickListener(preference -> {
+            if (listener != null)
+                listener.onGoToList();
+            return false;
         });
     }
 

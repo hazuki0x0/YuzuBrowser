@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -188,7 +189,6 @@ import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.ClearBrowserDataAlertDialog;
 import jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog;
-import jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialAsyncManager;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
 import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
@@ -229,6 +229,7 @@ import jp.hazuki.yuzubrowser.utils.view.CopyableTextView;
 import jp.hazuki.yuzubrowser.utils.view.CustomCoordinatorLayout;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 import jp.hazuki.yuzubrowser.utils.view.PointerView;
+import jp.hazuki.yuzubrowser.utils.view.SeekBarDialog;
 import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior;
 import jp.hazuki.yuzubrowser.utils.view.pie.PieControlBase;
 import jp.hazuki.yuzubrowser.utils.view.pie.PieMenu;
@@ -264,7 +265,8 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcImageShareWebHandler;
 import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
 public class BrowserActivity extends LongPressFixActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
-        GestureOverlayView.OnGesturePerformedListener, MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener {
+        GestureOverlayView.OnGesturePerformedListener, MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener,
+        FinishAlertDialog.OnFinishDialogCallBack {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -355,6 +357,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private boolean isResumed;
     private Action delayAction;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1769,6 +1772,18 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             adBlockController.update();
     }
 
+    @Override
+    public void onFinishPositiveButtonClicked(int clearTabNo, int newSetting) {
+        finishQuick(clearTabNo, newSetting);//TODO dialog memory leak
+    }
+
+    @Override
+    public void onFinishNeutralButtonClicked(int clearTabNo, int newSetting) {
+        if (clearTabNo >= 0 && mTabManager.size() >= 2)
+            removeTab(clearTabNo);
+        moveTaskToBack(true);
+    }
+
     private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
@@ -2218,22 +2233,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
     private void finishAlert(final int clearTabNo) {
         new FinishAlertDialog(this)
-                .setPositiveButton(android.R.string.yes, new FinishAlertDialog.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, int new_value) {
-                        finishQuick(clearTabNo, new_value);//TODO dialog memory leak
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .setNeutralButton(R.string.minimize, new FinishAlertDialog.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, int new_value) {
-                        if (clearTabNo >= 0 && mTabManager.size() >= 2)
-                            removeTab(clearTabNo);
-                        moveTaskToBack(true);
-                    }
-                })
-                .show();
+                .setPositiveButton(android.R.string.yes)
+                .setNegativeButton(android.R.string.no)
+                .setNeutralButton(R.string.minimize)
+                .setClearTabNo(clearTabNo)
+                .show(getSupportFragmentManager());
     }
 
     private void showSearchBox(String query, int target, boolean openNewTab, boolean reverse) {
@@ -4029,10 +4033,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 }
                 break;
                 case SingleAction.CLEAR_DATA:
-                    new ClearBrowserDataAlertDialog(BrowserActivity.this).show();
+                    new ClearBrowserDataAlertDialog(BrowserActivity.this).show(getSupportFragmentManager());
                     break;
                 case SingleAction.SHOW_PROXY_SETTING:
-                    new ProxySettingDialog(BrowserActivity.this).show();
+                    new ProxySettingDialog(BrowserActivity.this).show(getSupportFragmentManager());
                     break;
                 case SingleAction.ORIENTATION_SETTING:
                     new AlertDialog.Builder(BrowserActivity.this)
@@ -4063,12 +4067,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 break;
                 case SingleAction.TEXTSIZE_SETTING: {
                     final WebSettings setting = mTabManager.get(target).mWebView.getSettings();
-                    new WebTextSizeDialog(BrowserActivity.this, WebViewUtils.getTextSize(setting)) {
-                        @Override
-                        public void onClick(int value) {
-                            WebViewUtils.setTextSize(setting, value);
-                        }
-                    }.show();
+                    new SeekBarDialog(BrowserActivity.this)
+                            .setTitle(R.string.pref_text_size)
+                            .setSeekMin(1)
+                            .setSeekMax(300)
+                            .setValue(WebViewUtils.getTextSize(setting))
+                            .setPositiveButton(android.R.string.ok, (dialog, which, value) -> WebViewUtils.setTextSize(setting, value))
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
                 }
                 break;
                 case SingleAction.USERJS_SETTING:

@@ -17,7 +17,7 @@
 package jp.hazuki.yuzubrowser.settings.preference;
 
 import android.content.Context;
-import android.preference.ListPreference;
+import android.support.v7.preference.ListPreference;
 import android.util.AttributeSet;
 
 import java.io.File;

@@ -76,7 +76,7 @@
         app:seekMax="72"
         app:seekMin="1" />
 
-    <jp.hazuki.yuzubrowser.settings.preference.WebTextSizeDialog
+    <jp.hazuki.yuzubrowser.settings.preference.WebTextSizePreference
         android:key="text_size"
         android:title="@string/pref_text_size" />
 

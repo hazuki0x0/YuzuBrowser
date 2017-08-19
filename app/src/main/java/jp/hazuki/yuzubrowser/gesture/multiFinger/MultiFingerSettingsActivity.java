@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.gesture.multiFinger;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
@@ -32,7 +32,7 @@ public class MultiFingerSettingsActivity extends ThemeActivity implements MfsFra
         setContentView(R.layout.fragment_base);
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new MfsFragment())
                     .commit();
         }
@@ -40,7 +40,7 @@ public class MultiFingerSettingsActivity extends ThemeActivity implements MfsFra
 
     @Override
     public void onGoToList() {
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .addToBackStack("")
                 .replace(R.id.container, new MfsListFragment(), "list")
                 .commit();
@@ -48,7 +48,7 @@ public class MultiFingerSettingsActivity extends ThemeActivity implements MfsFra
 
     @Override
     public void goEdit(int index, MultiFingerGestureItem item) {
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .addToBackStack("")
                 .replace(R.id.container, MfsEditFragment.newInstance(index, item))
                 .commit();
@@ -56,7 +56,7 @@ public class MultiFingerSettingsActivity extends ThemeActivity implements MfsFra
 
     @Override
     public void onEdited(int index, MultiFingerGestureItem item) {
-        Fragment fragment = getFragmentManager().findFragmentByTag("list");
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("list");
         if (fragment instanceof MfsListFragment) {
             ((MfsListFragment) fragment).onEdited(index, item);
         }

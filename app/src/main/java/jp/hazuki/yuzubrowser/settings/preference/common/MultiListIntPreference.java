@@ -1,10 +1,9 @@
 package jp.hazuki.yuzubrowser.settings.preference.common;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.preference.DialogPreference;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 import java.util.Arrays;
@@ -36,33 +35,6 @@ public class MultiListIntPreference extends DialogPreference {
     }
 
     @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-
-        if (mValue == null) {
-            mValue = new boolean[mMax];
-            Arrays.fill(mValue, false);
-        }
-
-        builder.setMultiChoiceItems(mEntriesId, mValue, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                mValue[which] = isChecked;
-            }
-        });
-    }
-
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-        if (positiveResult) {
-            if (callChangeListener(mValue)) {
-                setValue(mValue);
-            }
-        }
-    }
-
-    @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getInt(index, -1);
     }
@@ -70,5 +42,33 @@ public class MultiListIntPreference extends DialogPreference {
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         setValue(restoreValue ? getPersistedInt(ArrayUtils.getBitsInt(mValue)) : (Integer) defaultValue);
+    }
+
+    public static class PrefernceDialog extends YuzuPreferenceDialog {
+
+        public static YuzuPreferenceDialog newInstance(Preference preference) {
+            return newInstance(new PrefernceDialog(), preference);
+        }
+
+        @Override
+        protected void onPrepareDialogBuilder(android.support.v7.app.AlertDialog.Builder builder) {
+            MultiListIntPreference pref = getParentPreference();
+            if (pref.mValue == null) {
+                pref.mValue = new boolean[pref.mMax];
+                Arrays.fill(pref.mValue, false);
+            }
+
+            builder.setMultiChoiceItems(pref.mEntriesId, pref.mValue, (dialog, which, isChecked) -> pref.mValue[which] = isChecked);
+        }
+
+        @Override
+        public void onDialogClosed(boolean positiveResult) {
+            if (positiveResult) {
+                MultiListIntPreference pref = getParentPreference();
+                if (pref.callChangeListener(pref.mValue)) {
+                    pref.setValue(pref.mValue);
+                }
+            }
+        }
     }
 }
