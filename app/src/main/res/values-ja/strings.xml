@@ -255,4 +255,6 @@
     <string name="favicon_cache">faviconキャッシュ</string>
     <string name="untitled">無題</string>
     <string name="loading_failed">ページから何も読み込めませんでした。</string>
+    <string name="font_not_found">フォントファイルが見つかりません</string>
+    <string name="font_error">このファイルはフォントではありません</string>
 </resources>

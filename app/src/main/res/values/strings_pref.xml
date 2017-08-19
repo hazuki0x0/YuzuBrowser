@@ -749,4 +749,20 @@
         <item>0</item>
         <item>1</item>
     </integer-array>
+
+    <string name="pref_reader_settings">Reader settings</string>
+    <string name="pref_reader_text_size">Text size</string>
+    <string name="pref_reader_text_font">Body font</string>
+    <string name="pref_reader_theme">Reader theme</string>
+    <string name="pref_reader_theme_same_as">Same as app settings</string>
+    <string-array name="pref_reader_theme_list" translatable="false">
+        <item>@string/pref_reader_theme_same_as</item>
+        <item>@string/pref_dark_theme</item>
+        <item>@string/pref_light_theme</item>
+    </string-array>
+    <integer-array name="pref_reader_theme_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
 </resources>

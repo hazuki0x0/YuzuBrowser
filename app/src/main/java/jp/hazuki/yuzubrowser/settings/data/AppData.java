@@ -188,6 +188,9 @@ public class AppData {
     public static final BooleanContainer safe_browsing = new BooleanContainer("safe_browsing", true);
     public static final BooleanContainer save_tabs_for_crash = new BooleanContainer("save_tabs_for_crash", false);
     public static final IntContainer touch_scrollbar = new IntContainer("touch_scrollbar", -1);
+    public static final IntContainer reader_theme = new IntContainer("reader_theme", -1);
+    public static final IntContainer reader_text_size = new IntContainer("reader_text_size", 18);
+    public static final StringContainer reader_text_font = new StringContainer("reader_text_font", "");
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

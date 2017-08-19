@@ -209,6 +209,10 @@
         </PreferenceScreen>
     </PreferenceScreen>
 
+    <Preference
+        android:key="reader_settings"
+        android:title="@string/pref_reader_settings"/>
+
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_touch_scrollbar_list"
         android:entryValues="@array/pref_touch_scrollbar_values"

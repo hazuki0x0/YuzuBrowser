@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.reader;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -30,8 +31,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 
@@ -53,6 +58,23 @@ public class ReaderFragment extends Fragment implements LoaderManager.LoaderCall
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         titleTextView = view.findViewById(R.id.titleTextView);
         bodyTextView = view.findViewById(R.id.bodyTextView);
+
+        bodyTextView.setTextSize(AppData.reader_text_size.get());
+
+        String fontPath = AppData.reader_text_font.get();
+        if (!TextUtils.isEmpty(fontPath)) {
+            File font = new File(fontPath);
+
+            if (font.exists() && font.isFile()) {
+                try {
+                    bodyTextView.setTypeface(Typeface.createFromFile(fontPath));
+                } catch (RuntimeException e) {
+                    Toast.makeText(getActivity(), R.string.font_error, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.font_not_found, Toast.LENGTH_SHORT).show();
+            }
+        }
 
         String url = getArguments().getString(ARG_URL);
         if (TextUtils.isEmpty(url)) {

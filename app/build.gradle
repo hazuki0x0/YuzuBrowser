@@ -88,6 +88,7 @@ dependencies {
     compile 'ca.barrenechea.header-decor:header-decor:0.2.8'
     compile 'org.jsoup:jsoup:1.10.3'
     compile 'com.takisoft.fix:preference-v7:26.0.1.0'
+    compile 'com.annimon:stream:1.1.8'
     compile project(':libraries:floatingactionbutton')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;

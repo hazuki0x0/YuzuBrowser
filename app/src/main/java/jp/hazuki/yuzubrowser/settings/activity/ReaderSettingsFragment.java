@@ -20,30 +20,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.AppUtils;
 
-public class UiSettingFragment extends YuzuPreferenceFragment {
-
+public class ReaderSettingsFragment extends YuzuPreferenceFragment {
     @Override
     public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.pref_ui_settings);
-
-        findPreference("theme_setting").setOnPreferenceChangeListener((preference, newValue) -> {
-            AppUtils.restartApp(getActivity());
-            return true;
-        });
-
-        findPreference("restart").setOnPreferenceClickListener(preference -> {
-            AppUtils.restartApp(getActivity());
-            return true;
-        });
-
-        findPreference("reader_settings").setOnPreferenceClickListener(preference -> {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new ReaderSettingsFragment())
-                    .addToBackStack("reader_settings")
-                    .commit();
-            return true;
-        });
+        addPreferencesFromResource(R.xml.pref_reader);
     }
 }

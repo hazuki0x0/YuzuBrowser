@@ -382,4 +382,10 @@
         <item>右</item>
         <item>左</item>
     </string-array>
+
+    <string name="pref_reader_settings">リーダー設定</string>
+    <string name="pref_reader_text_size">テキストサイズ</string>
+    <string name="pref_reader_text_font">本文フォント</string>
+    <string name="pref_reader_theme">リーダーのテーマ</string>
+    <string name="pref_reader_theme_same_as">アプリの設定</string>
 </resources>

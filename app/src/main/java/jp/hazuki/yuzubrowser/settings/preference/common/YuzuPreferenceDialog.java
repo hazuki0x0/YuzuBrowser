@@ -22,7 +22,7 @@ import android.support.v7.preference.PreferenceDialogFragmentCompat;
 
 public abstract class YuzuPreferenceDialog extends PreferenceDialogFragmentCompat {
 
-    protected static YuzuPreferenceDialog newInstance(YuzuPreferenceDialog dialog, Preference preference) {
+    protected static <T extends YuzuPreferenceDialog> T newInstance(T dialog, Preference preference) {
         Bundle bundle = new Bundle();
         bundle.putString(ARG_KEY, preference.getKey());
         dialog.setArguments(bundle);

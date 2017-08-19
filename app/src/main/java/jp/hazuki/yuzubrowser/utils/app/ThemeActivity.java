@@ -33,7 +33,7 @@ public class ThemeActivity extends AppCompatActivity {
             ThemeData.createInstance(getApplicationContext(), AppData.theme_setting.get());
         }
 
-        if (ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
+        if (!useDarkTheme() && useLightTheme() || ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
             setTheme(lightThemeResource());
         }
 
@@ -48,5 +48,13 @@ public class ThemeActivity extends AppCompatActivity {
     @StyleRes
     int lightThemeResource() {
         return R.style.CustomThemeLight;
+    }
+
+    protected boolean useLightTheme() {
+        return false;
+    }
+
+    protected boolean useDarkTheme() {
+        return false;
     }
 }

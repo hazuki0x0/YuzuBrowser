@@ -257,4 +257,6 @@
     <string name="pref_save_tab_for_crash">Save tabs in a high frequency</string>
     <string name="untitled">Untitled</string>
     <string name="loading_failed">Couldn\'t load anything from the page.</string>
+    <string name="font_not_found">Font file not found</string>
+    <string name="font_error">This file is not a font</string>
 </resources>

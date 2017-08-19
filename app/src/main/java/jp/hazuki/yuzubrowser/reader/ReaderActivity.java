@@ -85,6 +85,16 @@ public class ReaderActivity extends ThemeActivity {
     }
 
     @Override
+    protected boolean useDarkTheme() {
+        return AppData.reader_theme.get() == 0;
+    }
+
+    @Override
+    protected boolean useLightTheme() {
+        return AppData.reader_theme.get() == 1;
+    }
+
+    @Override
     protected int lightThemeResource() {
         return R.style.BrowserMinThemeLight_NoTitle;
     }
