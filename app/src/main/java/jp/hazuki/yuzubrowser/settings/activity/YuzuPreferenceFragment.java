@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompatDividers;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
-import jp.hazuki.yuzubrowser.settings.preference.FontListPreference;
 import jp.hazuki.yuzubrowser.settings.preference.NightModePreference;
 import jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference;
 import jp.hazuki.yuzubrowser.settings.preference.WebTextSizePreference;
@@ -112,8 +111,6 @@ public abstract class YuzuPreferenceFragment extends PreferenceFragmentCompatDiv
                 dialog = NightModePreference.SettingDialog.newInstance(preference);
             } else if (preference instanceof WebTextSizePreference) {
                 dialog = WebTextSizePreference.SizeDialog.newInstance(preference);
-            } else if (preference instanceof FontListPreference) {
-                dialog = FontListPreference.FontListDialog.newInstance(preference);
             } else if (preference instanceof CustomDialogPreference) {
                 ((CustomDialogPreference) preference).show(getChildFragmentManager());
                 return;
