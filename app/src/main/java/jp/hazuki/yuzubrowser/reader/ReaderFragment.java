@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.reader;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -26,7 +27,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,7 @@ import java.io.File;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat;
 
@@ -76,6 +80,14 @@ public class ReaderFragment extends Fragment implements LoaderManager.LoaderCall
             }
         }
 
+        bodyTextView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            CharSequence sequence = bodyTextView.getText();
+            if (sequence instanceof Spanned) {
+                setImages((Spanned) sequence);
+                bodyTextView.setText(sequence);
+            }
+        });
+
         String url = getArguments().getString(ARG_URL);
         if (TextUtils.isEmpty(url)) {
             setFailedText();
@@ -100,9 +112,46 @@ public class ReaderFragment extends Fragment implements LoaderManager.LoaderCall
         setText(getString(R.string.untitled), getString(R.string.loading_failed));
     }
 
-    private void setText(String title, String body) {
+    private void setText(String title, CharSequence body) {
         titleTextView.setText(title);
+
+        if (body instanceof Spanned) {
+            setImages((Spanned) body);
+        }
+
         bodyTextView.setText(body);
+    }
+
+    private void setImages(Spanned spanned) {
+        ImageSpan[] imageSpans = spanned.getSpans(0, spanned.length(), ImageSpan.class);
+
+        int width = bodyTextView.getWidth();
+
+        if (width == 0) {
+            return;
+        }
+
+        int maxWidth = DisplayUtils.convertDpToPx(getActivity(), 360);
+        int padding = 0;
+
+        if (width > maxWidth) {
+            padding = (width - maxWidth) / 2;
+            width = maxWidth;
+        }
+        for (ImageSpan span : imageSpans) {
+            Drawable drawable = span.getDrawable();
+
+            int w = drawable.getIntrinsicWidth();
+            int h = drawable.getIntrinsicHeight();
+
+            if (w <= 0 || h <= 0) {
+                drawable.setBounds(0, 0, 0, 0);
+                return;
+            }
+
+            double scale = width / (double) w;
+            drawable.setBounds(padding, 0, (int) (w * scale) + padding, (int) (h * scale));
+        }
     }
 
     @Override
@@ -114,7 +163,8 @@ public class ReaderFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<ReaderData> loader, ReaderData data) {
-        new Handler().post(() -> progressDialog.dismiss());
+        if (progressDialog != null)
+            new Handler().post(() -> progressDialog.dismiss());
         if (data != null) {
             setText(data.getTitle(), data.getBody());
         } else {

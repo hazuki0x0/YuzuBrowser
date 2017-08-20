@@ -19,8 +19,50 @@ package jp.hazuki.yuzubrowser.utils;
 public class HtmlUtils {
 
     public static String sanitize(String str) {
-        return str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
+        int index = indexOfMeta(str, 0);
+        if (index < 0) return str;
+
+        StringBuilder sb = new StringBuilder(str.length());
+        int offset = 0;
+
+        do {
+            sb.append(str, offset, index);
+            switch (str.charAt(index)) {
+                case '&':
+                    sb.append("&amp;");
+                    break;
+                case '<':
+                    sb.append("&lt;");
+                    break;
+                case '>':
+                    sb.append("&gt;");
+                    break;
+                case '"':
+                    sb.append("&quot;");
+                    break;
+                case '\'':
+                    sb.append("&#39;");
+                    break;
+            }
+            offset = index + 1;
+        } while (0 <= (index = indexOfMeta(str, offset)));
+
+        sb.append(str, offset, str.length());
+        return sb.toString();
     }
 
 
+    private static int indexOfMeta(String str, int offset) {
+        for (int i = offset; str.length() > i; i++) {
+            switch (str.charAt(i)) {
+                case '&':
+                case '<':
+                case '>':
+                case '"':
+                case '\'':
+                    return i;
+            }
+        }
+        return -1;
+    }
 }

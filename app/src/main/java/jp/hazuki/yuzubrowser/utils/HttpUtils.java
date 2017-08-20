@@ -16,8 +16,15 @@
 
 package jp.hazuki.yuzubrowser.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
@@ -65,5 +72,20 @@ public final class HttpUtils {
         }
 
         return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
+    }
+
+    public static Bitmap getImage(String url, String userAgent, String referrer) {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestProperty("User-Agent", userAgent);
+            conn.addRequestProperty("Referer", referrer);
+            try (InputStream is = conn.getInputStream()) {
+                return BitmapFactory.decodeStream(is);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

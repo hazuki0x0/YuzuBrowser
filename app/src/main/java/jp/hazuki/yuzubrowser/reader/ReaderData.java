@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.reader;
 
 public class ReaderData {
     private final String title;
-    private final String body;
+    private final CharSequence body;
 
-    public ReaderData(String title, String body) {
+    public ReaderData(String title, CharSequence body) {
         this.title = title;
         this.body = body;
     }
@@ -29,7 +29,7 @@ public class ReaderData {
         return title;
     }
 
-    public String getBody() {
+    public CharSequence getBody() {
         return body;
     }
 }

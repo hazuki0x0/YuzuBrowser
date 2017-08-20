@@ -16,6 +16,8 @@
 
 package jp.hazuki.yuzubrowser.reader.snacktory;
 
+import com.annimon.stream.Stream;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,7 +56,7 @@ public class ArticleTextExtractor {
     private Pattern NEGATIVE;
     private static final Pattern NEGATIVE_STYLE =
             Pattern.compile("hidden|display: ?none|font-size: ?small");
-    private static final Pattern PASS_PATTERN = Pattern.compile("h\\d");
+    private static final Pattern PASS_PATTERN = Pattern.compile("h\\d|img|p");
     private static final Set<String> IGNORED_TITLE_PARTS = new LinkedHashSet<String>() {
         {
             add("hacker news");
@@ -73,7 +75,7 @@ public class ArticleTextExtractor {
                 + "|arti(cle|kel)|instapaper_body");
         setNegative("nav($|igation)|user|com(ment|bx)|(^com-)|contact|"
                 + "foot|masthead|(me(dia|ta))|outbrain|promo|related|scroll|(sho(utbox|pping))|"
-                + "sidebar|sponsor|tags|tool|widget|player|disclaimer|toc|infobox|vcard|post-ratings");
+                + "sidebar|sponsor|tags|tool|widget|player|disclaimer|toc|infobox|vcard");
     }
 
     public ArticleTextExtractor setUnlikely(String unlikelyStr) {
@@ -151,9 +153,8 @@ public class ArticleTextExtractor {
         // now remove the clutter
         prepareDocument(doc);
 
-        Element body = getBodyElement(doc);
         // init elements
-        Collection<Element> nodes = getNodes(body);
+        Collection<Element> nodes = getNodes(doc);
         int maxWeight = 0;
         Element bestMatchElement = null;
         for (Element entry : nodes) {
@@ -161,8 +162,8 @@ public class ArticleTextExtractor {
             if (currentWeight > maxWeight) {
                 maxWeight = currentWeight;
                 bestMatchElement = entry;
-                if (maxWeight > 200)
-                    break;
+//                if (maxWeight > 200)
+//                    break;
             }
         }
 
@@ -179,26 +180,29 @@ public class ArticleTextExtractor {
 
 
             Element parent = bestMatchElement.parent();
-            Element custom = new Element("div");
-            int weight = calcWeight(bestMatchElement);
-            int index = 0;
-            for (Element entry : parent.children()) {
-                int currentWeight = calcWeight(entry);
-                if (currentWeight >= weight || PASS_PATTERN.matcher(entry.tagName()).matches()) {
-                    custom.insertChildren(index, entry);
-                    index++;
+            if ("div".equals(parent.tagName()) && parent.ownText().length() == 0) {
+                if (Stream.of(parent.children()).allMatch(value -> "div".equals(value.tagName()) && countText(value) > 100)) {
+                    Element custom = new Element("div");
+                    int index = 0;
+                    for (Element entry : parent.children()) {
+                        custom.insertChildren(index, entry);
+                        index++;
+                    }
+                    bestMatchElement = custom;
                 }
             }
 
+            bestMatchElement.setBaseUri(res.getUrl());
+
             // clean before grabbing text
-            String text = formatter.getFormattedText(custom);
+            String text = formatter.getFormattedText(bestMatchElement, res.getUrl());
             text = removeTitleFromText(text, res.getTitle());
             // this fails for short facebook post and probably tweets: text.length() > res.getDescription().length()
             if (text.length() > res.getTitle().length()) {
                 res.setText(text);
 //                print("best element:", bestMatchElement);
             }
-            res.setTextList(formatter.getTextList(custom));
+            res.setTextList(formatter.getTextList(bestMatchElement));
         }
 
         if (res.getImageUrl().isEmpty()) {
@@ -210,6 +214,14 @@ public class ArticleTextExtractor {
         res.setFaviconUrl(extractFaviconUrl(doc));
         res.setKeywords(extractKeywords(doc));
         return res;
+    }
+
+    private int countText(Element element) {
+        return element.ownText().length() +
+                Stream.of(element.children())
+                        .filter(value -> "p".equals(value.tagName()))
+                        .mapToInt(item -> item.text().length())
+                        .sum();
     }
 
     protected String extractTitle(Document doc) {
@@ -333,12 +345,12 @@ public class ArticleTextExtractor {
     protected int weightChildNodes(Element rootEl) {
         int weight = 0;
         Element caption = null;
-        List<Element> pEls = new ArrayList<Element>(5);
+        List<Element> pEls = new ArrayList<>(5);
         for (Element child : rootEl.children()) {
             String ownText = child.ownText();
 
             // if you are on a paragraph, grab all the text including that surrounded by additional formatting.
-            if (child.tagName().equals("p")) ownText = child.text();
+            //if (child.tagName().equals("p")) ownText = child.text();
 
             int ownTextLength = ownText.length();
             if (ownTextLength < 20)
@@ -358,6 +370,45 @@ public class ArticleTextExtractor {
                     caption = child;
             }
         }
+
+        int grandChildrenWeight = 0;
+        for (Element child2 : rootEl.children()) {
+
+            // If the node looks negative don't include it in the weights
+            // instead penalize the grandparent. This is done to try to
+            // avoid giving weigths to navigation nodes, etc.
+            if (NEGATIVE.matcher(child2.id()).find() ||
+                    NEGATIVE.matcher(child2.className()).find()) {
+                grandChildrenWeight -= 30;
+                continue;
+            }
+
+            for (Element grandchild : child2.children()) {
+                int grandchildWeight = 0;
+                String ownText = grandchild.ownText();
+                int ownTextLength = ownText.length();
+                if (ownTextLength < 20)
+                    continue;
+
+                if (ownTextLength > 200) {
+                    int childOwnTextWeight = Math.max(50, ownTextLength / 10);
+                    grandchildWeight += childOwnTextWeight;
+                }
+
+                if (grandchild.tagName().equals("h1") || grandchild.tagName().equals("h2")) {
+                    int h2h1Weight = 30;
+                    grandchildWeight += h2h1Weight;
+                } else if (grandchild.tagName().equals("div") || grandchild.tagName().equals("p")) {
+                    int calcChildWeight = calcWeightForChild(grandchild, ownText);
+                    grandchildWeight += calcChildWeight;
+                }
+
+                grandChildrenWeight += grandchildWeight;
+            }
+        }
+
+        grandChildrenWeight = grandChildrenWeight / 3;
+        weight += grandChildrenWeight;
 
         // use caption and image
         if (caption != null)
@@ -406,7 +457,7 @@ public class ArticleTextExtractor {
         if (c > 5)
             val = -30;
         else
-            val = (int) Math.round(ownText.length() / 25.0);
+            val = (int) Math.round(ownText.length() / 35.0);
 
         addScore(child, val);
         return val;
@@ -418,7 +469,7 @@ public class ArticleTextExtractor {
             weight += 35;
 
         if (POSITIVE.matcher(e.id()).find())
-            weight += 40;
+            weight += 45;
 
         if (UNLIKELY.matcher(e.className()).find())
             weight -= 20;
@@ -435,6 +486,11 @@ public class ArticleTextExtractor {
         String style = e.attr("style");
         if (style != null && !style.isEmpty() && NEGATIVE_STYLE.matcher(style).find())
             weight -= 50;
+
+        String itemprop = e.attr("itemprop");
+        if (itemprop != null && !itemprop.isEmpty() && POSITIVE.matcher(itemprop).find()) {
+            weight += 100;
+        }
         return weight;
     }
 
@@ -613,9 +669,11 @@ public class ArticleTextExtractor {
     /**
      * @return a set of all important nodes
      */
-    public Collection<Element> getNodes(Element body) {
+    public Collection<Element> getNodes(Document doc) {
         List<Element> nodes = new ArrayList<>(64);
         int score = 100;
+        Element body = getBodyElement(doc);
+        if (body == null) return null;
         for (Element el : body.select("*")) {
             if (NODES.matcher(el.tagName()).matches()) {
                 nodes.add(el);
@@ -642,27 +700,11 @@ public class ArticleTextExtractor {
                 return result;
             }
         }
-        return new Element("null");
-    }
-
-    private Element searchParentElement(Element root, Element target) {
-        Elements children = root.children();
-        for (Element child : children) {
-            if (child.equals(target)) {
-                return root;
-            }
-        }
-        for (Element child : children) {
-            Element result = searchParentElement(child, target);
-            if (result != null) {
-                return result;
-            }
-        }
         return null;
     }
 
     public String cleanTitle(String title) {
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder(title.length());
 //        int index = title.lastIndexOf("|");
 //        if (index > 0 && title.length() / 2 < index)
 //            title = title.substring(0, index + 1);

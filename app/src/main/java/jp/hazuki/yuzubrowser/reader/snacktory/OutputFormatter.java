@@ -22,10 +22,13 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import jp.hazuki.yuzubrowser.utils.HtmlUtils;
 
 /**
  * @author goose | jim
@@ -43,7 +46,9 @@ public class OutputFormatter {
     protected final List<String> nodesToReplace;
     protected String nodesToKeepCssSelector = "p";
     private static final Pattern PASS_PATTERN = Pattern.compile("h\\d|p");
-    private static final Pattern NEW_LINE = Pattern.compile("div|h\\d");
+    private static final Pattern NEW_LINE = Pattern.compile("div|h\\d|table");
+    private static final Pattern BOLD = Pattern.compile("b|em|strong");
+    private static final Pattern HEADING = Pattern.compile("h\\d");
 
     public OutputFormatter() {
         this(MIN_PARAGRAPH_TEXT, NODES_TO_REPLACE);
@@ -68,11 +73,15 @@ public class OutputFormatter {
     /**
      * takes an element and turns the P tags into \n\n
      */
-    public String getFormattedText(Element topNode) {
+    public String getFormattedText(Element topNode, String url) {
         removeNodesWithNegativeScores(topNode);
 
         StringBuilder sb = new StringBuilder();
-        decode(topNode, sb);
+        decode(topNode, sb, URI.create(url));
+
+        while (endsWith(sb, "<br>")) {
+            sb.setLength(sb.length() - 4);
+        }
 
         String str = SHelper.innerTrim(sb.toString());
         if (str.length() > MIN_PARAGRAPH_TEXT)
@@ -108,37 +117,77 @@ public class OutputFormatter {
         Elements gravityItems = topNode.select("*[gravityScore]");
         for (Element item : gravityItems) {
             int score = Integer.parseInt(item.attr("gravityScore"));
-            if (score < 0 || item.text().length() < MIN_PARAGRAPH_TEXT && !PASS_PATTERN.matcher(item.tagName()).find())
+            if (score < 0 && !PASS_PATTERN.matcher(item.tagName()).find() && item.select("img").size() == 0)
                 item.remove();
         }
     }
 
-    protected void decode(Element node, StringBuilder sb) {
+    protected void decode(Element node, StringBuilder sb, URI url) {
         for (Node child : node.childNodes()) {
             if (unlikely(child))
                 continue;
             if (child instanceof TextNode) {
                 TextNode textNode = (TextNode) child;
                 String txt = textNode.text();
-                sb.append(txt);
+                sb.append(HtmlUtils.sanitize(txt));
             } else if (child instanceof Element) {
-                if ("br".equals(((Element) child).tagName())) {
-                    sb.append("\n");
+                Element element = (Element) child;
+                if ("br".equals(element.tagName())) {
+                    sb.append("<br>");
                     continue;
+                } else if ("img".equals(element.tagName())) {
+                    String imgUrl = child.absUrl("src");
+                    sb.append("<img src=\"").append(imgUrl).append("\"><br>");
+                    continue;
+                } else if ("div".equals(element.tagName())) {
+                    if (element.text().length() < MIN_PARAGRAPH_TEXT && element.select("img").size() == 0) {
+                        continue;
+                    }
                 }
 
-                decode((Element) child, sb);
+                boolean heading = HEADING.matcher(element.tagName()).find();
+                boolean bold = BOLD.matcher(element.tagName()).find();
 
-                if (NEW_LINE.matcher(((Element) child).tagName()).find() &&
-                        sb.length() > 0 && sb.charAt(sb.length() - 1) != '\n') {
-                    sb.append("\n");
+                if (heading) {
+                    sb.append("<").append(element.tagName()).append(">");
+                } else if (bold) {
+                    sb.append("<b>");
+                }
+
+                decode((Element) child, sb, url);
+
+                if (heading) {
+                    sb.append("</").append(element.tagName()).append(">");
+                } else if (bold) {
+                    sb.append("</b>");
+                }
+
+                if (NEW_LINE.matcher(element.tagName()).find() && !endsWith(sb, "<br>")) {
+                    sb.append("<br>");
                 }
             }
         }
 
         if ("p".equals(node.tagName())) {
-            sb.append("\n\n");
+            if (endsWith(sb, "<br>")) {
+                sb.append("<br>");
+            } else {
+                sb.append("<br><br>");
+            }
         }
+    }
+
+    public static boolean endsWith(StringBuilder sb, String text) {
+        if (sb.length() < text.length())
+            return false;
+
+        int sbLength = sb.length();
+        int textLength = text.length();
+        for (int i = 1; i <= textLength; i++) {
+            if (text.charAt(textLength - i) != sb.charAt(sbLength - i))
+                return false;
+        }
+        return true;
     }
 
     boolean unlikely(Node e) {

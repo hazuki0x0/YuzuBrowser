@@ -17,7 +17,17 @@
 package jp.hazuki.yuzubrowser.reader;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.webkit.WebSettings;
 
@@ -25,6 +35,8 @@ import java.util.Locale;
 
 import jp.hazuki.yuzubrowser.reader.snacktory.HtmlFetcher;
 import jp.hazuki.yuzubrowser.reader.snacktory.JResult;
+import jp.hazuki.yuzubrowser.utils.HttpUtils;
+import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class ReaderTask extends AsyncTaskLoader<ReaderData> {
@@ -58,7 +70,13 @@ public class ReaderTask extends AsyncTaskLoader<ReaderData> {
         try {
             JResult result = fetcher.fetchAndExtract(url, 2500, true);
             if (!TextUtils.isEmpty(result.getText())) {
-                return new ReaderData(result.getTitle(), result.getText());
+                Spanned html;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    html = Html.fromHtml(result.getText(), Html.FROM_HTML_MODE_LEGACY, this::getImage, null);
+                } else {
+                    html = Html.fromHtml(result.getText(), this::getImage, null);
+                }
+                return new ReaderData(result.getTitle(), html);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,6 +85,15 @@ public class ReaderTask extends AsyncTaskLoader<ReaderData> {
             Logger.w("reader", e, "Out of memory");
         }
         return null;
+    }
+
+    private Drawable getImage(String imageUrl) {
+        Drawable drawable = ImageUtils.getDrawable(getContext(), HttpUtils.getImage(imageUrl, userAgent, url));
+        if (drawable != null) {
+            return drawable;
+        } else {
+            return new ColorDrawable(0);
+        }
     }
 
     @Override
@@ -78,5 +105,38 @@ public class ReaderTask extends AsyncTaskLoader<ReaderData> {
     @Override
     protected void onStopLoading() {
         cancelLoad();
+    }
+
+    private static class DummyDrawable extends Drawable {
+
+        @Override
+        public void draw(@NonNull Canvas canvas) {
+
+        }
+
+        @Override
+        public void setAlpha(int i) {
+
+        }
+
+        @Override
+        public void setColorFilter(@Nullable ColorFilter colorFilter) {
+
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.UNKNOWN;
+        }
+
+        @Override
+        public int getIntrinsicWidth() {
+            return 0;
+        }
+
+        @Override
+        public int getIntrinsicHeight() {
+            return 0;
+        }
     }
 }
