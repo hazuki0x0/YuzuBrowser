@@ -64,13 +64,18 @@ class ThumbnailManager {
     }
 
     private void create(final MainTabData data) {
-        Bitmap bitmap = createThumbnailImage(data.mWebView);
-        if (bitmap != null) {
-            cache.putBitmap(data.getUrl(), bitmap);
-            data.shotThumbnail(bitmap);
-        } else {
-            data.setCanRetry(true);
-        }
+        data.mWebView.getView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = createThumbnailImage(data.mWebView);
+                if (bitmap != null) {
+                    cache.putBitmap(data.getUrl(), bitmap);
+                    data.shotThumbnail(bitmap);
+                } else {
+                    data.setCanRetry(true);
+                }
+            }
+        }, 100);
     }
 
     void forceTakeThumbnail(MainTabData data) {
