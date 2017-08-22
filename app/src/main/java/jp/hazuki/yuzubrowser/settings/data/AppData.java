@@ -351,6 +351,11 @@ public class AppData {
                     AppData.layout_algorithm.set("NORMAL");
                     AppData.commit(context, AppData.layout_algorithm);
                 }
+
+                if (lastLaunch <= 300103 && "SINGLE_COLUMN>".equals(AppData.layout_algorithm.get())) {
+                    AppData.layout_algorithm.set("SINGLE_COLUMN");
+                    AppData.commit(context, AppData.layout_algorithm);
+                }
             }
 
             lastLaunchVersion.set(versionCode);

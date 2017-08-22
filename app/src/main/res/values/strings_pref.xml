@@ -424,7 +424,7 @@
     <string-array name="pref_layout_algorithm_values" translatable="false">
         <item>NORMAL</item>
         <item>TEXT_AUTOSIZING</item>
-        <item>SINGLE_COLUMN></item>
+        <item>SINGLE_COLUMN</item>
         <item>NARROW_COLUMNS</item>
     </string-array>
 
