@@ -562,6 +562,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
         mTabManager.saveData();
         mHandler.removeCallbacks(mSaveTabsRunnable);
+        FaviconManager.getInstance(getApplicationContext()).save();
 
         if (mIsActivityPaused) {
             Logger.w(TAG, "Activity is already stopped");
@@ -627,7 +628,6 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
         mSpeedDialAsyncManager.destroy();
         mFaviconAsyncManager.destroy();
-        FaviconManager.destroyInstance();
         mIsDestroyed = true;
     }
 
@@ -3740,6 +3740,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                             } catch (ActivityNotFoundException e) {
                                 e.printStackTrace();
                             }
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_SHORT).show();
                         }
                     } catch (IOException e) {
                         ErrorReport.printAndWriteLog(e);

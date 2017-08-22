@@ -71,6 +71,9 @@ public class WebViewUtils {
         try {
             bitmap = capturePictureOverall(web);
             return bitmap != null && ImageUtils.saveBitmap(bitmap, file);
+        } catch (OutOfMemoryError e) {
+            System.gc();
+            return false;
         } finally {
             if (bitmap != null)
                 bitmap.recycle();

@@ -424,7 +424,7 @@
     <string-array name="pref_layout_algorithm_values" translatable="false">
         <item>NORMAL</item>
         <item>TEXT_AUTOSIZING</item>
-        <item>SINGLE_COLUMN></item>
+        <item>SINGLE_COLUMN</item>
         <item>NARROW_COLUMNS</item>
     </string-array>
 
@@ -733,7 +733,7 @@
     <string name="pref_backup_speed_dial_confirm">Are you sure you want to backup speed dial?</string>
     <string name="pref_snap_toolbar">Snap Toolbar</string>
     <string name="pref_enable_safe_browsing">Enable safe browsing</string>
-    <string name="pref_required_android_O">Android 8.0 (O) or higher is required</string>
+    <string name="pref_required_android_O">Android 8.0 (Oreo) or higher is required</string>
     <string name="pref_always_show_url">Always show URL</string>
     <string name="pref_show_favicon">Show favicon</string>
 

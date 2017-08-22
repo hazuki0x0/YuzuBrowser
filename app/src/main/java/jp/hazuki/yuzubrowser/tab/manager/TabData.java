@@ -157,8 +157,8 @@ public class TabData {
 
     public boolean isNeedShotThumbnail() {
         int sr = mWebView.computeVerticalScrollRangeMethod();
-        if (sr == 0)
-            return false;
+//        if (sr == 0)
+//            return false;
 
         int old = scrollRange;
         scrollRange = sr;
