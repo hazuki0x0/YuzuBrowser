@@ -1,6 +1,7 @@
 package jp.hazuki.yuzubrowser.download;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 public class DownloadInfo implements Serializable {
@@ -22,7 +23,11 @@ public class DownloadInfo implements Serializable {
 
     public DownloadInfo(String url, File file) {
         this.url = url;
-        this.file = file;
+        try {
+            this.file = file.getCanonicalFile();
+        } catch (IOException e) {
+            this.file = file;
+        }
     }
 
     public long getId() {
@@ -46,7 +51,11 @@ public class DownloadInfo implements Serializable {
     }
 
     public void setFile(File file) {
-        this.file = file;
+        try {
+            this.file = file.getCanonicalFile();
+        } catch (IOException e) {
+            this.file = file;
+        }
     }
 
     public void setFile(String file) {
