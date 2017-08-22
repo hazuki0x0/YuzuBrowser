@@ -21,7 +21,9 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +86,10 @@ public class ToolbarManager {
         leftToolbarLayout = activity.findViewById(R.id.leftToolbarLayout);
         rightToolbarLayout = activity.findViewById(R.id.rightToolbarLayout);
         findOnPage = activity.findViewById(R.id.find);
+
+        // Workaround for alpha bug. Why the bug happen????
+        bottomToolbarAlwaysLayout.setBackground(
+                new ColorDrawable(ResourcesCompat.getColor(activity.getResources(), R.color.deep_gray, activity.getTheme())));
 
         webToolbarLayout = new LinearLayout(activity);
         webToolbarLayout.setOrientation(LinearLayout.VERTICAL);
@@ -230,6 +236,8 @@ public class ToolbarManager {
                     | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         }
         bottomToolbarLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());
+        bottomOverlayItemLayout.getBackground().setAlpha(AppData.overlay_bottom_alpha.get());
+        //bottomToolbarAlwaysLayout.setBackgroundColor(0xff212121);
     }
 
     public void onThemeChanged(ThemeData themedata) {
