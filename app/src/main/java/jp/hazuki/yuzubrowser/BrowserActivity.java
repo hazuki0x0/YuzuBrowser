@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -351,6 +352,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private boolean isResumed;
     private Action delayAction;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
