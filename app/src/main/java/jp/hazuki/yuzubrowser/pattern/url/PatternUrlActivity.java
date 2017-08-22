@@ -254,11 +254,6 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
             ListView view_listView = view.findViewById(R.id.listView);
 
             final PackageManager pm = getActivity().getPackageManager();
-            if (url.startsWith("*.") && url.length() >= 3) {
-                url = url.substring(2);
-            } else {
-                url = url.replace("://*.", "://");
-            }
             String intentUrl = url.replace("*", "");
             intent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse((WebUtils.maybeContainsUrlScheme(intentUrl)) ? intentUrl : "http://" + intentUrl));
