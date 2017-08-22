@@ -23,11 +23,7 @@ public class DownloadInfo implements Serializable {
 
     public DownloadInfo(String url, File file) {
         this.url = url;
-        try {
-            this.file = file.getCanonicalFile();
-        } catch (IOException e) {
-            this.file = file;
-        }
+        setFile(file);
     }
 
     public long getId() {
@@ -51,10 +47,14 @@ public class DownloadInfo implements Serializable {
     }
 
     public void setFile(File file) {
-        try {
-            this.file = file.getCanonicalFile();
-        } catch (IOException e) {
-            this.file = file;
+        if (file != null) {
+            try {
+                this.file = file.getCanonicalFile();
+            } catch (IOException e) {
+                this.file = file;
+            }
+        } else {
+            this.file = null;
         }
     }
 
