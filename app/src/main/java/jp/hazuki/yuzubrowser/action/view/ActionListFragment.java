@@ -51,6 +51,7 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
     private static final int RESULT_REQUEST_ADD = 1;
     private static final int RESULT_REQUEST_EDIT = 2;
     private static final int RESULT_REQUEST_ADD_EASY = 3;
+    private static final int RESULT_REQUEST_JSON = 4;
 
     private ActionList mList;
     private ActionListAdapter adapter;
@@ -144,13 +145,10 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
         adapter.notifyDataSetChanged();
         onActionListChanged();
         Snackbar.make(getRootView(), R.string.deleted, Snackbar.LENGTH_SHORT)
-                .setAction(R.string.undo, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mList.add(index, action);
-                        adapter.notifyDataSetChanged();
-                        onActionListChanged();
-                    }
+                .setAction(R.string.undo, v -> {
+                    mList.add(index, action);
+                    adapter.notifyDataSetChanged();
+                    onActionListChanged();
                 })
                 .show();
     }
@@ -181,7 +179,7 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
             case R.id.actionToJson:
                 Intent intent = new Intent(getActivity(), ActionStringActivity.class);
                 intent.putExtra(ActionStringActivity.EXTRA_ACTION, (Parcelable) mList);
-                startActivity(intent);
+                startActivityForResult(intent, RESULT_REQUEST_JSON);
                 return true;
         }
         return false;
@@ -207,6 +205,11 @@ public class ActionListFragment extends RecyclerFabFragment implements OnRecycle
                     for (SingleAction singleaction : action) {
                         mList.add(new Action(singleaction));
                     }
+                    break;
+                case RESULT_REQUEST_JSON:
+                    ActionList actionList = data.getParcelableExtra(ActionStringActivity.EXTRA_ACTION);
+                    mList.clear();
+                    mList.addAll(actionList);
                     break;
             }
 

@@ -178,6 +178,8 @@
     <string name="quit">Quit</string>
     <string name="clipboard_empty">Clipboard is empty</string>
     <string name="action_to_json">Show JSON string</string>
+    <string name="json_to_action">Convert to action</string>
+    <string name="invalid_json_format">Invalid JSON format</string>
     <string name="multi_select">Multi select</string>
     <string name="select_this_item">Select this item</string>
     <string name="save_to">Save to</string>

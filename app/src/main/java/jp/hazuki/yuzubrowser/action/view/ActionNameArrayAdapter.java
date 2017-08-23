@@ -126,6 +126,10 @@ public class ActionNameArrayAdapter extends BaseAdapter {
         this.mListener = mListener;
     }
 
+    public ActionNameArray getNameArray() {
+        return nameArray;
+    }
+
     static class ViewHolder {
         TextView text;
         ImageButton setting;

@@ -177,6 +177,8 @@
     <string name="quit">終了</string>
     <string name="clipboard_empty">クリップボードには何も入っていませんよ。</string>
     <string name="action_to_json">JSON文字列を表示</string>
+    <string name="json_to_action">アクションに変換</string>
+    <string name="invalid_json_format">不正なJSONフォーマットです</string>
     <string name="multi_select">複数選択</string>
     <string name="select_this_item">このアイテムを選択</string>
     <string name="save_to">保存先</string>

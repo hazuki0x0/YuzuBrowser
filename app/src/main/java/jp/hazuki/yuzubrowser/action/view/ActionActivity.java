@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.action.view;
 
 import android.app.Activity;
@@ -6,13 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -36,6 +46,7 @@ public class ActionActivity extends ThemeActivity {
     public static final String EXTRA_ACTION = "ActionActivity.extra.action";
     public static final String EXTRA_RETURN = "ActionActivity.extra.return";
     public static final int RESULT_REQUEST_PREFERENCE = 1;
+    private static final int RESULT_REQUEST_JSON = 2;
 
     private ActionManager mActionManager;
     private OnActivityResultListener mOnActivityResultListener;
@@ -50,10 +61,10 @@ public class ActionActivity extends ThemeActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.action_activity);
-        listView = (ListView) findViewById(R.id.listView);
-        Button okButton = (Button) findViewById(R.id.okButton);
-        Button resetButton = (Button) findViewById(R.id.resetButton);
-        Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        listView = findViewById(R.id.listView);
+        Button okButton = findViewById(R.id.okButton);
+        Button resetButton = findViewById(R.id.resetButton);
+        Button cancelButton = findViewById(R.id.cancelButton);
 
         Intent intent = getIntent();
         if (intent == null) throw new NullPointerException("intent is null");
@@ -111,90 +122,65 @@ public class ActionActivity extends ThemeActivity {
         if (initial_position != -1)
             listView.setSelection(initial_position);
 
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int value = adapter.getItemValue(position);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            int value = adapter.getItemValue(position);
 
-                if (adapter.toggleCheck(position)) {
-                    SingleAction action = SingleAction.makeInstance(value);
-                    mAction.add(action);
-                    showPreference(action.showMainPreference(ActionActivity.this));
-                } else {
-                    for (int i = 0; i < mAction.size(); i++) {
-                        if (mAction.get(i).id == value) {
-                            mAction.remove(i);
-                            break;
-                        }
+            if (adapter.toggleCheck(position)) {
+                SingleAction action = SingleAction.makeInstance(value);
+                mAction.add(action);
+                showPreference(action.showMainPreference(ActionActivity.this));
+            } else {
+                for (int i = 0; i < mAction.size(); i++) {
+                    if (mAction.get(i).id == value) {
+                        mAction.remove(i);
+                        break;
                     }
                 }
-
             }
+
         });
 
-        listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!adapter.isChecked(position))
-                    listView.performItemClick(view, position, id);
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (!adapter.isChecked(position))
+                listView.performItemClick(view, position, id);
 
-                showSubPreference(position);
-                return true;
-            }
+            showSubPreference(position);
+            return true;
         });
 
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (mActionManager == null) {
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_ACTION, (Parcelable) mAction);
-                    intent.putExtra(EXTRA_RETURN, getIntent().getBundleExtra(EXTRA_RETURN));
-                    setResult(RESULT_OK, intent);
-                } else if (mActionManager instanceof SingleActionManager) {
-                    Action list = ((SingleActionManager) mActionManager).getAction(mActionId);
-                    list.clear();
-                    list.addAll(mAction);
-                    mActionManager.save(getApplicationContext());
-                    setResult(RESULT_OK);
-                } else if (mActionManager instanceof ListActionManager) {
-                    ((ListActionManager) mActionManager).addAction(mActionId, mAction);
-                    mActionManager.save(getApplicationContext());
-                    setResult(RESULT_OK);
-                }
-                finish();
+        okButton.setOnClickListener(arg0 -> {
+            if (mActionManager == null) {
+                Intent intent1 = new Intent();
+                intent1.putExtra(EXTRA_ACTION, (Parcelable) mAction);
+                intent1.putExtra(EXTRA_RETURN, getIntent().getBundleExtra(EXTRA_RETURN));
+                setResult(RESULT_OK, intent1);
+            } else if (mActionManager instanceof SingleActionManager) {
+                Action list = ((SingleActionManager) mActionManager).getAction(mActionId);
+                list.clear();
+                list.addAll(mAction);
+                mActionManager.save(getApplicationContext());
+                setResult(RESULT_OK);
+            } else if (mActionManager instanceof ListActionManager) {
+                ((ListActionManager) mActionManager).addAction(mActionId, mAction);
+                mActionManager.save(getApplicationContext());
+                setResult(RESULT_OK);
             }
+            finish();
         });
 
-        okButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                startJsonStringActivity();
-                return false;
-            }
+        okButton.setOnLongClickListener(v -> {
+            startJsonStringActivity();
+            return false;
         });
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                mAction.clear();
-                adapter.clearChoices();
-            }
+        resetButton.setOnClickListener(arg0 -> {
+            mAction.clear();
+            adapter.clearChoices();
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                finish();
-            }
-        });
+        cancelButton.setOnClickListener(arg0 -> finish());
 
-        adapter.setListener(new ActionNameArrayAdapter.OnSettingButtonListener() {
-            @Override
-            public void onSettingClick(int position) {
-                showSubPreference(position);
-            }
-        });
+        adapter.setListener(this::showSubPreference);
     }
 
     public ActionNameArray getActionNameArray() {
@@ -229,17 +215,39 @@ public class ActionActivity extends ThemeActivity {
                     mOnActivityResultListener = null;
                 }
                 break;
+            case RESULT_REQUEST_JSON:
+                if (resultCode == RESULT_OK && data != null) {
+                    Action result = data.getParcelableExtra(ActionStringActivity.EXTRA_ACTION);
+                    mAction.clear();
+                    mAction.addAll(result);
+
+                    adapter.clearChoices();
+                    int initial_position = -1;
+                    ActionNameArray actionNameArray = adapter.getNameArray();
+                    for (SingleAction action : mAction) {
+                        int id = action.id;
+                        int size = actionNameArray.actionValues.length;
+                        for (int i = 0; i < size; ++i) {
+                            if (actionNameArray.actionValues[i] == id) {
+                                adapter.setChecked(i, true);
+
+                                if (initial_position == -1)
+                                    initial_position = i;
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                    if (initial_position != -1)
+                        listView.setSelection(initial_position);
+                }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(R.string.action_to_json).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                startJsonStringActivity();
-                return false;
-            }
+        menu.add(R.string.action_to_json).setOnMenuItemClickListener(item -> {
+            startJsonStringActivity();
+            return false;
         });
         return super.onCreateOptionsMenu(menu);
     }
@@ -247,7 +255,7 @@ public class ActionActivity extends ThemeActivity {
     private void startJsonStringActivity() {
         Intent intent = new Intent(getApplicationContext(), ActionStringActivity.class);
         intent.putExtra(ActionStringActivity.EXTRA_ACTION, (Parcelable) mAction);
-        startActivity(intent);
+        startActivityForResult(intent, RESULT_REQUEST_JSON);
     }
 
     public static Action getActionFromIntent(int resultCode, Intent intent) {
