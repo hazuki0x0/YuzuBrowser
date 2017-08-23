@@ -17,8 +17,6 @@
 package jp.hazuki.yuzubrowser.action.view;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,6 @@ import android.widget.TextView;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionNameArray;
 import jp.hazuki.yuzubrowser.action.SingleAction;
-import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 
 public class ActionNameArrayAdapter extends BaseAdapter {
 
@@ -39,17 +36,10 @@ public class ActionNameArrayAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     private OnSettingButtonListener mListener;
 
-    private final PorterDuffColorFilter iconColor;
-    private final PorterDuffColorFilter disableIconColor;
-
     public ActionNameArrayAdapter(Context context, ActionNameArray array) {
         nameArray = array;
         inflater = LayoutInflater.from(context);
         checked = new boolean[getCount()];
-
-        int color = ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor);
-        iconColor = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        disableIconColor = new PorterDuffColorFilter(color & 0xffffff | 0x88000000, PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
@@ -93,9 +83,9 @@ public class ActionNameArrayAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.select_action_item, parent, false);
             holder = new ViewHolder();
-            holder.text = (TextView) convertView.findViewById(R.id.nameTextView);
-            holder.setting = (ImageButton) convertView.findViewById(R.id.settingsButton);
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            holder.text = convertView.findViewById(R.id.nameTextView);
+            holder.setting = convertView.findViewById(R.id.settingsButton);
+            holder.checkBox = convertView.findViewById(R.id.checkBox);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -103,18 +93,17 @@ public class ActionNameArrayAdapter extends BaseAdapter {
 
         holder.text.setText(getName(position));
 
-        holder.checkBox.setChecked(isChecked(position));
+        boolean checked = isChecked(position);
+
+        holder.checkBox.setChecked(checked);
 
         if (SingleAction.checkSubPreference(getItemValue(position))) {
             holder.setting.setVisibility(View.VISIBLE);
-            holder.setting.setClickable(isChecked(position));
-            holder.setting.setColorFilter(isChecked(position) ? iconColor : disableIconColor);
-            holder.setting.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null)
-                        mListener.onSettingClick(position);
-                }
+            holder.setting.setEnabled(checked);
+            holder.setting.setImageAlpha(checked ? 0xff : 0x88);
+            holder.setting.setOnClickListener(v -> {
+                if (mListener != null)
+                    mListener.onSettingClick(position);
             });
         } else {
             holder.setting.setVisibility(View.GONE);
