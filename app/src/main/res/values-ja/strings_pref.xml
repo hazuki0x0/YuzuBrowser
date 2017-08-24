@@ -393,6 +393,7 @@
     <string name="pref_menu">メニュー</string>
     <string name="pref_history">履歴</string>
     <string name="pref_bookmark">ブックマーク</string>
+    <string name="pref_speeddial_item_text_size">アイテムのテキストサイズ</string>
     <string-array name="pref_text_size_list">
         <item>デフォルト</item>
         <item>最小</item>

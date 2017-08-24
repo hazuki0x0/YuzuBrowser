@@ -33,5 +33,10 @@
             android:title="@string/pref_speeddial_column_max_width"
             app:seekMax="200"
             app:seekMin="10" />
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_speeddial_item"
+            android:title="@string/pref_speeddial_item_text_size"/>
     </PreferenceCategory>
 </PreferenceScreen>
