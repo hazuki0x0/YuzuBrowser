@@ -67,4 +67,9 @@ public class MainSettingsActivity extends ThemeActivity implements PreferenceFra
             return false;
         }
     }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.CustomThemeLight_Pref;
+    }
 }
