@@ -388,4 +388,17 @@
     <string name="pref_reader_text_font">本文フォント</string>
     <string name="pref_reader_theme">リーダーのテーマ</string>
     <string name="pref_reader_theme_same_as">アプリの設定</string>
+
+    <string name="pref_font_size">フォントサイズ設定</string>
+    <string name="pref_menu">メニュー</string>
+    <string name="pref_history">履歴</string>
+    <string name="pref_bookmark">ブックマーク</string>
+    <string-array name="pref_text_size_list">
+        <item>デフォルト</item>
+        <item>最小</item>
+        <item>小</item>
+        <item>中</item>
+        <item>大</item>
+        <item>最大</item>
+    </string-array>
 </resources>

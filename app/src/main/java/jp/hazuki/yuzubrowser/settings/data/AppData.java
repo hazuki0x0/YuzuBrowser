@@ -48,6 +48,7 @@ import jp.hazuki.yuzubrowser.settings.container.IntContainer;
 import jp.hazuki.yuzubrowser.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
+import jp.hazuki.yuzubrowser.settings.container.custom.FontSizeContainer;
 import jp.hazuki.yuzubrowser.tab.manager.BundleDataBaseConverter;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.useragent.UserAgent;
@@ -191,6 +192,7 @@ public class AppData {
     public static final IntContainer reader_theme = new IntContainer("reader_theme", -1);
     public static final IntContainer reader_text_size = new IntContainer("reader_text_size", 18);
     public static final StringContainer reader_text_font = new StringContainer("reader_text_font", "");
+    public static final FontSizeContainer font_size = new FontSizeContainer();
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

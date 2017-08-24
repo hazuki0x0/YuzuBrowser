@@ -36,6 +36,8 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkSite;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FontUtils;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -159,6 +161,11 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             super(itemView, adapter);
             title = itemView.findViewById(android.R.id.text1);
             foreground = itemView.findViewById(R.id.foreground);
+
+            int fontSize = AppData.font_size.bookmark.get();
+            if (fontSize >= 0) {
+                title.setTextSize(FontUtils.getTextSize(fontSize));
+            }
         }
 
         @Override
@@ -177,12 +184,12 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
             imageButton = itemView.findViewById(R.id.imageButton);
             url = itemView.findViewById(android.R.id.text2);
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    adapter.onIconClick(v, getAdapterPosition(), getItem());
-                }
-            });
+            imageButton.setOnClickListener(v -> adapter.onIconClick(v, getAdapterPosition(), getItem()));
+
+            int fontSize = AppData.font_size.bookmark.get();
+            if (fontSize >= 0) {
+                url.setTextSize(FontUtils.getSmallerTextSize(fontSize));
+            }
         }
     }
 

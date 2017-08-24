@@ -765,4 +765,25 @@
         <item>0</item>
         <item>1</item>
     </integer-array>
+
+    <string name="pref_font_size">Font size settings</string>
+    <string name="pref_menu">Menu</string>
+    <string name="pref_history">History</string>
+    <string name="pref_bookmark">Bookmark</string>
+    <string-array name="pref_text_size_list">
+        <item>Default</item>
+        <item>Tiny</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Huge</item>
+    </string-array>
+    <integer-array name="pref_text_size_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
 </resources>

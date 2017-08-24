@@ -209,6 +209,29 @@
         </PreferenceScreen>
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:key="ps_font_size"
+        android:title="@string/pref_font_size">
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_bookmark"
+            android:title="@string/pref_bookmark"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_history"
+            android:title="@string/pref_history"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_history"
+            android:title="@string/pref_history"/>
+    </PreferenceScreen>
+
     <Preference
         android:key="reader_settings"
         android:title="@string/pref_reader_settings"/>

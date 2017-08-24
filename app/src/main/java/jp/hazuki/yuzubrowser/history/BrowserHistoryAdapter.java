@@ -27,6 +27,8 @@ import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FontUtils;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -237,6 +239,16 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
             titleTextView = itemView.findViewById(R.id.titleTextView);
             urlTextView = itemView.findViewById(R.id.urlTextView);
             timeTextView = itemView.findViewById(R.id.timeTextView);
+
+            int fontSizeSetting = AppData.font_size.history.get();
+            if (fontSizeSetting >= 0) {
+                int normal = FontUtils.getTextSize(fontSizeSetting);
+                int small = FontUtils.getSmallerTextSize(fontSizeSetting);
+
+                titleTextView.setTextSize(normal);
+                urlTextView.setTextSize(small);
+                timeTextView.setTextSize(small);
+            }
         }
     }
 
@@ -247,6 +259,11 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
             super(itemView);
 
             header = (TextView) itemView;
+
+            int fontSizeSetting = AppData.font_size.history.get();
+            if (fontSizeSetting >= 0) {
+                header.setTextSize(FontUtils.getTextSize(fontSizeSetting));
+            }
         }
     }
 
