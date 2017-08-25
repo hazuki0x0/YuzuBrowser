@@ -31,12 +31,14 @@ public class FontSizeContainer implements Containable {
     public final IntContainer history;
     public final IntContainer menu;
     public final IntContainer speeddial_item;
+    public final IntContainer readItLater;
 
     public FontSizeContainer() {
         bookmark = new IntContainer("font_size_bookmark", -1);
         history = new IntContainer("font_size_history", -1);
         menu = new IntContainer("font_size_menu", -1);
         speeddial_item = new IntContainer("font_size_speeddial_item", -1);
+        readItLater = new IntContainer("font_size_read_it_later", 1);
 
         checkPreferenceList();
     }
