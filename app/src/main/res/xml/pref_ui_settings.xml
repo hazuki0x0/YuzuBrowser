@@ -228,8 +228,14 @@
         <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
             android:entries="@array/pref_text_size_list"
             android:entryValues="@array/pref_text_size_values"
-            android:key="font_size_history"
-            android:title="@string/pref_history"/>
+            android:key="font_size_menu"
+            android:title="@string/pref_menu"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_read_it_later"
+            android:title="@string/read_it_later"/>
     </PreferenceScreen>
 
     <Preference

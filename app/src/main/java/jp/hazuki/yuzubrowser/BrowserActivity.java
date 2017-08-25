@@ -177,6 +177,8 @@ import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlChecker;
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager;
 import jp.hazuki.yuzubrowser.reader.ReaderActivity;
+import jp.hazuki.yuzubrowser.readitlater.ReadItLaterActivity;
+import jp.hazuki.yuzubrowser.readitlater.ReadItLaterKt;
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity;
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager;
 import jp.hazuki.yuzubrowser.resblock.ResourceChecker;
@@ -982,6 +984,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 Logger.w(TAG, "ACTION_VIEW : url is null or empty.");
                 return false;
             }
+        } else if (Constants.intent.ACTION_OPEN_DEFAULT.equals(action)) {
+            openInNewTab(intent.getDataString(), TabType.DEFAULT);
         } else {
             return false;
         }
@@ -4313,6 +4317,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     startActivity(intent);
                     break;
                 }
+                case SingleAction.READ_IT_LATER: {
+                    MainTabData tab = mTabManager.get(target);
+                    ReadItLaterKt.save(BrowserActivity.this, getContentResolver(), tab.mWebView);
+                    break;
+                }
+                case SingleAction.READ_IT_LATER_LIST:
+                    startActivity(new Intent(BrowserActivity.this, ReadItLaterActivity.class));
+                    break;
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return false;
@@ -4616,6 +4628,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     return res.getDrawable(R.drawable.ic_list_white_24dp, getTheme());
                 case SingleAction.READER_MODE:
                     return res.getDrawable(R.drawable.ic_chrome_reader_mode_white_24dp, getTheme());
+                case SingleAction.READ_IT_LATER:
+                    return res.getDrawable(R.drawable.ic_watch_later_white_24dp, getTheme());
+                case SingleAction.READ_IT_LATER_LIST:
+                    return res.getDrawable(R.drawable.ic_read_it_list_white_24px, getTheme());
                 default:
                     Toast.makeText(getApplicationContext(), "Unknown action:" + action.id, Toast.LENGTH_LONG).show();
                     return null;

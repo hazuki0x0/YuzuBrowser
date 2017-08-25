@@ -298,6 +298,14 @@
         <activity
             android:name=".reader.ReaderActivity"
             android:theme="@style/BrowserMinThemeBlack.NoTitle"/>
+        <activity
+            android:name=".readitlater.ReadItLaterActivity"
+            android:label="@string/read_it_later"/>
+
+        <provider
+            android:authorities="${applicationId}.readItLaterProvider"
+            android:name=".readitlater.ReadItLaterProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

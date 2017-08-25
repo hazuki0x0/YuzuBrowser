@@ -107,5 +107,7 @@
         <item>タブのピン留め</item>
         <item>アクション一覧</item>
         <item>リーダーモード</item>
+        <item>あとで読む</item>
+        <item>あとで読む一覧</item>
     </string-array>
 </resources>

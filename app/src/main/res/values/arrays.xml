@@ -44,4 +44,8 @@
         <item>Shortcuts list</item>
     </string-array>
 
+    <declare-styleable name="FRelativeLayout">
+        <attr name="foreground" format="reference|color"/>
+    </declare-styleable>
+
 </resources>

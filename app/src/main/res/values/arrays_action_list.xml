@@ -107,5 +107,7 @@
         <item>Pin tab</item>
         <item>Action list</item>
         <item>Reader mode</item>
+        <item>Read it later</item>
+        <item>Read it later list</item>
     </string-array>
 </resources>
