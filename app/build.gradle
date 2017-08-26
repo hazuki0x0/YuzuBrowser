@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 
 def gitHash = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
