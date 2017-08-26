@@ -76,8 +76,9 @@ public class MainTabData extends TabData {
         finished = true;
         if (bgTab) {
             bgTab = false;
-            if (AppData.pause_web_tab_change.get())
-                mWebView.onPause();
+//TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
+//            if (AppData.pause_web_tab_change.get())
+//                mWebView.onPause();
         }
         if (AppData.toolbar_show_favicon.get() && !url.startsWith("yuzu:") && !iconReceived) {
             setIcon(context.getDrawable(R.drawable.ic_page_white_24px));
@@ -220,7 +221,7 @@ public class MainTabData extends TabData {
 
     public void setUpBgTab() {
         this.bgTab = true;
-        mWebView.onResume();
+        //mWebView.onResume();
     }
 
     public boolean isStartDocument() {

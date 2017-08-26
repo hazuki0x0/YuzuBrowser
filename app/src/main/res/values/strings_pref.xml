@@ -406,6 +406,7 @@
     <string name="pref_download_folder">Download directory</string>
     <string name="pref_pause_web_background">Pause web in background</string>
     <string name="pref_pause_web_tab_change">Pause web on changing tab</string>
+    <string name="pref_pause_web_tab_change_disable_summary">Disabled due to a bug in WebView</string>
     <string name="pref_btn_custom">Custom button</string>
     <string name="pref_custom_bar">Custom bar</string>
     <string name="pref_save_formdata">Save data of web forms</string>

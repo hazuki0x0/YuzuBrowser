@@ -22,14 +22,14 @@ import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.View;
 
-import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     private CustomWebView webView;
     private int prevY;
-    private View topToolBar;
+//    private View topToolBar;
+//    private View webFrame;
 
     public WebViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,7 +37,8 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
-        topToolBar = parent.findViewById(R.id.topToolbarLayout);
+//        topToolBar = parent.findViewById(R.id.topToolbarLayout);
+//        webFrame = child.findViewById(R.id.webFrameLayout);
         return super.layoutDependsOn(parent, child, dependency);
     }
 
@@ -51,13 +52,14 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
         prevY = bottom;
 
-        int toolbarHeight = topToolBar.getHeight();
+//Disable due to freeze webView
+//        int toolbarHeight = topToolBar.getHeight();
 
-        if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
-            child.setPadding(0, 0, 0, toolbarHeight);
-        } else {
-            child.setPadding(0, 0, 0, 0);
-        }
+//        if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
+//            webFrame.setPadding(0, 0, 0, toolbarHeight);
+//        } else {
+//            webFrame.setPadding(0, 0, 0, 0);
+//        }
 
         return super.onDependentViewChanged(parent, child, dependency);
     }

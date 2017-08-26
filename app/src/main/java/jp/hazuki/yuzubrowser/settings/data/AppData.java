@@ -105,7 +105,8 @@ public class AppData {
     public static final StringContainer download_folder = new StringContainer("download_folder", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
     public static final BooleanContainer pause_web_background = new BooleanContainer("pause_web_background", true);
     public static final BooleanContainer save_formdata = new BooleanContainer("save_formdata", true);
-    public static final BooleanContainer pause_web_tab_change = new BooleanContainer("pause_web_tab_change", true);
+    //TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
+    //public static final BooleanContainer pause_web_tab_change = new BooleanContainer("pause_web_tab_change", true);
     public static final BooleanContainer web_app_cache = new BooleanContainer("web_app_cache", true);
     public static final BooleanContainer web_geolocation = new BooleanContainer("web_geolocation", true);
     public static final StringContainer layout_algorithm = new StringContainer("layout_algorithm", "TEXT_AUTOSIZING");

@@ -1322,8 +1322,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     @Override
     public MainTabData addNewTab(@WebViewType int cacheType, @TabType int type) {
         CustomWebView web = makeWebView(cacheType);
-        if (AppData.pause_web_tab_change.get())
-            web.onPause();
+// TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
+//        if (AppData.pause_web_tab_change.get())
+//            web.onPause();
         MainTabData tabdata = mTabManager.add(web, mToolbar.addNewTabView());
         tabdata.setTabType(type);
         if (type == TabType.WINDOW) {
@@ -1608,8 +1609,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             webFrameLayout.removeView(old_data.mWebView.getView());
             webViewBehavior.setWebView(null);
 
-            if (AppData.pause_web_tab_change.get())
-                old_data.mWebView.onPause();
+//TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
+//            if (AppData.pause_web_tab_change.get())
+//                old_data.mWebView.onPause();
         }
 
         CustomWebView new_web = new_data.mWebView;
