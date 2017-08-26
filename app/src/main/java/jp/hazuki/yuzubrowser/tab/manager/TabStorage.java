@@ -171,8 +171,12 @@ class TabStorage {
         for (TabIndexData data : mTabIndexDataList) {
             byte[] image = getThumbnail(data.getId());
             if (image != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                data.setThumbnail(bitmap);
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                    data.setThumbnail(bitmap);
+                } catch (OutOfMemoryError e) {
+                    System.gc();
+                }
             }
         }
     }
