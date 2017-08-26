@@ -22,15 +22,14 @@ import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.View;
 
-import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     private CustomWebView webView;
     private int prevY;
-    private View topToolBar;
-    private View webFrame;
+//    private View topToolBar;
+//    private View webFrame;
 
     public WebViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,8 +37,8 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
-        topToolBar = parent.findViewById(R.id.topToolbarLayout);
-        webFrame = child.findViewById(R.id.webFrameLayout);
+//        topToolBar = parent.findViewById(R.id.topToolbarLayout);
+//        webFrame = child.findViewById(R.id.webFrameLayout);
         return super.layoutDependsOn(parent, child, dependency);
     }
 
