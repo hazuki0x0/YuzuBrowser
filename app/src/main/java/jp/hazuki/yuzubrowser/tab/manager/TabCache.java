@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.tab.manager;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TabCache<T extends TabData> extends LinkedHashMap<Long, T> {
 
@@ -30,7 +31,7 @@ public class TabCache<T extends TabData> extends LinkedHashMap<Long, T> {
     }
 
     @Override
-    protected boolean removeEldestEntry(Entry<Long, T> eldest) {
+    protected boolean removeEldestEntry(Map.Entry<Long, T> eldest) {
         boolean result = size() > mSize;
         if (result) {
             mListener.onCacheOverflow(eldest.getValue());

@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.favicon;
 import android.graphics.Bitmap;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 class FaviconCache extends LinkedHashMap<Long, Bitmap> {
 
@@ -32,7 +33,7 @@ class FaviconCache extends LinkedHashMap<Long, Bitmap> {
     }
 
     @Override
-    protected boolean removeEldestEntry(Entry<Long, Bitmap> eldest) {
+    protected boolean removeEldestEntry(Map.Entry<Long, Bitmap> eldest) {
         boolean result = size() > mSize;
         if (result) {
             mListener.onCacheOverflow(eldest.getKey());
