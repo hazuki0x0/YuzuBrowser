@@ -105,7 +105,9 @@
 
     <SwitchPreference
         android:key="pause_web_tab_change"
-        android:title="@string/pref_pause_web_tab_change" />
+        android:title="@string/pref_pause_web_tab_change"
+        android:summary="@string/pref_pause_web_tab_change_disable_summary"
+        android:enabled="false"/>
     <SwitchPreference
         android:key="pause_web_background"
         android:title="@string/pref_pause_web_background" />

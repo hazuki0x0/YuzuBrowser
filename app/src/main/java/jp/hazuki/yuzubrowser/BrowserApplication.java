@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser;
 
 import android.app.Application;
 import android.os.Environment;
-import android.webkit.WebView;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -52,7 +51,6 @@ public class BrowserApplication extends Application {
         Fabric.with(this, crashlytics, new Answers());
         CrashlyticsUtils.setChromeVersion(this);
         AppUtils.registNotification(this);
-        WebView.enableSlowWholeDocumentDraw();
 
         Logger.d(TAG, "onCreate()");
         needLoad = false;

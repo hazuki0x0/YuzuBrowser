@@ -119,6 +119,7 @@
     <string name="pref_download_folder">ダウンロード先</string>
     <string name="pref_pause_web_background">バックグラウンドでWebを停止</string>
     <string name="pref_pause_web_tab_change">タブが裏のときWebを停止</string>
+    <string name="pref_pause_web_tab_change_disable_summary">WebViewのバグのため無効</string>
     <string name="pref_btn_custom">カスタムボタン</string>
     <string name="pref_custom_bar">カスタムバー</string>
     <string name="pref_save_formdata">フォームデータを保存</string>

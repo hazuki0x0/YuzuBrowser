@@ -53,13 +53,14 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
         prevY = bottom;
 
-        int toolbarHeight = topToolBar.getHeight();
+//Disable due to freeze webView
+//        int toolbarHeight = topToolBar.getHeight();
 
-        if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
-            webFrame.setPadding(0, 0, 0, toolbarHeight);
-        } else {
-            webFrame.setPadding(0, 0, 0, 0);
-        }
+//        if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
+//            webFrame.setPadding(0, 0, 0, toolbarHeight);
+//        } else {
+//            webFrame.setPadding(0, 0, 0, 0);
+//        }
 
         return super.onDependentViewChanged(parent, child, dependency);
     }
