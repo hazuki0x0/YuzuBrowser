@@ -262,4 +262,5 @@
     <string name="font_not_found">Font file not found</string>
     <string name="font_error">This file is not a font</string>
     <string name="read_it_later">Read it later</string>
+    <string name="navigate_lock">Navigate lock</string>
 </resources>

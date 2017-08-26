@@ -1,7 +1,6 @@
 package jp.hazuki.yuzubrowser.pattern;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,11 +35,11 @@ public abstract class PatternActivity<T extends PatternChecker> extends ThemeAct
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pattern_list_activity);
 
-        rootLayout = (LinearLayout) findViewById(R.id.rootLayout);
-        listView = (ListView) findViewById(R.id.listView);
-        openOthersButton = (Button) findViewById(R.id.openOthersButton);
-        webSettingButton = (Button) findViewById(R.id.webSettingButton);
-        blockButton = (Button) findViewById(R.id.blockButton);
+        rootLayout = findViewById(R.id.rootLayout);
+        listView = findViewById(R.id.listView);
+        openOthersButton = findViewById(R.id.openOthersButton);
+        webSettingButton = findViewById(R.id.webSettingButton);
+        blockButton = findViewById(R.id.blockButton);
 
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
@@ -56,14 +56,28 @@ public abstract class PatternActivity<T extends PatternChecker> extends ThemeAct
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if (convertView == null)
-                    convertView = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, null);
+                    convertView = getLayoutInflater().inflate(R.layout.activity_pattern_item, parent, false);
+
+                TextView title = convertView.findViewById(R.id.titleTextView);
+                TextView action = convertView.findViewById(R.id.actionTitleTextView);
+                CheckBox checkBox = convertView.findViewById(R.id.enableCheckBox);
                 T item = getItem(position);
                 if (item != null) {
-                    ((TextView) convertView.findViewById(android.R.id.text1)).setText(item.getTitle(getApplicationContext()));
-                    ((TextView) convertView.findViewById(android.R.id.text2)).setText(item.getActionTitle(getApplicationContext()));
+                    title.setText(item.getTitle(getApplicationContext()));
+                    action.setText(item.getActionTitle(getApplicationContext()));
+                    checkBox.setOnCheckedChangeListener(null);
+                    checkBox.setChecked(item.isEnable());
+                    checkBox.setEnabled(true);
+                    checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+                        mManager.get(position).setEnable(b);
+                        saveAndNotifyDataSetChanged();
+                    });
                 } else {
-                    ((TextView) convertView.findViewById(android.R.id.text1)).setText(R.string.unknown);
-                    ((TextView) convertView.findViewById(android.R.id.text2)).setText(R.string.unknown);
+                    title.setText(R.string.unknown);
+                    action.setText(R.string.unknown);
+                    checkBox.setOnCheckedChangeListener(null);
+                    checkBox.setChecked(false);
+                    checkBox.setEnabled(false);
                 }
 
                 return convertView;
@@ -101,12 +115,9 @@ public abstract class PatternActivity<T extends PatternChecker> extends ThemeAct
         new AlertDialog.Builder(this)
                 .setTitle(R.string.confirm)
                 .setMessage(R.string.confirm_delete_action)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mManager.remove(position);
-                        saveAndNotifyDataSetChanged();
-                    }
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    mManager.remove(position);
+                    saveAndNotifyDataSetChanged();
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();

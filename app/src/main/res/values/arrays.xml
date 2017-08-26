@@ -23,10 +23,6 @@
         <item>7</item>
         <item>8</item>
     </integer-array>
-    <string-array name="enable_disable">
-        <item>Enable</item>
-        <item>Disable</item>
-    </string-array>
     <string-array name="resblock_res_type_list">
         <item>Empty string</item>
         <item>Empty PNG image</item>

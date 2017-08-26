@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.view.View;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -56,6 +57,7 @@ class TabStorage {
     private static final String FILE_TAB_THUMBNAIL_SUFFIX = "_thumb";
     private List<TabIndexData> mTabIndexDataList;
     private final File tabPath;
+    private OnWebViewCreatedListener listener;
 
     public TabStorage(Context context) {
         tabPath = context.getDir("tabs", Context.MODE_PRIVATE);
@@ -147,13 +149,17 @@ class TabStorage {
         saveThumbnails();
     }
 
-    public CustomWebView loadWebView(WebBrowser webBrowser, TabIndexData data) {
+    public MainTabData loadWebView(WebBrowser webBrowser, TabIndexData data, View tabView) {
         if (data == null) return null;
         Bundle bundle = loadBundle(new File(tabPath, Long.toString(data.getId())));
         CustomWebView webView = webBrowser.makeWebView(WebViewFactory.getMode(bundle));
-        webView.restoreState(bundle);
         webView.setIdentityId(data.getId());
-        return webView;
+        MainTabData tab = data.getMainTabData(webView, tabView);
+        if (listener != null) {
+            listener.onWebViewCreated(tab);
+        }
+        webView.restoreState(bundle);
+        return tab;
     }
 
     public TabIndexData saveWebView(MainTabData tabData) {
@@ -254,6 +260,10 @@ class TabStorage {
 
     public void clear() {
         FileUtils.deleteDirectoryContents(tabPath);
+    }
+
+    public void setOnWebViewCreatedListener(OnWebViewCreatedListener listener) {
+        this.listener = listener;
     }
 
     private static final String JSON_NAME_ID = "id";

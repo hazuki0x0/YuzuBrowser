@@ -18,8 +18,10 @@ import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherFactory;
 
 public class PatternUrlChecker extends PatternChecker {
     private static final String FIELD_PATTERN_URL = "0";
+    private static final String FIELD_PATTERN_ENABLE = "1";
     private String mPatternUrl;
     private Pattern mPattern;
+    private boolean enable = true;
 
     public PatternUrlChecker(PatternAction pattern_action, FastMatcherFactory factory, String pattern_url) throws PatternSyntaxException {
         super(pattern_action);
@@ -36,6 +38,9 @@ public class PatternUrlChecker extends PatternChecker {
                 if (parser.nextToken() != JsonToken.VALUE_STRING) return;
                 setPatternUrlWithThrow(factory, parser.getText());
                 continue;
+            } else if (FIELD_PATTERN_ENABLE.equals(parser.getCurrentName())) {
+                enable = parser.nextBooleanValue();
+                continue;
             }
             parser.skipChildren();
         }
@@ -51,7 +56,7 @@ public class PatternUrlChecker extends PatternChecker {
     }
 
     public boolean isMatchUrl(String url) {
-        return mPattern != null && mPattern.matcher(url).find();
+        return enable && mPattern != null && mPattern.matcher(url).find();
     }
 
     protected Matcher matcher(String url) {
@@ -64,10 +69,21 @@ public class PatternUrlChecker extends PatternChecker {
     }
 
     @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    @Override
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    @Override
     public boolean write(JsonGenerator generator) throws IOException {
         getAction().write(generator);
         generator.writeStartObject();
         generator.writeStringField(FIELD_PATTERN_URL, mPatternUrl);
+        generator.writeBooleanField(FIELD_PATTERN_ENABLE, enable);
         generator.writeEndObject();
         return true;
     }

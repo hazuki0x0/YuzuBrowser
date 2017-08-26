@@ -12,12 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,7 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,35 +136,74 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
             view_uaEditText = view.findViewById(R.id.uaEditText);
             final ImageButton view_uaButton = view.findViewById(R.id.uaButton);
             final CheckBox view_jsCheckBox = view.findViewById(R.id.jsCheckBox);
-            final Spinner view_jsSpinner = view.findViewById(R.id.jsSpinner);
+            final Switch view_jsSwitch = view.findViewById(R.id.jsSwitch);
+            CheckBox view_navLockCheckBox = view.findViewById(R.id.navLockCheckBox);
+            Switch view_navLockSwitch = view.findViewById(R.id.navLockSwitch);
 
             if (checker != null) {
                 WebSettingPatternAction action = (WebSettingPatternAction) checker.getAction();
                 String ua = action.getUserAgentString();
                 view_uaCheckBox.setChecked(ua != null);
-                if (ua != null)
+                if (ua != null) {
                     view_uaEditText.setText(ua);
+                } else {
+                    view_uaEditText.setEnabled(false);
+                    view_uaButton.setEnabled(false);
+                }
+
 
                 int js = action.getJavaScriptSetting();
-                view_jsCheckBox.setChecked(js != WebSettingPatternAction.UNDEFINED);
                 switch (js) {
+                    case WebSettingPatternAction.UNDEFINED:
+                        view_jsCheckBox.setChecked(false);
+                        view_jsSwitch.setChecked(false);
+                        view_jsSwitch.setEnabled(false);
+                        break;
                     case WebSettingPatternAction.ENABLE:
-                        view_jsSpinner.setSelection(0);
+                        view_jsCheckBox.setChecked(true);
+                        view_jsSwitch.setChecked(true);
                         break;
                     case WebSettingPatternAction.DISABLE:
-                        view_jsSpinner.setSelection(1);
+                        view_jsCheckBox.setChecked(true);
+                        view_jsSwitch.setChecked(false);
                         break;
                 }
+
+                int navLock = action.getNavLock();
+                switch (navLock) {
+                    case WebSettingPatternAction.UNDEFINED:
+                        view_navLockCheckBox.setChecked(false);
+                        view_navLockSwitch.setChecked(false);
+                        view_navLockSwitch.setEnabled(false);
+                        break;
+                    case WebSettingPatternAction.ENABLE:
+                        view_navLockCheckBox.setChecked(true);
+                        view_navLockSwitch.setChecked(true);
+                        break;
+                    case WebSettingPatternAction.DISABLE:
+                        view_navLockCheckBox.setChecked(true);
+                        view_navLockSwitch.setChecked(false);
+                        break;
+                }
+            } else {
+                view_uaEditText.setEnabled(false);
+                view_uaButton.setEnabled(false);
+                view_jsSwitch.setEnabled(false);
+                view_navLockSwitch.setEnabled(false);
             }
 
-            view_uaButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), UserAgentListActivity.class);
-                    intent.putExtra(Intent.EXTRA_TEXT, view_uaEditText.getText().toString());
-                    startActivityForResult(intent, REQUEST_USER_AGENT);
-                }
+            view_uaCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
+                view_uaEditText.setEnabled(b);
+                view_uaButton.setEnabled(b);
             });
+
+            view_uaButton.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), UserAgentListActivity.class);
+                intent.putExtra(Intent.EXTRA_TEXT, view_uaEditText.getText().toString());
+                startActivityForResult(intent, REQUEST_USER_AGENT);
+            });
+
+            view_jsCheckBox.setOnCheckedChangeListener((compoundButton, b) -> view_jsSwitch.setEnabled(b));
 
             final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.pattern_change_websettings)
@@ -175,42 +212,40 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
 
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String ua = null;
-                            if (view_uaCheckBox.isChecked()) {
-                                ua = view_uaEditText.getText().toString();
-                            }
-
-                            int js = WebSettingPatternAction.UNDEFINED;
-                            if (view_jsCheckBox.isChecked()) {
-                                switch (view_jsSpinner.getSelectedItemPosition()) {
-                                    case 0:
-                                        js = WebSettingPatternAction.ENABLE;
-                                        break;
-                                    case 1:
-                                        js = WebSettingPatternAction.DISABLE;
-                                        break;
-                                }
-                            }
-
-                            WebSettingPatternAction action = new WebSettingPatternAction(ua, js);
-                            if (getActivity() instanceof PatternUrlActivity) {
-                                PatternUrlChecker newChecker = ((PatternUrlActivity) getActivity()).makeActionChecker(action, header);
-                                if (newChecker != null) {
-                                    int id = getArguments().getInt(ID);
-                                    ((PatternUrlActivity) getActivity()).add(id, newChecker);
-                                    dismiss();
-                                }
-                            }
-                        }
-                    });
+            alertDialog.setOnShowListener(dialog -> alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+                String ua = null;
+                if (view_uaCheckBox.isChecked()) {
+                    ua = view_uaEditText.getText().toString();
                 }
-            });
+
+                int js = WebSettingPatternAction.UNDEFINED;
+                if (view_jsCheckBox.isChecked()) {
+                    if (view_jsSwitch.isChecked()) {
+                        js = WebSettingPatternAction.ENABLE;
+                    } else {
+                        js = WebSettingPatternAction.DISABLE;
+                    }
+                }
+
+                int navLock = WebSettingPatternAction.UNDEFINED;
+                if (view_navLockCheckBox.isEnabled()) {
+                    if (view_navLockSwitch.isChecked()) {
+                        navLock = WebSettingPatternAction.ENABLE;
+                    } else {
+                        navLock = WebSettingPatternAction.DISABLE;
+                    }
+                }
+
+                WebSettingPatternAction action = new WebSettingPatternAction(ua, js, navLock);
+                if (getActivity() instanceof PatternUrlActivity) {
+                    PatternUrlChecker newChecker = ((PatternUrlActivity) getActivity()).makeActionChecker(action, header);
+                    if (newChecker != null) {
+                        int id = getArguments().getInt(ID);
+                        ((PatternUrlActivity) getActivity()).add(id, newChecker);
+                        dismiss();
+                    }
+                }
+            }));
 
 
             return alertDialog;
@@ -316,66 +351,54 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                     .setNegativeButton(android.R.string.cancel, null);
 
             if (checker != null)
-                dialog_builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        PatternUrlChecker new_checker = patternActivity.makeActionChecker(checker.getAction(), header_view);
-                        if (new_checker != null) {
-                            patternActivity.add(getArguments().getInt(ID), new_checker);
-                        }
+                dialog_builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    PatternUrlChecker new_checker = patternActivity.makeActionChecker(checker.getAction(), header_view);
+                    if (new_checker != null) {
+                        patternActivity.add(getArguments().getInt(ID), new_checker);
                     }
                 });
 
-            view_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    OpenOthersPatternAction pattern;
-                    if (position == 0) {
-                        pattern = new OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_LIST);
-                    } else {
-                        ResolveInfo item = open_app_list.get(position - 1);
-                        intent.setClassName(item.activityInfo.packageName, item.activityInfo.name);
-                        pattern = new OpenOthersPatternAction(intent);
-                    }
-                    PatternUrlChecker new_checker = patternActivity.makeActionChecker(pattern, header_view);
+            view_listView.setOnItemClickListener((parent, view1, position, id) -> {
+                OpenOthersPatternAction pattern;
+                if (position == 0) {
+                    pattern = new OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_LIST);
+                } else {
+                    ResolveInfo item = open_app_list.get(position - 1);
+                    intent.setClassName(item.activityInfo.packageName, item.activityInfo.name);
+                    pattern = new OpenOthersPatternAction(intent);
+                }
+                PatternUrlChecker new_checker = patternActivity.makeActionChecker(pattern, header_view);
+                if (new_checker != null) {
+                    patternActivity.add(getArguments().getInt(ID), new_checker);
+                    dismiss();
+                }
+            });
+
+            view_listView.setOnItemLongClickListener((parent, view12, position, id) -> {
+                if (position == 0) {
+                    OpenOthersPatternAction new_pattern = new OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_CHOOSER);
+                    PatternUrlChecker new_checker = patternActivity.makeActionChecker(new_pattern, header_view);
                     if (new_checker != null) {
                         patternActivity.add(getArguments().getInt(ID), new_checker);
                         dismiss();
                     }
                 }
+                return true;
             });
 
-            view_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
-                        OpenOthersPatternAction new_pattern = new OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_CHOOSER);
-                        PatternUrlChecker new_checker = patternActivity.makeActionChecker(new_pattern, header_view);
-                        if (new_checker != null) {
-                            patternActivity.add(getArguments().getInt(ID), new_checker);
-                            dismiss();
-                        }
-                    }
+            view_urlEditText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ImeUtils.hideIme(getActivity(), view_urlEditText);
+                    String url1 = view_urlEditText.getText().toString();
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse((WebUtils.maybeContainsUrlScheme(url1)) ? url1 : "http://" + url1));
+                    List<ResolveInfo> open_app_list1 = pm.queryIntentActivities(intent, flag);
+                    Collections.sort(open_app_list1, new ResolveInfo.DisplayNameComparator(pm));
+                    arrayAdapter.clear();
+                    arrayAdapter.addAll(open_app_list1);
+                    arrayAdapter.notifyDataSetChanged();
                     return true;
                 }
-            });
-
-            view_urlEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        ImeUtils.hideIme(getActivity(), view_urlEditText);
-                        String url = view_urlEditText.getText().toString();
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse((WebUtils.maybeContainsUrlScheme(url)) ? url : "http://" + url));
-                        List<ResolveInfo> open_app_list = pm.queryIntentActivities(intent, flag);
-                        Collections.sort(open_app_list, new ResolveInfo.DisplayNameComparator(pm));
-                        arrayAdapter.clear();
-                        arrayAdapter.addAll(open_app_list);
-                        arrayAdapter.notifyDataSetChanged();
-                        return true;
-                    }
-                    return false;
-                }
+                return false;
             });
 
             return dialog_builder.create();

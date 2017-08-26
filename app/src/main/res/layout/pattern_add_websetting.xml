@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
     <LinearLayout
@@ -11,49 +12,86 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/uaCheckBox"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/useragent" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical">
+            tools:ignore="UselessParent">
 
-
-            <EditText
-                android:id="@+id/uaEditText"
-                android:layout_width="0dp"
+            <CheckBox
+                android:id="@+id/uaCheckBox"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/useragent"
-                android:inputType="text"
-                android:layout_weight="1" />
+                android:text="@string/useragent"/>
 
-            <ImageButton
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:tint="?attr/iconColor"
-                android:src="@drawable/ic_add_white_24dp"
-                android:id="@+id/uaButton" />
+            <LinearLayout
+                android:id="@+id/uaLayout"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/uaCheckBox">
 
-        </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/jsCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/javascript" />
+                <EditText
+                    android:id="@+id/uaEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/useragent"
+                    android:inputType="text"/>
 
-        <Spinner
-            android:id="@+id/jsSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:entries="@array/enable_disable" />
+                <ImageButton
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:tint="?attr/iconColor"
+                    android:src="@drawable/ic_add_white_24dp"
+                    android:contentDescription="@string/useragent"
+                    android:id="@+id/uaButton"/>
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/jsCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/javascript"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/uaLayout"
+                android:layout_toStartOf="@+id/jsSwitch"
+                android:layout_alignParentStart="true"/>
+
+            <Switch
+                android:id="@+id/jsSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:layout_alignTop="@+id/jsCheckBox"
+                android:layout_alignBottom="@+id/jsCheckBox"/>
+
+            <CheckBox
+                android:id="@+id/navLockCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jsCheckBox"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:text="@string/navigate_lock"
+                android:layout_toStartOf="@+id/navLockSwitch"/>
+
+            <Switch
+                android:id="@+id/navLockSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/navLockCheckBox"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:layout_alignBottom="@+id/navLockCheckBox"/>
+        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

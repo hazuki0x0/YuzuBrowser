@@ -260,4 +260,5 @@
     <string name="font_not_found">フォントファイルが見つかりません</string>
     <string name="font_error">このファイルはフォントではありません</string>
     <string name="read_it_later">あとで読む</string>
+    <string name="navigate_lock">ナビゲートロック</string>
 </resources>

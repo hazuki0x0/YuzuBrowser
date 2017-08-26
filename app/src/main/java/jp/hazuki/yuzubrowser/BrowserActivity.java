@@ -66,7 +66,6 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
@@ -196,6 +195,7 @@ import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
 import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
 import jp.hazuki.yuzubrowser.tab.TabListLayout;
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
+import jp.hazuki.yuzubrowser.tab.manager.OnWebViewCreatedListener;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.tab.manager.TabManager;
@@ -268,7 +268,7 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
 public class BrowserActivity extends LongPressFixActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
         GestureOverlayView.OnGesturePerformedListener, MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener,
-        FinishAlertDialog.OnFinishDialogCallBack {
+        FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -359,7 +359,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private boolean isResumed;
     private Action delayAction;
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -384,33 +384,27 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 findViewById(R.id.webOuterFrameLayout).getLayoutParams())
                 .getBehavior();
         superFrameLayout = findViewById(R.id.superFrameLayout);
-        superFrameLayout.setOnImeShownListener(new RootLayout.OnImeShownListener() {
-            @Override
-            public void onImeVisibilityChanged(boolean visible) {
-                if (mIsImeShown != visible) {
-                    mIsImeShown = visible;
-                    if (mToolbar != null) {
-                        MainTabData tab = mTabManager.getCurrentTabData();
-                        if (tab != null)
-                            mToolbar.notifyChangeWebState(tab);
-                        mToolbar.onImeChanged(visible);
-                    }
+        superFrameLayout.setOnImeShownListener(visible -> {
+            if (mIsImeShown != visible) {
+                mIsImeShown = visible;
+                if (mToolbar != null) {
+                    MainTabData tab = mTabManager.getCurrentTabData();
+                    if (tab != null)
+                        mToolbar.notifyChangeWebState(tab);
+                    mToolbar.onImeChanged(visible);
+                }
 
-                    if (!visible && mIsFullScreenMode) {
-                        getWindow().getDecorView()
-                                .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get()));
-                    }
+                if (!visible && mIsFullScreenMode) {
+                    getWindow().getDecorView()
+                            .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get()));
                 }
             }
         });
 
         findViewById(R.id.topToolbarLayout).getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        coordinatorLayout.setToolbarHeight(findViewById(R.id.topToolbarLayout).getHeight());
-                        mTabManager.onLayoutCreated();
-                    }
+                .addOnGlobalLayoutListener(() -> {
+                    coordinatorLayout.setToolbarHeight(findViewById(R.id.topToolbarLayout).getHeight());
+                    mTabManager.onLayoutCreated();
                 });
 
         AppBarLayout appBarLayout = findViewById(R.id.appbar);
@@ -431,10 +425,13 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         mGestureDetector = new MultiTouchGestureDetector(appContext, new MyGestureListener());
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null) {
-            mIsNetworkUp = networkInfo.isAvailable();
+        if (cm != null) {
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null) {
+                mIsNetworkUp = networkInfo.isAvailable();
+            }
         }
+
         mNetworkStateChangedFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         mNetworkStateBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -455,6 +452,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         mFaviconAsyncManager = new FaviconAsyncManager(getApplicationContext());
 
         onPreferenceReset();
+        mTabManager.setOnWebViewCreatedListener(this);
 
         if (savedInstanceState != null) {
             restoreWebState(savedInstanceState);
@@ -481,20 +479,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         menuWindow = new MenuWindow(this, action_manager.browser_activity.list, mActionCallback);
         menuWindow.setListener(this);
 
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                setFullscreenIfEnable();
-            }
-        });
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> setFullscreenIfEnable());
 
         actionNameTextView = findViewById(R.id.actionNameTextView);
-        webGestureOverlayView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return multiFingerGestureDetector != null && multiFingerGestureDetector.onTouchEvent(event);
-            }
-        });
+        webGestureOverlayView.setOnTouchListener((v, event) ->
+                multiFingerGestureDetector != null && multiFingerGestureDetector.onTouchEvent(event));
     }
 
     @Override
@@ -1225,7 +1214,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
                 /* save normal settings */
                 if (tab.getResetAction() == null)
-                    tab.setResetAction(new WebSettingResetAction(tab.mWebView.getSettings()));
+                    tab.setResetAction(new WebSettingResetAction(tab));
                 tab.getResetAction().setPatternAction((WebSettingPatternAction) pattern.getAction());
 
                 /* change web settings */
@@ -1243,7 +1232,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
         /* reset to normal */
         if (normalSettings && tab.getResetAction() != null) {
-            tab.getResetAction().reset(tab.mWebView);
+            tab.getResetAction().reset(tab);
             tab.setResetAction(null);
             return 0;
         }
@@ -1333,8 +1322,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     public CustomWebView makeWebView(@WebViewType int cacheType) {
         CustomWebView web = WebViewFactory.create(this, cacheType);
         web.getView().setId(View.generateViewId());
+        web.getWebView().setFocusableInTouchMode(true);
+        web.getWebView().setFocusable(true);
         web.getWebView().setDrawingCacheEnabled(false);
-        web.getWebView().buildDrawingCache();
+        web.getWebView().setWillNotCacheDrawing(true);
         initWebSetting(web);
         boolean enable_cookie = AppData.private_mode.get()
                 ? AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
@@ -1643,6 +1634,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
 
         CustomWebView new_web = new_data.mWebView;
+        new_web.resumeTimers();
         new_web.onResume();
         if (new_web.getView().getParent() != null) {
             ((ViewGroup) new_web.getView().getParent()).removeView(new_web.getView());
@@ -1786,6 +1778,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         if (clearTabNo >= 0 && mTabManager.size() >= 2)
             removeTab(clearTabNo);
         moveTaskToBack(true);
+    }
+
+    @Override
+    public void onWebViewCreated(MainTabData tab) {
+        checkPatternMatch(tab, tab.getUrl(), true);
     }
 
     private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
@@ -2413,18 +2410,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.permission_probrem)
                     .setMessage(R.string.confirm_permission_storage_app)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            PermissionUtils.openRequestPermissionSettings(getActivity(), getString(R.string.request_permission_storage_setting));
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().finish();
-                        }
-                    });
+                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                            PermissionUtils.openRequestPermissionSettings(getActivity(), getString(R.string.request_permission_storage_setting)))
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> getActivity().finish());
             setCancelable(false);
             return builder.create();
         }
@@ -2619,24 +2607,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             (new AlertDialog.Builder(BrowserActivity.this))
                     .setTitle(view.getUrl())
                     .setMessage(R.string.form_resubmit)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            resend.sendToTarget();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dontResend.sendToTarget();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            dontResend.sendToTarget();
-                        }
-                    })
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> resend.sendToTarget())
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> dontResend.sendToTarget())
+                    .setOnCancelListener(dialog -> dontResend.sendToTarget())
                     .show();
         }
 
@@ -2664,24 +2637,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             (new AlertDialog.Builder(BrowserActivity.this))
                     .setTitle(R.string.ssl_error_title)
                     .setMessage(R.string.ssl_error_mes)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            handler.proceed();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            handler.cancel();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            handler.cancel();
-                        }
-                    })
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> handler.proceed())
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> handler.cancel())
+                    .setOnCancelListener(dialog -> handler.cancel())
                     .show();
         }
 
@@ -3016,32 +2974,23 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 case WebView.HitTestResult.EMAIL_TYPE: {
                     final String extra = result.getExtra();
                     menu.setHeaderTitle(extra);
-                    menu.add(R.string.email).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_MAILTO + extra));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            return false;
-                        }
+                    menu.add(R.string.email).setOnMenuItemClickListener(arg0 -> {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_MAILTO + extra));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
                     });
-                    menu.add(R.string.add_contact).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-                            intent.putExtra(Insert.EMAIL, extra);
-                            intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            return false;
-                        }
+                    menu.add(R.string.add_contact).setOnMenuItemClickListener(arg0 -> {
+                        Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                        intent.putExtra(Insert.EMAIL, extra);
+                        intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
                     });
-                    menu.add(R.string.copy_email_address).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
-                            return false;
-                        }
+                    menu.add(R.string.copy_email_address).setOnMenuItemClickListener(arg0 -> {
+                        ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                        return false;
                     });
                 }
                 break;
@@ -3049,23 +2998,17 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 case WebView.HitTestResult.GEO_TYPE: {
                     final String extra = result.getExtra();
                     menu.setHeaderTitle(extra);
-                    menu.add(R.string.open_map).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            try {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_GEO + URLEncoder.encode(extra, "UTF-8"))));
-                            } catch (UnsupportedEncodingException e) {
-                                ErrorReport.printAndWriteLog(e);
-                            }
-                            return false;
+                    menu.add(R.string.open_map).setOnMenuItemClickListener(arg0 -> {
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_GEO + URLEncoder.encode(extra, "UTF-8"))));
+                        } catch (UnsupportedEncodingException e) {
+                            ErrorReport.printAndWriteLog(e);
                         }
+                        return false;
                     });
-                    menu.add(R.string.copy_map_address).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            ClipboardUtils.setClipboardText(getApplicationContext(), extra);
-                            return false;
-                        }
+                    menu.add(R.string.copy_map_address).setOnMenuItemClickListener(arg0 -> {
+                        ClipboardUtils.setClipboardText(getApplicationContext(), extra);
+                        return false;
                     });
                 }
                 break;

@@ -21,13 +21,16 @@ public class WebSettingPatternAction extends PatternAction {
 
     private static final String FIELD_NAME_UA = "0";
     private static final String FIELD_NAME_JS = "1";
+    private static final String FIELD_NAME_NAV_LOCK = "2";
 
     private String mUserAgent;
     private int mJavaScript;
+    private int navLock;
 
-    public WebSettingPatternAction(String ua, int js) {
+    public WebSettingPatternAction(String ua, int js, int navLock) {
         mUserAgent = ua;
         mJavaScript = js;
+        this.navLock = navLock;
     }
 
     public WebSettingPatternAction(JsonParser parser) throws IOException {
@@ -42,6 +45,11 @@ public class WebSettingPatternAction extends PatternAction {
             if (FIELD_NAME_JS.equals(parser.getCurrentName())) {
                 if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return;
                 mJavaScript = parser.getIntValue();
+                continue;
+            }
+            if (FIELD_NAME_NAV_LOCK.equals(parser.getCurrentName())) {
+                if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return;
+                navLock = parser.getIntValue();
                 continue;
             }
             parser.skipChildren();
@@ -65,6 +73,7 @@ public class WebSettingPatternAction extends PatternAction {
         if (mUserAgent != null)
             generator.writeStringField(FIELD_NAME_UA, mUserAgent);
         generator.writeNumberField(FIELD_NAME_JS, mJavaScript);
+        generator.writeNumberField(FIELD_NAME_NAV_LOCK, navLock);
         generator.writeEndObject();
         return true;
     }
@@ -75,6 +84,10 @@ public class WebSettingPatternAction extends PatternAction {
 
     public int getJavaScriptSetting() {
         return mJavaScript;
+    }
+
+    public int getNavLock() {
+        return navLock;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -91,6 +104,15 @@ public class WebSettingPatternAction extends PatternAction {
                 break;
             case DISABLE:
                 settings.setJavaScriptEnabled(false);
+                break;
+        }
+
+        switch (navLock) {
+            case ENABLE:
+                tab.setNavLock(true);
+                break;
+            case DISABLE:
+                tab.setNavLock(false);
                 break;
         }
         return false;
