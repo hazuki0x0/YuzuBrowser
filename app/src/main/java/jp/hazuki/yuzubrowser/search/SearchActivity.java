@@ -22,12 +22,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,12 +81,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
         SearchButton searchButton = findViewById(R.id.searchButton);
         OutSideClickableRecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        recyclerView.setOnOutSideClickListener(new OutSideClickableRecyclerView.OnOutSideClickListener() {
-            @Override
-            public void onOutSideClick() {
-                finish();
-            }
-        });
+        recyclerView.setOnOutSideClickListener(this::finish);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -100,15 +92,10 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
             layoutManager.setReverseLayout(true);
         }
 
-        adapter = new SearchRecyclerAdapter(this, new ArrayList<Suggestion>(), this);
+        adapter = new SearchRecyclerAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        recyclerView.setOnClickListener(view -> finish());
 
         if (ThemeData.isEnabled()) {
             if (ThemeData.getInstance().toolbarBackgroundColor != 0)
@@ -125,19 +112,17 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.setStatusBarColor(ThemeData.getInstance().statusBarColor);
+                window.getDecorView().setSystemUiVisibility(ThemeData.getSystemUiVisibilityFlag());
             }
         }
 
         editText.addTextChangedListener(this);
-        editText.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    finishWithResult(editText.getText().toString(), SEARCH_MODE_AUTO);
-                    return true;
-                }
-                return false;
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                finishWithResult(editText.getText().toString(), SEARCH_MODE_AUTO);
+                return true;
             }
+            return false;
         });
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override

@@ -938,7 +938,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             if (menuWindow != null)
-                menuWindow.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                menuWindow.setSystemUiVisibility(ThemeData.getSystemUiVisibilityFlag());
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
@@ -1000,6 +1000,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.setStatusBarColor(themedata.statusBarColor);
+                if (themedata.isLightStatusBar()) {
+                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                }
             }
 
             if (themedata.scrollbarAccentColor != 0) {

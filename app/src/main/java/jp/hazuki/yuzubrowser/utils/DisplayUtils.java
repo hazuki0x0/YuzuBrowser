@@ -6,6 +6,8 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
+import jp.hazuki.yuzubrowser.theme.ThemeData;
+
 public class DisplayUtils {
     private DisplayUtils() {
         throw new UnsupportedOperationException();
@@ -29,9 +31,11 @@ public class DisplayUtils {
 
     public static int getFullScreenVisibility(boolean showNavBar) {
         if (showNavBar) {
-            return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | ThemeData.getSystemUiVisibilityFlag();
         } else {
-            return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | ThemeData.getSystemUiVisibilityFlag();
         }
     }
 }
