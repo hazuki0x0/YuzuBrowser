@@ -39,7 +39,6 @@ import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
 import android.widget.FrameLayout;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -55,6 +54,7 @@ import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.tab.manager.TabCache;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
@@ -607,8 +607,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
     private String saveIndexData() {
         StringWriter writer = new StringWriter();
-        JsonFactory jsonFactory = new JsonFactory();
-        try (JsonGenerator generator = jsonFactory.createGenerator(writer)) {
+        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(writer)) {
             generator.writeStartArray();
             for (TabIndexData data : tabIndexList) {
                 generator.writeStartObject();
@@ -628,8 +627,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
     private void loadIndexData(String data) {
         tabIndexList.clear();
-        JsonFactory factory = new JsonFactory();
-        try (JsonParser parser = factory.createParser(data)) {
+        try (JsonParser parser = JsonUtils.getFactory().createParser(data)) {
             // 配列の処理
             if (parser.nextToken() == JsonToken.START_ARRAY) {
                 while (parser.nextToken() != JsonToken.END_ARRAY) {

@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.readitlater
 
-import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
+import jp.hazuki.yuzubrowser.utils.JsonUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -33,7 +33,6 @@ class ReadItLaterIndex(root: File) : ArrayList<ReadItem>() {
     }
 
     private val indexFile: File = File(root, "index")
-    private val jsonFactory: JsonFactory = JsonFactory()
 
     init {
         load()
@@ -43,7 +42,7 @@ class ReadItLaterIndex(root: File) : ArrayList<ReadItem>() {
         clear()
         try {
             FileInputStream(indexFile).use {
-                val parser = jsonFactory.createParser(it)
+                val parser = JsonUtils.getFactory().createParser(it)
                 if (parser.nextToken() == JsonToken.START_ARRAY) {
                     while (parser.nextToken() != JsonToken.END_ARRAY) {
                         val item = read(parser)
@@ -60,7 +59,7 @@ class ReadItLaterIndex(root: File) : ArrayList<ReadItem>() {
 
     fun save() {
         FileOutputStream(indexFile).use {
-            val generator = jsonFactory.createGenerator(it)
+            val generator = JsonUtils.getFactory().createGenerator(it)
             generator.writeStartArray()
             for (item in this) {
                 generator.writeStartObject()

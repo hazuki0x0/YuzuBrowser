@@ -33,7 +33,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -47,6 +46,7 @@ import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
@@ -70,8 +70,7 @@ public class ThemeData {
 
     private ThemeData(Context context, File folder) throws IOException {
         try (InputStream is = new BufferedInputStream(new FileInputStream(new File(folder, "theme.json")))) {
-            JsonFactory factory = new JsonFactory();
-            JsonParser parser = factory.createParser(is);
+            JsonParser parser = JsonUtils.getFactory().createParser(is);
 
             if (parser.nextToken() != JsonToken.START_OBJECT) return;
 

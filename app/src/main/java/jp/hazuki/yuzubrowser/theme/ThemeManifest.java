@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.theme;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -25,6 +24,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 
 public class ThemeManifest {
     public static final String MANIFEST = "manifest.json";
@@ -105,9 +106,8 @@ public class ThemeManifest {
 
     public static ThemeManifest decodeManifest(File manifestFile) throws ThemeManifest.IllegalManifestException {
         if (manifestFile.exists() && manifestFile.isFile()) {
-            JsonFactory factory = new JsonFactory();
             try (InputStream is = new BufferedInputStream(new FileInputStream(manifestFile));
-                 JsonParser parser = factory.createParser(is)) {
+                 JsonParser parser = JsonUtils.getFactory().createParser(is)) {
                 return new ThemeManifest(parser);
             } catch (IOException e) {
                 e.printStackTrace();

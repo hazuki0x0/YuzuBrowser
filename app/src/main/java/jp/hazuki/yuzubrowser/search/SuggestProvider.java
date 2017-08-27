@@ -30,7 +30,6 @@ import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 
 import java.io.IOException;
@@ -47,6 +46,7 @@ import jp.hazuki.yuzubrowser.search.suggest.SuggestGoogle;
 import jp.hazuki.yuzubrowser.search.suggest.Suggestion;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class SuggestProvider extends ContentProvider {
@@ -99,7 +99,6 @@ public class SuggestProvider extends ContentProvider {
     private static final int DB_VERSION = 1;
     private static final String TABLE_NAME = "main_table1";
 
-    private final JsonFactory mJsonFactory = new JsonFactory();
     private DatabaseHelper mOpenHelper;
 
     private int mSuggestType;
@@ -212,7 +211,7 @@ public class SuggestProvider extends ContentProvider {
             connection.setRequestMethod("GET");
             connection.connect();
             if (connection.getResponseCode() == 200) {
-                parser = mJsonFactory.createParser(connection.getInputStream());
+                parser = JsonUtils.getFactory().createParser(connection.getInputStream());
 
                 return mSuggestEngine.getSuggestions(parser);
             }
