@@ -22,6 +22,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -240,7 +241,11 @@ public class DownloadService extends Service {
     public static void startDownloadService(Context context, DownloadInfo info) {
         Intent dintent = new Intent(context, DownloadService.class);
         dintent.putExtra(DownloadService.EXTRA_DOWNLOAD_INFO, info);
-        context.startService(dintent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(dintent);
+        } else {
+            context.startService(dintent);
+        }
     }
 
     private class DownloadThread extends Thread {
