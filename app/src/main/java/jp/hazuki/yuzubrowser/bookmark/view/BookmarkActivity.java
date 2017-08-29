@@ -40,7 +40,7 @@ public class BookmarkActivity extends LongPressFixActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackKeyPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragment instanceof BookmarkFragment) {
             if (((BookmarkFragment) fragment).onBack()) {
