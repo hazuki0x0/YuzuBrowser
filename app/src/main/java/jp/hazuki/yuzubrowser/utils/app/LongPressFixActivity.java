@@ -25,19 +25,29 @@ public class LongPressFixActivity extends ThemeActivity {
     private final Handler handler = new Handler();
 
     private long time;
+    private boolean waiting;
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             switch (event.getAction()) {
                 case KeyEvent.ACTION_DOWN:
-                    time = System.currentTimeMillis();
-                    handler.postDelayed(longPress, longPressTimeout);
+                    if (!waiting) {
+                        waiting = true;
+                        time = System.currentTimeMillis();
+                        handler.postDelayed(longPress, longPressTimeout);
+                    }
                     break;
                 case KeyEvent.ACTION_UP:
                     handler.removeCallbacks(longPress);
-                    if (System.currentTimeMillis() - time > longPressTimeout)
-                        return true;
+                    waiting = false;
+                    if (System.currentTimeMillis() - time < longPressTimeout) {
+                        onBackKeyPressed();
+                    }
+                    return true;
+                default:
+                    handler.removeCallbacks(longPress);
+                    waiting = false;
                     break;
             }
         }
@@ -48,12 +58,15 @@ public class LongPressFixActivity extends ThemeActivity {
         handler.removeCallbacks(longPress);
     }
 
-    private Runnable longPress = new Runnable() {
-        @Override
-        public void run() {
-            onBackKeyLongPressed();
-        }
-    };
+    private Runnable longPress = this::onBackKeyLongPressed;
+
+    @Override
+    public final void onBackPressed() {
+    }
+
+    public void onBackKeyPressed() {
+        super.onBackPressed();
+    }
 
     public void onBackKeyLongPressed() {
 

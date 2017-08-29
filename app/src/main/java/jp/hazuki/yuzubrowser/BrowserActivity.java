@@ -873,7 +873,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackKeyPressed() {
         if (menuWindow != null && menuWindow.isShowing()) {
             menuWindow.dismiss();
         } else if (mWebCustomViewHandler != null && mWebCustomViewHandler.isCustomViewShowing()) {
