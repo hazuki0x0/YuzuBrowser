@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.BuildConfig;
+import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.SingleAction;
 import jp.hazuki.yuzubrowser.action.item.CustomMenuSingleAction;
@@ -40,6 +41,8 @@ import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
+import jp.hazuki.yuzubrowser.search.settings.SearchUrl;
+import jp.hazuki.yuzubrowser.search.settings.SearchUrlManager;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.settings.container.BooleanContainer;
 import jp.hazuki.yuzubrowser.settings.container.Containable;
@@ -327,6 +330,21 @@ public class AppData {
             encodes.add(new WebTextEncode("EUC-JP"));
             encodes.add(new WebTextEncode("ISO-2022-JP"));
             encodes.write(context);
+
+            {
+                SearchUrlManager urlManager = new SearchUrlManager(context);
+                String[] urls = context.getResources().getStringArray(R.array.default_search_url);
+                String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
+                int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
+
+                for (int i = 0; i < urls.length; i++) {
+                    urlManager.add(new SearchUrl(titles[i], urls[i], colors[i]));
+                }
+
+                urlManager.save();
+                AppData.search_url.set(urlManager.get(0).getUrl());
+                AppData.commit(context, AppData.search_url);
+            }
         }
 
         int versionCode = BuildConfig.VERSION_CODE;
@@ -362,6 +380,26 @@ public class AppData {
                 if (lastLaunch <= 300103 && "SINGLE_COLUMN>".equals(AppData.layout_algorithm.get())) {
                     AppData.layout_algorithm.set("SINGLE_COLUMN");
                     AppData.commit(context, AppData.layout_algorithm);
+                }
+
+                if (lastLaunch < 300200) {
+                    SearchUrlManager urlManager = new SearchUrlManager(context);
+                    String[] urls = context.getResources().getStringArray(R.array.default_search_url);
+                    String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
+                    int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
+
+                    for (int i = 0; i < urls.length; i++) {
+                        urlManager.add(new SearchUrl(titles[i], urls[i], colors[i]));
+                    }
+
+                    if (!"http://www.google.com/m?q=%s".equals(AppData.search_url.get())) {
+                        urlManager.add(new SearchUrl("Custom", AppData.search_url.get(), 0));
+                        urlManager.setSelectedId(urlManager.get(urlManager.size() - 1).getId());
+                    }
+
+                    urlManager.save();
+                    AppData.search_url.set(urlManager.get(urlManager.getSelectedIndex()).getUrl());
+                    AppData.commit(context, AppData.search_url);
                 }
             }
 

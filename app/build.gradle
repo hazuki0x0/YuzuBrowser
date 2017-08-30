@@ -18,6 +18,7 @@ android {
 
         buildConfigField "String", "GIT_HASH", "\"${gitHash}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        resValue "string", "package_name", applicationId
     }
 
     compileOptions {
@@ -93,6 +94,7 @@ dependencies {
     compile 'com.takisoft.fix:preference-v7:26.0.1.0'
     compile 'com.annimon:stream:1.1.8'
     compile project(':libraries:floatingactionbutton')
+    compile project(':libraries:colorpicker')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }

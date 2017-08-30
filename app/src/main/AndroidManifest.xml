@@ -306,6 +306,9 @@
             android:authorities="${applicationId}.readItLaterProvider"
             android:name=".readitlater.ReadItLaterProvider"
             android:exported="false"/>
+        <activity
+            android:name=".search.settings.SearchUrlListActivity"
+            android:label="@string/search"/>
     </application>
 
 </manifest>

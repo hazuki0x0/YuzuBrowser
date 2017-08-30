@@ -710,6 +710,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             case RESULT_REQUEST_SEARCHBOX: {
                 if (resultCode != RESULT_OK || data == null) break;
                 String query = data.getStringExtra(SearchActivity.EXTRA_QUERY);
+                String searchUrl = data.getStringExtra(SearchActivity.EXTRA_SEARCH_URL);
 
                 if (TextUtils.isEmpty(query)) break;
 
@@ -719,11 +720,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         url = WebUtils.makeUrl(query);
                         break;
                     case SearchActivity.SEARCH_MODE_WORD:
-                        url = WebUtils.makeSearchUrlFromQuery(query, AppData.search_url.get(), "%s");
+                        url = WebUtils.makeSearchUrlFromQuery(query, searchUrl, "%s");
                         break;
                     //case SearchActivity.SEARCH_MODE_AUTO:
                     default:
-                        url = WebUtils.makeUrlFromQuery(query, AppData.search_url.get(), "%s");
+                        url = WebUtils.makeUrlFromQuery(query, searchUrl, "%s");
                         break;
                 }
                 Bundle appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA);

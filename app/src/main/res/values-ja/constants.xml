@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="InconsistentArrays">
+
+    <string-array name="default_search_url">
+        <item>https://www.google.co.jp/m?q=%s</item>
+        <item>https://www.bing.com/search?q=%s</item>
+        <item>https://search.yahoo.co.jp/search?p=%s</item>
+        <item>https://duckduckgo.com/?q=%s</item>
+    </string-array>
+
+    <string-array name="default_search_url_name">
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo! JAPAN</item>
+        <item>DuckDuckGo</item>
+    </string-array>
+
+    <integer-array name="default_search_url_color">
+        <item>0xff2196f3</item>
+        <item>0xff009688</item>
+        <item>0xfff44336</item>
+        <item>0xffff5722</item>
+    </integer-array>
+</resources>

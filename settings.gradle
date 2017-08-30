@@ -1,1 +1,1 @@
-include ':app', ':libraries:floatingactionbutton'
+include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker'

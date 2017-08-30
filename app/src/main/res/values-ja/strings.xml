@@ -21,6 +21,7 @@
     <string name="confirm_delete_button">このボタンを削除しますか？</string>
     <string name="confirm_delete_speedDial">このスピードダイアルを削除しますか？</string>
     <string name="confirm_delete_gesture">このジェスチャーを削除しますか？</string>
+    <string name="confirm_delete_search_url">この検索URLを削除しますか？</string>
     <string name="delete_history">履歴の削除</string>
     <string name="delete_all_history">履歴の全削除</string>
     <string name="delete_all_displayed_item">表示中の履歴を全削除</string>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_search_url">
+        <item>http://www.google.com/m?q=%s</item>
+        <item>https://www.bing.com/search?q=%s</item>
+        <item>https://search.yahoo.com/search?p=%s</item>
+        <item>https://duckduckgo.com/?q=%s</item>
+        <item>https://www.baidu.com/s?wd=%s</item>
+        <item>https://yandex.ru/yandsearch?text=%s</item>
+    </string-array>
+
+    <string-array name="default_search_url_name">
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Yahoo!</item>
+        <item>DuckDuckGo</item>
+        <item>Baidu</item>
+        <item>Yandex</item>
+    </string-array>
+
+    <integer-array name="default_search_url_color">
+        <item>0xff2196f3</item>
+        <item>0xff009688</item>
+        <item>0xff673ab7</item>
+        <item>0xffff5722</item>
+        <item>0xff3f51b5</item>
+        <item>0xffffeb3b</item>
+    </integer-array>
+</resources>

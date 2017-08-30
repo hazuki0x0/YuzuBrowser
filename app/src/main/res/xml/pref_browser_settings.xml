@@ -46,6 +46,38 @@
 
     <jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
 
+    <PreferenceScreen
+        android:key="ps_search"
+        android:title="@string/pref_search_settings">
+
+        <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
+            android:key="search_url"
+            android:singleLine="true"
+            android:title="@string/pref_search_url"/>
+
+        <PreferenceScreen
+            android:title="@string/pref_search_url_settings">
+
+            <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="@string/package_name"
+                android:targetClass="jp.hazuki.yuzubrowser.search.settings.SearchUrlListActivity"/>
+
+        </PreferenceScreen>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_search_suggest_list"
+            android:entryValues="@array/pref_search_suggest_values"
+            android:key="search_suggest"
+            android:title="@string/pref_search_suggest"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_search_suggest_engine_list"
+            android:entryValues="@array/pref_search_suggest_engine_values"
+            android:key="search_suggest_engine"
+            android:title="@string/pref_search_suggest_engine"/>
+    </PreferenceScreen>
+
     <SwitchPreference
         android:key="save_tabs_for_crash"
         android:title="@string/pref_save_tab_for_crash" />
@@ -98,11 +130,6 @@
         app:seekMax="50"
         app:seekMin="3" />
 
-    <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
-        android:key="search_url"
-        android:singleLine="true"
-        android:title="@string/pref_search_url" />
-
     <SwitchPreference
         android:key="pause_web_tab_change"
         android:title="@string/pref_pause_web_tab_change"
@@ -127,16 +154,4 @@
         android:title="@string/pref_auto_tab_save_delay"
         app:seekMax="3600"
         app:seekMin="0" />
-
-    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
-        android:entries="@array/pref_search_suggest_list"
-        android:entryValues="@array/pref_search_suggest_values"
-        android:key="search_suggest"
-        android:title="@string/pref_search_suggest" />
-
-    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
-        android:entries="@array/pref_search_suggest_engine_list"
-        android:entryValues="@array/pref_search_suggest_engine_values"
-        android:key="search_suggest_engine"
-        android:title="@string/pref_search_suggest_engine" />
 </PreferenceScreen>
