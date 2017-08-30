@@ -23,7 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.BrowserActivity;
+import jp.hazuki.yuzubrowser.HandleIntentActivity;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.ShareActivity;
 import jp.hazuki.yuzubrowser.browser.SafeFileProvider;
 import jp.hazuki.yuzubrowser.download.DownloadFileProvider;
 
@@ -64,43 +66,54 @@ public class PackageUtils {
     }
 
     public static Intent createChooser(Context context, Intent query, CharSequence title) {
-        PackageManager manager = context.getPackageManager();
-        int flag;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            flag = PackageManager.MATCH_ALL;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ComponentName[] componentNames = {
+                    new ComponentName(context, BrowserActivity.class),
+                    new ComponentName(context, HandleIntentActivity.class),
+                    new ComponentName(context, ShareActivity.class)
+            };
+            Intent intent = Intent.createChooser(query, title);
+            intent.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, componentNames);
+            return intent;
         } else {
-            flag = PackageManager.MATCH_DEFAULT_ONLY;
-        }
-
-        List<ResolveInfo> infoList = manager.queryIntentActivities(query, flag);
-        List<Intent> intents = new ArrayList<>();
-        String appId = context.getPackageName();
-
-        Collections.sort(infoList, new ResolveInfo.DisplayNameComparator(manager));
-
-        Intent appIntent;
-
-        for (ResolveInfo info : infoList) {
-            if (appId.equals(info.activityInfo.packageName)) {
-                continue;
+            PackageManager manager = context.getPackageManager();
+            int flag;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                flag = PackageManager.MATCH_ALL;
+            } else {
+                flag = PackageManager.MATCH_DEFAULT_ONLY;
             }
-            ActivityInfo activityInfo = info.activityInfo;
-            appIntent = new Intent(query);
-            appIntent.setPackage(activityInfo.packageName);
-            appIntent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
 
-            LabeledIntent intent = new LabeledIntent(appIntent, activityInfo.packageName, info.labelRes, info.icon);
-            intents.add(intent);
-        }
+            List<ResolveInfo> infoList = manager.queryIntentActivities(query, flag);
+            List<Intent> intents = new ArrayList<>();
+            String appId = context.getPackageName();
 
-        Intent chooser;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || intents.size() == 0) {
-            chooser = Intent.createChooser(new Intent(), title);
-        } else {
-            chooser = Intent.createChooser(intents.remove(0), title);
+            Collections.sort(infoList, new ResolveInfo.DisplayNameComparator(manager));
+
+            Intent appIntent;
+
+            for (ResolveInfo info : infoList) {
+                if (appId.equals(info.activityInfo.packageName)) {
+                    continue;
+                }
+                ActivityInfo activityInfo = info.activityInfo;
+                appIntent = new Intent(query);
+                appIntent.setPackage(activityInfo.packageName);
+                appIntent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
+
+                LabeledIntent intent = new LabeledIntent(appIntent, activityInfo.packageName, info.labelRes, info.icon);
+                intents.add(intent);
+            }
+
+            Intent chooser;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || intents.size() == 0) {
+                chooser = Intent.createChooser(new Intent(), title);
+            } else {
+                chooser = Intent.createChooser(intents.remove(0), title);
+            }
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[intents.size()]));
+            return chooser;
         }
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[intents.size()]));
-        return chooser;
     }
 
     public static void createShortcut(Context context, String title, String url, Bitmap favicon) {
