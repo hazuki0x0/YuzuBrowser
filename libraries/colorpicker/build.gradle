@@ -17,8 +17,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion Integer.parseInt(project.android_compile_sdk_version)
+    buildToolsVersion project.android_build_tools_version
     sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
@@ -27,5 +27,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:26.0.1'
+    implementation "com.android.support:appcompat-v7:${android_support_lib_version}"
 }

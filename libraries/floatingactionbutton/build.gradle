@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion Integer.parseInt(project.android_compile_sdk_version)
+    buildToolsVersion project.android_build_tools_version
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion Integer.parseInt(project.android_min_sdk_version)
+        targetSdkVersion Integer.parseInt(project.android_target_sdk_version)
         versionCode Integer.parseInt(project.VERSION_CODE)
         versionName project.VERSION_NAME
     }
@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:26.0.1'
-    compile 'com.android.support:design:26.0.1'
+    implementation "com.android.support:appcompat-v7:${android_support_lib_version}"
+    implementation "com.android.support:design:${android_support_lib_version}"
 }
