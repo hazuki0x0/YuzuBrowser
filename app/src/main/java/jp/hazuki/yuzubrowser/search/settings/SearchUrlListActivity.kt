@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.search.settings
 
 import android.os.Bundle
+import android.view.MenuItem
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 
@@ -30,6 +31,18 @@ class SearchUrlListActivity : ThemeActivity() {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, SearchUrlListFragment())
                     .commit()
+        }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

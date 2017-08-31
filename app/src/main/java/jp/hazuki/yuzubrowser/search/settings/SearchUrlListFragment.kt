@@ -29,12 +29,13 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import jp.hazuki.yuzubrowser.R
+import jp.hazuki.yuzubrowser.utils.view.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerMenu
 
-class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener {
+class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete {
 
     private lateinit var adapter: UrlAdapter
     private lateinit var manager: SearchUrlManager
@@ -78,9 +79,7 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
         SearchSettingDialog.newInstance(position, manager[position]).show(childFragmentManager, "edit")
     }
 
-    override fun onRecyclerItemLongClicked(v: View?, position: Int): Boolean {
-        return false
-    }
+    override fun onRecyclerItemLongClicked(v: View?, position: Int): Boolean = false
 
     override fun onUrlEdited(index: Int, url: SearchUrl) {
         edited = true
@@ -90,6 +89,13 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
         } else {
             manager.add(url)
             adapter.notifyItemInserted(manager.size - 1)
+        }
+    }
+
+    override fun onDeleteClicked(position: Int) {
+        if (manager.size > 1) {
+            DeleteDialogCompat.newInstance(context, R.string.confirm, R.string.confirm_delete_search_url, position)
+                    .show(childFragmentManager, "delete")
         }
     }
 

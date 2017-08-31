@@ -37,7 +37,7 @@ public class RecyclerMenu {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        menuListener.onDelete(position);
+                        menuListener.onDeleteClicked(position);
                         return true;
                     case R.id.moveUp:
                         moveListener.onMoveUp(position);
@@ -58,7 +58,7 @@ public class RecyclerMenu {
     }
 
     public interface OnRecyclerMenuListener {
-        void onDelete(int position);
+        void onDeleteClicked(int position);
     }
 
     public interface OnRecyclerMoveListener {

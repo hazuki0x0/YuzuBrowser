@@ -308,7 +308,7 @@
             android:exported="false"/>
         <activity
             android:name=".search.settings.SearchUrlListActivity"
-            android:label="@string/search"/>
+            android:label="@string/pref_search_url_settings"/>
     </application>
 
 </manifest>

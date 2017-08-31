@@ -20,7 +20,10 @@ import android.content.Context
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import jp.hazuki.yuzubrowser.utils.JsonUtils
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 
 class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
 
@@ -67,8 +70,6 @@ class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
                     }
                 }
             }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }

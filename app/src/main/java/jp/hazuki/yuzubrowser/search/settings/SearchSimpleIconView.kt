@@ -19,14 +19,14 @@ package jp.hazuki.yuzubrowser.search.settings
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.widget.TextView
 import jp.hazuki.yuzubrowser.R
 
 class SearchSimpleIconView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : TextView(context, attrs, defStyleAttr) {
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     init {
         gravity = Gravity.CENTER
