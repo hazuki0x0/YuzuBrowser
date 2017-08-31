@@ -16,8 +16,6 @@
 
 package jp.hazuki.yuzubrowser.reader.snacktory;
 
-import com.annimon.stream.Stream;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -181,7 +179,7 @@ public class ArticleTextExtractor {
 
             Element parent = bestMatchElement.parent();
             if ("div".equals(parent.tagName()) && parent.ownText().length() == 0) {
-                if (Stream.of(parent.children()).allMatch(value -> "div".equals(value.tagName()) && countText(value) > 100)) {
+                if (SnacktoryUtils.hasOtherMainParagraph(parent)) {
                     Element custom = new Element("div");
                     int index = 0;
                     for (Element entry : parent.children()) {
@@ -214,14 +212,6 @@ public class ArticleTextExtractor {
         res.setFaviconUrl(extractFaviconUrl(doc));
         res.setKeywords(extractKeywords(doc));
         return res;
-    }
-
-    private int countText(Element element) {
-        return element.ownText().length() +
-                Stream.of(element.children())
-                        .filter(value -> "p".equals(value.tagName()))
-                        .mapToInt(item -> item.text().length())
-                        .sum();
     }
 
     protected String extractTitle(Document doc) {
