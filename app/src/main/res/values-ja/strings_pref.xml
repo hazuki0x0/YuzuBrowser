@@ -406,4 +406,7 @@
 
     <string name="pref_search_settings">検索設定</string>
     <string name="pref_search_url_settings">検索エンジン設定</string>
+    <string name="pref_search_url_show_icon">検索バーに切り替えアイコンを表示</string>
+    <string name="pref_search_cat_search">検索エンジン</string>
+    <string name="pref_search_cat_suggest">検索サジェスト</string>
 </resources>

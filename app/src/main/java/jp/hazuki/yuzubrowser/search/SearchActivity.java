@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -90,6 +91,10 @@ public class SearchActivity extends ThemeActivity implements TextWatcher, Loader
         manager = new SearchUrlManager(this);
         searchUrlSpinner.setAdapter(new SearchUrlSpinnerAdapter(this, manager));
         searchUrlSpinner.setSelection(manager.getSelectedIndex());
+
+        if (!AppData.search_url_show_icon.get()) {
+            searchUrlSpinner.setVisibility(View.GONE);
+        }
 
         recyclerView.setOnOutSideClickListener(this::finish);
 

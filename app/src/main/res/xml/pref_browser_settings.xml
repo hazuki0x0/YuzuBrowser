@@ -50,32 +50,38 @@
         android:key="ps_search"
         android:title="@string/pref_search_settings">
 
-        <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
-            android:key="search_url"
-            android:singleLine="true"
-            android:title="@string/pref_search_url"/>
+        <PreferenceCategory android:title="@string/pref_search_cat_search">
+            <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
+                android:key="search_url"
+                android:singleLine="true"
+                android:title="@string/pref_search_url"/>
 
-        <PreferenceScreen
-            android:title="@string/pref_search_url_settings">
+            <PreferenceScreen
+                android:title="@string/pref_search_url_settings">
+                <intent
+                    android:action="android.intent.action.MAIN"
+                    android:targetPackage="@string/package_name"
+                    android:targetClass="jp.hazuki.yuzubrowser.search.settings.SearchUrlListActivity"/>
+            </PreferenceScreen>
 
-            <intent
-                android:action="android.intent.action.MAIN"
-                android:targetPackage="@string/package_name"
-                android:targetClass="jp.hazuki.yuzubrowser.search.settings.SearchUrlListActivity"/>
+            <SwitchPreference
+                android:key="search_url_show_icon"
+                android:title="@string/pref_search_url_show_icon"/>
+        </PreferenceCategory>
 
-        </PreferenceScreen>
+        <PreferenceCategory android:title="@string/pref_search_cat_suggest">
+            <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_search_suggest_list"
+                android:entryValues="@array/pref_search_suggest_values"
+                android:key="search_suggest"
+                android:title="@string/pref_search_suggest"/>
 
-        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
-            android:entries="@array/pref_search_suggest_list"
-            android:entryValues="@array/pref_search_suggest_values"
-            android:key="search_suggest"
-            android:title="@string/pref_search_suggest"/>
-
-        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
-            android:entries="@array/pref_search_suggest_engine_list"
-            android:entryValues="@array/pref_search_suggest_engine_values"
-            android:key="search_suggest_engine"
-            android:title="@string/pref_search_suggest_engine"/>
+            <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_search_suggest_engine_list"
+                android:entryValues="@array/pref_search_suggest_engine_values"
+                android:key="search_suggest_engine"
+                android:title="@string/pref_search_suggest_engine"/>
+        </PreferenceCategory>
     </PreferenceScreen>
 
     <SwitchPreference

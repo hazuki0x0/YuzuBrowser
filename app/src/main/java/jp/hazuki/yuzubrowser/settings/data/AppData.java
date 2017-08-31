@@ -197,6 +197,7 @@ public class AppData {
     public static final IntContainer reader_text_size = new IntContainer("reader_text_size", 18);
     public static final StringContainer reader_text_font = new StringContainer("reader_text_font", "");
     public static final FontSizeContainer font_size = new FontSizeContainer();
+    public static final BooleanContainer search_url_show_icon = new BooleanContainer("search_url_show_icon", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

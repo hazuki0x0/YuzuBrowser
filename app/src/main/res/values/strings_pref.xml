@@ -790,5 +790,8 @@
     </integer-array>
 
     <string name="pref_search_settings">Search settings</string>
-    <string name="pref_search_url_settings">Search URL settings</string>
+    <string name="pref_search_url_settings">Search engine settings</string>
+    <string name="pref_search_url_show_icon">Show switch icon on search bar</string>
+    <string name="pref_search_cat_search">Search engine</string>
+    <string name="pref_search_cat_suggest">Search suggest</string>
 </resources>
