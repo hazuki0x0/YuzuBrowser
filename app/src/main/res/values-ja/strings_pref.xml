@@ -90,7 +90,6 @@
     <string name="pref_tab_action">タブアクション</string>
     <string name="pref_show_zoom_button">ズームボタンの表示</string>
     <string name="pref_fullscreen">フルスクリーン</string>
-    <string name="pref_fullscreen_hide_nav">フルスクリーン時にナビバーを隠す</string>
     <string name="pref_keep_screen_on">自動的に消灯しない</string>
     <string name="pref_accept_cookie">Cookieの許可</string>
     <string name="pref_accept_third_cookie">サードパーティCookieの許可</string>
@@ -409,4 +408,10 @@
     <string name="pref_search_url_show_icon">検索バーに切り替えアイコンを表示</string>
     <string name="pref_search_cat_search">検索エンジン</string>
     <string name="pref_search_cat_suggest">検索サジェスト</string>
+    <string name="pref_fullscreen_mode">フルスクリーンモード</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>ステータスバーを隠す</item>
+        <item>ナビバーを隠す</item>
+        <item>両方を隠す</item>
+    </string-array>
 </resources>

@@ -396,7 +396,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
                 if (!visible && mIsFullScreenMode) {
                     getWindow().getDecorView()
-                            .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get()));
+                            .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility());
                 }
             }
         });
@@ -656,7 +656,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     private void setFullscreenIfEnable() {
         if (mIsFullScreenMode) {
             getWindow().getDecorView()
-                    .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get()));
+                    .setSystemUiVisibility(DisplayUtils.getFullScreenVisibility());
         }
     }
 
@@ -929,12 +929,13 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         }
 
         if (enable) {
-            int visibility = DisplayUtils.getFullScreenVisibility(AppData.fullscreen_hide_nav.get());
+            int visibility = DisplayUtils.getFullScreenVisibility();
             getWindow().getDecorView()
                     .setSystemUiVisibility(visibility);
             if (menuWindow != null)
                 menuWindow.setSystemUiVisibility(visibility);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            if (DisplayUtils.isNeedFullScreenFlag())
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
@@ -1537,14 +1538,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "histories":
                     case "history":
                         intent = new Intent(BrowserActivity.this, BrowserHistoryActivity.class);
-                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                         intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                         startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                         return true;
                     case "downloads":
                     case "download":
                         intent = new Intent(BrowserActivity.this, DownloadListActivity.class);
-                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                         intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                         break;
                     case "debug":
@@ -1553,7 +1554,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     case "bookmarks":
                     case "bookmark":
                         intent = new Intent(BrowserActivity.this, BookmarkActivity.class);
-                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                         intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                         startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                         return true;
@@ -2251,7 +2252,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(SearchActivity.EXTRA_QUERY, query);
-        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
         intent.putExtra(SearchActivity.EXTRA_REVERSE, reverse);
 
         Bundle appdata = new Bundle();
@@ -3910,21 +3911,21 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 break;
                 case SingleAction.SHOW_BOOKMARK: {
                     Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
-                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                     intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivityForResult(intent, RESULT_REQUEST_BOOKMARK);
                 }
                 break;
                 case SingleAction.SHOW_HISTORY: {
                     Intent intent = new Intent(getApplicationContext(), BrowserHistoryActivity.class);
-                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                     intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivityForResult(intent, RESULT_REQUEST_HISTORY);
                 }
                 break;
                 case SingleAction.SHOW_DOWNLOADS: {
                     Intent intent = new Intent(getApplicationContext(), DownloadListActivity.class);
-                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                     intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivity(intent);
                 }
@@ -4252,7 +4253,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                                     .setTitle(R.string.action_list)
                                     .create()
                                     .setAction(ActionActivity.ACTION_ALL_ACTION)
-                                    .putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode)
+                                    .putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag())
                                     .putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation()),
                             RESULT_REQUEST_ACTION_LIST);
                     break;
@@ -4261,7 +4262,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     Intent intent = new Intent(BrowserActivity.this, ReaderActivity.class);
                     intent.putExtra(Constants.intent.EXTRA_URL, tab.getOriginalUrl());
                     intent.putExtra(Constants.intent.EXTRA_USER_AGENT, tab.mWebView.getSettings().getUserAgentString());
-                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode);
+                    intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, mIsFullScreenMode && DisplayUtils.isNeedFullScreenFlag());
                     intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, getRequestedOrientation());
                     startActivity(intent);
                     break;

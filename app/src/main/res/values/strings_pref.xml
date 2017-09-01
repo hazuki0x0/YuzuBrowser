@@ -361,7 +361,6 @@
     <string name="pref_tab_action">Tab action</string>
     <string name="pref_show_zoom_button">Display zoom buttons</string>
     <string name="pref_fullscreen">Fullscreen</string>
-    <string name="pref_fullscreen_hide_nav">Hide NavBar when fullscreen</string>
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="pref_accept_cookie">Accept cookie</string>
     <string name="pref_accept_third_cookie">Accept third party cookies</string>
@@ -794,4 +793,15 @@
     <string name="pref_search_url_show_icon">Show switch icon on search bar</string>
     <string name="pref_search_cat_search">Search engine</string>
     <string name="pref_search_cat_suggest">Search suggest</string>
+    <string name="pref_fullscreen_mode">Full screen mode</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>Hide status bar</item>
+        <item>Hide navigation bar</item>
+        <item>Hide both</item>
+    </string-array>
+    <integer-array name="pref_fullscreen_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 </resources>

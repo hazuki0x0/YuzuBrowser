@@ -262,9 +262,11 @@
     <SwitchPreference
         android:key="fullscreen"
         android:title="@string/pref_fullscreen" />
-    <SwitchPreference
-        android:key="fullscreen_hide_nav"
-        android:title="@string/pref_fullscreen_hide_nav" />
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_fullscreen_mode_list"
+        android:entryValues="@array/pref_fullscreen_mode_values"
+        android:key="fullscreen_hide_mode"
+        android:title="@string/pref_fullscreen_mode"/>
     <SwitchPreference
         android:key="keep_screen_on"
         android:title="@string/pref_keep_screen_on" />

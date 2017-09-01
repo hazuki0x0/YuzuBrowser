@@ -183,7 +183,7 @@ public class AppData {
     public static final IntContainer show_tab_divider = new IntContainer("show_tab_divider", 0);
     public static final BooleanContainer volume_default_playing = new BooleanContainer("volume_default_playing", true);
     public static final BooleanContainer snap_toolbar = new BooleanContainer("snap_toolbar", true);
-    public static final BooleanContainer fullscreen_hide_nav = new BooleanContainer("fullscreen_hide_nav", false);
+    public static final IntContainer fullscreen_hide_mode = new IntContainer("fullscreen_hide_mode", 0);
     public static final BooleanContainer speeddial_show_header = new BooleanContainer("speeddial_show_header", true);
     public static final BooleanContainer speeddial_show_search = new BooleanContainer("speeddial_show_search", true);
     public static final BooleanContainer speeddial_show_icon = new BooleanContainer("speeddial_show_icon", true);
@@ -400,7 +400,12 @@ public class AppData {
 
                     urlManager.save();
                     AppData.search_url.set(urlManager.get(urlManager.getSelectedIndex()).getUrl());
-                    AppData.commit(context, AppData.search_url);
+
+                    AppData.fullscreen_hide_mode.set(shared_preference.getBoolean("fullscreen_hide_nav", false) ? 2 : 0);
+
+                    AppData.commit(context, AppData.search_url, AppData.fullscreen_hide_mode);
+
+                    shared_preference.edit().remove("fullscreen_hide_nav").apply();
                 }
             }
 
