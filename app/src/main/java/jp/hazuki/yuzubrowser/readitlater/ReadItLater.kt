@@ -20,6 +20,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
 fun save(context: Context, resolver: ContentResolver, webView: CustomWebView) {
@@ -33,7 +34,7 @@ fun save(context: Context, resolver: ContentResolver, webView: CustomWebView) {
         val path = cursor.getString(0)
         cursor.close()
         if (webView.saveWebArchiveMethod(path)) {
-            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.saved_file) + webView.title, Toast.LENGTH_SHORT).show()
             return
         }
     }

@@ -19,10 +19,8 @@ package jp.hazuki.yuzubrowser.readitlater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
@@ -34,7 +32,6 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.FontUtils
 import jp.hazuki.yuzubrowser.utils.UrlUtils
-import jp.hazuki.yuzubrowser.utils.view.FRelativeLayout
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener
@@ -122,7 +119,6 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
         val date = DateFormat.getDateFormat(context)!!
         @SuppressLint("SimpleDateFormat")
         val time = SimpleDateFormat("kk:mm")
-        val foregroundOverlay = ColorDrawable(ResourcesCompat.getColor(context.resources, R.color.selected_overlay, context.theme))
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ReaderViewHolder {
             return ReaderViewHolder(inflater.inflate(R.layout.read_it_later_item, parent, false), this)
@@ -132,14 +128,14 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
             val d = Date(item.time)
             holder.time.text = date.format(d) + " " + time.format(d)
 
-            (holder.itemView as FRelativeLayout).foreground =
-                    if (isMultiSelectMode && isSelected(position)) foregroundOverlay else null
+            holder.foreground.visibility = if (isMultiSelectMode && isSelected(position)) View.VISIBLE else View.INVISIBLE
         }
 
         private class ReaderViewHolder(view: View, adapter: ReaderAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<ReadItem>(view, adapter) {
             val title = view.findViewById<TextView>(R.id.titleTextView)!!
             val url = view.findViewById<TextView>(R.id.urlTextView)!!
             val time = view.findViewById<TextView>(R.id.timeTextView)!!
+            val foreground = view.findViewById<View>(R.id.foreground)!!
 
             init {
                 val font = AppData.font_size.readItLater.get()

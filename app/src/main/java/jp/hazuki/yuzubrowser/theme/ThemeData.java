@@ -234,7 +234,7 @@ public class ThemeData {
                     }
                     continue;
                 }
-                if ("refreshUseDark".equalsIgnoreCase(field)) {
+                if ("pullToRefreshDark".equalsIgnoreCase(field)) {
                     refreshUseDark = getBoolean(parser);
                     refreshColorDef = true;
                     continue;
