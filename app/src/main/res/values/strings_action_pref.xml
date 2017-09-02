@@ -19,8 +19,9 @@
 
     <string name="action_start_activity_edit_intent">Edit intent</string>
     <string name="action_start_activity_edit_url">Edit query URL</string>
-    <string name="action_screenshot_all">Capture all(Malfunction)</string>
+    <string name="action_screenshot_all">Capture all</string>
     <string name="action_screenshot_path">Save directory</string>
+    <string name="action_screenshot_full_error">Slow rendering must be enabled if you want to use \"Capture all\".</string>
     <string name="action_mousepointer_backfinish">Finish when back button is pressed</string>
     <string name="action_translate_from">From</string>
     <string name="action_translate_to">To</string>

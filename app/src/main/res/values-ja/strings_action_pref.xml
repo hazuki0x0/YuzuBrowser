@@ -19,8 +19,9 @@
 
     <string name="action_start_activity_edit_intent">インテントの編集</string>
     <string name="action_start_activity_edit_url">クエリURLの編集</string>
-    <string name="action_screenshot_all">全てキャプチャ(動作不良)</string>
+    <string name="action_screenshot_all">全てキャプチャ</string>
     <string name="action_screenshot_path">保存先</string>
+    <string name="action_screenshot_full_error">「全てキャプチャ」を使用する場合は、スローレンダリングを有効にする必要があります。</string>
     <string name="action_mousepointer_backfinish">戻るボタンで終了する</string>
     <string name="action_translate_from">変換元</string>
     <string name="action_translate_to">変換先</string>

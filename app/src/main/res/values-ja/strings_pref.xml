@@ -414,4 +414,6 @@
         <item>ナビバーを隠す</item>
         <item>両方を隠す</item>
     </string-array>
+    <string name="pref_slow_rendering">スローレンダリング</string>
+    <string name="pref_slow_rendering_alert">警告\nこの機能を有効にするとフリーズが頻発する場合があります。\nまた、切り替えにはアプリ履歴から、ブラウザの再起動が必要です。\nスクリーンショットの全てキャプチャを使用する以外でのこの機能の利用はおすすめしません。</string>
 </resources>

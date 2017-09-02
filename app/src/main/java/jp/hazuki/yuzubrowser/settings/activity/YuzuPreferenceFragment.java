@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompatDividers;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.NightModePreference;
 import jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference;
+import jp.hazuki.yuzubrowser.settings.preference.SlowRenderingPreference;
 import jp.hazuki.yuzubrowser.settings.preference.WebTextSizePreference;
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference;
 import jp.hazuki.yuzubrowser.settings.preference.common.CustomDialogPreference;
@@ -38,7 +40,6 @@ import jp.hazuki.yuzubrowser.settings.preference.common.IntListPreference;
 import jp.hazuki.yuzubrowser.settings.preference.common.MultiListIntPreference;
 import jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference;
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference;
-import jp.hazuki.yuzubrowser.settings.preference.common.YuzuPreferenceDialog;
 
 public abstract class YuzuPreferenceFragment extends PreferenceFragmentCompatDividers {
     private static final String FRAGMENT_DIALOG_TAG = "android.support.v7.preference.PreferenceFragment.DIALOG";
@@ -91,7 +92,7 @@ public abstract class YuzuPreferenceFragment extends PreferenceFragmentCompatDiv
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         if (this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG_TAG) == null) {
-            YuzuPreferenceDialog dialog;
+            DialogFragment dialog;
 
             if (preference instanceof StrToIntListPreference) {
                 dialog = StrToIntListPreference.PreferenceDialog.newInstance(preference);
@@ -111,6 +112,8 @@ public abstract class YuzuPreferenceFragment extends PreferenceFragmentCompatDiv
                 dialog = NightModePreference.SettingDialog.newInstance(preference);
             } else if (preference instanceof WebTextSizePreference) {
                 dialog = WebTextSizePreference.SizeDialog.newInstance(preference);
+            } else if (preference instanceof SlowRenderingPreference) {
+                dialog = SlowRenderingPreference.WarningDialog.newInstance(preference);
             } else if (preference instanceof CustomDialogPreference) {
                 ((CustomDialogPreference) preference).show(getChildFragmentManager());
                 return;

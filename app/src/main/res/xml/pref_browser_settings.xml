@@ -160,4 +160,8 @@
         android:title="@string/pref_auto_tab_save_delay"
         app:seekMax="3600"
         app:seekMin="0" />
+
+    <jp.hazuki.yuzubrowser.settings.preference.SlowRenderingPreference
+        android:key="slow_rendering"
+        android:title="@string/pref_slow_rendering"/>
 </PreferenceScreen>

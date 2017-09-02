@@ -3645,7 +3645,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     try {
                         switch (type) {
                             case SaveScreenshotSingleAction.SS_TYPE_ALL:
-                                if (WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file))
+                                if (WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView, file))
                                     Toast.makeText(getApplicationContext(), getString(R.string.saved_file) + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                                 else
                                     Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_SHORT).show();
@@ -3675,7 +3675,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         boolean result = false;
                         switch (type) {
                             case ShareScreenshotSingleAction.SS_TYPE_ALL:
-                                result = WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView.getWebView(), file);
+                                result = WebViewUtils.savePictureOverall(mTabManager.get(target).mWebView, file);
                                 break;
                             case ShareScreenshotSingleAction.SS_TYPE_PART:
                                 result = WebViewUtils.savePicturePart(mTabManager.get(target).mWebView.getWebView(), file);

@@ -8,7 +8,14 @@
         android:id="@+id/captureAllCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/action_screenshot_all" />
+        android:text="@string/action_screenshot_all"
+        android:enabled="false"/>
+
+    <TextView
+        android:id="@+id/captureAllErrorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_screenshot_full_error"/>
 
     <!--
     <jp.hazuki.yuzubrowser.utils.view.filelist.FileListButton

@@ -1,9 +1,10 @@
 package jp.hazuki.yuzubrowser.action.item;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.CheckBox;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.SingleAction;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo;
 
 public class ShareScreenshotSingleAction extends SingleAction implements Parcelable {
@@ -80,21 +82,25 @@ public class ShareScreenshotSingleAction extends SingleAction implements Parcela
 
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
-        final CheckBox checkbox = new CheckBox(context);
-        checkbox.setText(R.string.action_screenshot_all);
-        checkbox.setChecked(mSsType == SS_TYPE_ALL);
+        View view = LayoutInflater.from(context).inflate(R.layout.action_screenshot_settings, null);
+        CheckBox captureAllCheckBox = view.findViewById(R.id.captureAllCheckBox);
+        view.findViewById(R.id.folderEditText).setVisibility(View.GONE);
+
+        captureAllCheckBox.setChecked(mSsType == SS_TYPE_ALL);
+
+        if (AppData.slow_rendering.get()) {
+            captureAllCheckBox.setEnabled(true);
+            view.findViewById(R.id.captureAllErrorTextView).setVisibility(View.GONE);
+        }
 
         new AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)
-                .setView(checkbox)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (checkbox.isChecked())
-                            mSsType = SS_TYPE_ALL;
-                        else
-                            mSsType = SS_TYPE_PART;
-                    }
+                .setView(view)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    if (captureAllCheckBox.isChecked())
+                        mSsType = SS_TYPE_ALL;
+                    else
+                        mSsType = SS_TYPE_PART;
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
