@@ -25,7 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
@@ -49,8 +49,8 @@ public class HtmlFetcher {
 
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader("urls.txt"));
-        String line = null;
-        Set<String> existing = new LinkedHashSet<String>();
+        String line;
+        Set<String> existing = new HashSet<>();
         while ((line = reader.readLine()) != null) {
             int index1 = line.indexOf("\"");
             int index2 = line.indexOf("\"", index1 + 1);
@@ -83,7 +83,7 @@ public class HtmlFetcher {
     private AtomicInteger cacheCounter = new AtomicInteger(0);
     private int maxTextLength = -1;
     private ArticleTextExtractor extractor = new ArticleTextExtractor();
-    private Set<String> furtherResolveNecessary = new LinkedHashSet<String>() {
+    private Set<String> furtherResolveNecessary = new HashSet<String>() {
         {
             add("bit.ly");
             add("cli.gs");

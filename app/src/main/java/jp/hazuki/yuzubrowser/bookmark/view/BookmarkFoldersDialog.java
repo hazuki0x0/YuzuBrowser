@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.app.AlertDialog;
@@ -7,9 +23,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -18,6 +31,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
@@ -48,28 +62,15 @@ public class BookmarkFoldersDialog {
         final LayoutInflater inflater = LayoutInflater.from(mContext);
 
         View top = inflater.inflate(R.layout.dialog_title, null);
-        titleText = (TextView) top.findViewById(R.id.titleText);
-        ImageButton button = (ImageButton) top.findViewById(R.id.addButton);
+        titleText = top.findViewById(R.id.titleText);
+        ImageButton button = top.findViewById(R.id.addButton);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AddBookmarkFolderDialog(mContext, mManager, mContext.getString(R.string.new_folder_name), mCurrentFolder)
-                        .setOnClickListener(new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                setFolder(mCurrentFolder);
-                            }
-                        })
-                        .show();
-            }
-        });
-        button.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(mContext, R.string.new_folder_name, Toast.LENGTH_SHORT).show();
-                return true;
-            }
+        button.setOnClickListener(v -> new AddBookmarkFolderDialog(mContext, mManager, mContext.getString(R.string.new_folder_name), mCurrentFolder)
+                .setOnClickListener((dialog, which) -> setFolder(mCurrentFolder))
+                .show());
+        button.setOnLongClickListener(v -> {
+            Toast.makeText(mContext, R.string.new_folder_name, Toast.LENGTH_SHORT).show();
+            return true;
         });
 
         mDialog = new AlertDialog.Builder(context)
@@ -98,25 +99,19 @@ public class BookmarkFoldersDialog {
             }
         });
 
-        mListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BookmarkFolder folder = mFolderList.get(position);
-                if (folder == null)
-                    folder = mCurrentFolder.parent;
-                setFolder(folder);
-            }
+        mListView.setOnItemClickListener((parent, view, position, id) -> {
+            BookmarkFolder folder = mFolderList.get(position);
+            if (folder == null)
+                folder = mCurrentFolder.parent;
+            setFolder(folder);
         });
 
-        mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                BookmarkFolder folder = mFolderList.get(position);
-                if (folder == null)
-                    folder = mCurrentFolder.parent;
-                return mOnFolderSelectedListener != null &&
-                        mOnFolderSelectedListener.onFolderSelected(mDialog, folder);
-            }
+        mListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            BookmarkFolder folder = mFolderList.get(position);
+            if (folder == null)
+                folder = mCurrentFolder.parent;
+            return mOnFolderSelectedListener != null &&
+                    mOnFolderSelectedListener.onFolderSelected(mDialog, folder);
         });
     }
 
@@ -145,7 +140,7 @@ public class BookmarkFoldersDialog {
     }
 
     public BookmarkFoldersDialog setCurrentFolder(BookmarkFolder folder, BookmarkItem excludeItem) {
-        mExcludeList = new ArrayList<>();
+        mExcludeList = new HashSet<>();
         mExcludeList.add(excludeItem);
         setFolder(folder);
         return this;

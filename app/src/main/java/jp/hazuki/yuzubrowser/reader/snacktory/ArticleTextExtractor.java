@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -55,7 +55,7 @@ public class ArticleTextExtractor {
     private static final Pattern NEGATIVE_STYLE =
             Pattern.compile("hidden|display: ?none|font-size: ?small");
     private static final Pattern PASS_PATTERN = Pattern.compile("h\\d|img|p");
-    private static final Set<String> IGNORED_TITLE_PARTS = new LinkedHashSet<String>() {
+    private static final Set<String> IGNORED_TITLE_PARTS = new HashSet<String>() {
         {
             add("hacker news");
             add("facebook");
