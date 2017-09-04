@@ -4269,7 +4269,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 }
                 case SingleAction.READ_IT_LATER: {
                     MainTabData tab = mTabManager.get(target);
-                    ReadItLaterKt.save(BrowserActivity.this, getContentResolver(), tab.mWebView);
+                    ReadItLaterKt.save(BrowserActivity.this, getContentResolver(), tab.getOriginalUrl(), tab.mWebView);
                     break;
                 }
                 case SingleAction.READ_IT_LATER_LIST:

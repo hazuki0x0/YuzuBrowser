@@ -25,3 +25,4 @@
 public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
 -keep class android.support.v7.widget.SearchView { *; }
 -keepattributes SourceFile,LineNumberTable
+-keeppackagenames org.jsoup.nodes

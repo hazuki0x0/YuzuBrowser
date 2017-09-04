@@ -23,10 +23,14 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
-fun save(context: Context, resolver: ContentResolver, webView: CustomWebView) {
+fun save(context: Context, resolver: ContentResolver, url: String?, webView: CustomWebView) {
+    val page = url ?: webView.url
+    if (page.isNullOrEmpty()) {
+        Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show()
+    }
     val uri = resolver.insert(ReadItLaterProvider.EDIT_URI, ContentValues().apply {
-        put(ReadItLaterProvider.URL, webView.originalUrl)
-        put(ReadItLaterProvider.TITLE, webView.title)
+        put(ReadItLaterProvider.URL, page)
+        put(ReadItLaterProvider.TITLE, webView.title ?: page)
     })
     val cursor = resolver.query(uri, null, null, null, null)
     if (cursor != null) {
