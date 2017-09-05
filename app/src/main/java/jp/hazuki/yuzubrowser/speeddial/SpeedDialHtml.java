@@ -32,6 +32,7 @@ import java.util.Map;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.HtmlUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 
@@ -149,6 +150,10 @@ public class SpeedDialHtml {
         }
 
         return getNoCacheResponse("text/css", builder);
+    }
+
+    public static void clearCache(Context context) {
+        FileUtils.deleteFile(new File(context.getCacheDir(), FOLDER));
     }
 
     private static WebResourceResponse getNoCacheResponse(String mimeType, CharSequence sequence) {
