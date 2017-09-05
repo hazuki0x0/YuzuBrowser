@@ -27,6 +27,7 @@ fun save(context: Context, resolver: ContentResolver, url: String?, webView: Cus
     val page = url ?: webView.url
     if (page.isNullOrEmpty()) {
         Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show()
+        return
     }
     val uri = resolver.insert(ReadItLaterProvider.EDIT_URI, ContentValues().apply {
         put(ReadItLaterProvider.URL, page)
