@@ -22,12 +22,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceScreen;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompatDividers;
 
+import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.NightModePreference;
 import jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference;
@@ -71,6 +74,25 @@ public abstract class YuzuPreferenceFragment extends PreferenceFragmentCompatDiv
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        PreferenceScreen screen = getPreferenceScreen();
+        if (screen != null) {
+            String key = null;
+            CharSequence title;
+            if (getArguments() != null) {
+                key = getArguments().getString(ARG_PREFERENCE_ROOT);
+            }
+            if (!TextUtils.isEmpty(key)) {
+                title = screen.findPreference(key).getTitle();
+            } else {
+                title = screen.getTitle();
+            }
+            getActivity().setTitle(TextUtils.isEmpty(title) ? getText(R.string.pref_settings) : title);
+        }
     }
 
     @Override
