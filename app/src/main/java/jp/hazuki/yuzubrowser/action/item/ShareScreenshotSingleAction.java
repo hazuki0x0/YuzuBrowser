@@ -109,6 +109,6 @@ public class ShareScreenshotSingleAction extends SingleAction implements Parcela
     }
 
     public int getType() {
-        return mSsType;
+        return AppData.slow_rendering.get() ? mSsType : SS_TYPE_PART;
     }
 }

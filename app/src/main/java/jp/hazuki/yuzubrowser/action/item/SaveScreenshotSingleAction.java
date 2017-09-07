@@ -126,7 +126,7 @@ public class SaveScreenshotSingleAction extends SingleAction implements Parcelab
     }
 
     public int getType() {
-        return mSsType;
+        return AppData.slow_rendering.get() ? mSsType : SS_TYPE_PART;
     }
 
     public File getFolder() {
