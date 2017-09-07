@@ -242,11 +242,21 @@
         android:key="reader_settings"
         android:title="@string/pref_reader_settings"/>
 
-    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
-        android:entries="@array/pref_touch_scrollbar_list"
-        android:entryValues="@array/pref_touch_scrollbar_values"
-        android:key="touch_scrollbar"
-        android:title="@string/pref_touch_scrollbar"/>
+    <PreferenceScreen
+        android:key="ps_touch_scrollbar"
+        android:title="@string/pref_touch_scrollbar">
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_touch_scrollbar_list"
+            android:entryValues="@array/pref_touch_scrollbar_values"
+            android:key="touch_scrollbar"
+            android:title="@string/pref_display_position"/>
+
+        <SwitchPreference
+            android:key="touch_scrollbar_fixed_toolbar"
+            android:title="@string/pref_touch_scrollbar_do_not_move_toolbar"/>
+
+    </PreferenceScreen>
 
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_oritentation_list"

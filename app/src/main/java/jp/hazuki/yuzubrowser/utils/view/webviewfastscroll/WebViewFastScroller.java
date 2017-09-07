@@ -43,6 +43,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
@@ -185,7 +186,7 @@ public class WebViewFastScroller extends FrameLayout {
                             (mWebView.computeVerticalScrollRangeMethod() + (mAppBarLayout == null ? 0 : mAppBarLayout.getTotalScrollRange()))
                             * computeDeltaScale(event));
 
-                    if (mCoordinatorLayout != null && mAppBarLayout != null) {
+                    if (!AppData.touch_scrollbar_fixed_toolbar.get() && mCoordinatorLayout != null && mAppBarLayout != null) {
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
                         AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
                         if (behavior != null) {
