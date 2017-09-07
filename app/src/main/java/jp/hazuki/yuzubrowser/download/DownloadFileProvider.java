@@ -44,8 +44,11 @@ public class DownloadFileProvider extends ContentProvider {
 
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".downloadFileProvider";
 
+    private String dataDir;
+
     @Override
     public boolean onCreate() {
+        dataDir = getContext().getApplicationInfo().dataDir;
         return true;
     }
 
@@ -119,7 +122,7 @@ public class DownloadFileProvider extends ContentProvider {
         return new Uri.Builder().scheme(SCHEME).authority(AUTHORITY).encodedPath(path).build();
     }
 
-    public static File getFileForUri(Uri uri) {
+    public File getFileForUri(Uri uri) {
         String path = uri.getEncodedPath();
 
         final int splitIndex = path.indexOf('/', 1);
@@ -136,6 +139,10 @@ public class DownloadFileProvider extends ContentProvider {
             file = file.getCanonicalFile();
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to resolve canonical path for " + file);
+        }
+
+        if (file.getAbsolutePath().startsWith(dataDir)) {
+            throw new IllegalArgumentException("No files supported by provider at " + uri);
         }
         return file;
     }
