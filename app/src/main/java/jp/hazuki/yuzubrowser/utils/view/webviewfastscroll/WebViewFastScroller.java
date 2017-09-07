@@ -333,7 +333,7 @@ public class WebViewFastScroller extends FrameLayout {
         } else {
             drawable = new InsetDrawable(new ColorDrawable(mBarColor), 0, 0, mBarInset, 0);
         }
-        drawable.setAlpha(57);
+        drawable.setAlpha(22);
         mBar.setBackground(drawable);
     }
 
