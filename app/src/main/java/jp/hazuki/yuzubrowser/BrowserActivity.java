@@ -165,7 +165,7 @@ import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureManager;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureDetector;
 import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureInfo;
-import jp.hazuki.yuzubrowser.gesture.view.CustomGestureOverlayView;
+import jp.hazuki.yuzubrowser.gesture.view.GestureFrameLayout;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager;
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager;
@@ -344,7 +344,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
     private TabListLayout mTabManagerView;
     private FrameLayout webFrameLayout;
-    private CustomGestureOverlayView webGestureOverlayView;
+    private GestureFrameLayout webGestureOverlayView;
     private GestureOverlayView mSubGestureView;
     private RootLayout superFrameLayout;
     private CustomCoordinatorLayout coordinatorLayout;
@@ -380,10 +380,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         mTabManager = TabManagerFactory.newInstance(this);
 
         webFrameLayout = findViewById(R.id.webFrameLayout);
-        View webOuterFrame = findViewById(R.id.webOuterFrameLayout);
         webGestureOverlayView = findViewById(R.id.webGestureOverlayView);
         coordinatorLayout = findViewById(R.id.coordinator);
-        webViewBehavior = (WebViewBehavior) ((CoordinatorLayout.LayoutParams) webOuterFrame.getLayoutParams()).getBehavior();
+        webViewBehavior = (WebViewBehavior) ((CoordinatorLayout.LayoutParams) webGestureOverlayView.getLayoutParams()).getBehavior();
         superFrameLayout = findViewById(R.id.superFrameLayout);
         superFrameLayout.setOnImeShownListener(visible -> {
             if (mIsImeShown != visible) {
@@ -414,7 +413,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
         webViewFastScroller.attachAppBarLayout(coordinatorLayout, appBarLayout);
 
-        webGestureOverlayView.setWebFrame(appBarLayout, webOuterFrame);
+        webGestureOverlayView.setWebFrame(appBarLayout);
 
         final Context appContext = getApplicationContext();
 

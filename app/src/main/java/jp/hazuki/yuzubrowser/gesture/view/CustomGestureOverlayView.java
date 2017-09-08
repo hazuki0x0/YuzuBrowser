@@ -18,17 +18,11 @@ package jp.hazuki.yuzubrowser.gesture.view;
 
 import android.content.Context;
 import android.gesture.GestureOverlayView;
-import android.graphics.Rect;
-import android.support.design.widget.AppBarLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 
 public class CustomGestureOverlayView extends GestureOverlayView {
 
-    private int top;
-    private boolean touchInner;
-    private boolean touchable;
     private OnTouchListener listener;
 
     public CustomGestureOverlayView(Context context) {
@@ -45,17 +39,15 @@ public class CustomGestureOverlayView extends GestureOverlayView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        touchable = event.getRawY() > top;
-        int action = event.getActionMasked();
-        if (action == MotionEvent.ACTION_DOWN) {
-            touchInner = touchable;
-        }
+        return false;
+    }
+
+    boolean preDispatchTouchEvent(MotionEvent event) {
         if (listener != null) {
             boolean result = false;
-            if ((touchInner && action == MotionEvent.ACTION_MOVE && !touchable) || listener.onTouch(this, event)) {
+            if (listener.onTouch(this, event)) {
                 event.setAction(MotionEvent.ACTION_CANCEL);
                 result = true;
-                touchable = true;
             }
 
             result |= super.dispatchTouchEvent(event);
@@ -68,18 +60,5 @@ public class CustomGestureOverlayView extends GestureOverlayView {
     @Override
     public void setOnTouchListener(OnTouchListener l) {
         listener = l;
-    }
-
-    public void setWebFrame(AppBarLayout appBarLayout, View frame) {
-        appBarLayout.addOnOffsetChangedListener((appBarLayout1, verticalOffset) -> {
-            Rect rect = new Rect();
-            frame.getGlobalVisibleRect(rect);
-            top = rect.top;
-        });
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return touchable && super.isEnabled();
     }
 }
