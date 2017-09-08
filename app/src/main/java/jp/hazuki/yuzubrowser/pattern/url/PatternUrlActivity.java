@@ -205,6 +205,8 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
 
             view_jsCheckBox.setOnCheckedChangeListener((compoundButton, b) -> view_jsSwitch.setEnabled(b));
 
+            view_navLockCheckBox.setOnCheckedChangeListener((compoundButton, b) -> view_navLockSwitch.setEnabled(b));
+
             final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.pattern_change_websettings)
                     .setView(view)
@@ -228,7 +230,7 @@ public class PatternUrlActivity extends PatternActivity<PatternUrlChecker> {
                 }
 
                 int navLock = WebSettingPatternAction.UNDEFINED;
-                if (view_navLockCheckBox.isEnabled()) {
+                if (view_navLockCheckBox.isChecked()) {
                     if (view_navLockSwitch.isChecked()) {
                         navLock = WebSettingPatternAction.ENABLE;
                     } else {
