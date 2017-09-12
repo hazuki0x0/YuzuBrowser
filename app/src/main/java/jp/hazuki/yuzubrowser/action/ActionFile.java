@@ -2,7 +2,6 @@ package jp.hazuki.yuzubrowser.action;
 
 import android.content.Context;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 
@@ -17,6 +16,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
 public abstract class ActionFile implements Serializable {
@@ -36,8 +36,7 @@ public abstract class ActionFile implements Serializable {
 
         try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
 
-            JsonFactory factory = new JsonFactory();
-            JsonParser parser = factory.createParser(is);
+            JsonParser parser = JsonUtils.getFactory().createParser(is);
 
             if (!load(parser)) {
                 Logger.e(TAG, "loadMain error (return false)");
@@ -60,8 +59,7 @@ public abstract class ActionFile implements Serializable {
 
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
 
-            JsonFactory factory = new JsonFactory();
-            JsonGenerator generator = factory.createGenerator(os);
+            JsonGenerator generator = JsonUtils.getFactory().createGenerator(os);
 
             if (!write(generator)) {
                 Logger.e(TAG, "writeMain error (return false)");

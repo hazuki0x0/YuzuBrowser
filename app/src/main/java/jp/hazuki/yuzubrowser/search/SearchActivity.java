@@ -12,7 +12,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -26,14 +25,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.search.settings.SearchUrlManager;
 import jp.hazuki.yuzubrowser.search.suggest.Suggestion;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.theme.ThemeData;
@@ -41,16 +40,18 @@ import jp.hazuki.yuzubrowser.utils.ClipboardUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.WebUtils;
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity;
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView;
 
-public class SearchActivity extends AppCompatActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
+public class SearchActivity extends ThemeActivity implements TextWatcher, LoaderCallbacks<Cursor>, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
     private static final String TAG = "SearchActivity";
     public static final String EXTRA_URI = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.uri";
     public static final String EXTRA_QUERY = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.query";
     public static final String EXTRA_SELECT_INITIAL_QUERY = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.selectinitquery";
     public static final String EXTRA_APP_DATA = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.appdata";
     public static final String EXTRA_SEARCH_MODE = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.searchmode";
+    public static final String EXTRA_SEARCH_URL = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.searchUrl";
     public static final String EXTRA_OPEN_NEW_TAB = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.openNewTab";
     public static final String EXTRA_REVERSE = "jp.hazuki.yuzubrowser.search.SearchActivity.extra.reverse";
     public static final int SEARCH_MODE_AUTO = 0;
@@ -64,6 +65,8 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
 
     private EditText editText;
     private SearchRecyclerAdapter adapter;
+    private Spinner searchUrlSpinner;
+    private SearchUrlManager manager;
 
     private String initQuery;
     private String initDecodedQuery = "";
@@ -84,12 +87,16 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
         SearchButton searchButton = findViewById(R.id.searchButton);
         OutSideClickableRecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        recyclerView.setOnOutSideClickListener(new OutSideClickableRecyclerView.OnOutSideClickListener() {
-            @Override
-            public void onOutSideClick() {
-                finish();
-            }
-        });
+        searchUrlSpinner = findViewById(R.id.searchUrlSpinner);
+        manager = new SearchUrlManager(this);
+        searchUrlSpinner.setAdapter(new SearchUrlSpinnerAdapter(this, manager));
+        searchUrlSpinner.setSelection(manager.getSelectedIndex());
+
+        if (!AppData.search_url_show_icon.get()) {
+            searchUrlSpinner.setVisibility(View.GONE);
+        }
+
+        recyclerView.setOnOutSideClickListener(this::finish);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -100,15 +107,10 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
             layoutManager.setReverseLayout(true);
         }
 
-        adapter = new SearchRecyclerAdapter(this, new ArrayList<Suggestion>(), this);
+        adapter = new SearchRecyclerAdapter(this, new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        recyclerView.setOnClickListener(view -> finish());
 
         if (ThemeData.isEnabled()) {
             if (ThemeData.getInstance().toolbarBackgroundColor != 0)
@@ -125,19 +127,17 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.setStatusBarColor(ThemeData.getInstance().statusBarColor);
+                window.getDecorView().setSystemUiVisibility(ThemeData.getSystemUiVisibilityFlag());
             }
         }
 
         editText.addTextChangedListener(this);
-        editText.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    finishWithResult(editText.getText().toString(), SEARCH_MODE_AUTO);
-                    return true;
-                }
-                return false;
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                finishWithResult(editText.getText().toString(), SEARCH_MODE_AUTO);
+                return true;
             }
+            return false;
         });
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
@@ -318,6 +318,7 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
         Intent data = new Intent();
         data.putExtra(EXTRA_QUERY, query);
         data.putExtra(EXTRA_SEARCH_MODE, mode);
+        data.putExtra(EXTRA_SEARCH_URL, manager.get(searchUrlSpinner.getSelectedItemPosition()).getUrl());
         data.putExtra(EXTRA_OPEN_NEW_TAB, openNewTab);
         if (mAppData != null)
             data.putExtra(EXTRA_APP_DATA, mAppData);
@@ -372,5 +373,10 @@ public class SearchActivity extends AppCompatActivity implements TextWatcher, Lo
             finish();
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected int lightThemeResource() {
+        return R.style.BrowserMinThemeLight_Transparent;
     }
 }

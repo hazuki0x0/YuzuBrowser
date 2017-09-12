@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser;
 
 import android.app.Application;
 import android.os.Environment;
+import android.webkit.WebView;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -57,6 +58,9 @@ public class BrowserApplication extends Application {
         ErrorReport.initialize(this);
         AppData.load(this);
         ErrorReport.setDetailedLog(AppData.detailed_log.get());
+        if (AppData.slow_rendering.get()) {
+            WebView.enableSlowWholeDocumentDraw();
+        }
     }
 
     public static File getExternalUserDirectory() {

@@ -20,6 +20,10 @@ public abstract class AbstractPatternChecker<T extends AbstractPatternAction> im
 
     public abstract String getTitle(Context context);
 
+    public abstract boolean isEnable();
+
+    public abstract void setEnable(boolean enable);
+
     public String getActionTitle(Context context) {
         return mPatternAction.getTitle(context);
     }

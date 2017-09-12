@@ -21,9 +21,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.view.View;
 
 import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -46,6 +46,7 @@ import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
@@ -56,6 +57,7 @@ class TabStorage {
     private static final String FILE_TAB_THUMBNAIL_SUFFIX = "_thumb";
     private List<TabIndexData> mTabIndexDataList;
     private final File tabPath;
+    private OnWebViewCreatedListener listener;
 
     public TabStorage(Context context) {
         tabPath = context.getDir("tabs", Context.MODE_PRIVATE);
@@ -147,13 +149,17 @@ class TabStorage {
         saveThumbnails();
     }
 
-    public CustomWebView loadWebView(WebBrowser webBrowser, TabIndexData data) {
+    public MainTabData loadWebView(WebBrowser webBrowser, TabIndexData data, View tabView) {
         if (data == null) return null;
         Bundle bundle = loadBundle(new File(tabPath, Long.toString(data.getId())));
         CustomWebView webView = webBrowser.makeWebView(WebViewFactory.getMode(bundle));
-        webView.restoreState(bundle);
         webView.setIdentityId(data.getId());
-        return webView;
+        MainTabData tab = data.getMainTabData(webView, tabView);
+        if (listener != null) {
+            listener.onWebViewCreated(tab);
+        }
+        webView.restoreState(bundle);
+        return tab;
     }
 
     public TabIndexData saveWebView(MainTabData tabData) {
@@ -260,6 +266,10 @@ class TabStorage {
         FileUtils.deleteDirectoryContents(tabPath);
     }
 
+    public void setOnWebViewCreatedListener(OnWebViewCreatedListener listener) {
+        this.listener = listener;
+    }
+
     private static final String JSON_NAME_ID = "id";
     private static final String JSON_NAME_URL = "url";
     private static final String JSON_NAME_TITLE = "title";
@@ -270,8 +280,7 @@ class TabStorage {
 
     private List<TabIndexData> loadIndexJson(File file) {
         List<TabIndexData> tabIndexDataList = new ArrayList<>();
-        JsonFactory factory = new JsonFactory();
-        try (JsonParser parser = factory.createParser(file)) {
+        try (JsonParser parser = JsonUtils.getFactory().createParser(file)) {
             // 配列の処理
             if (parser.nextToken() == JsonToken.START_ARRAY) {
                 while (parser.nextToken() != JsonToken.END_ARRAY) {
@@ -324,8 +333,7 @@ class TabStorage {
     }
 
     private void saveIndexJson(File file, List<TabIndexData> tabIndexDataList) {
-        JsonFactory jsonFactory = new JsonFactory();
-        try (JsonGenerator generator = jsonFactory.createGenerator(file, JsonEncoding.UTF8)) {
+        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(file, JsonEncoding.UTF8)) {
             generator.writeStartArray();
             for (TabIndexData data : tabIndexDataList) {
                 generator.writeStartObject();
@@ -349,8 +357,7 @@ class TabStorage {
 
     public int loadCurrentTab() {
         int tab = 0;
-        JsonFactory factory = new JsonFactory();
-        try (JsonParser parser = factory.createParser(new File(tabPath, FILE_TAB_CURRENT))) {
+        try (JsonParser parser = JsonUtils.getFactory().createParser(new File(tabPath, FILE_TAB_CURRENT))) {
             if (parser.nextToken() == JsonToken.START_OBJECT) {
                 while (parser.nextToken() != JsonToken.END_OBJECT) {
                     String name = parser.getCurrentName();
@@ -369,8 +376,7 @@ class TabStorage {
     }
 
     public void saveCurrentTab(int currentTab) {
-        JsonFactory jsonFactory = new JsonFactory();
-        try (JsonGenerator generator = jsonFactory.createGenerator(new File(tabPath, FILE_TAB_CURRENT), JsonEncoding.UTF8)) {
+        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(new File(tabPath, FILE_TAB_CURRENT), JsonEncoding.UTF8)) {
             generator.writeStartObject();
             generator.writeNumberField(JSON_NAME_CURRENT_TAB, currentTab);
             generator.writeEndObject();

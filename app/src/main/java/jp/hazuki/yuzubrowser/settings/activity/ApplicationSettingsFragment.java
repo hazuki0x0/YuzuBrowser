@@ -20,23 +20,19 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+import android.support.annotation.Nullable;
+import android.support.v7.preference.SwitchPreferenceCompat;
 import android.view.MenuItem;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 
-public class ApplicationSettingsFragment extends PreferenceFragment {
+public class ApplicationSettingsFragment extends YuzuPreferenceFragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_app_settings);
 
-        SwitchPreference pref = (SwitchPreference) findPreference("enable_share");
+        SwitchPreferenceCompat pref = (SwitchPreferenceCompat) findPreference("enable_share");
         String packageName = getActivity().getPackageName();
         final ComponentName componentName = new ComponentName(packageName,
                 packageName + ".ShareActivity");
@@ -46,20 +42,17 @@ public class ApplicationSettingsFragment extends PreferenceFragment {
         pref.setChecked(pm.getComponentEnabledSetting(componentName)
                 != PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
 
-        pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((boolean) newValue) {
-                    pm.setComponentEnabledSetting(componentName,
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP);
-                } else {
-                    pm.setComponentEnabledSetting(componentName,
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
-                }
-                return true;
+        pref.setOnPreferenceChangeListener((preference, newValue) -> {
+            if ((boolean) newValue) {
+                pm.setComponentEnabledSetting(componentName,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP);
+            } else {
+                pm.setComponentEnabledSetting(componentName,
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
             }
+            return true;
         });
     }
 

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser">
-    <PreferenceScreen android:title="@string/pref_hardbtn_settings">
+                  xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser"
+                  android:title="@string/pref_action_settings">
+    <PreferenceScreen
+        android:key="ps_hardware_button"
+        android:title="@string/pref_hardbtn_settings">
         <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
             android:title="@string/pref_btn_back_press"
             app:actionGroup="h_btn"
@@ -36,7 +39,9 @@
             android:entries="@array/action_open_menu_list"
             android:entryValues="@array/action_open_menu_values" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_softbtn_settings">
+    <PreferenceScreen
+        android:key="ps_software_button"
+        android:title="@string/pref_softbtn_settings">
         <PreferenceCategory>
             <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
                 android:key="swipebtn_sensitivity"
@@ -73,7 +78,9 @@
                 app:actionId="custombar1" />
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_tab_action">
+    <PreferenceScreen
+        android:key="ps_tab_action"
+        android:title="@string/pref_tab_action">
         <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
             android:key="tab_action_sensitivity"
             android:title="@string/pref_sensitivity_distance"
@@ -103,7 +110,9 @@
         app:actionGroup="menu"
         app:actionId="menuBrowserActivity" />
 
-    <PreferenceScreen android:title="@string/pref_web_gesture_settings">
+    <PreferenceScreen
+        android:key="ps_web_gesture"
+        android:title="@string/pref_web_gesture_settings">
         <SwitchPreference
             android:key="gesture_enable_web"
             android:title="@string/pref_gesture_enable" />
@@ -123,7 +132,9 @@
             app:gestureId="web"
             app:intentTitle="@string/pref_web_gesture_settings" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_sub_gesture_settings">
+    <PreferenceScreen
+        android:key="ps_sub_gesture"
+        android:title="@string/pref_sub_gesture_settings">
         <jp.hazuki.yuzubrowser.settings.preference.common.FloatSeekbarPreference
             android:key="gesture_score_sub"
             android:title="@string/pref_gesture_score"
@@ -139,7 +150,9 @@
     <Preference
         android:key="mf_gesture"
         android:title="@string/pref_multi_finger_gesture_settings" />
-    <PreferenceScreen android:title="@string/pref_flick_settings">
+    <PreferenceScreen
+        android:key="ps_flick"
+        android:title="@string/pref_flick_settings">
         <PreferenceCategory>
             <SwitchPreference
                 android:key="flick_enable"
@@ -173,7 +186,9 @@
                 app:actionId="flickRight" />
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_web_swipe_settings">
+    <PreferenceScreen
+        android:key="ps_two_finger_swipe"
+        android:title="@string/pref_web_swipe_settings">
         <PreferenceCategory>
             <SwitchPreference
                 android:key="webswipe_enable"
@@ -209,7 +224,9 @@
                 app:actionId="swipeRight" />
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_double_tap_flick_settings">
+    <PreferenceScreen
+        android:key="ps_double_tap_flick"
+        android:title="@string/pref_double_tap_flick_settings">
         <PreferenceCategory>
             <SwitchPreference
                 android:key="double_tap_flick_enable"
@@ -246,7 +263,9 @@
 
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_qc_settings">
+    <PreferenceScreen
+        android:key="ps_qc"
+        android:title="@string/pref_qc_settings">
         <SwitchPreference
             android:key="qc_enable"
             android:title="@string/pref_qc_enable" />
@@ -285,7 +304,9 @@
             app:actionGroup="qc"
             app:actionId="qcLevel3" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_lpress_settings">
+    <PreferenceScreen
+        android:key="ps_long_press"
+        android:title="@string/pref_lpress_settings">
         <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
             android:entries="@array/pref_lpress_link_list"
             android:entryValues="@array/pref_lpress_link_values"

@@ -37,6 +37,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
 
     private MultiTouchGestureDetector mGestureDetector;
     private OnScrollChangedListener mOnScrollChangedListener;
+    private OnScrollChangedListener mScrollBarListener;
     private View mTitleBar;
 
     private int firstY;
@@ -53,6 +54,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private boolean scrollExcessPlay;
     private final int scrollSlop;
     private boolean touching = false;
+    private boolean scrollable = false;
 
     public NormalWebView(Context context) {
         this(context, null);
@@ -145,6 +147,8 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
+        if (mScrollBarListener != null)
+            mScrollBarListener.onScrollChanged(l, t, oldl, oldt);
         if (mOnScrollChangedListener != null)
             mOnScrollChangedListener.onScrollChanged(l, t, oldl, oldt);
         if (mTitleBar != null)
@@ -369,6 +373,11 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         mOnScrollChangedListener = l;
     }
 
+    @Override
+    public void setScrollBarListener(OnScrollChangedListener l) {
+        mScrollBarListener = l;
+    }
+
     // Nested Scroll implements
 
     @Override
@@ -424,5 +433,17 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     @Override
     public boolean isTouching() {
         return touching;
+    }
+
+    @Override
+    protected int computeVerticalScrollRange() {
+        int scrollRange = super.computeVerticalScrollRange();
+        scrollable = scrollRange > getHeight();
+        return scrollRange;
+    }
+
+    @Override
+    public boolean isScrollable() {
+        return scrollable;
     }
 }

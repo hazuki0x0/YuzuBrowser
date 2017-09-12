@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.BuildConfig;
+import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionList;
 import jp.hazuki.yuzubrowser.action.SingleAction;
 import jp.hazuki.yuzubrowser.action.item.CustomMenuSingleAction;
@@ -40,6 +41,8 @@ import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
+import jp.hazuki.yuzubrowser.search.settings.SearchUrl;
+import jp.hazuki.yuzubrowser.search.settings.SearchUrlManager;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.settings.container.BooleanContainer;
 import jp.hazuki.yuzubrowser.settings.container.Containable;
@@ -48,6 +51,7 @@ import jp.hazuki.yuzubrowser.settings.container.IntContainer;
 import jp.hazuki.yuzubrowser.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
+import jp.hazuki.yuzubrowser.settings.container.custom.FontSizeContainer;
 import jp.hazuki.yuzubrowser.tab.manager.BundleDataBaseConverter;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.useragent.UserAgent;
@@ -179,7 +183,7 @@ public class AppData {
     public static final IntContainer show_tab_divider = new IntContainer("show_tab_divider", 0);
     public static final BooleanContainer volume_default_playing = new BooleanContainer("volume_default_playing", true);
     public static final BooleanContainer snap_toolbar = new BooleanContainer("snap_toolbar", true);
-    public static final BooleanContainer fullscreen_hide_nav = new BooleanContainer("fullscreen_hide_nav", false);
+    public static final IntContainer fullscreen_hide_mode = new IntContainer("fullscreen_hide_mode", 0);
     public static final BooleanContainer speeddial_show_header = new BooleanContainer("speeddial_show_header", true);
     public static final BooleanContainer speeddial_show_search = new BooleanContainer("speeddial_show_search", true);
     public static final BooleanContainer speeddial_show_icon = new BooleanContainer("speeddial_show_icon", true);
@@ -188,6 +192,14 @@ public class AppData {
     public static final IntContainer speeddial_column_width = new IntContainer("speeddial_column_width", 80);
     public static final BooleanContainer safe_browsing = new BooleanContainer("safe_browsing", true);
     public static final BooleanContainer save_tabs_for_crash = new BooleanContainer("save_tabs_for_crash", false);
+    public static final IntContainer touch_scrollbar = new IntContainer("touch_scrollbar", -1);
+    public static final IntContainer reader_theme = new IntContainer("reader_theme", -1);
+    public static final IntContainer reader_text_size = new IntContainer("reader_text_size", 18);
+    public static final StringContainer reader_text_font = new StringContainer("reader_text_font", "");
+    public static final FontSizeContainer font_size = new FontSizeContainer();
+    public static final BooleanContainer search_url_show_icon = new BooleanContainer("search_url_show_icon", true);
+    public static final BooleanContainer slow_rendering = new BooleanContainer("slow_rendering", false);
+    public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
@@ -321,6 +333,21 @@ public class AppData {
             encodes.add(new WebTextEncode("EUC-JP"));
             encodes.add(new WebTextEncode("ISO-2022-JP"));
             encodes.write(context);
+
+            {
+                SearchUrlManager urlManager = new SearchUrlManager(context);
+                String[] urls = context.getResources().getStringArray(R.array.default_search_url);
+                String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
+                int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
+
+                for (int i = 0; i < urls.length; i++) {
+                    urlManager.add(new SearchUrl(titles[i], urls[i], colors[i]));
+                }
+
+                urlManager.save();
+                AppData.search_url.set(urlManager.get(0).getUrl());
+                AppData.commit(context, AppData.search_url);
+            }
         }
 
         int versionCode = BuildConfig.VERSION_CODE;
@@ -356,6 +383,31 @@ public class AppData {
                 if (lastLaunch <= 300103 && "SINGLE_COLUMN>".equals(AppData.layout_algorithm.get())) {
                     AppData.layout_algorithm.set("SINGLE_COLUMN");
                     AppData.commit(context, AppData.layout_algorithm);
+                }
+
+                if (lastLaunch < 300200) {
+                    SearchUrlManager urlManager = new SearchUrlManager(context);
+                    String[] urls = context.getResources().getStringArray(R.array.default_search_url);
+                    String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
+                    int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
+
+                    for (int i = 0; i < urls.length; i++) {
+                        urlManager.add(new SearchUrl(titles[i], urls[i], colors[i]));
+                    }
+
+                    if (!"http://www.google.com/m?q=%s".equals(AppData.search_url.get())) {
+                        urlManager.add(new SearchUrl("Custom", AppData.search_url.get(), 0));
+                        urlManager.setSelectedId(urlManager.get(urlManager.size() - 1).getId());
+                    }
+
+                    urlManager.save();
+                    AppData.search_url.set(urlManager.get(urlManager.getSelectedIndex()).getUrl());
+
+                    AppData.fullscreen_hide_mode.set(shared_preference.getBoolean("fullscreen_hide_nav", false) ? 2 : 0);
+
+                    AppData.commit(context, AppData.search_url, AppData.fullscreen_hide_mode);
+
+                    shared_preference.edit().remove("fullscreen_hide_nav").apply();
                 }
             }
 

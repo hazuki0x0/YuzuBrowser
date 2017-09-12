@@ -18,21 +18,18 @@ package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
+import android.support.v7.preference.Preference;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.adblock.AdBlockActivity;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference;
 
-public class BrowserSettingsFragment extends PreferenceFragment {
+public class BrowserSettingsFragment extends YuzuPreferenceFragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_browser_settings);
 
         StrToIntListPreference pref = (StrToIntListPreference) findPreference("search_suggest");
@@ -40,33 +37,23 @@ public class BrowserSettingsFragment extends PreferenceFragment {
 
         suggest.setEnabled(pref.getValue() != 2);
 
-        pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                suggest.setEnabled(((int) newValue) != 2);
-                return true;
-            }
+        pref.setOnPreferenceChangeListener((preference, newValue) -> {
+            suggest.setEnabled(((int) newValue) != 2);
+            return true;
         });
 
         final Preference savePinned = findPreference("save_pinned_tabs");
         SwitchPreference saveLast = (SwitchPreference) findPreference("save_last_tabs");
 
         savePinned.setEnabled(!saveLast.isChecked());
-        saveLast.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                savePinned.setEnabled(!(boolean) newValue);
-                return true;
-            }
+        saveLast.setOnPreferenceChangeListener((preference, newValue) -> {
+            savePinned.setEnabled(!(boolean) newValue);
+            return true;
         });
 
-        findPreference("ad_block_settings").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), AdBlockActivity.class));
-                return true;
-            }
+        findPreference("ad_block_settings").setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(getActivity(), AdBlockActivity.class));
+            return true;
         });
-
     }
 }

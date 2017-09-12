@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.gesture.multiFinger.data;
 import android.content.Context;
 
 import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -31,6 +30,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.action.Action;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 
 public class MultiFingerGestureManager {
     private static final String FILENAME = "multiFingerGes_1.dat";
@@ -89,8 +89,7 @@ public class MultiFingerGestureManager {
     private void load() {
         gestureItems.clear();
         if (JSON_FILE == null || !JSON_FILE.exists() || JSON_FILE.isDirectory()) return;
-        JsonFactory factory = new JsonFactory();
-        try (JsonParser parser = factory.createParser(JSON_FILE)) {
+        try (JsonParser parser = JsonUtils.getFactory().createParser(JSON_FILE)) {
             if (parser.nextToken() == JsonToken.START_ARRAY) {
                 while (parser.nextToken() != JsonToken.END_ARRAY) {
                     if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
@@ -135,8 +134,7 @@ public class MultiFingerGestureManager {
     }
 
     public void save() {
-        JsonFactory jsonFactory = new JsonFactory();
-        try (JsonGenerator generator = jsonFactory.createGenerator(JSON_FILE, JsonEncoding.UTF8)) {
+        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(JSON_FILE, JsonEncoding.UTF8)) {
             generator.writeStartArray();
             for (MultiFingerGestureItem item : gestureItems) {
                 generator.writeStartObject();

@@ -11,9 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@color/deep_gray"
-        android:paddingStart="8dp"
+        android:paddingStart="4dp"
         android:paddingEnd="0dp"
         android:gravity="center">
+
+        <Spinner
+            android:id="@+id/searchUrlSpinner"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
         <EditText
             android:id="@+id/editText"
@@ -24,7 +30,9 @@
             android:ems="10"
             android:hint="@string/search_editText_hint"
             android:imeOptions="actionGo"
-            android:inputType="text|textUri">
+            android:inputType="text|textUri"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="0dp">
 
             <requestFocus />
         </EditText>

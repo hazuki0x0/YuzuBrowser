@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clipToPadding="false"
+                android:padding="8dp">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/titleTextView"
+        android:layout_below="@+id/titleTextView"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/urlTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/titleTextView"
+        android:layout_below="@+id/titleTextView"
+        android:layout_marginTop="4dp"
+        android:layout_toStartOf="@+id/timeTextView"/>
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/selected_overlay"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/timeTextView"
+        android:layout_marginStart="-8dp"
+        android:layout_marginTop="-8dp"
+        android:layout_marginEnd="-8dp"
+        android:layout_marginBottom="-8dp"/>
+</RelativeLayout>

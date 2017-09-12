@@ -24,6 +24,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
 
+        <Spinner
+            android:id="@+id/searchUrlSpinner"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+
         <EditText
             android:id="@+id/editText"
             android:layout_width="0dp"

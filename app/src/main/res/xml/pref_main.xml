@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="fragment_browser"
+        android:title="@string/pref_browser_settings"/>
+
+    <Preference
+        android:key="fragment_page"
+        android:title="@string/pref_page_settings"/>
+
+    <Preference
+        android:key="fragment_privacy"
+        android:title="@string/pref_privacy_settings"/>
+
+    <Preference
+        android:key="fragment_ui"
+        android:title="@string/pref_ui_settings"/>
+
+    <Preference
+        android:key="fragment_action"
+        android:title="@string/pref_action_settings"/>
+
+    <Preference
+        android:key="fragment_operation"
+        android:title="@string/operation_settings"/>
+
+    <Preference
+        android:key="fragment_speseddial"
+        android:title="@string/pref_speed_dial_setting"/>
+
+    <Preference
+        android:key="fragment_application"
+        android:title="@string/pref_app_settings"/>
+
+    <Preference
+        android:key="fragment_import_export"
+        android:title="@string/pref_import_export"/>
+
+    <Preference
+        android:key="activity_help"
+        android:title="@string/pref_help"/>
+
+    <Preference
+        android:key="fragment_about"
+        android:title="@string/pref_about"/>
+</PreferenceScreen>

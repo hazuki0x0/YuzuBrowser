@@ -52,7 +52,9 @@
         android:key="web_cache"
         android:title="@string/pref_web_cache" />
 
-    <PreferenceScreen android:title="@string/pref_history_settings">
+    <PreferenceScreen
+        android:key="ps_history"
+        android:title="@string/pref_history_settings">
         <SwitchPreference
             android:key="save_history"
             android:title="@string/pref_save_history" />
@@ -69,7 +71,9 @@
             app:seekMin="0" />
     </PreferenceScreen>
 
-    <PreferenceScreen android:title="@string/pref_security_settings">
+    <PreferenceScreen
+        android:key="ps_security"
+        android:title="@string/pref_security_settings">
         <SwitchPreference
             android:key="allow_content_access"
             android:title="@string/pref_allow_content_access" />

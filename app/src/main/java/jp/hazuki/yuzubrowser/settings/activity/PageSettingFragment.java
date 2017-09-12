@@ -18,41 +18,32 @@ package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
+import android.support.v7.preference.Preference;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference;
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeSettingActivity;
 
-public class PageSettingFragment extends PreferenceFragment {
+public class PageSettingFragment extends YuzuPreferenceFragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_page_settings);
 
-        findPreference("web_encode_list").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), WebTextEncodeSettingActivity.class);
-                startActivity(intent);
-                return true;
-            }
+        findPreference("web_encode_list").setOnPreferenceClickListener(preference -> {
+            Intent intent = new Intent(getActivity(), WebTextEncodeSettingActivity.class);
+            startActivity(intent);
+            return true;
         });
 
         final Preference nightMode = findPreference("night_mode");
         StrToIntListPreference rendering = (StrToIntListPreference) findPreference("rendering");
 
         nightMode.setEnabled(rendering.getValue() == 4);
-        rendering.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                nightMode.setEnabled((int) (newValue) == 4);
-                return true;
-            }
+        rendering.setOnPreferenceChangeListener((preference, newValue) -> {
+            nightMode.setEnabled((int) (newValue) == 4);
+            return true;
         });
     }
 }

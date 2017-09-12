@@ -39,6 +39,10 @@ public class CustomGestureOverlayView extends GestureOverlayView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        return false;
+    }
+
+    boolean preDispatchTouchEvent(MotionEvent event) {
         if (listener != null) {
             boolean result = false;
             if (listener.onTouch(this, event)) {

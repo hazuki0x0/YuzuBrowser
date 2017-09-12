@@ -90,7 +90,6 @@
     <string name="pref_tab_action">タブアクション</string>
     <string name="pref_show_zoom_button">ズームボタンの表示</string>
     <string name="pref_fullscreen">フルスクリーン</string>
-    <string name="pref_fullscreen_hide_nav">フルスクリーン時にナビバーを隠す</string>
     <string name="pref_keep_screen_on">自動的に消灯しない</string>
     <string name="pref_accept_cookie">Cookieの許可</string>
     <string name="pref_accept_third_cookie">サードパーティCookieの許可</string>
@@ -376,4 +375,47 @@
     <string name="pref_always_show_url">常にURLを表示する</string>
     <string name="pref_show_favicon">ファビコンを表示</string>
     <string name="pref_save_tab_for_crash">タブを高頻度で保存する</string>
+
+    <string name="pref_touch_scrollbar">タッチスクロールバー設定</string>
+    <string name="pref_display_position">表示位置</string>
+    <string name="pref_touch_scrollbar_do_not_move_toolbar">ツールバーを動かさない</string>
+    <string-array name="pref_touch_scrollbar_list">
+        <item>非表示</item>
+        <item>右</item>
+        <item>左</item>
+    </string-array>
+
+    <string name="pref_reader_settings">リーダー設定</string>
+    <string name="pref_reader_text_size">テキストサイズ</string>
+    <string name="pref_reader_text_font">本文フォント</string>
+    <string name="pref_reader_theme">リーダーのテーマ</string>
+    <string name="pref_reader_theme_same_as">アプリの設定</string>
+
+    <string name="pref_font_size">フォントサイズ設定</string>
+    <string name="pref_menu">メニュー</string>
+    <string name="pref_history">履歴</string>
+    <string name="pref_bookmark">ブックマーク</string>
+    <string name="pref_speeddial_item_text_size">アイテムのテキストサイズ</string>
+    <string-array name="pref_text_size_list">
+        <item>デフォルト</item>
+        <item>最小</item>
+        <item>小</item>
+        <item>中</item>
+        <item>大</item>
+        <item>最大</item>
+    </string-array>
+
+    <string name="pref_search_settings">検索設定</string>
+    <string name="pref_search_url_settings">検索エンジン設定</string>
+    <string name="pref_search_url_show_icon">検索バーに切り替えアイコンを表示</string>
+    <string name="pref_search_cat_search">検索エンジン</string>
+    <string name="pref_search_cat_suggest">検索サジェスト</string>
+    <string name="pref_fullscreen_mode">フルスクリーンモード</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>ステータスバーを隠す</item>
+        <item>ナビバーを隠す</item>
+        <item>両方を隠す</item>
+    </string-array>
+    <string name="pref_slow_rendering">スローレンダリング</string>
+    <string name="pref_slow_rendering_alert">警告\nこの機能を有効にするとフリーズが頻発する場合があります。\nまた、切り替えにはアプリ履歴から、ブラウザの再起動が必要です。\nスクリーンショットの全てキャプチャを使用する以外でのこの機能の利用はおすすめしません。</string>
 </resources>

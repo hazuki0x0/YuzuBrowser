@@ -3,7 +3,6 @@ package jp.hazuki.yuzubrowser.utils.matcher;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 
 public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>> {
     private final File mFile;
@@ -70,10 +70,8 @@ public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>
         if (!mFile.exists() || !mFile.isFile())
             return true;
 
-        JsonFactory factory = new JsonFactory();
-
         try (InputStream is = new BufferedInputStream(new FileInputStream(mFile));
-             JsonParser parser = factory.createParser(is)) {
+             JsonParser parser = JsonUtils.getFactory().createParser(is)) {
 
             if (parser.nextToken() != JsonToken.START_ARRAY) return false;
             while (parser.nextToken() != JsonToken.END_ARRAY) {
@@ -90,9 +88,8 @@ public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>
     }
 
     public boolean save(Context context) {
-        JsonFactory factory = new JsonFactory();
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(mFile));
-             JsonGenerator generator = factory.createGenerator(os)) {
+             JsonGenerator generator = JsonUtils.getFactory().createGenerator(os)) {
 
             generator.writeStartArray();
             for (T item : mList) {

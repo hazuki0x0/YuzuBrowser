@@ -48,6 +48,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     private final TabFaviconManager tabFaviconManager;
 
     private List<View> mTabView;
+    private OnWebViewCreatedListener listener;
 
     CacheTabManager(BrowserActivity activity) {
         mWebBrowser = activity;
@@ -56,6 +57,14 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         mTabView = new ArrayList<>();
         thumbnailManager = new ThumbnailManager(activity);
         tabFaviconManager = new TabFaviconManager(activity);
+        mTabStorage.setOnWebViewCreatedListener(tab -> {
+            synchronized (mTabCache) {
+                mTabCache.put(tab.getId(), tab);
+            }
+            if (listener != null) {
+                listener.onWebViewCreated(tab);
+            }
+        });
     }
 
     @Override
@@ -349,6 +358,11 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         thumbnailManager.forceTakeThumbnail(data);
     }
 
+    @Override
+    public void setOnWebViewCreatedListener(OnWebViewCreatedListener listener) {
+        this.listener = listener;
+    }
+
     private void setText(View view, TabIndexData indexData) {
         String text;
         if (indexData.getTitle() != null) {
@@ -380,8 +394,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     }
 
     private MainTabData getTabData(TabIndexData tabIndexData, int no) {
-        CustomWebView webView = mTabStorage.loadWebView(mWebBrowser, tabIndexData);
-        MainTabData tabData = tabIndexData.getMainTabData(webView, mTabView.get(no));
+        MainTabData tabData = mTabStorage.loadWebView(mWebBrowser, tabIndexData, mTabView.get(no));
         synchronized (mTabCache) {
             mTabCache.put(tabIndexData.getId(), tabData);
         }

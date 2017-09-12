@@ -3,7 +3,6 @@ package jp.hazuki.yuzubrowser.action;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.utils.util.JsonConvertable;
 
 public class Action extends ArrayList<SingleAction> implements Parcelable, JsonConvertable {
@@ -112,8 +112,7 @@ public class Action extends ArrayList<SingleAction> implements Parcelable, JsonC
         StringWriter writer = null;
         try {
             writer = new StringWriter();
-            JsonFactory factory = new JsonFactory();
-            JsonGenerator generator = factory.createGenerator(writer);
+            JsonGenerator generator = JsonUtils.getFactory().createGenerator(writer);
 
             writeAction(generator);
 
@@ -139,8 +138,7 @@ public class Action extends ArrayList<SingleAction> implements Parcelable, JsonC
         StringReader reader = null;
         try {
             reader = new StringReader(str);
-            JsonFactory factory = new JsonFactory();
-            JsonParser parser = factory.createParser(reader);
+            JsonParser parser = JsonUtils.getFactory().createParser(reader);
 
             boolean ret = loadAction(parser);
 

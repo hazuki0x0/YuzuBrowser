@@ -18,30 +18,25 @@ package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
+import android.support.v7.preference.Preference;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.PermissionUtils;
 
-public class PrivacyFragment extends PreferenceFragment {
+public class PrivacyFragment extends YuzuPreferenceFragment {
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_privacy);
 
-        findPreference("web_geolocation").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (PermissionUtils.checkLocation(getActivity())) {
-                    return true;
-                } else {
-                    PermissionUtils.requestLocation(getActivity());
-                    return false;
-                }
+        findPreference("web_geolocation").setOnPreferenceClickListener(preference -> {
+            if (PermissionUtils.checkLocation(getActivity())) {
+                return true;
+            } else {
+                PermissionUtils.requestLocation(getActivity());
+                return false;
             }
         });
 

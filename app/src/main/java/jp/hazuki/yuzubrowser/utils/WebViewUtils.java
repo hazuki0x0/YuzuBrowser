@@ -59,14 +59,17 @@ public class WebViewUtils {
         to_setting.setTextZoom(from_setting.getTextZoom());
     }
 
-    public static Bitmap capturePictureOverall(WebView web) {
-        Bitmap bitmap = Bitmap.createBitmap(web.getWidth(), web.getContentHeight(), Bitmap.Config.ARGB_8888);
+    public static Bitmap capturePictureOverall(CustomWebView web) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                Math.max(web.getWebView().getWidth(), web.computeHorizontalScrollRangeMethod()),
+                Math.max(web.getWebView().getContentHeight(), web.computeVerticalScrollRangeMethod()),
+                Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        web.draw(canvas);
+        web.getWebView().draw(canvas);
         return bitmap;
     }
 
-    public static boolean savePictureOverall(WebView web, File file) throws IOException {
+    public static boolean savePictureOverall(CustomWebView web, File file) throws IOException {
         Bitmap bitmap = null;
         try {
             bitmap = capturePictureOverall(web);

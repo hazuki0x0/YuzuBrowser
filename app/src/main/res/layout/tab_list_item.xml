@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/tab_list_item_background_normal"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tab_list_item_background_normal"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
     <ImageView
@@ -52,7 +53,7 @@
         android:id="@+id/closeImageButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_close_black_24dp"
@@ -64,7 +65,7 @@
         android:id="@+id/tabHistoryImageButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/tab_history"
         android:padding="10dp"
         android:scaleType="centerCrop"

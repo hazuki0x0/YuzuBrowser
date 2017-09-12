@@ -18,13 +18,12 @@ package jp.hazuki.yuzubrowser.gesture.multiFinger;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,23 +76,20 @@ public class MfsEditFragment extends Fragment {
             item = new MultiFingerGestureItem();
         nameArray = new ActionNameArray(getActivity());
 
-        actionButton = (SpinnerButton) v.findViewById(R.id.actionButton);
+        actionButton = v.findViewById(R.id.actionButton);
 
         String text = item.getAction().toString(nameArray);
         actionButton.setText(text != null ? text : getText(R.string.action_empty));
-        actionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new ActionActivity.Builder(getActivity())
-                        .setDefaultAction(item.getAction())
-                        .setTitle(R.string.pref_multi_finger_gesture_settings)
-                        .create();
-                startActivityForResult(intent, REQUEST_ACTION);
-            }
+        actionButton.setOnClickListener(v1 -> {
+            Intent intent = new ActionActivity.Builder(getActivity())
+                    .setDefaultAction(item.getAction())
+                    .setTitle(R.string.pref_multi_finger_gesture_settings)
+                    .create();
+            startActivityForResult(intent, REQUEST_ACTION);
         });
 
-        SeekBar seekBar = (SeekBar) v.findViewById(R.id.fingerSeekBar);
-        final TextView seekTextView = (TextView) v.findViewById(R.id.seekTextView);
+        SeekBar seekBar = v.findViewById(R.id.fingerSeekBar);
+        final TextView seekTextView = v.findViewById(R.id.seekTextView);
         seekBar.setProgress(item.getFingers() - 1);
         seekTextView.setText(Integer.toString(item.getFingers()));
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -112,60 +108,29 @@ public class MfsEditFragment extends Fragment {
             }
         });
 
-        v.findViewById(R.id.upButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFingerAction(MultiFingerGestureDetector.SWIPE_UP);
-            }
+        v.findViewById(R.id.upButton).setOnClickListener(v12 -> addFingerAction(MultiFingerGestureDetector.SWIPE_UP));
+
+        v.findViewById(R.id.downButton).setOnClickListener(v13 -> addFingerAction(MultiFingerGestureDetector.SWIPE_DOWN));
+
+        v.findViewById(R.id.leftButton).setOnClickListener(v14 -> addFingerAction(MultiFingerGestureDetector.SWIPE_LEFT));
+
+        v.findViewById(R.id.rightButton).setOnClickListener(v15 -> addFingerAction(MultiFingerGestureDetector.SWIPE_RIGHT));
+
+        v.findViewById(R.id.deleteButton).setOnClickListener(v16 -> {
+            item.removeLastTrace();
+            adapter.notifyDataSetChanged();
+            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         });
 
-        v.findViewById(R.id.downButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFingerAction(MultiFingerGestureDetector.SWIPE_DOWN);
-            }
+        v.findViewById(R.id.cancelButton).setOnClickListener(v17 -> getFragmentManager().popBackStack());
+
+        v.findViewById(R.id.okButton).setOnClickListener(v18 -> {
+            if (listener != null)
+                listener.onEdited(getArguments().getInt(ARG_INDEX, -1), item);
+            getFragmentManager().popBackStack();
         });
 
-        v.findViewById(R.id.leftButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFingerAction(MultiFingerGestureDetector.SWIPE_LEFT);
-            }
-        });
-
-        v.findViewById(R.id.rightButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFingerAction(MultiFingerGestureDetector.SWIPE_RIGHT);
-            }
-        });
-
-        v.findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                item.removeLastTrace();
-                adapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-            }
-        });
-
-        v.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        v.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null)
-                    listener.onEdited(getArguments().getInt(ARG_INDEX, -1), item);
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        recyclerView = v.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         adapter = new MfsFingerAdapter(getActivity(), item.getTraces(), null);
@@ -201,14 +166,6 @@ public class MfsEditFragment extends Fragment {
             listener = (OnMfsEditFragmentListener) getActivity();
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && getActivity() instanceof OnMfsEditFragmentListener)
-            listener = (OnMfsEditFragmentListener) getActivity();
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -236,8 +193,8 @@ public class MfsEditFragment extends Fragment {
 
             ViewHolder(View itemView, MfsFingerAdapter adapter) {
                 super(itemView, adapter);
-                title = (TextView) itemView.findViewById(R.id.numTextView);
-                icon = (ImageView) itemView.findViewById(R.id.imageView);
+                title = itemView.findViewById(R.id.numTextView);
+                icon = itemView.findViewById(R.id.imageView);
             }
 
             @Override

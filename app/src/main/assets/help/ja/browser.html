@@ -10,7 +10,7 @@
 <details id="pattern">
     <summary>パターンマッチ</summary>
     <p class="details_info">
-        URLによって、他のアプリで開く、JavaScriptとUserAgentの変更、ブロックが設定できる<br>
+        URLによって、他のアプリで開く、JavaScriptとUserAgentの変更、ナビゲートロックの切り替え、ブロックが設定できる<br>
         書き方については<a href="regex.html">パターンの仕様</a>を参照してください。
     </p>
 </details>
@@ -55,6 +55,21 @@
     <p class="details_info">Proxyを設定できる</p>
 </details>
 <details>
+    <summary>検索設定</summary>
+    <p class="details_info">
+    <dl>
+        <dt>検索エンジンのURL</dt>
+        <dd>設定した検索エンジンを選択する。</dd>
+        <dt>検索エンジン設定</dt>
+        <dd>検索エンジンの名前、色、URLを設定ができる。<br>検索ワードの部分を %s と置く。</dd>
+        <dt>検索バーに切り替えアイコンを表示</dt>
+        <dd>検索バーに検索エンジンの切り替えアイコンを表示するか設定できる。</dd>
+        <dt>検索サジェストのタイプ</dt>
+        <dd>検索サジェストをネットワーク、過去のクエリ、両方から設定出来る。</dd>
+    </dl>
+    </p>
+</details>
+<details>
     <summary>終了時のタブを保存</summary>
     <p class="details_info">終了アクションを使用したときに保存するか設定できる</p>
 </details>
@@ -73,10 +88,6 @@
 <details>
     <summary>メモリに保持するタブ数</summary>
     <p class="details_info">メモリ上に保持するタブ数の上限の設定</p>
-</details>
-<details>
-    <summary>検索エンジンのURL</summary>
-    <p class="details_info">検索エンジンのURLを設定ができる<br>検索ワードの部分を %s と置く</p>
 </details>
 <details>
     <summary>タブが裏のときWebを停止</summary>
@@ -100,12 +111,10 @@
     <p class="details_info">オートセーブの間隔を設定する<br>0秒の場合オートセーブはしない</p>
 </details>
 <details>
-    <summary>検索サジェストのタイプ</summary>
-    <p class="details_info">検索サジェストのタイプを設定できる</p>
-</details>
-<details>
-    <summary>検索サジェストエンジン</summary>
-    <p class="details_info">検索サジェストエンジンを設定できる</p>
-</details>
+    <summary>スローレンダリング</summary>
+    <p>
+        フルスクリーンスクリーンショットを利用するための設定です。<br>
+        フリーズが頻発する可能性があるため、スクリーンショット以外での設定の有効化はおすすめしません。
+    </p>
 </body>
 </html>

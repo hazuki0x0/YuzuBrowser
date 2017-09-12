@@ -80,6 +80,16 @@ public class PatternUrlConverter {
         }
 
         @Override
+        public boolean isEnable() {
+            return false;
+        }
+
+        @Override
+        public void setEnable(boolean enable) {
+
+        }
+
+        @Override
         public boolean write(JsonGenerator generator) throws IOException {
             getAction().write(generator);
             generator.writeStartObject();

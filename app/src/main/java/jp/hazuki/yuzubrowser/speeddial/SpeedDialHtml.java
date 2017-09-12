@@ -32,6 +32,7 @@ import java.util.Map;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.HtmlUtils;
 import jp.hazuki.yuzubrowser.utils.IOUtils;
 
@@ -143,7 +144,16 @@ public class SpeedDialHtml {
 
         builder.append(".box:nth-child(n+").append(l_column + 1).append("){order:1}}");
 
+        int fontSize = AppData.font_size.speeddial_item.get();
+        if (fontSize >= 0) {
+            builder.append(".name{font-size:").append(getFontSize(fontSize)).append("}");
+        }
+
         return getNoCacheResponse("text/css", builder);
+    }
+
+    public static void clearCache(Context context) {
+        FileUtils.deleteFile(new File(context.getCacheDir(), FOLDER));
     }
 
     private static WebResourceResponse getNoCacheResponse(String mimeType, CharSequence sequence) {
@@ -160,5 +170,25 @@ public class SpeedDialHtml {
 
     private static String getResourceString(Context context, int id) {
         return IOUtils.readString(context.getResources().openRawResource(id));
+    }
+
+    private static String getFontSize(int size) {
+        switch (size) {
+            case 0:
+                return "42%";
+            case 1:
+                return "50%";
+            case 2:
+                return "60%";
+            case 3:
+            default:
+                return "75%";
+            case 4:
+                return "88.8%";
+            case 5:
+                return "100%";
+            case 6:
+                return "120%";
+        }
     }
 }

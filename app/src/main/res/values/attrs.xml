@@ -97,4 +97,13 @@
     <attr name="spinnerButtonStyle" format="reference" />
     <attr name="iconColor" format="color" />
 
+    <declare-styleable name="WebViewFastScroller">
+        <attr name="wfs_barColor" format="color"/>
+        <attr name="wfs_handleNormalColor" format="color"/>
+        <attr name="wfs_handlePressedColor" format="color"/>
+        <attr name="wfs_touchTargetWidth" format="dimension"/>
+        <attr name="wfs_hideDelay" format="integer"/>
+        <attr name="wfs_hidingEnabled" format="boolean"/>
+    </declare-styleable>
+
 </resources>

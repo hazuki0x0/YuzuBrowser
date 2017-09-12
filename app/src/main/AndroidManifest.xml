@@ -295,6 +295,20 @@
         <activity
             android:name=".adblock.AdBlockActivity"
             android:label="@string/pref_ad_block" />
+        <activity
+            android:name=".reader.ReaderActivity"
+            android:theme="@style/BrowserMinThemeBlack.NoTitle"/>
+        <activity
+            android:name=".readitlater.ReadItLaterActivity"
+            android:label="@string/read_it_later"/>
+
+        <provider
+            android:authorities="${applicationId}.readItLaterProvider"
+            android:name=".readitlater.ReadItLaterProvider"
+            android:exported="false"/>
+        <activity
+            android:name=".search.settings.SearchUrlListActivity"
+            android:label="@string/pref_search_url_settings"/>
     </application>
 
 </manifest>

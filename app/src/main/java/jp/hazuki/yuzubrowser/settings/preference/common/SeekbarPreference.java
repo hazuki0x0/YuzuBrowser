@@ -1,9 +1,10 @@
 package jp.hazuki.yuzubrowser.settings.preference.common;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.preference.DialogPreference;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 import jp.hazuki.yuzubrowser.R;
@@ -27,23 +28,6 @@ public class SeekbarPreference extends DialogPreference {
     }
 
     @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-        mController.onPrepareDialogBuilder(builder);
-    }
-
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-        if (positiveResult) {
-            int value = mController.getCurrentValue();
-            if (callChangeListener(value)) {
-                setValue(value);
-            }
-        }
-    }
-
-    @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getInt(index, -1);
     }
@@ -51,5 +35,28 @@ public class SeekbarPreference extends DialogPreference {
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         setValue(restoreValue ? getPersistedInt(mController.getValue()) : (Integer) defaultValue);
+    }
+
+    public static class PreferenceDialog extends YuzuPreferenceDialog {
+
+        public static YuzuPreferenceDialog newInstance(Preference preference) {
+            return newInstance(new PreferenceDialog(), preference);
+        }
+
+        @Override
+        protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+            ((SeekbarPreference) getParentPreference()).mController.onPrepareDialogBuilder(builder);
+        }
+
+        @Override
+        public void onDialogClosed(boolean positiveResult) {
+            SeekbarPreference pref = getParentPreference();
+            if (positiveResult) {
+                int value = pref.mController.getCurrentValue();
+                if (pref.callChangeListener(value)) {
+                    pref.setValue(value);
+                }
+            }
+        }
     }
 }

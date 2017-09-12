@@ -26,7 +26,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
-import android.support.v7.widget.AppCompatDrawableManager;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -68,7 +68,7 @@ public class ImageUtils {
     }
 
     public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
-        Drawable drawable = AppCompatDrawableManager.get().getDrawable(context, drawableId);
+        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), drawableId, context.getTheme());
 
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
                 drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -156,6 +156,16 @@ public class ImageUtils {
             throw new IllegalArgumentException("unsupported drawable type");
         }
     }
+
+    public static Drawable getDrawable(Context context, Bitmap bitmap) {
+        if (bitmap == null) return null;
+
+        Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+
+        return drawable;
+    }
+
 
     public static byte[] getBase64Image(String data) {
         if (!data.startsWith("data:")) return null;

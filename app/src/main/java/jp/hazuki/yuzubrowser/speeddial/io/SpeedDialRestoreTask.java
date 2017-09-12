@@ -16,8 +16,8 @@
 
 package jp.hazuki.yuzubrowser.speeddial.io;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import jp.hazuki.yuzubrowser.speeddial.SpeedDialHtml;
 import jp.hazuki.yuzubrowser.speeddial.SpeedDialManager;
 
 public class SpeedDialRestoreTask extends AsyncTaskLoader<Boolean> {
@@ -58,6 +59,7 @@ public class SpeedDialRestoreTask extends AsyncTaskLoader<Boolean> {
                     }
                 }
             }
+            SpeedDialHtml.clearCache(getContext());
             return Boolean.TRUE;
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser">
+                  xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser"
+                  android:title="@string/pref_ui_settings">
 
     <Preference
         android:key="restart"
@@ -11,7 +12,9 @@
         android:key="theme_setting"
         android:title="@string/theme_setting" />
 
-    <PreferenceScreen android:title="@string/pref_toolbar_settings">
+    <PreferenceScreen
+        android:key="ps_toolbar"
+        android:title="@string/pref_toolbar_settings">
         <SwitchPreference
             android:key="snap_toolbar"
             android:title="@string/pref_snap_toolbar" />
@@ -21,7 +24,9 @@
             app:seekMax="255"
             app:seekMin="0" />
 
-        <PreferenceScreen android:title="@string/pref_tab_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_tab"
+            android:title="@string/pref_tab_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_list"
                 android:entryValues="@array/pref_toolbar_location_values"
@@ -84,7 +89,9 @@
                 android:key="toolbar_show_favicon"
                 android:title="@string/pref_show_favicon" />
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/pref_url_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_url"
+            android:title="@string/pref_url_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_list"
                 android:entryValues="@array/pref_toolbar_location_values"
@@ -127,7 +134,9 @@
                 android:key="toolbar_always_show_url"
                 android:title="@string/pref_always_show_url" />
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/pref_progress_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_progress"
+            android:title="@string/pref_progress_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_list"
                 android:entryValues="@array/pref_toolbar_location_values"
@@ -162,7 +171,9 @@
                 app:seekMax="100"
                 app:seekMin="1" />
         </PreferenceScreen>
-        <PreferenceScreen android:title="@string/pref_custom_bar">
+        <PreferenceScreen
+            android:key="ps_toolbar_custom"
+            android:title="@string/pref_custom_bar">
             <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
                 android:entries="@array/pref_toolbar_location_custom_list"
                 android:entryValues="@array/pref_toolbar_location_custom_values"
@@ -199,6 +210,55 @@
         </PreferenceScreen>
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:key="ps_font_size"
+        android:title="@string/pref_font_size">
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_bookmark"
+            android:title="@string/pref_bookmark"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_history"
+            android:title="@string/pref_history"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_menu"
+            android:title="@string/pref_menu"/>
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_read_it_later"
+            android:title="@string/read_it_later"/>
+    </PreferenceScreen>
+
+    <Preference
+        android:key="reader_settings"
+        android:title="@string/pref_reader_settings"/>
+
+    <PreferenceScreen
+        android:key="ps_touch_scrollbar"
+        android:title="@string/pref_touch_scrollbar">
+
+        <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_touch_scrollbar_list"
+            android:entryValues="@array/pref_touch_scrollbar_values"
+            android:key="touch_scrollbar"
+            android:title="@string/pref_display_position"/>
+
+        <SwitchPreference
+            android:key="touch_scrollbar_fixed_toolbar"
+            android:title="@string/pref_touch_scrollbar_do_not_move_toolbar"/>
+
+    </PreferenceScreen>
+
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_oritentation_list"
         android:entryValues="@array/pref_oritentation_values"
@@ -213,9 +273,11 @@
     <SwitchPreference
         android:key="fullscreen"
         android:title="@string/pref_fullscreen" />
-    <SwitchPreference
-        android:key="fullscreen_hide_nav"
-        android:title="@string/pref_fullscreen_hide_nav" />
+    <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_fullscreen_mode_list"
+        android:entryValues="@array/pref_fullscreen_mode_values"
+        android:key="fullscreen_hide_mode"
+        android:title="@string/pref_fullscreen_mode"/>
     <SwitchPreference
         android:key="keep_screen_on"
         android:title="@string/pref_keep_screen_on" />

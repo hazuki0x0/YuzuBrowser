@@ -147,7 +147,7 @@ public class CustomSingleActionFragment extends Fragment implements OnRecyclerLi
     }
 
     @Override
-    public void onDelete(int position) {
+    public void onDeleteClicked(int position) {
         adapter.remove(position);
     }
 

@@ -1,8 +1,10 @@
 package jp.hazuki.yuzubrowser.settings.preference;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,34 +32,54 @@ public class ProxySettingDialog extends CustomDialogPreference {
         return this;
     }
 
+    @NonNull
     @Override
-    public void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.proxy_dialog, null);
-        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-        final EditText editText = (EditText) view.findViewById(R.id.editText);
+    protected CustomDialogFragment crateCustomDialog() {
+        return SettingDialog.newInstance(mSaveSettings);
+    }
 
-        checkBox.setChecked(AppData.proxy_set.get());
-        editText.setText(AppData.proxy_address.get());
+    public static class SettingDialog extends CustomDialogFragment {
+        private static final String SAVE = "save";
 
-        builder
-                .setView(view)
-                .setTitle(R.string.pref_proxy_settings)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        public static SettingDialog newInstance(boolean save) {
+            SettingDialog dialog = new SettingDialog();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(SAVE, save);
+            dialog.setArguments(bundle);
+            return dialog;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.proxy_dialog, null);
+            final CheckBox checkBox = view.findViewById(R.id.checkBox);
+            final EditText editText = view.findViewById(R.id.editText);
+
+            checkBox.setChecked(AppData.proxy_set.get());
+            editText.setText(AppData.proxy_address.get());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder
+                    .setView(view)
+                    .setTitle(R.string.pref_proxy_settings)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         Context context = getContext();
                         boolean enable = checkBox.isChecked();
                         String proxy_address = editText.getText().toString();
 
                         WebViewProxy.setProxy(context, enable, proxy_address);
 
-                        if (mSaveSettings) {
+                        if (getArguments().getBoolean(SAVE)) {
                             AppData.proxy_set.set(enable);
                             AppData.proxy_address.set(proxy_address);
                             AppData.commit(context, AppData.proxy_set, AppData.proxy_address);
                         }
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null);
+                    })
+                    .setNegativeButton(android.R.string.cancel, null);
+
+            return builder.create();
+        }
     }
 }

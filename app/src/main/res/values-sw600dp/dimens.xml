@@ -7,4 +7,5 @@
     <dimen name="tab_list_item_h_button_padding">8dp</dimen>
     <dimen name="tab_list_item_h_button_margin">8dp</dimen>
     <dimen name="tab_list_item_h_text_size">20sp</dimen>
+    <dimen name="preference_width">600dp</dimen>
 </resources>

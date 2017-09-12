@@ -164,6 +164,8 @@ public interface CustomWebView {
 
     void setMyOnScrollChangedListener(OnScrollChangedListener l);
 
+    void setScrollBarListener(OnScrollChangedListener l);
+
     boolean setEmbeddedTitleBarMethod(View view);
 
     boolean notifyFindDialogDismissedMethod();
@@ -204,6 +206,10 @@ public interface CustomWebView {
     void setDoubleTapFling(boolean fling);
 
     boolean isTouching();
+
+    boolean isScrollable();
+
+    void setVerticalScrollBarEnabled(boolean enabled);
 
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);

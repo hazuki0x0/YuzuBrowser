@@ -1,5 +1,6 @@
 package jp.hazuki.yuzubrowser.history;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -16,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +27,8 @@ import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+import jp.hazuki.yuzubrowser.utils.FontUtils;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
@@ -36,6 +40,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     private static final PorterDuffColorFilter faviconColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
 
     private DateFormat dateFormat;
+    private DateFormat timeFormat;
     private BrowserHistoryManager mManager;
     private FaviconManager faviconManager;
     private List<BrowserHistory> histories;
@@ -50,9 +55,11 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
     private SparseBooleanArray itemSelected = new SparseBooleanArray();
     private Drawable foregroundOverlay;
 
+    @SuppressLint("SimpleDateFormat")
     public BrowserHistoryAdapter(Context context, BrowserHistoryManager manager, boolean pick, OnHistoryRecyclerListener listener) {
         inflater = LayoutInflater.from(context);
         dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
+        timeFormat = new SimpleDateFormat("kk:mm");
         mManager = manager;
         faviconManager = FaviconManager.getInstance(context.getApplicationContext());
         mListener = listener;
@@ -93,34 +100,22 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         }
         holder.titleTextView.setText(item.getTitle());
         holder.urlTextView.setText(url);
+        holder.timeTextView.setText(timeFormat.format(new Date(item.getTime())));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (multiSelectMode) {
-                    toggle(holder.getAdapterPosition());
-                } else {
-                    mListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (multiSelectMode) {
+                toggle(holder.getAdapterPosition());
+            } else {
+                mListener.onRecyclerItemClicked(v, holder.getAdapterPosition());
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return mListener.onRecyclerItemLongClicked(v, holder.getAdapterPosition());
-            }
-        });
+        holder.itemView.setOnLongClickListener(v -> mListener.onRecyclerItemLongClicked(v, holder.getAdapterPosition()));
 
         if (pickMode) {
             holder.imageButton.setClickable(false);
         } else {
-            holder.imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onIconClicked(v, holder.getAdapterPosition());
-                }
-            });
+            holder.imageButton.setOnClickListener(v -> mListener.onIconClicked(v, holder.getAdapterPosition()));
         }
     }
 
@@ -234,6 +229,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         ImageButton imageButton;
         TextView titleTextView;
         TextView urlTextView;
+        TextView timeTextView;
 
         HistoryHolder(View itemView) {
             super(itemView);
@@ -242,6 +238,17 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
             imageButton = itemView.findViewById(R.id.imageButton);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             urlTextView = itemView.findViewById(R.id.urlTextView);
+            timeTextView = itemView.findViewById(R.id.timeTextView);
+
+            int fontSizeSetting = AppData.font_size.history.get();
+            if (fontSizeSetting >= 0) {
+                int normal = FontUtils.getTextSize(fontSizeSetting);
+                int small = FontUtils.getSmallerTextSize(fontSizeSetting);
+
+                titleTextView.setTextSize(normal);
+                urlTextView.setTextSize(small);
+                timeTextView.setTextSize(small);
+            }
         }
     }
 
@@ -252,6 +259,11 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
             super(itemView);
 
             header = (TextView) itemView;
+
+            int fontSizeSetting = AppData.font_size.history.get();
+            if (fontSizeSetting >= 0) {
+                header.setTextSize(FontUtils.getTextSize(fontSizeSetting));
+            }
         }
     }
 

@@ -17,9 +17,8 @@
 package jp.hazuki.yuzubrowser.settings.preference;
 
 import android.content.Context;
-import android.preference.ListPreference;
+import android.support.v7.preference.ListPreference;
 import android.util.AttributeSet;
-import android.view.View;
 
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeList;
 
@@ -36,9 +35,9 @@ public class WebTextEncodeListPreference extends ListPreference {
     }
 
     @Override
-    protected View onCreateDialogView() {
+    protected void onClick() {
         init(getContext());
-        return super.onCreateDialogView();
+        super.onClick();
     }
 
     private void init(Context context) {

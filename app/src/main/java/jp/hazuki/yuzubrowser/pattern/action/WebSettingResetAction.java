@@ -18,23 +18,28 @@ package jp.hazuki.yuzubrowser.pattern.action;
 
 import android.webkit.WebSettings;
 
-import jp.hazuki.yuzubrowser.webkit.CustomWebView;
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData;
 
 public class WebSettingResetAction {
     private String userAgent;
     private boolean javaScriptEnable;
+    private boolean navLockEnable;
     private WebSettingPatternAction patternAction;
 
-    public WebSettingResetAction(WebSettings settings) {
+    public WebSettingResetAction(MainTabData tabData) {
+        WebSettings settings = tabData.mWebView.getSettings();
         userAgent = settings.getUserAgentString();
         javaScriptEnable = settings.getJavaScriptEnabled();
+        navLockEnable = tabData.isNavLock();
     }
 
-    public void reset(CustomWebView webView) {
-        WebSettings settings = webView.getSettings();
+    public void reset(MainTabData tab) {
+        WebSettings settings = tab.mWebView.getSettings();
 
         settings.setUserAgentString(userAgent);
         settings.setJavaScriptEnabled(javaScriptEnable);
+        tab.setNavLock(navLockEnable);
+
     }
 
     public WebSettingPatternAction getPatternAction() {

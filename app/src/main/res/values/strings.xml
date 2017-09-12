@@ -22,6 +22,7 @@
     <string name="confirm_delete_button">Delete this button?</string>
     <string name="confirm_delete_speedDial">Delete this speed dial?</string>
     <string name="confirm_delete_gesture">Delete this gesture?</string>
+    <string name="confirm_delete_search_url">Delete this search URL?</string>
     <string name="delete_history">Delete history</string>
     <string name="delete_all_history">Delete all history</string>
     <string name="delete_all_displayed_item">Delete all displayed items</string>
@@ -178,6 +179,8 @@
     <string name="quit">Quit</string>
     <string name="clipboard_empty">Clipboard is empty</string>
     <string name="action_to_json">Show JSON string</string>
+    <string name="json_to_action">Convert to action</string>
+    <string name="invalid_json_format">Invalid JSON format</string>
     <string name="multi_select">Multi select</string>
     <string name="select_this_item">Select this item</string>
     <string name="save_to">Save to</string>
@@ -255,4 +258,10 @@
     <string name="recent_search_queries">Recent search queries</string>
     <string name="favicon_cache">Favicon caches</string>
     <string name="pref_save_tab_for_crash">Save tabs in a high frequency</string>
+    <string name="untitled">Untitled</string>
+    <string name="loading_failed">Couldn\'t load anything from the page.</string>
+    <string name="font_not_found">Font file not found</string>
+    <string name="font_error">This file is not a font</string>
+    <string name="read_it_later">Read it later</string>
+    <string name="navigate_lock">Navigate lock</string>
 </resources>

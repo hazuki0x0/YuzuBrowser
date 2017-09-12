@@ -29,9 +29,10 @@ import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.os.Build;
 import android.text.TextUtils;
+import android.view.View;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -45,12 +46,14 @@ import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
 
     public Drawable tabBackgroundNormal, tabBackgroundSelect;
     public int tabTextColorNormal, tabTextColorLock, tabTextColorPin, tabTextColorSelect, tabAccentColor, tabDividerColor;
+    public int scrollbarAccentColor;
     public boolean showTabDivider;
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
@@ -58,6 +61,7 @@ public class ThemeData {
     public ShapeDrawable toolbarButtonBackgroundPress;
     public int qcItemBackgroundColorNormal, qcItemBackgroundColorSelect, qcItemColor;
     public int statusBarColor;
+    private boolean statusBarDarkIcon;
     public boolean refreshUseDark;
     public boolean lightTheme;
 
@@ -66,10 +70,11 @@ public class ThemeData {
 
     private ThemeData(Context context, File folder) throws IOException {
         try (InputStream is = new BufferedInputStream(new FileInputStream(new File(folder, "theme.json")))) {
-            JsonFactory factory = new JsonFactory();
-            JsonParser parser = factory.createParser(is);
+            JsonParser parser = JsonUtils.getFactory().createParser(is);
 
             if (parser.nextToken() != JsonToken.START_OBJECT) return;
+
+            boolean refreshColorDef = false;
             while (parser.nextToken() != JsonToken.END_OBJECT) {
                 if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return;
                 String field = parser.getText();
@@ -132,6 +137,13 @@ public class ThemeData {
                         e.printStackTrace();
                     }
                     continue;
+                }
+                if ("scrollbarAccentColor".equalsIgnoreCase(field)) {
+                    try {
+                        scrollbarAccentColor = Long.decode(parser.getText().trim()).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if ("showTabDivider".equalsIgnoreCase(field)) {
                     showTabDivider = getBoolean(parser);
@@ -217,10 +229,18 @@ public class ThemeData {
                 if ("statusBarColor".equalsIgnoreCase(field)) {
                     try {
                         statusBarColor = Long.decode(parser.getText().trim()).intValue();
-                        refreshUseDark = isColorLight(statusBarColor);
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
+                    continue;
+                }
+                if ("pullToRefreshDark".equalsIgnoreCase(field)) {
+                    refreshUseDark = getBoolean(parser);
+                    refreshColorDef = true;
+                    continue;
+                }
+                if ("statusBarDarkIcon".equalsIgnoreCase(field)) {
+                    statusBarDarkIcon = getBoolean(parser);
                     continue;
                 }
                 if (parser.getCurrentToken() == JsonToken.START_OBJECT
@@ -230,6 +250,10 @@ public class ThemeData {
             }
 
             toolbarImageColor = 0xFF000000 | toolbarImageColor;
+            if (!refreshColorDef && !refreshUseDark) {
+                refreshUseDark = isColorLight(statusBarColor) && !lightTheme;
+            }
+
 
             parser.close();
         }
@@ -381,6 +405,18 @@ public class ThemeData {
             default:
                 return Boolean.valueOf(parser.getText().trim());
         }
+    }
+
+    public static int getSystemUiVisibilityFlag() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && sInstance != null && (sInstance.statusBarDarkIcon || sInstance.isLightStatusBar())) {
+            return View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+            return 0;
+        }
+    }
+
+    public boolean isLightStatusBar() {
+        return isColorLight(statusBarColor);
     }
 
     private boolean isColorLight(int color) {

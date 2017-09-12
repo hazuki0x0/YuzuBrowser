@@ -2,7 +2,6 @@ package jp.hazuki.yuzubrowser.bookmark;
 
 import android.content.Context;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 
@@ -20,6 +19,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 
 public class BookmarkManager implements Serializable {
     private final File mFile;
@@ -59,8 +59,7 @@ public class BookmarkManager implements Serializable {
 
         try (InputStream is = new BufferedInputStream(new FileInputStream(mFile))) {
 
-            JsonFactory factory = new JsonFactory();
-            JsonParser parser = factory.createParser(is);
+            JsonParser parser = JsonUtils.getFactory().createParser(is);
             mRoot.readForRoot(parser);
             parser.close();
             return true;
@@ -77,8 +76,7 @@ public class BookmarkManager implements Serializable {
 
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(mFile))) {
 
-            JsonFactory factory = new JsonFactory();
-            JsonGenerator generator = factory.createGenerator(os);
+            JsonGenerator generator = JsonUtils.getFactory().createGenerator(os);
             mRoot.writeForRoot(generator);
             generator.close();
             return true;

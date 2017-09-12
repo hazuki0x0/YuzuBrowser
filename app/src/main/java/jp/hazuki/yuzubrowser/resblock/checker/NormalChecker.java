@@ -63,6 +63,15 @@ public class NormalChecker extends ResourceChecker {
     }
 
     @Override
+    public boolean isEnable() {
+        return true;
+    }
+
+    @Override
+    public void setEnable(boolean enable) {
+    }
+
+    @Override
     public int check(Uri url) {
         if (!url.toString().contains(mUrl))
             return SHOULD_CONTINUE;

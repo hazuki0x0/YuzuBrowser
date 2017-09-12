@@ -1,18 +1,17 @@
 package jp.hazuki.yuzubrowser.settings.preference.common;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.preference.DialogPreference;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 import jp.hazuki.yuzubrowser.R;
 
 public class IntListPreference extends DialogPreference {
     private final int[] mEntryValues;
-    private int mClickedItemIndex = -1;
     private int mValue;
 
     public IntListPreference(Context context, AttributeSet attrs) {
@@ -43,38 +42,6 @@ public class IntListPreference extends DialogPreference {
         return findIndexOfValue(mValue);
     }
 
-    @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-        mClickedItemIndex = getValueIndex();
-        builder.setPositiveButton(null, null);
-
-        int length = mEntryValues.length;
-        String lists[] = new String[length];
-        for (int i = 0; i < length; ++i) {
-            lists[i] = String.valueOf(mEntryValues[i]);
-        }
-
-        builder.setSingleChoiceItems(lists, mClickedItemIndex, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mClickedItemIndex = which;
-                IntListPreference.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
-                dialog.dismiss();
-            }
-        });
-    }
-
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-        if (positiveResult && mClickedItemIndex >= 0) {
-            int value = mEntryValues[mClickedItemIndex];
-            if (callChangeListener(value)) {
-                setValue(value);
-            }
-        }
-    }
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
@@ -84,5 +51,44 @@ public class IntListPreference extends DialogPreference {
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         setValue(restoreValue ? getPersistedInt(mValue) : (Integer) defaultValue);
+    }
+
+    public static class PreferenceDialog extends YuzuPreferenceDialog {
+
+        private int mClickedItemIndex = -1;
+
+        public static YuzuPreferenceDialog newInstance(Preference preference) {
+            return newInstance(new PreferenceDialog(), preference);
+        }
+
+        @Override
+        protected void onPrepareDialogBuilder(android.support.v7.app.AlertDialog.Builder builder) {
+            IntListPreference pref = getParentPreference();
+            mClickedItemIndex = pref.getValueIndex();
+            builder.setPositiveButton(null, null);
+
+            int length = pref.mEntryValues.length;
+            String lists[] = new String[length];
+            for (int i = 0; i < length; ++i) {
+                lists[i] = String.valueOf(pref.mEntryValues[i]);
+            }
+
+            builder.setSingleChoiceItems(lists, mClickedItemIndex, (dialog, which) -> {
+                mClickedItemIndex = which;
+                this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                dialog.dismiss();
+            });
+        }
+
+        @Override
+        public void onDialogClosed(boolean positiveResult) {
+            IntListPreference pref = getParentPreference();
+            if (positiveResult && mClickedItemIndex >= 0) {
+                int value = pref.mEntryValues[mClickedItemIndex];
+                if (pref.callChangeListener(value)) {
+                    pref.setValue(value);
+                }
+            }
+        }
     }
 }

@@ -39,7 +39,6 @@ import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
 import android.widget.FrameLayout;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -55,6 +54,7 @@ import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.tab.manager.TabCache;
 import jp.hazuki.yuzubrowser.tab.manager.TabData;
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.utils.WebViewUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
@@ -70,8 +70,10 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     private int layerType;
     private Paint layerPaint;
     private boolean acceptThirdPartyCookies;
+    private boolean verticalScrollBarEnabled;
     private OnWebStateChangeListener mStateChangeListener;
     private OnScrollChangedListener mOnScrollChangedListener;
+    private OnScrollChangedListener mScrollBarListener;
     private DownloadListener mDownloadListener;
     private final DownloadListener mDownloadListenerWrapper = new DownloadListener() {
         @Override
@@ -605,8 +607,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
     private String saveIndexData() {
         StringWriter writer = new StringWriter();
-        JsonFactory jsonFactory = new JsonFactory();
-        try (JsonGenerator generator = jsonFactory.createGenerator(writer)) {
+        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(writer)) {
             generator.writeStartArray();
             for (TabIndexData data : tabIndexList) {
                 generator.writeStartObject();
@@ -626,8 +627,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
     private void loadIndexData(String data) {
         tabIndexList.clear();
-        JsonFactory factory = new JsonFactory();
-        try (JsonParser parser = factory.createParser(data)) {
+        try (JsonParser parser = JsonUtils.getFactory().createParser(data)) {
             // 配列の処理
             if (parser.nextToken() == JsonToken.START_ARRAY) {
                 while (parser.nextToken() != JsonToken.END_ARRAY) {
@@ -882,6 +882,8 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
         to.setDownloadListener(mDownloadListenerWrapper);
         from.setMyOnScrollChangedListener(null);
         to.setMyOnScrollChangedListener(mOnScrollChangedListener);
+        from.setScrollBarListener(null);
+        to.setScrollBarListener(mScrollBarListener);
 
         if (mStateChangeListener != null)
             mStateChangeListener.onStateChanged(this, todata);
@@ -897,6 +899,7 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
 
         to.resetTheme();
         to.setSwipeEnable(from.getSwipeEnable());
+        to.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
 
         to.setLayerType(layerType, layerPaint);
         to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies);
@@ -953,6 +956,12 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     }
 
     @Override
+    public void setScrollBarListener(OnScrollChangedListener l) {
+        mScrollBarListener = l;
+        currentTab.mWebView.setScrollBarListener(l);
+    }
+
+    @Override
     public void setLayerType(int layerType, @Nullable Paint paint) {
         this.layerType = layerType;
         layerPaint = paint;
@@ -982,6 +991,19 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     @Override
     public boolean isTouching() {
         return currentTab.mWebView.isTouching();
+    }
+
+    @Override
+    public boolean isScrollable() {
+        return currentTab.mWebView.isScrollable();
+    }
+
+    @Override
+    public void setVerticalScrollBarEnabled(boolean enabled) {
+        verticalScrollBarEnabled = enabled;
+        for (TabData web : tabCache.values()) {
+            web.mWebView.setVerticalScrollBarEnabled(enabled);
+        }
     }
 
     @Override

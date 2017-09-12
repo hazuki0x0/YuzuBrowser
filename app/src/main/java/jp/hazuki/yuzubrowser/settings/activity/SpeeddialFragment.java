@@ -18,28 +18,27 @@ package jp.hazuki.yuzubrowser.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.speeddial.view.SpeedDialSettingActivity;
 
-public class SpeeddialFragment extends PreferenceFragment {
+public class SpeeddialFragment extends YuzuPreferenceFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
+
+    }
+
+    @Override
+    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_speeddial);
 
-        findPreference("edit_speeddial").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SpeedDialSettingActivity.class);
-                startActivity(intent);
-                return true;
-            }
+        findPreference("edit_speeddial").setOnPreferenceClickListener(preference -> {
+            Intent intent = new Intent(getActivity(), SpeedDialSettingActivity.class);
+            startActivity(intent);
+            return true;
         });
     }
 }

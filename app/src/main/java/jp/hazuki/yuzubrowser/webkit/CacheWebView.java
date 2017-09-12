@@ -57,8 +57,10 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     private int layerType;
     private Paint layerPaint;
     private boolean acceptThirdPartyCookies;
+    private boolean verticalScrollBarEnabled;
     private OnWebStateChangeListener mStateChangeListener;
     private OnScrollChangedListener mOnScrollChangedListener;
+    private OnScrollChangedListener mScrollBarListener;
     private DownloadListener mDownloadListener;
     private final DownloadListener mDownloadListenerWrapper = new DownloadListener() {
         @Override
@@ -743,6 +745,8 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
         to.setDownloadListener(mDownloadListenerWrapper);
         from.setMyOnScrollChangedListener(null);
         to.setMyOnScrollChangedListener(mOnScrollChangedListener);
+        from.setScrollBarListener(null);
+        to.setScrollBarListener(mScrollBarListener);
 
         if (mStateChangeListener != null)
             mStateChangeListener.onStateChanged(this, todata);
@@ -758,6 +762,7 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
 
         to.resetTheme();
         to.setSwipeEnable(from.getSwipeEnable());
+        to.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
 
         to.setLayerType(layerType, layerPaint);
         to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies);
@@ -814,6 +819,12 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     }
 
     @Override
+    public void setScrollBarListener(OnScrollChangedListener l) {
+        mScrollBarListener = l;
+        mList.get(mCurrent).mWebView.setScrollBarListener(l);
+    }
+
+    @Override
     public void setLayerType(int layerType, @Nullable Paint paint) {
         this.layerType = layerType;
         layerPaint = paint;
@@ -842,5 +853,18 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
     @Override
     public boolean isTouching() {
         return mList.get(mCurrent).mWebView.isTouching();
+    }
+
+    @Override
+    public boolean isScrollable() {
+        return mList.get(mCurrent).mWebView.isScrollable();
+    }
+
+    @Override
+    public void setVerticalScrollBarEnabled(boolean enabled) {
+        verticalScrollBarEnabled = enabled;
+        for (TabData web : mList) {
+            web.mWebView.setVerticalScrollBarEnabled(enabled);
+        }
     }
 }
