@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class UserScriptDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "userjs1.db";
@@ -158,6 +159,11 @@ public class UserScriptDatabase extends SQLiteOpenHelper {
         ArrayList<UserScript> list = getAllList();
         UserScript item = list.remove(positionFrom);
         list.add(positionTo, item);
+        deleteAll();
+        addAll(list);
+    }
+
+    public void saveAll(List<UserScript> list) {
         deleteAll();
         addAll(list);
     }

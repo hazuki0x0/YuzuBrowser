@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.userjs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -84,23 +83,17 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
 
         final FloatingActionMenu fabMenu = rootView.findViewById(R.id.fabMenu);
 
-        rootView.findViewById(R.id.addByEditFab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-                startActivityForResult(intent, REQUEST_ADD_USERJS);
-                fabMenu.close(false);
-            }
+        rootView.findViewById(R.id.addByEditFab).setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
+            startActivityForResult(intent, REQUEST_ADD_USERJS);
+            fabMenu.close(false);
         });
 
-        rootView.findViewById(R.id.addFromFileFab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FileListActivity.class);
-                intent.putExtra(FileListActivity.EXTRA_FILE, Environment.getExternalStorageDirectory());
-                startActivityForResult(intent, REQUEST_ADD_FROM_FILE);
-                fabMenu.close(false);
-            }
+        rootView.findViewById(R.id.addFromFileFab).setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), FileListActivity.class);
+            intent.putExtra(FileListActivity.EXTRA_FILE, Environment.getExternalStorageDirectory());
+            startActivityForResult(intent, REQUEST_ADD_FROM_FILE);
+            fabMenu.close(false);
         });
 
         mDb = new UserScriptDatabase(getActivity().getApplicationContext());
@@ -129,31 +122,22 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
         PopupMenu popupMenu = new PopupMenu(getActivity(), v);
         Menu menu = popupMenu.getMenu();
 
-        menu.add(R.string.userjs_info).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onInfoButtonClick(null, position);
-                return false;
-            }
+        menu.add(R.string.userjs_info).setOnMenuItemClickListener(item -> {
+            onInfoButtonClick(null, position);
+            return false;
         });
 
-        menu.add(R.string.userjs_edit).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
-                intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position).getInfo());
-                startActivityForResult(intent, REQUEST_EDIT_USERJS);
-                return false;
-            }
+        menu.add(R.string.userjs_edit).setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(getActivity(), UserScriptEditActivity.class);
+            intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position).getInfo());
+            startActivityForResult(intent, REQUEST_EDIT_USERJS);
+            return false;
         });
 
-        menu.add(R.string.userjs_delete).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                DeleteDialogCompat.newInstance(getActivity(), R.string.confirm, R.string.userjs_delete_confirm, position)
-                        .show(getChildFragmentManager(), "delete");
-                return false;
-            }
+        menu.add(R.string.userjs_delete).setOnMenuItemClickListener(item -> {
+            DeleteDialogCompat.newInstance(getActivity(), R.string.confirm, R.string.userjs_delete_confirm, position)
+                    .show(getChildFragmentManager(), "delete");
+            return false;
         });
 
         popupMenu.show();
@@ -213,17 +197,14 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.confirm)
                         .setMessage(String.format(getString(R.string.userjs_add_file_confirm), file.getName()))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    String data = IOUtils.readFile(file, "UTF-8");
-                                    mDb.add(new UserScript(data));
-                                    reset();
-                                } catch (IOException e) {
-                                    ErrorReport.printAndWriteLog(e);
-                                    Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
-                                }
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            try {
+                                String data1 = IOUtils.readFile(file, "UTF-8");
+                                mDb.add(new UserScript(data1));
+                                reset();
+                            } catch (IOException e) {
+                                ErrorReport.printAndWriteLog(e);
+                                Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)
@@ -262,7 +243,7 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             adapter.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            mDb.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mDb.saveAll(adapter.getItems());
             return true;
         }
 
@@ -271,12 +252,9 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
             final int index = viewHolder.getAdapterPosition();
             final UserScript js = adapter.remove(index);
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            adapter.add(index, js);
-                            adapter.notifyDataSetChanged();
-                        }
+                    .setAction(R.string.undo, v -> {
+                        adapter.add(index, js);
+                        adapter.notifyDataSetChanged();
                     })
                     .addCallback(new Snackbar.Callback() {
                         @Override
@@ -352,14 +330,6 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
                     .onCheckBoxClicked(v, position);
         }
 
-        @Override
-        public void move(int fromPosition, int toPosition) {
-            super.move(fromPosition, toPosition);
-            for (int i = 0; i < size(); i++) {
-                get(i).setId(i + 1);
-            }
-        }
-
         static class ViewHolder extends ArrayRecyclerAdapter.ArrayViewHolder<UserScript> {
             TextView textView;
             ImageButton button;
@@ -371,19 +341,9 @@ public class UserScriptListFragment extends Fragment implements OnUserJsItemClic
                 button = itemView.findViewById(R.id.infoButton);
                 checkBox = itemView.findViewById(R.id.checkBox);
 
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        adapter.onInfoButtonClick(v, getAdapterPosition(), getItem());
-                    }
-                });
+                button.setOnClickListener(v -> adapter.onInfoButtonClick(v, getAdapterPosition(), getItem()));
 
-                checkBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        adapter.onCheckBoxClick(v, getAdapterPosition(), getItem());
-                    }
-                });
+                checkBox.setOnClickListener(v -> adapter.onCheckBoxClick(v, getAdapterPosition(), getItem()));
             }
 
             @Override
