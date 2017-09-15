@@ -1208,6 +1208,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     }
 
     private int checkPatternMatch(MainTabData tab, String url, boolean shouldOpenInNewTab) {
+        if (url == null) return -1;
         boolean normalSettings = true;
         boolean changeSetting = false;
         for (PatternUrlChecker pattern : mPatternManager.getList()) {
