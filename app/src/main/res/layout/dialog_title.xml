@@ -20,6 +20,7 @@
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:src="@drawable/ic_add_white_24dp"
+        android:tint="?attr/iconColor"
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/new_folder_name" />
 </LinearLayout>
