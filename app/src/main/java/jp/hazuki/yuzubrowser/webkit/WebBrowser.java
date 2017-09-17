@@ -33,4 +33,6 @@ public interface WebBrowser {
     void loadUrl(String url, int target);
 
     ToolbarManager getToolbar();
+
+    void requestIconChange();
 }

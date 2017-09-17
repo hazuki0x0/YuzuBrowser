@@ -48,7 +48,7 @@ public class BookmarkHtmlImportTask extends AsyncTaskLoader<Boolean> {
         try {
             NetscapeBookmarkParser parser = new NetscapeBookmarkParser(getContext(), folder);
             parser.parse(html);
-            manager.write();
+            manager.save();
             return Boolean.TRUE;
         } catch (NetscapeBookmarkException e) {
             handler.post(() -> Toast.makeText(getContext(), R.string.not_bookmark_file, Toast.LENGTH_SHORT).show());

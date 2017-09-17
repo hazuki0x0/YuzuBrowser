@@ -156,7 +156,7 @@ public class BookmarkFoldersDialog {
         mCurrentFolder = folder;
         if (folder.parent != null)
             mFolderList.add(null);//for move to prev folder
-        for (BookmarkItem i : folder.list)
+        for (BookmarkItem i : folder.getItemList())
             if (i instanceof BookmarkFolder && (mExcludeList == null || !mExcludeList.contains(i)))
                 mFolderList.add((BookmarkFolder) i);
         ((ArrayAdapter<?>) mListView.getAdapter()).notifyDataSetChanged();

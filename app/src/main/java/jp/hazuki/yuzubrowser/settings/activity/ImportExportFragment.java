@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.settings.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -67,8 +66,8 @@ public class ImportExportFragment extends YuzuPreferenceFragment implements Load
         addPreferencesFromResource(R.xml.pref_import_export);
 
         findPreference("import_sd_bookmark").setOnPreferenceClickListener(preference -> {
-            final BookmarkManager manager = new BookmarkManager(getActivity());
-            final File internal_file = manager.getBookmarkFile();
+            final BookmarkManager manager = BookmarkManager.getInstance(getActivity());
+            final File internal_file = manager.getFile();
 
             File def_folder = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator);
             if (!def_folder.exists())
@@ -82,18 +81,15 @@ public class ImportExportFragment extends YuzuPreferenceFragment implements Load
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.pref_import_bookmark)
                                     .setMessage(R.string.pref_import_bookmark_confirm)
-                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (file.exists())
-                                                if (FileUtils.copySingleFile(file, internal_file)) {
-                                                    manager.load();
-                                                    manager.write();
-                                                    Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
-                                                    return;
-                                                }
-                                            Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
-                                        }
+                                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                        if (file.exists())
+                                            if (FileUtils.copySingleFile(file, internal_file)) {
+                                                manager.load();
+                                                manager.save();
+                                                Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
+                                                return;
+                                            }
+                                        Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
                                     })
                                     .setNegativeButton(android.R.string.cancel, null)
                                     .show();
@@ -109,33 +105,30 @@ public class ImportExportFragment extends YuzuPreferenceFragment implements Load
             return false;
         });
 
-        ((AlertDialogPreference) findPreference("export_sd_bookmark")).setOnPositiveButtonListener(new AlertDialogPreference.OnButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                if (PermissionUtils.checkWriteStorage(getActivity())) {
-                    BookmarkManager manager = new BookmarkManager(getActivity());
-                    File internal_file = manager.getBookmarkFile();
-                    File external_file = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".dat");
-                    if (!external_file.getParentFile().exists()) {
-                        if (!external_file.getParentFile().mkdirs()) {
-                            Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
-                            return;
-                        }
+        ((AlertDialogPreference) findPreference("export_sd_bookmark")).setOnPositiveButtonListener(() -> {
+            if (PermissionUtils.checkWriteStorage(getActivity())) {
+                BookmarkManager manager = BookmarkManager.getInstance(getActivity());
+                File internal_file = manager.getFile();
+                File external_file = new File(BrowserApplication.getExternalUserDirectory(), internal_file.getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".dat");
+                if (!external_file.getParentFile().exists()) {
+                    if (!external_file.getParentFile().mkdirs()) {
+                        Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
+                        return;
                     }
-                    if (internal_file.exists())
-                        if (FileUtils.copySingleFile(internal_file, external_file)) {
-                            Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
-                } else {
-                    PermissionUtils.requestStorage(getActivity());
                 }
+                if (internal_file.exists())
+                    if (FileUtils.copySingleFile(internal_file, external_file)) {
+                        Toast.makeText(getActivity(), R.string.succeed, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();
+            } else {
+                PermissionUtils.requestStorage(getActivity());
             }
         });
 
         findPreference("import_html_bookmark").setOnPreferenceClickListener(preference -> {
-            final BookmarkManager manager = new BookmarkManager(getActivity());
+            final BookmarkManager manager = BookmarkManager.getInstance(getActivity());
             File def_folder = Environment.getExternalStorageDirectory();
 
             new FileListDialog(getActivity())
@@ -149,7 +142,7 @@ public class ImportExportFragment extends YuzuPreferenceFragment implements Load
                                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                                         if (file.exists()) {
                                             BookmarkFolder root = new BookmarkFolder(file.getName(), manager.getRoot(), BookmarkIdGenerator.getNewId());
-                                            manager.add(root);
+                                            manager.add(manager.getRoot(), root);
                                             Bundle bundle = new Bundle();
                                             bundle.putSerializable("file", file);
                                             bundle.putSerializable("manager", manager);
@@ -176,8 +169,8 @@ public class ImportExportFragment extends YuzuPreferenceFragment implements Load
 
         ((AlertDialogPreference) findPreference("export_html_bookmark")).setOnPositiveButtonListener(() -> {
             if (PermissionUtils.checkWriteStorage(getActivity())) {
-                BookmarkManager manager = new BookmarkManager(getActivity());
-                File external_file = new File(BrowserApplication.getExternalUserDirectory(), manager.getBookmarkFile().getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".html");
+                BookmarkManager manager = BookmarkManager.getInstance(getActivity());
+                File external_file = new File(BrowserApplication.getExternalUserDirectory(), manager.getFile().getParentFile().getName() + File.separator + FileUtils.getTimeFileName() + ".html");
                 if (!external_file.getParentFile().exists()) {
                     if (!external_file.getParentFile().mkdirs()) {
                         Toast.makeText(getActivity(), R.string.failed, Toast.LENGTH_LONG).show();

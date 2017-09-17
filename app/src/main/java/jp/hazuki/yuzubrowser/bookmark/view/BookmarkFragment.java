@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.bookmark.view;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -88,7 +87,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
 
         pickMode = getArguments().getBoolean(MODE_PICK);
 
-        mManager = new BookmarkManager(getContext());
+        mManager = BookmarkManager.getInstance(getActivity());
 
         locationDetector = new RecyclerTouchLocationDetector();
 
@@ -120,7 +119,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             actionBar.setTitle(folder.title);
         }
 
-        adapter = new BookmarkItemAdapter(getActivity(), folder.list, pickMode, AppData.open_bookmark_new_tab.get(), this);
+        adapter = new BookmarkItemAdapter(getActivity(), folder.getItemList(), pickMode, AppData.open_bookmark_new_tab.get(), this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -135,7 +134,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
 
     @Override
     public void onRecyclerItemClicked(View v, int position) {
-        BookmarkItem item = mCurrentFolder.list.get(position);
+        BookmarkItem item = mCurrentFolder.get(position);
         if (item instanceof BookmarkSite) {
             if (pickMode) {
                 pickBookmark((BookmarkSite) item);
@@ -222,12 +221,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         switch (item.getItemId()) {
             case R.id.addFolder:
                 new AddBookmarkFolderDialog(getActivity(), mManager, getString(R.string.new_folder_name), mCurrentFolder)
-                        .setOnClickListener(new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                adapter.notifyDataSetChanged();
-                            }
-                        })
+                        .setOnClickListener((dialog, which) -> adapter.notifyDataSetChanged())
                         .show();
                 return true;
             case R.id.sort: {
@@ -250,7 +244,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
     private List<BookmarkItem> getSelectedBookmark(List<Integer> items) {
         List<BookmarkItem> bookmarkItems = new ArrayList<>();
         for (Integer item : items) {
-            bookmarkItems.add(mCurrentFolder.list.get(item));
+            bookmarkItems.add(mCurrentFolder.get(item));
         }
         return bookmarkItems;
     }
@@ -261,30 +255,27 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         final BookmarkItem bookmarkItem;
         if (pickMode) {
             bookmarkItem = adapter.get(index);
-            menu.getMenu().add(R.string.select_this_item).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
+            menu.getMenu().add(R.string.select_this_item).setOnMenuItemClickListener(item -> {
 
-                    if (bookmarkItem instanceof BookmarkSite) {
-                        pickBookmark((BookmarkSite) bookmarkItem);
-                    } else {
-                        Intent sender = new Intent(getActivity(), BookmarkActivity.class);
-                        sender.putExtra("id", bookmarkItem.getId());
+                if (bookmarkItem instanceof BookmarkSite) {
+                    pickBookmark((BookmarkSite) bookmarkItem);
+                } else {
+                    Intent sender = new Intent(getActivity(), BookmarkActivity.class);
+                    sender.putExtra("id", bookmarkItem.getId());
 
-                        Intent intent = new Intent();
-                        intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title);
-                        intent.putExtra(Intent.EXTRA_TEXT, sender.toUri(Intent.URI_INTENT_SCHEME));
-                        getActivity().setResult(RESULT_OK, intent);
-                    }
-                    getActivity().finish();
-                    return false;
+                    Intent intent = new Intent();
+                    intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title);
+                    intent.putExtra(Intent.EXTRA_TEXT, sender.toUri(Intent.URI_INTENT_SCHEME));
+                    getActivity().setResult(RESULT_OK, intent);
                 }
+                getActivity().finish();
+                return false;
             });
         } else {
             if (adapter.isMultiSelectMode()) {
                 inflater.inflate(R.menu.bookmark_multiselect_menu, menu.getMenu());
                 bookmarkItem = null;
-            } else if (mCurrentFolder.list.get(index) instanceof BookmarkSite) {
+            } else if (mCurrentFolder.get(index) instanceof BookmarkSite) {
                 inflater.inflate(R.menu.bookmark_site_menu, menu.getMenu());
                 bookmarkItem = adapter.get(index);
             } else {
@@ -293,12 +284,9 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             }
         }
 
-        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                onContextMenuClick(item.getItemId(), bookmarkItem, index);
-                return true;
-            }
+        menu.setOnMenuItemClickListener(item -> {
+            onContextMenuClick(item.getItemId(), bookmarkItem, index);
+            return true;
         });
         menu.show();
     }
@@ -349,21 +337,11 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.editBookmark:
                 if (item instanceof BookmarkSite) {
                     new AddBookmarkSiteDialog(getActivity(), mManager, (BookmarkSite) item)
-                            .setOnClickListener(new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
+                            .setOnClickListener((dialog, which) -> adapter.notifyDataSetChanged())
                             .show();
                 } else if (item instanceof BookmarkFolder) {
                     new AddBookmarkFolderDialog(getActivity(), mManager, (BookmarkFolder) item)
-                            .setOnClickListener(new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
+                            .setOnClickListener((dialog, which) -> adapter.notifyDataSetChanged())
                             .show();
                 }
                 break;
@@ -371,30 +349,26 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 new BookmarkFoldersDialog(getActivity(), mManager)
                         .setTitle(R.string.move_bookmark)
                         .setCurrentFolder(mCurrentFolder, item)
-                        .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
-                            @Override
-                            public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
-                                mCurrentFolder.list.remove(index);
-                                folder.add(item);
+                        .setOnFolderSelectedListener((dialog, folder) -> {
+                            mManager.moveTo(mCurrentFolder, folder, index);
 
-                                mManager.write();
-                                adapter.notifyDataSetChanged();
-                                return false;
-                            }
+                            mManager.save();
+                            adapter.notifyDataSetChanged();
+                            return false;
                         })
                         .show();
                 break;
             case R.id.moveUp:
                 if (index > 0) {
-                    Collections.swap(mCurrentFolder.list, index - 1, index);
-                    mManager.write();
+                    Collections.swap(mCurrentFolder.getItemList(), index - 1, index);
+                    mManager.save();
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case R.id.moveDown:
-                if (index < mCurrentFolder.list.size() - 1) {
-                    Collections.swap(mCurrentFolder.list, index + 1, index);
-                    mManager.write();
+                if (index < mCurrentFolder.size() - 1) {
+                    Collections.swap(mCurrentFolder.getItemList(), index + 1, index);
+                    mManager.save();
                     adapter.notifyDataSetChanged();
                 }
                 break;
@@ -402,13 +376,10 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.confirm)
                         .setMessage(R.string.confirm_delete_bookmark)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mCurrentFolder.list.remove(index);
-                                mManager.write();
-                                adapter.notifyDataSetChanged();
-                            }
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            mManager.remove(mCurrentFolder, index);
+                            mManager.save();
+                            adapter.notifyDataSetChanged();
                         })
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
@@ -416,7 +387,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.openAllNew: {
                 List<BookmarkItem> items;
                 if (item instanceof BookmarkFolder) {
-                    items = ((BookmarkFolder) item).list;
+                    items = ((BookmarkFolder) item).getItemList();
                 } else {
                     items = getSelectedBookmark(adapter.getSelectedItems());
                 }
@@ -426,7 +397,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.openAllBg: {
                 List<BookmarkItem> items;
                 if (item instanceof BookmarkFolder) {
-                    items = ((BookmarkFolder) item).list;
+                    items = ((BookmarkFolder) item).getItemList();
                 } else {
                     items = getSelectedBookmark(adapter.getSelectedItems());
                 }
@@ -439,16 +410,12 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 new BookmarkFoldersDialog(getActivity(), mManager)
                         .setTitle(R.string.move_bookmark)
                         .setCurrentFolder(mCurrentFolder, bookmarkItems)
-                        .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
-                            @Override
-                            public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
-                                mCurrentFolder.list.removeAll(bookmarkItems);
-                                folder.addAll(bookmarkItems);
+                        .setOnFolderSelectedListener((dialog, folder) -> {
+                            mManager.moveAll(mCurrentFolder, folder, bookmarkItems);
 
-                                mManager.write();
-                                adapter.notifyDataSetChanged();
-                                return false;
-                            }
+                            mManager.save();
+                            adapter.notifyDataSetChanged();
+                            return false;
                         })
                         .show();
                 break;
@@ -456,17 +423,14 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.confirm)
                         .setMessage(R.string.confirm_delete_bookmark)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
 
-                                mCurrentFolder.list.removeAll(selectedList);
-                                mManager.write();
+                            mManager.removeAll(mCurrentFolder, selectedList);
+                            mManager.save();
 
-                                adapter.setMultiSelectMode(false);
-                                adapter.notifyDataSetChanged();
-                            }
+                            adapter.setMultiSelectMode(false);
+                            adapter.notifyDataSetChanged();
                         })
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
@@ -491,7 +455,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.openAllNew: {
                 List<BookmarkItem> items;
                 if (item instanceof BookmarkFolder) {
-                    items = ((BookmarkFolder) item).list;
+                    items = ((BookmarkFolder) item).getItemList();
                 } else {
                     items = getSelectedBookmark(adapter.getSelectedItems());
                 }
@@ -501,7 +465,7 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
             case R.id.openAllBg: {
                 List<BookmarkItem> items;
                 if (item instanceof BookmarkFolder) {
-                    items = ((BookmarkFolder) item).list;
+                    items = ((BookmarkFolder) item).getItemList();
                 } else {
                     items = getSelectedBookmark(adapter.getSelectedItems());
                 }
@@ -518,16 +482,12 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 new BookmarkFoldersDialog(getActivity(), mManager)
                         .setTitle(R.string.move_bookmark)
                         .setCurrentFolder(mCurrentFolder, bookmarkItems)
-                        .setOnFolderSelectedListener(new BookmarkFoldersDialog.OnFolderSelectedListener() {
-                            @Override
-                            public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
-                                mCurrentFolder.list.removeAll(bookmarkItems);
-                                folder.addAll(bookmarkItems);
+                        .setOnFolderSelectedListener((dialog, folder) -> {
+                            mManager.moveAll(mCurrentFolder, folder, bookmarkItems);
 
-                                mManager.write();
-                                mode.finish();
-                                return false;
-                            }
+                            mManager.save();
+                            mode.finish();
+                            return false;
                         })
                         .show();
                 return true;
@@ -535,16 +495,13 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.confirm)
                         .setMessage(R.string.confirm_delete_bookmark)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            List<BookmarkItem> selectedList = getSelectedBookmark(adapter.getSelectedItems());
 
-                                mCurrentFolder.list.removeAll(selectedList);
-                                mManager.write();
+                            mManager.removeAll(mCurrentFolder, selectedList);
+                            mManager.save();
 
-                                mode.finish();
-                            }
+                            mode.finish();
                         })
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
@@ -578,12 +535,8 @@ public class BookmarkFragment extends Fragment implements BookmarkItemAdapter.On
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             adapter.move(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mManager.save();
             return true;
-        }
-
-        @Override
-        public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
-            mManager.write();
         }
 
         @Override

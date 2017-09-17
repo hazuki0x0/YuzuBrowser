@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkFoldersDialog.OnFolderSelectedListener;
 import jp.hazuki.yuzubrowser.utils.view.SpinnerButton;
+import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 
 public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements OnFolderSelectedListener {
     protected final Context mContext;
@@ -23,6 +25,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
     protected final EditText titleEditText;
     protected final EditText urlEditText;
     protected final SpinnerButton folderButton;
+    protected final CheckBox addToTopCheckBox;
     protected DialogInterface.OnClickListener mOnClickListener;
     protected final S mItem;
     protected BookmarkManager mManager;
@@ -34,12 +37,13 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
         mManager = manager;
 
         if (mManager == null)
-            mManager = new BookmarkManager(context);
+            mManager = BookmarkManager.getInstance(context);
 
         View view = inflateView();
-        titleEditText = (EditText) view.findViewById(R.id.titleEditText);
-        urlEditText = (EditText) view.findViewById(R.id.urlEditText);
-        folderButton = (SpinnerButton) view.findViewById(R.id.folderButton);
+        titleEditText = view.findViewById(R.id.titleEditText);
+        urlEditText = view.findViewById(R.id.urlEditText);
+        folderButton = view.findViewById(R.id.folderButton);
+        addToTopCheckBox = view.findViewById(R.id.addToTopCheckBox);
 
         initView(view, title, url);
 
@@ -67,16 +71,11 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
             final BookmarkFolder root = mManager.getRoot();
             mParent = root;
             folderButton.setText(root.title);
-            folderButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new BookmarkFoldersDialog(mContext, mManager)
-                            .setTitle(R.string.folder)
-                            .setCurrentFolder(root)
-                            .setOnFolderSelectedListener(AddBookmarkDialog.this)
-                            .show();
-                }
-            });
+            folderButton.setOnClickListener(v -> new BookmarkFoldersDialog(mContext, mManager)
+                    .setTitle(R.string.folder)
+                    .setCurrentFolder(root)
+                    .setOnFolderSelectedListener(AddBookmarkDialog.this)
+                    .show());
         } else {
             folderButton.setVisibility(View.GONE);
         }
@@ -85,32 +84,36 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
     public void show() {
         mDialog.show();
 
-        mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Editable title = titleEditText.getText();
-                if (TextUtils.isEmpty(title)) {
-                    Toast.makeText(mDialog.getContext(), R.string.title_empty_mes, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Editable url = urlEditText.getText();
-                if (TextUtils.isEmpty(url)) {
-                    Toast.makeText(mDialog.getContext(), R.string.url_empty_mes, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            Editable title = titleEditText.getText();
+            if (TextUtils.isEmpty(title)) {
+                Toast.makeText(mDialog.getContext(), R.string.title_empty_mes, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Editable url = urlEditText.getText();
+            if (TextUtils.isEmpty(url)) {
+                Toast.makeText(mDialog.getContext(), R.string.url_empty_mes, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                S item = makeItem(mItem, title.toString(), url.toString());
-                if (item != null)
-                    mParent.add(item);
+            S item = makeItem(mItem, title.toString(), url.toString());
+            if (item != null) {
+                if (addToTopCheckBox.isChecked())
+                    mManager.addFirst(mParent, item);
+                else
+                    mManager.add(mParent, item);
+            }
 
-                if (mManager.write()) {
-                    Toast.makeText(mDialog.getContext(), R.string.succeed, Toast.LENGTH_SHORT).show();
-                    if (mOnClickListener != null)
-                        mOnClickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);
-                    mDialog.dismiss();
-                } else {
-                    Toast.makeText(mDialog.getContext(), R.string.failed, Toast.LENGTH_LONG).show();
+            if (mManager.save()) {
+                Toast.makeText(mDialog.getContext(), R.string.succeed, Toast.LENGTH_SHORT).show();
+                if (mOnClickListener != null)
+                    mOnClickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);
+                if (mContext instanceof WebBrowser) {
+                    ((WebBrowser) mContext).requestIconChange();
                 }
+                mDialog.dismiss();
+            } else {
+                Toast.makeText(mDialog.getContext(), R.string.failed, Toast.LENGTH_LONG).show();
             }
         });
     }

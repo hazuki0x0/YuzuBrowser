@@ -262,4 +262,5 @@
     <string name="font_error">このファイルはフォントではありません</string>
     <string name="read_it_later">あとで読む</string>
     <string name="navigate_lock">ナビゲートロック</string>
+    <string name="add_to_top">先頭に追加</string>
 </resources>

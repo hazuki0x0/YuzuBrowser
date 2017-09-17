@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator;
@@ -20,7 +19,7 @@ public class BookmarkFolder extends BookmarkItem implements Serializable {
     public static final int BOOKMARK_ITEM_ID = 1;
 
     public BookmarkFolder parent;
-    public final ArrayList<BookmarkItem> list;
+    final ArrayList<BookmarkItem> list;
 
     public BookmarkFolder(String title, BookmarkFolder parent, long id) {
         super(title, id);
@@ -41,8 +40,24 @@ public class BookmarkFolder extends BookmarkItem implements Serializable {
         list.add(item);
     }
 
-    public void addAll(Collection<BookmarkItem> addlist) {
-        list.addAll(addlist);
+    public void add(BookmarkFolder folder) {
+        list.add(folder);
+    }
+
+    public void addFirst(BookmarkFolder folder) {
+        list.add(0, folder);
+    }
+
+    public BookmarkItem get(int index) {
+        return list.get(index);
+    }
+
+    public List<BookmarkItem> getItemList() {
+        return list;
+    }
+
+    public int size() {
+        return list.size();
     }
 
     public void clear() {

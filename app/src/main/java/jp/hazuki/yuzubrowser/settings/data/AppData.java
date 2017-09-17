@@ -360,8 +360,8 @@ public class AppData {
             if (lastLaunch >= 0) {
                 //version up code
                 if (lastLaunch < 106000) {
-                    BookmarkManager manager = new BookmarkManager(context);
-                    manager.write();
+                    BookmarkManager manager = BookmarkManager.getInstance(context);
+                    manager.save();
                 }
 
                 if (lastLaunch < 200000) {

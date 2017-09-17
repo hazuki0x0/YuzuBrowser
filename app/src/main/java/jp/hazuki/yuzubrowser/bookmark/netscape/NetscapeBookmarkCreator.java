@@ -47,7 +47,7 @@ public class NetscapeBookmarkCreator {
     }
 
     private void writeFolder(Writer writer, BookmarkFolder folder) throws IOException {
-        for (BookmarkItem item : folder.list) {
+        for (BookmarkItem item : folder.getItemList()) {
             String date = Long.toString(item.getId() / 1000);
             if (item instanceof BookmarkSite) {
                 writeIndent(writer);
