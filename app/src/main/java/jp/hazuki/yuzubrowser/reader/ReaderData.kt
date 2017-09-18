@@ -14,22 +14,6 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.reader;
+package jp.hazuki.yuzubrowser.reader
 
-public class ReaderData {
-    private final String title;
-    private final CharSequence body;
-
-    public ReaderData(String title, CharSequence body) {
-        this.title = title;
-        this.body = body;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public CharSequence getBody() {
-        return body;
-    }
-}
+class ReaderData(val title: String, val body: CharSequence)
