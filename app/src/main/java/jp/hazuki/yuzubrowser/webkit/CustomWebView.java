@@ -211,6 +211,8 @@ public interface CustomWebView {
 
     void setVerticalScrollBarEnabled(boolean enabled);
 
+    void setSwipeable(boolean swipeable);
+
     interface OnWebStateChangeListener {
         void onStateChanged(CustomWebView web, TabData tabdata);
     }

@@ -48,6 +48,9 @@ public class WebViewBehavior extends AppBarLayout.ScrollingViewBehavior {
 
         if (webView != null && !webView.isTouching()) {
             webView.scrollBy(0, bottom - prevY);
+            if (bottom == 0) {
+                webView.setSwipeable(false);
+            }
         }
 
         prevY = bottom;

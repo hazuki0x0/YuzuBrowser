@@ -42,12 +42,10 @@ import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector;
 
-public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, SwipeRefreshLayout.OnRefreshListener, ScrollController.OnScrollEnable {
+public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, SwipeRefreshLayout.OnRefreshListener, OnSwipeableChangeListener {
     private static final int TIMEOUT = 7500;
 
-    private long id = System.currentTimeMillis();
-    private NormalWebView webView;
-    private ScrollController controller;
+    private final NormalWebView webView;
     private boolean enableSwipe = false;
 
     private final CustomWebChromeClientWrapper mWebChromeClientWrapper = new CustomWebChromeClientWrapper(this) {
@@ -63,14 +61,8 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     private final CustomWebViewClientWrapper mWebViewClientWrapper = new CustomWebViewClientWrapper(this) {
         @Override
         public void onPageFinished(CustomWebView view, String url) {
-            controller.onPageChange();
             super.onPageFinished(view, url);
-        }
 
-        @Override
-        public void onPageStarted(CustomWebView view, String url, Bitmap favicon) {
-            controller.onPageChange();
-            super.onPageStarted(view, url, favicon);
         }
     };
 
@@ -78,8 +70,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     public SwipeWebView(Context context) {
         super(context);
         webView = new NormalWebView(context);
-        controller = new ScrollController(this);
-        webView.setScrollController(controller);
+        webView.setOnScrollableChangeListener(this);
         addView(webView, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         setOnRefreshListener(this);
@@ -447,13 +438,12 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
     @Override
     public long getIdentityId() {
-        return id;
+        return webView.getIdentityId();
     }
 
     @Override
     public void setIdentityId(long identityId) {
-        if (id > identityId)
-            id = identityId;
+        webView.setIdentityId(identityId);
     }
 
     @Override
@@ -471,22 +461,17 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     @Override
     public void onRefresh() {
         webView.reload();
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setRefreshing(false);
-            }
-        }, TIMEOUT);
+        postDelayed(() -> setRefreshing(false), TIMEOUT);
     }
 
     @Override
-    public void onScrollEnable(boolean enable) {
-        setEnabled(isScrollable() && enable);
+    public void onSwipeableChanged(boolean scrollable) {
+        super.setEnabled(enableSwipe && scrollable);
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        super.setEnabled(enableSwipe && enabled);
+        super.setEnabled(enableSwipe && isScrollable());
     }
 
     @Override
@@ -521,5 +506,10 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
     @Override
     public void setVerticalScrollBarEnabled(boolean verticalScrollBarEnabled) {
         webView.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+    }
+
+    @Override
+    public void setSwipeable(boolean swipeable) {
+        webView.setSwipeable(swipeable);
     }
 }
