@@ -38,12 +38,13 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     private MultiTouchGestureDetector mGestureDetector;
     private OnScrollChangedListener mOnScrollChangedListener;
     private OnScrollChangedListener mScrollBarListener;
+    private OnSwipeableChangeListener scrollableChangeListener;
+    private boolean swipeable = true;
     private View mTitleBar;
 
     private int firstY;
     private int mLastY;
     private int scrollY;
-    private ScrollController mScrollController;
     private final int[] mScrollOffset = new int[2];
     private final int[] mScrollConsumed = new int[2];
     private int mNestedOffsetY;
@@ -310,6 +311,9 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                         mLastY = eventY - mScrollOffset[1];
                         event.offsetLocation(0, -mScrollOffset[1]);
                         mNestedOffsetY = mScrollOffset[1];
+                        setSwipeable(false);
+                    } else {
+                        setSwipeable(true);
                     }
                     returnValue = super.onTouchEvent(event);
 
@@ -322,9 +326,6 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
                     } else {
                         nestedScrolled = false;
                     }
-                }
-                if (mScrollController != null) {
-                    mScrollController.onMove(scrollExcessPlay, mScrollConsumed[1], getScrollY());
                 }
                 break;
             case MotionEvent.ACTION_DOWN:
@@ -360,12 +361,7 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         setOnMyCreateContextMenuListener(null);
         setMyOnScrollChangedListener(null);
 
-        post(new Runnable() {
-            @Override
-            public void run() {
-                NormalWebView.super.destroy();
-            }
-        });
+        post(NormalWebView.super::destroy);
     }
 
     @Override
@@ -426,8 +422,18 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
         return mChildHelper.dispatchNestedPreFling(velocityX, velocityY);
     }
 
-    public void setScrollController(ScrollController controller) {
-        mScrollController = controller;
+    public void setOnScrollableChangeListener(OnSwipeableChangeListener listener) {
+        scrollableChangeListener = listener;
+    }
+
+    @Override
+    public void setSwipeable(boolean enable) {
+        if (swipeable != enable) {
+            swipeable = enable;
+            if (scrollableChangeListener != null) {
+                scrollableChangeListener.onSwipeableChanged(scrollable && swipeable);
+            }
+        }
     }
 
     @Override
@@ -438,7 +444,10 @@ public class NormalWebView extends WebView implements CustomWebView, NestedScrol
     @Override
     protected int computeVerticalScrollRange() {
         int scrollRange = super.computeVerticalScrollRange();
+        boolean old = scrollable;
         scrollable = scrollRange > getHeight();
+        if (old != scrollable && scrollableChangeListener != null)
+            scrollableChangeListener.onSwipeableChanged(scrollable && swipeable);
         return scrollRange;
     }
 

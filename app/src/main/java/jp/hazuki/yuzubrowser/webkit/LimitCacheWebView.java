@@ -1007,6 +1007,11 @@ public class LimitCacheWebView extends FrameLayout implements CustomWebView, Tab
     }
 
     @Override
+    public void setSwipeable(boolean swipeable) {
+        currentTab.mWebView.setSwipeable(swipeable);
+    }
+
+    @Override
     public void onCacheOverflow(TabData tabData) {
         Bundle bundle = new Bundle();
         tabData.mWebView.saveState(bundle);

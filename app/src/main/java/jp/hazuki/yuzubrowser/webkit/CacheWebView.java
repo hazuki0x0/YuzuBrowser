@@ -867,4 +867,9 @@ public class CacheWebView extends FrameLayout implements CustomWebView {
             web.mWebView.setVerticalScrollBarEnabled(enabled);
         }
     }
+
+    @Override
+    public void setSwipeable(boolean swipeable) {
+        mList.get(mCurrent).mWebView.setSwipeable(swipeable);
+    }
 }
