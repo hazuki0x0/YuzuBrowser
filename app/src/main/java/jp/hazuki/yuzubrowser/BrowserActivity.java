@@ -61,8 +61,6 @@ import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,8 +82,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebView.WebViewTransport;
 import android.webkit.WebViewDatabase;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -93,6 +89,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -246,12 +244,15 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebHistoryItem;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView.OnWebStateChangeListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebViewClient;
+import jp.hazuki.yuzubrowser.webkit.NormalWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
 import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
 import jp.hazuki.yuzubrowser.webkit.WebViewAutoScrollManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
+import jp.hazuki.yuzubrowser.webkit.WebViewProvider;
+import jp.hazuki.yuzubrowser.webkit.WebViewProvider.CachedWebViewProvider;
 import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
 import jp.hazuki.yuzubrowser.webkit.WebViewRenderingManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewType;
@@ -269,7 +270,7 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
 public class BrowserActivity extends LongPressFixActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
         GestureOverlayView.OnGesturePerformedListener, MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener,
-        FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener {
+        FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, CachedWebViewProvider {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -378,6 +379,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         mHandler = new Handler();
         dialogHandler = new PermissionDialogHandler(this);
         mTabManager = TabManagerFactory.newInstance(this);
+
+        WebViewProvider.setProvider(this);
 
         webFrameLayout = findViewById(R.id.webFrameLayout);
         webGestureOverlayView = findViewById(R.id.webGestureOverlayView);
@@ -1794,6 +1797,33 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         checkPatternMatch(tab, tab.getUrl(), true);
     }
 
+    //Cache web view for performance reasons
+    private NormalWebView cachedWebView;
+    private boolean waitingForWebViewCache;
+
+    @NotNull
+    @Override
+    public NormalWebView getWebView() {
+        NormalWebView cache = cachedWebView;
+        if (cache != null) {
+            cachedWebView = null;
+            createWebViewCache();
+            return cache;
+        }
+        createWebViewCache();
+        return new NormalWebView(this);
+    }
+
+    private void createWebViewCache() {
+        if (waitingForWebViewCache) return;
+
+        waitingForWebViewCache = true;
+        mHandler.postDelayed(() -> {
+            cachedWebView = new NormalWebView(this);
+            waitingForWebViewCache = false;
+        }, 100);
+    }
+
     private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
@@ -2094,20 +2124,17 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                                 .setTitle(R.string.download)
                                 .setItems(
                                         new String[]{getString(R.string.download), getString(R.string.open), getString(R.string.share)},
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                switch (which) {
-                                                    case 0:
-                                                        actionDownload(url, userAgent, contentDisposition, mimetype, contentLength);
-                                                        break;
-                                                    case 1:
-                                                        actionOpen(url, userAgent, contentDisposition, mimetype, contentLength);
-                                                        break;
-                                                    case 2:
-                                                        actionShare(url);
-                                                        break;
-                                                }
+                                        (dialog, which) -> {
+                                            switch (which) {
+                                                case 0:
+                                                    actionDownload(url, userAgent, contentDisposition, mimetype, contentLength);
+                                                    break;
+                                                case 1:
+                                                    actionOpen(url, userAgent, contentDisposition, mimetype, contentLength);
+                                                    break;
+                                                case 2:
+                                                    actionShare(url);
+                                                    break;
                                             }
                                         })
                                 .setNegativeButton(android.R.string.cancel, null)
@@ -2294,23 +2321,20 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 .setView(listview)
                 .show();
 
-        listview.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int next = position - history_list.getCurrent();
-                if (tab.mWebView.canGoBackOrForward(next)) {
-                    if (tab.isNavLock()) {
-                        CustomWebHistoryItem item = history_list.getBackOrForward(next);
-                        if (item != null)
-                            performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
-                        else
-                            tab.mWebView.goBackOrForward(next);
-                    } else {
+        listview.setOnItemClickListener((parent, view, position, id) -> {
+            int next = position - history_list.getCurrent();
+            if (tab.mWebView.canGoBackOrForward(next)) {
+                if (tab.isNavLock()) {
+                    CustomWebHistoryItem item = history_list.getBackOrForward(next);
+                    if (item != null)
+                        performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, item.getUrl(), TabType.DEFAULT);
+                    else
                         tab.mWebView.goBackOrForward(next);
-                    }
+                } else {
+                    tab.mWebView.goBackOrForward(next);
                 }
-                dialog.dismiss();
             }
+            dialog.dismiss();
         });
     }
 
@@ -2783,18 +2807,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             (new AlertDialog.Builder(BrowserActivity.this))
                     .setTitle(url)
                     .setMessage(message)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            result.confirm();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            result.cancel();
-                        }
-                    })
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> result.confirm())
+                    .setOnCancelListener(dialog -> result.cancel())
                     .show();
             return true;
         }
@@ -2805,24 +2819,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 (new AlertDialog.Builder(BrowserActivity.this))
                         .setTitle(url)
                         .setMessage(message)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.confirm();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.cancel();
-                            }
-                        })
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                result.cancel();
-                            }
-                        })
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> result.confirm())
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> result.cancel())
+                        .setOnCancelListener(dialog -> result.cancel())
                         .show();
             return true;
         }
@@ -2835,24 +2834,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     .setTitle(url)
                     .setMessage(message)
                     .setView(edit_text)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            result.confirm(edit_text.getText().toString());
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            result.cancel();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            result.cancel();
-                        }
-                    })
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> result.confirm(edit_text.getText().toString()))
+                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> result.cancel())
+                    .setOnCancelListener(dialog -> result.cancel())
                     .show();
             return true;
         }
@@ -2861,7 +2845,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         @Override
         public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
             if (mWebCustomViewHandler == null)
-                mWebCustomViewHandler = new WebCustomViewHandler((ViewGroup) findViewById(R.id.fullscreenLayout));
+                mWebCustomViewHandler = new WebCustomViewHandler(findViewById(R.id.fullscreenLayout));
             mWebCustomViewHandler.showCustomView(BrowserActivity.this, view, AppData.web_customview_oritentation.get(), callback);
         }
 
@@ -2904,12 +2888,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         @Override
         public void getVisitedHistory(final ValueCallback<String[]> callback) {
             if (mBrowserHistoryManager != null) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onReceiveValue(mBrowserHistoryManager.getHistoryArray(3000));
-                    }
-                }).start();
+                new Thread(() -> callback.onReceiveValue(mBrowserHistoryManager.getHistoryArray(3000))).start();
             }
         }
     }
@@ -2950,32 +2929,23 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 case WebView.HitTestResult.PHONE_TYPE: {
                     final String extra = result.getExtra();
                     menu.setHeaderTitle(Uri.decode(extra));
-                    menu.add(R.string.dial).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_TEL + extra));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            return false;
-                        }
+                    menu.add(R.string.dial).setOnMenuItemClickListener(arg0 -> {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(WebView.SCHEME_TEL + extra));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
                     });
-                    menu.add(R.string.add_contact).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-                            intent.putExtra(Insert.PHONE, Uri.decode(extra));
-                            intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            return false;
-                        }
+                    menu.add(R.string.add_contact).setOnMenuItemClickListener(arg0 -> {
+                        Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                        intent.putExtra(Insert.PHONE, Uri.decode(extra));
+                        intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
                     });
-                    menu.add(R.string.copy_phone_num).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem arg0) {
-                            ClipboardUtils.setClipboardText(getApplicationContext(), Uri.decode(extra));
-                            return false;
-                        }
+                    menu.add(R.string.copy_phone_num).setOnMenuItemClickListener(arg0 -> {
+                        ClipboardUtils.setClipboardText(getApplicationContext(), Uri.decode(extra));
+                        return false;
                     });
                 }
                 break;
@@ -3358,26 +3328,16 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                             DownloadService.startDownloadService(BrowserActivity.this, info);
                             return true;
                         case SingleAction.LPRESS_ADD_BLACK_LIST:
-                            webview.requestFocusNodeHref(new WebSrcImageLinkHandler(new WebSrcImageLinkHandler.OnHandleUrlListener() {
-                                @Override
-                                public void onHandleUrl(String url) {
-                                    AddAdBlockDialog.addBackListInstance(url)
-                                            .show(getSupportFragmentManager(), "add black");
-                                }
-                            }).obtainMessage());
+                            webview.requestFocusNodeHref(new WebSrcImageLinkHandler(url -> AddAdBlockDialog.addBackListInstance(url)
+                                    .show(getSupportFragmentManager(), "add black")).obtainMessage());
                             return true;
                         case SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST:
                             AddAdBlockDialog.addBackListInstance(extra)
                                     .show(getSupportFragmentManager(), "add black");
                             return true;
                         case SingleAction.LPRESS_ADD_WHITE_LIST:
-                            webview.requestFocusNodeHref(new WebSrcImageLinkHandler(new WebSrcImageLinkHandler.OnHandleUrlListener() {
-                                @Override
-                                public void onHandleUrl(String url) {
-                                    AddAdBlockDialog.addWhiteListInstance(url)
-                                            .show(getSupportFragmentManager(), "add white");
-                                }
-                            }).obtainMessage());
+                            webview.requestFocusNodeHref(new WebSrcImageLinkHandler(url -> AddAdBlockDialog.addWhiteListInstance(url)
+                                    .show(getSupportFragmentManager(), "add white")).obtainMessage());
                         case SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST:
                             AddAdBlockDialog.addWhiteListInstance(extra)
                                     .show(getSupportFragmentManager(), "add white");
@@ -3481,13 +3441,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                         mWebViewPageFastScroller = new WebViewPageFastScroller(BrowserActivity.this);
                         mToolbar.getBottomToolbarAlwaysLayout().addView(mWebViewPageFastScroller);
                         mWebViewPageFastScroller.show(mTabManager.get(target).mWebView);
-                        mWebViewPageFastScroller.setOnEndListener(new WebViewPageFastScroller.OnEndListener() {
-                            @Override
-                            public boolean onEnd() {
-                                mToolbar.getBottomToolbarAlwaysLayout().removeView(mWebViewPageFastScroller);
-                                mWebViewPageFastScroller = null;
-                                return true;
-                            }
+                        mWebViewPageFastScroller.setOnEndListener(() -> {
+                            mToolbar.getBottomToolbarAlwaysLayout().removeView(mWebViewPageFastScroller);
+                            mWebViewPageFastScroller = null;
+                            return true;
                         });
                     } else {
                         mWebViewPageFastScroller.close();
@@ -3497,12 +3454,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 case SingleAction.PAGE_AUTO_SCROLL: {
                     if (mWebViewAutoScrollManager == null) {
                         mWebViewAutoScrollManager = new WebViewAutoScrollManager();
-                        mWebViewAutoScrollManager.setOnStopListener(new WebViewAutoScrollManager.OnStop() {
-                            @Override
-                            public void onStop() {
-                                mWebViewAutoScrollManager = null;
-                            }
-                        });
+                        mWebViewAutoScrollManager.setOnStopListener(() -> mWebViewAutoScrollManager = null);
                         mWebViewAutoScrollManager.start(mTabManager.get(target).mWebView, ((AutoPageScrollAction) action).getScrollSpeed());
                     } else {
                         mWebViewAutoScrollManager.stop();
@@ -3583,12 +3535,9 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     titleTextView.setText(tab.getTitle());
                     final String url = tab.getUrl();
                     urlTextView.setText(UrlUtils.decodeUrl(url));
-                    urlTextView.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            ClipboardUtils.setClipboardText(BrowserActivity.this, url);
-                            return true;
-                        }
+                    urlTextView.setOnLongClickListener(v -> {
+                        ClipboardUtils.setClipboardText(BrowserActivity.this, url);
+                        return true;
                     });
 
                     new AlertDialog.Builder(BrowserActivity.this)
@@ -3722,13 +3671,10 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     String to = translateAction.getTranslateTo();
                     if (TextUtils.isEmpty(to)) {
                         new AlertDialog.Builder(BrowserActivity.this)
-                                .setItems(R.array.translate_language_list, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        String to = getResources().getStringArray(R.array.translate_language_values)[which];
-                                        String url = URLUtil.composeSearchUrl(tab.getUrl(), "http://translate.google.com/translate?sl=" + from + "&tl=" + to + "&u=%s", "%s");
-                                        loadUrl(tab, url);
-                                    }
+                                .setItems(R.array.translate_language_list, (dialog, which) -> {
+                                    String to1 = getResources().getStringArray(R.array.translate_language_values)[which];
+                                    String url = URLUtil.composeSearchUrl(tab.getUrl(), "http://translate.google.com/translate?sl=" + from + "&tl=" + to1 + "&u=%s", "%s");
+                                    loadUrl(tab, url);
                                 })
                                 .show();
                     } else {
@@ -3976,15 +3922,12 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     mSubGestureView.setGestureStrokeType(GestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
                     mSubGestureView.setGestureStrokeWidth(8.0f);
                     mSubGestureView.setBackgroundColor(0x70000000);
-                    mSubGestureView.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
-                        @Override
-                        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-                            Action action = manager.recognize(gesture);
-                            if (action != null) {
-                                mActionCallback.run(action);
-                                superFrameLayout.removeView(mSubGestureView);
-                                mSubGestureView = null;
-                            }
+                    mSubGestureView.addOnGesturePerformedListener((overlay, gesture) -> {
+                        Action action1 = manager.recognize(gesture);
+                        if (action1 != null) {
+                            mActionCallback.run(action1);
+                            superFrameLayout.removeView(mSubGestureView);
+                            mSubGestureView = null;
                         }
                     });
                     superFrameLayout.addView(mSubGestureView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -3998,23 +3941,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     break;
                 case SingleAction.ORIENTATION_SETTING:
                     new AlertDialog.Builder(BrowserActivity.this)
-                            .setItems(R.array.pref_oritentation_list, new DialogInterface.OnClickListener() {
-                                @SuppressWarnings("WrongConstant")
-                                @Override
-                                public void onClick(DialogInterface arg0, int which) {
-                                    setRequestedOrientation(getResources().getIntArray(R.array.pref_oritentation_values)[which]);
-                                }
-                            })
+                            .setItems(R.array.pref_oritentation_list,
+                                    (arg0, which) -> setRequestedOrientation(getResources().getIntArray(R.array.pref_oritentation_values)[which]))
                             .show();
                     break;
                 case SingleAction.OPEN_LINK_SETTING:
                     new AlertDialog.Builder(BrowserActivity.this)
-                            .setItems(R.array.pref_newtab_list, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int which) {
-                                    AppData.newtab_link.set(getResources().getIntArray(R.array.pref_newtab_values)[which]);
-                                }
-                            })
+                            .setItems(R.array.pref_newtab_list,
+                                    (arg0, which) -> AppData.newtab_link.set(getResources().getIntArray(R.array.pref_newtab_values)[which]))
                             .show();
                     break;
                 case SingleAction.USERAGENT_SETTING: {
@@ -4168,20 +4102,14 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     if (def_target instanceof HitTestResultTargetInfo) {
                         HitTestResultTargetInfo web_target = (HitTestResultTargetInfo) def_target;
                         builder.setTitle(web_target.getResult().getExtra())
-                                .setAdapter(new ActionListViewAdapter(BrowserActivity.this, actionList, web_target.getActionNameArray()), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkAndRun(actionList.get(which), def_target);
-                                    }
-                                });
+                                .setAdapter(
+                                        new ActionListViewAdapter(BrowserActivity.this, actionList, web_target.getActionNameArray()),
+                                        (dialog, which) -> checkAndRun(actionList.get(which), def_target));
                     } else {
                         builder.setTitle(tab.getUrl())
-                                .setAdapter(new ActionListViewAdapter(BrowserActivity.this, actionList, null), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkAndRun(actionList.get(which), def_target);
-                                    }
-                                });
+                                .setAdapter(
+                                        new ActionListViewAdapter(BrowserActivity.this, actionList, null),
+                                        (dialog, which) -> checkAndRun(actionList.get(which), def_target));
                     }
 
                     builder.show();

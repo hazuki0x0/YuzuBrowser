@@ -69,7 +69,7 @@ public class SwipeWebView extends SwipeRefreshLayout implements CustomWebView, S
 
     public SwipeWebView(Context context) {
         super(context);
-        webView = new NormalWebView(context);
+        webView = WebViewProvider.getInstance(context);
         webView.setOnScrollableChangeListener(this);
         addView(webView, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
