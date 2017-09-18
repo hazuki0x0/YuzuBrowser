@@ -90,6 +90,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -243,12 +245,15 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebHistoryItem;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView.OnWebStateChangeListener;
 import jp.hazuki.yuzubrowser.webkit.CustomWebViewClient;
+import jp.hazuki.yuzubrowser.webkit.NormalWebView;
 import jp.hazuki.yuzubrowser.webkit.TabType;
 import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebCustomViewHandler;
 import jp.hazuki.yuzubrowser.webkit.WebUploadHandler;
 import jp.hazuki.yuzubrowser.webkit.WebViewAutoScrollManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
+import jp.hazuki.yuzubrowser.webkit.WebViewProvider;
+import jp.hazuki.yuzubrowser.webkit.WebViewProvider.CachedWebViewProvider;
 import jp.hazuki.yuzubrowser.webkit.WebViewProxy;
 import jp.hazuki.yuzubrowser.webkit.WebViewRenderingManager;
 import jp.hazuki.yuzubrowser.webkit.WebViewType;
@@ -266,7 +271,7 @@ import jp.hazuki.yuzubrowser.webkit.handler.WebSrcLinkCopyHandler;
 
 public class BrowserActivity extends LongPressFixActivity implements WebBrowser, GestureOverlayView.OnGestureListener,
         GestureOverlayView.OnGesturePerformedListener, MenuWindow.OnMenuCloseListener, AddAdBlockDialog.OnAdBlockListUpdateListener,
-        FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener {
+        FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, CachedWebViewProvider {
     private static final String TAG = "BrowserActivity";
 
     private static final int RESULT_REQUEST_WEB_UPLOAD = 1;
@@ -375,6 +380,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         mHandler = new Handler();
         dialogHandler = new PermissionDialogHandler(this);
         mTabManager = TabManagerFactory.newInstance(this);
+
+        WebViewProvider.setProvider(this);
 
         webFrameLayout = findViewById(R.id.webFrameLayout);
         webGestureOverlayView = findViewById(R.id.webGestureOverlayView);
@@ -1794,6 +1801,33 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
     @Override
     public void requestIconChange() {
         mToolbar.notifyChangeWebState();
+    }
+
+    //Cache web view for performance reasons
+    private NormalWebView cachedWebView;
+    private boolean waitingForWebViewCache;
+
+    @NotNull
+    @Override
+    public NormalWebView getWebView() {
+        NormalWebView cache = cachedWebView;
+        if (cache != null) {
+            cachedWebView = null;
+            createWebViewCache();
+            return cache;
+        }
+        createWebViewCache();
+        return new NormalWebView(this);
+    }
+
+    private void createWebViewCache() {
+        if (waitingForWebViewCache) return;
+
+        waitingForWebViewCache = true;
+        mHandler.postDelayed(() -> {
+            cachedWebView = new NormalWebView(this);
+            waitingForWebViewCache = false;
+        }, 100);
     }
 
     private final class MyGestureListener implements MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
