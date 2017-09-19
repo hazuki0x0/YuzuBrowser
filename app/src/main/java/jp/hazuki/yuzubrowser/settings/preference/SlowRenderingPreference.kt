@@ -40,7 +40,7 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
     class WarningDialog : DialogFragment() {
 
         companion object {
-            @JvmStatic private val ARG_KEY = "key"
+            private const val ARG_KEY = "key"
 
             @JvmStatic
             fun newInstance(preference: Preference): WarningDialog {

@@ -33,8 +33,8 @@ import jp.hazuki.yuzubrowser.R
 class SearchSettingDialog : DialogFragment(), ColorPickerSwatch.OnColorSelectedListener {
 
     companion object {
-        private val ARG_INDEX = "index"
-        private val ARG_URL = "url"
+        private const val ARG_INDEX = "index"
+        private const val ARG_URL = "url"
 
         @JvmStatic
         fun newInstance(index: Int, url: SearchUrl?): SearchSettingDialog {

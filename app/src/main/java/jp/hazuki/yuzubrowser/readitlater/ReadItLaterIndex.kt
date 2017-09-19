@@ -27,9 +27,9 @@ import java.io.FileOutputStream
 class ReadItLaterIndex(root: File) : ArrayList<ReadItem>() {
 
     companion object {
-        val TIME = "time"
-        val TITLE = "title"
-        val URL = "url"
+        const val TIME = "time"
+        const val TITLE = "title"
+        const val URL = "url"
     }
 
     private val indexFile: File = File(root, "index")

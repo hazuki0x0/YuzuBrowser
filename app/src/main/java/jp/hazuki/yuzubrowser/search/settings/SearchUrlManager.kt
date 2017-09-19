@@ -32,16 +32,16 @@ class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
     var idCount = 0
 
     companion object {
-        private val NAME = "searchUrl.json"
+        private const val NAME = "searchUrl.json"
 
-        private val FIELD_SELECTED = "sel"
-        private val FIELD_ITEMS = "item"
-        private val FIELD_ID_CURRENT = "idc"
+        private const val FIELD_SELECTED = "sel"
+        private const val FIELD_ITEMS = "item"
+        private const val FIELD_ID_CURRENT = "idc"
 
-        private val FIELD_TITLE = "0"
-        private val FIELD_URL = "1"
-        private val FIELD_COLOR = "2"
-        private val FIELD_ID = "3"
+        private const val FIELD_TITLE = "0"
+        private const val FIELD_URL = "1"
+        private const val FIELD_COLOR = "2"
+        private const val FIELD_ID = "3"
     }
 
     init {

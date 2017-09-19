@@ -35,24 +35,26 @@ class ReadItLaterProvider : ContentProvider() {
     private lateinit var index: ReadItLaterIndex
 
     companion object {
-        val TIME = "time"
-        val URL = "url"
-        val TITLE = "title"
-        val PATH = "path"
+        const val TIME = "time"
+        const val URL = "url"
+        const val TITLE = "title"
+        const val PATH = "path"
 
-        val COL_TIME = 0
-        val COL_URL = 1
-        val COL_TITLE = 2
+        const val COL_TIME = 0
+        const val COL_URL = 1
+        const val COL_TITLE = 2
+
+        const private val SCHEME = "content"
+        private const val AUTHORITY = BuildConfig.APPLICATION_ID + ".readItLaterProvider"
+
+        private const val TYPE_READ = 1
+        private const val TYPE_EDIT = 2
+        private const val TYPE_PATH = 3
 
         private val ITEM_COLUMNS: Array<String>
         private val FILE_COLUMNS: Array<String>
-        private val SCHEME = "content"
-        private val AUTHORITY = BuildConfig.APPLICATION_ID + ".readItLaterProvider"
         private val URI = Uri.parse("$SCHEME://$AUTHORITY")
         val EDIT_URI = Uri.parse("$SCHEME://$AUTHORITY/index")!!
-        private val TYPE_READ = 1
-        private val TYPE_EDIT = 2
-        private val TYPE_PATH = 3
         private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
         init {
