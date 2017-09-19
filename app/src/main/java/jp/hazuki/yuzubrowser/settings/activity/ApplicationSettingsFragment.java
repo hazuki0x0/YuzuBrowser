@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.preference.SwitchPreferenceCompat;
+import android.support.v14.preference.SwitchPreference;
 import android.view.MenuItem;
 
 import jp.hazuki.yuzubrowser.R;
@@ -32,10 +32,9 @@ public class ApplicationSettingsFragment extends YuzuPreferenceFragment {
     public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_app_settings);
 
-        SwitchPreferenceCompat pref = (SwitchPreferenceCompat) findPreference("enable_share");
+        SwitchPreference pref = (SwitchPreference) findPreference("enable_share");
         String packageName = getActivity().getPackageName();
-        final ComponentName componentName = new ComponentName(packageName,
-                packageName + ".ShareActivity");
+        final ComponentName componentName = new ComponentName(packageName, packageName + ".ShareActivity");
 
         final PackageManager pm = getActivity().getPackageManager();
 
