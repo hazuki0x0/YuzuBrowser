@@ -673,6 +673,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
         saveWebState(bundle);
     }
 
