@@ -16,7 +16,7 @@ public class WebCustomViewHandler {
     private static final FrameLayout.LayoutParams FULLSCREEN_LP = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     private final ViewGroup mFullscreenLayout;
     private static final int ADD_FLAGS = WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-    private int mOldOrientation, mOldFlag;
+    private int mOldOrientation, mOldFlag, oldUiVisibility;
 
     public WebCustomViewHandler(ViewGroup fullscreenLayout) {
         mFullscreenLayout = fullscreenLayout;
@@ -35,6 +35,7 @@ public class WebCustomViewHandler {
         mOldOrientation = activity.getRequestedOrientation();
         activity.setRequestedOrientation(orientation);
 
+        oldUiVisibility = activity.getWindow().getDecorView().getSystemUiVisibility();
         activity.getWindow().getDecorView()
                 .setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
@@ -59,7 +60,7 @@ public class WebCustomViewHandler {
         activity.setRequestedOrientation(mOldOrientation);
 
         activity.getWindow().getDecorView()
-                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                .setSystemUiVisibility(oldUiVisibility);
 
         WindowManager.LayoutParams win_params = activity.getWindow().getAttributes();
         win_params.flags = mOldFlag;
