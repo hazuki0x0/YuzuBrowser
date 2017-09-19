@@ -4134,7 +4134,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     moveTaskToBack(true);
                     break;
                 case SingleAction.CUSTOM_ACTION:
-                    return run(((CustomSingleAction) action).getAction());
+                    if (def_target instanceof HitTestResultTargetInfo) {
+                        return run(((CustomSingleAction) action).getAction(), (HitTestResultTargetInfo) def_target);
+                    } else {
+                        return run(((CustomSingleAction) action).getAction());
+                    }
                 case SingleAction.VIBRATION:
                     Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
