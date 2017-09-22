@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 
 def gitHash = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -66,6 +67,10 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -89,15 +94,20 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${android_support_lib_version}"
     implementation "com.android.support:design:${android_support_lib_version}"
     implementation "com.android.support:recyclerview-v7:${android_support_lib_version}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation "com.takisoft.fix:preference-v7:${android_support_fix_lib_version}"
     testCompile 'junit:junit:4.12'
+
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
     implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
     implementation 'org.jsoup:jsoup:1.10.3'
-    implementation "com.takisoft.fix:preference-v7:${android_support_fix_lib_version}"
     implementation project(':libraries:floatingactionbutton')
     implementation project(':libraries:colorpicker')
     implementation ('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 }

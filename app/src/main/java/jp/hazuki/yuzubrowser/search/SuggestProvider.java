@@ -308,7 +308,7 @@ public class SuggestProvider extends ContentProvider {
                     return String.valueOf(getPosition());
                 //case COL_TEXT_1:
                 case COL_QUERY:
-                    return mList.get(getPosition()).word;
+                    return mList.get(getPosition()).getTitle();
             }
             return null;
         }
@@ -335,7 +335,7 @@ public class SuggestProvider extends ContentProvider {
         public int getInt(int column) {
             if (getPosition() == -1) return 0;
             if (column == COL_HISTORY) {
-                return mList.get(getPosition()).history ? 1 : 0;
+                return mList.get(getPosition()).getSuggestHistory() ? 1 : 0;
             } else {
                 return 0;
             }

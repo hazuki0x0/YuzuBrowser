@@ -20,6 +20,7 @@ import android.content.Context
 import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.JsonUtils
 import java.io.*
+import java.util.regex.Pattern
 
 class BookmarkManager private constructor(context: Context) : Serializable {
     val file = File(context.getDir("bookmark1", Context.MODE_PRIVATE), "bookmark1.dat")
@@ -158,6 +159,29 @@ class BookmarkManager private constructor(context: Context) : Serializable {
     fun moveAll(from: BookmarkFolder, to: BookmarkFolder, items: List<BookmarkItem>) {
         from.list.removeAll(items)
         to.list.addAll(items)
+    }
+
+    fun search(query: String): List<BookmarkSite> {
+        val list = mutableListOf<BookmarkSite>()
+
+        val pattern = Pattern.compile("[^a-zA-Z]$query")
+
+        search(list, root, pattern)
+
+        return list
+    }
+
+    private fun search(list: MutableList<BookmarkSite>, root: BookmarkFolder, pattern: Pattern) {
+        root.list.forEach {
+            if (it is BookmarkSite) {
+                if (pattern.matcher(it.url).find() || pattern.matcher(it.title).find()) {
+                    list.add(it)
+                }
+            }
+            if (it is BookmarkFolder) {
+                search(list, it, pattern)
+            }
+        }
     }
 
     fun isBookmarked(url: String?): Boolean {
