@@ -128,6 +128,7 @@ import jp.hazuki.yuzubrowser.action.item.ToastAction;
 import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
 import jp.hazuki.yuzubrowser.action.item.VibrationSingleAction;
 import jp.hazuki.yuzubrowser.action.item.WebScrollSingleAction;
+import jp.hazuki.yuzubrowser.action.item.WithToastAction;
 import jp.hazuki.yuzubrowser.action.item.startactivity.StartActivitySingleAction;
 import jp.hazuki.yuzubrowser.action.manager.DoubleTapFlickActionManager;
 import jp.hazuki.yuzubrowser.action.manager.FlickActionManager;
@@ -4053,6 +4054,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     else
                         adBlockController = null;
                     mTabManager.get(target).mWebView.reload();
+                    if (((WithToastAction) action).getShowToast()) {
+                        Toast.makeText(getApplicationContext(),
+                                adBlockController != null ? R.string.toggle_enable : R.string.toggle_disable,
+                                Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case SingleAction.OPEN_BLACK_LIST:
                     startActivity(
@@ -4158,6 +4164,11 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                     AppData.private_mode.set(privateMode);
                     AppData.commit(BrowserActivity.this, AppData.private_mode);
                     setPrivateMode(privateMode);
+                    if (((WithToastAction) action).getShowToast()) {
+                        Toast.makeText(getApplicationContext(),
+                                privateMode ? R.string.toggle_enable : R.string.toggle_disable,
+                                Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case SingleAction.VIEW_SOURCE: {
                     CustomWebView webView = mTabManager.get(target).mWebView;

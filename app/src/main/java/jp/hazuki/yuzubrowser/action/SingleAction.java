@@ -29,6 +29,7 @@ import jp.hazuki.yuzubrowser.action.item.ToastAction;
 import jp.hazuki.yuzubrowser.action.item.TranslatePageSingleAction;
 import jp.hazuki.yuzubrowser.action.item.VibrationSingleAction;
 import jp.hazuki.yuzubrowser.action.item.WebScrollSingleAction;
+import jp.hazuki.yuzubrowser.action.item.WithToastAction;
 import jp.hazuki.yuzubrowser.action.item.startactivity.StartActivitySingleAction;
 import jp.hazuki.yuzubrowser.action.view.ActionActivity;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
@@ -241,6 +242,8 @@ public class SingleAction implements Parcelable {
                 return new PasteSearchBoxAction(id, parser);
             case PASTE_GO:
                 return new PasteGoSingleAction(id, parser);
+            case TOGGLE_AD_BLOCK:
+                return new WithToastAction(id, parser);
             case START_ACTIVITY:
                 return new StartActivitySingleAction(id, parser);
             case OPEN_OPTIONS_MENU:
@@ -255,6 +258,8 @@ public class SingleAction implements Parcelable {
                 return new VibrationSingleAction(id, parser);
             case TOAST:
                 return new ToastAction(id, parser);
+            case PRIVATE:
+                return new WithToastAction(id, parser);
             case CLOSE_AUTO_SELECT:
                 return new CloseAutoSelectAction(id, parser);
             default:
@@ -279,6 +284,7 @@ public class SingleAction implements Parcelable {
             case SHOW_SEARCHBOX:
             case PASTE_SEARCHBOX:
             case PASTE_GO:
+            case TOGGLE_AD_BLOCK:
             case START_ACTIVITY:
             case OPEN_OPTIONS_MENU:
             case CUSTOM_MENU:
@@ -286,6 +292,7 @@ public class SingleAction implements Parcelable {
             case CUSTOM_ACTION:
             case VIBRATION:
             case TOAST:
+            case PRIVATE:
             case CLOSE_AUTO_SELECT:
                 return true;
             default:

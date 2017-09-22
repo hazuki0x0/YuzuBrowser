@@ -75,4 +75,5 @@
     </integer-array>
 
     <string name="action_bottom_search_bar">Show Search bar at bottom</string>
+    <string name="show_toast">Show toast</string>
 </resources>
