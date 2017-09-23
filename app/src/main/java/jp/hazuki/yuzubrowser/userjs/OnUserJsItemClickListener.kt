@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.userjs;
+package jp.hazuki.yuzubrowser.userjs
 
-import android.view.View;
+import android.view.View
 
-import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener;
+import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener
 
-public interface OnUserJsItemClickListener extends OnRecyclerListener {
-    void onInfoButtonClick(View v, int index);
-
-    void onCheckBoxClicked(View v, int index);
+interface OnUserJsItemClickListener : OnRecyclerListener {
+    fun onInfoButtonClick(v: View?, index: Int)
 }
