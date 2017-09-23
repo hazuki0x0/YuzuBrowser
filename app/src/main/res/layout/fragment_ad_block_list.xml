@@ -20,7 +20,8 @@
         android:padding="@dimen/fab_margin"
         app:menu_colorNormal="@color/accent"
         app:menu_backgroundColor="#55000000"
-        app:menu_closeOnTouchOutside="true">
+        app:menu_closeOnTouchOutside="true"
+        app:layout_behavior="jp.hazuki.yuzubrowser.utils.view.behavior.ScrollFaMenuBehavior">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/addByEditFab"
