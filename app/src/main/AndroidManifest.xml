@@ -127,6 +127,15 @@
             android:exported="true"
             android:label="@string/pref_settings"
             android:theme="@style/CustomThemeBlack.Pref" />
+        <activity-alias
+            android:name=".CreateSettingsShortCut"
+            android:targetActivity=".settings.activity.MainSettingsActivity"
+            android:label="@string/browser_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
         <activity
             android:name=".action.view.ActionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
