@@ -289,8 +289,8 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
 
     private static final String APPDATA_EXTRA_TARGET = "BrowserActivity.target";
     private static final String TAB_TYPE = "tabType";
-    public static final String ACTION_FINISH = BrowserActivity.class.getName() + ".finish";
-    public static final String ACTION_NEW_TAB = BrowserActivity.class.getName() + ".newTab";
+    public static final String ACTION_FINISH = "jp.hazuki.yuzubrowser.BrowserActivity.finish";
+    public static final String ACTION_NEW_TAB = "jp.hazuki.yuzubrowser.BrowserActivity.newTab";
     public static final String EXTRA_FORCE_DESTROY = "force_destroy";
     public static final String EXTRA_WINDOW_MODE = "window_mode";
     public static final String EXTRA_SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab";
@@ -967,7 +967,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
             return false;
         }
         if (ACTION_NEW_TAB.equals(action)) {
-            openNewTab(TabType.DEFAULT);
+            openInNewTab(AppData.home_page.get(), TabType.DEFAULT);
             return false;
         }
         if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
