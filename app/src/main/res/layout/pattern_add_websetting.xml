@@ -91,6 +91,26 @@
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"
                 android:layout_alignBottom="@+id/navLockCheckBox"/>
+
+            <CheckBox
+                android:id="@+id/loadImageCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/navLockCheckBox"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:text="@string/load_image"
+                android:layout_toStartOf="@+id/loadImageSwitch"/>
+
+            <Switch
+                android:id="@+id/loadImageSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/loadImageCheckBox"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:layout_alignBottom="@+id/loadImageCheckBox"/>
         </RelativeLayout>
     </LinearLayout>
 

@@ -265,4 +265,5 @@
     <string name="read_it_later">Read it later</string>
     <string name="navigate_lock">Navigate lock</string>
     <string name="add_to_top">Add to top</string>
+    <string name="load_image">Load image</string>
 </resources>

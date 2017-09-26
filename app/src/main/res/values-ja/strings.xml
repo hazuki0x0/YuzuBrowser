@@ -264,4 +264,5 @@
     <string name="navigate_lock">ナビゲートロック</string>
     <string name="add_to_top">先頭に追加</string>
     <string name="browser_settings">ブラウザ設定</string>
+    <string name="load_iamge">画像を読み込む</string>
 </resources>
