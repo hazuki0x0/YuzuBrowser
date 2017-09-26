@@ -45,6 +45,11 @@
         android:key="download_action"
         android:title="@string/pref_download_action" />
 
+    <EditTextPreference
+        android:key="download_folder"
+        android:singleLine="true"
+        android:title="@string/pref_download_folder"/>
+
     <jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
 
     <PreferenceScreen
@@ -150,11 +155,6 @@
         android:key="share_unknown_scheme"
         android:title="@string/pref_share_unkown_scheme"
         android:summary="@string/pref_share_unkown_scheme_summary" />
-
-    <EditTextPreference
-        android:key="download_folder"
-        android:singleLine="true"
-        android:title="@string/pref_download_folder" />
 
     <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
         android:key="auto_tab_save_delay"
