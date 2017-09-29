@@ -98,8 +98,8 @@ public class OpenUrlSingleAction extends SingleAction implements Parcelable {
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_open_url_setting, null);
-        final EditText urlEditText = (EditText) view.findViewById(R.id.urlEditText);
-        final Spinner tabSpinner = (Spinner) view.findViewById(R.id.tabSpinner);
+        final EditText urlEditText = view.findViewById(R.id.urlEditText);
+        final Spinner tabSpinner = view.findViewById(R.id.tabSpinner);
 
         urlEditText.setText(mUrl);
 

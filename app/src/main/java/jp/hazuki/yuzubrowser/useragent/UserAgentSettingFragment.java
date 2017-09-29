@@ -51,8 +51,8 @@ public class UserAgentSettingFragment extends Fragment implements DeleteUserAgen
         rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
 
         mUserAgentList = new UserAgentList();
         mUserAgentList.read(getActivity());

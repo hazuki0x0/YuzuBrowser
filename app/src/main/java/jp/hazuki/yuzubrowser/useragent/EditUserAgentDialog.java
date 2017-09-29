@@ -57,8 +57,8 @@ public class EditUserAgentDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.useragent_add, null);
-        final EditText nameEditText = (EditText) view.findViewById(R.id.nameEditText);
-        final EditText uaEditText = (EditText) view.findViewById(R.id.uaEditText);
+        final EditText nameEditText = view.findViewById(R.id.nameEditText);
+        final EditText uaEditText = view.findViewById(R.id.uaEditText);
 
         nameEditText.setText(getArguments().getString(NAME));
         uaEditText.setText(getArguments().getString(UA));

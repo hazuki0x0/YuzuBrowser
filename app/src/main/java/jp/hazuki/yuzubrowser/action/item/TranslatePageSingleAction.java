@@ -106,8 +106,8 @@ public class TranslatePageSingleAction extends SingleAction implements Parcelabl
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_translate_page_setting, null);
-        final Spinner fromSpinner = (Spinner) view.findViewById(R.id.fromSpinner);
-        final Spinner toSpinner = (Spinner) view.findViewById(R.id.toSpinner);
+        final Spinner fromSpinner = view.findViewById(R.id.fromSpinner);
+        final Spinner toSpinner = view.findViewById(R.id.toSpinner);
 
         String list[] = context.getResources().getStringArray(R.array.translate_language_list);
         final String values[] = context.getResources().getStringArray(R.array.translate_language_values);

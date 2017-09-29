@@ -25,7 +25,7 @@
         android:clickable="true"
         android:gravity="right"
         android:orientation="horizontal"
-        tools:ignore="RtlHardcoded">
+        tools:ignore="KeyboardInaccessibleWidget,RtlHardcoded">
 
         <ImageButton
             android:id="@+id/newTabButton"

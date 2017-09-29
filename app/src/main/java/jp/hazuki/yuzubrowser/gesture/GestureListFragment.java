@@ -195,8 +195,8 @@ public class GestureListFragment extends RecyclerFabFragment implements OnRecycl
 
             public ViewHolder(View itemView, GestureListAdapter adapter) {
                 super(itemView, adapter);
-                title = (TextView) itemView.findViewById(R.id.textView);
-                imageView = (ImageView) itemView.findViewById(R.id.imageView);
+                title = itemView.findViewById(R.id.textView);
+                imageView = itemView.findViewById(R.id.imageView);
             }
 
             @Override

@@ -42,7 +42,7 @@ public class HelpActivity extends ThemeActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        webView = (WebView) findViewById(R.id.webView);
+        webView = findViewById(R.id.webView);
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());

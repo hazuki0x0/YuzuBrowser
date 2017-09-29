@@ -28,7 +28,7 @@
         android:clickable="true"
         android:gravity="right"
         style="?android:attr/buttonBarStyle"
-        tools:ignore="RtlHardcoded">
+        tools:ignore="KeyboardInaccessibleWidget,RtlHardcoded">
 
         <ImageButton
             android:src="@drawable/ic_add_box_white_24dp"

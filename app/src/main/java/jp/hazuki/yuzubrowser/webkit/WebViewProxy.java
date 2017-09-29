@@ -1,5 +1,6 @@
 package jp.hazuki.yuzubrowser.webkit;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Proxy;
@@ -25,6 +26,7 @@ public class WebViewProxy {
         return setProxy(context, "", 0);
     }
 
+    @SuppressLint("PrivateApi")
     public static boolean setProxy(Context context, String host, int port) {
         System.setProperty("http.proxyHost", host);
         System.setProperty("http.proxyPort", Integer.toString(port));

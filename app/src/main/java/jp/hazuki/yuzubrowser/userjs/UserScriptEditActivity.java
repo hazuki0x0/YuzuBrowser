@@ -22,7 +22,7 @@ public class UserScriptEditActivity extends ThemeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scroll_edittext);
-        editText = (EditText) findViewById(R.id.editText);
+        editText = findViewById(R.id.editText);
 
         Intent intent = getIntent();
         if (intent == null)

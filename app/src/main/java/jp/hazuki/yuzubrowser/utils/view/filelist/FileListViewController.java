@@ -141,7 +141,7 @@ public class FileListViewController {
                     convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, null);
                 }
                 File file = getItem(position);
-                TextView text1 = ((TextView) convertView.findViewById(android.R.id.text1));
+                TextView text1 = convertView.findViewById(android.R.id.text1);
                 text1.setText((file == null) ? "../" : (file.isDirectory() ? file.getName() + File.separatorChar : file.getName()));
                 return convertView;
             }

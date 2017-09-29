@@ -60,12 +60,12 @@ public class SpeedDialSettingActivityEditFragment extends Fragment {
             speedDial = new SpeedDial();
         }
 
-        name = (EditText) v.findViewById(R.id.name);
-        url = (EditText) v.findViewById(R.id.url);
-        icon = (ImageButton) v.findViewById(R.id.imageButton2);
+        name = v.findViewById(R.id.name);
+        url = v.findViewById(R.id.url);
+        icon = v.findViewById(R.id.imageButton2);
         bottomBar = v.findViewById(R.id.bottomBar);
 
-        Switch sw = (Switch) v.findViewById(R.id.use_favicon);
+        Switch sw = v.findViewById(R.id.use_favicon);
 
         ((RootLayout) v.findViewById(R.id.superFrameLayout)).setOnImeShownListener(new RootLayout.OnImeShownListener() {
             @Override

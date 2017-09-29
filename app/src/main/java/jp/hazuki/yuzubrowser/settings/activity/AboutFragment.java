@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.settings.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
@@ -60,6 +61,7 @@ public class AboutFragment extends YuzuPreferenceFragment {
     }
 
     public static class OpenSourceLicenseDialog extends DialogFragment {
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             WebView webView = new WebView(getActivity());
@@ -72,6 +74,7 @@ public class AboutFragment extends YuzuPreferenceFragment {
     }
 
     public static class DeleteLogDialog extends DialogFragment {
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

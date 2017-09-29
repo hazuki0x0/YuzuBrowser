@@ -45,7 +45,7 @@ public class TextEditActivity extends ThemeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scroll_edittext);
-        editText = (EditText) findViewById(R.id.editText);
+        editText = findViewById(R.id.editText);
 
         File file = (File) getIntent().getSerializableExtra(Intent.EXTRA_STREAM);
         if (file == null) {

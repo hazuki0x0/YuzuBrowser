@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 
 import java.util.Arrays;
@@ -52,7 +51,7 @@ public class AppUtils {
             NotificationChannel service = new NotificationChannel(
                     Constants.notification.CHANNEL_DOWNLOAD_SERVICE,
                     context.getString(R.string.download_service),
-                    NotificationManagerCompat.IMPORTANCE_MIN);
+                    NotificationManager.IMPORTANCE_MIN);
 
             service.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 

@@ -16,6 +16,8 @@
 
 package jp.hazuki.yuzubrowser.utils.image;
 
+import android.support.annotation.NonNull;
+
 import com.crashlytics.android.Crashlytics;
 
 import java.io.BufferedInputStream;
@@ -277,7 +279,7 @@ public final class DiskLruCache implements Closeable {
      * This cache uses a single background thread to evict entries.
      */
     private final ExecutorService executorService = new ThreadPoolExecutor(0, 1,
-            60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+            60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     private final Callable<Void> cleanupCallable = new Callable<Void>() {
         @Override
         public Void call() throws Exception {
@@ -916,7 +918,7 @@ public final class DiskLruCache implements Closeable {
             }
 
             @Override
-            public void write(byte[] buffer, int offset, int length) {
+            public void write(@NonNull byte[] buffer, int offset, int length) {
                 try {
                     out.write(buffer, offset, length);
                 } catch (IOException e) {

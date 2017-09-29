@@ -20,10 +20,10 @@ public class EnvironmentActivity extends ThemeActivity {
         setContentView(R.layout.environment_activity);
         setTitle("Environment");
 
-        TextView externalStorageDirTextView = (TextView) findViewById(R.id.externalStorageDirTextView);
-        TextView externalStorageStateTextView = (TextView) findViewById(R.id.externalStorageStateTextView);
-        TextView externalFilesDirTextView = (TextView) findViewById(R.id.externalFilesDirTextView);
-        TextView estimatedExternalFilesDirTextView = (TextView) findViewById(R.id.estimatedExternalFilesDirTextView);
+        TextView externalStorageDirTextView = findViewById(R.id.externalStorageDirTextView);
+        TextView externalStorageStateTextView = findViewById(R.id.externalStorageStateTextView);
+        TextView externalFilesDirTextView = findViewById(R.id.externalFilesDirTextView);
+        TextView estimatedExternalFilesDirTextView = findViewById(R.id.estimatedExternalFilesDirTextView);
 
         try {
             File externalStorageDir = Environment.getExternalStorageDirectory();

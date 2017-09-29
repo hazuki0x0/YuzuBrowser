@@ -15,6 +15,8 @@
  */
 package jp.hazuki.yuzubrowser.reader.snacktory;
 
+import android.annotation.SuppressLint;
+
 import org.jsoup.nodes.Element;
 
 import java.io.UnsupportedEncodingException;
@@ -266,7 +268,7 @@ public class SHelper {
     public static String getUrlFromUglyGoogleRedirect(String url) {
         if (url.startsWith("http://www.google.com/url?")) {
             url = url.substring("http://www.google.com/url?".length());
-            String arr[] = urlDecode(url).split("\\&");
+            String arr[] = urlDecode(url).split("&");
             if (arr != null)
                 for (String str : arr) {
                     if (str.startsWith("q="))
@@ -421,6 +423,7 @@ public class SHelper {
      * keep in mind: simpleDateFormatter is not thread safe! call completeDate
      * before applying this formatter.
      */
+    @SuppressLint("SimpleDateFormat")
     public static SimpleDateFormat createDateFormatter() {
         return new SimpleDateFormat("yyyy/MM/dd");
     }

@@ -49,8 +49,8 @@ public class AdBlockImportFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        final EditText editText = (EditText) view.findViewById(R.id.editText);
-        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.excludeCheckBox);
+        final EditText editText = view.findViewById(R.id.editText);
+        final CheckBox checkBox = view.findViewById(R.id.excludeCheckBox);
 
         Uri uri = getArguments().getParcelable(ARG_URI);
 

@@ -62,7 +62,7 @@ public class MfsListAdapter extends ArrayRecyclerAdapter<MultiFingerGestureItem,
 
         public ViewHolder(View itemView, MfsListAdapter adapter) {
             super(itemView, adapter);
-            title = (TextView) itemView.findViewById(android.R.id.text1);
+            title = itemView.findViewById(android.R.id.text1);
         }
     }
 }

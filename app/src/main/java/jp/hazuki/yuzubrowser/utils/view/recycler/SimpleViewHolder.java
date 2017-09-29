@@ -8,6 +8,6 @@ public class SimpleViewHolder<T> extends ArrayRecyclerAdapter.ArrayViewHolder<T>
 
     public SimpleViewHolder(View itemView, int id, ArrayRecyclerAdapter<T, ?> adapter) {
         super(itemView, adapter);
-        textView = (TextView) itemView.findViewById(id);
+        textView = itemView.findViewById(id);
     }
 }

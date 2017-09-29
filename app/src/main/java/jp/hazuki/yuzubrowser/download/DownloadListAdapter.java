@@ -33,8 +33,8 @@ public class DownloadListAdapter extends ResourceCursorAdapter {
         ((TextView) view.findViewById(R.id.urlTextView)).setText(cursor.getString(DownloadInfoDatabase.COLUMN_URL_INDEX));
         ((TextView) view.findViewById(R.id.filenameTextView)).setText(new File(cursor.getString(DownloadInfoDatabase.COLUMN_FILEPATH_INDEX)).getName());
 
-        TextView statusTextView = (TextView) view.findViewById(R.id.statusTextView);
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        TextView statusTextView = view.findViewById(R.id.statusTextView);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
 
         switch (cursor.getInt(DownloadInfoDatabase.COLUMN_STATE_INDEX)) {
             case DownloadInfo.STATE_DOWNLOADED:

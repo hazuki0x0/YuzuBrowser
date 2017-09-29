@@ -54,8 +54,8 @@ class SpeedDialRecyclerAdapter extends ArrayRecyclerAdapter<SpeedDial, SpeedDial
 
         public ViewHolder(View itemView, SpeedDialRecyclerAdapter adapter) {
             super(itemView, adapter);
-            title = (TextView) itemView.findViewById(android.R.id.text1);
-            url = (TextView) itemView.findViewById(android.R.id.text2);
+            title = itemView.findViewById(android.R.id.text1);
+            url = itemView.findViewById(android.R.id.text2);
         }
 
         @Override

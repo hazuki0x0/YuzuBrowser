@@ -108,11 +108,11 @@ public class OpenOptionsMenuAction extends SingleAction {
         return null;
     }
 
-    @SuppressLint("RtlHardcoded")
     public int getGravity() {
         return getGravity(showMode);
     }
 
+    @SuppressLint("RtlHardcoded")
     public static int getGravity(int mode) {
         switch (mode) {
             case 0:

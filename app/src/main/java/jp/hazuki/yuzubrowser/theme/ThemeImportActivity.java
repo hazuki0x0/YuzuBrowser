@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.theme;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -52,7 +51,7 @@ public class ThemeImportActivity extends ThemeActivity implements LoaderManager.
         ProgressDialogFragmentCompat progressDialog = ProgressDialogFragmentCompat.newInstance("Installing...");
         progressDialog.show(getSupportFragmentManager(), "dialog");
 
-        return new ThemeImportTask(this, (Uri) args.getParcelable(Intent.EXTRA_STREAM));
+        return new ThemeImportTask(this, args.getParcelable(Intent.EXTRA_STREAM));
     }
 
     @Override

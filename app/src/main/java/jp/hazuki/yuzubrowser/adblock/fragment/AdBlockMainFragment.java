@@ -39,7 +39,7 @@ public class AdBlockMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_ad_blcok_main, container, false);
         getActivity().setTitle(R.string.pref_ad_block);
 
-        Switch sw = (Switch) v.findViewById(R.id.adBlockSwitch);
+        Switch sw = v.findViewById(R.id.adBlockSwitch);
         final View black = v.findViewById(R.id.blackListButton);
         final View white = v.findViewById(R.id.whiteListButton);
         final View whitePage = v.findViewById(R.id.whitePageListButton);

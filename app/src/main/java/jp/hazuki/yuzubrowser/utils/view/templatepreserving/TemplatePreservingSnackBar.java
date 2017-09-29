@@ -52,7 +52,7 @@ public class TemplatePreservingSnackBar extends BaseTransientBottomBar<TemplateP
         action = content.findViewById(R.id.snackbarAction);
     }
 
-    public static TemplatePreservingSnackBar make(@NonNull ViewGroup view, String template, CharSequence title, @Duration int duration) {
+    public static TemplatePreservingSnackBar make(@NonNull ViewGroup view, String template, CharSequence title, int duration) {
         ViewGroup parent = findSuitableParent(view);
         if (parent == null) {
             throw new IllegalArgumentException("No suitable parent found from the given view. "

@@ -50,9 +50,9 @@ public class CheckerEditDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.resource_block_add_dialog, null);
-        final Spinner resTypeSpinner = (Spinner) view.findViewById(R.id.resTypeSpinner);
-        final EditText urlEditText = (EditText) view.findViewById(R.id.urlEditText);
-        final CheckBox whiteCheckBox = (CheckBox) view.findViewById(R.id.whiteCheckBox);
+        final Spinner resTypeSpinner = view.findViewById(R.id.resTypeSpinner);
+        final EditText urlEditText = view.findViewById(R.id.urlEditText);
+        final CheckBox whiteCheckBox = view.findViewById(R.id.whiteCheckBox);
 
         NormalChecker checker = (NormalChecker) getArguments().getSerializable(CHECKER);
         if (checker != null) {

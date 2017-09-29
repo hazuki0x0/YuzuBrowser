@@ -23,7 +23,7 @@ public class CustomToolbarBase extends ToolbarBase {
     public CustomToolbarBase(Context context, ToolbarContainer toolbarContainer, ActionCallback action_callback, RequestCallback request_callback) {
         super(context, toolbarContainer, R.layout.toolbar_custom, request_callback);
         final int TOOLBAR_SIZE_Y = DisplayUtils.convertDpToPx(context, toolbarContainer.size.get());
-        mButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.linearLayout), action_callback, TOOLBAR_SIZE_Y) {
+        mButtonController = new ButtonToolbarController(findViewById(R.id.linearLayout), action_callback, TOOLBAR_SIZE_Y) {
             private final LinearLayout.LayoutParams PARAMS = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
             @Override

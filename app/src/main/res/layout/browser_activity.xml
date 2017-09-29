@@ -153,6 +153,7 @@
         android:layout_height="match_parent"
         android:background="#FF000000"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="gone" />
 
     <TextView

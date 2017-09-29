@@ -52,8 +52,8 @@ public class SeekBarPreferenceController {
 
     public void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         final View view = LayoutInflater.from(mContext).inflate(R.layout.seekbar_preference, null);
-        final TextView textView = (TextView) view.findViewById(R.id.countTextView);
-        final SeekBar seekbar = (SeekBar) view.findViewById(R.id.seekBar);
+        final TextView textView = view.findViewById(R.id.countTextView);
+        final SeekBar seekbar = view.findViewById(R.id.seekBar);
 
         seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
@@ -112,7 +112,7 @@ public class SeekBarPreferenceController {
         });
 
         if (!TextUtils.isEmpty(comment)) {
-            TextView commentText = (TextView) view.findViewById(R.id.commentTextView);
+            TextView commentText = view.findViewById(R.id.commentTextView);
             commentText.setVisibility(View.VISIBLE);
             commentText.setText(comment);
         }

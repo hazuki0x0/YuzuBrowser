@@ -120,8 +120,8 @@ public class TabListSingleAction extends SingleAction implements Parcelable {
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_tab_list, null);
-        final Spinner modeSpinner = (Spinner) view.findViewById(R.id.modeSpinner);
-        final Spinner buttonSpinner = (Spinner) view.findViewById(R.id.buttonSpinner);
+        final Spinner modeSpinner = view.findViewById(R.id.modeSpinner);
+        final Spinner buttonSpinner = view.findViewById(R.id.buttonSpinner);
 
         modeSpinner.setSelection(mode);
         buttonSpinner.setSelection(leftButton ? 1 : 0);

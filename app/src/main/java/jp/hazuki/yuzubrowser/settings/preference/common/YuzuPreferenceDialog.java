@@ -29,6 +29,7 @@ public abstract class YuzuPreferenceDialog extends PreferenceDialogFragmentCompa
         return dialog;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Preference> T getParentPreference() {
         return (T) getPreference();
     }

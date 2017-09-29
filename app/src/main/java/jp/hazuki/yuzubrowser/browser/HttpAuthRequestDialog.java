@@ -34,9 +34,9 @@ public class HttpAuthRequestDialog {
         }
         if (username == null || password == null) {
             View dialog_view = LayoutInflater.from(mContext).inflate(R.layout.http_auth_dialog, null);
-            final EditText nameEditText = (EditText) dialog_view.findViewById(R.id.nameEditText);
-            final EditText passEditText = (EditText) dialog_view.findViewById(R.id.passEditText);
-            CheckBox checkBox = (CheckBox) dialog_view.findViewById(R.id.checkBox);
+            final EditText nameEditText = dialog_view.findViewById(R.id.nameEditText);
+            final EditText passEditText = dialog_view.findViewById(R.id.passEditText);
+            CheckBox checkBox = dialog_view.findViewById(R.id.checkBox);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

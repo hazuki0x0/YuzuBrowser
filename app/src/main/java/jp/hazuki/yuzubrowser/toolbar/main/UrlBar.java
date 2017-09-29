@@ -3,7 +3,6 @@ package jp.hazuki.yuzubrowser.toolbar.main;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
-import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.action.ActionCallback;
@@ -30,8 +29,8 @@ public class UrlBar extends ToolbarBase {
 
         SoftButtonActionManager softbtnManager = SoftButtonActionManager.getInstance(context);
 
-        mLeftButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.leftLinearLayout), action_callback, TOOLBAR_SIZE_Y);
-        mRightButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.rightLinearLayout), action_callback, TOOLBAR_SIZE_Y);
+        mLeftButtonController = new ButtonToolbarController(findViewById(R.id.leftLinearLayout), action_callback, TOOLBAR_SIZE_Y);
+        mRightButtonController = new ButtonToolbarController(findViewById(R.id.rightLinearLayout), action_callback, TOOLBAR_SIZE_Y);
 
         centerUrlButton = findViewById(R.id.centerUrlButton);
         centerUrlButton.setActionData(softbtnManager.btn_url_center, action_callback);

@@ -100,7 +100,7 @@ public class ToastAction extends SingleAction {
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View v = LayoutInflater.from(context).inflate(R.layout.action_toast_dialog, null);
-        final EditText editText = (EditText) v.findViewById(R.id.editText);
+        final EditText editText = v.findViewById(R.id.editText);
 
         editText.setText(text);
 

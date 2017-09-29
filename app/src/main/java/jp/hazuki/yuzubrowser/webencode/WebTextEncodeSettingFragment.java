@@ -52,8 +52,8 @@ public class WebTextEncodeSettingFragment extends Fragment implements OnRecycler
         rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
 
         mEncodeList = new WebTextEncodeList();
         mEncodeList.read(getActivity());

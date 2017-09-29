@@ -100,7 +100,7 @@ public class AutoPageScrollAction extends SingleAction implements Parcelable {
     @Override
     public StartActivityInfo showSubPreference(final ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_auto_scroll, null);
-        final EditText editText = (EditText) view.findViewById(R.id.editText);
+        final EditText editText = view.findViewById(R.id.editText);
         editText.setText(String.valueOf(mScrollSpeed));
         new AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)

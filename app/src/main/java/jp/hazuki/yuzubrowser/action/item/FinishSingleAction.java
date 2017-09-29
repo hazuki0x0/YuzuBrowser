@@ -109,8 +109,8 @@ public class FinishSingleAction extends SingleAction implements Parcelable {
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_finish_setting, null);
-        final CheckBox finishAlertCheckBox = (CheckBox) view.findViewById(R.id.finishAlertCheckBox);
-        final CheckBox closetabCheckBox = (CheckBox) view.findViewById(R.id.closetabCheckBox);
+        final CheckBox finishAlertCheckBox = view.findViewById(R.id.finishAlertCheckBox);
+        final CheckBox closetabCheckBox = view.findViewById(R.id.closetabCheckBox);
 
         finishAlertCheckBox.setChecked(mAlert);
         closetabCheckBox.setChecked(mCloseTab);

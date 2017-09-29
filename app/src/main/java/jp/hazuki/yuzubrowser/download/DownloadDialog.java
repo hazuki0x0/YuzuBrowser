@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
@@ -66,10 +67,10 @@ public class DownloadDialog {
         View view = LayoutInflater.from(mContext).inflate(R.layout.download_dialog, null);
         view.setVisibility(View.GONE);
 
-        filenameEditText = (EditText) view.findViewById(R.id.filenameEditText);
+        filenameEditText = view.findViewById(R.id.filenameEditText);
         setRealItemName(view);
 
-        folderButton = (FileListButton) view.findViewById(R.id.folderButton);
+        folderButton = view.findViewById(R.id.folderButton);
         if (mInfo.getFile() != null) {
             folderButton.setText(mInfo.getFile().getParentFile().getName());
             folderButton.setFilePath(mInfo.getFile().getParentFile());
@@ -92,7 +93,7 @@ public class DownloadDialog {
             }
         });
 
-        saveArchiveCheckBox = (CheckBox) view.findViewById(R.id.saveArchiveCheckBox);
+        saveArchiveCheckBox = view.findViewById(R.id.saveArchiveCheckBox);
         setCanSaveArchive(mWebView);
 
         saveArchiveCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -223,7 +224,7 @@ public class DownloadDialog {
             if (success) {
                 Toast.makeText(context, context.getString(R.string.saved_file) + info.getFile().getAbsolutePath(), Toast.LENGTH_SHORT).show();
 
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext);
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY);
                 notification.setWhen(System.currentTimeMillis());
                 notification.setProgress(0, 0, false);
                 notification.setAutoCancel(true);

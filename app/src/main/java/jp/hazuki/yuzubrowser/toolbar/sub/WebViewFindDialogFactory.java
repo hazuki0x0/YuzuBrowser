@@ -49,8 +49,8 @@ public class WebViewFindDialogFactory {
             mContext = context;
             root = view;
 
-            editText = (EditText) root.findViewById(R.id.findEditText);
-            match = (TextView) root.findViewById(R.id.howMatchTextView);
+            editText = root.findViewById(R.id.findEditText);
+            match = root.findViewById(R.id.howMatchTextView);
         }
 
         @Override
@@ -58,9 +58,9 @@ public class WebViewFindDialogFactory {
             mCurrentWeb = web;
             mCurrentWeb.setFindListener(findListener);
 
-            ImageButton buttonLeft = (ImageButton) root.findViewById(R.id.buttonLeft);
-            ImageButton buttonRight = (ImageButton) root.findViewById(R.id.buttonRight);
-            ImageButton buttonEnd = (ImageButton) root.findViewById(R.id.buttonEnd);
+            ImageButton buttonLeft = root.findViewById(R.id.buttonLeft);
+            ImageButton buttonRight = root.findViewById(R.id.buttonRight);
+            ImageButton buttonEnd = root.findViewById(R.id.buttonEnd);
 
             if (ThemeData.isEnabled()) {
                 ThemeData data = ThemeData.getInstance();

@@ -153,11 +153,11 @@ public abstract class TabListRecyclerBaseAdapter extends RecyclerView.Adapter<Ta
 
         public ViewHolder(View itemView, final TabListRecyclerBaseAdapter adapter) {
             super(itemView);
-            thumbNail = (ImageView) itemView.findViewById(R.id.thumbNailImageView);
-            title = (TextView) itemView.findViewById(R.id.titleTextView);
-            url = (TextView) itemView.findViewById(R.id.urlTextView);
+            thumbNail = itemView.findViewById(R.id.thumbNailImageView);
+            title = itemView.findViewById(R.id.titleTextView);
+            url = itemView.findViewById(R.id.urlTextView);
             disable = itemView.findViewById(R.id.disable);
-            closeButton = (ImageButton) itemView.findViewById(R.id.closeImageButton);
+            closeButton = itemView.findViewById(R.id.closeImageButton);
             historyButton = itemView.findViewById(R.id.tabHistoryImageButton);
 
             itemView.setOnTouchListener(new View.OnTouchListener() {

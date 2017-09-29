@@ -115,9 +115,9 @@ public class WebScrollSingleAction extends SingleAction implements Parcelable {
     @Override
     public StartActivityInfo showSubPreference(final ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_web_scroll_setting, null);
-        final Spinner typeSpinner = (Spinner) view.findViewById(R.id.typeSpinner);
-        final EditText editTextX = (EditText) view.findViewById(R.id.editTextX);
-        final EditText editTextY = (EditText) view.findViewById(R.id.editTextY);
+        final Spinner typeSpinner = view.findViewById(R.id.typeSpinner);
+        final EditText editTextX = view.findViewById(R.id.editTextX);
+        final EditText editTextY = view.findViewById(R.id.editTextY);
 
         Resources res = context.getResources();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, res.getStringArray(R.array.action_web_scroll_type_list));

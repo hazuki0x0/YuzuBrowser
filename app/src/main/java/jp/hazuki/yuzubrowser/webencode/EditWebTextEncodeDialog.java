@@ -55,7 +55,7 @@ public class EditWebTextEncodeDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.webencode_add, null);
-        final EditText encodeEditText = (EditText) view.findViewById(R.id.encodeEditText);
+        final EditText encodeEditText = view.findViewById(R.id.encodeEditText);
 
         encodeEditText.setText(getArguments().getString(ENCODING));
 

@@ -41,7 +41,7 @@ public class OutputFormatter {
 
     public static final int MIN_PARAGRAPH_TEXT = 50;
     private static final List<String> NODES_TO_REPLACE = Arrays.asList("strong", "b", "i");
-    private Pattern unlikelyPattern = Pattern.compile("display\\:none|visibility\\:hidden");
+    private Pattern unlikelyPattern = Pattern.compile("display:none|visibility:hidden");
     protected final int minParagraphText;
     protected final List<String> nodesToReplace;
     protected String nodesToKeepCssSelector = "p";
@@ -100,7 +100,7 @@ public class OutputFormatter {
      * Takes an element and returns a list of texts extracted from the P tags
      */
     public List<String> getTextList(Element topNode) {
-        List<String> texts = new ArrayList<String>();
+        List<String> texts = new ArrayList<>();
         for (Element element : topNode.select(this.nodesToKeepCssSelector)) {
             if (element.hasText()) {
                 texts.add(element.text());

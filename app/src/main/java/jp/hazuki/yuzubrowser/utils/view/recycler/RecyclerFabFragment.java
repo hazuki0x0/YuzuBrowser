@@ -40,8 +40,8 @@ public abstract class RecyclerFabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.recycler_with_fab, container, false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
+        fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -38,7 +38,7 @@ public class AddGestureActivity extends ThemeActivity {
 
         manager = GestureManager.getInstance(getApplicationContext(), gesture_id);
 
-        GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.gestureOverlayView);
+        GestureOverlayView gestureOverlayView = findViewById(R.id.gestureOverlayView);
         gestureOverlayView.setGestureStrokeType(manager.getGestureStrokeType());
 
         gestureOverlayView.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {

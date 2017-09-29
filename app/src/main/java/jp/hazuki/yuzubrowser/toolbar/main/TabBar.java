@@ -50,8 +50,8 @@ public class TabBar extends ToolbarBase {
         TAB_SIZE_Y = DisplayUtils.convertDpToPx(context, AppData.toolbar_tab.size.get());
         TAB_FONT_SIZE = AppData.tab_font_size.get();
 
-        mLeftButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.leftLinearLayout), action_callback, TAB_SIZE_Y);
-        mRightButtonController = new ButtonToolbarController((LinearLayout) findViewById(R.id.rightLinearLayout), action_callback, TAB_SIZE_Y);
+        mLeftButtonController = new ButtonToolbarController(findViewById(R.id.leftLinearLayout), action_callback, TAB_SIZE_Y);
+        mRightButtonController = new ButtonToolbarController(findViewById(R.id.rightLinearLayout), action_callback, TAB_SIZE_Y);
 
         LinearLayout tabLayoutBase = findViewById(R.id.tabLayoutBase);
         switch (AppData.tab_type.get()) {

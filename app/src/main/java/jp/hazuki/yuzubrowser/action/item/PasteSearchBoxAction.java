@@ -100,8 +100,8 @@ public class PasteSearchBoxAction extends SingleAction {
     @Override
     public StartActivityInfo showSubPreference(ActionActivity context) {
         View view = LayoutInflater.from(context).inflate(R.layout.action_show_search_box, null);
-        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-        final CheckBox bottom = (CheckBox) view.findViewById(R.id.checkBox2);
+        final CheckBox checkBox = view.findViewById(R.id.checkBox);
+        final CheckBox bottom = view.findViewById(R.id.checkBox2);
         checkBox.setChecked(openNewTab);
         bottom.setChecked(reverse);
         new AlertDialog.Builder(context)

@@ -79,7 +79,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         listener.setFragmentTitle(type);
         provider = AdBlockManager.getProvider(BrowserApplication.getInstance(), type);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
@@ -87,7 +87,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
         adapter = new AdBlockArrayRecyclerAdapter(getActivity(), provider.getAllItems(), this);
         recyclerView.setAdapter(adapter);
 
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabMenu);
+        final FloatingActionMenu fabMenu = view.findViewById(R.id.fabMenu);
 
         view.findViewById(R.id.addByEditFab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,7 +261,7 @@ public class AdBlockFragment extends Fragment implements OnRecyclerListener, AdB
     @Override
     public void onDeleteSelected() {
         List<Integer> items = adapter.getSelectedItems();
-        Collections.sort(items, Collections.<Integer>reverseOrder());
+        Collections.sort(items, Collections.reverseOrder());
         for (int index : items) {
             AdBlock adBlock = adapter.remove(index);
             provider.delete(adBlock.getId());

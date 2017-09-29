@@ -48,7 +48,7 @@ public class GestureTestActivity extends ThemeActivity {
 
         final GestureManager manager = GestureManager.getInstance(getApplicationContext(), gesture_id);
 
-        GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.gestureOverlayView);
+        GestureOverlayView gestureOverlayView = findViewById(R.id.gestureOverlayView);
         gestureOverlayView.setGestureStrokeType(manager.getGestureStrokeType());
 
         mActionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA);

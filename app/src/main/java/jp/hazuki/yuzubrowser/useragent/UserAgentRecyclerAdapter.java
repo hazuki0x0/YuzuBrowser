@@ -47,8 +47,8 @@ public class UserAgentRecyclerAdapter extends ArrayRecyclerAdapter<UserAgent, Us
 
         public ViewHolder(View itemView, UserAgentRecyclerAdapter adapter) {
             super(itemView, adapter);
-            title = (TextView) itemView.findViewById(android.R.id.text1);
-            userAgent = (TextView) itemView.findViewById(android.R.id.text2);
+            title = itemView.findViewById(android.R.id.text1);
+            userAgent = itemView.findViewById(android.R.id.text2);
         }
 
         @Override
