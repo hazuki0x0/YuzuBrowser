@@ -1404,6 +1404,17 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         openNewTab(WebViewFactory.getMode(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state);
     }
 
+    private void openInNewTab(MainTabData data) {
+        Bundle bundle = new Bundle();
+        data.mWebView.saveState(bundle);
+        MainTabData newTab = openNewTab(WebViewFactory.getMode(bundle), bundle.getInt(TAB_TYPE, data.getTabType()));
+        newTab.mWebView.restoreState(bundle);
+        newTab.mWebView.setIdentityId(newTab.getId());
+        newTab.setUrl(data.getUrl());
+        newTab.setTitle(data.getTitle());
+        newTab.setParent(newTab.getParent());
+    }
+
     private void openInNewTabPost(final String url, @TabType int type) {
         openInNewTab(url, type);
     }
@@ -3839,9 +3850,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
                 }
                 break;
                 case SingleAction.REPLICATE_TAB: {
-                    Bundle outState = new Bundle();
-                    mTabManager.get(target).mWebView.saveState(outState);
-                    openInNewTab(outState);
+                    openInNewTab(mTabManager.get(target));
                 }
                 break;
                 case SingleAction.SHOW_SEARCHBOX:
