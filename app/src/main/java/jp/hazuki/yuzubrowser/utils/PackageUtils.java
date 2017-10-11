@@ -15,7 +15,9 @@ import android.os.Parcelable;
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
+import android.text.TextUtils;
 import android.webkit.URLUtil;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -104,7 +106,7 @@ public class PackageUtils {
     }
 
     public static void createShortcut(Context context, String title, String url, Bitmap favicon) {
-        if (url != null && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+        if (url != null && !TextUtils.isEmpty(title) && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
             Intent target = new Intent(context, BrowserActivity.class);
             target.setAction(Intent.ACTION_VIEW);
             if (URLUtil.isFileUrl(url)) {
@@ -127,6 +129,8 @@ public class PackageUtils {
                     .build();
 
             ShortcutManagerCompat.requestPinShortcut(context, shortcutInfo, null);
+        } else {
+            Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show();
         }
     }
 }
