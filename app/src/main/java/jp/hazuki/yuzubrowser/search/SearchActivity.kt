@@ -251,7 +251,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         val histories = BrowserHistoryManager.getInstance(this).search(query, 0, 5)
         val list = ArrayList<SuggestHistory>(histories.size)
         histories.forEach {
-            list.add(SuggestHistory(it.title, it.url))
+            list.add(SuggestHistory(it.title ?: "", it.url ?: ""))
         }
         return list
     }
