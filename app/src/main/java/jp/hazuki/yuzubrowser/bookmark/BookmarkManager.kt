@@ -164,7 +164,7 @@ class BookmarkManager private constructor(context: Context) : Serializable {
     fun search(query: String): List<BookmarkSite> {
         val list = mutableListOf<BookmarkSite>()
 
-        val pattern = Pattern.compile("[^a-zA-Z]$query")
+        val pattern = Pattern.compile("[^a-zA-Z]\\Q$query\\E")
 
         search(list, root, pattern)
 
