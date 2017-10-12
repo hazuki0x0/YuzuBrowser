@@ -232,10 +232,12 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         val suggestions = ArrayList<SuggestItem>()
 
         contentResolver.query(uri, null, null, null, null).use { c ->
-            val COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
-            val COL_HISTORY = c.getColumnIndex(SuggestProvider.SUGGEST_HISTORY)
-            while (c.moveToNext()) {
-                suggestions.add(Suggestion(c.getString(COL_QUERY), c.getInt(COL_HISTORY) == 1))
+            if (c != null) {
+                val COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
+                val COL_HISTORY = c.getColumnIndex(SuggestProvider.SUGGEST_HISTORY)
+                while (c.moveToNext()) {
+                    suggestions.add(Suggestion(c.getString(COL_QUERY), c.getInt(COL_HISTORY) == 1))
+                }
             }
         }
         return suggestions
