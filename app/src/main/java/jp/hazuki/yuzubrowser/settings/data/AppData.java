@@ -151,6 +151,8 @@ public class AppData {
     public static final IntContainer minimum_font = new IntContainer("minimum_font", 8);
     public static final BooleanContainer kill_process = new BooleanContainer("kill_process", false);
     public static final IntContainer search_suggest = new IntContainer("search_suggest", 0);
+    public static final BooleanContainer search_suggest_histories = new BooleanContainer("search_suggest_histories", true);
+    public static final BooleanContainer search_suggest_bookmarks = new BooleanContainer("search_suggest_bookmarks", true);
     public static final IntContainer history_max_day = new IntContainer("history_max_day", 0);
     public static final IntContainer history_max_count = new IntContainer("history_max_count", 0);
     public static final BooleanContainer detailed_log = new BooleanContainer("detailed_log", false);

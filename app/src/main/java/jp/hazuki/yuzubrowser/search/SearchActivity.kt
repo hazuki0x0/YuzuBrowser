@@ -213,13 +213,13 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
     private fun setQuery(query: String) = ui {
         val search = async { getSearchQuery(query) }
-        val histories = async { getHistoryQuery(query) }
-        val bookmarks = async { getBookmarkQuery(query) }
+        val histories = if (AppData.search_suggest_histories.get()) async { getHistoryQuery(query) } else null
+        val bookmarks = if (AppData.search_suggest_bookmarks.get()) async { getBookmarkQuery(query) } else null
 
         val suggestions = mutableListOf<SuggestItem>()
         suggestions.addAll(search.await())
-        suggestions.addAll(histories.await())
-        suggestions.addAll(bookmarks.await())
+        histories?.run { suggestions.addAll(await()) }
+        bookmarks?.run { suggestions.addAll(await()) }
 
         adapter.clear()
         adapter.addAll(suggestions)

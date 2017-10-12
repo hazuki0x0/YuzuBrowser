@@ -266,4 +266,6 @@
     <string name="navigate_lock">Navigate lock</string>
     <string name="add_to_top">Add to top</string>
     <string name="load_image">Load image</string>
+    <string name="suggest_histories">Show histories</string>
+    <string name="suggest_bookmarks">Show bookmarks</string>
 </resources>

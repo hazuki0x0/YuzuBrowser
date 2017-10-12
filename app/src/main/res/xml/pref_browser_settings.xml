@@ -87,6 +87,13 @@
                 android:entryValues="@array/pref_search_suggest_engine_values"
                 android:key="search_suggest_engine"
                 android:title="@string/pref_search_suggest_engine"/>
+
+            <SwitchPreference
+                android:key="search_suggest_histories"
+                android:title="@string/suggest_histories"/>
+            <SwitchPreference
+                android:key="search_suggest_bookmarks"
+                android:title="@string/suggest_bookmarks"/>
         </PreferenceCategory>
     </PreferenceScreen>
 
