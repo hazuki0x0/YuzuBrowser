@@ -84,7 +84,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
             searchUrlSpinner.visibility = View.GONE
         }
 
-        recyclerView.setOnOutSideClickListener { this.finish() }
+        recyclerView.setOnOutSideClickListener { finish() }
 
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -98,7 +98,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         adapter = SearchRecyclerAdapter(this, ArrayList(), this)
         recyclerView.adapter = adapter
 
-        recyclerView.setOnClickListener { _ -> finish() }
+        recyclerView.setOnClickListener { finish() }
 
         if (ThemeData.isEnabled()) {
             if (ThemeData.getInstance().toolbarBackgroundColor != 0)
@@ -231,13 +231,11 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
         val suggestions = ArrayList<SuggestItem>()
 
-        contentResolver.query(uri, null, null, null, null).use { c ->
-            if (c != null) {
-                val COL_QUERY = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
-                val COL_HISTORY = c.getColumnIndex(SuggestProvider.SUGGEST_HISTORY)
-                while (c.moveToNext()) {
-                    suggestions.add(Suggestion(c.getString(COL_QUERY), c.getInt(COL_HISTORY) == 1))
-                }
+        contentResolver.query(uri, null, null, null, null)?.use { c ->
+            val colQuery = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
+            val colHistory = c.getColumnIndex(SuggestProvider.SUGGEST_HISTORY)
+            while (c.moveToNext()) {
+                suggestions.add(Suggestion(c.getString(colQuery), c.getInt(colHistory) == 1))
             }
         }
         return suggestions
@@ -290,18 +288,17 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
     private fun finishWithResult(query: String, mode: Int) {
         if (!AppData.private_mode.get() && !TextUtils.isEmpty(query) && mode != SEARCH_MODE_URL && !WebUtils.isUrl(query)) {
-            val values = ContentValues()
-            values.put(SearchManager.SUGGEST_COLUMN_QUERY, query)
-            contentResolver.insert(mContentUri, values)
+            contentResolver.insert(mContentUri,
+                    ContentValues().apply { put(SearchManager.SUGGEST_COLUMN_QUERY, query) })
         }
-        val data = Intent()
-        data.putExtra(EXTRA_QUERY, query)
-        data.putExtra(EXTRA_SEARCH_MODE, mode)
-        data.putExtra(EXTRA_SEARCH_URL, manager[searchUrlSpinner.selectedItemPosition].url)
-        data.putExtra(EXTRA_OPEN_NEW_TAB, openNewTab)
-        if (mAppData != null)
-            data.putExtra(EXTRA_APP_DATA, mAppData)
-        setResult(RESULT_OK, data)
+        setResult(RESULT_OK, Intent().apply {
+            putExtra(EXTRA_QUERY, query)
+            putExtra(EXTRA_SEARCH_MODE, mode)
+            putExtra(EXTRA_SEARCH_URL, manager[searchUrlSpinner.selectedItemPosition].url)
+            putExtra(EXTRA_OPEN_NEW_TAB, openNewTab)
+            if (mAppData != null)
+                putExtra(EXTRA_APP_DATA, mAppData)
+        })
         finish()
     }
 
@@ -325,7 +322,6 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         } catch (e: ActivityNotFoundException) {
             e.printStackTrace()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
