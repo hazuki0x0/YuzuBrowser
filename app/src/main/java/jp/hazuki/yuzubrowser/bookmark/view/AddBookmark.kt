@@ -20,11 +20,11 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
 
-fun showDialog(context: Context, fragmentManager: FragmentManager, title: String, url: String) {
+fun showDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
     if (BookmarkManager.getInstance(context).isBookmarked(url)) {
-        AddBookmarkOptionDialog.newInstance(title, url)
+        AddBookmarkOptionDialog.newInstance(title ?: "", url)
                 .show(fragmentManager, "bookmarkOption")
     } else {
-        AddBookmarkSiteDialog(context, title, url).show()
+        AddBookmarkSiteDialog(context, title ?: "", url).show()
     }
 }
