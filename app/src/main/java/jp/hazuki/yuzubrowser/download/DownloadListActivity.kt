@@ -167,15 +167,15 @@ class DownloadListActivity : ThemeActivity(), LoaderCallbacks<Cursor>, ServiceCo
         mListAdapter?.notifyDataSetChanged()
     }
 
-    override fun onCreateLoader(arg0: Int, arg1: Bundle): Loader<Cursor> {
+    override fun onCreateLoader(arg0: Int, arg1: Bundle?): Loader<Cursor> {
         return ImplementedCursorLoader(applicationContext, mDb)
     }
 
-    override fun onLoadFinished(arg0: Loader<Cursor>, cursor: Cursor) {
+    override fun onLoadFinished(arg0: Loader<Cursor>?, cursor: Cursor?) {
         mListAdapter!!.swapCursor(cursor)
     }
 
-    override fun onLoaderReset(arg0: Loader<Cursor>) {
+    override fun onLoaderReset(arg0: Loader<Cursor>?) {
         mListAdapter!!.swapCursor(null)
     }
 
