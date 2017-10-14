@@ -48,6 +48,11 @@ class WebSettingPatternAction : PatternAction {
                 navLock = parser.intValue
                 continue
             }
+            if (FIELD_NAME_IMAGE == parser.currentName) {
+                if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
+                loadImage = parser.intValue
+                continue
+            }
             parser.skipChildren()
         }
     }
@@ -68,6 +73,7 @@ class WebSettingPatternAction : PatternAction {
             generator.writeStringField(FIELD_NAME_UA, userAgentString)
         generator.writeNumberField(FIELD_NAME_JS, javaScriptSetting)
         generator.writeNumberField(FIELD_NAME_NAV_LOCK, navLock)
+        generator.writeNumberField(FIELD_NAME_IMAGE, loadImage)
         generator.writeEndObject()
         return true
     }
@@ -104,5 +110,6 @@ class WebSettingPatternAction : PatternAction {
         private const val FIELD_NAME_UA = "0"
         private const val FIELD_NAME_JS = "1"
         private const val FIELD_NAME_NAV_LOCK = "2"
+        private const val FIELD_NAME_IMAGE = "3"
     }
 }

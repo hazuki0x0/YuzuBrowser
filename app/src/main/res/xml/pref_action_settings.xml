@@ -42,14 +42,16 @@
     <PreferenceScreen
         android:key="ps_software_button"
         android:title="@string/pref_softbtn_settings">
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_basic_settings">
             <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
                 android:key="swipebtn_sensitivity"
                 android:title="@string/pref_sensitivity_distance"
                 app:seekMax="500"
                 app:seekMin="10" />
         </PreferenceCategory>
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_action_settings">
             <jp.hazuki.yuzubrowser.settings.preference.ToolbarActionListPrerence
                 android:title="@string/pref_btn_tab_left"
                 app:actionGroup="s_btn_array"
@@ -153,7 +155,8 @@
     <PreferenceScreen
         android:key="ps_flick"
         android:title="@string/pref_flick_settings">
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_basic_settings">
             <SwitchPreference
                 android:key="flick_enable"
                 android:title="@string/pref_flick_enable" />
@@ -175,7 +178,8 @@
                 android:key="flick_disable_scroll"
                 android:title="@string/pref_flick_disable_scrolling" />
         </PreferenceCategory>
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_action_settings">
             <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
                 android:title="@string/pref_flick_left"
                 app:actionGroup="flick"
@@ -189,7 +193,8 @@
     <PreferenceScreen
         android:key="ps_two_finger_swipe"
         android:title="@string/pref_web_swipe_settings">
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_basic_settings">
             <SwitchPreference
                 android:key="webswipe_enable"
                 android:title="@string/pref_web_swipe_enable" />
@@ -205,7 +210,8 @@
                 app:seekMax="100"
                 app:seekMin="0" />
         </PreferenceCategory>
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_action_settings">
             <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
                 android:title="@string/pref_btn_action_up"
                 app:actionGroup="web_swipe"
@@ -227,7 +233,8 @@
     <PreferenceScreen
         android:key="ps_double_tap_flick"
         android:title="@string/pref_double_tap_flick_settings">
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_basic_settings">
             <SwitchPreference
                 android:key="double_tap_flick_enable"
                 android:title="@string/pref_double_tap_flick_enable" />
@@ -243,7 +250,8 @@
                 app:seekMax="100"
                 app:seekMin="0" />
         </PreferenceCategory>
-        <PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/pref_action_settings">
             <jp.hazuki.yuzubrowser.settings.preference.ActionPreference
                 android:title="@string/pref_flick_left"
                 app:actionGroup="double_tap_flick"

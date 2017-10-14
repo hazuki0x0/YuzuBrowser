@@ -62,7 +62,7 @@ public abstract class YuzuPreferenceFragment extends PreferenceFragmentCompatDiv
         try {
             return super.onCreateView(inflater, container, savedInstanceState);
         } finally {
-            setDividerPreferences(DIVIDER_PADDING_CHILD | DIVIDER_CATEGORY_AFTER_LAST | DIVIDER_CATEGORY_BETWEEN);
+            setDividerPreferences(DIVIDER_PADDING_CHILD | DIVIDER_CATEGORY_BETWEEN | DIVIDER_NO_BEFORE_FIRST);
             getPreferenceManager().setSharedPreferencesName(AppData.PREFERENCE_NAME);
             TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[]{android.R.attr.listDivider});
             Drawable divider = a.getDrawable(0);
