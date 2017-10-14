@@ -27,7 +27,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -76,19 +75,19 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         return headerView
     }
 
-    override fun getWebSettingDialog(checker: PatternUrlChecker): DialogFragment {
+    override fun getWebSettingDialog(checker: PatternUrlChecker?): DialogFragment {
         return SettingWebDialog.getInstance(getPosition(checker), checker)
     }
 
-    override fun getOpenOtherDialog(checker: PatternUrlChecker): DialogFragment {
+    override fun getOpenOtherDialog(checker: PatternUrlChecker?): DialogFragment {
         return OpenOtherDialog.newInstance(getPosition(checker), checker, urlEditText.text.toString())
     }
 
-    override fun settingBlockAction(checker: PatternUrlChecker, header_view: View) {
+    override fun settingBlockAction(checker: PatternUrlChecker?, header_view: View?) {
         super.settingBlockAction(checker, makeHeaderView(checker))
     }
 
-    override fun makeActionChecker(pattern_action: PatternAction, header_view: View?): PatternUrlChecker? {
+    override fun makeActionChecker(pattern_action: PatternAction?, header_view: View?): PatternUrlChecker? {
         val patternUrl = (header_view!!.findViewById<View>(R.id.urlEditText) as EditText).text.toString()
         try {
             val checker = PatternUrlChecker(pattern_action, FastMatcherFactory(), patternUrl)
@@ -109,7 +108,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val checker = arguments.getSerializable(CHECKER) as? PatternUrlChecker
-            val view = LayoutInflater.from(activity).inflate(R.layout.pattern_add_websetting, null) as ViewGroup
+            val view = View.inflate(activity, R.layout.pattern_add_websetting, null) as ViewGroup
             if (activity is PatternUrlActivity) {
                 header = (activity as PatternUrlActivity).makeHeaderView(checker)
                 if (header != null)
@@ -277,7 +276,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
             private const val REQUEST_USER_AGENT = 1
 
-            fun getInstance(id: Int, checker: PatternUrlChecker): DialogFragment {
+            fun getInstance(id: Int, checker: PatternUrlChecker?): DialogFragment {
                 val fragment = SettingWebDialog()
                 val bundle = Bundle()
                 bundle.putInt(ID, id)
@@ -297,8 +296,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             var url = arguments.getString(URL)
             val checker = arguments.getSerializable(CHECKER) as? PatternUrlChecker
 
-            val inflater = LayoutInflater.from(activity)
-            val headerView = inflater.inflate(R.layout.pattern_list_url, null)
+            val headerView = View.inflate(activity, R.layout.pattern_list_url, null)
             val urlEditText = headerView.findViewById<EditText>(R.id.urlEditText)
             if (checker != null) {
                 url = checker.patternUrl
@@ -308,7 +306,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             }
             urlEditText.setText(url)
 
-            val view = inflater.inflate(R.layout.pattern_add_open, null) as ViewGroup
+            val view = View.inflate(activity, R.layout.pattern_add_open, null) as ViewGroup
             view.addView(headerView, 0)
             val listView = view.findViewById<ListView>(R.id.listView)
 
@@ -330,7 +328,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                     var v = convertView
                     if (v == null) {
-                        v = inflater.inflate(R.layout.image_text_list_item, null)
+                        v = View.inflate(activity, R.layout.image_text_list_item, null)
                         val imageView = v!!.findViewById<ImageView>(R.id.imageView)
 
                         val params = imageView.layoutParams
@@ -438,7 +436,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             private const val CHECKER = "checker"
             private const val URL = "url"
 
-            fun newInstance(id: Int, checker: PatternUrlChecker, url: String): OpenOtherDialog {
+            fun newInstance(id: Int, checker: PatternUrlChecker?, url: String): OpenOtherDialog {
                 val dialog = OpenOtherDialog()
                 val bundle = Bundle()
                 bundle.putInt(ID, id)
