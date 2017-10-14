@@ -57,35 +57,40 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_downward_white_24dp" />
+            android:src="@drawable/ic_arrow_downward_white_24dp"
+            android:tint="?attr/iconColor"/>
 
         <ImageButton
             android:id="@+id/upButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_upward_white_24dp" />
+            android:src="@drawable/ic_arrow_upward_white_24dp"
+            android:tint="?attr/iconColor"/>
 
         <ImageButton
             android:id="@+id/leftButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_back_white_24dp" />
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            android:tint="?attr/iconColor"/>
 
         <ImageButton
             android:id="@+id/rightButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_forward_white_24dp" />
+            android:src="@drawable/ic_arrow_forward_white_24dp"
+            android:tint="?attr/iconColor"/>
 
         <ImageButton
             android:id="@+id/deleteButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_delete_sweep_white_24px" />
+            android:src="@drawable/ic_delete_sweep_white_24px"
+            android:tint="?attr/iconColor"/>
 
     </LinearLayout>
 

@@ -17,5 +17,6 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="?android:attr/listPreferredItemHeightSmall"
-        android:layout_height="?android:attr/listPreferredItemHeightSmall" />
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:tint="?attr/iconColor"/>
 </LinearLayout>
