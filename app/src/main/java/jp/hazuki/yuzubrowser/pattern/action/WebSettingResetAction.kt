@@ -22,7 +22,7 @@ class WebSettingResetAction(tabData: MainTabData) {
     private val userAgent: String?
     private val javaScriptEnable: Boolean
     private val navLockEnable: Boolean
-    private val blockImage: Boolean
+    private val loadImage: Boolean
     var patternAction: WebSettingPatternAction? = null
 
     init {
@@ -30,7 +30,7 @@ class WebSettingResetAction(tabData: MainTabData) {
         userAgent = settings.userAgentString
         javaScriptEnable = settings.javaScriptEnabled
         navLockEnable = tabData.isNavLock
-        blockImage = settings.blockNetworkImage
+        loadImage = settings.loadsImagesAutomatically
     }
 
     fun reset(tab: MainTabData) {
@@ -39,6 +39,6 @@ class WebSettingResetAction(tabData: MainTabData) {
         settings.userAgentString = userAgent
         settings.javaScriptEnabled = javaScriptEnable
         tab.isNavLock = navLockEnable
-        settings.blockNetworkImage = blockImage
+        settings.loadsImagesAutomatically = loadImage
     }
 }

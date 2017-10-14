@@ -1247,6 +1247,7 @@ public class BrowserActivity extends LongPressFixActivity implements WebBrowser,
         if (normalSettings && tab.getResetAction() != null) {
             tab.getResetAction().reset(tab);
             tab.setResetAction(null);
+            mToolbar.notifyChangeWebState();
             return 0;
         }
         return -1;

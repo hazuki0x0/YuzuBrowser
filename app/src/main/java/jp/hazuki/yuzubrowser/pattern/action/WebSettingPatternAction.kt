@@ -96,8 +96,8 @@ class WebSettingPatternAction : PatternAction {
         }
 
         when (loadImage) {
-            ENABLE -> settings.blockNetworkImage = false
-            DISABLE -> settings.blockNetworkImage = true
+            ENABLE -> settings.loadsImagesAutomatically = true
+            DISABLE -> settings.loadsImagesAutomatically = false
         }
         return false
     }
