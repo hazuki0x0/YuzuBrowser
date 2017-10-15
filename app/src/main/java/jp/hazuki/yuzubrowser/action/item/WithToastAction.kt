@@ -33,6 +33,17 @@ class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelabl
 
     companion object {
         private const val FIELD_SHOW_TOAST = "0"
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<WithToastAction> = object : Parcelable.Creator<WithToastAction> {
+            override fun createFromParcel(source: Parcel): WithToastAction {
+                return WithToastAction(source)
+            }
+
+            override fun newArray(size: Int): Array<WithToastAction?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 
     var showToast = false
@@ -68,16 +79,6 @@ class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelabl
 
     private constructor(source: Parcel) : this(source.readInt()) {
         showToast = source.readByte() != 0.toByte()
-    }
-
-    val CREATOR: Parcelable.Creator<WithToastAction> = object : Parcelable.Creator<WithToastAction> {
-        override fun createFromParcel(source: Parcel): WithToastAction {
-            return WithToastAction(source)
-        }
-
-        override fun newArray(size: Int): Array<WithToastAction?> {
-            return arrayOfNulls(size)
-        }
     }
 
     override fun showSubPreference(context: ActionActivity?): StartActivityInfo? {

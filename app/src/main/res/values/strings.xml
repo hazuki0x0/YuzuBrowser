@@ -268,4 +268,5 @@
     <string name="load_image">Load image</string>
     <string name="suggest_histories">Show history</string>
     <string name="suggest_bookmarks">Show bookmark</string>
+    <string name="search_engine_error">Search engine not found</string>
 </resources>

@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.search
 
+import android.app.Activity
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
@@ -31,6 +32,7 @@ import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
@@ -200,6 +202,12 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
             openNewTab = intent.getBooleanExtra(EXTRA_OPEN_NEW_TAB, false)
         } else {
             throw IllegalStateException("Intent is null")
+        }
+
+        if (manager.size == 0) {
+            Toast.makeText(this, R.string.search_engine_error, Toast.LENGTH_SHORT).show()
+            setResult(Activity.RESULT_CANCELED)
+            finish()
         }
     }
 
