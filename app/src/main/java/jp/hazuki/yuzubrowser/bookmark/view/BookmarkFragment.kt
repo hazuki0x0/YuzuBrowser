@@ -405,7 +405,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 return true
             }
             R.id.selectAll -> {
-                for (i in 0..adapter.itemCount) {
+                for (i in 0 until adapter.itemCount) {
                     adapter.setSelect(i, true)
                 }
                 return true

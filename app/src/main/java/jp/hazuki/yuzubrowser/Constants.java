@@ -27,6 +27,6 @@ public final class Constants {
 
     public static final class notification {
         public static final String CHANNEL_DOWNLOAD_SERVICE = "jp.hazuki.yuzubrowser.channel.dl.service";
-        public static final String CHANNEL_DOWNLOAD_NOTIFY = "jp.hazuki.yuzubrowser.channel.dl.notify";
+        public static final String CHANNEL_DOWNLOAD_NOTIFY = "jp.hazuki.yuzubrowser.channel.dl.notify2";
     }
 }

@@ -16,9 +16,11 @@
 
 package jp.hazuki.yuzubrowser.settings.data;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.webkit.WebSettings;
 
@@ -410,6 +412,12 @@ public class AppData {
                     AppData.commit(context, AppData.search_url, AppData.fullscreen_hide_mode);
 
                     shared_preference.edit().remove("fullscreen_hide_nav").apply();
+                }
+
+                if (lastLaunch < 300303 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationManager manager = (NotificationManager)
+                            context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.deleteNotificationChannel("jp.hazuki.yuzubrowser.channel.dl.notify");
                 }
             }
 

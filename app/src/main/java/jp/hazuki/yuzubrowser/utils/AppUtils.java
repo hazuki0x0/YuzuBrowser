@@ -58,7 +58,7 @@ public class AppUtils {
             NotificationChannel notify = new NotificationChannel(
                     Constants.notification.CHANNEL_DOWNLOAD_NOTIFY,
                     context.getString(R.string.download_notify),
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_LOW);
 
             notify.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
