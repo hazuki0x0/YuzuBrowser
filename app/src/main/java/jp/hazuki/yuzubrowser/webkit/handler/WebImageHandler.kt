@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.bookmark.view
+package jp.hazuki.yuzubrowser.webkit.handler
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
-import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
+import jp.hazuki.yuzubrowser.download.DownloadDialog
+import java.lang.ref.WeakReference
 
-fun showAddBookmarkDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
-    if (BookmarkManager.getInstance(context).isBookmarked(url)) {
-        AddBookmarkOptionDialog.newInstance(title ?: "", url)
-                .show(fragmentManager, "bookmarkOption")
-    } else {
-        AddBookmarkSiteDialog(context, title ?: "", url).show()
+class WebImageHandler(context: Context, val userAgent: String) : WebSrcImageHandler() {
+    private val refContext = WeakReference(context)
+
+    override fun handleUrl(url: String) {
+        val context = refContext.get()
+        if (context != null)
+            DownloadDialog.showDownloadDialog(context, url, userAgent)//TODO referer
     }
 }

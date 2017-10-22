@@ -22,7 +22,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
-import jp.hazuki.yuzubrowser.webkit.WebBrowser
+import jp.hazuki.yuzubrowser.browser.BrowserController
 
 class AddBookmarkOptionDialog : DialogFragment() {
 
@@ -50,7 +50,7 @@ class AddBookmarkOptionDialog : DialogFragment() {
                     1 -> {
                         BookmarkManager.getInstance(activity).removeAll(arguments.getString(ARG_URL))
                         val activity = activity
-                        if (activity is WebBrowser) {
+                        if (activity is BrowserController) {
                             activity.requestIconChange()
                         }
                     }

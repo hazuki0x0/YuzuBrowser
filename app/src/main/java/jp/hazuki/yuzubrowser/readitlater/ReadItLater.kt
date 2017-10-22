@@ -23,7 +23,7 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
-fun save(context: Context, resolver: ContentResolver, url: String?, webView: CustomWebView) {
+fun readItLater(context: Context, resolver: ContentResolver, url: String?, webView: CustomWebView) {
     val page = url ?: webView.url
     if (page.isNullOrEmpty()) {
         Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show()

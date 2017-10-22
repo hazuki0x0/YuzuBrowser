@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
@@ -48,7 +49,6 @@ import jp.hazuki.yuzubrowser.utils.IOUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
-import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 import jp.hazuki.yuzubrowser.webkit.WebViewFactory;
 
 class TabStorage {
@@ -149,7 +149,7 @@ class TabStorage {
         saveThumbnails();
     }
 
-    public MainTabData loadWebView(WebBrowser webBrowser, TabIndexData data, View tabView) {
+    public MainTabData loadWebView(BrowserActivity webBrowser, TabIndexData data, View tabView) {
         if (data == null) return null;
         Bundle bundle = loadBundle(new File(tabPath, Long.toString(data.getId())));
         CustomWebView webView = webBrowser.makeWebView(WebViewFactory.getMode(bundle));

@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.bookmark.view
+package jp.hazuki.yuzubrowser.webkit.handler
 
-import android.content.Context
-import android.support.v4.app.FragmentManager
-import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
+import jp.hazuki.yuzubrowser.browser.BrowserController
+import jp.hazuki.yuzubrowser.webkit.TabType
+import java.lang.ref.WeakReference
 
-fun showAddBookmarkDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
-    if (BookmarkManager.getInstance(context).isBookmarked(url)) {
-        AddBookmarkOptionDialog.newInstance(title ?: "", url)
-                .show(fragmentManager, "bookmarkOption")
-    } else {
-        AddBookmarkSiteDialog(context, title ?: "", url).show()
+class WebSrcImageOpenRightBgTabHandler(controller: BrowserController) : WebSrcImageHandler() {
+    private val mReference: WeakReference<BrowserController> = WeakReference(controller)
+
+    override fun handleUrl(url: String) {
+        mReference.get()?.openInRightBgTab(url, TabType.WINDOW)
     }
 }

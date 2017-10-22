@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.bookmark.view
+package jp.hazuki.yuzubrowser.tab
 
-import android.content.Context
-import android.support.v4.app.FragmentManager
-import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData
+import jp.hazuki.yuzubrowser.tab.manager.TabManager
+import jp.hazuki.yuzubrowser.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.webkit.TabType
 
-fun showAddBookmarkDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
-    if (BookmarkManager.getInstance(context).isBookmarked(url)) {
-        AddBookmarkOptionDialog.newInstance(title ?: "", url)
-                .show(fragmentManager, "bookmarkOption")
-    } else {
-        AddBookmarkSiteDialog(context, title ?: "", url).show()
-    }
+interface UiTabManager : TabManager {
+    fun add(web: CustomWebView, @TabType type: Int): MainTabData
+    fun setCurrentTab(no: Int, from: MainTabData?, to: MainTabData)
 }

@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.bookmark.view
+package jp.hazuki.yuzubrowser.browser
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
-import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
+import android.content.res.Resources
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 
-fun showAddBookmarkDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
-    if (BookmarkManager.getInstance(context).isBookmarked(url)) {
-        AddBookmarkOptionDialog.newInstance(title ?: "", url)
-                .show(fragmentManager, "bookmarkOption")
-    } else {
-        AddBookmarkSiteDialog(context, title ?: "", url).show()
-    }
+interface BrowserInfo {
+    val resourcesByInfo: Resources
+    val themeByInfo: Resources.Theme
+    val currentTabData: MainTabData?
+    val applicationContextInfo: Context
+    val tabSize: Int
+    val isImeShown: Boolean
+    val isActivityPaused: Boolean
+
+    val isEnableUserScript: Boolean
+    val isEnableGesture: Boolean
+    val isEnableQuickControl: Boolean
+    val isEnableMultiFingerGesture: Boolean
+    val isEnableAdBlock: Boolean
 }

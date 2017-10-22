@@ -107,7 +107,7 @@ class DebugFileListActivity : FileListActivity(), FileListFragment.OnFileItemLon
             AlertDialog.Builder(this@DebugFileListActivity)
                     .setTitle("Make folder")
                     .setView(editText)
-                    .setPositiveButton(android.R.string.ok) { arg0, arg1 ->
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
                         File(currentFolder, editText.text.toString()).mkdir()
                         notifyDataSetChanged()
                     }

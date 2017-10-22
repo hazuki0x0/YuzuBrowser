@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.menuwindow
@@ -26,14 +26,16 @@ import android.widget.PopupWindow
 import android.widget.ScrollView
 import android.widget.TextView
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.action.ActionCallback
 import jp.hazuki.yuzubrowser.action.ActionList
 import jp.hazuki.yuzubrowser.action.ActionNameArray
+import jp.hazuki.yuzubrowser.action.manager.ActionController
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.utils.FontUtils
 
-class MenuWindow(context: Context, actionList: ActionList, callback: ActionCallback) : PopupWindow.OnDismissListener {
+typealias OnMenuCloseListener = () -> Unit
+
+class MenuWindow(context: Context, actionList: ActionList, controller: ActionController) : PopupWindow.OnDismissListener {
 
     private val windowMargin = DisplayUtils.convertDpToPx(context, 4)
     private val window = PopupWindow(context)
@@ -70,7 +72,7 @@ class MenuWindow(context: Context, actionList: ActionList, callback: ActionCallb
                 child.textSize = fontSize.toFloat()
             }
             child.setOnClickListener {
-                callback.run(action)
+                controller.run(action)
                 window.dismiss()
             }
             child.text = action.toString(array)
@@ -124,12 +126,8 @@ class MenuWindow(context: Context, actionList: ActionList, callback: ActionCallb
         locking = true
         handler.postDelayed(lock, 50)
 
-        mListener?.onMenuClose()
+        mListener?.invoke()
     }
 
     private val lock = { locking = false }
-
-    interface OnMenuCloseListener {
-        fun onMenuClose()
-    }
 }

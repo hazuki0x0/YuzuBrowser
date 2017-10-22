@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.bookmark.view
+package jp.hazuki.yuzubrowser.toolbar.main
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
-import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
 
-fun showAddBookmarkDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
-    if (BookmarkManager.getInstance(context).isBookmarked(url)) {
-        AddBookmarkOptionDialog.newInstance(title ?: "", url)
-                .show(fragmentManager, "bookmarkOption")
-    } else {
-        AddBookmarkSiteDialog(context, title ?: "", url).show()
-    }
-}
+import jp.hazuki.yuzubrowser.action.manager.ActionController
+import jp.hazuki.yuzubrowser.action.manager.ActionIconManager
+import jp.hazuki.yuzubrowser.settings.data.AppData
+import jp.hazuki.yuzubrowser.toolbar.BrowserToolbarManager.RequestCallback
+
+class CustomToolbar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : CustomToolbarBase(context, AppData.toolbar_custom1, controller, iconManager, request_callback)

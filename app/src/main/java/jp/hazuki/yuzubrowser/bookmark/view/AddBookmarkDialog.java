@@ -16,8 +16,8 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkFoldersDialog.OnFolderSelectedListener;
+import jp.hazuki.yuzubrowser.browser.BrowserController;
 import jp.hazuki.yuzubrowser.utils.view.SpinnerButton;
-import jp.hazuki.yuzubrowser.webkit.WebBrowser;
 
 public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements OnFolderSelectedListener {
     protected final Context mContext;
@@ -108,8 +108,8 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
                 Toast.makeText(mDialog.getContext(), R.string.succeed, Toast.LENGTH_SHORT).show();
                 if (mOnClickListener != null)
                     mOnClickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);
-                if (mContext instanceof WebBrowser) {
-                    ((WebBrowser) mContext).requestIconChange();
+                if (mContext instanceof BrowserController) {
+                    ((BrowserController) mContext).requestIconChange();
                 }
                 mDialog.dismiss();
             } else {

@@ -272,7 +272,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
     public void loadData() {
         List<TabIndexData> list = mTabStorage.getTabIndexDataList();
         for (TabIndexData data : list) {
-            View v = mWebBrowser.getToolbar().addNewTabView();
+            View v = mWebBrowser.getToolbarManager().addNewTabView();
             moveTabToBackground(v, mWebBrowser.getResources(), mWebBrowser.getTheme());
             mTabView.add(v);
             setText(v, data);
