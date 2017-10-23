@@ -19,52 +19,46 @@ package jp.hazuki.yuzubrowser.action.item
 import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
-import android.view.View
-import android.widget.Switch
+import android.widget.CheckBox
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.SingleAction
 import jp.hazuki.yuzubrowser.action.view.ActionActivity
+import jp.hazuki.yuzubrowser.utils.Logger
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo
+import java.io.IOException
 
-class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelable {
-
-    companion object {
-        private const val FIELD_SHOW_TOAST = "0"
-
-        @JvmField
-        val CREATOR: Parcelable.Creator<WithToastAction> = object : Parcelable.Creator<WithToastAction> {
-            override fun createFromParcel(source: Parcel): WithToastAction {
-                return WithToastAction(source)
-            }
-
-            override fun newArray(size: Int): Array<WithToastAction?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    var showToast = false
+class LeftRightTabSingleAction : SingleAction {
+    var isTabLoop = false
         private set
 
-    constructor(id: Int, parser: JsonParser?) : this(id) {
+    @Throws(IOException::class)
+    constructor(id: Int, parser: JsonParser?) : super(id) {
+
         if (parser != null) {
             if (parser.nextToken() != JsonToken.START_OBJECT) return
             while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (FIELD_SHOW_TOAST == parser.currentName) {
-                    if (parser.nextValue().isBoolean)
-                        showToast = parser.booleanValue
+                if (parser.currentToken != JsonToken.FIELD_NAME) return
+                if (FIELD_NAME_TAB_LOOP != parser.currentName) {
+                    parser.skipChildren()
+                    continue
+                }
+                when (parser.nextToken()) {
+                    JsonToken.VALUE_TRUE -> isTabLoop = true
+                    JsonToken.VALUE_FALSE -> isTabLoop = false
+                    else -> Logger.w(TAG, "current token is not boolean value : " + parser.currentToken.toString())
                 }
             }
         }
     }
 
+    @Throws(IOException::class)
     override fun writeIdAndData(generator: JsonGenerator) {
         generator.writeNumber(id)
         generator.writeStartObject()
-        generator.writeBooleanField(FIELD_SHOW_TOAST, showToast)
+        generator.writeBooleanField(FIELD_NAME_TAB_LOOP, isTabLoop)
         generator.writeEndObject()
     }
 
@@ -74,26 +68,42 @@ class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelabl
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id)
-        dest.writeByte(if (showToast) 1 else 0)
+        dest.writeInt(if (isTabLoop) 1 else 0)
     }
 
-    private constructor(source: Parcel) : this(source.readInt()) {
-        showToast = source.readByte() != 0.toByte()
+    private constructor(source: Parcel) : super(source.readInt()) {
+        isTabLoop = source.readInt() == 1
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
-        val view = View.inflate(context, R.layout.action_with_toast, null)
-        val switch: Switch = view.findViewById(R.id.showToastSwitch)
+        val view = CheckBox(context)
+        view.setText(R.string.action_tab_loop)
+        view.isChecked = isTabLoop
 
-        switch.isChecked = showToast
         AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)
                 .setView(view)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    showToast = switch.isChecked
-                }
+                .setPositiveButton(android.R.string.ok) { _, _ -> isTabLoop = view.isChecked }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
+
         return null
     }
+
+    companion object {
+        private const val TAG = "LeftRightTabSingleAction"
+        private const val FIELD_NAME_TAB_LOOP = "0"
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<LeftRightTabSingleAction> = object : Parcelable.Creator<LeftRightTabSingleAction> {
+            override fun createFromParcel(source: Parcel): LeftRightTabSingleAction {
+                return LeftRightTabSingleAction(source)
+            }
+
+            override fun newArray(size: Int): Array<LeftRightTabSingleAction?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
 }

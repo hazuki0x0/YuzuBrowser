@@ -20,7 +20,7 @@ import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
-import android.widget.Switch
+import android.widget.EditText
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
@@ -28,43 +28,35 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.SingleAction
 import jp.hazuki.yuzubrowser.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo
+import java.io.IOException
 
-class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelable {
+class ToastAction : SingleAction, Parcelable {
 
-    companion object {
-        private const val FIELD_SHOW_TOAST = "0"
-
-        @JvmField
-        val CREATOR: Parcelable.Creator<WithToastAction> = object : Parcelable.Creator<WithToastAction> {
-            override fun createFromParcel(source: Parcel): WithToastAction {
-                return WithToastAction(source)
-            }
-
-            override fun newArray(size: Int): Array<WithToastAction?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    var showToast = false
+    var text: String? = null
         private set
 
-    constructor(id: Int, parser: JsonParser?) : this(id) {
+    @Throws(IOException::class)
+    constructor(id: Int, parser: JsonParser?) : super(id) {
+
         if (parser != null) {
             if (parser.nextToken() != JsonToken.START_OBJECT) return
             while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (FIELD_SHOW_TOAST == parser.currentName) {
-                    if (parser.nextValue().isBoolean)
-                        showToast = parser.booleanValue
+                if (parser.currentToken != JsonToken.FIELD_NAME) return
+                if (FIELD_TEXT == parser.currentName) {
+                    if (parser.nextToken() == JsonToken.VALUE_STRING)
+                        text = parser.text
+                    continue
                 }
+                parser.skipChildren()
             }
         }
     }
 
+    @Throws(IOException::class)
     override fun writeIdAndData(generator: JsonGenerator) {
         generator.writeNumber(id)
         generator.writeStartObject()
-        generator.writeBooleanField(FIELD_SHOW_TOAST, showToast)
+        generator.writeStringField(FIELD_TEXT, text)
         generator.writeEndObject()
     }
 
@@ -74,26 +66,44 @@ class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelabl
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id)
-        dest.writeByte(if (showToast) 1 else 0)
+        dest.writeString(text)
     }
 
-    private constructor(source: Parcel) : this(source.readInt()) {
-        showToast = source.readByte() != 0.toByte()
+    private constructor(source: Parcel) : super(source.readInt()) {
+        text = source.readString()
+    }
+
+    override fun showMainPreference(context: ActionActivity): StartActivityInfo? {
+        return showSubPreference(context)
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
-        val view = View.inflate(context, R.layout.action_with_toast, null)
-        val switch: Switch = view.findViewById(R.id.showToastSwitch)
+        val v = View.inflate(context, R.layout.action_toast_dialog, null)
+        val editText = v.findViewById<EditText>(R.id.editText)
 
-        switch.isChecked = showToast
+        editText.setText(text)
+
         AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    showToast = switch.isChecked
-                }
+                .setView(v)
+                .setPositiveButton(android.R.string.ok) { _, _ -> text = editText.text.toString() }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
         return null
+    }
+
+    companion object {
+        private const val FIELD_TEXT = "0"
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<ToastAction> = object : Parcelable.Creator<ToastAction> {
+            override fun createFromParcel(source: Parcel): ToastAction {
+                return ToastAction(source)
+            }
+
+            override fun newArray(size: Int): Array<ToastAction?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 }

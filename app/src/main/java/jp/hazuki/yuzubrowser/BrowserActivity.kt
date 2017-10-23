@@ -1224,9 +1224,11 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         webClient.checkPatternMatch(tab, tab.url, true)
     }
 
-    override fun showActionName(text: String) {
-        actionNameTextView.visibility = View.VISIBLE
-        actionNameTextView.text = text
+    override fun showActionName(text: String?) {
+        if (text != null) {
+            actionNameTextView.visibility = View.VISIBLE
+            actionNameTextView.text = text
+        }
     }
 
     override fun hideActionName() {

@@ -587,7 +587,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.OPEN_URL -> {
                 val openUrlAction = action as OpenUrlSingleAction
-                controller.loadUrl(controller.getTab(actionTarget), openUrlAction.url, TabType.WINDOW)
+                controller.loadUrl(controller.getTab(actionTarget), openUrlAction.url, openUrlAction.targetTab, TabType.WINDOW)
             }
             SingleAction.TRANSLATE_PAGE -> {
                 val translateAction = action as TranslatePageSingleAction
@@ -598,7 +598,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     AlertDialog.Builder(controller.activity)
                             .setItems(R.array.translate_language_list) { _, which ->
                                 val to1 = controller.resourcesByInfo.getStringArray(R.array.translate_language_values)[which]
-                                val url = URLUtil.composeSearchUrl(tab.url, "http://translate.google.com/translate?sl=$from&tl=$to1&u=%s", "%s")
+                                val url = URLUtil.composeSearchUrl(tab.url, "http://translate.google.com/translate?sl=${from ?: ""}&tl=$to1&u=%s", "%s")
                                 controller.loadUrl(tab, url)
                             }
                             .show()

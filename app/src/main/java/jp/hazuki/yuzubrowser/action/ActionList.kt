@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.action
 
 import android.os.Parcel
@@ -12,24 +28,16 @@ import java.io.IOException
 import java.io.StringWriter
 import java.util.*
 
-class Action : ArrayList<SingleAction>, Parcelable, JsonConvertable {
+class ActionList : ArrayList<Action>, Parcelable, JsonConvertable {
 
-    constructor() : super(1)
+    constructor() : super() {}
 
-    constructor(action: Action) : super(action)
-
-    constructor(action: SingleAction) : super(1) {
-        add(action)
-    }
-
-    constructor(jsonStr: String) : super(1) {
+    constructor(jsonStr: String) : super() {
         fromJsonString(jsonStr)
     }
 
-    constructor(actions: Collection<SingleAction>) : super(actions)
-
     constructor(source: Parcel) : super() {
-        source.readList(this, SingleAction::class.java.classLoader)
+        source.readList(this, Action::class.java.classLoader)
     }
 
     override fun describeContents(): Int {
@@ -38,6 +46,10 @@ class Action : ArrayList<SingleAction>, Parcelable, JsonConvertable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeList(this)
+    }
+
+    fun add(`object`: SingleAction): Boolean {
+        return add(Action(`object`))
     }
 
     @Throws(IOException::class)
@@ -50,9 +62,7 @@ class Action : ArrayList<SingleAction>, Parcelable, JsonConvertable {
     fun writeAction(generator: JsonGenerator) {
         generator.writeStartArray()
         for (action in this) {
-            generator.writeStartArray()
-            action.writeIdAndData(generator)
-            generator.writeEndArray()
+            action.writeAction(generator)
         }
         generator.writeEndArray()
     }
@@ -60,23 +70,15 @@ class Action : ArrayList<SingleAction>, Parcelable, JsonConvertable {
     @Throws(IOException::class)
     fun loadAction(parser: JsonParser): Boolean {
         if (parser.nextToken() != JsonToken.START_ARRAY) return false
-        while (parser.nextToken() != JsonToken.END_ARRAY) {
-            if (parser.currentToken != JsonToken.START_ARRAY) return false
-
-            parser.nextToken()
-            if (parser.currentToken == JsonToken.VALUE_NUMBER_INT) {
-                val id = parser.intValue
-
-                //in makeInstance, should use getCurrentToken
-                val action: SingleAction
-                action = SingleAction.makeInstance(id, parser)
-                //parser.skipChildren();
-                if (parser.currentToken != JsonToken.END_ARRAY && parser.nextToken() != JsonToken.END_ARRAY)
-                    return false
-                add(action)
-            } else if (parser.currentToken != JsonToken.END_ARRAY) {
-                return false
+        while (true) {
+            val action = Action()
+            if (!action.loadAction(parser)) {
+                return if (parser.currentToken == JsonToken.END_ARRAY)
+                    break
+                else
+                    false
             }
+            add(action)
         }
         return true
     }
@@ -107,26 +109,18 @@ class Action : ArrayList<SingleAction>, Parcelable, JsonConvertable {
         return false
     }
 
-    fun toString(nameArray: ActionNameArray): String? {
-        return if (isEmpty()) null else get(0).toString(nameArray)
-    }
-
     companion object {
-        private const val serialVersionUID = 1712925333386047748L
+        const val serialVersionUID = 4454998466204378989L
 
         @JvmField
-        val CREATOR: Parcelable.Creator<Action> = object : Parcelable.Creator<Action> {
-            override fun createFromParcel(source: Parcel): Action {
-                return Action(source)
+        val CREATOR: Parcelable.Creator<ActionList> = object : Parcelable.Creator<ActionList> {
+            override fun createFromParcel(source: Parcel): ActionList {
+                return ActionList(source)
             }
 
-            override fun newArray(size: Int): Array<Action?> {
+            override fun newArray(size: Int): Array<ActionList?> {
                 return arrayOfNulls(size)
             }
-        }
-
-        fun makeInstance(id: Int): Action {
-            return Action(SingleAction.makeInstance(id))
         }
     }
 }

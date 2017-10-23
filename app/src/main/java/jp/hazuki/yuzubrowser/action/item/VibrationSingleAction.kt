@@ -16,11 +16,8 @@
 
 package jp.hazuki.yuzubrowser.action.item
 
-import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
-import android.view.View
-import android.widget.Switch
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
@@ -28,43 +25,35 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.SingleAction
 import jp.hazuki.yuzubrowser.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.utils.view.SeekBarDialog
+import java.io.IOException
 
-class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelable {
-
-    companion object {
-        private const val FIELD_SHOW_TOAST = "0"
-
-        @JvmField
-        val CREATOR: Parcelable.Creator<WithToastAction> = object : Parcelable.Creator<WithToastAction> {
-            override fun createFromParcel(source: Parcel): WithToastAction {
-                return WithToastAction(source)
-            }
-
-            override fun newArray(size: Int): Array<WithToastAction?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    var showToast = false
+class VibrationSingleAction : SingleAction, Parcelable {
+    var time = 100
         private set
 
-    constructor(id: Int, parser: JsonParser?) : this(id) {
+    @Throws(IOException::class)
+    constructor(id: Int, parser: JsonParser?) : super(id) {
+
         if (parser != null) {
             if (parser.nextToken() != JsonToken.START_OBJECT) return
             while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (FIELD_SHOW_TOAST == parser.currentName) {
-                    if (parser.nextValue().isBoolean)
-                        showToast = parser.booleanValue
+                if (parser.currentToken != JsonToken.FIELD_NAME) return
+                if (FIELD_NAME_TIME != parser.currentName) {
+                    parser.skipChildren()
+                    continue
                 }
+                if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
+                time = parser.intValue
             }
         }
     }
 
+    @Throws(IOException::class)
     override fun writeIdAndData(generator: JsonGenerator) {
         generator.writeNumber(id)
         generator.writeStartObject()
-        generator.writeBooleanField(FIELD_SHOW_TOAST, showToast)
+        generator.writeNumberField(FIELD_NAME_TIME, time)
         generator.writeEndObject()
     }
 
@@ -74,26 +63,38 @@ class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelabl
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id)
-        dest.writeByte(if (showToast) 1 else 0)
+        dest.writeInt(time)
     }
 
-    private constructor(source: Parcel) : this(source.readInt()) {
-        showToast = source.readByte() != 0.toByte()
+    private constructor(source: Parcel) : super(source.readInt()) {
+        time = source.readInt()
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
-        val view = View.inflate(context, R.layout.action_with_toast, null)
-        val switch: Switch = view.findViewById(R.id.showToastSwitch)
-
-        switch.isChecked = showToast
-        AlertDialog.Builder(context)
-                .setTitle(R.string.action_settings)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    showToast = switch.isChecked
-                }
+        SeekBarDialog(context)
+                .setTitle(R.string.action_vibration_setting)
+                .setPositiveButton(android.R.string.ok) { _, _, value -> time = value }
+                .setSeekMin(1)
+                .setSeekMax(3000)
+                .setValue(time)
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
+
         return null
+    }
+
+    companion object {
+        private const val FIELD_NAME_TIME = "0"
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<VibrationSingleAction> = object : Parcelable.Creator<VibrationSingleAction> {
+            override fun createFromParcel(source: Parcel): VibrationSingleAction {
+                return VibrationSingleAction(source)
+            }
+
+            override fun newArray(size: Int): Array<VibrationSingleAction?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 }

@@ -243,16 +243,16 @@ public class AppData {
             tabManager.save(context);
 
             MenuActionManager menuManager = MenuActionManager.getInstance(context);
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.GO_HOME));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.ALL_ACTION));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.SHOW_SETTINGS));
-            menuManager.browser_activity.list.add(SingleAction.makeInstance(SingleAction.FINISH));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.GO_HOME));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.ALL_ACTION));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_SETTINGS));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FINISH));
             menuManager.save(context);
 
             LongPressActionManager manager = LongPressActionManager.getInstance(context);

@@ -71,7 +71,7 @@ interface BrowserController : BrowserInfo {
     fun showCustomView(view: View, callback: WebChromeClient.CustomViewCallback)
     fun hideCustomView()
     fun getVideoLoadingProgressView(): View?
-    fun showActionName(text: String)
+    fun showActionName(text: String?)
     fun hideActionName()
     fun requestIconChange() = notifyChangeWebState()
 
