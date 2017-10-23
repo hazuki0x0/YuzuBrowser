@@ -104,7 +104,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
     class SettingWebDialog : DialogFragment() {
 
         private var header: View? = null
-        private lateinit var view_uaEditText: EditText
+        private lateinit var viewUaEditText: EditText
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val checker = arguments.getSerializable(CHECKER) as? PatternUrlChecker
@@ -116,7 +116,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             }
 
             val uaCheckBox: CheckBox = view.findViewById(R.id.uaCheckBox)
-            view_uaEditText = view.findViewById(R.id.uaEditText)
+            viewUaEditText = view.findViewById(R.id.uaEditText)
             val uaButton: ImageButton = view.findViewById(R.id.uaButton)
             val jsCheckBox: CheckBox = view.findViewById(R.id.jsCheckBox)
             val jsSwitch: Switch = view.findViewById(R.id.jsSwitch)
@@ -130,9 +130,9 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 val ua = action.userAgentString
                 uaCheckBox.isChecked = ua != null
                 if (ua != null) {
-                    view_uaEditText.setText(ua)
+                    viewUaEditText.setText(ua)
                 } else {
-                    view_uaEditText.isEnabled = false
+                    viewUaEditText.isEnabled = false
                     uaButton.isEnabled = false
                 }
 
@@ -184,7 +184,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     }
                 }
             } else {
-                view_uaEditText.isEnabled = false
+                viewUaEditText.isEnabled = false
                 uaButton.isEnabled = false
                 jsSwitch.isEnabled = false
                 navLockSwitch.isEnabled = false
@@ -192,13 +192,13 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             }
 
             uaCheckBox.setOnCheckedChangeListener { _, b ->
-                view_uaEditText.isEnabled = b
+                viewUaEditText.isEnabled = b
                 uaButton.isEnabled = b
             }
 
             uaButton.setOnClickListener { _ ->
                 val intent = Intent(activity, UserAgentListActivity::class.java)
-                intent.putExtra(Intent.EXTRA_TEXT, view_uaEditText.text.toString())
+                intent.putExtra(Intent.EXTRA_TEXT, viewUaEditText.text.toString())
                 startActivityForResult(intent, REQUEST_USER_AGENT)
             }
 
@@ -219,7 +219,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
                     var ua: String? = null
                     if (uaCheckBox.isChecked) {
-                        ua = view_uaEditText.text.toString()
+                        ua = viewUaEditText.text.toString()
                     }
 
                     var js = WebSettingPatternAction.UNDEFINED
@@ -266,7 +266,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             if (requestCode == REQUEST_USER_AGENT && resultCode == RESULT_OK) {
-                view_uaEditText.setText(data?.getStringExtra(Intent.EXTRA_TEXT))
+                viewUaEditText.setText(data?.getStringExtra(Intent.EXTRA_TEXT))
             }
         }
 

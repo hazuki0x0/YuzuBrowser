@@ -48,9 +48,9 @@ class SearchUrlSpinnerAdapter(context: Context, objects: List<SearchUrl>) : Arra
                     .inflate(R.layout.serach_url_spinner, parent, false)!!
         }
 
-        var searchUrl = getItem(position)
+        val searchUrl = getItem(position)
 
-        view.findViewById<SearchSimpleIconView>(R.id.iconColorView)!!.setSearchUrl(searchUrl)
+        view.findViewById<SearchSimpleIconView>(R.id.iconColorView).setSearchUrl(searchUrl)
         view.findViewById<TextView>(R.id.titleTextView).text = if (searchUrl.title.isNotEmpty()) searchUrl.title else searchUrl.url
         return view
     }

@@ -21,7 +21,6 @@ import android.content.res.Resources
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
-import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.toolbar.main.CustomToolbar
@@ -81,11 +80,5 @@ interface ToolbarManager {
         const val LOCATION_TOP_ALWAYS = 7
         const val LOCATION_BOTTOM_ALWAYS = 8
         const val LOCATION_BOTTOM_OVERLAY_ALWAYS = 9
-    }
-
-    interface RequestCallback {
-        fun shouldShowToolbar(visibility: ToolbarVisibilityContainter, tabdata: MainTabData): Boolean
-
-        fun shouldShowToolbar(visibility: ToolbarVisibilityContainter, tabdata: MainTabData, newConfig: Configuration): Boolean
     }
 }

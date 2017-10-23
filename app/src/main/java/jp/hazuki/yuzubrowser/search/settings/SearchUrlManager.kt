@@ -151,8 +151,4 @@ class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
         }
         return super.add(element)
     }
-
-    override fun removeAt(index: Int): SearchUrl {
-        return super.removeAt(index)
-    }
 }

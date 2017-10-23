@@ -190,6 +190,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         }
 
         webViewFastScroller.attachAppBarLayout(coordinator, appbar)
+        webGestureOverlayView.setWebFrame(appbar)
 
         (getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.run {
             activeNetworkInfo.run {

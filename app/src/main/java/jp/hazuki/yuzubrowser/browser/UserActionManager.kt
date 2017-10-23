@@ -126,7 +126,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
         web.setGestureDetector(gestureDetector)
     }
 
-    fun onTouchEvent(event: MotionEvent): Boolean = multiFingerGestureDetector?.onTouchEvent(event) ?: false
+    fun onTouchEvent(event: MotionEvent): Boolean = multiFingerGestureDetector?.onTouchEvent(event) == true
 
     fun onVolumeKey(isUp: Boolean): Boolean {
         return controller.run(if (isUp) hardButton.volume_up.action else hardButton.volume_down.action)

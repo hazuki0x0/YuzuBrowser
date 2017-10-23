@@ -45,8 +45,8 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompatDividers() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        try {
-            return super.onCreateView(inflater, container, savedInstanceState)
+        return try {
+            super.onCreateView(inflater, container, savedInstanceState)
         } finally {
             setDividerPreferences(PreferenceFragmentCompatDividers.DIVIDER_PADDING_CHILD or PreferenceFragmentCompatDividers.DIVIDER_CATEGORY_BETWEEN or PreferenceFragmentCompatDividers.DIVIDER_NO_BEFORE_FIRST)
             preferenceManager.sharedPreferencesName = AppData.PREFERENCE_NAME
