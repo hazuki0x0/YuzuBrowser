@@ -26,6 +26,7 @@
         <item name="spinnerButtonStyle">@style/Widget.Yuzu.SpinnerButton</item>
         <item name="android:webViewStyle">@style/Widget.Yuzu.WebView</item>
         <item name="iconColor">@color/white_gray</item>
+        <item name="editTextStyle">@style/EditTextStyle</item>
     </style>
 
     <style name="BrowserMinThemeBlack.NoTitle" parent="@style/BrowserMinThemeBlack">
@@ -64,6 +65,7 @@
         <item name="android:webViewStyle">@style/Widget.Yuzu.WebView</item>
         <item name="iconColor">@color/deep_gray</item>
         <item name="android:scrollbarSize">4dp</item>
+        <item name="editTextStyle">@style/EditTextStyle</item>
     </style>
 
     <style name="BrowserMinThemeLight.NoTitle" parent="@style/BrowserMinThemeLight">
@@ -106,4 +108,6 @@
         <item name="android:scrollbarThumbHorizontal">@color/scroll_bar</item>
         <item name="android:scrollbarSize">4dp</item>
     </style>
+
+    <style name="EditTextStyle" parent="@style/Widget.AppCompat.EditText"/>
 </resources>
