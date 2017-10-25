@@ -24,7 +24,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextUtils
@@ -43,8 +42,13 @@ import jp.hazuki.yuzubrowser.search.suggest.SuggestItem
 import jp.hazuki.yuzubrowser.search.suggest.Suggestion
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.theme.ThemeData
-import jp.hazuki.yuzubrowser.utils.*
+import jp.hazuki.yuzubrowser.utils.UrlUtils
+import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.utils.async
+import jp.hazuki.yuzubrowser.utils.extensions.clipboardText
+import jp.hazuki.yuzubrowser.utils.extensions.getResColor
+import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView
 import java.util.*
@@ -91,7 +95,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         recyclerView.addItemDecoration(DividerItemDecoration(
-                this, ResourcesCompat.getColor(resources, R.color.divider, theme)))
+                this, getResColor(R.color.divider)))
 
         if (reverse) {
             layoutManager.reverseLayout = true
@@ -155,12 +159,12 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
                 when (item.itemId) {
                     android.R.id.copy -> if (min == 0 && max == text.length && initDecodedQuery == text.toString()) {
-                        ClipboardUtils.setClipboardText(this@SearchActivity, initQuery, false)
+                        clipboardText = initQuery!!
                         mode.finish()
                         return true
                     }
                     android.R.id.cut -> if (min == 0 && max == text.length && initDecodedQuery == text.toString()) {
-                        ClipboardUtils.setClipboardText(this@SearchActivity, initQuery, false)
+                        clipboardText = initQuery!!
                         editText.setText("")
                         mode.finish()
                         return true

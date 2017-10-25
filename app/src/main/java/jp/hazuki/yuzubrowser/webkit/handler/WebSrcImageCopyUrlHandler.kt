@@ -1,7 +1,7 @@
 package jp.hazuki.yuzubrowser.webkit.handler
 
 import android.content.Context
-import jp.hazuki.yuzubrowser.utils.ClipboardUtils
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import java.lang.ref.WeakReference
 
 class WebSrcImageCopyUrlHandler(context: Context) : WebSrcImageHandler() {
@@ -9,7 +9,7 @@ class WebSrcImageCopyUrlHandler(context: Context) : WebSrcImageHandler() {
 
     override fun handleUrl(url: String) {
         mReference.get()?.run {
-            ClipboardUtils.setClipboardText(this, url)
+            setClipboardWithToast(url)
         }
     }
 }

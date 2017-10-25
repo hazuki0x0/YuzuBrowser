@@ -26,7 +26,7 @@ import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.extensions.ContextExtensionsKt;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -79,7 +79,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         DividerColorDrawable(Context context, @ColorInt int color) {
             super(color);
 
-            height = DisplayUtils.convertDpToPx(context, 1);
+            height = ContextExtensionsKt.convertDpToPx(context, 1);
         }
 
         @Override

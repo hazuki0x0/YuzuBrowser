@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Region;
 
-import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.utils.image.ImageCache;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
@@ -32,7 +32,7 @@ class ThumbnailManager {
     private ImageCache cache;
 
     ThumbnailManager(Context context) {
-        float density = DisplayUtils.getDensity(context);
+        float density = ContextExtensionsKt.getDensity(context);
         height = (int) (density * 82 + 0.5f);
         width = (int) (density * 104 + 0.5f);
         cache = new ImageCache(0x200000);

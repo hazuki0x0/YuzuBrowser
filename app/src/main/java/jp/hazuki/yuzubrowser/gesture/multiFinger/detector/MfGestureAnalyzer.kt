@@ -21,10 +21,10 @@ import android.os.SystemClock
 import android.view.MotionEvent
 
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 
 internal class MfGestureAnalyzer(context: Context) {
-    private var sensitivity: Int = 0
+    private var sensitivity: Int = context.convertDpToPx(AppData.multi_finger_gesture_sensitivity.get())
 
     private val dX = DoubleArray(5)
     private val dY = DoubleArray(5)
@@ -85,10 +85,6 @@ internal class MfGestureAnalyzer(context: Context) {
                 else -> MultiFingerGestureDetector.SWIPE_UNKNOWN
             }
         }
-
-    init {
-        sensitivity = DisplayUtils.convertDpToPx(context, AppData.multi_finger_gesture_sensitivity.get())
-    }
 
     fun getGesture(paramMotionEvent: MotionEvent): GestureData {
         for (i in 0 until fingers) {

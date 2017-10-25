@@ -22,7 +22,6 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.support.design.widget.AppBarLayout
-import android.support.v4.content.res.ResourcesCompat
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +45,7 @@ import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.Companion.LOCATION_TOP_ALWAY
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.Companion.LOCATION_UNDEFINED
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager.Companion.LOCATION_WEB
 import jp.hazuki.yuzubrowser.toolbar.main.*
+import jp.hazuki.yuzubrowser.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
@@ -78,7 +78,7 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
 
     init {
         bottomAlwaysToolbarLayout.background =
-                ColorDrawable(ResourcesCompat.getColor(context.resources, R.color.deep_gray, context.theme))
+                ColorDrawable(context.getResColor(R.color.deep_gray))
     }
 
     override fun addToolbarView(isPortrait: Boolean) {

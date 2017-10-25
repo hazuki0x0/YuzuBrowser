@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.browser.ui
 
 import android.content.Context
-import android.support.v4.content.res.ResourcesCompat
 import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.Action
@@ -26,7 +25,8 @@ import jp.hazuki.yuzubrowser.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.action.manager.QuickControlActionManager
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.theme.ThemeData
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.utils.extensions.density
+import jp.hazuki.yuzubrowser.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.utils.view.pie.PieItem
 import jp.hazuki.yuzubrowser.utils.view.pie.PieMenu
 
@@ -73,7 +73,7 @@ class PieManager(private val context: Context, private val actionController: Act
     }
 
     fun onPreferenceReset() {
-        val density = DisplayUtils.getDensity(context)
+        val density = context.density
         pie.setRadiusStart((AppData.qc_rad_start.get() * density + 0.5f).toInt())
         pie.setRadiusIncrement((AppData.qc_rad_inc.get() * density + 0.5f).toInt())
         pie.setSlop((AppData.qc_slop.get() * density + 0.5f).toInt())
@@ -84,12 +84,12 @@ class PieManager(private val context: Context, private val actionController: Act
         if (themeData != null && themeData.qcItemBackgroundColorNormal != 0)
             pie.setNormalColor(themeData.qcItemBackgroundColorNormal)
         else
-            pie.setNormalColor(ResourcesCompat.getColor(context.resources, R.color.qc_normal, context.theme))
+            pie.setNormalColor(context.getResColor(R.color.qc_normal))
 
         if (themeData != null && themeData.qcItemBackgroundColorSelect != 0)
             pie.setSelectedColor(themeData.qcItemBackgroundColorSelect)
         else
-            pie.setSelectedColor(ResourcesCompat.getColor(context.resources, R.color.qc_selected, context.theme))
+            pie.setSelectedColor(context.getResColor(R.color.qc_selected))
 
         if (themeData != null && themeData.qcItemColor != 0)
             pie.setColorFilterToItems(themeData.qcItemColor)

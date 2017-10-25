@@ -40,10 +40,10 @@ import jp.hazuki.yuzubrowser.browser.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.ClipboardUtils
 import jp.hazuki.yuzubrowser.utils.PackageUtils
 import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector
 import java.util.*
 
@@ -281,7 +281,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 val site = item as BookmarkSite
                 WebUtils.shareWeb(activity, site.url, site.title)
             }
-            R.id.copyUrl -> ClipboardUtils.setClipboardText(activity, (item as BookmarkSite).url)
+            R.id.copyUrl -> activity.setClipboardWithToast((item as BookmarkSite).url)
             R.id.addToHome -> {
                 val url = (item as BookmarkSite).url
                 val bitmap = FaviconManager.getInstance(activity).get(url)

@@ -30,14 +30,15 @@ import jp.hazuki.yuzubrowser.action.ActionList
 import jp.hazuki.yuzubrowser.action.ActionNameArray
 import jp.hazuki.yuzubrowser.action.manager.ActionController
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.utils.FontUtils
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToFloatPx
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 
 typealias OnMenuCloseListener = () -> Unit
 
 class MenuWindow(context: Context, actionList: ActionList, controller: ActionController) : PopupWindow.OnDismissListener {
 
-    private val windowMargin = DisplayUtils.convertDpToPx(context, 4)
+    private val windowMargin = context.convertDpToPx(4)
     private val window = PopupWindow(context)
     private val handler = Handler()
     private var locking = false
@@ -54,7 +55,7 @@ class MenuWindow(context: Context, actionList: ActionList, controller: ActionCon
         window.height = LinearLayout.LayoutParams.WRAP_CONTENT
         window.width = LinearLayout.LayoutParams.WRAP_CONTENT
         window.setBackgroundDrawable(context.getDrawable(R.drawable.menu_drop_down_background))
-        window.elevation = DisplayUtils.convertDpToPx(context, 10).toFloat()
+        window.elevation = context.convertDpToFloatPx(10)
         window.setOnDismissListener(this)
         window.contentView.isFocusableInTouchMode = true
         window.contentView.setOnKeyListener { _, keyCode, event ->

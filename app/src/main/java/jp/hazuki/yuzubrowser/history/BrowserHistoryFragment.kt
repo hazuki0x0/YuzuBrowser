@@ -36,8 +36,8 @@ import jp.hazuki.yuzubrowser.browser.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.ClipboardUtils
 import jp.hazuki.yuzubrowser.utils.WebUtils
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.recycler_view.*
 import java.util.*
@@ -136,7 +136,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
                 false
             }
             menu.add(R.string.copy_url).setOnMenuItemClickListener {
-                ClipboardUtils.setClipboardText(activity, url)
+                activity.setClipboardWithToast(url)
                 false
             }
 

@@ -29,14 +29,14 @@ import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.utils.view.swipebutton.SwipeImageButton
 
 open class CustomToolbarBase(context: Context, toolbarContainer: ToolbarContainer, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, toolbarContainer, R.layout.toolbar_custom, request_callback) {
     private val mButtonController: ButtonToolbarController
 
     init {
-        val toolbarSizeY = DisplayUtils.convertDpToPx(context, toolbarContainer.size.get())
+        val toolbarSizeY = context.convertDpToPx(toolbarContainer.size.get())
         mButtonController = object : ButtonToolbarController(findViewById(R.id.linearLayout), controller, iconManager, toolbarSizeY) {
             private val PARAMS = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
 

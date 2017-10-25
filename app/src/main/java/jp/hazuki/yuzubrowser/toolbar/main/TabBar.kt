@@ -30,15 +30,15 @@ import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.utils.view.tab.FullTabLayout
 import jp.hazuki.yuzubrowser.utils.view.tab.ScrollableTabLayout
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout
 import kotlinx.android.synthetic.main.toolbar_tab.view.*
 
 class TabBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_tab, R.layout.toolbar_tab, request_callback) {
-    private val tabSizeX = DisplayUtils.convertDpToPx(context, AppData.tab_size_x.get())
-    private val tabSizeY = DisplayUtils.convertDpToPx(context, AppData.toolbar_tab.size.get())
+    private val tabSizeX = context.convertDpToPx(AppData.tab_size_x.get())
+    private val tabSizeY = context.convertDpToPx(AppData.toolbar_tab.size.get())
     private val tabFontSize = AppData.tab_font_size.get()
     private val mTabLayout: TabLayout
     private val mLeftButtonController: ButtonToolbarController

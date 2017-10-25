@@ -30,7 +30,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import jp.hazuki.yuzubrowser.adblock.AdBlock;
-import jp.hazuki.yuzubrowser.utils.DisplayUtils;
+import jp.hazuki.yuzubrowser.utils.extensions.ContextExtensionsKt;
 
 public class AdBlockEditDialog extends DialogFragment {
     private static final String ARG_TITLE = "title";
@@ -47,7 +47,7 @@ public class AdBlockEditDialog extends DialogFragment {
         final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        float density = DisplayUtils.getDensity(getActivity());
+        float density = ContextExtensionsKt.getDensity(getActivity());
         int marginWidth = (int) (4 * density + 0.5f);
         int marginHeight = (int) (16 * density + 0.5f);
         layoutParams.setMargins(marginWidth, marginHeight, marginWidth, marginHeight);

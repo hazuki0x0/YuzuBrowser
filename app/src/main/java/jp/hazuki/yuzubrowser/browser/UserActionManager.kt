@@ -36,9 +36,9 @@ import jp.hazuki.yuzubrowser.gesture.multiFinger.detector.MultiFingerGestureInfo
 import jp.hazuki.yuzubrowser.gesture.view.GestureFrameLayout
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.theme.ThemeData
-import jp.hazuki.yuzubrowser.utils.ClipboardUtils
 import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.MathUtils
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webkit.CustomOnCreateContextMenuListener
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
@@ -250,7 +250,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
                         false
                     }
                     menu.add(R.string.copy_phone_num).setOnMenuItemClickListener {
-                        ClipboardUtils.setClipboardText(browser.applicationContextInfo, Uri.decode(extra))
+                        browser.applicationContextInfo.setClipboardWithToast(Uri.decode(extra))
                         false
                     }
                 }
@@ -273,7 +273,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
                         false
                     }
                     menu.add(R.string.copy_email_address).setOnMenuItemClickListener {
-                        ClipboardUtils.setClipboardText(browser.applicationContextInfo, extra)
+                        browser.applicationContextInfo.setClipboardWithToast(extra)
                         false
                     }
                 }
@@ -291,7 +291,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
                         false
                     }
                     menu.add(R.string.copy_map_address).setOnMenuItemClickListener {
-                        ClipboardUtils.setClipboardText(browser.applicationContextInfo, extra)
+                        browser.applicationContextInfo.setClipboardWithToast(extra)
                         false
                     }
                 }

@@ -34,8 +34,8 @@ import android.widget.TextView
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.utils.UrlUtils
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat
 import java.io.File
 
@@ -112,7 +112,7 @@ class ReaderFragment : Fragment(), LoaderManager.LoaderCallbacks<ReaderData> {
             return
         }
 
-        val maxWidth = DisplayUtils.convertDpToPx(activity, 360)
+        val maxWidth = activity.convertDpToPx(360)
         var padding = 0
 
         if (width > maxWidth) {

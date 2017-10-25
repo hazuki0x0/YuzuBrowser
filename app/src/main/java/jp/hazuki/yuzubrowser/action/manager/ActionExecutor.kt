@@ -62,6 +62,8 @@ import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.userjs.UserScriptListActivity
 import jp.hazuki.yuzubrowser.utils.*
+import jp.hazuki.yuzubrowser.utils.extensions.clipboardText
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.SeekBarDialog
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.webkit.TabType
@@ -105,7 +107,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_COPY_URL -> {
-                        ClipboardUtils.setClipboardText(controller.applicationContextInfo, result.extra)
+                        controller.applicationContextInfo.setClipboardWithToast(result.extra)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
@@ -171,7 +173,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_COPY_IMAGE_URL -> {
-                        ClipboardUtils.setClipboardText(controller.applicationContextInfo, result.extra)
+                        controller.applicationContextInfo.setClipboardWithToast(result.extra)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
@@ -289,7 +291,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_COPY_IMAGE_URL -> {
-                        ClipboardUtils.setClipboardText(controller.applicationContextInfo, result.extra)
+                        controller.applicationContextInfo.setClipboardWithToast(result.extra)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
@@ -492,7 +494,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 val url = tab.url
                 urlTextView.text = UrlUtils.decodeUrl(url)
                 urlTextView.setOnLongClickListener({ _ ->
-                    ClipboardUtils.setClipboardText(controller.applicationContextInfo, url)
+                    controller.applicationContextInfo.setClipboardWithToast(url)
                     true
                 })
 
@@ -502,16 +504,16 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         .setPositiveButton(android.R.string.ok, null)
                         .show()
             }
-            SingleAction.COPY_URL -> ClipboardUtils.setClipboardText(controller.applicationContextInfo, controller.getTab(actionTarget).url)
-            SingleAction.COPY_TITLE -> ClipboardUtils.setClipboardText(controller.applicationContextInfo, controller.getTab(actionTarget).title)
+            SingleAction.COPY_URL -> controller.applicationContextInfo.setClipboardWithToast(controller.getTab(actionTarget).url)
+            SingleAction.COPY_TITLE -> controller.applicationContextInfo.setClipboardWithToast(controller.getTab(actionTarget).title)
             SingleAction.COPY_TITLE_URL -> {
                 val tab = controller.getTab(actionTarget)
                 val url = tab.url
                 val title = tab.title
                 when {
-                    url == null -> ClipboardUtils.setClipboardText(controller.applicationContextInfo, title)
-                    title == null -> ClipboardUtils.setClipboardText(controller.applicationContextInfo, url)
-                    else -> ClipboardUtils.setClipboardText(controller.applicationContextInfo, title + " " + url)
+                    url == null -> controller.applicationContextInfo.setClipboardWithToast(title)
+                    title == null -> controller.applicationContextInfo.setClipboardWithToast(url)
+                    else -> controller.applicationContextInfo.setClipboardWithToast(title + " " + url)
                 }
             }
             SingleAction.TAB_HISTORY -> controller.showTabHistory(actionTarget)
@@ -678,13 +680,12 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     actionTarget,
                     (action as ShowSearchBoxAction).isOpenNewTab,
                     action.isReverse)
-            SingleAction.PASTE_SEARCHBOX -> controller.showSearchBox(
-                    ClipboardUtils.getClipboardText(controller.applicationContextInfo),
+            SingleAction.PASTE_SEARCHBOX -> controller.showSearchBox(controller.applicationContextInfo.clipboardText,
                     actionTarget,
                     (action as PasteSearchBoxAction).isOpenNewTab,
                     action.isReverse)
             SingleAction.PASTE_GO -> {
-                val text = ClipboardUtils.getClipboardText(controller.applicationContextInfo)
+                val text = controller.applicationContextInfo.clipboardText
                 if (TextUtils.isEmpty(text)) {
                     Toast.makeText(controller.applicationContextInfo, R.string.clipboard_empty, Toast.LENGTH_SHORT).show()
                     return true

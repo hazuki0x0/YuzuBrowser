@@ -34,8 +34,8 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.SingleAction
 import jp.hazuki.yuzubrowser.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.utils.ArrayUtils
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.utils.extensions.density
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 import java.io.IOException
 
@@ -186,7 +186,7 @@ class WebScrollSingleAction : SingleAction, Parcelable {
 
     private fun makeFlingValue(context: Context, d: Int): Int {
         val decelerationLate = (Math.log(0.78) / Math.log(0.9)).toFloat()
-        val physicalCoef = SensorManager.GRAVITY_EARTH * 39.37f * DisplayUtils.getDensity(context) * 160.0f * 0.84f
+        val physicalCoef = SensorManager.GRAVITY_EARTH * 39.37f * context.density * 160.0f * 0.84f
         val flingFliction = ViewConfiguration.getScrollFriction()
         return (Integer.signum(d) * Math.round(Math.exp(Math.log((Math.abs(d) / (flingFliction * physicalCoef)).toDouble()) / decelerationLate * (decelerationLate - 1.0)) / 0.35f * (flingFliction * physicalCoef))).toInt()
     }

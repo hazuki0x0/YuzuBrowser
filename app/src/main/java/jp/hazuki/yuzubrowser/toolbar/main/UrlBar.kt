@@ -28,8 +28,8 @@ import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.toolbar.ButtonToolbarController
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.utils.UrlUtils
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 import kotlinx.android.synthetic.main.toolbar_url.view.*
 
 class UrlBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_url, R.layout.toolbar_url, request_callback) {
@@ -37,7 +37,7 @@ class UrlBar(context: Context, controller: ActionController, iconManager: Action
     private val mRightButtonController: ButtonToolbarController
 
     init {
-        val toolbarSizeY = DisplayUtils.convertDpToPx(context, AppData.toolbar_url.size.get())
+        val toolbarSizeY = context.convertDpToPx(AppData.toolbar_url.size.get())
 
         val softbtnManager = SoftButtonActionManager.getInstance(context)
 

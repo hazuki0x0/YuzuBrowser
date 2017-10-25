@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.webkit.handler
 import android.content.Context
 import android.os.Handler
 import android.os.Message
-import jp.hazuki.yuzubrowser.utils.ClipboardUtils
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import java.lang.ref.WeakReference
 
 class WebSrcLinkCopyHandler(context: Context) : Handler() {
@@ -29,7 +29,7 @@ class WebSrcLinkCopyHandler(context: Context) : Handler() {
         val text = msg.data.getString("title")
         if (!text.isNullOrEmpty()) {
             mReference.get()?.run {
-                ClipboardUtils.setClipboardText(this, text)
+                setClipboardWithToast(text)
             }
         }
     }

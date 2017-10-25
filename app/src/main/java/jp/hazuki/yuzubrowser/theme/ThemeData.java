@@ -44,9 +44,9 @@ import java.io.InputStream;
 
 import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
-import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.utils.JsonUtils;
+import jp.hazuki.yuzubrowser.utils.extensions.ContextExtensionsKt;
 
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
@@ -323,7 +323,7 @@ public class ThemeData {
                 if (bitmap == null)
                     return null;
                 if (autoScale) {
-                    float density = DisplayUtils.getDensity(context);
+                    float density = ContextExtensionsKt.getDensity(context);
                     Matrix matrix = new Matrix();
                     matrix.setScale(density, density);
                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, scaleFilter);

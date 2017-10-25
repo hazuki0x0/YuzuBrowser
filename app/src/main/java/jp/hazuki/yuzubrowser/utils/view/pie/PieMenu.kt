@@ -18,13 +18,14 @@ package jp.hazuki.yuzubrowser.utils.view.pie
 
 import android.content.Context
 import android.graphics.*
-import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SoundEffectConstants
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import jp.hazuki.yuzubrowser.R
+import jp.hazuki.yuzubrowser.utils.extensions.dimension
+import jp.hazuki.yuzubrowser.utils.extensions.getResColor
 import java.util.*
 
 class PieMenu @JvmOverloads constructor(
@@ -83,16 +84,15 @@ class PieMenu @JvmOverloads constructor(
     }
 
     init {
-        val res = context.resources
-        radius = res.getDimension(R.dimen.qc_radius_start).toInt()
-        radiusInc = res.getDimension(R.dimen.qc_radius_increment).toInt()
-        slop = res.getDimension(R.dimen.qc_slop).toInt()
-        touchOffset = res.getDimension(R.dimen.qc_touch_offset).toInt()
+        radius = context.dimension(R.dimen.qc_radius_start)
+        radiusInc = context.dimension(R.dimen.qc_radius_increment)
+        slop = context.dimension(R.dimen.qc_slop)
+        touchOffset = context.dimension(R.dimen.qc_touch_offset)
         setWillNotDraw(false)
         isDrawingCacheEnabled = false
-        normalPaint.color = ResourcesCompat.getColor(res, R.color.qc_normal, context.theme)
+        normalPaint.color = context.getResColor(R.color.qc_normal)
         normalPaint.isAntiAlias = true
-        selectedPaint.color = ResourcesCompat.getColor(res, R.color.qc_selected, context.theme)
+        selectedPaint.color = context.getResColor(R.color.qc_selected)
         selectedPaint.isAntiAlias = true
     }
 
@@ -257,10 +257,7 @@ class PieMenu @JvmOverloads constructor(
             }
         } else if (MotionEvent.ACTION_UP == action) {
             if (isOpen) {
-                var handled = false
-                if (pieView != null) {
-                    handled = pieView!!.onTouchEvent(evt)
-                }
+                val handled = pieView?.onTouchEvent(evt) ?: false
                 val item = currentItem
                 deselect()
                 show(false)
@@ -276,12 +273,9 @@ class PieMenu @JvmOverloads constructor(
             deselect()
             return false
         } else if (MotionEvent.ACTION_MOVE == action) {
-            var handled = false
+            val handled = pieView?.onTouchEvent(evt) ?: false
             val polar = getPolar(x, y)
             val maxr = radius + levels * radiusInc + 50
-            if (pieView != null) {
-                handled = pieView!!.onTouchEvent(evt)
-            }
             if (handled) {
                 invalidate()
                 return false
@@ -305,7 +299,7 @@ class PieMenu @JvmOverloads constructor(
                         0
                     val cy = item.view.top
                     pieView = item.pieView
-                    layoutPieView(pieView, cx, cy,
+                    layoutPieView(pieView!!, cx, cy,
                             (item.startAngle + item.sweep) / 2)
                 }
                 invalidate()
@@ -315,8 +309,8 @@ class PieMenu @JvmOverloads constructor(
         return false
     }
 
-    private fun layoutPieView(pv: PieView?, x: Int, y: Int, angle: Float) {
-        pv!!.layout(x, y, onTheLeft(), angle)
+    private fun layoutPieView(pv: PieView, x: Int, y: Int, angle: Float) {
+        pv.layout(x, y, onTheLeft(), angle)
     }
 
     /**
@@ -327,9 +321,7 @@ class PieMenu @JvmOverloads constructor(
      */
     private fun onEnter(item: PieItem?) {
         // deselect
-        if (currentItem != null) {
-            currentItem!!.isSelected = false
-        }
+        currentItem?.isSelected = false
         if (item != null) {
             // clear up stack
             playSoundEffect(SoundEffectConstants.CLICK)
@@ -340,9 +332,7 @@ class PieMenu @JvmOverloads constructor(
     }
 
     private fun deselect() {
-        if (currentItem != null) {
-            currentItem!!.isSelected = false
-        }
+        currentItem?.isSelected = false
         currentItem = null
         pieView = null
     }

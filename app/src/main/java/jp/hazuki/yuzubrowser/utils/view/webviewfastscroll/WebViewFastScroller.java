@@ -44,8 +44,8 @@ import android.widget.FrameLayout;
 
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.settings.data.AppData;
-import jp.hazuki.yuzubrowser.utils.DisplayUtils;
 import jp.hazuki.yuzubrowser.utils.ThemeUtils;
+import jp.hazuki.yuzubrowser.utils.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.webkit.CustomWebView;
 
 public class WebViewFastScroller extends FrameLayout {
@@ -110,7 +110,7 @@ public class WebViewFastScroller extends FrameLayout {
 
         mTouchTargetWidth = a.getDimensionPixelSize(
                 R.styleable.WebViewFastScroller_wfs_touchTargetWidth,
-                DisplayUtils.convertDpToPx(context, 24));
+                ContextExtensionsKt.convertDpToPx(context, 24));
 
         mHideDelay = a.getInt(R.styleable.WebViewFastScroller_wfs_hideDelay,
                 DEFAULT_AUTO_HIDE_DELAY);
@@ -119,7 +119,7 @@ public class WebViewFastScroller extends FrameLayout {
 
         a.recycle();
 
-        int fortyEightDp = DisplayUtils.convertDpToPx(context, 48);
+        int fortyEightDp = ContextExtensionsKt.convertDpToPx(context, 48);
         setLayoutParams(new ViewGroup.LayoutParams(fortyEightDp, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mBar = new View(context);
@@ -131,7 +131,7 @@ public class WebViewFastScroller extends FrameLayout {
 
         mMinScrollHandleHeight = fortyEightDp;
 
-        final int eightDp = DisplayUtils.convertDpToPx(getContext(), 8);
+        final int eightDp = ContextExtensionsKt.convertDpToPx(getContext(), 8);
         mHiddenTranslationX = (showLeft ? -1 : 1) * eightDp;
         mHide = () -> {
             if (!mHandle.isPressed()) {
@@ -280,10 +280,10 @@ public class WebViewFastScroller extends FrameLayout {
     public void setTouchTargetWidth(int touchTargetWidth) {
         mTouchTargetWidth = touchTargetWidth;
 
-        int eightDp = DisplayUtils.convertDpToPx(getContext(), 8);
+        int eightDp = ContextExtensionsKt.convertDpToPx(getContext(), 8);
         mBarInset = mTouchTargetWidth - eightDp;
 
-        int fortyEightDp = DisplayUtils.convertDpToPx(getContext(), 48);
+        int fortyEightDp = ContextExtensionsKt.convertDpToPx(getContext(), 48);
         if (mTouchTargetWidth > fortyEightDp) {
             throw new RuntimeException("Touch target width cannot be larger than 48dp!");
         }

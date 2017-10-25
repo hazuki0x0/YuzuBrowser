@@ -14,15 +14,6 @@ public class DisplayUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static int convertDpToPx(Context context, int dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return (int) (density * dp + 0.5f);
-    }
-
-    public static float getDensity(Context context) {
-        return context.getResources().getDisplayMetrics().density;
-    }
-
     public static int getDisplayHeight(Context context) {
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point point = new Point();

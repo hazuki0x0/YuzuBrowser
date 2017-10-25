@@ -22,15 +22,15 @@ import android.view.WindowManager
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToFloatPx
 
 class BrowserHistoryActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
-        supportActionBar?.elevation = DisplayUtils.convertDpToPx(this, 1).toFloat()
+        supportActionBar?.elevation = convertDpToFloatPx(1)
 
         var pickMode = false
         var fullscreen = AppData.fullscreen.get()
