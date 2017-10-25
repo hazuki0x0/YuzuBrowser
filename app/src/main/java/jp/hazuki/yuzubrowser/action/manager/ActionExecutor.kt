@@ -330,10 +330,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_ADD_BLACK_LIST -> {
-                        target.webView.requestFocusNodeHref(WebSrcImageLinkHandler { url ->
-                            AddAdBlockDialog.addBackListInstance(url)
-                                    .show(controller.activity.supportFragmentManager, "add black")
-                        }.obtainMessage())
+                        target.webView.requestFocusNodeHref(WebSrcImageBlackListHandler(controller.activity).obtainMessage())
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
@@ -342,10 +339,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_ADD_WHITE_LIST -> {
-                        target.webView.requestFocusNodeHref(WebSrcImageLinkHandler({ url ->
-                            AddAdBlockDialog.addWhiteListInstance(url)
-                                    .show(controller.activity.supportFragmentManager, "add white")
-                        }).obtainMessage())
+                        target.webView.requestFocusNodeHref(WebSrcImageWhiteListHandler(controller.activity).obtainMessage())
                         AddAdBlockDialog.addWhiteListInstance(result.extra)
                                 .show(controller.activity.supportFragmentManager, "add white")
                         return true

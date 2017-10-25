@@ -16,16 +16,17 @@
 
 package jp.hazuki.yuzubrowser.webkit.handler
 
+import android.support.v7.app.AppCompatActivity
+import jp.hazuki.yuzubrowser.adblock.AddAdBlockDialog
 import java.lang.ref.WeakReference
 
-class WebSrcImageLinkHandler(listener: OnHandleUrlListener) : WebSrcImageHandler() {
-    private val listenerReference: WeakReference<OnHandleUrlListener> = WeakReference(listener)
+class WebSrcImageBlackListHandler(activity: AppCompatActivity) : WebSrcImageHandler() {
+    private val mReference: WeakReference<AppCompatActivity> = WeakReference(activity)
 
     override fun handleUrl(url: String) {
-        listenerReference.get()?.onHandleUrl(url)
-    }
-
-    interface OnHandleUrlListener {
-        fun onHandleUrl(url: String)
+        mReference.get()?.run {
+            AddAdBlockDialog.addBackListInstance(url)
+                    .show(supportFragmentManager, "add black")
+        }
     }
 }
