@@ -126,7 +126,18 @@ class UserActionManager(private val context: Context, private val browser: Brows
         web.setGestureDetector(gestureDetector)
     }
 
-    fun onTouchEvent(event: MotionEvent): Boolean = multiFingerGestureDetector?.onTouchEvent(event) == true
+    fun onTouchEvent(event: MotionEvent): Boolean {
+        return if (pieManager.isOpen) {
+            multiFingerGestureDetector?.run {
+                if (isTracking) {
+                    stopTracking()
+                }
+            }
+            false
+        } else {
+            multiFingerGestureDetector?.onTouchEvent(event) == true
+        }
+    }
 
     fun onVolumeKey(isUp: Boolean): Boolean {
         return controller.run(if (isUp) hardButton.volume_up.action else hardButton.volume_down.action)
@@ -174,11 +185,13 @@ class UserActionManager(private val context: Context, private val browser: Brows
     }
 
     override fun onGesturePerformed(info: MultiFingerGestureInfo): Boolean {
-        multiFingerGestureManager?.run {
-            gestureItems.forEach {
-                if (info.match(it)) {
-                    controller.run(it.action)
-                    return true
+        if (!pieManager.isOpen) {
+            multiFingerGestureManager?.run {
+                gestureItems.forEach {
+                    if (info.match(it)) {
+                        controller.run(it.action)
+                        return true
+                    }
                 }
             }
         }
