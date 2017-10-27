@@ -87,8 +87,8 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation "com.android.support:appcompat-v7:${android_support_lib_version}"
@@ -96,14 +96,14 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:${android_support_lib_version}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.takisoft.fix:preference-v7:${android_support_fix_lib_version}"
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.2'
     implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation project(':libraries:floatingactionbutton')
     implementation project(':libraries:colorpicker')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
 
