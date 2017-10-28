@@ -59,11 +59,11 @@ class UrlBar(context: Context, controller: ActionController, iconManager: Action
         centerUrlButton.textSize = AppData.toolbar_text_size_url.get().toFloat()
     }
 
-    override fun applyTheme(themedata: ThemeData) {
-        super.applyTheme(themedata)
-        applyTheme(themedata, mLeftButtonController)
-        applyTheme(themedata, mRightButtonController)
-        applyTheme(themedata, centerUrlButton)
+    override fun applyTheme(themeData: ThemeData?) {
+        super.applyTheme(themeData)
+        applyTheme(themeData, mLeftButtonController)
+        applyTheme(themeData, mRightButtonController)
+        applyTheme(themeData, centerUrlButton)
     }
 
     private fun addButtons() {

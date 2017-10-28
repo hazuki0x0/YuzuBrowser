@@ -72,12 +72,12 @@ open class ButtonToolbarController(private val linearLayout: ViewGroup, private 
         }
     }
 
-    fun setColorFilter(cf: ColorFilter) {
+    fun setColorFilter(cf: ColorFilter?) {
         for (btn in mButtonList)
             btn.colorFilter = cf
     }
 
-    fun setBackgroundDrawable(background: Drawable) {
+    fun setBackgroundDrawable(background: Drawable?) {
         for (btn in mButtonList)
             btn.setImageDrawable(background)
     }

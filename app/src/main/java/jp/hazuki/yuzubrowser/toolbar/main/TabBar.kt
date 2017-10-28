@@ -76,11 +76,11 @@ class TabBar(context: Context, controller: ActionController, iconManager: Action
         mRightButtonController.resetIcon()
     }
 
-    override fun applyTheme(themedata: ThemeData) {
-        super.applyTheme(themedata)
-        applyTheme(themedata, mLeftButtonController)
-        applyTheme(themedata, mRightButtonController)
-        mTabLayout.applyTheme(themedata)
+    override fun applyTheme(themeData: ThemeData?) {
+        super.applyTheme(themeData)
+        applyTheme(themeData, mLeftButtonController)
+        applyTheme(themeData, mRightButtonController)
+        mTabLayout.applyTheme(themeData)
     }
 
     private fun addButtons() {

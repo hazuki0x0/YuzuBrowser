@@ -223,7 +223,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
     }
 
     private inner class MyOnCreateContextMenuListener : CustomOnCreateContextMenuListener() {
-        override fun onCreateContextMenu(menu: ContextMenu, webview: CustomWebView, menuInfo: ContextMenu.ContextMenuInfo) {
+        override fun onCreateContextMenu(menu: ContextMenu, webview: CustomWebView, menuInfo: ContextMenu.ContextMenuInfo?) {
             val result = webview.hitTestResult ?: return
 
             val manager = LongPressActionManager.getInstance(browser.applicationContextInfo)
