@@ -52,7 +52,7 @@ class ReaderActivity : ThemeActivity() {
 
             if (savedInstanceState == null) {
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, ReaderFragment.newInstance(url, ua))
+                        .replace(R.id.container, ReaderFragment(url, ua))
                         .commit()
             }
         } else {

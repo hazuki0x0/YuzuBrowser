@@ -481,12 +481,12 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         private const val MODE_PICK = "pick"
         private const val ITEM_ID = "id"
 
-        fun newInstance(pickMode: Boolean, id: Long): Fragment {
+        operator fun invoke(pickMode: Boolean, id: Long): BookmarkFragment {
             val fragment = BookmarkFragment()
-            val bundle = Bundle()
-            bundle.putBoolean(MODE_PICK, pickMode)
-            bundle.putLong(ITEM_ID, id)
-            fragment.arguments = bundle
+            fragment.arguments = Bundle().apply {
+                putBoolean(MODE_PICK, pickMode)
+                putLong(ITEM_ID, id)
+            }
             return fragment
         }
     }

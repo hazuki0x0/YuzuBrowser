@@ -20,10 +20,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.Loader
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.style.ImageSpan
@@ -35,11 +32,13 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.UrlUtils
+import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
+import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat
 import java.io.File
 
-class ReaderFragment : Fragment(), LoaderManager.LoaderCallbacks<ReaderData> {
+class ReaderFragment : Fragment() {
 
     private var progressDialog: ProgressDialog? = null
     private lateinit var titleTextView: TextView
@@ -86,7 +85,18 @@ class ReaderFragment : Fragment(), LoaderManager.LoaderCallbacks<ReaderData> {
 
         activity.title = UrlUtils.decodeUrlHost(url)
 
-        loaderManager.initLoader(0, arguments, this)
+        ui {
+            val dialog = ProgressDialog(getString(R.string.now_loading)).apply {
+                show(childFragmentManager, "loading")
+            }
+            val data = async { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }.await()
+            dialog.dismiss()
+            if (data != null) {
+                setText(data.title, data.body)
+            } else {
+                setFailedText()
+            }
+        }
     }
 
     private fun setFailedText() {
@@ -135,29 +145,11 @@ class ReaderFragment : Fragment(), LoaderManager.LoaderCallbacks<ReaderData> {
         }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<ReaderData> {
-        progressDialog = ProgressDialog.newInstance(getString(R.string.now_loading))
-        progressDialog!!.show(childFragmentManager, "loading")
-        return ReaderTask(context, args.getString(ARG_URL), args.getString(ARG_UA))
-    }
-
-    override fun onLoadFinished(loader: Loader<ReaderData>, data: ReaderData?) {
-        if (progressDialog != null)
-            Handler().post { progressDialog!!.dismiss() }
-        if (data != null) {
-            setText(data.title, data.body)
-        } else {
-            setFailedText()
-        }
-    }
-
-    override fun onLoaderReset(loader: Loader<ReaderData>) = Unit
-
     companion object {
         private const val ARG_URL = "url"
         private const val ARG_UA = "ua"
 
-        fun newInstance(url: String?, userAgent: String?): ReaderFragment {
+        operator fun invoke(url: String?, userAgent: String?): ReaderFragment {
             return ReaderFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_URL, url)
@@ -183,7 +175,7 @@ class ReaderFragment : Fragment(), LoaderManager.LoaderCallbacks<ReaderData> {
         companion object {
             private const val MESSAGE = "mes"
 
-            fun newInstance(message: String): ProgressDialog {
+            operator fun invoke(message: String): ProgressDialog {
                 return ProgressDialog().apply {
                     arguments = Bundle().apply {
                         putCharSequence(MESSAGE, message)

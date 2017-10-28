@@ -313,7 +313,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     companion object {
         private const val PICK_MODE = "pick"
 
-        fun newInstance(isPickMode: Boolean): BrowserHistoryFragment {
+        operator fun invoke(isPickMode: Boolean): BrowserHistoryFragment {
             return BrowserHistoryFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(PICK_MODE, isPickMode)

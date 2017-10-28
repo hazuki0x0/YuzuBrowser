@@ -16,16 +16,13 @@
 
 package jp.hazuki.yuzubrowser.tab
 
-import android.view.View
 import jp.hazuki.yuzubrowser.browser.BrowserController
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.tab.manager.OnWebViewCreatedListener
-import jp.hazuki.yuzubrowser.tab.manager.TabIndexData
 import jp.hazuki.yuzubrowser.tab.manager.TabManager
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 import jp.hazuki.yuzubrowser.webkit.TabType
 
-class BrowserTabManager(private val tabManager: TabManager, private val controller: BrowserController) : UiTabManager {
+class BrowserTabManager(private val tabManager: TabManager, private val controller: BrowserController) : UiTabManager, TabManager by tabManager {
 
     private val toolbarManager
         get() = controller.toolbarManager
@@ -39,10 +36,6 @@ class BrowserTabManager(private val tabManager: TabManager, private val controll
         return tab
     }
 
-    override fun add(web: CustomWebView?, view: View?): MainTabData {
-        return tabManager.add(web, view)
-    }
-
     override fun addTab(index: Int, tabData: MainTabData) {
         val oldCurrent = tabManager.currentTabNo
         tabManager.addTab(index, tabData)
@@ -51,10 +44,6 @@ class BrowserTabManager(private val tabManager: TabManager, private val controll
         if (oldCurrent == tabManager.currentTabNo) {
             toolbarManager.moveCurrentTabPosition(tabManager.currentTabNo)
         }
-    }
-
-    override fun setCurrentTab(no: Int) {
-        tabManager.setCurrentTab(no)
     }
 
     override fun setCurrentTab(no: Int, from: MainTabData?, to: MainTabData) {
@@ -76,42 +65,6 @@ class BrowserTabManager(private val tabManager: TabManager, private val controll
         return current
     }
 
-    override fun indexOf(id: Long): Int {
-        return tabManager.indexOf(id)
-    }
-
-    override fun size(): Int {
-        return tabManager.size()
-    }
-
-    override fun isEmpty(): Boolean {
-        return tabManager.isEmpty
-    }
-
-    override fun isFirst(): Boolean {
-        return tabManager.isFirst
-    }
-
-    override fun isLast(): Boolean {
-        return tabManager.isLast
-    }
-
-    override fun isFirst(no: Int): Boolean {
-        return tabManager.isFirst(no)
-    }
-
-    override fun isLast(no: Int): Boolean {
-        return tabManager.isLast(no)
-    }
-
-    override fun getLastTabNo(): Int {
-        return tabManager.lastTabNo
-    }
-
-    override fun getCurrentTabNo(): Int {
-        return tabManager.currentTabNo
-    }
-
     override fun swap(a: Int, b: Int) {
         if (a == b) return
 
@@ -123,81 +76,5 @@ class BrowserTabManager(private val tabManager: TabManager, private val controll
         }
         tabManager.swap(a, b)
         toolbarManager.swapTab(a, b)
-    }
-
-    override fun getCurrentTabData(): MainTabData? {
-        return tabManager.currentTabData
-    }
-
-    override fun get(no: Int): MainTabData {
-        return tabManager[no]
-    }
-
-    override fun get(web: CustomWebView?): MainTabData {
-        return tabManager[web]
-    }
-
-    override fun getIndexData(no: Int): TabIndexData {
-        return tabManager.getIndexData(no)
-    }
-
-    override fun getIndexData(id: Long): TabIndexData {
-        return tabManager.getIndexData(id)
-    }
-
-    override fun searchParentTabNo(id: Long): Int {
-        return tabManager.searchParentTabNo(id)
-    }
-
-    override fun destroy() {
-        return tabManager.destroy()
-    }
-
-    override fun saveData() {
-        tabManager.saveData()
-    }
-
-    override fun loadData() {
-        tabManager.loadData()
-    }
-
-    override fun clear() {
-        tabManager.clear()
-    }
-
-    override fun clearExceptPinnedTab() {
-        tabManager.clearExceptPinnedTab()
-    }
-
-    override fun onPreferenceReset() {
-        tabManager.onPreferenceReset()
-    }
-
-    override fun onLayoutCreated() {
-        tabManager.onLayoutCreated()
-    }
-
-    override fun getLoadedData(): MutableList<MainTabData> {
-        return tabManager.loadedData
-    }
-
-    override fun getIndexDataList(): MutableList<TabIndexData> {
-        return tabManager.indexDataList
-    }
-
-    override fun takeThumbnailIfNeeded(data: MainTabData?) {
-        tabManager.takeThumbnailIfNeeded(data)
-    }
-
-    override fun removeThumbnailCache(url: String?) {
-        tabManager.removeThumbnailCache(url)
-    }
-
-    override fun forceTakeThumbnail(data: MainTabData?) {
-        tabManager.forceTakeThumbnail(data)
-    }
-
-    override fun setOnWebViewCreatedListener(listener: OnWebViewCreatedListener?) {
-        tabManager.setOnWebViewCreatedListener(listener)
     }
 }

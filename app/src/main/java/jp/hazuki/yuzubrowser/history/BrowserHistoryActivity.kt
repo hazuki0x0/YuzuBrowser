@@ -49,7 +49,7 @@ class BrowserHistoryActivity : ThemeActivity() {
         requestedOrientation = orientation
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, BrowserHistoryFragment.newInstance(pickMode))
+                .replace(R.id.container, BrowserHistoryFragment(pickMode))
                 .commit()
     }
 
