@@ -24,6 +24,8 @@ import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.CoroutineContext
 import kotlinx.coroutines.experimental.async as ktAsync
 
+typealias Deferred<T> = kotlinx.coroutines.experimental.Deferred<T>
+
 fun <T> async(context: CoroutineContext = CommonPool, start: CoroutineStart = CoroutineStart.DEFAULT, block: suspend CoroutineScope.() -> T)
         = ktAsync(context, start, block)
 

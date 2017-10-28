@@ -106,8 +106,8 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
         activity.setResult(RESULT_OK, data)
     }
 
-    override fun onMove(recyclerView: RecyclerView, item1: Int, item2: Int): Boolean {
-        adapter.move(item1, item2)
+    override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
+        adapter.move(fromIndex, toIndex)
         onActionListChanged()
         return true
     }
@@ -190,8 +190,8 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
 
     private class ActionListAdapter internal constructor(context: Context, actionList: ActionList, private val nameList: ActionNameArray, recyclerListener: OnRecyclerListener) : ArrayRecyclerAdapter<Action, SimpleViewHolder<Action>>(context, actionList, recyclerListener) {
 
-        override fun onBindViewHolder(holder: SimpleViewHolder<Action>, action: Action, position: Int) {
-            holder.textView.text = action.toString(nameList)
+        override fun onBindViewHolder(holder: SimpleViewHolder<Action>, item: Action, position: Int) {
+            holder.textView.text = item.toString(nameList)
         }
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<Action> {

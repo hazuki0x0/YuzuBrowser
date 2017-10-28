@@ -27,7 +27,7 @@ import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.net.HttpClientBuilder
 import jp.hazuki.yuzubrowser.utils.ui
-import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat
+import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -50,7 +50,7 @@ class FastDownloadActivity : ThemeActivity() {
         }
 
         ui {
-            val dialog = ProgressDialogFragmentCompat.newInstance(getString(R.string.now_downloading))
+            val dialog = ProgressDialog(getString(R.string.now_downloading))
             dialog.show(supportFragmentManager, "dialog")
             val file = async { download(url, intent.getStringExtra(EXTRA_FILE_REFERER), intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)) }.await()
             dialog.dismiss()

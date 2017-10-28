@@ -16,8 +16,6 @@
 
 package jp.hazuki.yuzubrowser.reader
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -35,12 +33,11 @@ import jp.hazuki.yuzubrowser.utils.UrlUtils
 import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.utils.ui
-import jp.hazuki.yuzubrowser.utils.view.ProgressDialogFragmentCompat
+import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
 import java.io.File
 
 class ReaderFragment : Fragment() {
 
-    private var progressDialog: ProgressDialog? = null
     private lateinit var titleTextView: TextView
     private lateinit var bodyTextView: TextView
 
@@ -86,7 +83,7 @@ class ReaderFragment : Fragment() {
         activity.title = UrlUtils.decodeUrlHost(url)
 
         ui {
-            val dialog = ProgressDialog(getString(R.string.now_loading)).apply {
+            val dialog = ProgressDialog(getString(R.string.now_loading), true, false).apply {
                 show(childFragmentManager, "loading")
             }
             val data = async { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }.await()
@@ -154,32 +151,6 @@ class ReaderFragment : Fragment() {
                 arguments = Bundle().apply {
                     putString(ARG_URL, url)
                     putString(ARG_UA, userAgent)
-                }
-            }
-        }
-    }
-
-    class ProgressDialog : ProgressDialogFragmentCompat() {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val dialog = super.onCreateDialog(savedInstanceState)
-            isCancelable = true
-            dialog.setCanceledOnTouchOutside(false)
-            return dialog
-        }
-
-        override fun onCancel(dialog: DialogInterface?) {
-            activity.finish()
-        }
-
-        companion object {
-            private const val MESSAGE = "mes"
-
-            operator fun invoke(message: String): ProgressDialog {
-                return ProgressDialog().apply {
-                    arguments = Bundle().apply {
-                        putCharSequence(MESSAGE, message)
-                    }
                 }
             }
         }
