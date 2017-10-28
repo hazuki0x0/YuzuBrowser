@@ -28,14 +28,14 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.search_activity_list_history_item.*
 import kotlinx.android.synthetic.main.search_activity_list_item.*
 
-class SearchRecyclerAdapter(context: Context, list: List<SuggestItem>, private val listener: OnSuggestSelectListener) : ArrayRecyclerAdapter<SuggestItem, SearchRecyclerAdapter.SuggestionViewHolder>(context, list, null) {
+class SearchRecyclerAdapter(context: Context, list: MutableList<SuggestItem>, private val listener: OnSuggestSelectListener) : ArrayRecyclerAdapter<SuggestItem, SearchRecyclerAdapter.SuggestionViewHolder>(context, list, null) {
 
     companion object {
         private const val TYPE_SUGGESTION = 0
         private const val TYPE_HISTORY = 1
     }
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): SuggestionViewHolder {
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SuggestionViewHolder {
         return when (viewType) {
             TYPE_HISTORY -> HistoryViewHolder(inflater.inflate(R.layout.search_activity_list_history_item, parent, false), this)
             else -> SuggestionViewHolder(inflater.inflate(R.layout.search_activity_list_item, parent, false), this)
@@ -61,7 +61,7 @@ class SearchRecyclerAdapter(context: Context, list: List<SuggestItem>, private v
         listener.onLongClicked(query)
     }
 
-    open class SuggestionViewHolder(override val containerView: View?, adapter: SearchRecyclerAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<SuggestItem>(containerView, adapter), LayoutContainer {
+    open class SuggestionViewHolder(override val containerView: View, adapter: SearchRecyclerAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<SuggestItem>(containerView, adapter), LayoutContainer {
 
         init {
             @Suppress("LeakingThis")
@@ -91,7 +91,7 @@ class SearchRecyclerAdapter(context: Context, list: List<SuggestItem>, private v
         }
     }
 
-    class HistoryViewHolder(view: View?, adapter: SearchRecyclerAdapter) : SuggestionViewHolder(view, adapter) {
+    class HistoryViewHolder(view: View, adapter: SearchRecyclerAdapter) : SuggestionViewHolder(view, adapter) {
 
         override fun viewInit(adapter: SearchRecyclerAdapter) {
             inputImageButton.setOnClickListener {

@@ -141,8 +141,7 @@ class MfsEditFragment : Fragment() {
         fun onEdited(index: Int, item: MultiFingerGestureItem)
     }
 
-    private class MfsFingerAdapter(context: Context, list: List<Int>, listener: OnRecyclerListener?) : ArrayRecyclerAdapter<Int, MfsFingerAdapter.ViewHolder>(context, list, listener) {
-
+    private class MfsFingerAdapter(context: Context, list: MutableList<Int>, listener: OnRecyclerListener?) : ArrayRecyclerAdapter<Int, MfsFingerAdapter.ViewHolder>(context, list, listener) {
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ViewHolder {
             return ViewHolder(inflater.inflate(R.layout.fragment_multi_finger_edit_item, parent, false), this)
         }

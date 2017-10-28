@@ -58,7 +58,7 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
         }
     }
 
-    override fun onRecyclerItemClicked(v: View?, position: Int) {
+    override fun onRecyclerItemClicked(v: View, position: Int) {
         startActivity(Intent(activity, BrowserActivity::class.java).apply {
             action = Constants.intent.ACTION_OPEN_DEFAULT
             data = ReadItLaterProvider.getReadUri(adapter[position].time)
@@ -66,7 +66,7 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
         activity.finish()
     }
 
-    override fun onRecyclerItemLongClicked(v: View?, position: Int): Boolean {
+    override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
         activity.startActionMode(this)
         adapter.isMultiSelectMode = true
         adapter.setSelect(position, true)

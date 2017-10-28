@@ -38,7 +38,7 @@ public class WebTextEncodeRecyclerAdapter extends ArrayRecyclerAdapter<WebTextEn
 
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, WebTextEncode encode, int position) {
-        holder.textView.setText(encode.encoding);
+        holder.getTextView().setText(encode.encoding);
     }
 
     @Override

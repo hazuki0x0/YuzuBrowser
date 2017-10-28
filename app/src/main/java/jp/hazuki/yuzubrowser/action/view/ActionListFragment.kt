@@ -42,15 +42,14 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     private lateinit var adapter: ActionListAdapter
     private lateinit var mActionNameArray: ActionNameArray
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setHasOptionsMenu(true)
         mActionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA)
 
         val actions = arguments.getParcelable<ActionList>(EXTRA_ACTION_LIST)
         setActionList(actions)
-
-        return rootView
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
@@ -184,12 +183,10 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
             onActionListChanged()
             adapter.notifyDataSetChanged()
         }
-
     }
 
-    override fun isLongPressDragEnabled(): Boolean {
-        return adapter.isSortMode
-    }
+    override val isLongPressDragEnabled
+        get() = adapter.isSortMode
 
     private class ActionListAdapter internal constructor(context: Context, actionList: ActionList, private val nameList: ActionNameArray, recyclerListener: OnRecyclerListener) : ArrayRecyclerAdapter<Action, SimpleViewHolder<Action>>(context, actionList, recyclerListener) {
 
@@ -197,7 +194,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
             holder.textView.text = action.toString(nameList)
         }
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): SimpleViewHolder<Action> {
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<Action> {
             return SimpleViewHolder(
                     inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
                     android.R.id.text1,

@@ -253,9 +253,9 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
         }
     }
 
-    private class UserJsAdapter internal constructor(context: Context, list: List<UserScript>, listener: OnRecyclerListener) : ArrayRecyclerAdapter<UserScript, UserJsAdapter.ViewHolder>(context, list, listener) {
+    private class UserJsAdapter internal constructor(context: Context, list: MutableList<UserScript>, private val listener: OnRecyclerListener) : ArrayRecyclerAdapter<UserScript, UserJsAdapter.ViewHolder>(context, list, listener) {
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ViewHolder {
             return ViewHolder(inflater.inflate(R.layout.fragment_userjs_item, parent, false), this)
         }
 
@@ -266,7 +266,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
                     .onInfoButtonClick(v, resolvedPosition)
         }
 
-        internal class ViewHolder(override val containerView: View?, adapter: UserJsAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<UserScript>(containerView, adapter), LayoutContainer {
+        internal class ViewHolder(override val containerView: View, adapter: UserJsAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<UserScript>(containerView, adapter), LayoutContainer {
             init {
                 infoButton.setOnClickListener { v -> adapter.onInfoButtonClick(v, adapterPosition, item) }
             }

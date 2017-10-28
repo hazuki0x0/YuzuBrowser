@@ -27,52 +27,49 @@ import java.util.*
 
 class MultiFingerGestureManager(context: Context) {
     private val jsonFile = context.getFileStreamPath(FILENAME)
-    private val items: MutableList<MultiFingerGestureItem> = ArrayList()
-
-    val gestureItems: List<MultiFingerGestureItem>
-        get() = items
+    val gestureItems: MutableList<MultiFingerGestureItem> = ArrayList()
 
     init {
         load()
     }
 
     fun add(item: MultiFingerGestureItem) {
-        items.add(item)
+        gestureItems.add(item)
         save()
     }
 
     fun add(index: Int, item: MultiFingerGestureItem) {
-        items.add(index, item)
+        gestureItems.add(index, item)
         save()
     }
 
     operator fun set(index: Int, item: MultiFingerGestureItem) {
-        items[index] = item
+        gestureItems[index] = item
         save()
     }
 
     fun remove(index: Int): MultiFingerGestureItem {
-        val item = items.removeAt(index)
+        val item = gestureItems.removeAt(index)
         save()
         return item
     }
 
     fun remove(item: MultiFingerGestureItem) {
-        if (items.remove(item))
+        if (gestureItems.remove(item))
             save()
     }
 
     fun move(from: Int, to: Int) {
-        ArrayUtils.move(items, from, to)
+        ArrayUtils.move(gestureItems, from, to)
         save()
     }
 
     fun indexOf(item: MultiFingerGestureItem): Int {
-        return items.indexOf(item)
+        return gestureItems.indexOf(item)
     }
 
     private fun load() {
-        items.clear()
+        gestureItems.clear()
         if (jsonFile == null || !jsonFile.exists() || jsonFile.isDirectory) return
         try {
             JsonUtils.getFactory().createParser(jsonFile).use { parser ->
@@ -104,7 +101,7 @@ class MultiFingerGestureManager(context: Context) {
                                     }
                                 }
                             }
-                            items.add(item)
+                            gestureItems.add(item)
                         } else {
                             parser.skipChildren()
                         }
@@ -121,7 +118,7 @@ class MultiFingerGestureManager(context: Context) {
         try {
             JsonUtils.getFactory().createGenerator(jsonFile, JsonEncoding.UTF8).use { generator ->
                 generator.writeStartArray()
-                for (item in items) {
+                for (item in gestureItems) {
                     generator.writeStartObject()
 
                     generator.writeNumberField(JSON_FINGERS, item.fingers)

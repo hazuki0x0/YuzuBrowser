@@ -27,7 +27,7 @@ import jp.hazuki.yuzubrowser.gesture.multiFinger.data.MultiFingerGestureItem
 import jp.hazuki.yuzubrowser.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener
 
-class MfsListAdapter(context: Context, list: List<MultiFingerGestureItem>, private val nameList: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<MultiFingerGestureItem, MfsListAdapter.ViewHolder>(context, list, listener) {
+class MfsListAdapter(context: Context, list: MutableList<MultiFingerGestureItem>, private val nameList: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<MultiFingerGestureItem, MfsListAdapter.ViewHolder>(context, list, listener) {
 
     override fun onBindViewHolder(holder: ViewHolder, item: MultiFingerGestureItem, position: Int) {
         val action = item.action
@@ -38,7 +38,7 @@ class MfsListAdapter(context: Context, list: List<MultiFingerGestureItem>, priva
             holder.title.text = action.toString(nameList)
     }
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ViewHolder {
         return ViewHolder(inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), this)
     }
 

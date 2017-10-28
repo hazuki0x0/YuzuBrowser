@@ -45,15 +45,14 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
     private lateinit var actionManager: SoftButtonActionArrayManagerBase
     private lateinit var adapter: ActionListAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         initData()
         val mActionNameArray = ActionNameArray(activity)
         adapter = ActionListAdapter(activity, mActionArray.list, mActionNameArray, this)
         setRecyclerViewAdapter(adapter)
         checkMax()
-        return rootView
     }
 
     override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
@@ -141,9 +140,8 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         return false
     }
 
-    override fun isLongPressDragEnabled(): Boolean {
-        return adapter.isSortMode
-    }
+    override val isLongPressDragEnabled
+        get() = adapter.isSortMode
 
     private fun checkMax() {
         setAddButtonEnabled(actionManager.max >= adapter.itemCount)
@@ -158,13 +156,13 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         mActionArray = actionManager.getActionArrayFile(mActionId)
     }
 
-    private class ActionListAdapter internal constructor(context: Context, list: List<SoftButtonActionFile>, private val actionNameArray: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder<SoftButtonActionFile>>(context, list, listener) {
+    private class ActionListAdapter internal constructor(context: Context, list: MutableList<SoftButtonActionFile>, private val actionNameArray: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder<SoftButtonActionFile>>(context, list, listener) {
 
         override fun onBindViewHolder(holder: SimpleViewHolder<SoftButtonActionFile>, item: SoftButtonActionFile, position: Int) {
             holder.textView.text = item.press.toString(actionNameArray)
         }
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): SimpleViewHolder<SoftButtonActionFile> {
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<SoftButtonActionFile> {
             return SimpleViewHolder(
                     inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), android.R.id.text1, this)
         }

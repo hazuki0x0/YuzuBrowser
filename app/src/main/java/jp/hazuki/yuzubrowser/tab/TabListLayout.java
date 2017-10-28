@@ -218,7 +218,7 @@ public class TabListLayout extends LinearLayout {
                 if (current) {
                     mAdapter.notifyItemChanged(tabManager.getCurrentTabNo());
                 }
-                snackbar = TemplatePreservingSnackBar.make(bottomBar, getContext().getString(R.string.closed_tab),
+                snackbar = TemplatePreservingSnackBar.Companion.make(bottomBar, getContext().getString(R.string.closed_tab),
                         ((TabListRecyclerBaseAdapter.ViewHolder) viewHolder).getTitle(), Snackbar.LENGTH_SHORT)
                         .setAction(R.string.undo, new OnClickListener() {
                             @Override

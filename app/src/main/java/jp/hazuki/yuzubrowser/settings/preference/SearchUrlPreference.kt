@@ -68,7 +68,7 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
             return view
         }
 
-        override fun onRecyclerItemClicked(v: View?, position: Int) {
+        override fun onRecyclerItemClicked(v: View, position: Int) {
             manager.selectedId = manager[position].id
             manager.save()
             AppData.search_url.set(manager[position].url)
@@ -76,7 +76,7 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
             dismiss()
         }
 
-        override fun onRecyclerItemLongClicked(v: View?, position: Int): Boolean = false
+        override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean = false
 
         override fun onPrepareDialogBuilder(builder: AlertDialog.Builder) {
             builder.setPositiveButton(null, null)

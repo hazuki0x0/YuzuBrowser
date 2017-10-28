@@ -75,11 +75,11 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
     }
 
 
-    override fun onRecyclerItemClicked(v: View?, position: Int) {
+    override fun onRecyclerItemClicked(v: View, position: Int) {
         SearchSettingDialog.newInstance(position, manager[position]).show(childFragmentManager, "edit")
     }
 
-    override fun onRecyclerItemLongClicked(v: View?, position: Int): Boolean = false
+    override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean = false
 
     override fun onUrlEdited(index: Int, url: SearchUrl) {
         edited = true

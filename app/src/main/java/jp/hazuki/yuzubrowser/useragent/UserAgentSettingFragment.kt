@@ -104,12 +104,12 @@ class UserAgentSettingFragment : Fragment(), DeleteUserAgentDialog.OnDelete, Edi
         }
     }
 
-    override fun onRecyclerItemClicked(v: View?, position: Int) {
+    override fun onRecyclerItemClicked(v: View, position: Int) {
         EditUserAgentDialog.newInstance(position, mUserAgentList[position])
                 .show(childFragmentManager, "edit")
     }
 
-    override fun onRecyclerItemLongClicked(v: View?, position: Int): Boolean {
+    override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
         SelectActionDialog.newInstance(position, mUserAgentList[position])
                 .show(childFragmentManager, "action")
         return true

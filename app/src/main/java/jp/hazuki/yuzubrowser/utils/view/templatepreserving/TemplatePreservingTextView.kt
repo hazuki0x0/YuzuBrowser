@@ -42,108 +42,102 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package jp.hazuki.yuzubrowser.utils.view.templatepreserving;
+package jp.hazuki.yuzubrowser.utils.view.templatepreserving
 
-import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
-import android.text.TextPaint;
-import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
-import android.util.AttributeSet;
-import android.widget.TextView;
+import android.content.Context
+import android.support.v7.widget.AppCompatTextView
+import android.text.TextUtils
+import android.text.TextUtils.TruncateAt
+import android.util.AttributeSet
+import android.widget.TextView
 
 /**
- * A {@link AppCompatTextView} that truncates content within a template, instead of truncating
+ * A [AppCompatTextView] that truncates content within a template, instead of truncating
  * the template text. Truncation only happens if maxLines is set to 1 and there's not enough space
  * to display the entire content.
- * <p>
+ *
+ *
  * For example, given the following template and content
  * Template: "%s was closed"
  * Content: "https://www.google.com/webhp?sourceid=chrome-instant&q=potato"
- * <p>
+ *
+ *
  * the TemplatePreservingTextView would truncate the content but not the template text:
  * "https://www.google.com/webh... was closed"
  */
-public class TemplatePreservingTextView extends AppCompatTextView {
-    private String mTemplate;
-    private CharSequence mContent = "";
-    private CharSequence mVisibleText;
-
-    /**
-     * Builds an instance of an {@link TemplatePreservingTextView}.
-     *
-     * @param context A {@link Context} instance to build this {@link TextView} in.
-     * @param attrs   An {@link AttributeSet} instance.
-     */
-    public TemplatePreservingTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+class TemplatePreservingTextView
+/**
+ * Builds an instance of an [TemplatePreservingTextView].
+ *
+ * @param context A [Context] instance to build this [TextView] in.
+ * @param attrs   An [AttributeSet] instance.
+ */
+(context: Context, attrs: AttributeSet) : AppCompatTextView(context, attrs) {
+    private var mTemplate: String? = null
+    private var mContent: CharSequence = ""
+    private var mVisibleText: CharSequence? = null
 
     /**
      * Sets the template format string. setText() must be called after calling this method for the
      * new template text to take effect.
      *
      * @param template Template format string (e.g. "Closed %s"), or null. If null is passed, this
-     *                 view acts like a normal TextView.
+     * view acts like a normal TextView.
      */
-    public void setTemplateText(String template) {
-        mTemplate = TextUtils.isEmpty(template) ? null : template;
+    fun setTemplateText(template: String) {
+        mTemplate = if (TextUtils.isEmpty(template)) null else template
     }
 
     /**
-     * This will take {@code text} and apply it to the internal template, building a new
-     * {@link String} to set.  This {@code text} will be automatically truncated to fit within
+     * This will take `text` and apply it to the internal template, building a new
+     * [String] to set.  This `text` will be automatically truncated to fit within
      * the template as best as possible, making sure the template does not get clipped.
      */
-    @Override
-    public void setText(CharSequence text, BufferType type) {
-        mContent = text != null ? text : "";
-        setContentDescription(mTemplate == null ? mContent : String.format(mTemplate, mContent));
-        updateVisibleText(0, true);
+    override fun setText(text: CharSequence?, type: TextView.BufferType) {
+        mContent = text ?: ""
+        contentDescription = if (mTemplate == null) mContent else String.format(mTemplate!!, mContent)
+        updateVisibleText(0, true)
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        final int availWidth =
-                MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val availWidth = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
         updateVisibleText(availWidth,
-                MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.UNSPECIFIED);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.UNSPECIFIED)
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-    private CharSequence getTruncatedText(int availWidth) {
-        final TextPaint paint = getPaint();
+    private fun getTruncatedText(availWidth: Int): CharSequence {
+        val paint = paint
 
         // Calculate the width the template takes.
-        final String emptyTemplate = String.format(mTemplate, "");
-        final float emptyTemplateWidth = paint.measureText(emptyTemplate);
+        val emptyTemplate = String.format(mTemplate!!, "")
+        val emptyTemplateWidth = paint.measureText(emptyTemplate)
 
         // Calculate the available width for the content.
-        final float contentWidth = Math.max(availWidth - emptyTemplateWidth, 0.f);
+        val contentWidth = Math.max(availWidth - emptyTemplateWidth, 0f)
 
         // Ellipsize the content to the available width.
-        CharSequence clipped = TextUtils.ellipsize(mContent, paint, contentWidth, TruncateAt.END);
+        val clipped = TextUtils.ellipsize(mContent, paint, contentWidth, TruncateAt.END)
 
         // Build the full string, which should fit within availWidth.
-        return String.format(mTemplate, clipped);
+        return String.format(mTemplate!!, clipped)
     }
 
-    private void updateVisibleText(int availWidth, boolean unspecifiedWidth) {
-        CharSequence visibleText;
-        if (mTemplate == null) {
-            visibleText = mContent;
-        } else if (getMaxLines() != 1 || unspecifiedWidth) {
-            visibleText = String.format(mTemplate, mContent);
+    private fun updateVisibleText(availWidth: Int, unspecifiedWidth: Boolean) {
+        val visibleText: CharSequence = if (mTemplate == null) {
+            mContent
+        } else if (maxLines != 1 || unspecifiedWidth) {
+            String.format(mTemplate!!, mContent)
         } else {
-            visibleText = getTruncatedText(availWidth);
+            getTruncatedText(availWidth)
         }
 
-        if (!visibleText.equals(mVisibleText)) {
-            mVisibleText = visibleText;
+        if (visibleText != mVisibleText) {
+            mVisibleText = visibleText
 
             // BufferType.SPANNABLE is required so that TextView.getIterableTextForAccessibility()
             // doesn't call our custom setText(). See crbug.com/449311
-            super.setText(mVisibleText, BufferType.SPANNABLE);
+            super.setText(mVisibleText, TextView.BufferType.SPANNABLE)
         }
     }
 }

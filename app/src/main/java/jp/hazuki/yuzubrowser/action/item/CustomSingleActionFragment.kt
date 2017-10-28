@@ -181,7 +181,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
             holder.menu.setOnClickListener { v -> RecyclerMenu(context, v, holder.adapterPosition, menuListener, this@ActionAdapter).show() }
         }
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): AVH {
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): AVH {
             return AVH(inflater.inflate(R.layout.action_custom_item, parent, false), this)
         }
 
