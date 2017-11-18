@@ -51,7 +51,6 @@ import java.io.IOException
 class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
     private lateinit var mDb: UserScriptDatabase
     private lateinit var adapter: UserJsAdapter
-    private lateinit var rootView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setHasOptionsMenu(true)
@@ -59,14 +58,15 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        rootView = view
-        mDb = UserScriptDatabase(activity.applicationContext)
+        mDb = UserScriptDatabase.getInstance(activity.applicationContext)
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.addItemDecoration(DividerItemDecoration(activity))
-        val helper = ItemTouchHelper(ListTouch())
-        helper.attachToRecyclerView(recyclerView)
-        recyclerView.addItemDecoration(helper)
+        recyclerView.run {
+            layoutManager = LinearLayoutManager(activity)
+            addItemDecoration(DividerItemDecoration(activity))
+            val helper = ItemTouchHelper(ListTouch())
+            helper.attachToRecyclerView(this)
+            addItemDecoration(helper)
+        }
 
         addByEditFab.setOnClickListener {
             startActivityForResult(Intent(activity, UserScriptEditActivity::class.java), REQUEST_ADD_USERJS)
@@ -91,7 +91,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
-        val script = adapter.get(position)
+        val script = adapter[position]
         script.isEnabled = !script.isEnabled
         mDb.update(script)
         adapter.notifyItemChanged(position)
@@ -107,7 +107,9 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
 
                 add(R.string.userjs_edit).setOnMenuItemClickListener {
                     val intent = Intent(activity, UserScriptEditActivity::class.java)
-                    intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, adapter.get(position).info)
+                    val item = adapter[position]
+                    intent.putExtra(Intent.EXTRA_TITLE, item.name)
+                    intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, item.id)
                     startActivityForResult(intent, REQUEST_EDIT_USERJS)
                     false
                 }
@@ -128,22 +130,14 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
     }
 
     override fun onInfoButtonClick(v: View?, index: Int) {
-        InfoDialog.newInstance(adapter.get(index))
+        InfoDialog.newInstance(adapter[index])
                 .show(childFragmentManager, "info")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_ADD_USERJS -> {
-                if (resultCode != RESULT_OK || data == null) return
-                val js = data.getParcelableExtra<UserScriptInfo>(UserScriptEditActivity.EXTRA_USERSCRIPT) ?: throw NullPointerException("UserJs is null")
-                mDb.add(js)
-                reset()
-            }
-            REQUEST_EDIT_USERJS -> {
-                if (resultCode != RESULT_OK || data == null) return
-                val js = data.getParcelableExtra<UserScriptInfo>(UserScriptEditActivity.EXTRA_USERSCRIPT) ?: throw NullPointerException("UserJs is null")
-                mDb.update(js)
+            REQUEST_ADD_USERJS, REQUEST_EDIT_USERJS -> {
+                if (resultCode != RESULT_OK) return
                 reset()
             }
             REQUEST_ADD_FROM_FILE -> {
@@ -187,9 +181,8 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
 
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
-        }
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
+                ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
@@ -200,7 +193,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val index = viewHolder.adapterPosition
             val js = adapter.remove(index)
-            Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
+            Snackbar.make(linear, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo) {
                         adapter.add(index, js)
                         adapter.notifyDataSetChanged()
@@ -215,22 +208,22 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
                     .show()
         }
 
-        override fun isLongPressDragEnabled(): Boolean {
-            return adapter.isSortMode
-        }
+        override fun isLongPressDragEnabled(): Boolean = adapter.isSortMode
     }
 
     class InfoDialog : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val js = arguments.getParcelable<UserScript>(USER_SCRIPT)
             val view = View.inflate(activity, R.layout.userjs_info_dialog, null)
-            view.findViewById<TextView>(R.id.nameTextView).text = js!!.name
-            view.findViewById<TextView>(R.id.versionTextView).text = js.version
-            view.findViewById<TextView>(R.id.authorTextView).text = js.author
-            view.findViewById<TextView>(R.id.descriptionTextView).text = js.description
-            view.findViewById<TextView>(R.id.includeTextView).text = ArrayUtils.join(js.include, "\n")
-            view.findViewById<TextView>(R.id.excludeTextView).text = ArrayUtils.join(js.exclude, "\n")
+
+            arguments.let {
+                view.findViewById<TextView>(R.id.nameTextView).text = it.getString(NAME)
+                view.findViewById<TextView>(R.id.versionTextView).text = it.getString(VERSION)
+                view.findViewById<TextView>(R.id.authorTextView).text = it.getString(AUTHOR)
+                view.findViewById<TextView>(R.id.descriptionTextView).text = it.getString(DESCRIPTION)
+                view.findViewById<TextView>(R.id.includeTextView).text = it.getString(INCLUDE)
+                view.findViewById<TextView>(R.id.excludeTextView).text = it.getString(EXCLUDE)
+            }
 
             return AlertDialog.Builder(activity)
                     .setTitle(R.string.userjs_info)
@@ -241,23 +234,32 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
         }
 
         companion object {
-            private const val USER_SCRIPT = "js"
+            private const val NAME = "name"
+            private const val VERSION = "ver"
+            private const val AUTHOR = "author"
+            private const val DESCRIPTION = "desc"
+            private const val INCLUDE = "include"
+            private const val EXCLUDE = "exclude"
 
             fun newInstance(script: UserScript): DialogFragment {
-                val dialog = InfoDialog()
-                val bundle = Bundle()
-                bundle.putParcelable(USER_SCRIPT, script)
-                dialog.arguments = bundle
-                return dialog
+                return InfoDialog().apply {
+                    arguments = Bundle().apply {
+                        putString(NAME, script.name)
+                        putString(VERSION, script.version)
+                        putString(AUTHOR, script.author)
+                        putString(DESCRIPTION, script.description)
+                        putString(INCLUDE, ArrayUtils.join(script.include, "\n"))
+                        putString(EXCLUDE, ArrayUtils.join(script.exclude, "\n"))
+                    }
+                }
             }
         }
     }
 
     private class UserJsAdapter internal constructor(context: Context, list: MutableList<UserScript>, private val listener: OnRecyclerListener) : ArrayRecyclerAdapter<UserScript, UserJsAdapter.ViewHolder>(context, list, listener) {
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ViewHolder {
-            return ViewHolder(inflater.inflate(R.layout.fragment_userjs_item, parent, false), this)
-        }
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ViewHolder =
+                ViewHolder(inflater.inflate(R.layout.fragment_userjs_item, parent, false), this)
 
         private fun onInfoButtonClick(v: View, position: Int, js: UserScript) {
             val resolvedPosition = searchPosition(position, js)

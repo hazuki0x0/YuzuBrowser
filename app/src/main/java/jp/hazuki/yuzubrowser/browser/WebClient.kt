@@ -788,14 +788,16 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 if (isStart != script.isRunStart)
                     continue
 
-                if (script.exclude != null)
-                    for (pattern in script.exclude) {
+                val exclude = script.exclude
+                if (exclude != null)
+                    for (pattern in exclude) {
                         if (pattern.matcher(url).find())
                             continue@SCRIPT_LOOP
                     }
 
-                if (script.include != null)
-                    for (pattern in script.include) {
+                val include = script.include
+                if (include != null)
+                    for (pattern in include) {
                         if (pattern.matcher(url).find()) {
                             web.evaluateJavascript(script.runnable, null)
 
