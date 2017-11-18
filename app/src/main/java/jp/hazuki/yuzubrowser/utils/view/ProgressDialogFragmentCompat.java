@@ -33,7 +33,8 @@ public class ProgressDialogFragmentCompat extends DialogFragment {
 
     @Override
     public void dismiss() {
-        dialog.dismiss();
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     @Override
