@@ -153,7 +153,7 @@ public class ImageUtils {
         } else if (drawable instanceof VectorDrawable) {
             return ImageUtils.getBitmap((VectorDrawable) drawable);
         } else {
-            throw new IllegalArgumentException("unsupported drawable type");
+            throw new IllegalArgumentException("unsupported drawable type : " + drawable.getClass().getName());
         }
     }
 
