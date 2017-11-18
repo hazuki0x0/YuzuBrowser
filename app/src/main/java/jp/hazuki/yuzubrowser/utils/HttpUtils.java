@@ -55,6 +55,8 @@ public final class HttpUtils {
                     if (normal.find()) {
                         try {
                             return FileUtils.createUniqueFile(AppData.download_folder.get(), URLDecoder.decode(normal.group(1), "UTF-8"));
+                        } catch (IllegalArgumentException e) {
+                            return FileUtils.createUniqueFile(AppData.download_folder.get(), FileUtils.replaceProhibitionWord(normal.group(1)));
                         } catch (UnsupportedEncodingException e) {
                             throw new AssertionError("UTF-8 is unknown");
                         }
