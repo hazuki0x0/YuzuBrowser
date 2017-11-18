@@ -93,7 +93,7 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
     }
 
 
-    val name = removeFileProhibitionWord(manifest.name)
+    val name = FileUtils.replaceProhibitionWord(manifest.name)
     if (name.isEmpty()) {
         FileUtils.deleteFile(tmpFolder)
         return@async Result(false, context.getString(R.string.theme_broken_manifest))
@@ -132,19 +132,6 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
 
     FileUtils.deleteFile(tmpFolder)
     return@async Result(false, context.getString(R.string.theme_unknown_error))
-}
-
-private fun removeFileProhibitionWord(name: String): String {
-    return name.replace("\\", "")
-            .replace("/", "")
-            .replace(":", "")
-            .replace("*", "")
-            .replace("?", "")
-            .replace("\"", "")
-            .replace("<", "")
-            .replace(">", "")
-            .replace("|", "")
-            .trim()
 }
 
 class Result constructor(val isSuccess: Boolean, val message: String)

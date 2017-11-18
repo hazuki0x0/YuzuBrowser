@@ -53,7 +53,5 @@ class ThemeImportActivity : ThemeActivity() {
         }
     }
 
-    override fun lightThemeResource(): Int {
-        return R.style.BrowserMinThemeLight_Transparent
-    }
+    override fun lightThemeResource() = R.style.BrowserMinThemeLight_Transparent
 }
