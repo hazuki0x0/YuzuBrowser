@@ -60,6 +60,7 @@ import jp.hazuki.yuzubrowser.userjs.UserScript
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.webkit.*
+import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
 import java.net.URISyntaxException
 import kotlin.concurrent.thread
 
@@ -68,12 +69,12 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
     private val speedDialManager = SpeedDialAsyncManager(activity.applicationContext)
     private val speedDialHtml = SpeedDialHtml(activity.applicationContext)
     private val faviconManager = FaviconAsyncManager(activity.applicationContext)
-    private val onWebStateChangeListener = CustomWebView.OnWebStateChangeListener { web, tabData ->
-        val tab = controller.getTabOrNull(web) ?: return@OnWebStateChangeListener
-
-        tab.onStateChanged(tabData)
-        if (tab == controller.currentTabData) {
-            controller.notifyChangeWebState()
+    private val onWebStateChangeListener: OnWebStateChangeListener = { web, tabData ->
+        controller.getTabOrNull(web)?.let { tab ->
+            tab.onStateChanged(tabData)
+            if (tab == controller.currentTabData) {
+                controller.notifyChangeWebState()
+            }
         }
     }
     private val webViewRenderingManager = WebViewRenderingManager()
@@ -189,7 +190,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
 
     fun initWebSetting(web: CustomWebView) {
         web.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY)
-        web.overScrollModeMethod = View.OVER_SCROLL_NEVER
+        web.setOverScrollModeMethod(View.OVER_SCROLL_NEVER)
 
         webViewRenderingManager.setWebViewRendering(web)
 
@@ -346,7 +347,6 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 return true
             }
 
-
             return checkUrl(data, url, uri)
         }
 
@@ -396,9 +396,9 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 controller.tabManager.saveData()
         }
 
-        override fun onFormResubmission(view: CustomWebView, dontResend: Message, resend: Message) {
+        override fun onFormResubmission(web: CustomWebView, dontResend: Message, resend: Message) {
             AlertDialog.Builder(activity)
-                    .setTitle(view.url)
+                    .setTitle(web.url)
                     .setMessage(R.string.form_resubmit)
                     .setPositiveButton(android.R.string.yes) { _, _ -> resend.sendToTarget() }
                     .setNegativeButton(android.R.string.no) { _, _ -> dontResend.sendToTarget() }
@@ -412,11 +412,11 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             browserHistoryManager?.add(data.originalUrl)
         }
 
-        override fun onReceivedHttpAuthRequest(view: CustomWebView, handler: HttpAuthHandler, host: String, realm: String) {
-            HttpAuthRequestDialog(activity).requestHttpAuth(view, handler, host, realm)
+        override fun onReceivedHttpAuthRequest(web: CustomWebView, handler: HttpAuthHandler, host: String, realm: String) {
+            HttpAuthRequestDialog(activity).requestHttpAuth(web, handler, host, realm)
         }
 
-        override fun onReceivedSslError(view: CustomWebView, handler: SslErrorHandler, error: SslError) {
+        override fun onReceivedSslError(web: CustomWebView, handler: SslErrorHandler, error: SslError) {
             if (!AppData.ssl_error_alert.get()) {
                 handler.cancel()
                 return
@@ -431,7 +431,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                     .show()
         }
 
-        override fun shouldInterceptRequest(view: CustomWebView, request: WebResourceRequest): WebResourceResponse? {
+        override fun shouldInterceptRequest(web: CustomWebView, request: WebResourceRequest): WebResourceResponse? {
             if ("yuzu".equals(request.url.scheme, ignoreCase = true)) {
                 val action = request.url.schemeSpecificPart
 
@@ -445,7 +445,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             adBlockController?.run {
-                val tabIndexData = controller.tabManager.getIndexData(view.identityId)
+                val tabIndexData = controller.tabManager.getIndexData(web.identityId)
                 var uri: Uri? = null
                 if (tabIndexData != null && tabIndexData.originalUrl != null)
                     uri = Uri.parse(tabIndexData.originalUrl)
@@ -627,9 +627,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             controller.hideCustomView()
         }
 
-        override fun getVideoLoadingProgressView(): View? {
-            return controller.getVideoLoadingProgressView()
-        }
+        override fun getVideoLoadingProgressView(): View? = controller.getVideoLoadingProgressView()
 
         override fun onGeolocationPermissionsHidePrompt() {
             geoView?.let {

@@ -73,7 +73,7 @@ import java.io.IOException
 
 class ActionExecutor(private val controller: BrowserController) : ActionController {
     override fun run(action: SingleAction, target: ActionController.HitTestResultTargetInfo): Boolean {
-        val result = target.webView.hitTestResult
+        val result = target.webView.hitTestResult ?: return false
 
         when (result.type) {
             WebView.HitTestResult.SRC_ANCHOR_TYPE -> {

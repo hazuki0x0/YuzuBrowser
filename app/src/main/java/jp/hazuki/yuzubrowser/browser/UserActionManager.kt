@@ -139,17 +139,13 @@ class UserActionManager(private val context: Context, private val browser: Brows
         }
     }
 
-    fun onVolumeKey(isUp: Boolean): Boolean {
-        return controller.run(if (isUp) hardButton.volume_up.action else hardButton.volume_down.action)
-    }
+    fun onVolumeKey(isUp: Boolean) =
+            controller.run(if (isUp) hardButton.volume_up.action else hardButton.volume_down.action)
 
-    fun isVolumeActionNotEmpty(isUp: Boolean): Boolean {
-        return (if (isUp) hardButton.volume_up.action else hardButton.volume_down.action).isNotEmpty()
-    }
+    fun isVolumeActionNotEmpty(isUp: Boolean) =
+            (if (isUp) hardButton.volume_up.action else hardButton.volume_down.action).isNotEmpty()
 
-    fun onCameraKey(): Boolean {
-        return controller.run(hardButton.camera_press.action)
-    }
+    fun onCameraKey() = controller.run(hardButton.camera_press.action)
 
     fun onBackKey() {
         controller.run(hardButton.back_press.action)
@@ -223,15 +219,15 @@ class UserActionManager(private val context: Context, private val browser: Brows
     }
 
     private inner class MyOnCreateContextMenuListener : CustomOnCreateContextMenuListener() {
-        override fun onCreateContextMenu(menu: ContextMenu, webview: CustomWebView, menuInfo: ContextMenu.ContextMenuInfo?) {
-            val result = webview.hitTestResult ?: return
+        override fun onCreateContextMenu(menu: ContextMenu, webView: CustomWebView, menuInfo: ContextMenu.ContextMenuInfo?) {
+            val result = webView.hitTestResult ?: return
 
             val manager = LongPressActionManager.getInstance(browser.applicationContextInfo)
 
             when (result.type) {
-                WebView.HitTestResult.SRC_ANCHOR_TYPE -> controller.run(manager.link.action, ActionController.HitTestResultTargetInfo(webview, result))
-                WebView.HitTestResult.IMAGE_TYPE -> controller.run(manager.image.action, ActionController.HitTestResultTargetInfo(webview, result))
-                WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> controller.run(manager.image_link.action, ActionController.HitTestResultTargetInfo(webview, result))
+                WebView.HitTestResult.SRC_ANCHOR_TYPE -> controller.run(manager.link.action, ActionController.HitTestResultTargetInfo(webView, result))
+                WebView.HitTestResult.IMAGE_TYPE -> controller.run(manager.image.action, ActionController.HitTestResultTargetInfo(webView, result))
+                WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> controller.run(manager.image_link.action, ActionController.HitTestResultTargetInfo(webView, result))
                 WebView.HitTestResult.PHONE_TYPE -> {
                     val extra = result.extra
                     menu.setHeaderTitle(Uri.decode(extra))
@@ -302,9 +298,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
     }
 
     private inner class MyGestureListener : MultiTouchGestureDetector.OnMultiTouchGestureListener, MultiTouchGestureDetector.OnMultiTouchDoubleTapListener {
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            return false
-        }
+        override fun onSingleTapUp(e: MotionEvent) = false
 
         override fun onShowPress(e: MotionEvent) {}
 
@@ -400,9 +394,8 @@ class UserActionManager(private val context: Context, private val browser: Brows
             return false
         }
 
-        private fun checkWebSwipe(sense_speed: Int, sense_dist: Int, velocity: Float, dist0: Float, dist1: Float): Boolean {
-            return Math.abs(velocity) >= sense_speed && MathUtils.equalsSign(dist0, dist1) && Math.abs(dist0) >= sense_dist && Math.abs(dist1) >= sense_dist
-        }
+        private fun checkWebSwipe(sense_speed: Int, sense_dist: Int, velocity: Float, dist0: Float, dist1: Float) =
+                Math.abs(velocity) >= sense_speed && MathUtils.equalsSign(dist0, dist1) && Math.abs(dist0) >= sense_dist && Math.abs(dist1) >= sense_dist
 
         override fun onUp(e: MotionEvent) {
             browser.toolbarManager.onWebViewTapUp()
@@ -419,21 +412,13 @@ class UserActionManager(private val context: Context, private val browser: Brows
             return false
         }
 
-        override fun onPointerDown(e: MotionEvent): Boolean {
-            return false
-        }
+        override fun onPointerDown(e: MotionEvent) = false
 
-        override fun onPointerUp(e: MotionEvent): Boolean {
-            return false
-        }
+        override fun onPointerUp(e: MotionEvent) = false
 
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            return false
-        }
+        override fun onSingleTapConfirmed(e: MotionEvent) = false
 
-        override fun onDoubleTap(e: MotionEvent): Boolean {
-            return false
-        }
+        override fun onDoubleTap(e: MotionEvent) = false
 
         override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
             if (e == null)
@@ -444,9 +429,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
             return false
         }
 
-        override fun onDoubleTapScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
-            return false
-        }
+        override fun onDoubleTapScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float) = false
 
         override fun onDoubleTapFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
             if (!AppData.double_tap_flick_enable.get())

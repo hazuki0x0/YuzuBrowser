@@ -112,7 +112,7 @@ object WebViewFindDialogFactory {
                     ImeUtils.hideIme(mContext, findEditText)
 
                     findNext(false)
-                    requestFocus()
+                    requestWebFocus()
                 }
             }
 
@@ -121,7 +121,7 @@ object WebViewFindDialogFactory {
                     ImeUtils.hideIme(mContext, findEditText)
 
                     findNext(true)
-                    requestFocus()
+                    requestWebFocus()
                 }
             }
 

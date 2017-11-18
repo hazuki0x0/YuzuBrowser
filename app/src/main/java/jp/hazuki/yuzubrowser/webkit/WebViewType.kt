@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit;
+package jp.hazuki.yuzubrowser.webkit
 
-import android.support.annotation.IntDef;
+import android.support.annotation.IntDef
 
-@IntDef({WebViewFactory.MODE_NORMAL, WebViewFactory.MODE_CACHE, WebViewFactory.MODE_LIMIT_CACHE})
-public @interface WebViewType {
-}
+@IntDef(WebViewFactory.MODE_NORMAL.toLong(), WebViewFactory.MODE_CACHE.toLong(), WebViewFactory.MODE_LIMIT_CACHE.toLong())
+annotation class WebViewType

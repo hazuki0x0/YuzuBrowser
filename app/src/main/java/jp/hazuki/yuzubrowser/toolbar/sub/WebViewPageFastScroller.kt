@@ -20,7 +20,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.toolbar.SubToolbar
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
