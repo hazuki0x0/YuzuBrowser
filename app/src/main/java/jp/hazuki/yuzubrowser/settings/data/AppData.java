@@ -175,6 +175,7 @@ public class AppData {
     public static final IntContainer tabs_cache_number = new IntContainer("tab_cache_number", 5);
     public static final IntContainer rendering = new IntContainer("rendering", 0);
     public static final BooleanContainer move_to_parent = new BooleanContainer("move_to_parent", true);
+    public static final BooleanContainer move_to_left_tab = new BooleanContainer("move_to_left_tab", false);
     public static final BooleanContainer multi_finger_gesture = new BooleanContainer("multi_finger_gesture", false);
     public static final BooleanContainer multi_finger_gesture_show_name = new BooleanContainer("multi_finger_gesture_show_name", false);
     public static final IntContainer multi_finger_gesture_sensitivity = new IntContainer("multi_finger_gesture_sensitivity", 30);

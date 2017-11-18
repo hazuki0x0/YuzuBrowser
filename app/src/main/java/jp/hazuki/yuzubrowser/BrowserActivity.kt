@@ -746,7 +746,11 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
                 return newNo
             }
         }
-        return if (no == tabManagerIn.lastTabNo) no - 1 else no + 1
+        return if (AppData.move_to_left_tab.get()) {
+            if (no == 0) 1 else no - 1
+        } else {
+            if (no == tabManagerIn.lastTabNo) no - 1 else no + 1
+        }
     }
 
     override fun swapTab(i: Int, j: Int) {

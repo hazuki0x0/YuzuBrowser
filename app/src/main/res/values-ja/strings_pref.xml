@@ -327,6 +327,7 @@
     <string name="pref_bright">明るい</string>
 
     <string name="pref_move_to_parent">タブを閉じた時に親タブに移動</string>
+    <string name="pref_move_to_left_tab">タブを閉じた時に左のタブに移動</string>
     <string name="pref_multi_finger_gesture_settings">マルチタッチジェスチャ設定</string>
     <string name="pref_multi_finger_gesture_enable">マルチタッチジェスチャを有効にする</string>
     <string name="pref_multi_finger_gesture_name_enable">アクション名を表示</string>

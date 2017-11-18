@@ -675,7 +675,8 @@
     <string name="pref_dark">Dark</string>
     <string name="pref_bright">Bright</string>
 
-    <string name="pref_move_to_parent">Move to parent tab when tab closed</string>
+    <string name="pref_move_to_parent">Move to the parent tab when tab closed</string>
+    <string name="pref_move_to_left_tab">Move to the left tab when tab closed</string>
     <string name="pref_multi_finger_gesture_settings">Multi touch gesture settings</string>
     <string name="pref_multi_finger_gesture_enable">Enable multi touch gesture</string>
     <string name="pref_multi_finger_gesture_name_enable">Show action name</string>

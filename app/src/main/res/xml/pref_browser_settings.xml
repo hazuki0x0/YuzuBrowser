@@ -110,6 +110,9 @@
         android:key="save_closed_tab"
         android:title="@string/pref_save_closed_tab" />
     <SwitchPreference
+        android:key="move_to_left_tab"
+        android:title="@string/pref_move_to_left_tab"/>
+    <SwitchPreference
         android:key="move_to_parent"
         android:title="@string/pref_move_to_parent" />
 
