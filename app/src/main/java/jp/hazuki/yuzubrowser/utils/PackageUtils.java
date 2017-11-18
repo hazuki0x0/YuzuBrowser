@@ -117,7 +117,7 @@ public class PackageUtils {
             IconCompat icon;
 
             if (favicon != null) {
-                icon = IconCompat.createWithBitmap(favicon);
+                icon = IconCompat.createWithBitmap(ImageUtils.trimSquare(favicon, 192));
             } else {
                 icon = IconCompat.createWithResource(context, R.mipmap.ic_link_shortcut);
             }
