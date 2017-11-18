@@ -39,25 +39,29 @@ class DownloadUtils {
 
     static File saveBase64Image(Base64Image imageData, File file) {
         if (imageData.isValid()) {
-            byte[] image = Base64.decode(imageData.getData(), Base64.DEFAULT);
+            try {
+                byte[] image = Base64.decode(imageData.getData(), Base64.DEFAULT);
 
-            if (file == null)
-                file = getFile(imageData);
+                if (file == null)
+                    file = getFile(imageData);
 
-            if (file == null)
-                return null;
+                if (file == null)
+                    return null;
 
-            if (file.getParentFile() != null) {
-                file.getParentFile().mkdirs();
-            }
+                if (file.getParentFile() != null) {
+                    file.getParentFile().mkdirs();
+                }
 
-            try (OutputStream outputStream = new FileOutputStream(file)) {
+                try (OutputStream outputStream = new FileOutputStream(file)) {
 
-                outputStream.write(image);
-                outputStream.flush();
+                    outputStream.write(image);
+                    outputStream.flush();
 
-                return file;
-            } catch (IOException e) {
+                    return file;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
