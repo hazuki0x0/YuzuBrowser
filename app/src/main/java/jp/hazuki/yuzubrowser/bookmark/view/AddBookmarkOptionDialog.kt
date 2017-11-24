@@ -48,7 +48,10 @@ class AddBookmarkOptionDialog : DialogFragment() {
                 when (i) {
                     0 -> AddBookmarkSiteDialog(activity, arguments.getString(ARG_TITLE), arguments.getString(ARG_URL)).show()
                     1 -> {
-                        BookmarkManager.getInstance(activity).removeAll(arguments.getString(ARG_URL))
+                        BookmarkManager.getInstance(activity).run {
+                            removeAll(arguments.getString(ARG_URL))
+                            save()
+                        }
                         val activity = activity
                         if (activity is BrowserController) {
                             activity.requestIconChange()
