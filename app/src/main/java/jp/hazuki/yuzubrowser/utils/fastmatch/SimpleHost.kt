@@ -14,32 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.fastmatch;
+package jp.hazuki.yuzubrowser.utils.fastmatch
 
-import android.net.Uri;
+import android.net.Uri
 
-import java.util.regex.Pattern;
+internal class SimpleHost(private val host: String) : SimpleCountMatcher() {
+    override val type: Int
+        get() = FastMatcher.TYPE_SIMPLE_HOST
+    override val pattern: String
+        get() = host
 
-class RegexUrl extends SimpleCountMatcher {
-
-    private Pattern pattern;
-
-    RegexUrl(String pattern) {
-        this.pattern = Pattern.compile(pattern);
-    }
-
-    @Override
-    protected boolean matchItem(Uri uri) {
-        return pattern.matcher(uri.toString()).find();
-    }
-
-    @Override
-    public int getType() {
-        return TYPE_REGEX_URL;
-    }
-
-    @Override
-    public String getPattern() {
-        return pattern.pattern();
-    }
+    override fun matchItem(uri: Uri) = host == uri.host
 }

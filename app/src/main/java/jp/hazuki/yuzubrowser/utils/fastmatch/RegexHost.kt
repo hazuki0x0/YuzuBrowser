@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.fastmatch;
+package jp.hazuki.yuzubrowser.utils.fastmatch
 
-import android.net.Uri;
+import android.net.Uri
 
-public interface FastMatcher {
-    int TYPE_SIMPLE_HOST = 1;
-    int TYPE_SIMPLE_URL = 2;
-    int TYPE_REGEX_HOST = 3;
-    int TYPE_REGEX_URL = 4;
-    int TYPE_CONTAINS_HOST = 5;
+import java.util.regex.Pattern
 
-    int getType();
+internal class RegexHost(host: String) : SimpleCountMatcher() {
+    private val regex: Pattern = Pattern.compile(host)
 
-    int getId();
+    override val type: Int
+        get() = FastMatcher.TYPE_REGEX_HOST
+    override val pattern: String
+        get() = regex.pattern()
 
-    boolean match(Uri uri);
-
-    int getFrequency();
-
-    String getPattern();
-
-    boolean isUpdate();
-
-    void saved();
-
-    long getTime();
+    override fun matchItem(uri: Uri): Boolean {
+        val host = uri.host
+        return if (host != null)
+            regex.matcher(host).find()
+        else
+            regex.matcher(uri.toString()).find()
+    }
 }

@@ -14,30 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.fastmatch;
+package jp.hazuki.yuzubrowser.utils.fastmatch
 
-import android.net.Uri;
+import android.net.Uri
+import java.util.*
 
-class SimpleUrl extends SimpleCountMatcher {
+class FastMatcherList {
+    var dbTime: Long = -1
+    var matcherList = ArrayList<FastMatcher>()
 
-    private String pattern;
-
-    SimpleUrl(String pattern) {
-        this.pattern = pattern;
+    fun add(matcher: FastMatcher) {
+        matcherList.add(matcher)
     }
 
-    @Override
-    protected boolean matchItem(Uri uri) {
-        return uri.toString().contains(pattern);
-    }
+    fun match(uri: Uri): Boolean = matcherList.any { it.match(uri) }
 
-    @Override
-    public int getType() {
-        return TYPE_SIMPLE_URL;
-    }
-
-    @Override
-    public String getPattern() {
-        return pattern;
+    fun sort() {
+        Collections.sort(matcherList, FastMatcherSorter())
     }
 }
