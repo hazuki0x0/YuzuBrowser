@@ -100,10 +100,10 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.2'
     implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
-    implementation 'org.jsoup:jsoup:1.11.1'
+    implementation 'org.jsoup:jsoup:1.11.2'
     implementation project(':libraries:floatingactionbutton')
     implementation project(':libraries:colorpicker')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
 
