@@ -816,7 +816,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     override fun showTabList(action: TabListSingleAction) {
         if (tabListView != null) return
 
-        tabListView = TabListLayout(this, action.mode, action.isLeftButton).apply {
+        tabListView = TabListLayout(this, action.mode, action.isLeftButton, action.lastTabMode).apply {
             setTabManager(tabManagerIn)
             setCallback(object : TabListLayout.Callback {
                 override fun requestTabListClose() {
@@ -847,6 +847,21 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
                 override fun requestRemoveTab(no: Int, destroy: Boolean) {
                     removeTab(no, false, destroy)
+                }
+
+                override fun requestCloseAllTab() {
+                    openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
+                    for (i in tabManagerIn.lastTabNo - 1 downTo 0) {
+                        removeTab(i, false)
+                    }
+                }
+
+                override fun requestFinish(alert: Boolean) {
+                    if (alert) {
+                        finishAlert(-1)
+                    } else {
+                        finishQuick(-1)
+                    }
                 }
             })
         }

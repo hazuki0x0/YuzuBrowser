@@ -56,6 +56,13 @@
         <item>右</item>
         <item>左</item>
     </string-array>
+    <string name="action_tab_list_last_tab">最後のタブを閉じる時の動作</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>なし</item>
+        <item>新しいタブを開く</item>
+        <item>終了</item>
+        <item>終了(ダイアログ表示)</item>
+    </string-array>
 
     <string name="action_open_menu">メニューの表示位置</string>
     <string-array name="action_open_menu_list">

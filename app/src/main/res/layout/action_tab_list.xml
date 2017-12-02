@@ -33,5 +33,20 @@
         android:id="@+id/buttonSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/action_tab_list_button" />
+        android:entries="@array/action_tab_list_button"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="2dp"
+        android:text="@string/action_tab_list_last_tab"/>
+
+    <Spinner
+        android:id="@+id/lastTabSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/action_tab_list_last_tab"/>
 </LinearLayout>

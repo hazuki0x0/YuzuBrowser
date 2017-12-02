@@ -61,6 +61,13 @@
         <item>Right</item>
         <item>Left</item>
     </string-array>
+    <string name="action_tab_list_last_tab">Behavior when closing the last tab</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>None</item>
+        <item>New tab</item>
+        <item>Finish</item>
+        <item>Finish with alert</item>
+    </string-array>
 
     <string name="action_open_menu">Display position of menu</string>
     <string-array name="action_open_menu_list">
