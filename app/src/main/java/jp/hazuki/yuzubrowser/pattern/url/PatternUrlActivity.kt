@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -49,6 +50,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val headerView = layoutInflater.inflate(R.layout.pattern_list_url, null)
         urlEditText = headerView.findViewById(R.id.urlEditText)
@@ -99,6 +101,16 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         }
 
         return null
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     class SettingWebDialog : DialogFragment() {

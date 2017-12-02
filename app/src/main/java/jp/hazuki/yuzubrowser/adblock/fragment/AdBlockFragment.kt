@@ -251,6 +251,10 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                activity.onBackPressed()
+                return true
+            }
             R.id.export -> {
                 val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
                 intent.type = "*/*"

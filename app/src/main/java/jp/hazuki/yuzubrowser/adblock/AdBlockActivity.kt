@@ -30,6 +30,7 @@ class AdBlockActivity : ThemeActivity(), AdBlockMainFragment.OnAdBlockMainListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null)
             supportFragmentManager.beginTransaction()

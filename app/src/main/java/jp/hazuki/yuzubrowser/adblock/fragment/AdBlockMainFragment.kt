@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 
@@ -36,6 +37,7 @@ class AdBlockMainFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         activity.setTitle(R.string.pref_ad_block)
+        setHasOptionsMenu(true)
         val enable = AppData.ad_block.get()
 
         adBlockSwitch.run {
@@ -63,6 +65,16 @@ class AdBlockMainFragment : Fragment() {
             isEnabled = enable
             setOnClickListener { listener!!.openWhitePageList() }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                activity.finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onAttach(context: Context?) {
