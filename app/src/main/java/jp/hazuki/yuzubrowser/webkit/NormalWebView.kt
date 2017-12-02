@@ -24,7 +24,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
-
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
@@ -37,6 +36,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
     private var isSwipeable = true
     private var firstY = 0
     private var lastY = 0
+    private var downScrollY = 0
     private val mScrollOffset = IntArray(2)
     private val mScrollConsumed = IntArray(2)
     private var scrollExcessPlay = false
@@ -184,7 +184,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
         when (action) {
             MotionEvent.ACTION_MOVE -> if (event.pointerCount != 1) {
                 returnValue = super.onTouchEvent(event)
-            } else if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollSlop || scrollY != 0 && scrollY == scrollY) {
+            } else if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollSlop || downScrollY != 0 && downScrollY == scrollY) {
                 returnValue = super.onTouchEvent(ev)
                 lastY = eventY
             } else {
@@ -195,6 +195,10 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                     startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
                 }
 
+                if (scrollY != 0) {
+                    setSwipeable(false)
+                }
+
                 // NestedPreScroll
                 if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset)) {
                     deltaY -= mScrollConsumed[1]
@@ -202,8 +206,6 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                     event.offsetLocation(0f, (-mScrollOffset[1]).toFloat())
                     nestedOffsetY = mScrollOffset[1]
                     setSwipeable(false)
-                } else {
-                    setSwipeable(true)
                 }
                 returnValue = super.onTouchEvent(event)
 
@@ -213,6 +215,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                     nestedOffsetY = mScrollOffset[1]
                     lastY -= deltaY
                     nestedScrolled = true
+                    setSwipeable(false)
                 } else {
                     nestedScrolled = false
                 }
@@ -227,7 +230,10 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                     lastY = eventY
                 }
                 firstY = eventY
-                scrollY = scrollY
+                downScrollY = scrollY
+                if (downScrollY == 0) {
+                    setSwipeable(true)
+                }
             }
             else -> {
                 isTouching = false
@@ -284,6 +290,10 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
             isSwipeable = swipeable
             scrollableChangeListener?.onSwipeableChanged(isScrollable && isSwipeable)
         }
+    }
+
+    fun isSwipeable(): Boolean {
+        return isSwipeable
     }
 
     override fun computeVerticalScrollRange(): Int {

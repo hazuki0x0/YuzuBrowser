@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Paint
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.widget.SwipeRefreshLayout
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.R
@@ -31,6 +32,7 @@ class SwipeWebView private constructor(context: Context, override val webView: N
     constructor(context: Context) : this(context, WebViewProvider.getInstance(context))
 
     private var enableSwipe = false
+    private var isSwipeEnable = false
 
     private val mWebChromeClientWrapper = object : CustomWebChromeClientWrapper(this) {
         override fun onProgressChanged(web: CustomWebView, newProgress: Int) {
@@ -67,7 +69,8 @@ class SwipeWebView private constructor(context: Context, override val webView: N
         get() = enableSwipe
         set(value) {
             enableSwipe = value
-            isEnabled = value
+
+            setEnableInternal(value)
         }
 
     override fun resetTheme() {
@@ -87,11 +90,35 @@ class SwipeWebView private constructor(context: Context, override val webView: N
     }
 
     override fun onSwipeableChanged(scrollable: Boolean) {
-        super.setEnabled(enableSwipe && scrollable)
+        setEnableInternal(enableSwipe && scrollable)
     }
 
     override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enableSwipe && isScrollable)
+        setEnableInternal(enableSwipe && webView.isSwipeable())
+    }
+
+    private fun setEnableInternal(enabled: Boolean) {
+        isSwipeEnable = enabled
+        if (isEnabled != enabled) {
+            if (!enabled) {
+                isRefreshing = false
+            }
+            super.setEnabled(enabled)
+        }
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        if (isSwipeEnable) {
+            return super.onInterceptTouchEvent(ev)
+        }
+        return false
+    }
+
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        if (isSwipeEnable) {
+            return super.onTouchEvent(ev)
+        }
+        return false
     }
 
     override fun setVerticalScrollBarEnabled(enabled: Boolean) {

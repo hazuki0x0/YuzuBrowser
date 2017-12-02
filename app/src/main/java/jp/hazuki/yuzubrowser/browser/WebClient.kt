@@ -190,7 +190,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
 
     fun initWebSetting(web: CustomWebView) {
         web.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY)
-        web.setOverScrollModeMethod(View.OVER_SCROLL_NEVER)
+        web.setOverScrollModeMethod(View.OVER_SCROLL_IF_CONTENT_SCROLLS)
 
         webViewRenderingManager.setWebViewRendering(web)
 
