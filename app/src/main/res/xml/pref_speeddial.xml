@@ -19,6 +19,9 @@
         <SwitchPreference
             android:key="speeddial_show_icon"
             android:title="@string/pref_speeddial_show_icon" />
+        <SwitchPreference
+            android:key="speeddial_dark_theme"
+            android:title="@string/pref_speeddial_dark_theme"/>
         <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
             android:key="speeddial_column"
             android:title="@string/pref_speeddial_column"

@@ -20,7 +20,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/icon"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_alignParentStart="true"
@@ -34,10 +34,10 @@
         android:id="@+id/use_favicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageButton2"
+        android:layout_alignBottom="@+id/icon"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/imageButton2"
-        android:layout_toEndOf="@+id/imageButton2"
+        android:layout_alignTop="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
         android:visibility="gone"
         android:text="@string/use_favicon" />
 

@@ -195,6 +195,7 @@ public class AppData {
     public static final IntContainer speeddial_column = new IntContainer("speeddial_column", 4);
     public static final IntContainer speeddial_column_landscape = new IntContainer("speeddial_column_landscape", 5);
     public static final IntContainer speeddial_column_width = new IntContainer("speeddial_column_width", 80);
+    public static final BooleanContainer speeddial_dark_theme = new BooleanContainer("speeddial_dark_theme", false);
     public static final BooleanContainer safe_browsing = new BooleanContainer("safe_browsing", true);
     public static final BooleanContainer save_tabs_for_crash = new BooleanContainer("save_tabs_for_crash", false);
     public static final IntContainer touch_scrollbar = new IntContainer("touch_scrollbar", -1);

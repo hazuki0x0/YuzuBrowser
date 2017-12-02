@@ -294,6 +294,7 @@
     <string name="pref_speeddial_column">縦画面の列数</string>
     <string name="pref_speeddial_column_landscape">横画面の列数</string>
     <string name="pref_speeddial_column_max_width">アイテムの最大幅</string>
+    <string name="pref_speeddial_dark_theme">ダークテーマを使用</string>
 
     <string name="pref_double_tap_flick_settings">ダブルタップフリック設定</string>
     <string name="pref_double_tap_flick_enable">ダブルタップフリックを有効にする</string>

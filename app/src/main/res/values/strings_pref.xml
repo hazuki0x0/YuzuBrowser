@@ -622,6 +622,7 @@
     <string name="pref_speeddial_column">Number of columns in vertical mode</string>
     <string name="pref_speeddial_column_landscape">Number of columns in landscape mode</string>
     <string name="pref_speeddial_column_max_width">Maximum column width</string>
+    <string name="pref_speeddial_dark_theme">Use dark theme</string>
 
 
     <string name="pref_double_tap_flick_settings">Double tap with flick settings</string>

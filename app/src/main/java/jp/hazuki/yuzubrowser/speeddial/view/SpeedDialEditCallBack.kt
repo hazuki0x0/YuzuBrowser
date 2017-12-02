@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.speeddial.view;
+package jp.hazuki.yuzubrowser.speeddial.view
 
-interface FabActionCallBack {
-    void onAdd(int which);
+import jp.hazuki.yuzubrowser.speeddial.SpeedDial
+
+internal interface SpeedDialEditCallBack {
+    fun onEdited(speedDial: SpeedDial)
 }
