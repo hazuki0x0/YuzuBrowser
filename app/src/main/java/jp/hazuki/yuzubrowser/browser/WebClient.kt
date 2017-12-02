@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.browser
 
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -424,7 +425,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
 
             AlertDialog.Builder(activity)
                     .setTitle(R.string.ssl_error_title)
-                    .setMessage(R.string.ssl_error_mes)
+                    .setMessage(activity.getString(R.string.ssl_error_mes, error.getErrorMessages(activity)))
                     .setPositiveButton(android.R.string.yes) { _, _ -> handler.proceed() }
                     .setNegativeButton(android.R.string.no) { _, _ -> handler.cancel() }
                     .setOnCancelListener { handler.cancel() }
@@ -854,6 +855,33 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
     }
 
     private fun getString(id: Int): String = activity.getString(id)
+
+    private fun SslError.getErrorMessages(context: Context): String {
+        val builder = StringBuilder()
+        if (hasError(SslError.SSL_DATE_INVALID)) {
+            builder.appendError(context.getText(R.string.ssl_error_certificate_date_invalid))
+        }
+        if (hasError(SslError.SSL_EXPIRED)) {
+            builder.appendError(context.getText(R.string.ssl_error_certificate_expired))
+        }
+        if (hasError(SslError.SSL_IDMISMATCH)) {
+            builder.appendError(context.getText(R.string.ssl_error_certificate_domain_mismatch))
+        }
+        if (hasError(SslError.SSL_NOTYETVALID)) {
+            builder.appendError(context.getText(R.string.ssl_error_certificate_not_yet_valid))
+        }
+        if (hasError(SslError.SSL_UNTRUSTED)) {
+            builder.appendError(context.getText(R.string.ssl_error_certificate_untrusted))
+        }
+        if (hasError(SslError.SSL_INVALID)) {
+            builder.appendError(context.getText(R.string.ssl_error_certificate_invalid))
+        }
+        return builder.toString()
+    }
+
+    private fun StringBuilder.appendError(sequence: CharSequence) {
+        append(" - ").append(sequence).append("\n")
+    }
 
     companion object {
         private const val TAG = "WebClient"

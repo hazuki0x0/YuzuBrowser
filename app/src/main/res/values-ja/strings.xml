@@ -128,7 +128,14 @@
     <string name="clear_download">リストから削除</string>
     <string name="delete_download">ファイルを削除</string>
     <string name="ssl_error_title">セキュリティ警告</string>
-    <string name="ssl_error_mes">このサイトのセキュリティ証明書には問題があります。続けますか？</string>
+    <string name="ssl_error_mes">このサイトのセキュリティ証明書には問題があります。\n%1$s\n続けますか？</string>
+    <string name="ssl_error_certificate_date_invalid">証明書の日付が無効です</string>
+    <string name="ssl_error_certificate_expired">証明書の有効期限が切れています</string>
+    <string name="ssl_error_certificate_domain_mismatch">ホスト名が一致しません</string>
+    <string name="ssl_error_certificate_invalid">一般的なエラーが発生しました</string>
+    <string name="ssl_error_certificate_not_yet_valid">有効な証明書ではありません</string>
+    <string name="ssl_error_certificate_untrusted">認証局が信頼されていません</string>
+    <string name="ssl_error_dont_ask_again">終了時まで設定を保持する</string>
     <string name="username">ユーザー名</string>
     <string name="password">パスワード</string>
     <string name="show_password">パスワードを表示</string>

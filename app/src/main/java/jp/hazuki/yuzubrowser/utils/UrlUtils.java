@@ -61,10 +61,14 @@ public class UrlUtils {
     }
 
     public static String decodeUrlHost(String url) {
-        String host = Uri.parse(url).getHost();
+        String host = getHost(url);
         if (host != null)
             return decodePunyCode(host);
         return null;
+    }
+
+    public static String getHost(String url) {
+        return Uri.parse(url).getHost();
     }
 
     private static String decodePunyCode(String domain) {

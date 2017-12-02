@@ -129,7 +129,14 @@
     <string name="clear_download">Remove from list</string>
     <string name="delete_download">Delete file</string>
     <string name="ssl_error_title">Security warning</string>
-    <string name="ssl_error_mes">There are problems with the security certificate for this site. Continue?</string>
+    <string name="ssl_error_mes">There are problems with the security certificate for this site.\n%1$s\nContinue?</string>
+    <string name="ssl_error_certificate_date_invalid">The date of the certificate is invalid</string>
+    <string name="ssl_error_certificate_expired">The certificate has expired</string>
+    <string name="ssl_error_certificate_domain_mismatch">Hostname mismatch</string>
+    <string name="ssl_error_certificate_invalid">A generic error occurred</string>
+    <string name="ssl_error_certificate_not_yet_valid">The certificate is not yet valid</string>
+    <string name="ssl_error_certificate_untrusted">The certificate authority is not trusted</string>
+    <string name="ssl_error_dont_ask_again">Don\'t ask again for this browsing session.</string>
     <string name="username">User name</string>
     <string name="password">Password</string>
     <string name="show_password">Show password</string>
