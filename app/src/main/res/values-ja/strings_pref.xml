@@ -423,4 +423,5 @@
     <string name="pref_slow_rendering_alert">警告\nこの機能を有効にするとフリーズが頻発する場合があります。\nまた、切り替えにはアプリ履歴から、ブラウザの再起動が必要です。\nスクリーンショットの全てキャプチャを使用する以外でのこの機能の利用はおすすめしません。</string>
     <string name="browser_settings">ブラウザ設定</string>
     <string name="pref_basic_settings">基本設定</string>
+    <string name="pref_white_url_box">白のURLボックスを表示</string>
 </resources>

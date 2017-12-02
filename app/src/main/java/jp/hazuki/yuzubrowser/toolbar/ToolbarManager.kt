@@ -26,13 +26,13 @@ import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.toolbar.main.CustomToolbar
 import jp.hazuki.yuzubrowser.toolbar.main.ProgressToolBar
 import jp.hazuki.yuzubrowser.toolbar.main.TabBar
-import jp.hazuki.yuzubrowser.toolbar.main.UrlBar
+import jp.hazuki.yuzubrowser.toolbar.main.UrlBarBase
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
 interface ToolbarManager {
     val tabBar: TabBar
-    val urlBar: UrlBar
+    val urlBar: UrlBarBase
     val progressBar: ProgressToolBar
     val customBar: CustomToolbar
     val findOnPage: View
