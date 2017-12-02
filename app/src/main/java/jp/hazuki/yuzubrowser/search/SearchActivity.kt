@@ -188,6 +188,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
                 0 -> SuggestProvider.URI_NORMAL
                 1 -> SuggestProvider.URI_NET
                 2 -> SuggestProvider.URI_LOCAL
+                3 -> SuggestProvider.URI_NONE
                 else -> SuggestProvider.URI_NORMAL
             }
 
@@ -224,6 +225,8 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
 
     private fun setQuery(query: String) = ui {
+        if (mContentUri === SuggestProvider.URI_NONE) return@ui
+
         val search = async { getSearchQuery(query) }
         val histories = if (AppData.search_suggest_histories.get()) async { getHistoryQuery(query) } else null
         val bookmarks = if (AppData.search_suggest_bookmarks.get()) async { getBookmarkQuery(query) } else null

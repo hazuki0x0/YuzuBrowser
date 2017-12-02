@@ -3,6 +3,7 @@ package jp.hazuki.yuzubrowser.settings.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceScreen
 import android.view.Menu
@@ -11,7 +12,7 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.debug.DebugActivity
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 
-class MainSettingsActivity : ThemeActivity(), PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
+class MainSettingsActivity : ThemeActivity(), PreferenceFragmentCompat.OnPreferenceStartScreenCallback, ReplaceFragmentListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,15 +61,20 @@ class MainSettingsActivity : ThemeActivity(), PreferenceFragmentCompat.OnPrefere
 
     override fun onPreferenceStartScreen(caller: PreferenceFragmentCompat?, pref: PreferenceScreen): Boolean {
         return if (caller is YuzuPreferenceFragment) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container,
-                            PreferenceScreenFragment.newInstance(caller.preferenceResId, pref.key))
-                    .addToBackStack(pref.key)
-                    .commit()
+            if (!caller.onPreferenceStartScreen(pref)) {
+                replaceFragment(PreferenceScreenFragment.newInstance(caller.preferenceResId, pref.key), pref.key)
+            }
             true
         } else {
             false
         }
+    }
+
+    override fun replaceFragment(fragment: Fragment, key: String) {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(key)
+                .commit()
     }
 
     override fun lightThemeResource(): Int {

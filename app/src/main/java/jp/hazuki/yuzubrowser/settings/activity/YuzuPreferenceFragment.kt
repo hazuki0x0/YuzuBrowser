@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.settings.activity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceScreen
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -105,6 +106,8 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompatDividers() {
             dialog.show(fragmentManager, preference.key)
         }
     }
+
+    open fun onPreferenceStartScreen(pref: PreferenceScreen): Boolean = false
 
     companion object {
         private const val FRAGMENT_DIALOG_TAG = "android.support.v7.preference.PreferenceFragment.DIALOG"

@@ -570,12 +570,14 @@
         <item>Network</item>
         <item>Recent queries</item>
         <item>Both</item>
+        <item>None</item>
     </string-array>
 
     <integer-array name="pref_search_suggest_values">
         <item>1</item>
         <item>2</item>
         <item>0</item>
+        <item>3</item>
     </integer-array>
 
     <string name="pref_history_settings">History settings</string>

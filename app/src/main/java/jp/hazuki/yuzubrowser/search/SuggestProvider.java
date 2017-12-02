@@ -55,6 +55,7 @@ public class SuggestProvider extends ContentProvider {
     public static final Uri URI_NET = Uri.parse("content://" + AUTHORITY + "/net");
     public static final Uri URI_LOCAL = Uri.parse("content://" + AUTHORITY + "/local");
     public static final Uri URI_NORMAL = Uri.parse("content://" + AUTHORITY + "/normal");
+    public static final Uri URI_NONE = Uri.EMPTY;
     public static final String SUGGEST_HISTORY = "suggest_history";
     private static final int TYPE_NET_ALL = 1;
     private static final int TYPE_LOCAL_ALL = 2;

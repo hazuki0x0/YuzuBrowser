@@ -249,6 +249,7 @@
         <item>ネットワーク</item>
         <item>過去のクエリ</item>
         <item>両方</item>
+        <item>なし</item>
     </string-array>
 
     <string name="pref_history_settings">履歴設定</string>
