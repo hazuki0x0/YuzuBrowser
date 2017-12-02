@@ -354,6 +354,11 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         override fun onPageStarted(web: CustomWebView, url: String, favicon: Bitmap?) {
             val data = controller.getTabOrNull(web) ?: return
 
+            if (AppData.toolbar_auto_open.get()) {
+                controller.appBarLayout.setExpanded(true, true)
+                data.mWebView.isNestedScrollingEnabledMethod = false
+            }
+
             applyUserScript(web, url, true)
 
             data.onPageStarted(url, favicon)
@@ -386,6 +391,8 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             data.onPageFinished(web, url)
+
+            controller.requestAdjustWebView()
 
             if (data === controller.currentTabData) {
                 controller.notifyChangeWebState(data)

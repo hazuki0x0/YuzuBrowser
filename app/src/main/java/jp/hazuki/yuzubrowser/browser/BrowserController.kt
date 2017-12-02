@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.browser
 
 import android.content.Intent
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
@@ -74,11 +75,14 @@ interface BrowserController : BrowserInfo {
     fun showActionName(text: String?)
     fun hideActionName()
     fun requestIconChange() = notifyChangeWebState()
+    fun requestAdjustWebView()
+    fun expandToolbar()
 
     val tabManager: TabManager
     val superFrameLayoutInfo: CoordinatorLayout
     val activity: AppCompatActivity
     val toolbarManager: ToolbarManager
+    val appBarLayout: AppBarLayout
     val currentTabNo: Int
         get() = tabManager.currentTabNo
     override val tabSize: Int

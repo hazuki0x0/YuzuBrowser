@@ -108,14 +108,14 @@ class SwipeWebView private constructor(context: Context, override val webView: N
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        if (isSwipeEnable) {
+        if (isSwipeEnable && isScrollable) {
             return super.onInterceptTouchEvent(ev)
         }
         return false
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        if (isSwipeEnable) {
+        if (isSwipeEnable && isScrollable) {
             return super.onTouchEvent(ev)
         }
         return false

@@ -685,6 +685,18 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
     override val isScrollable: Boolean
         get() = mList[mCurrent].mWebView.isScrollable
 
+    override var isToolbarShowing: Boolean
+        get() = mList[mCurrent].mWebView.isToolbarShowing
+        set(value) {
+            mList[mCurrent].mWebView.isToolbarShowing = value
+        }
+
+    override var isNestedScrollingEnabledMethod: Boolean
+        get() = mList[mCurrent].mWebView.isNestedScrollingEnabledMethod
+        set(value) {
+            mList[mCurrent].mWebView.isNestedScrollingEnabledMethod = value
+        }
+
     override fun setVerticalScrollBarEnabled(enabled: Boolean) {
         verticalScrollBarEnabled = enabled
         for (web in mList) {

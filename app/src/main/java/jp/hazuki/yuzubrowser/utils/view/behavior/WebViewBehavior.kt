@@ -21,39 +21,68 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.View
+import jp.hazuki.yuzubrowser.R
+import jp.hazuki.yuzubrowser.browser.BrowserController
+import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
 class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.ScrollingViewBehavior(context, attrs) {
 
+    private lateinit var controller: BrowserController
+    private lateinit var webFrame: View
+    private lateinit var bottomBar: View
     private var webView: CustomWebView? = null
     private var prevY: Int = 0
+
+    override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View?): Boolean {
+        if (dependency is AppBarLayout) {
+            bottomBar = parent.findViewById(R.id.bottomToolbarLayout)
+            webFrame = child.findViewById(R.id.webFrameLayout)
+            return true
+        }
+        return false
+    }
 
     override fun onDependentViewChanged(parent: CoordinatorLayout?, child: View?, dependency: View): Boolean {
         val bottom = dependency.bottom
 
-        if (webView != null && !webView!!.isTouching) {
-            webView!!.scrollBy(0, bottom - prevY)
-            if (bottom == 0) {
-                webView!!.setSwipeable(false)
+        val webView = webView
+        if (webView != null) {
+            webView.isToolbarShowing = dependency.top == 0
+            if (!webView.isTouching) {
+                webView.scrollBy(0, bottom - prevY)
+                if (bottom == 0) {
+                    webView.setSwipeable(false)
+                }
+            }
+
+            val data = controller.getTabOrNull(webView)
+            if (data != null) {
+                adjustWebView(data, dependency.height + bottomBar.height)
             }
         }
 
         prevY = bottom
 
-        //Disable due to freeze webView
-        //        int toolbarHeight = topToolBar.getHeight();
-
-        //        if (toolbarHeight != 0 && dependency.getHeight() == dependency.getBottom()) {
-        //            webFrame.setPadding(0, 0, 0, toolbarHeight);
-        //        } else {
-        //            webFrame.setPadding(0, 0, 0, 0);
-        //        }
-
         return super.onDependentViewChanged(parent, child, dependency)
+    }
+
+    fun adjustWebView(data: MainTabData, height: Int) {
+        if (data.isFinished && !data.mWebView.isScrollable) {
+            controller.expandToolbar()
+            data.mWebView.isNestedScrollingEnabledMethod = false
+            webFrame.setPadding(0, 0, 0, height)
+        } else {
+            webFrame.setPadding(0, 0, 0, 0)
+        }
     }
 
     fun setWebView(webView: CustomWebView?) {
         this.webView = webView
+    }
+
+    fun setController(browserController: BrowserController) {
+        controller = browserController
     }
 }

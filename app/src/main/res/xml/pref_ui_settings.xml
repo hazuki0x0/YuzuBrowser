@@ -18,6 +18,9 @@
         <SwitchPreference
             android:key="snap_toolbar"
             android:title="@string/pref_snap_toolbar" />
+        <SwitchPreference
+            android:key="toolbar_auto_open"
+            android:title="@string/pref_toolbar_show_loading"/>
         <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
             android:key="overlay_bottom_alpha"
             android:title="@string/pref_overlay_bottom_alpha"

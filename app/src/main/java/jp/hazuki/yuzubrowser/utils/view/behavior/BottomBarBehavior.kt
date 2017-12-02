@@ -30,24 +30,32 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
 
     private lateinit var topToolbar: View
     private lateinit var bottomToolbar: View
+    private lateinit var bottomBar: View
 
-    override fun layoutDependsOn(parent: CoordinatorLayout?, bottomBar: LinearLayout?, dependency: View?): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout?, bottomBar: LinearLayout, dependency: View?): Boolean {
         if (dependency is AppBarLayout) {
+            this.bottomBar = bottomBar
             topToolbar = dependency.findViewById(R.id.topToolbarLayout)
-            bottomToolbar = bottomBar!!.findViewById(R.id.bottomToolbarLayout)
+            bottomToolbar = bottomBar.findViewById(R.id.bottomToolbarLayout)
             return true
         }
         return false
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout?, bottomBar: LinearLayout, dependency: View?): Boolean {
+    override fun onDependentViewChanged(parent: CoordinatorLayout?, bottomBar: LinearLayout, dependency: View): Boolean {
         val bottomBarHeight = bottomToolbar.height
 
         if (topToolbar.height != 0) {
-            val height = -dependency!!.top * bottomBarHeight / dependency.height
+            val height = -dependency.top * bottomBarHeight / dependency.height
 
             bottomBar.translationY = Math.min(height, bottomBarHeight).toFloat()
         }
         return true
+    }
+
+    fun setExpanded(expanded: Boolean) {
+        if (expanded) {
+            bottomBar.translationY = 0f
+        }
     }
 }

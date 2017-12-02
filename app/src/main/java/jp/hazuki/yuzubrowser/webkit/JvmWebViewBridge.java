@@ -92,6 +92,16 @@ public abstract class JvmWebViewBridge extends WebView implements CustomWebView 
     }
 
     @Override
+    public boolean isNestedScrollingEnabledMethod() {
+        return isNestedScrollingEnabled();
+    }
+
+    @Override
+    public void setNestedScrollingEnabledMethod(boolean b) {
+        setNestedScrollingEnabled(b);
+    }
+
+    @Override
     public int computeVerticalScrollRangeMethod() {
         return computeVerticalScrollRange();
     }

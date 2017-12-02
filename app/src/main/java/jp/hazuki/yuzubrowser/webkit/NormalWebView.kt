@@ -72,6 +72,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
         private set
     override var isScrollable: Boolean = false
         private set
+    override var isToolbarShowing: Boolean = false
 
     override fun copyMyBackForwardList(): CustomWebBackForwardList = CustomWebBackForwardList(copyBackForwardList())
 
@@ -231,7 +232,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                 }
                 firstY = eventY
                 downScrollY = scrollY
-                if (downScrollY == 0) {
+                if (downScrollY == 0 && isToolbarShowing) {
                     setSwipeable(true)
                 }
             }
@@ -299,9 +300,15 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
     override fun computeVerticalScrollRange(): Int {
         val scrollRange = super.computeVerticalScrollRange()
         val old = isScrollable
-        isScrollable = scrollRange > height
-        if (old != isScrollable)
+        isScrollable = scrollRange > height + scrollSlop
+        if (old != isScrollable) {
             scrollableChangeListener?.onSwipeableChanged(isScrollable && isSwipeable)
+        }
+
+        if (isScrollable && !isNestedScrollingEnabled) {
+            isNestedScrollingEnabledMethod = true
+        }
+
         return scrollRange
     }
 }

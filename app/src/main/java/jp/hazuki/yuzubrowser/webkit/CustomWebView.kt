@@ -63,6 +63,10 @@ interface CustomWebView {
 
     val isScrollable: Boolean
 
+    var isToolbarShowing: Boolean
+
+    var isNestedScrollingEnabledMethod: Boolean
+
     fun canGoBack(): Boolean
 
     fun canGoBackOrForward(steps: Int): Boolean

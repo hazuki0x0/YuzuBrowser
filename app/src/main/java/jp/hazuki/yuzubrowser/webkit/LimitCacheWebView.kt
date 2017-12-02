@@ -819,6 +819,18 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
     override val isScrollable: Boolean
         get() = currentTab.mWebView.isScrollable
 
+    override var isToolbarShowing: Boolean
+        get() = currentTab.mWebView.isToolbarShowing
+        set(value) {
+            currentTab.mWebView.isToolbarShowing = value
+        }
+
+    override var isNestedScrollingEnabledMethod: Boolean
+        get() = currentTab.mWebView.isNestedScrollingEnabledMethod
+        set(value) {
+            currentTab.mWebView.isNestedScrollingEnabledMethod = value
+        }
+
     override fun setVerticalScrollBarEnabled(enabled: Boolean) {
         verticalScrollBarEnabled = enabled
         for (web in tabCache.values) {

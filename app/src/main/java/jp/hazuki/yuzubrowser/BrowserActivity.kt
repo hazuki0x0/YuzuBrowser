@@ -30,15 +30,13 @@ import android.gesture.GestureOverlayView
 import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.os.*
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -83,6 +81,7 @@ import jp.hazuki.yuzubrowser.toolbar.sub.WebViewPageFastScroller
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.utils.view.PointerView
+import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.webkit.*
 import kotlinx.android.synthetic.main.browser_activity.*
@@ -127,6 +126,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     private lateinit var tabManagerIn: UiTabManager
     private lateinit var userActionManager: UserActionManager
     private lateinit var webViewBehavior: WebViewBehavior
+    private lateinit var bottomBarBehavior: BottomBarBehavior
     private lateinit var webClient: WebClient
     private lateinit var menuWindow: MenuWindow
 
@@ -171,6 +171,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         WebViewProvider.setProvider(this)
 
         webViewBehavior = (webGestureOverlayView.layoutParams as CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
+        bottomBarBehavior = (bottomOverlayLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
         superFrameLayout.setOnImeShownListener { visible ->
             if (isImeShown != visible) {
                 isImeShown = visible
@@ -222,12 +223,19 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             loadUrl(tab, AppData.home_page.get())
         }
 
+        webViewBehavior.setController(this)
+
         val menuAction = MenuActionManager.getInstance(applicationContext)
         menuWindow = MenuWindow(this, menuAction.browser_activity.list, actionController).apply { setListener { setFullscreenIfEnable() } }
 
         window.decorView.setOnSystemUiVisibilityChangeListener { setFullscreenIfEnable() }
 
-        webGestureOverlayView.setOnTouchListener { _, event -> userActionManager.onTouchEvent(event) }
+        webGestureOverlayView.setOnTouchListener { _, event ->
+            if (event.actionMasked == MotionEvent.ACTION_UP) {
+                requestAdjustWebView()
+            }
+            userActionManager.onTouchEvent(event)
+        }
     }
 
     override fun onStart() {
@@ -981,6 +989,17 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         webCustomViewHandler?.hideCustomView(this)
     }
 
+    override fun requestAdjustWebView() {
+        val data = tabManagerIn.currentTabData
+        data.mWebView.computeVerticalScrollRangeMethod()
+        webViewBehavior.adjustWebView(data, appBarLayout.height + bottomToolbarLayout.height)
+    }
+
+    override fun expandToolbar() {
+        appBarLayout.setExpanded(true, false)
+        bottomBarBehavior.setExpanded(true)
+    }
+
     override fun getVideoLoadingProgressView(): View? {
         if (videoLoadingProgressView == null) {
             videoLoadingProgressView = View.inflate(this, R.layout.video_loading, null)
@@ -1290,6 +1309,9 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
     override val tabManager: TabManager
         get() = tabManagerIn
+
+    override val appBarLayout: AppBarLayout
+        get() = appbar
 
     override val superFrameLayoutInfo: CoordinatorLayout
         get() = superFrameLayout
