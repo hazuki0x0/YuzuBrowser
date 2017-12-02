@@ -45,6 +45,7 @@ import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector
+import kotlinx.android.synthetic.main.fragment_bookmark.*
 import java.util.*
 
 
@@ -53,7 +54,6 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     private var pickMode: Boolean = false
 
     private lateinit var adapter: BookmarkItemAdapter
-    private lateinit var recyclerView: RecyclerView
     private lateinit var mManager: BookmarkManager
     private lateinit var mCurrentFolder: BookmarkFolder
 
@@ -75,9 +75,11 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragent_bookark, container, false)
         setHasOptionsMenu(true)
-        recyclerView = rootView.findViewById(R.id.recyclerView)
+        return inflater.inflate(R.layout.fragment_bookmark, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         val helper = ItemTouchHelper(Touch())
         helper.attachToRecyclerView(recyclerView)
@@ -92,8 +94,6 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         recyclerView.addOnItemTouchListener(locationDetector)
 
         setList(root)
-
-        return rootView
     }
 
     private fun setList(folder: BookmarkFolder) {
@@ -216,7 +216,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         val inflater = menu.menuInflater
         val bookmarkItem: BookmarkItem?
         if (pickMode) {
-            bookmarkItem = adapter.get(index)
+            bookmarkItem = adapter[index]
             menu.menu.add(R.string.select_this_item).setOnMenuItemClickListener { _ ->
 
                 if (bookmarkItem is BookmarkSite) {
@@ -241,11 +241,11 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 }
                 mCurrentFolder.get(index) is BookmarkSite -> {
                     inflater.inflate(R.menu.bookmark_site_menu, menu.menu)
-                    adapter.get(index)
+                    adapter[index]
                 }
                 else -> {
                     inflater.inflate(R.menu.bookmark_folder_menu, menu.menu)
-                    adapter.get(index)
+                    adapter[index]
                 }
             }
         }

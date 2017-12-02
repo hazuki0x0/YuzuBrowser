@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.history
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.WindowManager
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
@@ -30,7 +31,10 @@ class BrowserHistoryActivity : ThemeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
-        supportActionBar?.elevation = convertDpToFloatPx(1)
+        supportActionBar?.run {
+            elevation = convertDpToFloatPx(1)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         var pickMode = false
         var fullscreen = AppData.fullscreen.get()
@@ -58,5 +62,16 @@ class BrowserHistoryActivity : ThemeActivity() {
         if (fragment !is BrowserHistoryFragment || !fragment.onBackPressed()) {
             finish()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

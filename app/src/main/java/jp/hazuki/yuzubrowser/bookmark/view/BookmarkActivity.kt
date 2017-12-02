@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.bookmark.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.WindowManager
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
@@ -29,6 +30,7 @@ class BookmarkActivity : LongPressFixActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val intent = intent
         var pickMode = false
@@ -63,5 +65,16 @@ class BookmarkActivity : LongPressFixActivity() {
 
     override fun onBackKeyLongPressed() {
         finish()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
