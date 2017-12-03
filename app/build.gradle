@@ -108,6 +108,7 @@ dependencies {
         transitive = true
     }
     implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
+    implementation project(':libraries:asyncpermissions')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
