@@ -578,7 +578,13 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         if (ACTION_FINISH == action) {
             forceDestroy = intent.getBooleanExtra(EXTRA_FORCE_DESTROY, false)
             BrowserApplication.setNeedLoad(true)
-            finish()
+            if (parent == null) {
+                recreate()
+            } else {
+                val restart = Intent(this, BrowserActivity::class.java)
+                finish()
+                startActivity(restart)
+            }
             return false
         }
         if (ACTION_NEW_TAB == action) {
