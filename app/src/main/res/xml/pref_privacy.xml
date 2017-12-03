@@ -46,6 +46,10 @@
         android:key="safe_browsing"
         android:title="@string/pref_enable_safe_browsing" />
 
+    <SwitchPreference
+        android:key="webRtc"
+        android:title="@string/pref_enable_web_rtc"/>
+
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_web_cache_list"
         android:entryValues="@array/pref_web_cache_values"

@@ -37,11 +37,9 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.*
-import android.webkit.CookieManager
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewDatabase
+import android.webkit.*
 import android.widget.*
+import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.action.Action
 import jp.hazuki.yuzubrowser.action.ActionNameArray
 import jp.hazuki.yuzubrowser.action.item.AutoPageScrollAction
@@ -84,10 +82,13 @@ import jp.hazuki.yuzubrowser.utils.view.PointerView
 import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.webkit.*
+import jp.hazuki.yuzubrowser.webkit.webrtc.WebRtcPermissionHandler
+import jp.hazuki.yuzubrowser.webkit.webrtc.WebRtcRequest
 import kotlinx.android.synthetic.main.browser_activity.*
+import java.lang.StringBuilder
 import java.util.*
 
-class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener {
+class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest {
 
     private lateinit var dialogHandler: PermissionDialogHandler
     private val handler = Handler(Looper.getMainLooper())
@@ -1455,6 +1456,38 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             mouseCursorView = null
         }
     }
+
+    private val webRtcHandler by lazy { WebRtcPermissionHandler(applicationContext, AsyncPermissions(this)) }
+
+    override suspend fun requestPermissions(permissions: List<String>): Boolean {
+        return webRtcHandler.requestPermissions(permissions)
+    }
+
+    override fun requestPagePermission(host: String, resources: Array<String>, onGrant: (Boolean) -> Unit) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.permission_request)
+                .setMessage(getRequestRtcList(host, resources))
+                .setPositiveButton(R.string.proceed) { _, _ -> onGrant(true) }
+                .setNegativeButton(R.string.deny) { _, _ -> onGrant(false) }
+                .setOnCancelListener { onGrant(false) }
+                .show()
+    }
+
+    private fun getRequestRtcList(host: String, resources: Array<String>): String {
+        val builder = StringBuilder()
+        resources.forEach {
+            when (it) {
+                PermissionRequest.RESOURCE_AUDIO_CAPTURE -> builder.append(getString(R.string.mic)).append('\n')
+                PermissionRequest.RESOURCE_MIDI_SYSEX -> builder.append(getString(R.string.midi_device)).append('\n')
+                PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> builder.append(getString(R.string.protected_media_id)).append('\n')
+                PermissionRequest.RESOURCE_VIDEO_CAPTURE -> builder.append(getString(R.string.camera)).append('\n')
+            }
+        }
+        return getString(R.string.permission_request_mes, host, builder.toString())
+    }
+
+    override val webRtcRequest: WebRtcRequest
+        get() = this
 
     override var isEnableFindOnPage: Boolean
         get() = findOnPage?.isVisible == true
