@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.webkit;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import jp.hazuki.yuzubrowser.settings.data.AppData;
 
@@ -26,7 +27,8 @@ public class WebViewFactory {
     public static final int MODE_CACHE = 2;
     public static final int MODE_LIMIT_CACHE = 3;
 
-    public static CustomWebView create(Context context, @WebViewType int mode) {
+    @NonNull
+    public static CustomWebView create(@NonNull Context context, @WebViewType int mode) {
         switch (mode) {
             default:
             case MODE_NORMAL:
@@ -38,9 +40,8 @@ public class WebViewFactory {
         }
     }
 
-    public static
     @WebViewType
-    int getMode(Bundle bundle) {
+    public static int getMode(@NonNull Bundle bundle) {
         if (CacheWebView.isBundleCacheWebView(bundle)) {
             return MODE_CACHE;
         } else if (LimitCacheWebView.isBundleFastBackWebView(bundle)) {
@@ -50,9 +51,8 @@ public class WebViewFactory {
         }
     }
 
-    public static
     @WebViewType
-    int getMode() {
+    public static int getMode() {
         if (AppData.fast_back.get()) {
             switch (AppData.fast_back_cache_size.get()) {
                 case 0:
