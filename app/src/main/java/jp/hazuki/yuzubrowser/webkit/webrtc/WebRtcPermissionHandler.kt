@@ -21,7 +21,7 @@ import android.content.Context
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.utils.PermissionUtils.openRequestPermissionSettings
+import jp.hazuki.yuzubrowser.browser.openRequestPermissionSettings
 import java.lang.StringBuilder
 
 class WebRtcPermissionHandler(private val context: Context, private val asyncPermissions: AsyncPermissions) {
@@ -47,7 +47,7 @@ class WebRtcPermissionHandler(private val context: Context, private val asyncPer
                 }
             }
             is PermissionResult.NeverAskAgain -> {
-                openRequestPermissionSettings(context, context.getRequestRtcToastMessage(result.permissions))
+                context.openRequestPermissionSettings(context.getRequestRtcToastMessage(result.permissions))
                 false
             }
         }

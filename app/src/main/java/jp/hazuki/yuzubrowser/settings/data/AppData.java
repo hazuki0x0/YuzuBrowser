@@ -208,7 +208,7 @@ public class AppData {
     public static final BooleanContainer search_url_show_icon = new BooleanContainer("search_url_show_icon", true);
     public static final BooleanContainer slow_rendering = new BooleanContainer("slow_rendering", false);
     public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
-    public static final BooleanContainer webRtc = new BooleanContainer("webRtc", false);
+    public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

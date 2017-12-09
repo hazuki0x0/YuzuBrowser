@@ -85,6 +85,10 @@ internal open class CustomWebChromeClientWrapper(private val customWebView: Cust
         mWebChromeClient?.getVisitedHistory(callback)
     }
 
+    override fun onPermissionRequest(request: PermissionRequest) {
+        mWebChromeClient?.onPermissionRequest(request) ?: super.onPermissionRequest(request)
+    }
+
     fun setWebChromeClient(mWebChromeClient: CustomWebChromeClient?) {
         this.mWebChromeClient = mWebChromeClient
     }

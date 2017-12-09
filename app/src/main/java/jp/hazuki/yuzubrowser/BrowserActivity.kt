@@ -16,14 +16,11 @@
 
 package jp.hazuki.yuzubrowser
 
-import android.Manifest
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.gesture.GestureOverlayView
@@ -32,8 +29,6 @@ import android.net.ConnectivityManager
 import android.os.*
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.*
@@ -53,7 +48,6 @@ import jp.hazuki.yuzubrowser.adblock.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.*
 import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable
-import jp.hazuki.yuzubrowser.browser.ui.PermissionDialogHandler
 import jp.hazuki.yuzubrowser.browser.ui.Toolbar
 import jp.hazuki.yuzubrowser.download.FastDownloadActivity
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
@@ -90,7 +84,7 @@ import java.util.*
 
 class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest {
 
-    private lateinit var dialogHandler: PermissionDialogHandler
+    private val asyncPermissions by lazy { AsyncPermissions(this) }
     private val handler = Handler(Looper.getMainLooper())
     private val actionController = ActionExecutor(this)
     private val iconManager = ActionIconManager(this)
@@ -159,8 +153,6 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             AppData.load(this)
             BrowserApplication.setNeedLoad(false)
         }
-
-        dialogHandler = PermissionDialogHandler(this)
 
         userActionManager = UserActionManager(this, this, actionController, iconManager)
         tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this), this)
@@ -279,16 +271,16 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
     override fun onPostResume() {
         super.onPostResume()
-        dialogHandler.resume()
         setFullscreenIfEnable()
         toolbar.resetToolBar()
-        PermissionUtils.checkFirst(this)
+        if (!checkBrowserPermission()) {
+            ui { requestBrowserPermissions(asyncPermissions) }
+        }
     }
 
     override fun onPause() {
         super.onPause()
         isResumed = false
-        dialogHandler.pause()
     }
 
     override fun onStop() {
@@ -786,46 +778,6 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
     override fun onAdBlockListUpdate() {
         webClient.updateAdBlockList()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var permission: String
-        var grantResult: Int
-
-        for (i in 0 until permissions.size) {
-            permission = permissions[i]
-            grantResult = grantResults[i]
-            when (permission) {
-                Manifest.permission.ACCESS_FINE_LOCATION -> if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    AppData.web_geolocation.set(false)
-                    AppData.commit(this, AppData.web_geolocation)
-                }
-                Manifest.permission.WRITE_EXTERNAL_STORAGE -> if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    PermissionUtils.setNoNeed(this, false)
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        PermissionUtils.requestStorage(this)
-                    } else {
-                        if (supportFragmentManager.findFragmentByTag("permission") !is PermissionDialog) {
-                            dialogHandler.sendMessage(dialogHandler.obtainMessage(PermissionDialogHandler.SHOW_DIALOG))
-                        }
-                    }
-                } else {
-                    PermissionUtils.setNoNeed(this, true)
-                }
-            }
-        }
-    }
-
-    class PermissionDialog : DialogFragment() {
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val builder = AlertDialog.Builder(activity)
-            builder.setTitle(R.string.permission_probrem)
-                    .setMessage(R.string.confirm_permission_storage_app)
-                    .setPositiveButton(android.R.string.ok) { _, _ -> PermissionUtils.openRequestPermissionSettings(activity, getString(R.string.request_permission_storage_setting)) }
-                    .setNegativeButton(android.R.string.no) { _, _ -> activity.finish() }
-            isCancelable = false
-            return builder.create()
-        }
     }
 
     override fun showTabList(action: TabListSingleAction) {
@@ -1457,7 +1409,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         }
     }
 
-    private val webRtcHandler by lazy { WebRtcPermissionHandler(applicationContext, AsyncPermissions(this)) }
+    private val webRtcHandler by lazy { WebRtcPermissionHandler(applicationContext, asyncPermissions) }
 
     override suspend fun requestPermissions(permissions: List<String>): Boolean {
         return webRtcHandler.requestPermissions(permissions)

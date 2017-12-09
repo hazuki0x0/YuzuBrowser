@@ -24,7 +24,9 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.BrowserApplication
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.backup.BackupTask
@@ -34,12 +36,15 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkManager
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator
+import jp.hazuki.yuzubrowser.browser.checkStoragePermission
+import jp.hazuki.yuzubrowser.browser.openRequestPermissionSettings
+import jp.hazuki.yuzubrowser.browser.requestStoragePermission
 import jp.hazuki.yuzubrowser.settings.preference.common.AlertDialogPreference
 import jp.hazuki.yuzubrowser.speeddial.io.SpeedDialBackupTask
 import jp.hazuki.yuzubrowser.speeddial.io.SpeedDialRestoreTask
 import jp.hazuki.yuzubrowser.utils.AppUtils
 import jp.hazuki.yuzubrowser.utils.FileUtils
-import jp.hazuki.yuzubrowser.utils.PermissionUtils
+import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListDialog
 import jp.hazuki.yuzubrowser.utils.view.filelist.FileListViewController
@@ -48,6 +53,7 @@ import java.lang.ref.WeakReference
 
 class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallbacks<Boolean> {
     private var progress: DialogFragment? = null
+    private val asyncPermissions by lazy { AsyncPermissions(appCompatActivity) }
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_import_export)
@@ -91,7 +97,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
 
         (findPreference("export_sd_bookmark") as AlertDialogPreference).setOnPositiveButtonListener {
-            if (PermissionUtils.checkWriteStorage(activity)) {
+            if (activity.checkStoragePermission()) {
                 val manager = BookmarkManager.getInstance(activity)
                 val internalFile = manager.file
                 val externalFile = File(BrowserApplication.getExternalUserDirectory(), internalFile.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".dat")
@@ -108,7 +114,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                     }
                 Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
             } else {
-                PermissionUtils.requestStorage(activity)
+                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
+
             }
         }
 
@@ -152,7 +159,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
 
         (findPreference("export_html_bookmark") as AlertDialogPreference).setOnPositiveButtonListener {
-            if (PermissionUtils.checkWriteStorage(activity)) {
+            if (activity.checkStoragePermission()) {
                 val manager = BookmarkManager.getInstance(activity)
                 val externalFile = File(BrowserApplication.getExternalUserDirectory(), manager.file.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".html")
                 if (!externalFile.parentFile.exists()) {
@@ -171,7 +178,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                 }
                 handler.setDialog(progress)
             } else {
-                PermissionUtils.requestStorage(activity)
+                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
             }
         }
 
@@ -204,7 +211,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
 
         (findPreference("backup_speed_dial") as AlertDialogPreference).setOnPositiveButtonListener {
-            if (PermissionUtils.checkWriteStorage(activity)) {
+            if (activity.checkStoragePermission()) {
                 val file = File(BrowserApplication.getExternalUserDirectory(), "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
@@ -214,7 +221,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                 }
                 handler.setDialog(progress)
             } else {
-                PermissionUtils.requestStorage(activity)
+                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
             }
         }
 
@@ -255,7 +262,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
 
         (findPreference("backup_settings") as AlertDialogPreference).setOnPositiveButtonListener {
-            if (PermissionUtils.checkWriteStorage(activity)) {
+            if (activity.checkStoragePermission()) {
                 val file = File(BrowserApplication.getExternalUserDirectory(), "backup" + File.separator + FileUtils.getTimeFileName() + EXT)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
@@ -265,14 +272,14 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                 }
                 handler.setDialog(progress)
             } else {
-                PermissionUtils.requestStorage(activity)
+                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (!PermissionUtils.checkWriteStorage(activity)) {
+        if (!activity.checkStoragePermission()) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 PermissionDialog().show(childFragmentManager, "permission")
             } else {
@@ -318,6 +325,9 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
     }
 
+    val appCompatActivity: AppCompatActivity
+        get() = activity as AppCompatActivity
+
     private class DialogHandler : Handler() {
         private var dialogRef: WeakReference<DialogFragment>? = null
 
@@ -343,8 +353,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                     .setMessage(R.string.confirm_permission_storage)
                     .setPositiveButton(android.R.string.ok
                     ) { _, _ ->
-                        PermissionUtils.openRequestPermissionSettings(activity,
-                                getString(R.string.request_permission_storage_setting))
+                        activity.openRequestPermissionSettings(getString(R.string.request_permission_storage_setting))
                     }
                     .setNegativeButton(android.R.string.cancel) { _, _ -> activity.onBackPressed() }
             isCancelable = false
