@@ -160,7 +160,11 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
 
     private fun newTab(url: String?, additionalHttpHeaders: MutableMap<String, String> = sHeaderMap) {
         val to = makeWebView()
-        additionalHttpHeaders.put("Referer", currentTab.url)
+        val currentTab = currentTab
+        val currentUrl = currentTab.url
+        if (currentUrl != null) {
+            additionalHttpHeaders.put("Referer", currentUrl)
+        }
         to.mWebView.loadUrl(url, sHeaderMap)
 
         for (i in tabIndexList.size - 1 downTo mCurrent + 1) {

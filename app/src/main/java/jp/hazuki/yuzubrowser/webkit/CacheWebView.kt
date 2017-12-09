@@ -157,7 +157,10 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
         mList.add(to)
         addView(to.mWebView.view)
         settingWebView(from.mWebView, to.mWebView)
-        additionalHttpHeaders.put("Referer", from.url)
+        val currentUrl = from.url
+        if (currentUrl != null) {
+            additionalHttpHeaders.put("Referer", currentUrl)
+        }
         to.mWebView.loadUrl(url, sHeaderMap)
         ++mCurrent
         move(from, to)
