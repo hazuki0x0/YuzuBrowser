@@ -276,11 +276,12 @@
     <string name="search_engine_error">検索エンジンが見つかりません</string>
     <string name="permission_request">パーミッションリクエスト</string>
     <string name="permission_request_mes">%1$sが以下のアクセス許可をリクエストしています\n\n%2$s</string>
-    <string name="proceed">許可</string>
-    <string name="deny">許可しない</string>
     <string name="camera">カメラ</string>
     <string name="mic">マイク</string>
     <string name="midi_device">MIDIデバイス</string>
-    <string name="protected_media_id">DRMコンテンツ</string>
+    <string name="protected_media_id">保護されたコンテンツ</string>
     <string name="permission_request_toast">[アクセス権]をタップしてから%1$sを有効にして下さい</string>
+    <string name="permission_ask">確認</string>
+    <string name="allow">許可</string>
+    <string name="block">拒否</string>
 </resources>

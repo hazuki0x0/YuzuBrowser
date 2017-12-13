@@ -34,7 +34,7 @@ import jp.hazuki.yuzubrowser.tab.manager.TabManager
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 import jp.hazuki.yuzubrowser.webkit.TabType
-import jp.hazuki.yuzubrowser.webkit.webrtc.WebRtcRequest
+import jp.hazuki.yuzubrowser.webrtc.core.WebRtcRequest
 
 interface BrowserController : BrowserInfo {
     fun getTab(target: Int): MainTabData = getTabOrNull(target) ?: throw IndexOutOfBoundsException("$target not found")

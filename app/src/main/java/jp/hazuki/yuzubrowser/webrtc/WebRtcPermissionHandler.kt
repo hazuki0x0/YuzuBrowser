@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit.webrtc
+package jp.hazuki.yuzubrowser.webrtc
 
 import android.Manifest
 import android.content.Context

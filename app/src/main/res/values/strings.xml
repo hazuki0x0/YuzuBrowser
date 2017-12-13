@@ -278,11 +278,12 @@
     <string name="search_engine_error">Search engine not found</string>
     <string name="permission_request">Permission request</string>
     <string name="permission_request_mes">%1$s\n\nwould like to use:\n\n%2$s</string>
-    <string name="proceed">Proceed</string>
-    <string name="deny">Deny</string>
     <string name="camera">Camera</string>
-    <string name="mic">Mic</string>
+    <string name="mic">Microphone</string>
     <string name="midi_device">MIDI device</string>
-    <string name="protected_media_id">DRM contents</string>
+    <string name="protected_media_id">Protected contents</string>
     <string name="permission_request_toast">Please tap [access right] and enable %1$s</string>
+    <string name="permission_ask">Ask</string>
+    <string name="allow">Allow</string>
+    <string name="block">Block</string>
 </resources>

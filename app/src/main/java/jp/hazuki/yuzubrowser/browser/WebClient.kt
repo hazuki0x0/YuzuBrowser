@@ -62,7 +62,7 @@ import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
-import jp.hazuki.yuzubrowser.webkit.webrtc.WebRtcPermission
+import jp.hazuki.yuzubrowser.webrtc.WebRtcPermission
 import java.net.URISyntaxException
 import kotlin.concurrent.thread
 
@@ -669,7 +669,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         override fun onPermissionRequest(request: PermissionRequest) {
             controller.activity.runOnUiThread {
                 if (AppData.webRtc.get()) {
-                    WebRtcPermission.instance.requestPermission(request, controller.webRtcRequest)
+                    WebRtcPermission.getInstance(controller.applicationContextInfo).requestPermission(request, controller.webRtcRequest)
                 } else {
                     request.deny()
                 }

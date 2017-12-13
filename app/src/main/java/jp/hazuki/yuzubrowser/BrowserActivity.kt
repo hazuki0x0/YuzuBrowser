@@ -76,8 +76,8 @@ import jp.hazuki.yuzubrowser.utils.view.PointerView
 import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.webkit.*
-import jp.hazuki.yuzubrowser.webkit.webrtc.WebRtcPermissionHandler
-import jp.hazuki.yuzubrowser.webkit.webrtc.WebRtcRequest
+import jp.hazuki.yuzubrowser.webrtc.WebRtcPermissionHandler
+import jp.hazuki.yuzubrowser.webrtc.core.WebRtcRequest
 import kotlinx.android.synthetic.main.browser_activity.*
 import java.lang.StringBuilder
 import java.util.*
@@ -1419,8 +1419,8 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         AlertDialog.Builder(this)
                 .setTitle(R.string.permission_request)
                 .setMessage(getRequestRtcList(host, resources))
-                .setPositiveButton(R.string.proceed) { _, _ -> onGrant(true) }
-                .setNegativeButton(R.string.deny) { _, _ -> onGrant(false) }
+                .setPositiveButton(R.string.allow) { _, _ -> onGrant(true) }
+                .setNegativeButton(R.string.block) { _, _ -> onGrant(false) }
                 .setOnCancelListener { onGrant(false) }
                 .show()
     }

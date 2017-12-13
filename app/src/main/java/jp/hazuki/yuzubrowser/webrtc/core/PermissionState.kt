@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit.webrtc
+package jp.hazuki.yuzubrowser.webrtc.core
 
-interface WebRtcRequest {
-    suspend fun requestPermissions(permissions: List<String>): Boolean
-    fun requestPagePermission(host: String, resources: Array<String>, onGrant: (Boolean) -> Unit)
+enum class PermissionState(val state: Int) {
+    UNCONFIGURED(0),
+    GRANTED(1),
+    DENIED(2);
+
+    companion object {
+        fun from(state: Int): PermissionState {
+            return when (state) {
+                0 -> UNCONFIGURED
+                1 -> GRANTED
+                2 -> DENIED
+                else -> throw IllegalArgumentException("Illegal state: $state")
+            }
+        }
+    }
 }
+

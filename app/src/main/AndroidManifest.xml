@@ -336,6 +336,9 @@
         <activity
             android:name=".search.settings.SearchUrlListActivity"
             android:label="@string/pref_search_url_settings"/>
+        <activity
+            android:name=".webrtc.ui.WebPermissionActivity"
+            android:label="@string/pref_content_settings"/>
     </application>
 
 </manifest>

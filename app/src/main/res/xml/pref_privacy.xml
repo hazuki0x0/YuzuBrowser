@@ -50,6 +50,10 @@
         android:key="webRtc"
         android:title="@string/pref_enable_web_rtc"/>
 
+    <PreferenceScreen
+        android:key="contentSettings"
+        android:title="@string/pref_content_settings"/>
+
     <jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
         android:entries="@array/pref_web_cache_list"
         android:entryValues="@array/pref_web_cache_values"

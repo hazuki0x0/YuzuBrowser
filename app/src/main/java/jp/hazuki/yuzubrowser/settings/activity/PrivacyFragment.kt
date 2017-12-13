@@ -26,7 +26,9 @@ import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.browser.requestLocationPermission
+import jp.hazuki.yuzubrowser.utils.extensions.startActivity
 import jp.hazuki.yuzubrowser.utils.ui
+import jp.hazuki.yuzubrowser.webrtc.ui.WebPermissionActivity
 
 class PrivacyFragment : YuzuPreferenceFragment() {
     private val asyncPermissions by lazy { AsyncPermissions(activity as AppCompatActivity) }
@@ -78,6 +80,11 @@ class PrivacyFragment : YuzuPreferenceFragment() {
             geo.isEnabled = newSettings
             appCache.isEnabled = newSettings
             true
+        }
+
+        findPreference("contentSettings").setOnPreferenceClickListener {
+            startActivity<WebPermissionActivity>()
+            return@setOnPreferenceClickListener true
         }
     }
 }
