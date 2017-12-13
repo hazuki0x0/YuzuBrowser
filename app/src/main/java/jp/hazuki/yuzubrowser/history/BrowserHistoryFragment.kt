@@ -88,8 +88,8 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
         if (!pickMode) {
             val history = adapter.getItem(position)
-            val url = history.url
-            val title = history.title
+            val url = history.url ?: return false
+            val title = history.title ?: return false
 
             val popupMenu = PopupMenu(activity, v, locationDetector.gravity)
             val menu = popupMenu.menu
@@ -301,7 +301,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
     private fun openUrls(items: List<Int>?, target: Int) {
         if (items != null && items.isNotEmpty()) {
-            val urls = items.map { adapter.getItem(it).url }
+            val urls = items.mapNotNull { adapter.getItem(it).url }
 
             val intent = Intent()
             intent.putExtra(BrowserManager.EXTRA_OPENABLE, OpenUrlList(urls, target))
