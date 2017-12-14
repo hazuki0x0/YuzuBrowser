@@ -581,6 +581,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             return false
         }
         if (ACTION_NEW_TAB == action) {
+            tabListView?.close()
             openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
             return false
         }
@@ -603,6 +604,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         } else {
             return false
         }
+        tabListView?.close()
         return true
     }
 

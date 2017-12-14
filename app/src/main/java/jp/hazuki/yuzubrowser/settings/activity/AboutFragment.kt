@@ -18,14 +18,20 @@ package jp.hazuki.yuzubrowser.settings.activity
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.BrowserActivity
 import jp.hazuki.yuzubrowser.BuildConfig
+import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.utils.AppUtils
 import jp.hazuki.yuzubrowser.utils.FileUtils
+import jp.hazuki.yuzubrowser.utils.extensions.intentFor
 import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import java.io.File
 
@@ -57,6 +63,25 @@ class AboutFragment : YuzuPreferenceFragment() {
     class OpenSourceLicenseDialog : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val webView = WebView(activity)
+            webView.webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                    openBrowser(request.url)
+                    return true
+                }
+
+                @Suppress("OverridingDeprecatedMember")
+                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                    openBrowser(Uri.parse(url))
+                    return true
+                }
+
+                private fun openBrowser(uri: Uri) {
+                    startActivity(intentFor<BrowserActivity>().apply {
+                        action = Constants.intent.ACTION_OPEN_DEFAULT
+                        data = uri
+                    })
+                }
+            }
             webView.loadUrl("file:///android_asset/licenses.html")
             val builder = AlertDialog.Builder(activity)
             builder.setTitle(R.string.open_source_license)
