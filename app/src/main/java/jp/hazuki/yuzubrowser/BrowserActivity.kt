@@ -341,7 +341,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             setFullscreenIfEnable()
     }
 
-    override fun isLoadThemeData() = true
+    override val isLoadThemeData = true
 
     override fun lightThemeResource() = R.style.BrowserMinThemeLight_NoTitle
 

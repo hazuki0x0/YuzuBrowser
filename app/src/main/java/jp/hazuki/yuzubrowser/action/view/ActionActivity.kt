@@ -268,7 +268,7 @@ class ActionActivity : ThemeActivity() {
             listener = object : OnActivityResultListener {
                 private val TAG = "ActionActivityResult"
 
-                override fun onActivityResult(context: Context, resultCode: Int, intent: Intent) {
+                override fun onActivityResult(context: Context, resultCode: Int, intent: Intent?) {
                     val action = getActionFromIntent(resultCode, intent)
                     if (action == null) {
                         Logger.w(TAG, "Action is null")
