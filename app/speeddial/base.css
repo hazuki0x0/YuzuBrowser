@@ -52,10 +52,9 @@ search:hover {
     box-sizing: border-box;
     width: 18%;
     margin: 1%;
-    background-color: #f2f2f2;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
-    border: 1px solid #d5d5d5;
-    border-radius: 3px;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
 }
 
 .inner {

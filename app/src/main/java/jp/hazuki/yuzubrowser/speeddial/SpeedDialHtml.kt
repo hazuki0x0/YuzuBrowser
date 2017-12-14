@@ -173,9 +173,9 @@ class SpeedDialHtml(context: Context) {
     companion object {
         private const val FOLDER = "speeddial"
 
-        private const val DARK_THEME = "body{background-color:#202020}.browserName{color:#f0f0f0}" +
-                ".search{color:#fff;box-shadow:2px 2px 2px rgba(0,0,0,.4);background-color:404040}" +
-                ".box,.search{border:1px solid #101010}.box{background-color:#303030}" +
+        private const val DARK_THEME = "body{background-color:#2a2a2a}.browserName{color:#f0f0f0}" +
+                ".search{color:#fff;box-shadow:2px 2px 6px rgba(0,0,0,.4);background-color:#707070}" +
+                ".box,.search{border:1px solid #101010}.box{background-color:#404040}" +
                 ".name{color:#f5f5f5}footer a{color:#afafaf}"
 
         @JvmStatic

@@ -1,5 +1,5 @@
 body {
-    background-color: #202020;
+    background-color: #2a2a2a;
 }
 
 .browserName {
@@ -9,13 +9,12 @@ body {
 .search {
     border: 1px solid #101010;
     color: #ffffff;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
-    background-color: 404040;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    background-color: #707070;
 }
 
 .box {
-    background-color: #303030;
-    border: 1px solid #101010;
+    background-color: #404040;
 }
 
 .name {
