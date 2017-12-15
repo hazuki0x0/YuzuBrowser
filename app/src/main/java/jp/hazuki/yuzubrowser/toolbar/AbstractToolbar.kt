@@ -63,7 +63,7 @@ open class AbstractToolbar(context: Context) : LinearLayout(context) {
             when (it) {
                 is ViewGroup -> applyTheme(themeData, it)
                 is TextView -> applyTheme(themeData, it)
-                is ImageView -> applyTheme(themeData, it)
+                is ImageView -> applyTheme(it)
             }
         }
     }
@@ -86,16 +86,16 @@ open class AbstractToolbar(context: Context) : LinearLayout(context) {
         private var THEME_IMAGE_COLOR_FILTER: ColorFilter? = null
         private var THEME_BUTTON_BG: Drawable? = null
 
-        internal fun applyTheme(themeData: ThemeData?, imageView: ImageView) {
+        internal fun applyTheme(imageView: ImageView) {
             imageView.colorFilter = THEME_IMAGE_COLOR_FILTER
         }
 
-        internal fun applyTheme(themeData: ThemeData?, button: ImageButton) {
-            applyTheme(themeData, button as ImageView)
+        internal fun applyTheme(button: ImageButton) {
+            applyTheme(button as ImageView)
             button.background = THEME_BUTTON_BG
         }
 
-        internal fun applyTheme(themeData: ThemeData?, controller: ButtonToolbarController) {
+        internal fun applyTheme(controller: ButtonToolbarController) {
             controller.setColorFilter(THEME_IMAGE_COLOR_FILTER)
             controller.setBackgroundDrawable(THEME_BUTTON_BG)
         }

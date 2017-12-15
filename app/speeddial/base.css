@@ -53,7 +53,7 @@ search:hover {
     width: 18%;
     margin: 1%;
     background-color: #ffffff;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
     border-radius: 2px;
 }
 

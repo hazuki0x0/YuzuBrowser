@@ -78,8 +78,8 @@ class TabBar(context: Context, controller: ActionController, iconManager: Action
 
     override fun applyTheme(themeData: ThemeData?) {
         super.applyTheme(themeData)
-        applyTheme(themeData, mLeftButtonController)
-        applyTheme(themeData, mRightButtonController)
+        applyTheme(mLeftButtonController)
+        applyTheme(mRightButtonController)
         mTabLayout.applyTheme(themeData)
     }
 

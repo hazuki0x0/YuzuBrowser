@@ -64,8 +64,8 @@ abstract class UrlBarBase(context: Context, controller: ActionController, iconMa
 
     override fun applyTheme(themeData: ThemeData?) {
         super.applyTheme(themeData)
-        applyTheme(themeData, mLeftButtonController)
-        applyTheme(themeData, mRightButtonController)
+        applyTheme(mLeftButtonController)
+        applyTheme(mRightButtonController)
     }
 
     private fun addButtons() {

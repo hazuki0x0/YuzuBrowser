@@ -56,7 +56,7 @@ open class CustomToolbarBase(context: Context, toolbarContainer: ToolbarContaine
 
     override fun applyTheme(themeData: ThemeData?) {
         super.applyTheme(themeData)
-        applyTheme(themeData, mButtonController)
+        applyTheme(mButtonController)
     }
 
     private fun addButtons() {
