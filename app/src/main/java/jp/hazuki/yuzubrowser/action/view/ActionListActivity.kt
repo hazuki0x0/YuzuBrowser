@@ -92,15 +92,16 @@ open class ActionListActivity : ThemeActivity() {
         }
 
         fun setOnActionListActivityResultListener(l: (actionList: ActionList) -> Unit): Builder {
-            listener = OnActivityResultListener { _, resultCode, intent ->
+            listener = listener@ { _, resultCode, intent ->
                 if (resultCode != Activity.RESULT_OK || intent == null) {
                     Logger.w(RESULT_TAG, "resultCode != Activity.RESULT_OK || intent == null")
-                    return@OnActivityResultListener
+                    return@listener
                 }
+
                 val actionList = intent.getParcelableExtra<ActionList>(EXTRA_ACTION_LIST)
                 if (actionList == null) {
                     Logger.w(RESULT_TAG, "Action is null")
-                    return@OnActivityResultListener
+                    return@listener
                 }
                 l.invoke(actionList)
             }

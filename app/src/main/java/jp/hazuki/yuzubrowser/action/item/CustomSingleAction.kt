@@ -27,7 +27,6 @@ import jp.hazuki.yuzubrowser.action.Action
 import jp.hazuki.yuzubrowser.action.ActionNameArray
 import jp.hazuki.yuzubrowser.action.SingleAction
 import jp.hazuki.yuzubrowser.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo
 import java.io.IOException
 
@@ -92,14 +91,12 @@ class CustomSingleAction : SingleAction {
         intent.putExtra(CustomSingleActionActivity.EXTRA_NAME, mName)
         intent.putExtra(ActionNameArray.INTENT_EXTRA, context.actionNameArray as Parcelable)
 
-        val l = OnActivityResultListener { _, resultCode, data ->
+        return StartActivityInfo(intent) { _, resultCode, data ->
             if (resultCode != Activity.RESULT_OK || data == null)
-                return@OnActivityResultListener
+                return@StartActivityInfo
             action = data.getParcelableExtra(CustomSingleActionActivity.EXTRA_ACTION)
             mName = data.getStringExtra(CustomSingleActionActivity.EXTRA_NAME)
         }
-
-        return StartActivityInfo(intent, l)
     }
 
     override fun toString(nameArray: ActionNameArray): String? {

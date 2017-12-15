@@ -19,6 +19,4 @@ package jp.hazuki.yuzubrowser.utils.app
 import android.content.Context
 import android.content.Intent
 
-interface OnActivityResultListener {
-    fun onActivityResult(context: Context, resultCode: Int, intent: Intent?)
-}
+typealias OnActivityResultListener = (context: Context, resultCode: Int, intent: Intent?) -> Unit

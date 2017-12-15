@@ -36,7 +36,6 @@ import jp.hazuki.yuzubrowser.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.ImageUtils
-import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.utils.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.utils.graphics.LauncherIconDrawable
 import java.io.IOException
@@ -126,9 +125,9 @@ class StartActivitySingleAction : SingleAction, Parcelable {
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
         val intent = Intent(context.applicationContext, StartActivityPreferenceActivity::class.java)
         intent.putExtra(Intent.EXTRA_INTENT, mIntent)
-        val listener = OnActivityResultListener { _, resultCode, data ->
+        return StartActivityInfo(intent) { _, resultCode, data ->
             if (resultCode != Activity.RESULT_OK || data == null)
-                return@OnActivityResultListener
+                return@StartActivityInfo
             val name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)
             var icon: Bitmap? = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON)
             if (icon == null) {
@@ -144,14 +143,13 @@ class StartActivitySingleAction : SingleAction, Parcelable {
 
                 }
             }
-            val sIntent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT) ?: return@OnActivityResultListener
+            val sIntent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT) ?: return@StartActivityInfo
             mName = name
             mIcon?.recycle()
             mIcon = icon
             mIntent = sIntent
             mIconCache = null
         }
-        return StartActivityInfo(intent, listener)
     }
 
     fun getIntent(tab: MainTabData): Intent? {

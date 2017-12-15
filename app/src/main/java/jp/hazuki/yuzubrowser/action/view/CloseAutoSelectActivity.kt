@@ -142,8 +142,8 @@ class CloseAutoSelectActivity : ThemeActivity() {
         private var listener: OnActivityResultListener? = null
 
         fun setListener(callback: (defaultAction: Action, intentAction: Action, windowAction: Action) -> Unit): Builder {
-            listener = OnActivityResultListener { _, resultCode, intent ->
-                if (resultCode == RESULT_OK) {
+            listener = { _, resultCode, intent ->
+                if (resultCode == RESULT_OK && intent != null) {
                     val defaultAction = intent.getParcelableExtra<Action>(DEFAULT)
                     val intentAction = intent.getParcelableExtra<Action>(INTENT)
                     val windowAction = intent.getParcelableExtra<Action>(WINDOW)

@@ -185,7 +185,7 @@ class ActionActivity : ThemeActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             RESULT_REQUEST_PREFERENCE -> if (mOnActivityResultListener != null) {
-                mOnActivityResultListener!!.onActivityResult(this, resultCode, data)
+                mOnActivityResultListener!!.invoke(this, resultCode, data)
                 mOnActivityResultListener = null
             }
             RESULT_REQUEST_JSON -> if (resultCode == Activity.RESULT_OK && data != null) {
@@ -265,17 +265,13 @@ class ActionActivity : ThemeActivity() {
         }
 
         fun setOnActionActivityResultListener(l: (action: Action) -> Unit): Builder {
-            listener = object : OnActivityResultListener {
-                private val TAG = "ActionActivityResult"
-
-                override fun onActivityResult(context: Context, resultCode: Int, intent: Intent?) {
-                    val action = getActionFromIntent(resultCode, intent)
-                    if (action == null) {
-                        Logger.w(TAG, "Action is null")
-                        return
-                    }
-                    l.invoke(action)
+            listener = listener@ { _, resultCode, intent ->
+                val action = getActionFromIntent(resultCode, intent)
+                if (action == null) {
+                    Logger.w("ActionActivityResult", "Action is null")
+                    return@listener
                 }
+                l.invoke(action)
             }
             return this
         }
