@@ -75,7 +75,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         controller.getTabOrNull(web)?.let { tab ->
             tab.onStateChanged(tabData)
             if (tab == controller.currentTabData) {
-                controller.notifyChangeWebState()
+                controller.notifyChangeWebState(tab)
             }
         }
     }

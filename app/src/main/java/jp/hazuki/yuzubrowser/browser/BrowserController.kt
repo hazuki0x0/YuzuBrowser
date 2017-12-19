@@ -42,7 +42,7 @@ interface BrowserController : BrowserInfo {
     fun getTabOrNull(target: CustomWebView): MainTabData?
     fun indexOf(id: Long): Int
     fun dispatchKeyEvent(event: KeyEvent): Boolean
-    fun notifyChangeWebState(tab: MainTabData? = null) = toolbarManager.notifyChangeWebState(tab)
+    fun notifyChangeWebState(tab: MainTabData? = currentTabData) = toolbarManager.notifyChangeWebState(tab)
     fun notifyChangeProgress(tab: MainTabData) = toolbarManager.notifyChangeProgress(tab)
     fun setCurrentTab(target: Int)
     fun removeTab(target: Int, error: Boolean = true, destroy: Boolean = true): Boolean
