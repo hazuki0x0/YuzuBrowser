@@ -47,6 +47,7 @@ import jp.hazuki.yuzubrowser.pattern.action.OpenOthersPatternAction
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingPatternAction
 import jp.hazuki.yuzubrowser.pattern.action.WebSettingResetAction
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlManager
+import jp.hazuki.yuzubrowser.readitlater.ReadItLaterActivity
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockListActivity
 import jp.hazuki.yuzubrowser.resblock.ResourceBlockManager
 import jp.hazuki.yuzubrowser.resblock.ResourceChecker
@@ -758,6 +759,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                     }
                     "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
                     "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
+                    "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
                     else -> return false
                 }
             activity.startActivity(intent)
