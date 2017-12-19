@@ -51,12 +51,14 @@ import jp.hazuki.yuzubrowser.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView
+import kotlinx.coroutines.experimental.Job
 import java.util.*
 
 class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
 
     private lateinit var mContentUri: Uri
     private var mAppData: Bundle? = null
+    private var queryJob: Job? = null
 
     private lateinit var editText: EditText
     private lateinit var adapter: SearchRecyclerAdapter
@@ -224,21 +226,26 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
 
-    private fun setQuery(query: String) = ui {
-        if (mContentUri === SuggestProvider.URI_NONE) return@ui
+    private fun setQuery(query: String) {
+        if (mContentUri === SuggestProvider.URI_NONE) return
 
-        val search = async { getSearchQuery(query) }
-        val histories = if (AppData.search_suggest_histories.get()) async { getHistoryQuery(query) } else null
-        val bookmarks = if (AppData.search_suggest_bookmarks.get()) async { getBookmarkQuery(query) } else null
+        queryJob?.cancel()
+        queryJob = ui {
+            val search = async { getSearchQuery(query) }
+            val histories = if (AppData.search_suggest_histories.get()) async { getHistoryQuery(query) } else null
+            val bookmarks = if (AppData.search_suggest_bookmarks.get()) async { getBookmarkQuery(query) } else null
 
-        val suggestions = mutableListOf<SuggestItem>()
-        suggestions.addAll(search.await())
-        histories?.run { suggestions.addAll(await()) }
-        bookmarks?.run { suggestions.addAll(await()) }
+            val suggestions = mutableListOf<SuggestItem>()
+            suggestions.addAll(search.await())
+            histories?.run { suggestions.addAll(await()) }
+            bookmarks?.run { suggestions.addAll(await()) }
 
-        adapter.clear()
-        adapter.addAll(suggestions)
-        adapter.notifyDataSetChanged()
+            queryJob = null
+
+            adapter.clear()
+            adapter.addAll(suggestions)
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun getSearchQuery(query: String): List<SuggestItem> {
