@@ -22,15 +22,10 @@ import android.webkit.PermissionRequest
 val PermissionRequest.permissions: List<String>
     get() = resources.flatMap {
         when (it) {
-            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> listOf(
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.MODIFY_AUDIO_SETTINGS
-            )
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> listOf(Manifest.permission.RECORD_AUDIO)
             PermissionRequest.RESOURCE_MIDI_SYSEX -> listOf()
             PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> listOf()
-            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> listOf(
-                    Manifest.permission.CAMERA
-            )
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> listOf(Manifest.permission.CAMERA)
             else -> listOf()
         }
     }
