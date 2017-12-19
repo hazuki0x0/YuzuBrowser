@@ -27,6 +27,8 @@
         <item name="android:webViewStyle">@style/Widget.Yuzu.WebView</item>
         <item name="iconColor">@color/white_gray</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
+        <item name="urlBarBoxColor">@color/dark_box</item>
+        <item name="urlBarBoxBorderColor">@color/dark_border</item>
     </style>
 
     <style name="BrowserMinThemeBlack.NoTitle" parent="@style/BrowserMinThemeBlack">
@@ -66,6 +68,8 @@
         <item name="iconColor">@color/deep_gray</item>
         <item name="android:scrollbarSize">4dp</item>
         <item name="editTextStyle">@style/EditTextStyle</item>
+        <item name="urlBarBoxColor">@color/white</item>
+        <item name="urlBarBoxBorderColor">@color/light_border</item>
     </style>
 
     <style name="BrowserMinThemeLight.NoTitle" parent="@style/BrowserMinThemeLight">

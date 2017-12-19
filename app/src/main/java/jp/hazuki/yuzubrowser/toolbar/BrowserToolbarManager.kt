@@ -53,7 +53,7 @@ import kotlinx.android.synthetic.main.browser_activity.*
 
 open class BrowserToolbarManager(context: Context, override val containerView: View, controller: ActionController, iconManager: ActionIconManager, requestCallback: RequestCallback) : ToolbarManager, LayoutContainer {
     override val tabBar = TabBar(context, controller, iconManager, requestCallback)
-    override val urlBar = if (AppData.toolbar_url_white.get()) WhiteUrlBar(context, controller, iconManager, requestCallback) else UrlBar(context, controller, iconManager, requestCallback)
+    override val urlBar = if (AppData.toolbar_url_box.get()) WhiteUrlBar(context, controller, iconManager, requestCallback) else UrlBar(context, controller, iconManager, requestCallback)
     override val progressBar = ProgressToolBar(context, requestCallback)
     override val customBar = CustomToolbar(context, controller, iconManager, requestCallback)
     private var mIsWebToolbarCombined = false

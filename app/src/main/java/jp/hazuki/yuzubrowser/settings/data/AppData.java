@@ -80,7 +80,7 @@ public class AppData {
     public static final IntContainer toolbar_text_size_url = new IntContainer("toolbar_text_size_url", 14);
     public static final ToolbarContainer toolbar_tab = new ToolbarContainer("tab", 1);
     public static final ToolbarContainer toolbar_url = new ToolbarContainer("url", 1);
-    public static final BooleanContainer toolbar_url_white = new BooleanContainer("toolbar_url_white", true);
+    public static final BooleanContainer toolbar_url_box = new BooleanContainer("toolbar_url_box", true);
     public static final ToolbarContainer toolbar_progress = new ToolbarContainer("progress", 1);
     public static final ToolbarContainer toolbar_custom1 = new ToolbarContainer("custom1", 1);
     public static final BooleanContainer toolbar_always_show_url = new BooleanContainer("toolbar_always_show_url", true);

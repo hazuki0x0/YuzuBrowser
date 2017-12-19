@@ -134,7 +134,7 @@
                 app:seekMax="50"
                 app:seekMin="1" />
             <SwitchPreference
-                android:key="toolbar_url_white"
+                android:key="toolbar_url_box"
                 android:title="@string/pref_white_url_box"/>
             <SwitchPreference
                 android:key="toolbar_always_show_url"

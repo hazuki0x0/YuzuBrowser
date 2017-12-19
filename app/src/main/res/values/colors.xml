@@ -20,4 +20,7 @@
     <color name="white_gray">#e6e6e6</color>
     <color name="scroll_bar">#aa646464</color>
     <color name="selected_overlay">#8033b5e5</color>
+    <color name="light_border">#bfbfbf</color>
+    <color name="dark_border">#000000</color>
+    <color name="dark_box">#626262</color>
 </resources>
