@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="jp.hazuki.yuzubrowser">
 
+    <!--suppress AndroidElementNotAllowed -->
+    <meta-data
+        android:name="android.webkit.WebView.EnableSafeBrowsing"
+        android:value="true"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
