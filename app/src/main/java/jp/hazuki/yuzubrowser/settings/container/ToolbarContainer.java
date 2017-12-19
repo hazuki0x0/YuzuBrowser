@@ -15,7 +15,7 @@ public class ToolbarContainer implements Containable {
     public final IntContainer location_landscape;
     public final IntContainer location_landscape_priority;
     public final IntContainer size;
-    public final ToolbarVisibilityContainter visibility;
+    public final ToolbarVisibilityContainer visibility;
 
     public ToolbarContainer(String id, int loc) {
         location = new IntContainer("toolbar_location_" + id, ToolbarManager.LOCATION_TOP);
@@ -23,7 +23,7 @@ public class ToolbarContainer implements Containable {
         location_landscape = new IntContainer("toolbar_location_l_" + id, ToolbarManager.LOCATION_UNDEFINED);
         location_landscape_priority = new IntContainer("toolbar_location_l_priority_" + id, -1);
         size = new IntContainer("toolbar_size_" + id, 48);
-        visibility = new ToolbarVisibilityContainter("toolbar_visibility_" + id, 1);
+        visibility = new ToolbarVisibilityContainer("toolbar_visibility_" + id, 1);
 
         checkPreferenceList();
     }

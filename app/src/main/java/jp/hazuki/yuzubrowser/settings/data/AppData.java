@@ -55,6 +55,7 @@ import jp.hazuki.yuzubrowser.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.settings.container.custom.FontSizeContainer;
 import jp.hazuki.yuzubrowser.tab.manager.BundleDataBaseConverter;
+import jp.hazuki.yuzubrowser.theme.ThemeData;
 import jp.hazuki.yuzubrowser.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.useragent.UserAgent;
 import jp.hazuki.yuzubrowser.useragent.UserAgentList;
@@ -160,7 +161,7 @@ public class AppData {
     public static final IntContainer history_max_day = new IntContainer("history_max_day", 0);
     public static final IntContainer history_max_count = new IntContainer("history_max_count", 0);
     public static final BooleanContainer detailed_log = new BooleanContainer("detailed_log", false);
-    public static final StringContainer theme_setting = new StringContainer("theme_setting", "");
+    public static final StringContainer theme_setting = new StringContainer("theme_setting", ThemeData.THEME_LIGHT);
     public static final BooleanContainer resblock_enable = new BooleanContainer("resblock_enable", false);
     public static final BooleanContainer allow_content_access = new BooleanContainer("allow_content_access", true);
     public static final BooleanContainer pull_to_refresh = new BooleanContainer("pull_to_refresh", true);
@@ -227,7 +228,7 @@ public class AppData {
             SoftButtonActionArrayManager softBtnAryManager = SoftButtonActionArrayManager.getInstance(context);
             softBtnAryManager.btn_tab_right.add(SingleAction.makeInstance(SingleAction.NEW_TAB));
             softBtnAryManager.btn_url_left.add(SingleAction.makeInstance(SingleAction.ADD_BOOKMARK));
-            softBtnAryManager.btn_url_right.add(SingleAction.makeInstance(SingleAction.OPEN_OPTIONS_MENU));
+            softBtnAryManager.btn_url_right.add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
             softBtnAryManager.save(context);
 
             HardButtonActionManager hardBtnManager = HardButtonActionManager.getInstance(context);
@@ -238,7 +239,7 @@ public class AppData {
             ToolbarActionManager toolbarManager = ToolbarActionManager.getInstance(context);
             toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.GO_BACK));
             toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
-            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
+            toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK), SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
             toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.TAB_LIST));
             toolbarManager.custombar1.add(SingleAction.makeInstance(SingleAction.OPEN_OPTIONS_MENU));
             toolbarManager.save(context);
@@ -248,13 +249,15 @@ public class AppData {
             tabManager.save(context);
 
             MenuActionManager menuManager = MenuActionManager.getInstance(context);
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.WEB_RELOAD_STOP));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.GO_FORWARD));
             menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.GO_HOME));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
             menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK));
             menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_DOWNLOADS));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.READ_IT_LATER));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.READ_IT_LATER_LIST));
+            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.READER_MODE));
             menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.ALL_ACTION));
             menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_SETTINGS));
             menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FINISH));
@@ -324,7 +327,10 @@ public class AppData {
             manager.save(context);
 
             toolbar_progress.size.set(4);
+            toolbar_progress.visibility.setHideWhenEndLoading(true);
+            toolbar_custom1.size.set(42);
             toolbar_custom1.location.set(ToolbarManager.LOCATION_BOTTOM);
+            toolbar_tab.visibility.setVisible(false);
 
             UserAgentList uaList = new UserAgentList();
             uaList.add(new UserAgent("android", "Mozilla/5.0 (Linux; Android 7.1.1; Nexus 5X Build/N4F26I) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36"));

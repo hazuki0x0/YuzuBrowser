@@ -24,13 +24,13 @@ import jp.hazuki.yuzubrowser.action.manager.ActionController
 import jp.hazuki.yuzubrowser.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.action.manager.TabActionManager
 import jp.hazuki.yuzubrowser.browser.BrowserController
-import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter
+import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainer
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.toolbar.BrowserToolbarManager
 import jp.hazuki.yuzubrowser.utils.view.tab.TabLayout
 
 class Toolbar(context: Context, root: View, private val controller: BrowserController, private val actionController: ActionController, iconManager: ActionIconManager) : BrowserToolbarManager(context, root, actionController, iconManager, object : BrowserToolbarManager.RequestCallback {
-    override fun shouldShowToolbar(visibility: ToolbarVisibilityContainter, tabData: MainTabData?, config: Configuration?): Boolean {
+    override fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration?): Boolean {
         if (!visibility.isVisible)
             return false
 

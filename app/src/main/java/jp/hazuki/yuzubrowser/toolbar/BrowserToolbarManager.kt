@@ -29,7 +29,7 @@ import android.widget.LinearLayout
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.manager.ActionController
 import jp.hazuki.yuzubrowser.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainter
+import jp.hazuki.yuzubrowser.settings.container.ToolbarVisibilityContainer
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.theme.ThemeData
@@ -339,6 +339,6 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     interface RequestCallback {
-        fun shouldShowToolbar(visibility: ToolbarVisibilityContainter, tabData: MainTabData?, config: Configuration? = null): Boolean
+        fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration? = null): Boolean
     }
 }
