@@ -85,6 +85,10 @@ class SpeedDialHtml(context: Context) {
                 builder.append(DARK_THEME)
             }
 
+            when (AppData.speeddial_layout.get()) {
+                1 -> builder.append(SMALL_ICON)
+            }
+
             return getNoCacheResponse("text/css", builder)
         }
 
@@ -177,6 +181,9 @@ class SpeedDialHtml(context: Context) {
                 ".search{color:#fff;box-shadow:2px 2px 6px rgba(0,0,0,.4);background-color:#707070}" +
                 ".box,.search{border:1px solid #101010}.box{background-color:#404040}" +
                 ".name{color:#f5f5f5}footer a{color:#afafaf}"
+
+        private const val SMALL_ICON = ".box{position:relative}img{position:absolute;top:0;bottom:0;" +
+                "width:20px;margin:auto 3px}.name{width:auto;-webkit-line-clamp:1;margin:10px 0 10px 26px}"
 
         @JvmStatic
         fun clearCache(context: Context) {

@@ -37,3 +37,21 @@
 .name {
     font-size: medium;
 }
+
+.box {
+    position: relative;
+}
+
+img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    margin: auto 3px;
+}
+
+.name {
+    width: auto;
+    -webkit-line-clamp: 1;
+    margin: 10px 0 10px 26px;
+}

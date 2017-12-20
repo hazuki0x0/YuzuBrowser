@@ -818,4 +818,13 @@
     <string name="pref_white_url_box">Show URL box</string>
     <string name="pref_enable_web_rtc">Enable WebRTC</string>
     <string name="pref_content_settings">Content settings</string>
+    <string name="pref_speeddial_layout">Layout</string>
+    <string-array name="pref_speeddial_layout_list">
+        <item>Large icon</item>
+        <item>Small icon</item>
+    </string-array>
+    <integer-array name="pref_speeddial_layout_values">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
 </resources>
