@@ -187,7 +187,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         webGestureOverlayView.setWebFrame(appbar)
 
         (getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.run {
-            activeNetworkInfo.run {
+            activeNetworkInfo?.run {
                 isNetworkUp = isAvailable
             }
         }
