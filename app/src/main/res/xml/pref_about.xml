@@ -16,6 +16,9 @@
     <Preference
         android:key="osl"
         android:title="@string/open_source_license" />
+    <Preference
+        android:key="privacy_policy"
+        android:title="@string/pref_privacy_policy"/>
     <PreferenceCategory android:title="@string/pref_log">
         <SwitchPreference
             android:key="detailed_log"

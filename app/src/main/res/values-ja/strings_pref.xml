@@ -432,4 +432,5 @@
         <item>大アイコン</item>
         <item>小アイコン</item>
     </string-array>
+    <string name="pref_privacy_policy">プライバシーポリシー</string>
 </resources>

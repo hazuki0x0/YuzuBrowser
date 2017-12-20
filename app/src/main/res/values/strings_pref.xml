@@ -827,4 +827,5 @@
         <item>0</item>
         <item>1</item>
     </integer-array>
+    <string name="pref_privacy_policy">Privacy Policy</string>
 </resources>

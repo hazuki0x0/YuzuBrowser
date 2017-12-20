@@ -54,6 +54,14 @@ class AboutFragment : YuzuPreferenceFragment() {
             true
         }
 
+        findPreference("privacy_policy").setOnPreferenceClickListener {
+            startActivity(intentFor<BrowserActivity>().apply {
+                action = Constants.intent.ACTION_OPEN_DEFAULT
+                data = Uri.parse("https://github.com/hazuki0x0/YuzuBrowser/wiki/Privacy-policy")
+            })
+            true
+        }
+
         findPreference("delete_log").setOnPreferenceClickListener {
             DeleteLogDialog().show(childFragmentManager, "delete")
             true
