@@ -28,6 +28,7 @@ import jp.hazuki.yuzubrowser.R
 
 class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {
 
+    private var isInitialized = false
     private lateinit var topToolbar: View
     private lateinit var bottomToolbar: View
     private lateinit var bottomBar: View
@@ -37,6 +38,7 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
             this.bottomBar = bottomBar
             topToolbar = dependency.findViewById(R.id.topToolbarLayout)
             bottomToolbar = bottomBar.findViewById(R.id.bottomToolbarLayout)
+            isInitialized = true
             return true
         }
         return false
@@ -54,7 +56,7 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
     }
 
     fun setExpanded(expanded: Boolean) {
-        if (expanded) {
+        if (isInitialized && expanded) {
             bottomBar.translationY = 0f
         }
     }
