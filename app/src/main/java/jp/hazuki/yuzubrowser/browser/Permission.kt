@@ -56,6 +56,7 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     } else {
+        if (supportFragmentManager.findFragmentByTag("permission") != null) return
         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
@@ -112,7 +113,7 @@ private suspend fun AppCompatActivity.handleResult(asyncPermissions: AsyncPermis
         }
         is PermissionResult.ShouldShowRationale -> permissionResult.proceed().let { handleResult(asyncPermissions, it, true) }
         is PermissionResult.NeverAskAgain -> {
-            if (storage) {
+            if (storage && !checkStoragePermission() && supportFragmentManager.findFragmentByTag("permission") == null) {
                 PermissionDialog().show(supportFragmentManager, "permission")
             }
         }
@@ -134,7 +135,7 @@ class PermissionDialog : DialogFragment() {
 private const val NO_NEED = "no_need"
 
 private fun Context.setNoNeed(noNeed: Boolean) {
-    if (checkNeed() != noNeed)
+    if (checkNeed() == noNeed)
         pref.edit().putBoolean(NO_NEED, noNeed).apply()
 }
 

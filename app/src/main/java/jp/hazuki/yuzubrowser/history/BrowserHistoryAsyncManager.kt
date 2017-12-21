@@ -20,7 +20,7 @@ class BrowserHistoryAsyncManager(context: Context) {
         thread.sendMessage(MyMessage(ADD_URL, url))
     }
 
-    fun update(url: String, title: String) {
+    fun update(url: String?, title: String?) {
         thread.sendMessage(MyMessage(UPDATE_TITLE, url, title))
     }
 
@@ -28,7 +28,7 @@ class BrowserHistoryAsyncManager(context: Context) {
         return historyManager.getHistoryArray(limit)
     }
 
-    private class MyMessage(val what: Int, val url: String, val obj: Any? = null)
+    private class MyMessage(val what: Int, val url: String?, val obj: Any? = null)
 
     private class MyThread internal constructor(private val mHistoryManager: BrowserHistoryManager) : Thread() {
         private val mMessageQueue = LinkedBlockingQueue<MyMessage>()

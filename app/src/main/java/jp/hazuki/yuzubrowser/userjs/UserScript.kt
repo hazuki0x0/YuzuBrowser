@@ -5,10 +5,10 @@ import android.os.Parcelable
 import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.Logger
 import jp.hazuki.yuzubrowser.utils.WebUtils
+import jp.hazuki.yuzubrowser.utils.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader
-import java.util.*
 import java.util.regex.Pattern
 
 class UserScript : Parcelable {
@@ -19,10 +19,8 @@ class UserScript : Parcelable {
     var version: String? = null
     var author: String? = null
     var description: String? = null
-    var include: MutableList<Pattern>? = null
-        private set
-    var exclude: MutableList<Pattern>? = null
-        private set
+    val include = ArrayList<Pattern>(0)
+    val exclude = ArrayList<Pattern>(0)
     var isUnwrap: Boolean = false
         private set
     var isRunStart: Boolean = false
@@ -37,14 +35,14 @@ class UserScript : Parcelable {
         get() = info.data
         set(data) {
             info.data = data
-            loadData()
+            loadHeaderData()
         }
 
     val runnable: String
         get() = if (isUnwrap) {
             info.data
         } else {
-            "(function() {\n" + info.data + "\n})()"
+            "(function() {\n${info.data}\n})()"
         }
 
     var isEnabled: Boolean
@@ -59,17 +57,17 @@ class UserScript : Parcelable {
 
     constructor(id: Long, data: String, enabled: Boolean) {
         info = UserScriptInfo(id, data, enabled)
-        loadData()
+        loadHeaderData()
     }
 
     constructor(data: String) {
         info = UserScriptInfo(data)
-        loadData()
+        loadHeaderData()
     }
 
     constructor(info: UserScriptInfo) {
         this.info = info
-        loadData()
+        loadHeaderData()
     }
 
     override fun describeContents(): Int = 0
@@ -85,26 +83,25 @@ class UserScript : Parcelable {
         val data = source.readString()
         val enabled = source.readInt() == 1
         info = UserScriptInfo(id, data, enabled)
-        loadData()
+        loadHeaderData()
     }
 
-    private fun loadData() {
+    private fun loadHeaderData() {
         name = null
         version = null
         description = null
-        include = null
-        exclude = null
+        include.clear()
+        exclude.clear()
 
         try {
             val reader = BufferedReader(StringReader(info.data))
-            var line = ""
 
-            if (reader.readLine().also { line = it } == null || !sHeaderStartPattern.matcher(line).matches()) {
+            if (reader.readLine()?.let { sHeaderStartPattern.matcher(it).matches() } != true) {
                 Logger.w(TAG, "Header (start) parser error")
                 return
             }
 
-            while (reader.readLine().also { line = it } != null) {
+            reader.forEachLine { line ->
                 val matcher = sHeaderMainPattern.matcher(line)
                 if (!matcher.matches()) {
                     if (sHeaderEndPattern.matcher(line).matches()) {
@@ -125,7 +122,7 @@ class UserScript : Parcelable {
 
     }
 
-    private fun readData(field: String, value: String, line: String) {
+    private fun readData(field: String?, value: String?, line: String) {
         if ("name".equals(field, ignoreCase = true)) {
             name = value
         } else if ("version".equals(field, ignoreCase = true)) {
@@ -135,30 +132,24 @@ class UserScript : Parcelable {
         } else if ("description".equals(field, ignoreCase = true)) {
             description = value
         } else if ("include".equals(field, ignoreCase = true)) {
-            if (include == null)
-                include = ArrayList()
-            val pattern = WebUtils.makeUrlPattern(value)
-            if (pattern != null)
-                include!!.add(pattern)
+            WebUtils.makeUrlPattern(value)?.let {
+                include.add(it)
+            }
         } else if ("exclude".equals(field, ignoreCase = true)) {
-            if (exclude == null)
-                exclude = ArrayList()
-            val pattern = WebUtils.makeUrlPattern(value)
-            if (pattern != null)
-                exclude!!.add(pattern)
+            WebUtils.makeUrlPattern(value)?.let {
+                exclude.add(it)
+            }
         } else if ("unwrap".equals(field, ignoreCase = true)) {
             isUnwrap = true
         } else if ("run-at".equals(field, ignoreCase = true)) {
             isRunStart = "document-start".equals(value, ignoreCase = true)
-        } else if ("match".equals(field, ignoreCase = true)) {
-            if (include == null)
-                include = ArrayList()
+        } else if ("match".equals(field, ignoreCase = true) && value != null) {
             val patternUrl = "?^" + value.replace("?", "\\?").replace(".", "\\.")
                     .replace("*", ".*").replace("+", ".+")
                     .replace("://.*\\.", "://((?![\\./]).)*\\.").replace("^\\.\\*://".toRegex(), "https?://")
-            val pattern = WebUtils.makeUrlPattern(patternUrl)
-            if (pattern != null)
-                include!!.add(pattern)
+            WebUtils.makeUrlPattern(patternUrl)?.let {
+                include.add(it)
+            }
         } else {
             Logger.w(TAG, "Unknown header : " + line)
         }

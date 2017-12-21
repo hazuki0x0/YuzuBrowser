@@ -83,8 +83,8 @@ class ReaderFragment : Fragment() {
         activity.title = UrlUtils.decodeUrlHost(url)
 
         ui {
-            val dialog = ProgressDialog(getString(R.string.now_loading), true, false).apply {
-                show(childFragmentManager, "loading")
+            val dialog = ProgressDialog(getString(R.string.now_loading), true, false).also {
+                it.show(childFragmentManager, "loading")
             }
             val data = async { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }.await()
             dialog.dismiss()

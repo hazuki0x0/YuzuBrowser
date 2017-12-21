@@ -670,7 +670,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             SingleAction.RESTORE_TAB -> controller.restoreTab()
             SingleAction.REPLICATE_TAB -> controller.openInNewTab(controller.getTab(actionTarget))
             SingleAction.SHOW_SEARCHBOX -> controller.showSearchBox(
-                    controller.getTab(actionTarget).url,
+                    controller.getTab(actionTarget).url ?: "",
                     actionTarget,
                     (action as ShowSearchBoxAction).isOpenNewTab,
                     action.isReverse)

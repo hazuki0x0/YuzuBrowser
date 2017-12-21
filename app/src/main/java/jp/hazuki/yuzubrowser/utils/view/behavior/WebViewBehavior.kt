@@ -29,6 +29,7 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
 class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.ScrollingViewBehavior(context, attrs) {
 
+    private var isInitialized = false
     private lateinit var controller: BrowserController
     private lateinit var webFrame: View
     private lateinit var bottomBar: View
@@ -69,6 +70,8 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
     }
 
     fun adjustWebView(data: MainTabData, height: Int) {
+        if (!isInitialized) return
+
         if (data.isFinished && !data.mWebView.isScrollable) {
             controller.expandToolbar()
             data.mWebView.isNestedScrollingEnabledMethod = false

@@ -101,10 +101,10 @@ class MfsEditFragment : Fragment() {
             fragmentManager.popBackStack()
         }
 
-        recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+        recyclerView.let {
+            it.layoutManager = LinearLayoutManager(activity)
             adapter = MfsFingerAdapter(activity, item.traces, null)
-            adapter = adapter
+            it.adapter = adapter
         }
     }
 

@@ -62,7 +62,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
             addItemDecoration(helper)
         }
 
-        val actions = arguments.getParcelable<Action>(ARG_ACTION)
+        val actions = arguments.getParcelable(ARG_ACTION) ?: Action()
         val name = arguments.getString(ARG_NAME)
         actionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA) ?: ActionNameArray(activity)
 
@@ -76,7 +76,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
             var newName: String? = editText.text.toString()
 
             if (TextUtils.isEmpty(newName) && adapter.itemCount > 0) {
-                newName = adapter.get(0).toString(actionNameArray)
+                newName = adapter[0].toString(actionNameArray)
             }
 
             val result = Intent()
@@ -103,7 +103,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
         bundle.putInt(ARG_POSITION, position)
         val intent = ActionActivity.Builder(activity)
                 .setTitle(R.string.edit_action)
-                .setDefaultAction(Action(adapter.get(position)))
+                .setDefaultAction(Action(adapter[position]))
                 .setActionNameArray(actionNameArray)
                 .setReturnData(bundle)
                 .create()
@@ -137,7 +137,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
                 }
                 val position = returnData.getInt(ARG_POSITION)
                 if (action.size == 1) {
-                    adapter.set(position, action[0])
+                    adapter[position] = action[0]
                     adapter.notifyItemChanged(position)
                 } else {
                     adapter.remove(position)
@@ -213,7 +213,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
 
         private const val ARG_POSITION = "position"
 
-        fun newInstance(actionList: Action, name: String, actionNameArray: ActionNameArray): CustomSingleActionFragment {
+        fun newInstance(actionList: Action?, name: String, actionNameArray: ActionNameArray): CustomSingleActionFragment {
             return CustomSingleActionFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_ACTION, actionList)

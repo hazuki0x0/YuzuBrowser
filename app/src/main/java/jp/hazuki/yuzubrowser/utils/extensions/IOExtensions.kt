@@ -16,11 +16,18 @@
 
 package jp.hazuki.yuzubrowser.utils.extensions
 
+import java.io.BufferedReader
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
 inline fun ZipInputStream.forEach(block: (entry: ZipEntry) -> Unit) {
     while (true) {
         block(nextEntry ?: return)
+    }
+}
+
+inline fun BufferedReader.forEachLine(block: (String) -> Unit) {
+    while (true) {
+        block(readLine() ?: return)
     }
 }

@@ -75,9 +75,9 @@ open class CustomWebViewClient : WebViewClient() {
             handler.cancel()
     }
 
-    open fun onReceivedLoginRequest(view: CustomWebView, realm: String, account: String, args: String) {}
+    open fun onReceivedLoginRequest(view: CustomWebView, realm: String, account: String?, args: String?) {}
 
-    override fun onReceivedLoginRequest(view: WebView, realm: String, account: String, args: String) {
+    override fun onReceivedLoginRequest(view: WebView, realm: String, account: String?, args: String?) {
         if (view is CustomWebView)
             onReceivedLoginRequest(view as CustomWebView, realm, account, args)
     }

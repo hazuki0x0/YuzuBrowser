@@ -309,7 +309,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
     }
 
     private fun finishWithResult(query: String, mode: Int) {
-        if (!AppData.private_mode.get() && !TextUtils.isEmpty(query) && mode != SEARCH_MODE_URL && !WebUtils.isUrl(query)) {
+        if (!AppData.private_mode.get() && !TextUtils.isEmpty(query) && mode != SEARCH_MODE_URL && !WebUtils.isUrl(query) && mContentUri != SuggestProvider.URI_NONE) {
             contentResolver.insert(mContentUri,
                     ContentValues().apply { put(SearchManager.SUGGEST_COLUMN_QUERY, query) })
         }

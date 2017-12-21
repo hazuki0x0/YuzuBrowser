@@ -636,6 +636,8 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             }
         }
 
+        menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController)
+
         webClient.onPreferenceReset()
         isEnableQuickControl = AppData.qc_enable.get()
         requestedOrientation = AppData.oritentation.get()
@@ -655,8 +657,6 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         } else {
             webViewFastScroller.setScrollEnabled(false)
         }
-
-        menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController)
 
         ErrorReport.setDetailedLog(AppData.detailed_log.get())
     }

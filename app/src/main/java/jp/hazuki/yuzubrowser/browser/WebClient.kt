@@ -417,9 +417,9 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         }
 
         override fun doUpdateVisitedHistory(web: CustomWebView, url: String, isReload: Boolean) {
-            val data = controller.getTabOrNull(web) ?: return
+            val data = controller.getTabOrNull(web)?.originalUrl ?: return
 
-            browserHistoryManager?.add(data.originalUrl)
+            browserHistoryManager?.add(data)
         }
 
         override fun onReceivedHttpAuthRequest(web: CustomWebView, handler: HttpAuthHandler, host: String, realm: String) {
@@ -805,22 +805,18 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 if (isStart != script.isRunStart)
                     continue
 
-                val exclude = script.exclude
-                if (exclude != null)
-                    for (pattern in exclude) {
-                        if (pattern.matcher(url).find())
-                            continue@SCRIPT_LOOP
-                    }
+                for (pattern in script.exclude) {
+                    if (pattern.matcher(url).find())
+                        continue@SCRIPT_LOOP
+                }
 
-                val include = script.include
-                if (include != null)
-                    for (pattern in include) {
-                        if (pattern.matcher(url).find()) {
-                            web.evaluateJavascript(script.runnable, null)
+                for (pattern in script.include) {
+                    if (pattern.matcher(url).find()) {
+                        web.evaluateJavascript(script.runnable, null)
 
-                            continue@SCRIPT_LOOP
-                        }
+                        continue@SCRIPT_LOOP
                     }
+                }
             }
         }
     }
