@@ -47,7 +47,7 @@ class WebPermissionsDatabase private constructor(context: Context) : ManagedSQLi
 
     fun getList(): List<Pair<String, WebPermissions>> {
         val db = readableDatabase
-        return db.select(TABLE).parseList(WebPermissionParser())
+        return db.select(TABLE).orderBy(COL_HOST).parseList(WebPermissionParser())
     }
 
     operator fun get(host: String): WebPermissions? {
