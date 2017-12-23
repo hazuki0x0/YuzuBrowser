@@ -21,10 +21,12 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
+import jp.hazuki.yuzubrowser.R
+import jp.hazuki.yuzubrowser.utils.ImageUtils
 import jp.hazuki.yuzubrowser.utils.image.Gochiusearch
 import java.util.*
 
-class SpeedDialManager(context: Context) {
+class SpeedDialManager(val context: Context) {
 
     private val mOpenHelper = MyOpenHelper(context)
 
@@ -85,7 +87,7 @@ class SpeedDialManager(context: Context) {
             put(COLUMN_URL, speedDial.url)
             put(COLUMN_TITLE, speedDial.title)
             put(COLUMN_ORDER, nowId + 1)
-            put(COLUMN_ICON, speedDial.icon!!.iconBytes)
+            put(COLUMN_ICON, (speedDial.icon ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(context, R.drawable.ic_public_white_24dp))).iconBytes)
             put(COLUMN_FAVICON, speedDial.isFavicon)
             put(COLUMN_LAST_UPDATE, 0)
         }
