@@ -40,6 +40,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
         if (dependency is AppBarLayout) {
             bottomBar = parent.findViewById(R.id.bottomToolbarLayout)
             webFrame = child.findViewById(R.id.webFrameLayout)
+            isInitialized = true
             return true
         }
         return false
