@@ -63,7 +63,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
         }
 
         val actions = arguments.getParcelable(ARG_ACTION) ?: Action()
-        val name = arguments.getString(ARG_NAME)
+        val name = arguments.getString(ARG_NAME) ?: ""
         actionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA) ?: ActionNameArray(activity)
 
         adapter = ActionAdapter(activity, actions, actionNameArray, this, this).apply {
@@ -213,7 +213,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
 
         private const val ARG_POSITION = "position"
 
-        fun newInstance(actionList: Action?, name: String, actionNameArray: ActionNameArray): CustomSingleActionFragment {
+        fun newInstance(actionList: Action?, name: String?, actionNameArray: ActionNameArray): CustomSingleActionFragment {
             return CustomSingleActionFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_ACTION, actionList)

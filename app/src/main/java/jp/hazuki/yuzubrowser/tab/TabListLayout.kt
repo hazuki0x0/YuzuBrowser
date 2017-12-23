@@ -152,7 +152,10 @@ constructor(context: Context, attrs: AttributeSet?, mode: Int, left: Boolean, va
 
     private fun closeLastTab() {
         when (lastTabMode) {
-            TabListSingleAction.LAST_TAB_MODE_NEW_TAB -> callback.requestCloseAllTab()
+            TabListSingleAction.LAST_TAB_MODE_NEW_TAB -> {
+                callback.requestCloseAllTab()
+                postDelayed({ adapter.notifyDataSetChanged() }, 100)
+            }
             TabListSingleAction.LAST_TAB_MODE_FINISH -> callback.requestFinish(false)
             TabListSingleAction.LAST_TAB_MODE_FINISH_WITH_ALERT -> callback.requestFinish(true)
         }

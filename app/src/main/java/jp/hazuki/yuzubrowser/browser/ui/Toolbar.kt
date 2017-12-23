@@ -85,7 +85,7 @@ class Toolbar(context: Context, root: View, private val controller: BrowserContr
         val theme = controller.themeByInfo
 
         fromTab?.onMoveTabToBackground(res, theme)
-        toTab?.onMoveTabToBackground(res, theme)
+        toTab?.onMoveTabToForeground(res, theme)
     }
 
     override fun onTabSwipeUp(id: Int) {

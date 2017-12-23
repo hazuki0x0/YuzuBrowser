@@ -225,7 +225,7 @@ class ActionIconManager(val info: BrowserInfo) {
             SingleAction.CUSTOM_ACTION -> return get((action as CustomSingleAction).action)
             SingleAction.VIBRATION -> return null
             SingleAction.TOAST -> return null
-            SingleAction.PRIVATE -> return if (AppData.private_mode.get())
+            SingleAction.PRIVATE -> return if (info.isPrivateMode)
                 info.resourcesByInfo.getDrawable(R.drawable.ic_private_white_24dp, info.themeByInfo)
             else
                 info.resourcesByInfo.getDrawable(R.drawable.ic_private_white_disable_24dp, info.themeByInfo)

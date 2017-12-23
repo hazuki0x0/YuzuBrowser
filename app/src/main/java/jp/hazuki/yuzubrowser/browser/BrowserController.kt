@@ -96,7 +96,7 @@ interface BrowserController : BrowserInfo {
     var requestedOrientationByCtrl: Int
     var renderingMode: Int
     var isFullscreenMode: Boolean
-    var isPrivateMode: Boolean
+    override var isPrivateMode: Boolean
     val isEnableFastPageScroller: Boolean
     fun showFastPageScroller(target: Int)
     fun closeFastPageScroller()

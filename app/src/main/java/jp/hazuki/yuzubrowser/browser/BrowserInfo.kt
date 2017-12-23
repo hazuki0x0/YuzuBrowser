@@ -28,6 +28,7 @@ interface BrowserInfo {
     val tabSize: Int
     val isImeShown: Boolean
     val isActivityPaused: Boolean
+    val isPrivateMode: Boolean
 
     val isEnableUserScript: Boolean
     val isEnableGesture: Boolean
