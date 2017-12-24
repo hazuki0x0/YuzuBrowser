@@ -50,6 +50,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private val childHelper = NestedScrollingChildHelper(this)
     private val scrollSlop: Int = ViewConfiguration.get(context).scaledPagingTouchSlop
+    private var scrollableHeight: (() -> Int)? = null
 
     init {
         isNestedScrollingEnabled = true
@@ -300,7 +301,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
     override fun computeVerticalScrollRange(): Int {
         val scrollRange = super.computeVerticalScrollRange()
         val old = isScrollable
-        isScrollable = scrollRange > height + scrollSlop
+        isScrollable = scrollRange > height + scrollSlop + (scrollableHeight?.invoke() ?: 0)
         if (old != isScrollable) {
             scrollableChangeListener?.onSwipeableChanged(isScrollable && isSwipeable)
         }
@@ -310,5 +311,9 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
 
         return scrollRange
+    }
+
+    override fun setScrollableHeight(listener: (() -> Int)?) {
+        scrollableHeight = listener
     }
 }

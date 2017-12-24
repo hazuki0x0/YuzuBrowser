@@ -81,6 +81,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         }
     }
     private val webViewRenderingManager = WebViewRenderingManager()
+    private val scrollableToolbarHeight = { controller.appBarLayout.totalScrollRange }
     private var browserHistoryManager: BrowserHistoryAsyncManager? = null
     private var resourceCheckerList: ArrayList<ResourceChecker>? = null
     private var adBlockController: AdBlockController? = null
@@ -196,6 +197,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         web.setOverScrollModeMethod(View.OVER_SCROLL_IF_CONTENT_SCROLLS)
 
         webViewRenderingManager.setWebViewRendering(web)
+        web.setScrollableHeight(scrollableToolbarHeight)
 
         web.setMyWebChromeClient(MyWebChromeClient())
         web.setMyWebViewClient(mWebViewClient)

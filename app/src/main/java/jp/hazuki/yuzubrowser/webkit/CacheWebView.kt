@@ -53,6 +53,7 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
     private var mOnScrollChangedListener: OnScrollChangedListener? = null
     private var mScrollBarListener: OnScrollChangedListener? = null
     private var mDownloadListener: DownloadListener? = null
+    private var scrollableHeight: (() -> Int)? = null
     private val mDownloadListenerWrapper = DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
         synchronized(this@CacheWebView) {
             if (mCurrent >= 1) {
@@ -608,6 +609,9 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
         to.setLayerType(webLayerType, webLayerPaint)
         to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies)
 
+        from.setScrollableHeight(null)
+        to.setScrollableHeight(scrollableHeight)
+
         val fromSetting = from.settings
         val toSetting = to.settings
 
@@ -709,6 +713,11 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
 
     override fun setSwipeable(swipeable: Boolean) {
         mList[mCurrent].mWebView.setSwipeable(swipeable)
+    }
+
+    override fun setScrollableHeight(listener: (() -> Int)?) {
+        scrollableHeight = listener
+        mList[mCurrent].mWebView.setScrollableHeight(listener)
     }
 
     companion object {

@@ -64,6 +64,7 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
     private var mOnScrollChangedListener: OnScrollChangedListener? = null
     private var mScrollBarListener: OnScrollChangedListener? = null
     private var mDownloadListener: DownloadListener? = null
+    private var scrollableHeight: (() -> Int)? = null
     private val mDownloadListenerWrapper = DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
         synchronized(this@LimitCacheWebView) {
             if (mCurrent >= 1) {
@@ -741,6 +742,9 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
         to.setLayerType(webLayerType, webLayerPaint)
         to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies)
 
+        from.setScrollableHeight(null)
+        to.setScrollableHeight(scrollableHeight)
+
         val fromSetting = from.settings
         val toSetting = to.settings
 
@@ -844,6 +848,11 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
 
     override fun setSwipeable(swipeable: Boolean) {
         currentTab.mWebView.setSwipeable(swipeable)
+    }
+
+    override fun setScrollableHeight(listener: (() -> Int)?) {
+        scrollableHeight = listener
+        currentTab.mWebView.setScrollableHeight(listener)
     }
 
     override fun onCacheOverflow(tabData: TabData) {

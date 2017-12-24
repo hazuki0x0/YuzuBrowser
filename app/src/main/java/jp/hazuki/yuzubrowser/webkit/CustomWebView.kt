@@ -206,4 +206,6 @@ interface CustomWebView {
     fun setVerticalScrollBarEnabled(enabled: Boolean)
 
     fun setSwipeable(swipeable: Boolean)
+
+    fun setScrollableHeight(listener: (() -> Int)?)
 }
