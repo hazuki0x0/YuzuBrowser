@@ -36,6 +36,7 @@ import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.adblock.AdBlockActivity
 import jp.hazuki.yuzubrowser.adblock.AdBlockController
+import jp.hazuki.yuzubrowser.adblock.mining.MiningProtector
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.debug.DebugActivity
 import jp.hazuki.yuzubrowser.download.DownloadDialog
@@ -85,6 +86,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
     private var browserHistoryManager: BrowserHistoryAsyncManager? = null
     private var resourceCheckerList: ArrayList<ResourceChecker>? = null
     private var adBlockController: AdBlockController? = null
+    private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
 
@@ -165,6 +167,13 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             AdBlockController(activity.applicationContext)
         } else {
             null
+        }
+        if (AppData.mining_protect.get()) {
+            if (miningProtector == null) {
+                miningProtector = MiningProtector()
+            }
+        } else {
+            miningProtector = null
         }
 
         controller.tabManager.loadedData.forEach {
@@ -456,14 +465,20 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 }
             }
 
-            adBlockController?.run {
-                val tabIndexData = controller.tabManager.getIndexData(web.identityId)
-                var uri: Uri? = null
-                if (tabIndexData != null && tabIndexData.originalUrl != null)
-                    uri = Uri.parse(tabIndexData.originalUrl)
+            val tabIndexData = controller.tabManager.getIndexData(web.identityId)
+            var uri: Uri? = null
+            if (tabIndexData != null && tabIndexData.originalUrl != null)
+                uri = Uri.parse(tabIndexData.originalUrl)
 
+            adBlockController?.run {
                 if (isBlock(uri, request.url)) {
                     return createDummy(request.url)
+                }
+            }
+
+            miningProtector?.run {
+                if (isBlock(uri, request.url)) {
+                    return dummy
                 }
             }
 

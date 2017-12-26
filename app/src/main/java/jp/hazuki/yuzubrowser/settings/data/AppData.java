@@ -211,6 +211,7 @@ public class AppData {
     public static final BooleanContainer slow_rendering = new BooleanContainer("slow_rendering", false);
     public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
     public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);
+    public static final BooleanContainer mining_protect = new BooleanContainer("mining_protect", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

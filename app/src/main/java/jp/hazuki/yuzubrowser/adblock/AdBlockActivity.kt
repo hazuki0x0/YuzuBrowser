@@ -93,6 +93,8 @@ class AdBlockActivity : ThemeActivity(), AdBlockMainFragment.OnAdBlockMainListen
         else -> throw IllegalArgumentException()
     }
 
+    override fun lightThemeResource() = R.style.CustomThemeLight_Pref
+
     companion object {
         const val ACTION_OPEN_BLACK = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.black"
         const val ACTION_OPEN_WHITE = "jp.hazuki.yuzubrowser.adblock.AdBlockActivity.action.open.white"

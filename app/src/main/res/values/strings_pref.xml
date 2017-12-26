@@ -828,4 +828,6 @@
         <item>1</item>
     </integer-array>
     <string name="pref_privacy_policy">Privacy Policy</string>
+    <string name="mining_protect">No Coin</string>
+    <string name="mining_protect_summary">Cryptocurrency mining protection</string>
 </resources>

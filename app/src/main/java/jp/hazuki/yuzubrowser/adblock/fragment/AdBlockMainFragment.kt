@@ -18,52 +18,31 @@ package jp.hazuki.yuzubrowser.adblock.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.settings.data.AppData
-import kotlinx.android.synthetic.main.fragment_ad_blcok_main.*
+import jp.hazuki.yuzubrowser.settings.activity.YuzuPreferenceFragment
 
-class AdBlockMainFragment : Fragment() {
+class AdBlockMainFragment : YuzuPreferenceFragment() {
 
     private var listener: OnAdBlockMainListener? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_ad_blcok_main, container, false)
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        activity.setTitle(R.string.pref_ad_block)
+    override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setHasOptionsMenu(true)
-        val enable = AppData.ad_block.get()
+        addPreferencesFromResource(R.xml.pref_ad_block)
 
-        adBlockSwitch.run {
-            isChecked = enable
-            setOnCheckedChangeListener { _, isChecked ->
-                blackListButton.isEnabled = isChecked
-                whiteListButton.isEnabled = isChecked
-                whitePageListButton.isEnabled = isChecked
-                AppData.ad_block.set(isChecked)
-                AppData.commit(activity, AppData.ad_block)
-            }
+        findPreference("black_list").setOnPreferenceClickListener {
+            listener!!.openBlackList()
+            false
         }
 
-        blackListButton.run {
-            isEnabled = enable
-            setOnClickListener { listener!!.openBlackList() }
+        findPreference("white_list").setOnPreferenceClickListener {
+            listener!!.openWhiteList()
+            false
         }
 
-        whiteListButton.run {
-            isEnabled = enable
-            setOnClickListener { listener!!.openWhiteList() }
-        }
-
-        whitePageListButton.run {
-            isEnabled = enable
-            setOnClickListener { listener!!.openWhitePageList() }
+        findPreference("white_page_list").setOnPreferenceClickListener {
+            listener!!.openWhitePageList()
+            false
         }
     }
 

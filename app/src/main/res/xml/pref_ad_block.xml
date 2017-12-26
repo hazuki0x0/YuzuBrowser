@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/pref_ad_block">
+
+    <SwitchPreference
+        android:key="ad_block"
+        android:title="@string/pref_ad_block_enable"/>
+
+    <Preference
+        android:key="black_list"
+        android:dependency="ad_block"
+        android:title="@string/pref_ad_block_black"/>
+
+    <Preference
+        android:key="white_list"
+        android:dependency="ad_block"
+        android:title="@string/pref_ad_block_white"/>
+
+    <Preference
+        android:key="white_page_list"
+        android:dependency="ad_block"
+        android:title="@string/pref_ad_block_white_page"/>
+
+    <SwitchPreference
+        android:key="mining_protect"
+        android:title="@string/mining_protect"
+        android:summary="@string/mining_protect_summary"/>
+
+</PreferenceScreen>

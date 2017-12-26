@@ -326,6 +326,7 @@
         </activity>
         <activity
             android:name=".adblock.AdBlockActivity"
+            android:theme="@style/CustomThemeBlack.Pref"
             android:label="@string/pref_ad_block" />
         <activity
             android:name=".reader.ReaderActivity"
