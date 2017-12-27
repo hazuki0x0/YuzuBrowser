@@ -91,6 +91,8 @@ class CloseAutoSelectActivity : ThemeActivity() {
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
+            val arguments = arguments ?: throw IllegalArgumentException()
+
             defaultAction = arguments.getParcelable(DEFAULT) ?: Action()
             intentAction = arguments.getParcelable(INTENT) ?: Action()
             windowAction = arguments.getParcelable(WINDOW) ?: Action()
@@ -103,7 +105,7 @@ class CloseAutoSelectActivity : ThemeActivity() {
         }
 
         override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-            val builder = ActionActivity.Builder(activity)
+            val builder = ActionActivity.Builder(activity ?: return)
             when (position) {
                 0 -> startActivityForResult(builder.setDefaultAction(defaultAction)
                         .setTitle(R.string.pref_close_default)

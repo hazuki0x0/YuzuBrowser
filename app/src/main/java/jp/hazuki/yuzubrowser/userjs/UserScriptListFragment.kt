@@ -58,6 +58,8 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+
         mDb = UserScriptDatabase.getInstance(activity.applicationContext)
 
         recyclerView.run {
@@ -98,6 +100,8 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
+        val activity = activity ?: return false
+
         PopupMenu(activity, v).apply {
             menu.run {
                 add(R.string.userjs_info).setOnMenuItemClickListener {
@@ -216,7 +220,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val view = View.inflate(activity, R.layout.userjs_info_dialog, null)
 
-            arguments.let {
+            arguments?.let {
                 view.findViewById<TextView>(R.id.nameTextView).text = it.getString(NAME)
                 view.findViewById<TextView>(R.id.versionTextView).text = it.getString(VERSION)
                 view.findViewById<TextView>(R.id.authorTextView).text = it.getString(AUTHOR)

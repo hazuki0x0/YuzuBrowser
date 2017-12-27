@@ -37,6 +37,8 @@ class PrivacyFragment : YuzuPreferenceFragment() {
         addPreferencesFromResource(R.xml.pref_privacy)
 
         findPreference("web_geolocation").setOnPreferenceClickListener {
+            val activity = activity ?: return@setOnPreferenceClickListener false
+
             if (activity.checkLocationPermission()) {
                 return@setOnPreferenceClickListener true
             } else {

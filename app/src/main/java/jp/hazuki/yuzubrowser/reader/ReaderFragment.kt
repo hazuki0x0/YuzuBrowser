@@ -46,6 +46,9 @@ class ReaderFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         titleTextView = view.findViewById(R.id.titleTextView)
         bodyTextView = view.findViewById(R.id.bodyTextView)
 
@@ -111,6 +114,8 @@ class ReaderFragment : Fragment() {
     }
 
     private fun setImages(spanned: Spanned) {
+        val activity = activity ?: return
+
         val imageSpans = spanned.getSpans(0, spanned.length, ImageSpan::class.java)
 
         var width = bodyTextView.width

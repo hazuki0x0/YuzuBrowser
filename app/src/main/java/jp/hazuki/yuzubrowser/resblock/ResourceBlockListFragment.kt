@@ -35,8 +35,11 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
     private lateinit var manager: ResourceBlockManager
     private lateinit var adapter: ResBlockAdapter
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val activity = activity ?: return
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         setHasOptionsMenu(true)
         manager = ResourceBlockManager(activity.applicationContext)
         adapter = ResBlockAdapter(activity, manager.list, this)
@@ -87,6 +90,8 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
     }
 
     override fun onDelete(position: Int) {
+        val activity = activity ?: return
+
         if (position >= 0 && position < manager.list.size) {
             manager.remove(position)
             manager.save(activity.applicationContext)

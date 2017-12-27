@@ -41,9 +41,11 @@ class WebPermissionFragment : Fragment(), OnRecyclerListener, WebPermissionsEdit
         return inflater.inflate(R.layout.recycler_view, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+
         adapter = WebPermissionAdapter(activity,
-                WebPermissionsDatabase.getInstance(context.applicationContext).getList().toMutableList(),
+                WebPermissionsDatabase.getInstance(activity.applicationContext).getList().toMutableList(),
                 this)
 
         recyclerView.run {
@@ -60,10 +62,12 @@ class WebPermissionFragment : Fragment(), OnRecyclerListener, WebPermissionsEdit
     }
 
     override fun onPermissionEdited(position: Int, host: String, permissions: WebPermissions) {
+        val activity = activity ?: return
+
         adapter[position] = Pair(host, permissions)
         adapter.notifyItemChanged(position)
 
-        WebPermissionsDatabase.getInstance(context.applicationContext).update(host, permissions)
+        WebPermissionsDatabase.getInstance(activity.applicationContext).update(host, permissions)
         WebRtcPermission.clearCache()
     }
 

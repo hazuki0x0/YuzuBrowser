@@ -46,19 +46,21 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
         return inflater.inflate(R.layout.recycler_view, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        if (view != null) {
-            val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
 
-            recyclerView.layoutManager = LinearLayoutManager(activity)
-            recyclerView.addItemDecoration(DividerItemDecoration(activity))
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-            adapter = ReaderAdapter(activity, getList(), this)
-            recyclerView.adapter = adapter
-        }
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.addItemDecoration(DividerItemDecoration(activity))
+
+        adapter = ReaderAdapter(activity, getList(), this)
+        recyclerView.adapter = adapter
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
+        val activity = activity ?: return
+
         startActivity(Intent(activity, BrowserActivity::class.java).apply {
             action = Constants.intent.ACTION_OPEN_DEFAULT
             data = ReadItLaterProvider.getReadUri(adapter[position].time)
@@ -67,6 +69,8 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
+        val activity = activity ?: return false
+
         activity.startActionMode(this)
         adapter.isMultiSelectMode = true
         adapter.setSelect(position, true)
@@ -74,6 +78,8 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
     }
 
     override fun onActionItemClicked(p0: ActionMode, menu: MenuItem): Boolean {
+        val activity = activity ?: return false
+
         return when (menu.itemId) {
             R.id.delete -> {
                 val items = adapter.selectedItems
@@ -102,6 +108,8 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
     }
 
     private fun getList(): MutableList<ReadItem> {
+        val activity = activity ?: throw IllegalStateException()
+
         val cursor = activity.contentResolver.query(ReadItLaterProvider.EDIT_URI, null, null, null, null)
         val list = ArrayList<ReadItem>()
         while (cursor.moveToNext()) {

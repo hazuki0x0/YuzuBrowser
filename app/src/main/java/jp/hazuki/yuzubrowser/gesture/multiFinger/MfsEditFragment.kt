@@ -51,7 +51,11 @@ class MfsEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_multi_finger_edit, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+        val fragmentManager = fragmentManager ?: return
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         item = arguments.getParcelable(ARG_ITEM) ?: MultiFingerGestureItem()
         nameArray = ActionNameArray(activity)
 

@@ -122,6 +122,8 @@ private suspend fun AppCompatActivity.handleResult(asyncPermissions: AsyncPermis
 
 class PermissionDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activity = activity ?: throw IllegalStateException()
+
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.permission_probrem)
                 .setMessage(R.string.confirm_permission_storage_app)

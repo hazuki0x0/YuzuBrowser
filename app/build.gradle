@@ -99,7 +99,7 @@ dependencies {
     implementation "com.takisoft.fix:preference-v7:${android_support_fix_lib_version}"
     testImplementation 'junit:junit:4.12'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
     implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
     implementation 'org.jsoup:jsoup:1.11.2'
     implementation project(':libraries:floatingactionbutton')

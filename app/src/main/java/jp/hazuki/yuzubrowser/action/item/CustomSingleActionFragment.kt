@@ -52,7 +52,8 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
         return inflater.inflate(R.layout.action_custom, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
         recyclerView.run {
             layoutManager = LinearLayoutManager(activity)
             addItemDecoration(DividerItemDecoration(activity))
@@ -62,6 +63,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
             addItemDecoration(helper)
         }
 
+        val arguments = arguments ?: return
         val actions = arguments.getParcelable(ARG_ACTION) ?: Action()
         val name = arguments.getString(ARG_NAME) ?: ""
         actionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA) ?: ActionNameArray(activity)
@@ -101,7 +103,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
     override fun onRecyclerItemClicked(v: View, position: Int) {
         val bundle = Bundle()
         bundle.putInt(ARG_POSITION, position)
-        val intent = ActionActivity.Builder(activity)
+        val intent = ActionActivity.Builder(activity ?: return)
                 .setTitle(R.string.edit_action)
                 .setDefaultAction(Action(adapter[position]))
                 .setActionNameArray(actionNameArray)

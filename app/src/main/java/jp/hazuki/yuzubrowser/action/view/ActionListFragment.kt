@@ -42,10 +42,12 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     private lateinit var adapter: ActionListAdapter
     private lateinit var mActionNameArray: ActionNameArray
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setHasOptionsMenu(true)
+
+        val arguments = arguments ?: return
+
         mActionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA)
 
         val actions = arguments.getParcelable<ActionList>(EXTRA_ACTION_LIST)
@@ -55,7 +57,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     override fun onRecyclerItemClicked(v: View, position: Int) {
         val bundle = Bundle()
         bundle.putInt(EXTRA_POSITION, position)
-        val intent = ActionActivity.Builder(activity)
+        val intent = ActionActivity.Builder(activity ?: return)
                 .setDefaultAction(mList[position])
                 .setActionNameArray(mActionNameArray)
                 .setTitle(R.string.edit_action)
@@ -77,7 +79,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     }
 
     override fun onAddButtonClick() {
-        val intent = ActionActivity.Builder(activity)
+        val intent = ActionActivity.Builder(activity ?: return)
                 .setTitle(R.string.edit_action)
                 .setActionNameArray(mActionNameArray)
                 .create()
@@ -91,6 +93,8 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     }
 
     private fun setActionList(list: ActionList?) {
+        val activity = activity ?: return
+
         mList = list ?: ActionList()
 
         adapter = ActionListAdapter(activity, mList, mActionNameArray, this)
@@ -98,8 +102,10 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     }
 
     private fun onActionListChanged() {
+        val activity = activity ?: return
+
         if (activity is ActionListActivity) {
-            (activity as ActionListActivity).onActionListChanged(mList)
+            activity.onActionListChanged(mList)
         }
         val data = Intent()
         data.putExtra(EXTRA_ACTION_LIST, mList as Parcelable?)
@@ -126,7 +132,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     }
 
     private fun startEasyAdd() {
-        val intent = ActionActivity.Builder(activity)
+        val intent = ActionActivity.Builder(activity ?: return)
                 .setTitle(R.string.action_easy_add)
                 .setActionNameArray(mActionNameArray)
                 .create()

@@ -45,8 +45,10 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
     private var mGestureId: Int = 0
     private lateinit var adapter: GestureListAdapter
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val activity = activity ?: return
+        val arguments = arguments ?: throw IllegalArgumentException()
 
         val mActionNameArray = arguments.getParcelable<ActionNameArray>(ActionNameArray.INTENT_EXTRA)
         mGestureId = arguments.getInt(GestureManager.INTENT_EXTRA_GESTURE_ID)
@@ -59,7 +61,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
     override fun onRecyclerItemClicked(v: View, position: Int) {
         val item = adapter[position]
         val bundle = Bundle().apply { putLong(ITEM_ID, item.id) }
-        val intent = ActionActivity.Builder(activity)
+        val intent = ActionActivity.Builder(activity ?: return)
                 .setDefaultAction(item.action)
                 .setTitle(R.string.action_settings)
                 .setReturnData(bundle)
@@ -80,6 +82,8 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
     }
 
     override fun onAddButtonClick() {
+        val activity = activity ?: return
+
         val intent = Intent(activity, AddGestureActivity::class.java)
         intent.putExtra(GestureManager.INTENT_EXTRA_GESTURE_ID, mGestureId)
         intent.putExtra(Intent.EXTRA_TITLE, activity.title)

@@ -29,7 +29,9 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_edit_speeddial, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         speedDial = arguments.getSerializable(DATA) as? SpeedDial ?: SpeedDial()
 
 

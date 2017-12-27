@@ -28,6 +28,7 @@ class AdBlockItemDeleteDialog : DialogFragment() {
     private var listener: OnBlockItemDeleteListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val arguments = arguments ?: throw IllegalArgumentException()
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.pref_delete)
         builder.setMessage(getString(R.string.pref_ad_block_delete_confirm, arguments.getString(ARG_ITEM)))
