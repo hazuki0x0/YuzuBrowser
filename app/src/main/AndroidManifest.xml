@@ -36,6 +36,9 @@
     <uses-feature
         android:name="android.hardware.camera.autofocus"
         android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false"/>
 
     <permission
         android:name="jp.hazuki.yuzubrowser.permission.myapp.signature"
