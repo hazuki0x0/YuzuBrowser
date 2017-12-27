@@ -124,7 +124,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
             RESULT_REQUEST_PREFERENCE -> {
                 val action = ActionActivity.getActionFromIntent(resultCode, data) ?: return
                 adapter.addAll(action)
-                adapter.notifyItemInserted(adapter.itemCount - 1)
+                adapter.notifyDataSetChanged()
             }
             RESULT_REQUEST_EDIT -> {
                 if (resultCode != Activity.RESULT_OK || data == null) {
