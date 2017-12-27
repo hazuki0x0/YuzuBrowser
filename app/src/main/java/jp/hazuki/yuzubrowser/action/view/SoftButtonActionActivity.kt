@@ -71,6 +71,9 @@ class SoftButtonActionActivity : ThemeActivity() {
         }
 
         override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+            val activity = activity ?: return
+            val arguments = arguments ?: throw IllegalArgumentException()
+
             var actionId = arguments.getInt(ActionManager.INTENT_EXTRA_ACTION_ID)
             actionId = when (position) {
                 0 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_PRESS

@@ -28,6 +28,9 @@ import jp.hazuki.yuzubrowser.R
 open class ProgressDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activity = activity ?: throw IllegalStateException()
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         val view = View.inflate(activity, R.layout.dialog_progress, null)
 
         view.findViewById<TextView>(R.id.progress_message).text = arguments.getString(ARG_MESSAGE)

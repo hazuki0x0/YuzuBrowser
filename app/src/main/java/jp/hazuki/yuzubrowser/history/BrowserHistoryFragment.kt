@@ -61,6 +61,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val arguments = arguments ?: throw IllegalArgumentException()
+
         pickMode = arguments.getBoolean(PICK_MODE)
 
         val layoutManager = LinearLayoutManager(activity)

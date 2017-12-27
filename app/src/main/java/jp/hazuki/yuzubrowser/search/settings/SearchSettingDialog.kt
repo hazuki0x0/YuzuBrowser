@@ -52,6 +52,8 @@ class SearchSettingDialog : DialogFragment(), ColorPickerSwatch.OnColorSelectedL
     private lateinit var iconColorButton: FrameLayout
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         val searchUrl = arguments.getSerializable(ARG_URL) as SearchUrl?
         val view = View.inflate(activity, R.layout.search_url_edit, null)
         val titleEditText = view.findViewById<EditText>(R.id.titleEditText)

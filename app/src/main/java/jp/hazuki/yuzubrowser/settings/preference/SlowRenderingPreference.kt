@@ -53,6 +53,7 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
         }
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val arguments = arguments ?: throw IllegalArgumentException()
             val fragment = targetFragment as? DialogPreference.TargetFragment
                     ?: throw IllegalStateException("Target fragment must implement TargetFragment" + " interface")
 

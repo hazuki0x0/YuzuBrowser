@@ -119,6 +119,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         private lateinit var viewUaEditText: EditText
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val arguments = arguments ?: throw IllegalArgumentException()
+
             val checker = arguments.getSerializable(CHECKER) as? PatternUrlChecker
             val view = View.inflate(activity, R.layout.pattern_add_websetting, null) as ViewGroup
             if (activity is PatternUrlActivity) {
@@ -305,6 +307,9 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         private var intent: Intent? = null
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val activity = activity ?: throw IllegalStateException()
+            val arguments = arguments ?: throw IllegalArgumentException()
+
             var url = arguments.getString(URL)
             val checker = arguments.getSerializable(CHECKER) as? PatternUrlChecker
 

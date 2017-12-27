@@ -41,7 +41,7 @@ class AboutFragment : YuzuPreferenceFragment() {
         addPreferencesFromResource(R.xml.pref_about)
         val version = findPreference("version")
         version.setOnPreferenceClickListener {
-            activity.setClipboardWithToast(AppUtils.getVersionDeviceInfo(activity))
+            activity?.setClipboardWithToast(AppUtils.getVersionDeviceInfo(activity))
             true
         }
 
@@ -104,6 +104,7 @@ class AboutFragment : YuzuPreferenceFragment() {
             builder.setTitle(R.string.pref_delete_all_logs)
                     .setMessage(R.string.pref_delete_log_mes)
                     .setPositiveButton(android.R.string.yes) { _, _ ->
+                        val activity = activity ?: return@setPositiveButton
                         val file = File(activity.getExternalFilesDir(null), "./error_log/")
                         if (!file.exists()) {
                             Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()

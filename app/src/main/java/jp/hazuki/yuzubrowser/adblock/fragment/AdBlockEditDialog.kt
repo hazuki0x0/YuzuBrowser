@@ -37,7 +37,7 @@ class AdBlockEditDialog : DialogFragment() {
         val params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)
-        val density = activity.density
+        val density = activity!!.density
         val marginWidth = (4 * density + 0.5f).toInt()
         val marginHeight = (16 * density + 0.5f).toInt()
         params.setMargins(marginWidth, marginHeight, marginWidth, marginHeight)
@@ -47,6 +47,7 @@ class AdBlockEditDialog : DialogFragment() {
             inputType = InputType.TYPE_CLASS_TEXT
         }
 
+        val arguments = arguments ?: throw NullPointerException()
         val text = arguments.getString(ARG_TEXT)
         if (!text.isNullOrEmpty())
             editText.setText(text)

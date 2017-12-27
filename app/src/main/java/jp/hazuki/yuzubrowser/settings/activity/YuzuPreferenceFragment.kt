@@ -49,17 +49,21 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompatDividers() {
         return try {
             super.onCreateView(inflater, container, savedInstanceState)
         } finally {
-            setDividerPreferences(PreferenceFragmentCompatDividers.DIVIDER_PADDING_CHILD or PreferenceFragmentCompatDividers.DIVIDER_CATEGORY_BETWEEN or PreferenceFragmentCompatDividers.DIVIDER_NO_BEFORE_FIRST)
-            preferenceManager.sharedPreferencesName = AppData.PREFERENCE_NAME
-            val a = activity.theme.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
-            val divider = a.getDrawable(0)
-            a.recycle()
-            setDivider(divider)
+            activity?.let {
+                setDividerPreferences(DIVIDER_PADDING_CHILD or DIVIDER_CATEGORY_BETWEEN or DIVIDER_CATEGORY_AFTER_LAST or DIVIDER_PREFERENCE_BETWEEN)
+                preferenceManager.sharedPreferencesName = AppData.PREFERENCE_NAME
+                val a = it.theme.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
+                val divider = a.getDrawable(0)
+                a.recycle()
+                setDivider(divider)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        val activity = activity ?: return
+
         preferenceScreen?.run {
             val key: String? = arguments?.getString(ARG_PREFERENCE_ROOT)
             val title = if (!TextUtils.isEmpty(key)) findPreference(key).title else title
@@ -78,7 +82,9 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompatDividers() {
     }
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
-        if (this.fragmentManager.findFragmentByTag(FRAGMENT_DIALOG_TAG) == null) {
+        val fragmentManager = fragmentManager ?: return
+
+        if (fragmentManager.findFragmentByTag(FRAGMENT_DIALOG_TAG) == null) {
             val dialog: DialogFragment
 
             when (preference) {

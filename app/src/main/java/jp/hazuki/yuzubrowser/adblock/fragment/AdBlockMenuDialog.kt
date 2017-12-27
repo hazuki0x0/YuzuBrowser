@@ -28,6 +28,7 @@ class AdBlockMenuDialog : DialogFragment() {
     private var listener: OnAdBlockMenuListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val arguments = arguments ?: throw IllegalArgumentException()
         val builder = AlertDialog.Builder(activity)
         builder.setItems(R.array.pref_ad_block_menu) { _, which ->
             val index = arguments.getInt(ARG_INDEX)

@@ -45,8 +45,10 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
     private lateinit var actionManager: SoftButtonActionArrayManagerBase
     private lateinit var adapter: ActionListAdapter
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val activity = activity ?: return
+
         setHasOptionsMenu(true)
         initData()
         val mActionNameArray = ActionNameArray(activity)
@@ -87,6 +89,8 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
     }
 
     private fun onListItemClick(position: Int) {
+        val activity = activity ?: return
+
         val intent = SoftButtonActionActivity.Builder(activity)
                 .setActionManager(mActionType, actionManager.makeActionIdFromPosition(mActionId, position))
                 .setTitle(activity.title.toString() + " - " + (position + 1).toString())
@@ -148,6 +152,8 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
     }
 
     private fun initData() {
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         mActionType = arguments.getInt(ACTION_TYPE)
         mActionId = arguments.getInt(ACTION_ID)
 

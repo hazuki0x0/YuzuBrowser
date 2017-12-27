@@ -43,16 +43,18 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
     private var edited = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+
         rootView = view
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addItemDecoration(DividerItemDecoration(context))
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.addItemDecoration(DividerItemDecoration(activity))
 
         val touchHelper = ItemTouchHelper(Touch())
         touchHelper.attachToRecyclerView(recyclerView)
         recyclerView.addItemDecoration(touchHelper)
 
-        manager = SearchUrlManager(context)
+        manager = SearchUrlManager(activity)
         adapter = UrlAdapter(activity, manager, this, this)
 
         recyclerView.adapter = adapter

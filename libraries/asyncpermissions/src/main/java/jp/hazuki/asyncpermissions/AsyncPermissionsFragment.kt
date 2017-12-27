@@ -58,6 +58,7 @@ class AsyncPermissionsFragment : Fragment() {
             vararg permissions: String,
             cont: CancellableContinuation<PermissionResult>
     ) {
+        val context = context ?: return
         if (checkSelfPermissions(context, permissions)) {
             PermissionResult.Granted(permissions.toList()).let(cont::resume)
             return

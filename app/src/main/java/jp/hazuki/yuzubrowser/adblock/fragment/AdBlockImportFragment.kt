@@ -40,8 +40,10 @@ class AdBlockImportFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_ad_block_import, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        val uri = arguments.getParcelable<Uri>(ARG_URI) ?: throw IllegalArgumentException()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+        val fragmentManager = fragmentManager ?: return
+        val uri = arguments?.getParcelable<Uri>(ARG_URI) ?: throw IllegalArgumentException()
 
         try {
             activity.contentResolver.openInputStream(uri)?.use { editText.setText(IOUtils.readString(it)) }

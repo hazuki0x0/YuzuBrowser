@@ -34,6 +34,9 @@ class AddAdBlockDialog : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activity = activity ?: throw IllegalStateException()
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         val params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)

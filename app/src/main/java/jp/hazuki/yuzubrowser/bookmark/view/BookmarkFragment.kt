@@ -61,6 +61,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
 
     private val root: BookmarkFolder
         get() {
+            val arguments = arguments ?: throw IllegalArgumentException()
+
             var id = arguments.getLong(ITEM_ID)
             if (AppData.save_bookmark_folder.get() || id > 0) {
                 if (id < 1) {
@@ -79,7 +81,10 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         return inflater.inflate(R.layout.fragment_recycler_with_scroller, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
         val helper = ItemTouchHelper(Touch())
         helper.attachToRecyclerView(recyclerView)
@@ -117,7 +122,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 } else {
                     sendUrl(item.url, AppData.newtab_bookmark.get())
                 }
-                activity.finish()
+                activity?.finish()
             }
             is BookmarkFolder -> setList(item)
             else -> throw IllegalStateException("Unknown BookmarkItem type")
@@ -141,6 +146,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     }
 
     private fun sendUrl(url: String?, target: Int) {
+        val activity = activity ?: return
+
         if (url != null) {
             activity.setResult(RESULT_OK, Intent().apply {
                 putExtra(BrowserManager.EXTRA_OPENABLE, OpenUrl(url, target))
@@ -150,6 +157,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     }
 
     private fun sendUrl(list: Collection<BookmarkItem>?, target: Int) {
+        val activity = activity ?: return
+
         if (list != null) {
             val urlList = list.filterIsInstance<BookmarkSite>().map { it.url }
 
@@ -185,6 +194,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val activity = activity ?: return false
+
         when (item.itemId) {
             R.id.addFolder -> {
                 AddBookmarkFolderDialog(activity, mManager, getString(R.string.new_folder_name), mCurrentFolder)
@@ -212,6 +223,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     private fun getSelectedBookmark(items: List<Int>): List<BookmarkItem> = items.map { mCurrentFolder.get(it) }
 
     private fun showContextMenu(v: View, index: Int) {
+        val activity = activity ?: return
+
         val menu = PopupMenu(activity, v, locationDetector.gravity)
         val inflater = menu.menuInflater
         val bookmarkItem: BookmarkItem?
@@ -258,6 +271,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     }
 
     private fun pickBookmark(site: BookmarkSite) {
+        val activity = activity ?: return
+
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_TITLE, site.title)
         intent.putExtra(Intent.EXTRA_TEXT, site.url)
@@ -271,6 +286,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     }
 
     private fun onContextMenuClick(id: Int, item: BookmarkItem?, index: Int) {
+        val activity = activity ?: return
+
         when (id) {
             R.id.open -> sendUrl((item as BookmarkSite).url, BrowserManager.LOAD_URL_TAB_CURRENT)
             R.id.openNew -> sendUrl((item as BookmarkSite).url, BrowserManager.LOAD_URL_TAB_NEW)

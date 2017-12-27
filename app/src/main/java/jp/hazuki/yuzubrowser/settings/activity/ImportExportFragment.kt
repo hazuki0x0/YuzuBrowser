@@ -57,6 +57,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_import_export)
+        val activity = activity ?: return
 
         findPreference("import_sd_bookmark").setOnPreferenceClickListener {
             val manager = BookmarkManager.getInstance(activity)
@@ -279,6 +280,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
     override fun onResume() {
         super.onResume()
+        val activity = activity ?: return
+
         if (!activity.checkStoragePermission()) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 PermissionDialog().show(childFragmentManager, "permission")
@@ -348,6 +351,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
     class PermissionDialog : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val activity = activity ?: throw IllegalStateException()
+
             val builder = AlertDialog.Builder(activity)
             builder.setTitle(R.string.permission_probrem)
                     .setMessage(R.string.confirm_permission_storage)

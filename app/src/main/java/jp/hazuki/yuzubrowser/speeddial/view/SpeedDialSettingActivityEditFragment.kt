@@ -47,7 +47,9 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        speedDial = arguments?.getSerializable(DATA) as? SpeedDial ?: SpeedDial()
+        val arguments = arguments ?: throw IllegalArgumentException()
+
+        speedDial = arguments.getSerializable(DATA) as? SpeedDial ?: SpeedDial()
 
 
         superFrameLayout.setOnImeShownListener { visible -> bottomBar.visibility = if (visible) View.GONE else View.VISIBLE }

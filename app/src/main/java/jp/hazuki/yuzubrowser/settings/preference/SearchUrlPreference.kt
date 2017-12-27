@@ -57,6 +57,8 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
         }
 
         override fun onCreateDialogView(context: Context?): View {
+            val activity = activity ?: throw IllegalStateException()
+
             manager = SearchUrlManager(context!!)
             val view = View.inflate(context, R.layout.recycler_view, null)
             val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)

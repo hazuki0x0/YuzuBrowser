@@ -53,7 +53,9 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         return inflater.inflate(R.layout.fragment_ad_block_list, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+        val arguments = arguments ?: return
         type = arguments.getInt(ARG_TYPE)
         listener!!.setFragmentTitle(type)
         provider = AdBlockManager.getProvider(BrowserApplication.getInstance(), type)
@@ -149,12 +151,14 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                 val handler = Handler()
                 Thread(Runnable {
                     try {
-                        context.contentResolver.openOutputStream(data.data!!)!!.use { os ->
-                            PrintWriter(os).use { pw ->
-                                val adBlockList = provider.enableItems
-                                for ((_, match) in adBlockList)
-                                    pw.println(match)
-                                handler.post { Toast.makeText(context, R.string.pref_exported, Toast.LENGTH_SHORT).show() }
+                        context?.run {
+                            contentResolver.openOutputStream(data.data!!)!!.use { os ->
+                                PrintWriter(os).use { pw ->
+                                    val adBlockList = provider.enableItems
+                                    for ((_, match) in adBlockList)
+                                        pw.println(match)
+                                    handler.post { Toast.makeText(context, R.string.pref_exported, Toast.LENGTH_SHORT).show() }
+                                }
                             }
                         }
                     } catch (e: IOException) {
@@ -250,6 +254,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val activity = activity ?: return false
         when (item.itemId) {
             android.R.id.home -> {
                 activity.onBackPressed()

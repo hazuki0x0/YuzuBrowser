@@ -50,6 +50,7 @@ class ReaderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
         val arguments = arguments ?: throw IllegalArgumentException()
+
         titleTextView = view.findViewById(R.id.titleTextView)
         bodyTextView = view.findViewById(R.id.bodyTextView)
 

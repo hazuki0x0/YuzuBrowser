@@ -42,6 +42,8 @@ class AddBookmarkOptionDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activity = activity ?: throw IllegalStateException()
+        val arguments = arguments ?: throw IllegalArgumentException()
         return AlertDialog.Builder(activity).apply {
             setTitle(R.string.bookmark)
             setItems(R.array.add_bookmark_option) { _, i ->
@@ -52,7 +54,6 @@ class AddBookmarkOptionDialog : DialogFragment() {
                             removeAll(arguments.getString(ARG_URL))
                             save()
                         }
-                        val activity = activity
                         if (activity is BrowserController) {
                             activity.requestIconChange()
                         }

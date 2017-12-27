@@ -45,7 +45,9 @@ class MfsListFragment : Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDel
         return inflater.inflate(R.layout.recycler_with_fab, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+
         recyclerView.run {
             layoutManager = LinearLayoutManager(activity)
             val helper = ItemTouchHelper(ListTouch())

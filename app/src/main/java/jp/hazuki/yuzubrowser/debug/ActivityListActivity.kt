@@ -50,6 +50,7 @@ class ActivityListActivity : ThemeActivity() {
             super.onActivityCreated(savedInstanceState)
 
             try {
+                val activity = activity ?: return
                 val activities = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES).activities
                 listAdapter = object : ArrayAdapter<ActivityInfo>(activity, 0, activities) {
                     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

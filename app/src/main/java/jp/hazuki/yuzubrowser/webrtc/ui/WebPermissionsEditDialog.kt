@@ -33,6 +33,8 @@ class WebPermissionsEditDialog : DialogFragment() {
     private var listener: OnPermissionEditedListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val arguments = arguments ?: throw IllegalArgumentException()
+
         val view = View.inflate(activity, R.layout.dialog_edit_web_permissons, null)
         val camera: Spinner = view.findViewById(R.id.cameraSpinner)
         val mic: Spinner = view.findViewById(R.id.micSpinner)
