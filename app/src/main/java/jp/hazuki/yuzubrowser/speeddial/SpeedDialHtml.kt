@@ -94,15 +94,18 @@ class SpeedDialHtml(context: Context) {
 
     private fun createCache(context: Context): CharSequence {
         val time = System.currentTimeMillis()
-        val speedDialList = manager.all
+        val index = manager.indexData
         val builder = StringBuilder(8000)
         val start = getResourceString(context, R.raw.speeddial_start)
         builder.append(start)
-        for ((_, url, title, icon) in speedDialList) {
+
+        for ((id, url, title, updateTime) in index) {
             builder.append("<div class=\"box\"><a href=\"")
                     .append(url)
-                    .append("\"><img src=\"data:image/png;base64,")
-                    .append(icon!!.iconBase64)
+                    .append("\"><img src=\"yuzu:speeddial/img/")
+                    .append(id)
+                    .append("?")
+                    .append(updateTime)
                     .append("\" /><div class=\"name\">")
                     .append(HtmlUtils.sanitize(title))
                     .append("</div></a></div>")
@@ -145,6 +148,16 @@ class SpeedDialHtml(context: Context) {
 
         }
         return getNoCacheResponse("text/html", createCache(context))
+    }
+
+    fun getImage(path: String): WebResourceResponse? {
+        val index = path.indexOf('?')
+        if (index < 14) return null
+
+        val id = path.substring(14, index)
+        val image = manager.getImage(id) ?: return null
+
+        return WebResourceResponse("image/png", null, ByteArrayInputStream(image))
     }
 
     private fun getNoCacheResponse(mimeType: String, sequence: CharSequence): WebResourceResponse {

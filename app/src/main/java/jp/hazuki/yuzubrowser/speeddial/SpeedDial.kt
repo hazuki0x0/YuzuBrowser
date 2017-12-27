@@ -18,7 +18,7 @@ package jp.hazuki.yuzubrowser.speeddial
 
 import java.io.Serializable
 
-data class SpeedDial(var id: Int, var url: String?, var title: String?, var icon: WebIcon?, var isFavicon: Boolean) : Serializable {
+data class SpeedDial(var id: Int, var url: String?, var title: String?, var icon: WebIcon?, var isFavicon: Boolean, var updateTime: Long = 0) : Serializable {
     @JvmOverloads constructor(url: String? = "", title: String? = "", icon: WebIcon? = null, isFavicon: Boolean = false) : this(-1, url, title, icon, isFavicon)
 
 

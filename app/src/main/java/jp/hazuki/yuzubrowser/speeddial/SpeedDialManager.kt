@@ -40,7 +40,20 @@ class SpeedDialManager(val context: Context) {
                             c.getString(COLUMN_URL_INDEX),
                             c.getString(COLUMN_TITLE_INDEX),
                             WebIcon(c.getBlob(COLUMN_ICON_INDEX)),
-                            c.getInt(COLUMN_FAVICON_INDEX) == 1))
+                            c.getInt(COLUMN_FAVICON_INDEX) == 1,
+                            c.getLong(COLUMN_LAST_UPDATE_INDEX)))
+                }
+                return list
+            }
+        }
+
+    val indexData: List<SpeedDialIndex>
+        @Synchronized get() {
+            val db = mOpenHelper.readableDatabase
+            db.query(TABLE_NAME, arrayOf(COLUMN_ID, COLUMN_URL, COLUMN_TITLE, COLUMN_LAST_UPDATE), null, null, null, null, COLUMN_ORDER + " asc").use { c ->
+                val list = arrayListOf<SpeedDialIndex>()
+                while (c.moveToNext()) {
+                    list.add(SpeedDialIndex(c.getInt(0), c.getString(1), c.getString(2), c.getLong(3)))
                 }
                 return list
             }
@@ -89,7 +102,7 @@ class SpeedDialManager(val context: Context) {
             put(COLUMN_ORDER, nowId + 1)
             put(COLUMN_ICON, (speedDial.icon ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(context, R.drawable.ic_public_white_24dp))).iconBytes)
             put(COLUMN_FAVICON, speedDial.isFavicon)
-            put(COLUMN_LAST_UPDATE, 0)
+            put(COLUMN_LAST_UPDATE, System.currentTimeMillis())
         }
         val id = db.insert(TABLE_NAME, null, values)
         speedDial.id = id.toInt()
@@ -103,7 +116,7 @@ class SpeedDialManager(val context: Context) {
             put(COLUMN_TITLE, speedDial.title)
             put(COLUMN_ICON, speedDial.icon!!.iconBytes)
             put(COLUMN_FAVICON, speedDial.isFavicon)
-            put(COLUMN_LAST_UPDATE, 0)
+            put(COLUMN_LAST_UPDATE, System.currentTimeMillis())
         }
         db.update(TABLE_NAME, values, COLUMN_ID + " = ?", arrayOf(Integer.toString(speedDial.id)))
     }
@@ -115,7 +128,7 @@ class SpeedDialManager(val context: Context) {
         var updated = false
 
         db.query(TABLE_NAME, null, COLUMN_FAVICON + " = 1 AND " + COLUMN_URL + " = ? AND " +
-                COLUMN_LAST_UPDATE + " <= ?", arrayOf(url, java.lang.Long.toString(time)), null, null, null).use { c ->
+                COLUMN_LAST_UPDATE + " <= ?", arrayOf(url, time.toString()), null, null, null).use { c ->
             if (c.moveToFirst()) {
                 val hash = Gochiusearch.getVectorHash(icon)
                 do {
@@ -139,16 +152,28 @@ class SpeedDialManager(val context: Context) {
     @Synchronized
     operator fun get(id: Int): SpeedDial? {
         val db = mOpenHelper.readableDatabase
-        db.query(TABLE_NAME, null, COLUMN_ID + " = ?", arrayOf(java.lang.Long.toString(id.toLong())), null, null, null).use { c ->
+        db.query(TABLE_NAME, null, COLUMN_ID + " = ?", arrayOf(id.toString()), null, null, null).use { c ->
             if (c.moveToFirst()) {
                 return SpeedDial(c.getInt(COLUMN_ID_INDEX),
                         c.getString(COLUMN_URL_INDEX),
                         c.getString(COLUMN_TITLE_INDEX),
                         WebIcon(c.getBlob(COLUMN_ICON_INDEX)),
-                        c.getInt(COLUMN_FAVICON_INDEX) == 1)
+                        c.getInt(COLUMN_FAVICON_INDEX) == 1,
+                        c.getLong(COLUMN_LAST_UPDATE_INDEX))
             }
             return null
         }
+    }
+
+    @Synchronized
+    fun getImage(id: String): ByteArray? {
+        val db = mOpenHelper.readableDatabase
+        db.query(TABLE_NAME, arrayOf(COLUMN_ICON), COLUMN_ID + " = " + id, null, null, null, null).use { c ->
+            if (c.moveToFirst()) {
+                return c.getBlob(0)
+            }
+        }
+        return null
     }
 
     @Synchronized
@@ -169,7 +194,7 @@ class SpeedDialManager(val context: Context) {
     @Synchronized
     fun delete(id: Int) {
         val db = mOpenHelper.writableDatabase
-        db.delete(TABLE_NAME, COLUMN_ID + " = ?", arrayOf(Integer.toString(id)))
+        db.delete(TABLE_NAME, COLUMN_ID + " = ?", arrayOf(id.toString()))
         updateListTime()
     }
 

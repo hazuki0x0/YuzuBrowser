@@ -456,11 +456,12 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             if ("yuzu".equals(request.url.scheme, ignoreCase = true)) {
                 val action = request.url.schemeSpecificPart
 
-                when {
-                    "speeddial".equals(action, ignoreCase = true) -> return speedDialHtml.createResponse()
-                    "speeddial/base.css" == action -> return speedDialHtml.baseCss
-                    "speeddial/custom.css" == action -> return speedDialHtml.customCss
-                    else -> {
+                if (action != null) {
+                    when {
+                        "speeddial".equals(action, ignoreCase = true) -> return speedDialHtml.createResponse()
+                        "speeddial/base.css" == action -> return speedDialHtml.baseCss
+                        "speeddial/custom.css" == action -> return speedDialHtml.customCss
+                        action.startsWith("speeddial/img/") -> return speedDialHtml.getImage(action)
                     }
                 }
             }
