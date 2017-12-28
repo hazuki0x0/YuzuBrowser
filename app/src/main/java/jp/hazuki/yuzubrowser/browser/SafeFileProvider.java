@@ -14,13 +14,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 
+import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.utils.FileUtils;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class SafeFileProvider extends ContentProvider {
     private static final String TAG = "SafeFileProvider";
-    private static final String AUTHORITY = "jp.hazuki.yuzubrowser.browser.SafeFileProvider";
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".browser.SafeFileProvider";
     //private static final String PROVIDER_URI = "content://" + AUTHORITY + "/";
 
     private String[] mAllowedFolder;

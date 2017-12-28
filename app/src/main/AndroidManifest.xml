@@ -41,7 +41,7 @@
         android:required="false"/>
 
     <permission
-        android:name="jp.hazuki.yuzubrowser.permission.myapp.signature"
+        android:name="${applicationId}.permission.myapp.signature"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="jp.hazuki.yuzubrowser.permission.myapp.signature" />
@@ -200,9 +200,9 @@
 
         <provider
             android:name=".search.SuggestProvider"
-            android:authorities="jp.hazuki.yuzubrowser.search.SuggestProvider"
+            android:authorities="${applicationId}.search.SuggestProvider"
             android:exported="false"
-            android:permission="jp.hazuki.yuzubrowser.permission.myapp.signature"
+            android:permission="${applicationId}.permission.myapp.signature"
             android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
 
@@ -216,9 +216,9 @@
             android:label="@string/download" />
         <provider
             android:name=".browser.SafeFileProvider"
-            android:authorities="jp.hazuki.yuzubrowser.browser.SafeFileProvider"
+            android:authorities="${applicationId}.browser.SafeFileProvider"
             android:exported="false"
-            android:permission="jp.hazuki.yuzubrowser.permission.myapp.signature"
+            android:permission="${applicationId}.permission.myapp.signature"
             android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
         <provider

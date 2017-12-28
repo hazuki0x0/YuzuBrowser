@@ -39,6 +39,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.search.suggest.ISuggest;
 import jp.hazuki.yuzubrowser.search.suggest.SuggestBing;
 import jp.hazuki.yuzubrowser.search.suggest.SuggestDuckDuckGo;
@@ -51,7 +52,7 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class SuggestProvider extends ContentProvider {
     private static final String TAG = "GoogleSuggestProvider";
-    private static final String AUTHORITY = "jp.hazuki.yuzubrowser.search.SuggestProvider";
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".search.SuggestProvider";
     public static final Uri URI_NET = Uri.parse("content://" + AUTHORITY + "/net");
     public static final Uri URI_LOCAL = Uri.parse("content://" + AUTHORITY + "/local");
     public static final Uri URI_NORMAL = Uri.parse("content://" + AUTHORITY + "/normal");

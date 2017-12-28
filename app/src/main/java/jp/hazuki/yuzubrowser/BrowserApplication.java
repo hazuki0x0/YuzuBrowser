@@ -35,7 +35,7 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class BrowserApplication extends Application {
     private static final String TAG = "BrowserApplication";
-    public static final String PERMISSION_MYAPP_SIGNATURE = "jp.hazuki.yuzubrowser.permission.myapp.signature";
+    public static final String PERMISSION_MYAPP_SIGNATURE = BuildConfig.APPLICATION_ID + ".permission.myapp.signature";
     private static BrowserApplication instance;
     private static boolean needLoad;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res/jp.hazuki.yuzubrowser"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:title="@string/pref_action_settings">
     <PreferenceScreen
         android:key="ps_hardware_button"
