@@ -696,91 +696,99 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
     }
 
     private fun checkUrl(data: MainTabData, url: String, uri: Uri): Boolean {
-        var scheme = uri.scheme ?: return false
+        val scheme = uri.scheme ?: return false
 
-        scheme = scheme.toLowerCase()
-        if (scheme == "intent") {
-            try {
-                val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+        when (scheme.toLowerCase()) {
+            "intent" -> {
+                try {
+                    val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
 
-                if (intent != null) {
-                    if (BookmarkActivity::class.java.name == intent.component?.className) {
-                        controller.startActivity(intent, BrowserController.REQUEST_BOOKMARK)
-                    } else {
-                        val info = activity.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-                        if (info != null) {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            try {
-                                activity.startActivity(intent)
-                                return true
-                            } catch (e: SecurityException) {
-                                e.printStackTrace()
+                    if (intent != null) {
+                        if (BookmarkActivity::class.java.name == intent.component?.className) {
+                            controller.startActivity(intent, BrowserController.REQUEST_BOOKMARK)
+                        } else {
+                            val info = activity.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                            if (info != null) {
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                try {
+                                    activity.startActivity(intent)
+                                    return true
+                                } catch (e: SecurityException) {
+                                    e.printStackTrace()
+                                }
+
                             }
-
+                            val fallbackUrl = intent.getStringExtra("browser_fallback_url")
+                            if (!TextUtils.isEmpty(fallbackUrl)) {
+                                controller.loadUrl(data, fallbackUrl)
+                            }
                         }
-                        val fallbackUrl = intent.getStringExtra("browser_fallback_url")
-                        if (!TextUtils.isEmpty(fallbackUrl)) {
-                            controller.loadUrl(data, fallbackUrl)
-                        }
+                        return true
                     }
-                    return true
+                } catch (e: URISyntaxException) {
+                    Logger.e(TAG, "Can't resolve intent://", e)
                 }
-            } catch (e: URISyntaxException) {
-                Logger.e(TAG, "Can't resolve intent://", e)
             }
-        }
+            "yuzu" -> {
+                val action = uri.schemeSpecificPart
 
-        if (scheme == "yuzu") {
-            val action = uri.schemeSpecificPart
-
-            val intent: Intent
-            if (action.isNullOrEmpty()) {
-                return false
-            } else
-                when (action.toLowerCase()) {
-                    "settings", "setting" -> intent = Intent(activity, MainSettingsActivity::class.java)
-                    "histories", "history" -> {
-                        intent = Intent(activity, BrowserHistoryActivity::class.java)
-                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
-                        intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
-                        controller.startActivity(intent, BrowserController.REQUEST_HISTORY)
-                        return true
-                    }
-                    "downloads", "download" -> {
-                        intent = Intent(activity, DownloadListActivity::class.java).apply {
-                            putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
-                            putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
+                val intent: Intent
+                if (action.isNullOrEmpty()) {
+                    return false
+                } else
+                    when (action.toLowerCase()) {
+                        "settings", "setting" -> intent = Intent(activity, MainSettingsActivity::class.java)
+                        "histories", "history" -> {
+                            intent = Intent(activity, BrowserHistoryActivity::class.java)
+                            intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
+                            intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
+                            controller.startActivity(intent, BrowserController.REQUEST_HISTORY)
+                            return true
                         }
-                    }
-                    "debug" -> intent = Intent(activity, DebugActivity::class.java)
-                    "bookmarks", "bookmark" -> {
-                        intent = Intent(activity, BookmarkActivity::class.java).apply {
-                            putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
-                            putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
+                        "downloads", "download" -> {
+                            intent = Intent(activity, DownloadListActivity::class.java).apply {
+                                putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
+                                putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
+                            }
                         }
-                        controller.startActivity(intent, BrowserController.REQUEST_BOOKMARK)
-                        return true
-                    }
-                    "search" -> {
-                        controller.showSearchBox("", controller.indexOf(data.id), false, "reverse".equals(uri.fragment, ignoreCase = true))
-                        return true
-                    }
-                    "speeddial" -> return false
-                    "home" -> {
-                        if ("yuzu:home".equals(AppData.home_page.get(), ignoreCase = true) || "yuzu://home".equals(AppData.home_page.get(), ignoreCase = true)) {
-                            AppData.home_page.set("about:blank")
-                            AppData.commit(activity, AppData.home_page)
+                        "debug" -> intent = Intent(activity, DebugActivity::class.java)
+                        "bookmarks", "bookmark" -> {
+                            intent = Intent(activity, BookmarkActivity::class.java).apply {
+                                putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
+                                putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
+                            }
+                            controller.startActivity(intent, BrowserController.REQUEST_BOOKMARK)
+                            return true
                         }
-                        controller.loadUrl(data, AppData.home_page.get())
-                        return true
+                        "search" -> {
+                            controller.showSearchBox("", controller.indexOf(data.id), false, "reverse".equals(uri.fragment, ignoreCase = true))
+                            return true
+                        }
+                        "speeddial" -> return false
+                        "home" -> {
+                            if ("yuzu:home".equals(AppData.home_page.get(), ignoreCase = true) || "yuzu://home".equals(AppData.home_page.get(), ignoreCase = true)) {
+                                AppData.home_page.set("about:blank")
+                                AppData.commit(activity, AppData.home_page)
+                            }
+                            controller.loadUrl(data, AppData.home_page.get())
+                            return true
+                        }
+                        "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
+                        "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
+                        "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
+                        else -> return false
                     }
-                    "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
-                    "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
-                    "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
-                    else -> return false
-                }
-            activity.startActivity(intent)
-            return true
+                activity.startActivity(intent)
+                return true
+            }
+            "mailto" -> {
+                activity.startActivity(Intent(Intent.ACTION_SENDTO, uri))
+                return true
+            }
+            "tel" -> {
+                activity.startActivity(Intent(Intent.ACTION_DIAL, uri))
+                return true
+            }
         }
 
         if (AppData.share_unknown_scheme.get()) {

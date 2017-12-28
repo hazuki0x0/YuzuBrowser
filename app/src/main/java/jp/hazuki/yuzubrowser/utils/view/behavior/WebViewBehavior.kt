@@ -30,14 +30,16 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView
 class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.ScrollingViewBehavior(context, attrs) {
 
     private var isInitialized = false
-    private lateinit var controller: BrowserController
-    private lateinit var webFrame: View
+    private lateinit var topToolBar: View
     private lateinit var bottomBar: View
+    private lateinit var webFrame: View
+    private lateinit var controller: BrowserController
     private var webView: CustomWebView? = null
     private var prevY: Int = 0
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View?): Boolean {
         if (dependency is AppBarLayout) {
+            topToolBar = parent.findViewById(R.id.topToolbarLayout)
             bottomBar = parent.findViewById(R.id.bottomToolbarLayout)
             webFrame = child.findViewById(R.id.webFrameLayout)
             isInitialized = true
@@ -61,7 +63,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
 
             val data = controller.getTabOrNull(webView)
             if (data != null) {
-                adjustWebView(data, dependency.height + bottomBar.height)
+                adjustWebView(data, topToolBar.height + bottomBar.height)
             }
         }
 

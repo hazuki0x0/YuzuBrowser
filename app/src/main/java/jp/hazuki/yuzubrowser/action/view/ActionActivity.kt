@@ -254,8 +254,8 @@ class ActionActivity : ThemeActivity() {
             return this
         }
 
-        fun setDefaultAction(action: Action): Builder {
-            intent.putExtra(EXTRA_ACTION, action as Parcelable)
+        fun setDefaultAction(action: Action?): Builder {
+            intent.putExtra(EXTRA_ACTION, action as Parcelable?)
             return this
         }
 
