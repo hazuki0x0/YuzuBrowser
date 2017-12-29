@@ -39,8 +39,8 @@ import jp.hazuki.yuzubrowser.adblock.AdBlockController
 import jp.hazuki.yuzubrowser.adblock.mining.MiningProtector
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.debug.DebugActivity
-import jp.hazuki.yuzubrowser.download2.ui.DownloadListActivity
-import jp.hazuki.yuzubrowser.download2.ui.fragment.DownloadDialog
+import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
+import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager

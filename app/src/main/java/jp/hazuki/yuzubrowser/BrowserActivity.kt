@@ -50,9 +50,9 @@ import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.*
 import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable
 import jp.hazuki.yuzubrowser.browser.ui.Toolbar
-import jp.hazuki.yuzubrowser.download2.service.DownloadFile
-import jp.hazuki.yuzubrowser.download2.ui.FastDownloadActivity
-import jp.hazuki.yuzubrowser.download2.ui.fragment.SaveWebArchiveDialog
+import jp.hazuki.yuzubrowser.download.service.DownloadFile
+import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
+import jp.hazuki.yuzubrowser.download.ui.fragment.SaveWebArchiveDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.gesture.GestureManager
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager
@@ -153,9 +153,9 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
         setContentView(R.layout.browser_activity)
 
-        if (BrowserApplication.isNeedLoad()) {
+        if (BrowserApplication.isNeedLoad) {
             AppData.load(this)
-            BrowserApplication.setNeedLoad(false)
+            BrowserApplication.isNeedLoad = false
         }
 
         userActionManager = UserActionManager(this, this, actionController, iconManager)
@@ -574,7 +574,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         if (action == null) return false
         if (ACTION_FINISH == action) {
             forceDestroy = intent.getBooleanExtra(EXTRA_FORCE_DESTROY, false)
-            BrowserApplication.setNeedLoad(true)
+            BrowserApplication.isNeedLoad = true
             if (parent == null) {
                 recreate()
             } else {
@@ -1037,7 +1037,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             tabManagerIn.clear()
         }
 
-        BrowserApplication.setNeedLoad(true)
+        BrowserApplication.isNeedLoad = true
         finish()
     }
 

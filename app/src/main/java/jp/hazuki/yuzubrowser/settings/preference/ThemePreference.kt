@@ -33,7 +33,7 @@ class ThemePreference(context: Context, attrs: AttributeSet) : ListPreference(co
     }
 
     private fun init() {
-        val dir = File(BrowserApplication.getExternalUserDirectory(), "theme")
+        val dir = File(BrowserApplication.externalUserDirectory, "theme")
 
         if (!dir.isDirectory) {
             dir.delete()

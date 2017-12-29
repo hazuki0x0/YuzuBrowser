@@ -33,7 +33,7 @@ class FontListPreference(context: Context, attrs: AttributeSet) : ListPreference
     }
 
     private fun init() {
-        val fontDir = File(BrowserApplication.getExternalUserDirectory(), "fonts")
+        val fontDir = File(BrowserApplication.externalUserDirectory, "fonts")
 
         if (!fontDir.isDirectory) {
             FileUtils.deleteFile(fontDir)

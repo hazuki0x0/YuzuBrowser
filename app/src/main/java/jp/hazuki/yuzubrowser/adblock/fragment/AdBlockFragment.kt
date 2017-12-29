@@ -58,7 +58,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         val arguments = arguments ?: return
         type = arguments.getInt(ARG_TYPE)
         listener!!.setFragmentTitle(type)
-        provider = AdBlockManager.getProvider(BrowserApplication.getInstance(), type)
+        provider = AdBlockManager.getProvider(BrowserApplication.instance, type)
         adapter = AdBlockArrayRecyclerAdapter(activity, provider.allItems, this)
         layoutManager = LinearLayoutManager(activity)
 

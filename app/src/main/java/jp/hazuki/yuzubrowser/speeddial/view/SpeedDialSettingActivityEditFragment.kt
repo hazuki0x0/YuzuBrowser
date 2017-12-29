@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.download.DownloadFileProvider
+import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider
 import jp.hazuki.yuzubrowser.speeddial.SpeedDial
 import jp.hazuki.yuzubrowser.speeddial.WebIcon
 import jp.hazuki.yuzubrowser.utils.ImageUtils

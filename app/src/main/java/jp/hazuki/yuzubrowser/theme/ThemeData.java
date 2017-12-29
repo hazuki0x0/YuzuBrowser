@@ -360,7 +360,7 @@ public class ThemeData {
     }
 
     public static ThemeData createInstance(Context context) {
-        File file = new File(BrowserApplication.getExternalUserDirectory(), "theme");
+        File file = new File(BrowserApplication.Companion.getExternalUserDirectory(), "theme");
         if (!file.exists() || !file.isDirectory())
             sInstance = null;
         else
@@ -380,7 +380,7 @@ public class ThemeData {
         } else if (THEME_LIGHT.equals(folder)) {
             sInstance = createLightTheme(context);
         } else {
-            File file = new File(BrowserApplication.getExternalUserDirectory(), "theme" + File.separator + folder);
+            File file = new File(BrowserApplication.Companion.getExternalUserDirectory(), "theme" + File.separator + folder);
             if (!file.exists() || !file.isDirectory())
                 sInstance = null;
             else

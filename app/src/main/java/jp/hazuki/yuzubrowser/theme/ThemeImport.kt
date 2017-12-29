@@ -31,7 +31,7 @@ import java.io.IOException
 import java.util.zip.ZipInputStream
 
 internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> = async {
-    val root = File(BrowserApplication.getExternalUserDirectory(), "theme")
+    val root = File(BrowserApplication.externalUserDirectory, "theme")
     val tmpFolder = File(root, System.currentTimeMillis().toString())
 
     try {

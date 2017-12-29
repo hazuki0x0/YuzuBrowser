@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit.handler
+package jp.hazuki.yuzubrowser.download.service.connection
 
-import android.support.v7.app.AppCompatActivity
-import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
-import java.lang.ref.WeakReference
+import android.support.annotation.IntDef
 
-class WebImageHandler(activity: AppCompatActivity, val userAgent: String) : WebSrcImageHandler() {
-    private val refActivity = WeakReference(activity)
-
-    override fun handleUrl(url: String) {
-        val activity = refActivity.get()
-        if (activity != null) {
-            DownloadDialog(url, userAgent).show(activity.supportFragmentManager, "download")//TODO referer
-        }
-    }
-}
+@IntDef(
+        ServiceSocket.REGISTER_OBSERVER.toLong(),
+        ServiceSocket.UNREGISTER_OBSERVER.toLong(),
+        ServiceSocket.UPDATE.toLong(),
+        ServiceSocket.GET_DOWNLOAD_INFO.toLong(),
+        ServiceSocket.CANCEL_DOWNLOAD.toLong(),
+        ServiceSocket.PAUSE_DOWNLOAD.toLong()
+)
+annotation class ServiceCommand

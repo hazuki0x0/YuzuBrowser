@@ -23,7 +23,7 @@ import android.app.Service
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
-import jp.hazuki.yuzubrowser.download.DownloadFileProvider
+import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider
 import org.jetbrains.anko.*
 import org.jetbrains.anko.internals.AnkoInternals
 import java.io.File

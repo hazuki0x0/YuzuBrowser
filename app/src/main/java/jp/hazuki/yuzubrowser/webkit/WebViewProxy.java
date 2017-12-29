@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Proxy;
+import android.os.Build;
 import android.util.ArrayMap;
 import android.widget.Toast;
 
@@ -13,7 +14,6 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jp.hazuki.yuzubrowser.BrowserApplication;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.utils.Logger;
 
@@ -60,7 +60,7 @@ public class WebViewProxy {
     }
 
     public static boolean setProxy(Context context, boolean enable, String proxy_address) {
-        if (setProxy && !WebViewProxy.resetProxy(BrowserApplication.getInstance()))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && setProxy && !WebViewProxy.resetProxy(context.getApplicationContext()))
             return false;
 
         setProxy = false;
@@ -69,7 +69,7 @@ public class WebViewProxy {
             Matcher matcher = pattern.matcher(proxy_address);
             if (matcher.find()) {
                 setProxy = true;
-                return WebViewProxy.setProxy(BrowserApplication.getInstance(), matcher.group(1), Integer.parseInt(matcher.group(2), 10));
+                return WebViewProxy.setProxy(context.getApplicationContext(), matcher.group(1), Integer.parseInt(matcher.group(2), 10));
             } else {
                 Toast.makeText(context, R.string.proxy_address_error, Toast.LENGTH_LONG).show();
                 return false;

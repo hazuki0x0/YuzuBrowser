@@ -36,7 +36,7 @@ import java.io.IOException
 
 class SaveScreenshotSingleAction : SingleAction, Parcelable {
     private var mSsType = SS_TYPE_PART
-    var folder = File(BrowserApplication.getExternalUserDirectory(), "screenshot")
+    var folder = File(BrowserApplication.externalUserDirectory, "screenshot")
         private set
 
     val type: Int

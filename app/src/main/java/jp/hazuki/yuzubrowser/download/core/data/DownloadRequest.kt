@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit.handler
+package jp.hazuki.yuzubrowser.download.core.data
 
-import android.support.v7.app.AppCompatActivity
-import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
-import java.lang.ref.WeakReference
+import android.annotation.SuppressLint
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-class WebImageHandler(activity: AppCompatActivity, val userAgent: String) : WebSrcImageHandler() {
-    private val refActivity = WeakReference(activity)
-
-    override fun handleUrl(url: String) {
-        val activity = refActivity.get()
-        if (activity != null) {
-            DownloadDialog(url, userAgent).show(activity.supportFragmentManager, "download")//TODO referer
-        }
-    }
-}
+@SuppressLint("ParcelCreator")
+@Parcelize
+class DownloadRequest(val referrer: String?, val userAgent: String?, val defaultExt: String?) : Parcelable

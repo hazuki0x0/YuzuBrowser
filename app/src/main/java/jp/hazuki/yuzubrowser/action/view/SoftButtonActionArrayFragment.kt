@@ -63,7 +63,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
     }
 
     override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
-        mActionArray.write(BrowserApplication.getInstance())
+        mActionArray.write(BrowserApplication.instance)
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
@@ -78,13 +78,13 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
 
     override fun onDelete(position: Int) {
         mActionArray.list.removeAt(position)
-        mActionArray.write(BrowserApplication.getInstance())
+        mActionArray.write(BrowserApplication.instance)
         adapter.notifyDataSetChanged()
     }
 
     override fun onAddButtonClick() {
         mActionArray.list.add(SoftButtonActionFile())
-        mActionArray.write(BrowserApplication.getInstance())
+        mActionArray.write(BrowserApplication.instance)
         onListItemClick(mActionArray.list.size - 1)
     }
 
@@ -111,7 +111,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
                 .addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                         if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                            mActionArray.write(BrowserApplication.getInstance())
+                            mActionArray.write(BrowserApplication.instance)
                         }
                     }
                 })
@@ -157,7 +157,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         mActionType = arguments.getInt(ACTION_TYPE)
         mActionId = arguments.getInt(ACTION_ID)
 
-        actionManager = ActionManager.getActionManager(BrowserApplication.getInstance(), mActionType) as? SoftButtonActionArrayManagerBase ?: throw IllegalArgumentException()
+        actionManager = ActionManager.getActionManager(BrowserApplication.instance, mActionType) as? SoftButtonActionArrayManagerBase ?: throw IllegalArgumentException()
 
         mActionArray = actionManager.getActionArrayFile(mActionId)
     }

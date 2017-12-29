@@ -25,10 +25,10 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.download2.core.data.DownloadFileInfo
-import jp.hazuki.yuzubrowser.download2.core.data.MetaData
-import jp.hazuki.yuzubrowser.download2.service.DownloadDatabase
-import jp.hazuki.yuzubrowser.download2.service.DownloadFile
+import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
+import jp.hazuki.yuzubrowser.download.core.data.MetaData
+import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
+import jp.hazuki.yuzubrowser.download.service.DownloadFile
 import org.jetbrains.anko.toast
 import java.io.File
 

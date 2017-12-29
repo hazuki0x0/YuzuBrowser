@@ -63,7 +63,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             val manager = BookmarkManager.getInstance(activity)
             val internalFile = manager.file
 
-            var defFolder = File(BrowserApplication.getExternalUserDirectory(), internalFile.parentFile.name + File.separator)
+            var defFolder = File(BrowserApplication.externalUserDirectory, internalFile.parentFile.name + File.separator)
             if (!defFolder.exists())
                 defFolder = Environment.getExternalStorageDirectory()
 
@@ -101,7 +101,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             if (activity.checkStoragePermission()) {
                 val manager = BookmarkManager.getInstance(activity)
                 val internalFile = manager.file
-                val externalFile = File(BrowserApplication.getExternalUserDirectory(), internalFile.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".dat")
+                val externalFile = File(BrowserApplication.externalUserDirectory, internalFile.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".dat")
                 if (!externalFile.parentFile.exists()) {
                     if (!externalFile.parentFile.mkdirs()) {
                         Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
@@ -162,7 +162,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         (findPreference("export_html_bookmark") as AlertDialogPreference).setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
                 val manager = BookmarkManager.getInstance(activity)
-                val externalFile = File(BrowserApplication.getExternalUserDirectory(), manager.file.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".html")
+                val externalFile = File(BrowserApplication.externalUserDirectory, manager.file.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".html")
                 if (!externalFile.parentFile.exists()) {
                     if (!externalFile.parentFile.mkdirs()) {
                         Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
@@ -184,7 +184,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
 
         findPreference("restore_speed_dial").setOnPreferenceClickListener {
-            val dir = File(BrowserApplication.getExternalUserDirectory(), "speedDial")
+            val dir = File(BrowserApplication.externalUserDirectory, "speedDial")
             if (!dir.exists())
                 dir.mkdirs()
             FileListDialog(activity)
@@ -213,7 +213,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
         (findPreference("backup_speed_dial") as AlertDialogPreference).setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
-                val file = File(BrowserApplication.getExternalUserDirectory(), "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL)
+                val file = File(BrowserApplication.externalUserDirectory, "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
                 loaderManager.restartLoader(5, bundle, this@ImportExportFragment)
@@ -227,7 +227,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
 
         findPreference("restore_settings").setOnPreferenceClickListener {
-            val dir = File(BrowserApplication.getExternalUserDirectory(), "backup")
+            val dir = File(BrowserApplication.externalUserDirectory, "backup")
             if (!dir.exists())
                 dir.mkdirs()
             FileListDialog(activity)
@@ -264,7 +264,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
         (findPreference("backup_settings") as AlertDialogPreference).setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
-                val file = File(BrowserApplication.getExternalUserDirectory(), "backup" + File.separator + FileUtils.getTimeFileName() + EXT)
+                val file = File(BrowserApplication.externalUserDirectory, "backup" + File.separator + FileUtils.getTimeFileName() + EXT)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
                 loaderManager.restartLoader(1, bundle, this@ImportExportFragment)

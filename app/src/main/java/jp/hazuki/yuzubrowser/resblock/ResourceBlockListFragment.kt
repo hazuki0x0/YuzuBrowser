@@ -58,7 +58,7 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
     }
 
     public override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
-        manager.save(BrowserApplication.getInstance())
+        manager.save(BrowserApplication.instance)
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int) {
@@ -72,7 +72,7 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
                 .addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                         if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                            manager.save(BrowserApplication.getInstance())
+                            manager.save(BrowserApplication.instance)
                         }
                     }
                 })
@@ -116,7 +116,7 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
             manager.add(checker)
             adapter.notifyItemInserted(adapter.itemCount - 1)
         }
-        manager.save(BrowserApplication.getInstance())
+        manager.save(BrowserApplication.instance)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {

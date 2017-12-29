@@ -27,7 +27,7 @@ import java.util.List;
 import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.browser.SafeFileProvider;
-import jp.hazuki.yuzubrowser.download.DownloadFileProvider;
+import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider;
 
 public class PackageUtils {
     private PackageUtils() {

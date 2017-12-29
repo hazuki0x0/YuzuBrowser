@@ -207,15 +207,15 @@
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
 
         <service
-            android:name=".download2.service.DownloadService"
+            android:name="jp.hazuki.yuzubrowser.download.service.DownloadService"
             android:exported="false" />
 
         <activity
-            android:name=".download2.ui.FastDownloadActivity"
+            android:name="jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserMinThemeBlack.Transparent"/>
-        <activity android:name=".download2.ui.DownloadListActivity"/>
+        <activity android:name="jp.hazuki.yuzubrowser.download.ui.DownloadListActivity"/>
 
         <provider
             android:name=".browser.SafeFileProvider"
@@ -225,7 +225,7 @@
             android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
         <provider
-            android:name=".download.DownloadFileProvider"
+            android:name="jp.hazuki.yuzubrowser.download.service.DownloadFileProvider"
             android:authorities="${applicationId}.downloadFileProvider"
             android:exported="false"
             android:grantUriPermissions="true" />
