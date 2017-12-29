@@ -45,7 +45,15 @@ import jp.hazuki.yuzubrowser.adblock.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.browser.BrowserController
 import jp.hazuki.yuzubrowser.browser.BrowserManager
-import jp.hazuki.yuzubrowser.download.*
+import jp.hazuki.yuzubrowser.download.DownloadFileProvider
+import jp.hazuki.yuzubrowser.download2.core.data.DownloadRequest
+import jp.hazuki.yuzubrowser.download2.core.utils.getDownloadFolderUri
+import jp.hazuki.yuzubrowser.download2.download
+import jp.hazuki.yuzubrowser.download2.service.DownloadFile
+import jp.hazuki.yuzubrowser.download2.ui.DownloadListActivity
+import jp.hazuki.yuzubrowser.download2.ui.FastDownloadActivity
+import jp.hazuki.yuzubrowser.download2.ui.fragment.DownloadDialog
+import jp.hazuki.yuzubrowser.download2.ui.fragment.SaveWebArchiveDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.pattern.url.PatternUrlActivity
@@ -111,12 +119,13 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
-                        DownloadDialog.showDownloadDialog(controller.activity, result.extra, target.webView.settings.userAgentString)//TODO referer
+                        DownloadDialog(result.extra, target.webView.settings.userAgentString)//TODO referer
+                                .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE -> {
-                        val info = DownloadRequestInfo(result.extra, null, null, target.webView.settings.userAgentString, -1)
-                        DownloadService.startDownloadService(controller.activity, info)
+                        val file = DownloadFile(result.extra, null, DownloadRequest(null, target.webView.settings.userAgentString, null))
+                        controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
                     SingleAction.LPRESS_PATTERN_MATCH -> {
@@ -177,7 +186,8 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog.showDownloadDialog(controller.activity, result.extra, target.webView.url, target.webView.settings.userAgentString, ".jpg")
+                        DownloadDialog(result.extra, target.webView.settings.userAgentString, target.webView.url, ".jpg")
+                                .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
@@ -206,9 +216,9 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
-                        val info = DownloadRequestInfo(result.extra, null, target.webView.url, target.webView.settings.userAgentString, -1)
-                        info.defaultExt = ".jpg"
-                        DownloadService.startDownloadService(controller.activity, info)
+                        val file = DownloadFile(result.extra, null,
+                                DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
+                        controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
@@ -295,7 +305,8 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog.showDownloadDialog(controller.activity, result.extra, target.webView.url, target.webView.settings.userAgentString, ".jpg")
+                        DownloadDialog(result.extra, target.webView.settings.userAgentString, target.webView.url, ".jpg")
+                                .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
@@ -324,9 +335,9 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
-                        val info = DownloadRequestInfo(result.extra, null, target.webView.url, target.webView.settings.userAgentString, -1)
-                        info.defaultExt = ".jpg"
-                        DownloadService.startDownloadService(controller.activity, info)
+                        val file = DownloadFile(result.extra, null,
+                                DownloadRequest(target.webView.url, target.webView.settings.userAgentString, ".jpg"))
+                        controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
                     SingleAction.LPRESS_ADD_BLACK_LIST -> {
@@ -579,7 +590,8 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.SAVE_PAGE -> {
                 val tab = controller.getTab(actionTarget)
-                DownloadDialog.showArchiveDownloadDialog(controller.activity, tab.url, tab.mWebView)
+                SaveWebArchiveDialog(controller.activity, tab.url, tab.mWebView, actionTarget)
+                        .show(controller.activity.supportFragmentManager, "saveArchive")
             }
             SingleAction.OPEN_URL -> {
                 val openUrlAction = action as OpenUrlSingleAction

@@ -43,6 +43,8 @@ import jp.hazuki.yuzubrowser.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.browser.BrowserManager;
+import jp.hazuki.yuzubrowser.download.DownloadInfoDatabase;
+import jp.hazuki.yuzubrowser.download2.service.DownloadDatabase;
 import jp.hazuki.yuzubrowser.search.settings.SearchUrl;
 import jp.hazuki.yuzubrowser.search.settings.SearchUrlManager;
 import jp.hazuki.yuzubrowser.settings.PreferenceConstants;
@@ -111,7 +113,7 @@ public class AppData {
     public static final IntContainer web_cache = new IntContainer("web_cache", WebSettings.LOAD_DEFAULT);
     public static final BooleanContainer web_popup = new BooleanContainer("web_popup", true);
     public static final IntContainer download_action = new IntContainer("download_action", PreferenceConstants.DOWNLOAD_AUTO);
-    public static final StringContainer download_folder = new StringContainer("download_folder", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+    public static final StringContainer download_folder = new StringContainer("download_folder", "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
     public static final BooleanContainer pause_web_background = new BooleanContainer("pause_web_background", true);
     public static final BooleanContainer save_formdata = new BooleanContainer("save_formdata", true);
     //TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
@@ -394,12 +396,10 @@ public class AppData {
 
                 if (lastLaunch <= 300100 && "NORMAL>".equals(AppData.layout_algorithm.get())) {
                     AppData.layout_algorithm.set("NORMAL");
-                    AppData.commit(context, AppData.layout_algorithm);
                 }
 
                 if (lastLaunch <= 300103 && "SINGLE_COLUMN>".equals(AppData.layout_algorithm.get())) {
                     AppData.layout_algorithm.set("SINGLE_COLUMN");
-                    AppData.commit(context, AppData.layout_algorithm);
                 }
 
                 if (lastLaunch < 300200) {
@@ -422,8 +422,6 @@ public class AppData {
 
                     AppData.fullscreen_hide_mode.set(shared_preference.getBoolean("fullscreen_hide_nav", false) ? 2 : 0);
 
-                    AppData.commit(context, AppData.search_url, AppData.fullscreen_hide_mode);
-
                     shared_preference.edit().remove("fullscreen_hide_nav").apply();
                 }
 
@@ -431,6 +429,16 @@ public class AppData {
                     NotificationManager manager = (NotificationManager)
                             context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.deleteNotificationChannel("jp.hazuki.yuzubrowser.channel.dl.notify");
+                }
+
+                if (lastLaunch < 400100) {
+                    DownloadInfoDatabase from = new DownloadInfoDatabase(context);
+                    DownloadDatabase to = DownloadDatabase.Companion.getInstance(context);
+
+                    to.convert(from.getConvertData());
+
+                    from.deleteDatabase(context);
+                    download_folder.set("file://" + download_folder.get());
                 }
             }
 

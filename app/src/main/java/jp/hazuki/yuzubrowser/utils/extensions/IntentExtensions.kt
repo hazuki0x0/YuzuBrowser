@@ -21,9 +21,12 @@ package jp.hazuki.yuzubrowser.utils.extensions
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
+import android.net.Uri
 import android.support.v4.app.Fragment
+import jp.hazuki.yuzubrowser.download.DownloadFileProvider
 import org.jetbrains.anko.*
 import org.jetbrains.anko.internals.AnkoInternals
+import java.io.File
 
 inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any?>)
         = AnkoInternals.internalStartActivity(activity!!, T::class.java, params)
@@ -49,3 +52,12 @@ inline fun Fragment.email(email: String, subject: String = "", text: String = ""
 inline fun Fragment.makeCall(number: String): Boolean = activity!!.makeCall(number)
 
 inline fun Fragment.sendSMS(number: String, text: String = ""): Boolean = activity!!.sendSMS(number, text)
+
+fun createFileOpenIntent(uri: Uri, mimeType: String): Intent {
+    val target = if (uri.scheme == "file") DownloadFileProvider.getUriForFIle(File(uri.path)) else uri
+
+    return Intent(Intent.ACTION_VIEW).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        setDataAndType(target, mimeType)
+    }
+}

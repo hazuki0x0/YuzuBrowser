@@ -80,6 +80,7 @@
     <string name="open_map">マップを開く</string>
     <string name="copy_map_address">マップアドレスのコピー</string>
     <string name="download_success">ダウンロードは成功しました</string>
+    <string name="download_paused">ダウンロードは一時停止しました</string>
     <string name="download_fail">ダウンロードは失敗しました</string>
     <string name="download_cancel">ダウンロードは中止されました</string>
     <string name="download">ダウンロード</string>
@@ -124,6 +125,9 @@
     <string name="proxy_address_error">Proxyアドレスのフォーマットが間違っています</string>
     <string name="open_file">ファイルを開く</string>
     <string name="open_url">URLを開く</string>
+    <string name="pause">一時停止</string>
+    <string name="pause_download">ダウンロードの一時停止</string>
+    <string name="resume_download">ダウンロードの再開</string>
     <string name="cancel_download">ダウンロードの中止</string>
     <string name="clear_download">リストから削除</string>
     <string name="delete_download">ファイルを削除</string>

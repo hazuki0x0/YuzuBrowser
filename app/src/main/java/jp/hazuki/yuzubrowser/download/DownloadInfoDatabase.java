@@ -16,15 +16,15 @@
 
 package jp.hazuki.yuzubrowser.download;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import jp.hazuki.yuzubrowser.utils.database.CursorLoadable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DownloadInfoDatabase extends SQLiteOpenHelper implements CursorLoadable {
+public class DownloadInfoDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "downloadinfolist1.db";
     private static final int DB_VERSION = 1;
     private static final String TABLE_NAME = "main_table1";
@@ -41,15 +41,7 @@ public class DownloadInfoDatabase extends SQLiteOpenHelper implements CursorLoad
     public static final int COLUMN_START_TIME_INDEX = 3;
     public static final int COLUMN_STATE_INDEX = 4;
 
-    private static DownloadInfoDatabase instance;
-
-    public static DownloadInfoDatabase getInstance(Context context) {
-        if (instance == null)
-            instance = new DownloadInfoDatabase(context);
-        return instance;
-    }
-
-    private DownloadInfoDatabase(Context context) {
+    public DownloadInfoDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -60,7 +52,7 @@ public class DownloadInfoDatabase extends SQLiteOpenHelper implements CursorLoad
                 ", " + COLUMN_URL + " TEXT NOT NULL" +
                 ", " + COLUMN_FILEPATH + " TEXT NOT NULL" +
                 ", " + COLUMN_START_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
-                ", " + COLUMN_STATE + " INTEGER DEFAULT " + DownloadInfo.STATE_DOWNLOADING +
+                ", " + COLUMN_STATE + " INTEGER DEFAULT 0" +
                 ")");
     }
 
@@ -70,55 +62,20 @@ public class DownloadInfoDatabase extends SQLiteOpenHelper implements CursorLoad
         onCreate(db);
     }
 
-    public long insert(DownloadInfo info) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        long id = info.getId();
-        if (id >= 0)
-            values.put(COLUMN_ID, id);
-        values.put(COLUMN_URL, info.getUrl());
-        values.put(COLUMN_FILEPATH, info.getFile().getAbsolutePath());
-        values.put(COLUMN_START_TIME, info.getStartTime());
-        values.put(COLUMN_STATE, info.getState());
-        id = db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        info.setId(id);
-        //db.close();
-        return id;
-    }
-
-    public void updateState(DownloadInfo info) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_STATE, info.getState());
-        db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{String.valueOf(info.getId())});
-        //db.close();
-    }
-
-    public void delete(long id) {
-        if (id < 0)
-            throw new IllegalArgumentException("id must be greater than or equal to 0");
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
-        //db.close();
-    }
-
-    public void deleteAllHistory() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME, COLUMN_STATE + " <> " + DownloadInfo.STATE_DOWNLOADING, null);
-        //db.close();
-    }
-
-    public void fixData() {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_STATE, DownloadInfo.STATE_UNKNOWN_ERROR);
-        db.update(TABLE_NAME, values, COLUMN_STATE + " = ?", new String[]{String.valueOf(DownloadInfo.STATE_DOWNLOADING)});
-        //db.close();
-    }
-
-    @Override
-    public Cursor getLoadableCursor() {
+    public List<ConvertDownloadInfo> getConvertData() {
+        List<ConvertDownloadInfo> infoList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(TABLE_NAME, null, null, null, null, null, COLUMN_START_TIME + " DESC");
+        try (Cursor c = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_START_TIME + " DESC")) {
+            while (c.moveToNext()) {
+                infoList.add(new ConvertDownloadInfo(c.getString(COLUMN_URL_INDEX),
+                        c.getString(COLUMN_FILEPATH_INDEX), c.getLong(COLUMN_START_TIME_INDEX), c.getInt(COLUMN_STATE_INDEX)));
+            }
+        }
+        db.close();
+        return infoList;
+    }
+
+    public void deleteDatabase(Context context) {
+        context.deleteDatabase(DB_NAME);
     }
 }

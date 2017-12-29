@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit.handler
+package jp.hazuki.yuzubrowser.download2.ui.fragment
 
-import android.support.v7.app.AppCompatActivity
-import jp.hazuki.yuzubrowser.download2.ui.fragment.DownloadDialog
-import java.lang.ref.WeakReference
+import android.view.ContextMenu
+import android.view.View
 
-class WebImageHandler(activity: AppCompatActivity, val userAgent: String) : WebSrcImageHandler() {
-    private val refActivity = WeakReference(activity)
+interface OnRecyclerMenuListener {
+    fun onRecyclerItemClicked(v: View, position: Int)
 
-    override fun handleUrl(url: String) {
-        val activity = refActivity.get()
-        if (activity != null) {
-            DownloadDialog(url, userAgent).show(activity.supportFragmentManager, "download")//TODO referer
-        }
-    }
+    fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?, position: Int)
 }

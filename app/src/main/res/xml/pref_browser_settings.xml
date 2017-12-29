@@ -50,6 +50,10 @@
         android:singleLine="true"
         android:title="@string/pref_download_folder"/>
 
+    <Preference
+        android:key="download2_folder"
+        android:title="@string/pref_download_folder"/>
+
     <jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
 
     <PreferenceScreen

@@ -19,9 +19,9 @@ package jp.hazuki.yuzubrowser.debug
 import android.os.Bundle
 import android.os.Environment
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.utils.EnvironmentUtils
 import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.utils.getExternalStorageDirectories
 import kotlinx.android.synthetic.main.environment_activity.*
 import java.io.IOException
 
@@ -49,7 +49,7 @@ class EnvironmentActivity : ThemeActivity() {
             ErrorReport.printAndWriteLog(e)
         }
 
-        for (str in EnvironmentUtils.getExternalStoragesFromSystemFile()) {
+        for (str in getExternalStorageDirectories()) {
             estimatedExternalFilesDirTextView.append(str)
             estimatedExternalFilesDirTextView.append("\n")
         }

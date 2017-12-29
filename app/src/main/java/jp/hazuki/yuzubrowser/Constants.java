@@ -29,4 +29,13 @@ public final class Constants {
         public static final String CHANNEL_DOWNLOAD_SERVICE = "jp.hazuki.yuzubrowser.channel.dl.service";
         public static final String CHANNEL_DOWNLOAD_NOTIFY = "jp.hazuki.yuzubrowser.channel.dl.notify2";
     }
+
+    public static final class download {
+        public static final String TMP_FILE_SUFFIX = ".yuzudownload";
+    }
+
+    public static final class mimeType {
+        public static final String MHTML = "multipart/related";
+        public static final String HTML = "text/html";
+    }
 }

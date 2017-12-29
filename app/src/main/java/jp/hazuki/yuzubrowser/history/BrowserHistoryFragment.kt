@@ -38,6 +38,7 @@ import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.utils.view.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
@@ -66,7 +67,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        recyclerView.addOnScrollListener(object : BrowserHistoryScrollListener(layoutManager) {
+        recyclerView.addOnScrollListener(object : LoadMoreListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {
                 adapter.loadMore()
                 recyclerView.post { adapter.notifyDataSetChanged() }

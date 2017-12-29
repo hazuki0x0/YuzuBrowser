@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.webkit.handler
+package jp.hazuki.yuzubrowser.download
 
-import android.support.v7.app.AppCompatActivity
-import jp.hazuki.yuzubrowser.download2.ui.fragment.DownloadDialog
-import java.lang.ref.WeakReference
+import jp.hazuki.yuzubrowser.download2.core.data.DownloadFileInfo
+import java.io.File
 
-class WebImageHandler(activity: AppCompatActivity, val userAgent: String) : WebSrcImageHandler() {
-    private val refActivity = WeakReference(activity)
+class ConvertDownloadInfo(val url: String, path: String, val time: Long, state: Int) {
+    val root: String
+    val name: String
+    val state = if (state == 100) DownloadFileInfo.STATE_UNKNOWN_ERROR else state
 
-    override fun handleUrl(url: String) {
-        val activity = refActivity.get()
-        if (activity != null) {
-            DownloadDialog(url, userAgent).show(activity.supportFragmentManager, "download")//TODO referer
-        }
+    init {
+        val file = File(path)
+        root = "file://${file.parent}"
+        name = file.name
     }
 }

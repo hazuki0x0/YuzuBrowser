@@ -29,6 +29,7 @@ import android.net.ConnectivityManager
 import android.os.*
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
+import android.support.v4.provider.DocumentFile
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.*
@@ -49,7 +50,9 @@ import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.*
 import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable
 import jp.hazuki.yuzubrowser.browser.ui.Toolbar
-import jp.hazuki.yuzubrowser.download.FastDownloadActivity
+import jp.hazuki.yuzubrowser.download2.service.DownloadFile
+import jp.hazuki.yuzubrowser.download2.ui.FastDownloadActivity
+import jp.hazuki.yuzubrowser.download2.ui.fragment.SaveWebArchiveDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.gesture.GestureManager
 import jp.hazuki.yuzubrowser.history.BrowserHistoryManager
@@ -72,6 +75,7 @@ import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialogFactory
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewPageFastScroller
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
+import jp.hazuki.yuzubrowser.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.utils.view.PointerView
 import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior
@@ -82,7 +86,7 @@ import kotlinx.android.synthetic.main.browser_activity.*
 import java.lang.StringBuilder
 import java.util.*
 
-class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest {
+class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
 
     private val asyncPermissions by lazy { AsyncPermissions(this) }
     private val handler = Handler(Looper.getMainLooper())
@@ -472,7 +476,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
                 else
                     delayAction = action
             }
-            else -> throw IllegalStateException()
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -1213,6 +1217,10 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
     override fun savePage(tab: MainTabData) {
         readItLater(this, contentResolver, tab.originalUrl, tab.mWebView)
+    }
+
+    override fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int) {
+        tabManagerIn[webViewNo].mWebView.webView.saveArchive(root, file)
     }
 
     override fun startActivity(intent: Intent, @RequestCause cause: Long) {

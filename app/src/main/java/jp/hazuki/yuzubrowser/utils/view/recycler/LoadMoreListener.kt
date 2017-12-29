@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.history
+package jp.hazuki.yuzubrowser.utils.view.recycler
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
-abstract class BrowserHistoryScrollListener(private val mLinearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
+abstract class LoadMoreListener(private val linearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
 
     private var previousTotal = 0
     private var loading = true
@@ -30,8 +30,8 @@ abstract class BrowserHistoryScrollListener(private val mLinearLayoutManager: Li
 
         if (dx == 0 && dy == 0) return
 
-        val totalItemCount = mLinearLayoutManager.itemCount
-        val lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition()
+        val totalItemCount = linearLayoutManager.itemCount
+        val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
 
         if (loading) {
             if (totalItemCount > previousTotal) {

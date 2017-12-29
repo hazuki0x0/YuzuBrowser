@@ -207,13 +207,16 @@
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
 
         <service
-            android:name=".download.DownloadService"
+            android:name=".download2.service.DownloadService"
             android:exported="false" />
 
         <activity
-            android:name=".download.DownloadListActivity"
+            android:name=".download2.ui.FastDownloadActivity"
+            android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/download" />
+            android:theme="@style/BrowserMinThemeBlack.Transparent"/>
+        <activity android:name=".download2.ui.DownloadListActivity"/>
+
         <provider
             android:name=".browser.SafeFileProvider"
             android:authorities="jp.hazuki.yuzubrowser.browser.SafeFileProvider"
@@ -298,11 +301,6 @@
         <activity
             android:name=".speeddial.view.SpeedDialSettingActivity"
             android:label="@string/pref_speed_dial_setting" />
-        <activity
-            android:name=".download.FastDownloadActivity"
-            android:exported="false"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
             android:name=".gesture.multiFinger.MultiFingerSettingsActivity"
             android:label="@string/pref_multi_finger_gesture_settings" />

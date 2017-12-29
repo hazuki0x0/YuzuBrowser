@@ -39,8 +39,8 @@ import jp.hazuki.yuzubrowser.adblock.AdBlockController
 import jp.hazuki.yuzubrowser.adblock.mining.MiningProtector
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.debug.DebugActivity
-import jp.hazuki.yuzubrowser.download.DownloadDialog
-import jp.hazuki.yuzubrowser.download.DownloadListActivity
+import jp.hazuki.yuzubrowser.download2.ui.DownloadListActivity
+import jp.hazuki.yuzubrowser.download2.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.history.BrowserHistoryAsyncManager
@@ -248,7 +248,8 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             private fun actionDownload(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-                DownloadDialog.showDownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null)
+                DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null)
+                        .show(activity.supportFragmentManager, "download")
             }
 
             private fun actionOpen(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {

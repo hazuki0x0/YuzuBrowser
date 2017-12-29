@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.settings.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +26,7 @@ import android.support.v7.preference.PreferenceScreen
 
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.adblock.AdBlockActivity
+import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
 
 class BrowserSettingsFragment : YuzuPreferenceFragment() {
@@ -53,8 +55,13 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
             true
         }
 
-        findPreference("ad_block_settings").setOnPreferenceClickListener { _ ->
+        findPreference("ad_block_settings").setOnPreferenceClickListener {
             startActivity(Intent(activity, AdBlockActivity::class.java))
+            true
+        }
+
+        findPreference("download2_folder").setOnPreferenceClickListener {
+            startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
             true
         }
     }
@@ -67,6 +74,23 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
         return false
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_FOLDER -> {
+                val activity = activity ?: return
+                if (resultCode != Activity.RESULT_OK || data == null) return
+
+                val uri = data.data
+
+                activity.contentResolver.takePersistableUriPermission(uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+
+                AppData.download_folder.set(uri.toString())
+                AppData.commit(activity, AppData.download_folder)
+            }
+        }
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
@@ -77,6 +101,10 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
         super.onDetach()
 
         replaceFragment = null
+    }
+
+    companion object {
+        private const val REQUEST_FOLDER = 1
     }
 
     class SuggestScreen : YuzuPreferenceFragment() {
