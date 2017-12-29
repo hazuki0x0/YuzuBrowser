@@ -51,7 +51,9 @@ var Context.clipboardText: String
         manager.primaryClip = clipData
     }
 
-fun Context.setClipboardWithToast(text: String) {
+fun Context.setClipboardWithToast(text: String?) {
+    if (text == null) return
+
     clipboardText = text
     Toast.makeText(this, getString(R.string.copy_clipboard_mes_before) + text, Toast.LENGTH_SHORT).show()
 }

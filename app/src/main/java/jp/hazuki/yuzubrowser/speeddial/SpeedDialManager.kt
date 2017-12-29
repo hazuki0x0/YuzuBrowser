@@ -114,7 +114,7 @@ class SpeedDialManager(val context: Context) {
         val values = ContentValues().apply {
             put(COLUMN_URL, speedDial.url)
             put(COLUMN_TITLE, speedDial.title)
-            put(COLUMN_ICON, speedDial.icon!!.iconBytes)
+            put(COLUMN_ICON, (speedDial.icon ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(context, R.drawable.ic_public_white_24dp))).iconBytes)
             put(COLUMN_FAVICON, speedDial.isFavicon)
             put(COLUMN_LAST_UPDATE, System.currentTimeMillis())
         }

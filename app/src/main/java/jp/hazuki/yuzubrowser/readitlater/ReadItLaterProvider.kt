@@ -45,7 +45,7 @@ class ReadItLaterProvider : ContentProvider() {
         const val COL_TITLE = 2
 
         const private val SCHEME = "content"
-        private const val AUTHORITY = BuildConfig.APPLICATION_ID + ".readItLaterProvider"
+        private const val AUTHORITY = "${BuildConfig.APPLICATION_ID}.readItLaterProvider"
 
         private const val TYPE_READ = 1
         private const val TYPE_EDIT = 2

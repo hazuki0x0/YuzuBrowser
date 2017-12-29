@@ -29,9 +29,9 @@ class MultiFingerGestureInfo {
         }
 
     fun clear() {
-        traces.clear()
         fingers = 0
         trace = 0
+        traces.clear()
     }
 
     fun match(item: MultiFingerGestureItem): Boolean {
