@@ -111,6 +111,8 @@ class ReaderFragment : Fragment() {
     }
 
     private fun setImages(spanned: Spanned) {
+        val activity = activity ?: return
+
         val imageSpans = spanned.getSpans(0, spanned.length, ImageSpan::class.java)
 
         var width = bodyTextView.width

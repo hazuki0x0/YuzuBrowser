@@ -277,7 +277,7 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
             item = if (data == null) {
                 CustomWebHistoryItem(it.url, it.url, it.title, null)
             } else {
-                CustomWebHistoryItem(data.url, data.originalUrl, data.title, data.mWebView.favicon)
+                CustomWebHistoryItem(data.url ?: "", data.originalUrl, data.title, data.mWebView.favicon)
             }
             list.add(item)
         }
