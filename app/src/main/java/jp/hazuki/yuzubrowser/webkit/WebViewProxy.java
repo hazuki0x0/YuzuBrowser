@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Proxy;
-import android.os.Build;
 import android.util.ArrayMap;
 import android.widget.Toast;
 
@@ -60,7 +59,7 @@ public class WebViewProxy {
     }
 
     public static boolean setProxy(Context context, boolean enable, String proxy_address) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && setProxy && !WebViewProxy.resetProxy(context.getApplicationContext()))
+        if (setProxy && !WebViewProxy.resetProxy(context.getApplicationContext()))
             return false;
 
         setProxy = false;
