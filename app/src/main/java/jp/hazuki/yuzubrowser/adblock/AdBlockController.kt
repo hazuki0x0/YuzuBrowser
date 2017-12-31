@@ -19,58 +19,67 @@ package jp.hazuki.yuzubrowser.adblock
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
+import jp.hazuki.yuzubrowser.adblock.faster.core.AdBlocker
+import jp.hazuki.yuzubrowser.adblock.faster.core.FilterMatcher
 import jp.hazuki.yuzubrowser.utils.IOUtils
 import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherList
+import kotlinx.coroutines.experimental.launch
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
-import kotlin.concurrent.thread
 
 class AdBlockController(context: Context) {
     private val dummyImage: ByteArray = IOUtils.readByte(context.resources.assets.open("blank.png"))
+    private val dummy = WebResourceResponse("text/plain", "UTF-8", EmptyInputStream())
 
     private val manager: AdBlockManager = AdBlockManager(context)
     private var blackList: FastMatcherList? = null
     private var whiteList: FastMatcherList? = null
     private var whitePageList: FastMatcherList? = null
+    private var adBlocker: AdBlocker? = null
 
     init {
         update()
     }
 
     fun update() {
-        thread {
-            blackList = manager.getFastMatcherCachedList(AdBlockManager.BLACK_TABLE_NAME)
-            whiteList = manager.getFastMatcherCachedList(AdBlockManager.WHITE_TABLE_NAME)
-            whitePageList = manager.getFastMatcherCachedList(AdBlockManager.WHITE_PAGE_TABLE_NAME)
+        launch {
+            lateinit var blackFilter: FilterMatcher
+            lateinit var whiteFilter: FilterMatcher
+            manager.getFastMatcherCachedList(AdBlockManager.BLACK_TABLE_NAME).let {
+                blackList = it
+                blackFilter = FilterMatcher(it.matcherList)
+            }
+
+            manager.getFastMatcherCachedList(AdBlockManager.WHITE_TABLE_NAME).let {
+                whiteList = it
+                whiteFilter = FilterMatcher(it.matcherList)
+            }
+
+            manager.getFastMatcherCachedList(AdBlockManager.WHITE_PAGE_TABLE_NAME).let {
+                whitePageList = it
+                adBlocker = AdBlocker(blackFilter, whiteFilter, it)
+            }
         }
     }
 
-    fun isBlock(pageUri: Uri?, uri: Uri): Boolean {
-        if (whitePageList == null || whiteList == null || blackList == null) return false
-        if (pageUri != null) {
-            if (whitePageList!!.match(pageUri)) return false
-        }
-
-        if (whiteList!!.match(uri)) return false
-        if (blackList!!.match(uri)) return true
-
-        return false
+    fun isBlock(pageUri: Uri, uri: Uri): Boolean {
+        return adBlocker?.isBlock(pageUri, uri) ?: false
     }
 
     fun onResume() {
-        Thread(Runnable {
+        launch {
             manager.updateOrder(AdBlockManager.BLACK_TABLE_NAME, blackList)
             manager.updateOrder(AdBlockManager.WHITE_TABLE_NAME, whiteList)
             manager.updateOrder(AdBlockManager.WHITE_PAGE_TABLE_NAME, whitePageList)
-        }).run()
+        }
     }
 
     fun createDummy(uri: Uri): WebResourceResponse {
         val last = uri.lastPathSegment
         return if (last != null && (!last.contains(".") || last.endsWith(".js") || last.endsWith(".css")
                 || last.endsWith(".html") || last.endsWith(".htm"))) {
-            WebResourceResponse("text/html", "UTF-8", DUMMY_TEXT)
+            dummy
         } else {
             WebResourceResponse("image/png", null, ByteArrayInputStream(dummyImage))
         }
@@ -79,9 +88,5 @@ class AdBlockController(context: Context) {
     private class EmptyInputStream : InputStream() {
         @Throws(IOException::class)
         override fun read(): Int = -1
-    }
-
-    companion object {
-        private val DUMMY_TEXT = EmptyInputStream()
     }
 }

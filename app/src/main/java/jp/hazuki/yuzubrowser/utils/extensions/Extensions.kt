@@ -14,34 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.fastmatch
+@file:Suppress("NOTHING_TO_INLINE")
 
-import android.net.Uri
-import jp.hazuki.yuzubrowser.adblock.faster.Filter
+package jp.hazuki.yuzubrowser.utils.extensions
 
-interface FastMatcher : Filter {
+import android.util.LruCache
 
-    val type: Int
-
-    val id: Int
-
-    val frequency: Int
-
-    override val pattern: String
-
-    val isUpdate: Boolean
-
-    val time: Long
-
-    override fun match(uri: Uri): Boolean
-
-    fun saved()
-
-    companion object {
-        const val TYPE_SIMPLE_HOST = 1
-        const val TYPE_SIMPLE_URL = 2
-        const val TYPE_REGEX_HOST = 3
-        const val TYPE_REGEX_URL = 4
-        const val TYPE_CONTAINS_HOST = 5
-    }
+operator inline fun <K, V> LruCache<K, V>.set(key: K, value: V) {
+    put(key, value)
 }

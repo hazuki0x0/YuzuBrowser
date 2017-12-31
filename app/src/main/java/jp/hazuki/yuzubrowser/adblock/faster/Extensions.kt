@@ -14,34 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.fastmatch
+package jp.hazuki.yuzubrowser.adblock.faster
 
-import android.net.Uri
-import jp.hazuki.yuzubrowser.adblock.faster.Filter
+import java.util.regex.Matcher
 
-interface FastMatcher : Filter {
-
-    val type: Int
-
-    val id: Int
-
-    val frequency: Int
-
-    override val pattern: String
-
-    val isUpdate: Boolean
-
-    val time: Long
-
-    override fun match(uri: Uri): Boolean
-
-    fun saved()
-
-    companion object {
-        const val TYPE_SIMPLE_HOST = 1
-        const val TYPE_SIMPLE_URL = 2
-        const val TYPE_REGEX_HOST = 3
-        const val TYPE_REGEX_URL = 4
-        const val TYPE_CONTAINS_HOST = 5
+fun Matcher.findAll(): MutableList<String> {
+    val items = ArrayList<String>()
+    while (find()) {
+        items.add(group())
     }
+    return items
 }

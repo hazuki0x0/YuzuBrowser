@@ -83,9 +83,8 @@ class MiningProtector {
             SimpleUrl("://baiduccdn1.com/lib/")
     )
 
-    fun isBlock(pageUri: Uri?, uri: Uri): Boolean {
-        val host = uri.host
-        if (host != null && host == pageUri?.host) return false
+    fun isBlock(pageUri: Uri, uri: Uri): Boolean {
+        if (pageUri.host == pageUri.host) return false
 
         return blackList.any { it.match(uri) }
     }
