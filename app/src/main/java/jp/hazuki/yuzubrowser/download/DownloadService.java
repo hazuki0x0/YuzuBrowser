@@ -227,7 +227,7 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             DownloadRequestInfo info = (DownloadRequestInfo) intent.getSerializableExtra(EXTRA_DOWNLOAD_INFO);
-            if (info != null) {
+            if (info != null && info.getUrl() != null) {
                 new DownloadThread(info).start();
             }
         }

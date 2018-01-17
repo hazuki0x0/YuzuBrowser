@@ -65,6 +65,7 @@ import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermission
+import org.jetbrains.anko.longToast
 import java.net.URISyntaxException
 import kotlin.concurrent.thread
 
@@ -443,13 +444,15 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 return
             }
 
-            AlertDialog.Builder(activity)
-                    .setTitle(R.string.ssl_error_title)
-                    .setMessage(activity.getString(R.string.ssl_error_mes, error.getErrorMessages(activity)))
-                    .setPositiveButton(android.R.string.yes) { _, _ -> handler.proceed() }
-                    .setNegativeButton(android.R.string.no) { _, _ -> handler.cancel() }
-                    .setOnCancelListener { handler.cancel() }
-                    .show()
+            if (!activity.isFinishing) {
+                AlertDialog.Builder(activity)
+                        .setTitle(R.string.ssl_error_title)
+                        .setMessage(activity.getString(R.string.ssl_error_mes, error.getErrorMessages(activity)))
+                        .setPositiveButton(android.R.string.yes) { _, _ -> handler.proceed() }
+                        .setNegativeButton(android.R.string.no) { _, _ -> handler.cancel() }
+                        .setOnCancelListener { handler.cancel() }
+                        .show()
+            }
         }
 
         override fun shouldInterceptRequest(web: CustomWebView, request: WebResourceRequest): WebResourceResponse? {
@@ -610,12 +613,14 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         }
 
         override fun onJsAlert(view: CustomWebView, url: String, message: String, result: JsResult): Boolean {
-            AlertDialog.Builder(activity)
-                    .setTitle(url)
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.yes) { _, _ -> result.confirm() }
-                    .setOnCancelListener { result.cancel() }
-                    .show()
+            if (!activity.isFinishing) {
+                AlertDialog.Builder(activity)
+                        .setTitle(url)
+                        .setMessage(message)
+                        .setPositiveButton(android.R.string.yes) { _, _ -> result.confirm() }
+                        .setOnCancelListener { result.cancel() }
+                        .show()
+            }
             return true
         }
 
@@ -782,11 +787,19 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
                 return true
             }
             "mailto" -> {
-                activity.startActivity(Intent(Intent.ACTION_SENDTO, uri))
+                try {
+                    activity.startActivity(Intent(Intent.ACTION_SENDTO, uri))
+                } catch (e: ActivityNotFoundException) {
+                    controller.activity.longToast(R.string.app_notfound)
+                }
                 return true
             }
             "tel" -> {
-                activity.startActivity(Intent(Intent.ACTION_DIAL, uri))
+                try {
+                    activity.startActivity(Intent(Intent.ACTION_DIAL, uri))
+                } catch (e: ActivityNotFoundException) {
+                    controller.activity.longToast(R.string.app_notfound)
+                }
                 return true
             }
         }

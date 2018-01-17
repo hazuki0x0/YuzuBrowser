@@ -200,7 +200,7 @@ class DownloadListActivity : ThemeActivity(), LoaderCallbacks<Cursor>, ServiceCo
         return messenger
     }
 
-    override fun onUnbind(service: Messenger) {
+    override fun onUnbind(service: Messenger?) {
         DownloadService.unregisterObserver(mServiceBindHelper.binder, mActivityMessenger)
     }
 

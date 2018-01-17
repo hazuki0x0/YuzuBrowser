@@ -74,7 +74,10 @@ public class EditUserAgentDialog extends DialogFragment {
 
                         if (getParentFragment() instanceof OnEditedUserAgent) {
                             ((OnEditedUserAgent) getParentFragment())
-                                    .onEdited(getArguments().getInt(POS), nameEditText.getText().toString(), uaEditText.getText().toString());
+                                    .onEdited(getArguments().getInt(POS),
+                                            nameEditText.getText().toString()
+                                                    .trim().replace("\n", "")
+                                            , uaEditText.getText().toString());
                         }
                     }
                 })

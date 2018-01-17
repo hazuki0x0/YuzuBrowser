@@ -330,6 +330,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             webCustomViewHandler = null
         }
         webFrameLayout.removeAllViews()
+        webGestureOverlayView.removeAllViews()
         tabManagerIn.destroy()
         webClient.destroy()
         isActivityDestroyed = true
@@ -951,7 +952,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     }
 
     override fun requestAdjustWebView() {
-        val data = tabManagerIn.currentTabData
+        val data = tabManagerIn.currentTabData ?: return
         data.mWebView.computeVerticalScrollRangeMethod()
         webViewBehavior.adjustWebView(data, topToolbarLayout.height + bottomToolbarLayout.height)
     }
@@ -1208,7 +1209,8 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     }
 
     override fun addBookmark(tab: MainTabData) {
-        showAddBookmarkDialog(this, supportFragmentManager, tab.title, tab.url)
+        showAddBookmarkDialog(this, supportFragmentManager, tab.title,
+                tab.url ?: tab.mWebView.url ?: "")
     }
 
     override fun savePage(tab: MainTabData) {

@@ -31,7 +31,7 @@ public class Gochiusearch {
      */
     public static long getVectorHash(Bitmap bitmap) {
         Bitmap bmpVector;
-        if (bitmap.getConfig() == Bitmap.Config.ARGB_8888) {
+        if (bitmap.getConfig() == Bitmap.Config.ARGB_8888 || bitmap.getConfig() == Bitmap.Config.RGB_565) {
             bmpVector = Bitmap.createScaledBitmap(bitmap, 9, 8, true);
         } else {
             Bitmap cache = bitmap.copy(Bitmap.Config.ARGB_8888, false);
