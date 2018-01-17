@@ -21,10 +21,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherCache
-import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherList
-import jp.hazuki.yuzubrowser.utils.fastmatch.ItemDecoder
-import jp.hazuki.yuzubrowser.utils.fastmatch.save
+import jp.hazuki.yuzubrowser.utils.fastmatch.*
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.util.*
@@ -153,22 +150,24 @@ class AdBlockManager internal constructor(context: Context) {
         list.sort()
         val db = mOpenHelper.writableDatabase
         db.beginTransaction()
-        try {
-            for (matcher in list.matcherList) {
-                if (matcher.isUpdate) {
-                    val values = ContentValues()
-                    values.put(COLUMN_COUNT, matcher.frequency)
-                    values.put(COLUMN_TIME, matcher.time)
-                    db.update(table, values, COLUMN_ID + "=" + matcher.id, null)
-                    matcher.saved()
+        synchronized(list) {
+            try {
+                for (matcher in list) {
+                    if (matcher.isUpdate) {
+                        val values = ContentValues()
+                        values.put(COLUMN_COUNT, matcher.frequency)
+                        values.put(COLUMN_TIME, matcher.time)
+                        db.update(table, values, COLUMN_ID + "=" + matcher.id, null)
+                        matcher.saved()
+                    }
                 }
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
             }
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
+            list.dbTime = System.currentTimeMillis()
+            list.save(appContext, table)
         }
-        list.dbTime = System.currentTimeMillis()
-        list.save(appContext, table)
     }
 
     internal fun getFastMatcherCachedList(table: String): FastMatcherList {
@@ -181,9 +180,8 @@ class AdBlockManager internal constructor(context: Context) {
     }
 
     private fun getFastMatcherList(table: String): FastMatcherList {
-        val list = FastMatcherList()
-        list.dbTime = getListUpdateTime(table)
-        val matcherList = list.matcherList
+        val list = arrayListOf<FastMatcher>()
+        val dbTime = getListUpdateTime(table)
         val decoder = ItemDecoder()
         val db = mOpenHelper.readableDatabase
         db.query(table, null, COLUMN_ENABLE + " = 1", null, null, null, COLUMN_COUNT + " DESC").use { c ->
@@ -194,9 +192,9 @@ class AdBlockManager internal constructor(context: Context) {
             while (c.moveToNext()) {
                 val matcher = decoder.singleDecode(c.getString(match), c.getInt(id), c.getInt(count), c.getLong(time))
                 if (matcher != null)
-                    matcherList.add(matcher)
+                    list.add(matcher)
             }
-            return list
+            return FastMatcherList(list, dbTime)
         }
     }
 

@@ -19,16 +19,19 @@ package jp.hazuki.yuzubrowser.utils.fastmatch
 import android.net.Uri
 import java.util.*
 
-class FastMatcherList {
-    var dbTime: Long = -1
-    var matcherList = ArrayList<FastMatcher>()
+class FastMatcherList(
+        private val matcherList: ArrayList<FastMatcher> = arrayListOf(),
+        var dbTime: Long = -1
+) : Iterable<FastMatcher> {
 
-    fun add(matcher: FastMatcher) {
-        matcherList.add(matcher)
+    override fun iterator(): Iterator<FastMatcher> {
+        return matcherList.iterator()
     }
 
+    @Synchronized
     fun match(uri: Uri): Boolean = matcherList.any { it.match(uri) }
 
+    @Synchronized
     fun sort() {
         Collections.sort(matcherList, FastMatcherSorter())
     }
