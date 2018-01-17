@@ -42,7 +42,13 @@ public class PackageUtils {
         Intent openIntent = new Intent(Intent.ACTION_VIEW);
         openIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Uri uri = DownloadFileProvider.getUriForFIle(file);
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = DownloadFileProvider.getUriForFIle(file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+
         openIntent.setDataAndType(uri, context.getContentResolver().getType(uri));
 
         openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

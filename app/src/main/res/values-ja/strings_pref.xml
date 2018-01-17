@@ -33,12 +33,12 @@
     <string name="pref_allow_content_access">contentアクセスの許可</string>
     <string name="pref_default_encoding">デフォルトエンコード</string>
     <string name="pref_text_encoding">テキストエンコーディング</string>
-    <string name="pref_softbtn_settings">ソフトボタン設定</string>
-    <string name="pref_btn_tab_left">タブ左ボタン</string>
-    <string name="pref_btn_tab_right">タブ右ボタン</string>
-    <string name="pref_btn_url_left">URL左ボタン</string>
-    <string name="pref_btn_url_right">URL右ボタン</string>
-    <string name="pref_btn_url_center">URL中央ボタン</string>
+    <string name="pref_softbtn_settings">ツールバーボタン設定</string>
+    <string name="pref_btn_tab_left">タブバー左ボタン</string>
+    <string name="pref_btn_tab_right">タブバー右ボタン</string>
+    <string name="pref_btn_url_left">URLバー左ボタン</string>
+    <string name="pref_btn_url_right">URLバー右ボタン</string>
+    <string name="pref_btn_url_center">URLバー中央ボタン(URLボックス)</string>
     <string name="pref_btn_action_press">タップ</string>
     <string name="pref_btn_action_lpress">ロングタップ</string>
     <string name="pref_btn_action_up">上スワイプ</string>
@@ -53,7 +53,7 @@
     <string name="pref_javascript">JavaScriptを有効にする</string>
     <string name="pref_web_db">データベースを有効にする</string>
     <string name="pref_web_dom_db">DOMストレージを有効にする</string>
-    <string name="pref_menu_settings">メニュー設定</string>
+    <string name="pref_menu_settings">メインメニュー設定</string>
     <string name="pref_user_agent">UserAgent</string>
 
     <string name="pref_sensitivity_distance">感度 (距離)</string>
@@ -119,7 +119,7 @@
     <string name="pref_pause_web_background">バックグラウンドでWebを停止</string>
     <string name="pref_pause_web_tab_change">タブが裏のときWebを停止</string>
     <string name="pref_pause_web_tab_change_disable_summary">WebViewのバグのため無効</string>
-    <string name="pref_btn_custom">カスタムボタン</string>
+    <string name="pref_btn_custom">カスタムバーボタン</string>
     <string name="pref_custom_bar">カスタムバー</string>
     <string name="pref_save_formdata">フォームデータを保存</string>
     <string name="pref_web_app_cache">アプリケーションキャッシュを有効にする</string>
@@ -396,7 +396,7 @@
     <string name="pref_reader_theme_same_as">アプリの設定</string>
 
     <string name="pref_font_size">フォントサイズ設定</string>
-    <string name="pref_menu">メニュー</string>
+    <string name="pref_menu">メインメニュー</string>
     <string name="pref_history">履歴</string>
     <string name="pref_bookmark">ブックマーク</string>
     <string name="pref_speeddial_item_text_size">アイテムのテキストサイズ</string>

@@ -154,12 +154,12 @@
     <string name="pref_allow_content_access">Allow content access</string>
     <string name="pref_default_encoding">Default text encoding</string>
     <string name="pref_text_encoding">Text encoding</string>
-    <string name="pref_softbtn_settings">Software button settings</string>
-    <string name="pref_btn_tab_left">Tab left button</string>
-    <string name="pref_btn_tab_right">Tab right button</string>
-    <string name="pref_btn_url_left">URL left button</string>
-    <string name="pref_btn_url_right">URL right button</string>
-    <string name="pref_btn_url_center">URL center button</string>
+    <string name="pref_softbtn_settings">Toolbar button settings</string>
+    <string name="pref_btn_tab_left">Tab bar left button</string>
+    <string name="pref_btn_tab_right">Tab bar right button</string>
+    <string name="pref_btn_url_left">URL bar left button</string>
+    <string name="pref_btn_url_right">URL bar right button</string>
+    <string name="pref_btn_url_center">URL bar center button(URL box)</string>
     <string name="pref_btn_action_press">Press</string>
     <string name="pref_btn_action_lpress">Long press</string>
     <string name="pref_btn_action_up">Swipe up</string>
@@ -174,7 +174,7 @@
     <string name="pref_javascript">Enable JavaScript</string>
     <string name="pref_web_db">Enable database</string>
     <string name="pref_web_dom_db">Enable DOM storage</string>
-    <string name="pref_menu_settings">Menu settings</string>
+    <string name="pref_menu_settings">Options menu settings</string>
     <string name="pref_user_agent">UserAgent</string>
 
     <string name="pref_sensitivity_distance">Sensitivity (distance)</string>
@@ -406,7 +406,7 @@
     <string name="pref_pause_web_background">Pause web in background</string>
     <string name="pref_pause_web_tab_change">Pause web on changing tab</string>
     <string name="pref_pause_web_tab_change_disable_summary">Disabled due to a bug in WebView</string>
-    <string name="pref_btn_custom">Custom button</string>
+    <string name="pref_btn_custom">Custom bar button</string>
     <string name="pref_custom_bar">Custom bar</string>
     <string name="pref_save_formdata">Save data of web forms</string>
     <string name="pref_web_app_cache">Enable application cache</string>
@@ -774,7 +774,7 @@
     </integer-array>
 
     <string name="pref_font_size">Font size settings</string>
-    <string name="pref_menu">Menu</string>
+    <string name="pref_menu">Options menu</string>
     <string name="pref_history">History</string>
     <string name="pref_bookmark">Bookmark</string>
     <string name="pref_speeddial_item_text_size">Item text size</string>

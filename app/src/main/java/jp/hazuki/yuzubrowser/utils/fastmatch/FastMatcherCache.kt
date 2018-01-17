@@ -47,8 +47,9 @@ class FastMatcherCache(context: Context, fileName: String) {
     }
 
     fun load(): FastMatcherList {
-        val matcherList = FastMatcherList()
-        if (!path.exists()) return matcherList
+        if (!path.exists()) return FastMatcherList()
+        var dbTime = -1L
+        val list = arrayListOf<FastMatcher>()
 
         try {
             BufferedInputStream(FileInputStream(path)).use {
@@ -61,8 +62,8 @@ class FastMatcherCache(context: Context, fileName: String) {
                     val shortArray = ByteArray(2)
                     var patternBuffer = ByteArray(32)
 
-                    if (it.read(longArray) != 8) return matcherList
-                    matcherList.dbTime = longArray.toLong()
+                    if (it.read(longArray) != 8) return FastMatcherList()
+                    dbTime = longArray.toLong()
 
                     loop@ while (true) {
                         val type = it.read()
@@ -100,7 +101,7 @@ class FastMatcherCache(context: Context, fileName: String) {
                         matcher.id = id
                         matcher.count = count
                         matcher.time = time
-                        matcherList.add(matcher)
+                        list.add(matcher)
                     }
                 }
             }
@@ -108,7 +109,7 @@ class FastMatcherCache(context: Context, fileName: String) {
             ErrorReport.printAndWriteLog(e)
         }
 
-        return matcherList
+        return FastMatcherList(list, dbTime)
     }
 }
 
@@ -123,7 +124,7 @@ fun FastMatcherList.save(context: Context, fileName: String) {
             os.write(CACHE_HEADER.toByteArray())
             os.write(dbTime.toByteArray())
 
-            matcherList.forEach { matcher ->
+            forEach { matcher ->
                 os.write(matcher.type and 0xff)
                 os.write(matcher.id.toByteArray())
                 os.write(matcher.frequency.toByteArray())

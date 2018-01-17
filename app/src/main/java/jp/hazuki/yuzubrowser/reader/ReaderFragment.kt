@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.reader
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.text.Spanned
 import android.text.TextUtils
@@ -32,6 +33,7 @@ import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.UrlUtils
 import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
+import jp.hazuki.yuzubrowser.utils.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
 import java.io.File
@@ -85,16 +87,25 @@ class ReaderFragment : Fragment() {
 
         activity.title = UrlUtils.decodeUrlHost(url)
 
+        fragmentManager.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
+            it.dismiss()
+        }
+
         ui {
             val dialog = ProgressDialog(getString(R.string.now_loading), true, false).also {
                 it.show(childFragmentManager, "loading")
             }
+
             val data = async { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }.await()
-            dialog.dismiss()
-            if (data != null) {
-                setText(data.title, data.body)
-            } else {
-                setFailedText()
+            if (isAdded) {
+                if (isResumed) {
+                    dialog.dismiss()
+                }
+                if (data != null) {
+                    setText(data.title, data.body)
+                } else {
+                    setFailedText()
+                }
             }
         }
     }
