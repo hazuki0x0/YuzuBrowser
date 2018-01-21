@@ -220,7 +220,9 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
         val list = CustomWebBackForwardList(mCurrent, mList.size)
         mList.asSequence()
                 .map { it.mWebView }
-                .mapTo(list) { CustomWebHistoryItem(it.url!!, it.originalUrl, it.title, it.favicon) }
+                .mapTo(list) {
+                    CustomWebHistoryItem(it.url ?: "", it.originalUrl, it.title, it.favicon)
+                }
         return list
     }
 

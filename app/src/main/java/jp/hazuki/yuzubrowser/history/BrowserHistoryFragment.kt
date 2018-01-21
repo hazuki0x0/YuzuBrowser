@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,8 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         return inflater.inflate(R.layout.fragment_recycler_with_scroller, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val arguments = arguments ?: throw IllegalArgumentException()
         pickMode = arguments.getBoolean(PICK_MODE)
 
         val layoutManager = LinearLayoutManager(activity)
@@ -86,6 +87,8 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
+        val activity = activity ?: return false
+
         if (!pickMode) {
             val history = adapter.getItem(position)
             val url = history.url ?: return false
@@ -158,6 +161,8 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     private fun sendUrl(url: String?, target: Int) {
+        val activity = activity ?: return
+
         if (url != null) {
             val intent = Intent()
             intent.putExtra(BrowserManager.EXTRA_OPENABLE, OpenUrl(url, target))
@@ -167,6 +172,8 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     private fun sendPicked(history: BrowserHistory) {
+        val activity = activity ?: return
+
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_TITLE, history.title)
         intent.putExtra(Intent.EXTRA_TEXT, history.url)
@@ -300,6 +307,8 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     private fun openUrls(items: List<Int>?, target: Int) {
+        val activity = activity ?: return
+
         if (items != null && items.isNotEmpty()) {
             val urls = items.mapNotNull { adapter.getItem(it).url }
 

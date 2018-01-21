@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ class ReaderFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: return
+        val arguments = arguments ?: throw IllegalArgumentException()
         titleTextView = view.findViewById(R.id.titleTextView)
         bodyTextView = view.findViewById(R.id.bodyTextView)
 
@@ -84,7 +86,7 @@ class ReaderFragment : Fragment() {
 
         activity.title = UrlUtils.decodeUrlHost(url)
 
-        fragmentManager.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
+        fragmentManager?.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
             it.dismiss()
         }
 
