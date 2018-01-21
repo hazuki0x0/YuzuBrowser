@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017-2018 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.speeddial.view
 
 import android.app.Activity
@@ -6,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +70,7 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
         }
 
         icon.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             intent.type = "image/*"
             startActivityForResult(intent, REQUEST_PICK_IMAGE)
         }
@@ -94,6 +111,7 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
                         putExtra("aspectY", 1)
                         putExtra("scale", true)
                         putExtra("return-data", true)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                     }
                     startActivityForResult(intent, REQUEST_CROP_IMAGE)
                 } catch (e: ActivityNotFoundException) {

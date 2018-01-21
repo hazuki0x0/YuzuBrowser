@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,8 +89,9 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
-        val activity = activity
-        if (!pickMode && activity != null) {
+        val activity = activity ?: return false
+
+        if (!pickMode) {
             val history = adapter.getItem(position)
             val url = history.url ?: return false
             val title = history.title ?: return false

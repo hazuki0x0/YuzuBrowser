@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ class ReaderFragment : Fragment() {
 
         activity.title = UrlUtils.decodeUrlHost(url)
 
-        fragmentManager.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
+        fragmentManager?.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
             it.dismiss()
         }
 

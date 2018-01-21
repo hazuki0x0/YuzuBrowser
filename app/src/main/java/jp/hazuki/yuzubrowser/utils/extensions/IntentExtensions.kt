@@ -28,8 +28,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.internals.AnkoInternals
 import java.io.File
 
-inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any?>)
-        = AnkoInternals.internalStartActivity(activity!!, T::class.java, params)
+inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any?>) = AnkoInternals.internalStartActivity(activity!!, T::class.java, params)
 
 inline fun <reified T : Activity> Fragment.startActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>) =
         startActivityForResult(AnkoInternals.createIntent(activity!!, T::class.java, params), requestCode)
