@@ -100,6 +100,11 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         }
     }
 
+    fun moveToFirst(folder: BookmarkFolder, item: BookmarkItem) {
+        folder.list.remove(item)
+        folder.list.add(0, item)
+    }
+
     fun addAll(folder: BookmarkFolder, addlist: Collection<BookmarkItem>) {
         folder.list.addAll(addlist)
         addlist.filter { it is BookmarkSite }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import jp.hazuki.yuzubrowser.R;
@@ -24,6 +25,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
     protected final AlertDialog mDialog;
     protected final EditText titleEditText;
     protected final EditText urlEditText;
+    protected final TextView folderTextView;
     protected final SpinnerButton folderButton;
     protected final CheckBox addToTopCheckBox;
     protected DialogInterface.OnClickListener mOnClickListener;
@@ -42,6 +44,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
         View view = inflateView();
         titleEditText = view.findViewById(R.id.titleEditText);
         urlEditText = view.findViewById(R.id.urlEditText);
+        folderTextView = view.findViewById(R.id.folderTextView);
         folderButton = view.findViewById(R.id.folderButton);
         addToTopCheckBox = view.findViewById(R.id.addToTopCheckBox);
 
@@ -77,6 +80,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
                     .setOnFolderSelectedListener(AddBookmarkDialog.this)
                     .show());
         } else {
+            folderTextView.setVisibility(View.GONE);
             folderButton.setVisibility(View.GONE);
         }
     }
@@ -102,6 +106,9 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
                     mManager.addFirst(mParent, item);
                 else
                     mManager.add(mParent, item);
+            }
+            if (mItem != null && addToTopCheckBox.isChecked()) {
+                mManager.moveToFirst(mParent, mItem);
             }
 
             if (mManager.save()) {
