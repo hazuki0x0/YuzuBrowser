@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,12 +48,12 @@ class AdBlockController(context: Context) {
             lateinit var whiteFilter: FilterMatcher
             manager.getFastMatcherCachedList(AdBlockManager.BLACK_TABLE_NAME).let {
                 blackList = it
-                blackFilter = FilterMatcher(it.matcherList)
+                blackFilter = FilterMatcher(it.iterator())
             }
 
             manager.getFastMatcherCachedList(AdBlockManager.WHITE_TABLE_NAME).let {
                 whiteList = it
-                whiteFilter = FilterMatcher(it.matcherList)
+                whiteFilter = FilterMatcher(it.iterator())
             }
 
             manager.getFastMatcherCachedList(AdBlockManager.WHITE_PAGE_TABLE_NAME).let {

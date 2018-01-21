@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,21 +23,17 @@ import jp.hazuki.yuzubrowser.adblock.faster.ListFilter
 import jp.hazuki.yuzubrowser.adblock.faster.findAll
 import java.util.regex.Pattern
 
-class FilterMatcher() {
+class FilterMatcher(iterator: Iterator<Filter>) {
     private val filtersByKey = HashMap<String, BaseFilter>()
     private val keyByFilter = HashMap<String, String>()
 
-    constructor(items: Collection<Filter>) : this() {
-        addAll(items)
+    init {
+        iterator.forEach(::add)
     }
 
     fun clear() {
         filtersByKey.clear()
         keyByFilter.clear()
-    }
-
-    fun addAll(items: Collection<Filter>) {
-        items.forEach(::add)
     }
 
     fun add(filter: Filter) {
