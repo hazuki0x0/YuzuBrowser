@@ -467,7 +467,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 Toast.makeText(controller.applicationContextInfo, if (cookie) R.string.toggle_enable else R.string.toggle_disable, Toast.LENGTH_SHORT).show()
             }
             SingleAction.TOGGLE_USERJS -> {
-                val to = !controller.isEnableAutoScroll
+                val to = !controller.isEnableUserScript
                 controller.isEnableUserScript = to
                 Toast.makeText(controller.applicationContextInfo, if (to) R.string.toggle_enable else R.string.toggle_disable, Toast.LENGTH_SHORT).show()
             }
