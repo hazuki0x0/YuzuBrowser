@@ -19,6 +19,10 @@ package jp.hazuki.yuzubrowser.adblock.faster
 import android.net.Uri
 
 class ListFilter(vararg filter: Filter) : ArrayList<Filter>(filter.size), BaseFilter {
+    override fun find(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Filter? {
+        return firstOrNull { it.match(key, pageUrl, requestUri, isThirdParty) }
+    }
+
     override fun match(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Boolean {
         return any { it.match(key, pageUrl, requestUri, isThirdParty) }
     }

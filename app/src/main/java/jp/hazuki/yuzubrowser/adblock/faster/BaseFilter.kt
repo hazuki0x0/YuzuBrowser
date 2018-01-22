@@ -22,4 +22,6 @@ interface BaseFilter {
     val size: Int
 
     fun match(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Boolean
+
+    fun find(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Filter?
 }

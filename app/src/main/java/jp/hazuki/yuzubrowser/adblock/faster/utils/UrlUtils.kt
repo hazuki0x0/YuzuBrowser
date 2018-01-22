@@ -34,8 +34,8 @@ fun isDomain(host: String): Boolean {
 }
 
 fun isThirdParty(pageUrl: Uri, requestUri: Uri): Boolean {
-    val pageHost = pageUrl.host
-    val requestHost = requestUri.host
+    val pageHost = pageUrl.host ?: ""
+    val requestHost = requestUri.host ?: ""
 
     if (pageHost == requestHost) return false
 

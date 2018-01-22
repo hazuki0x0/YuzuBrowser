@@ -474,8 +474,13 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             val uri = Uri.parse(tabIndexData.url)
 
             adBlockController?.run {
-                if (isBlock(uri, request.url)) {
-                    return createDummy(request.url)
+                val result = isBlock(uri, request.url)
+                if (result != null) {
+                    return if (request.isForMainFrame) {
+                        createMainFrameDummy(activity, request.url, result.pattern)
+                    } else {
+                        createDummy(request.url)
+                    }
                 }
             }
 

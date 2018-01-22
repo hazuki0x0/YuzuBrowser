@@ -118,6 +118,10 @@ class FilterMatcher(iterator: Iterator<Filter>) {
         return filtersByKey[key]?.match(key, pageUrl, requestUri, isThirdParty) ?: false
     }
 
+    fun find(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Filter? {
+        return filtersByKey[key]?.find(key, pageUrl, requestUri, isThirdParty)
+    }
+
     companion object {
         private val regexMatcher = Pattern.compile("""^(@@)?/.*/(?:\$~?[\w-]+(?:=[^,\s]+)?(?:,~?[\w-]+(?:=[^,\s]+)?)*)?$""")
         private val optionMatcher = Pattern.compile("""\$(~?[\w-]+(?:=[^,\s]+)?(?:,~?[\w-]+(?:=[^,\s]+)?)*)$""")

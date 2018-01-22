@@ -290,4 +290,7 @@
     <string name="permission_ask">Ask</string>
     <string name="allow">Allow</string>
     <string name="block">Block</string>
+    <string name="ad_block">Ad block</string>
+    <string name="ad_block_blocked_page">Ad block blocked the following page:</string>
+    <string name="ad_block_blocked_filter">Because of the following filter:</string>
 </resources>

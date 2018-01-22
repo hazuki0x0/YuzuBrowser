@@ -72,7 +72,7 @@ public final class FastMatcherFactory {
     }
 
     private CharBuffer getBuffer(int length) {
-        if (mainBuffer == null || mainBuffer.limit() < length * 2)
+        if (mainBuffer == null || mainBuffer.capacity() < length * 2)
             mainBuffer = CharBuffer.allocate(length * 2);
         mainBuffer.clear();
         return mainBuffer;

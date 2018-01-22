@@ -23,9 +23,9 @@ import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.FileUtils
 import jp.hazuki.yuzubrowser.utils.HtmlUtils
 import jp.hazuki.yuzubrowser.utils.IOUtils
+import jp.hazuki.yuzubrowser.utils.extensions.getNoCacheResponse
 import java.io.*
 import java.nio.charset.StandardCharsets
-import java.util.*
 
 class SpeedDialHtml(context: Context) {
 
@@ -158,16 +158,6 @@ class SpeedDialHtml(context: Context) {
         val image = manager.getImage(id) ?: return null
 
         return WebResourceResponse("image/png", null, ByteArrayInputStream(image))
-    }
-
-    private fun getNoCacheResponse(mimeType: String, sequence: CharSequence): WebResourceResponse {
-        return getNoCacheResponse(mimeType, ByteArrayInputStream(sequence.toString().toByteArray(StandardCharsets.UTF_8)))
-    }
-
-    private fun getNoCacheResponse(mimeType: String, stream: InputStream): WebResourceResponse {
-        val response = WebResourceResponse(mimeType, "UTF-8", stream)
-        response.responseHeaders = HashMap<String, String>().apply { put("Cache-Control", "no-cache") }
-        return response
     }
 
     private fun getResourceString(context: Context, id: Int): String {

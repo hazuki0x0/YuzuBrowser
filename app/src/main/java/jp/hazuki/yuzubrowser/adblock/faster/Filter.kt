@@ -27,4 +27,8 @@ interface Filter : BaseFilter {
     fun match(uri: Uri): Boolean
 
     override fun match(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean) = match(requestUri)
+
+    override fun find(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Filter? {
+        return if (match(requestUri)) this else null
+    }
 }

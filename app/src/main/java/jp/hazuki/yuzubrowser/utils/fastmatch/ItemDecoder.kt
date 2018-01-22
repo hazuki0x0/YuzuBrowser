@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.utils.fastmatch
 
 import jp.hazuki.yuzubrowser.utils.ErrorReport
+import jp.hazuki.yuzubrowser.utils.fastmatch.regex.NormalRegexUrl
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
@@ -38,7 +39,7 @@ class ItemDecoder {
         if (line.length > 2) {
             if (line[0] == '[' && line[line.length - 1] == ']') {
                 return try {
-                    RegexUrl(line.substring(1, line.length - 1))
+                    NormalRegexUrl(line.substring(1, line.length - 1))
                 } catch (e: PatternSyntaxException) {
                     ErrorReport.printAndWriteLog(e)
                     null

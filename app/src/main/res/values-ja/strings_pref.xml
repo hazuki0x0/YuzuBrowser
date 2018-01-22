@@ -435,4 +435,7 @@
     <string name="pref_privacy_policy">プライバシーポリシー</string>
     <string name="mining_protect">No Coin</string>
     <string name="mining_protect_summary">仮想通貨のマイニング保護</string>
+    <string name="ad_block">広告ブロック</string>
+    <string name="ad_block_blocked_page">広告ブロックがこのページをブロックしました</string>
+    <string name="ad_block_blocked_filter">以下のフィルターがブロックしました</string>
 </resources>

@@ -19,9 +19,12 @@ package jp.hazuki.yuzubrowser.adblock
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
+import jp.hazuki.yuzubrowser.R
+import jp.hazuki.yuzubrowser.adblock.faster.Filter
 import jp.hazuki.yuzubrowser.adblock.faster.core.AdBlocker
 import jp.hazuki.yuzubrowser.adblock.faster.core.FilterMatcher
 import jp.hazuki.yuzubrowser.utils.IOUtils
+import jp.hazuki.yuzubrowser.utils.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherList
 import kotlinx.coroutines.experimental.launch
 import java.io.ByteArrayInputStream
@@ -63,8 +66,8 @@ class AdBlockController(context: Context) {
         }
     }
 
-    fun isBlock(pageUri: Uri, uri: Uri): Boolean {
-        return adBlocker?.isBlock(pageUri, uri) ?: false
+    fun isBlock(pageUri: Uri, uri: Uri): Filter? {
+        return adBlocker?.isBlock(pageUri, uri)
     }
 
     fun onResume() {
@@ -83,6 +86,30 @@ class AdBlockController(context: Context) {
         } else {
             WebResourceResponse("image/png", null, ByteArrayInputStream(dummyImage))
         }
+    }
+
+    fun createMainFrameDummy(context: Context, uri: Uri, pattern: String): WebResourceResponse {
+        val builder = StringBuilder("<meta charset=utf-8>" +
+                "<meta content=\"width=device-width,initial-scale=1,minimum-scale=1\"name=viewport>" +
+                "<style>body{padding:5px 15px;background:#fafafa}body,p{text-align:center}p{margin:20px 0 0}" +
+                "pre{margin:5px 0;padding:5px;background:#ddd}button{margin:15px;border:0;cursor:pointer;" +
+                "outline:0;appearance:none;transition:box-shadow .2s cubic-bezier(0.4,0,0.2,1);padding:5px;" +
+                "font-size:.875em;padding:10px 24px;color:#fff;background-color:#4285f4;border-radius:3px}" +
+                "</style><title>")
+                .append(context.getText(R.string.pref_ad_block))
+                .append("</title><p>")
+                .append(context.getText(R.string.ad_block_blocked_page))
+                .append("<pre>")
+                .append(uri)
+                .append("</pre><p>")
+                .append(context.getText(R.string.ad_block_blocked_filter))
+                .append("<pre>")
+                .append(pattern)
+                .append("</pre><button onclick=history.back()>")
+                .append(context.getText(R.string.go_back))
+                .append("</button>")
+
+        return getNoCacheResponse("text/html", builder)
     }
 
     private class EmptyInputStream : InputStream() {
