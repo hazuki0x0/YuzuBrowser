@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,13 @@ package jp.hazuki.yuzubrowser.utils.extensions
 
 import android.app.Activity
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.support.v4.app.Fragment
 import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider
+import jp.hazuki.yuzubrowser.utils.getPathFromUri
 import org.jetbrains.anko.*
 import org.jetbrains.anko.internals.AnkoInternals
 import java.io.File
@@ -52,8 +55,17 @@ inline fun Fragment.makeCall(number: String): Boolean = activity!!.makeCall(numb
 
 inline fun Fragment.sendSMS(number: String, text: String = ""): Boolean = activity!!.sendSMS(number, text)
 
-fun createFileOpenIntent(uri: Uri, mimeType: String): Intent {
-    val target = if (uri.scheme == "file") DownloadFileProvider.getUriForFIle(File(uri.path)) else uri
+fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String): Intent {
+    val target = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (uri.scheme == "file") DownloadFileProvider.getUriForFIle(File(uri.path)) else uri
+    } else {
+        if (uri.scheme == "file") {
+            uri
+        } else {
+            val path = context.getPathFromUri(uri)
+            if (path != null) Uri.parse("file://" + path) else uri
+        }
+    }
 
     return Intent(Intent.ACTION_VIEW).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)

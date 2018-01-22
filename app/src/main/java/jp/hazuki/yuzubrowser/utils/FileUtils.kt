@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,12 @@ package jp.hazuki.yuzubrowser.utils
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.v4.provider.DocumentFile
+import java.io.File
 
 
 fun createUniqueFileName(root: DocumentFile, fileName: String): String {
@@ -93,6 +95,12 @@ fun Context.getPathFromUri(uri: Uri): String? {
             }
 
             // TODO handle non-primary volumes
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val path = "/storage/$type/${split[1]}"
+                if (File(path).exists()) {
+                    return path
+                }
+            }
 
         } else if (uri.isDownloadsDocument()) { // DownloadsProvider
             val id = DocumentsContract.getDocumentId(uri)
@@ -118,6 +126,9 @@ fun Context.getPathFromUri(uri: Uri): String? {
             }
         }
     } else if ("content".equals(uri.scheme, ignoreCase = true)) { // MediaStore (and general)
+
+        if (uri.isGooglePhotosUri()) return uri.lastPathSegment
+
         return getDataColumn(uri, null, null)
 
     } else if ("file".equals(uri.scheme, ignoreCase = true)) { // File
@@ -161,4 +172,8 @@ fun Uri.isDownloadsDocument(): Boolean {
 
 fun Uri.isMediaDocument(): Boolean {
     return "com.android.providers.media.documents" == authority
+}
+
+fun Uri.isGooglePhotosUri(): Boolean {
+    return "com.google.android.apps.photos.content" == authority
 }

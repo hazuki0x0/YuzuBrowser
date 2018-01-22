@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -262,7 +262,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
                 setAutoCancel(true)
                 setContentText(getText(R.string.download_success))
                 setSmallIcon(android.R.drawable.stat_sys_download_done)
-                setContentIntent(PendingIntent.getActivity(applicationContext, 0, info.createFileOpenIntent(), 0))
+                setContentIntent(PendingIntent.getActivity(applicationContext, 0, info.createFileOpenIntent(this@DownloadService), 0))
                 notificationManager.notify(info.id.toInt(), build())
             }
             updateInfo(ServiceSocket.UPDATE, info)

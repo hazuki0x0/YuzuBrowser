@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017-2018 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.utils;
 
 import android.content.ComponentName;
@@ -19,7 +35,6 @@ import android.text.TextUtils;
 import android.webkit.URLUtil;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,33 +42,10 @@ import java.util.List;
 import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.R;
 import jp.hazuki.yuzubrowser.browser.SafeFileProvider;
-import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider;
 
 public class PackageUtils {
     private PackageUtils() {
         throw new UnsupportedOperationException();
-    }
-
-    public static Intent createFileOpenIntent(Context context, String filepath) {
-        return createFileOpenIntent(context, new File(filepath));
-    }
-
-    public static Intent createFileOpenIntent(Context context, File file) {
-        Intent openIntent = new Intent(Intent.ACTION_VIEW);
-        openIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = DownloadFileProvider.getUriForFIle(file);
-        } else {
-            uri = Uri.fromFile(file);
-        }
-
-        openIntent.setDataAndType(uri, context.getContentResolver().getType(uri));
-
-        openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-        return openIntent;
     }
 
     public static boolean isPermissionDerivedFromMyPackage(Context context, String permssion_name) {

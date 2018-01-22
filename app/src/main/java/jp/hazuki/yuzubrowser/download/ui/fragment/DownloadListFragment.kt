@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,13 +71,15 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
+        val activity = activity ?: return
+
         val info = adapter[position]
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED) {
             info.getFile()?.let {
                 try {
-                    startActivity(createFileOpenIntent(it.uri, info.mimeType))
+                    startActivity(createFileOpenIntent(activity, it.uri, info.mimeType))
                 } catch (e: ActivityNotFoundException) {
-                    activity?.longToast(R.string.app_notfound)
+                    activity.longToast(R.string.app_notfound)
                 }
             }
 
@@ -85,6 +87,8 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?, position: Int) {
+        val activity = activity ?: return
+
         val info = adapter[position]
         val file = info.getFile()
 
@@ -92,9 +96,9 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
             DownloadFileInfo.STATE_DOWNLOADED -> if (file != null) {
                 menu.add(R.string.open_file).setOnMenuItemClickListener {
                     try {
-                        startActivity(createFileOpenIntent(file.uri, info.mimeType))
+                        startActivity(createFileOpenIntent(activity, file.uri, info.mimeType))
                     } catch (e: ActivityNotFoundException) {
-                        activity?.longToast(R.string.app_notfound)
+                        activity.longToast(R.string.app_notfound)
                     }
                     false
                 }
@@ -115,7 +119,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
 
         if (info.checkFlag(DownloadFileInfo.STATE_PAUSED)) {
             menu.add(R.string.resume_download).setOnMenuItemClickListener {
-                activity?.reDownload(info.id)
+                activity.reDownload(info.id)
                 false
             }
         }
@@ -123,7 +127,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         menu.add(R.string.open_url).setOnMenuItemClickListener {
             startActivity(intentFor<BrowserActivity>(Intent.EXTRA_TEXT to info.url)
                     .apply { action = Intent.ACTION_VIEW })
-            activity?.finish()
+            activity.finish()
             false
         }
 

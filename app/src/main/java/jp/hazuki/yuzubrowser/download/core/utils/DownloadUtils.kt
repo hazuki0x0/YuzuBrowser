@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.createUniqueFileName
+import jp.hazuki.yuzubrowser.utils.extensions.createFileOpenIntent
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
@@ -130,7 +131,7 @@ fun getDownloadFolderUri(): Uri {
     return Uri.parse(AppData.download_folder.get())
 }
 
-fun DownloadFileInfo.createFileOpenIntent() = jp.hazuki.yuzubrowser.utils.extensions.createFileOpenIntent(root.findFile(name).uri, mimeType)
+fun DownloadFileInfo.createFileOpenIntent(context: Context) = createFileOpenIntent(context, root.findFile(name).uri, mimeType)
 
 fun DownloadFileInfo.getNotificationString(context: Context): String {
     return if (size > 0) {
