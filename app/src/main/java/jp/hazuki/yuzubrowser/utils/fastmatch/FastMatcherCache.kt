@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package jp.hazuki.yuzubrowser.utils.fastmatch
 
 import android.content.Context
 import jp.hazuki.yuzubrowser.utils.ErrorReport
+import jp.hazuki.yuzubrowser.utils.fastmatch.regex.LazyRegexHost
+import jp.hazuki.yuzubrowser.utils.fastmatch.regex.LazyRegexUrl
 import java.io.*
 
 private const val FOLDER = "fastMatcher"
@@ -93,8 +95,8 @@ class FastMatcherCache(context: Context, fileName: String) {
                         val matcher = when (type) {
                             1 -> SimpleHost(pattern)
                             2 -> SimpleUrl(pattern)
-                            3 -> RegexHost(pattern)
-                            4 -> RegexUrl(pattern)
+                            3 -> LazyRegexHost(pattern)
+                            4 -> LazyRegexUrl(pattern)
                             5 -> ContainsHost(pattern)
                             else -> break@loop
                         }

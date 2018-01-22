@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.fastmatch
+package jp.hazuki.yuzubrowser.utils.fastmatch.regex
 
-import android.net.Uri
-
+import jp.hazuki.yuzubrowser.utils.fastmatch.RegexHost
 import java.util.regex.Pattern
 
-internal abstract class RegexUrl : SimpleCountMatcher() {
-    protected abstract val regex: Pattern
-
-    override val type: Int
-        get() = FastMatcher.TYPE_REGEX_URL
-    override val pattern: String
-        get() = regex.pattern()
-
-    override fun matchItem(uri: Uri) = regex.matcher(uri.toString()).find()
+internal class NormalRegexHost(host: String) : RegexHost() {
+    override val regex: Pattern = Pattern.compile(host)
 }

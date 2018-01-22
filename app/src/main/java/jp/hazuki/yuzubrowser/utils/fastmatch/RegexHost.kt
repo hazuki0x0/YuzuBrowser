@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import android.net.Uri
 
 import java.util.regex.Pattern
 
-internal class RegexHost(host: String) : SimpleCountMatcher() {
-    private val regex: Pattern = Pattern.compile(host)
+internal abstract class RegexHost : SimpleCountMatcher() {
+    protected abstract val regex: Pattern
 
     override val type: Int
         get() = FastMatcher.TYPE_REGEX_HOST
