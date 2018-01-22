@@ -49,7 +49,7 @@ public class PackageUtils {
             uri = Uri.fromFile(file);
         }
 
-        openIntent.setDataAndType(uri, context.getContentResolver().getType(uri));
+        openIntent.setDataAndType(uri, FileUtils.getMineType(file));
 
         openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
