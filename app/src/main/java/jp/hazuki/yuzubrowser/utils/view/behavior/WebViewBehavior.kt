@@ -40,7 +40,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
     override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View?): Boolean {
         if (dependency is AppBarLayout) {
             topToolBar = parent.findViewById(R.id.topToolbarLayout)
-            bottomBar = parent.findViewById(R.id.bottomToolbarLayout)
+            bottomBar = parent.findViewById(R.id.bottomOverlayLayout)
             webFrame = child.findViewById(R.id.webFrameLayout)
             isInitialized = true
             return true
