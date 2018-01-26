@@ -439,6 +439,12 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             HttpAuthRequestDialog(activity).requestHttpAuth(web, handler, host, realm)
         }
 
+        override fun onReceivedError(view: CustomWebView, errorCode: Int, description: CharSequence, url: Uri) {
+            if (errorCode == ERROR_UNSUPPORTED_SCHEME && url.toString().equals("yuzu:speeddial", true)) {
+                view.view.postDelayed({ view.reload() }, 50)
+            }
+        }
+
         override fun onReceivedSslError(web: CustomWebView, handler: SslErrorHandler, error: SslError) {
             if (!AppData.ssl_error_alert.get()) {
                 handler.cancel()
