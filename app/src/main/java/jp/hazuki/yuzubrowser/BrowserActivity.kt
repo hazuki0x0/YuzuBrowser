@@ -958,7 +958,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     override fun requestAdjustWebView() {
         val data = tabManagerIn.currentTabData ?: return
         data.mWebView.computeVerticalScrollRangeMethod()
-        webViewBehavior.adjustWebView(data, topToolbarLayout.height + bottomToolbarLayout.height)
+        webViewBehavior.adjustWebView(data, topToolbarLayout.height + bottomOverlayLayout.height)
     }
 
     override fun expandToolbar() {
