@@ -32,16 +32,17 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
     private var isInitialized = false
     private lateinit var topToolBar: View
     private lateinit var bottomBar: View
-    private lateinit var webFrame: View
+    private lateinit var paddingFrame: View
     private lateinit var controller: BrowserController
     private var webView: CustomWebView? = null
     private var prevY: Int = 0
+    private var paddingHeight = 0
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View?): Boolean {
         if (dependency is AppBarLayout) {
             topToolBar = parent.findViewById(R.id.topToolbarLayout)
             bottomBar = parent.findViewById(R.id.bottomOverlayLayout)
-            webFrame = child.findViewById(R.id.webFrameLayout)
+            paddingFrame = child.findViewById(R.id.paddingFrame)
             isInitialized = true
             return true
         }
@@ -74,13 +75,19 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
 
     fun adjustWebView(data: MainTabData, height: Int) {
         if (!isInitialized) return
+        if (paddingHeight != height) {
+            paddingHeight = height
+            val params = paddingFrame.layoutParams
+            params.height = height
+            paddingFrame.layoutParams = params
+        }
 
         if (data.isFinished && !data.mWebView.isScrollable) {
             controller.expandToolbar()
             data.mWebView.isNestedScrollingEnabledMethod = false
-            webFrame.setPadding(0, 0, 0, height)
+            paddingFrame.visibility = View.VISIBLE
         } else {
-            webFrame.setPadding(0, 0, 0, 0)
+            paddingFrame.visibility = View.GONE
         }
     }
 
