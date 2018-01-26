@@ -59,7 +59,6 @@ class SaveWebArchiveDialog : DialogFragment() {
         saveArchiveCheckBox.visibility = View.VISIBLE
 
         val file = arguments.getParcelable<DownloadFile>(ARG_FILE)
-        val no = arguments.getInt(ARG_NO)
 
         root = Uri.parse(AppData.download_folder.get()).toDocumentFile(activity)
 
@@ -83,7 +82,7 @@ class SaveWebArchiveDialog : DialogFragment() {
                 .setTitle(R.string.download)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val activity = getActivity() ?: return@setPositiveButton
+                    val act = getActivity() ?: return@setPositiveButton
                     val input = filenameEditText.text.toString()
                     if (input.isEmpty()) return@setPositiveButton
 
@@ -94,7 +93,7 @@ class SaveWebArchiveDialog : DialogFragment() {
                     if (saveArchiveCheckBox.isChecked) {
                         listener?.onSaveWebViewToFile(root, file, arguments.getInt(ARG_NO))
                     } else {
-                        activity.download(root.uri, file, null)
+                        act.download(root.uri, file, null)
                     }
 
                     this.dialog.dismiss()
