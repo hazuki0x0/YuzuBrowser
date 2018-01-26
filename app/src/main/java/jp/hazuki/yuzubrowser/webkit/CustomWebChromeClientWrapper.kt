@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import android.os.Message
 import android.view.View
 import android.webkit.*
 
-internal open class CustomWebChromeClientWrapper(private val customWebView: CustomWebView) : CustomWebChromeClient() {
+open class CustomWebChromeClientWrapper(private val customWebView: CustomWebView) : CustomWebChromeClient() {
 
     private var mWebChromeClient: CustomWebChromeClient? = null
 

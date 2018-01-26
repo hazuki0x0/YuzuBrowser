@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 
-internal open class CustomWebViewClientWrapper(private val customWebView: CustomWebView) : CustomWebViewClient() {
+open class CustomWebViewClientWrapper(private val customWebView: CustomWebView) : CustomWebViewClient() {
 
     private var mWebViewClient: CustomWebViewClient? = null
 

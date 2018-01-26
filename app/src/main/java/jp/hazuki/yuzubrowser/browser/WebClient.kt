@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -311,7 +311,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         web.resetTheme()
         web.swipeEnable = AppData.pull_to_refresh.get()
 
-        //if add to this, should also add to CacheWebView#settingWebView
+        //if add to this, should also add to AbstractCacheWebView#settingWebView
     }
 
     fun loadUrl(tab: MainTabData, url: String, shouldOpenInNewTab: Boolean) {
