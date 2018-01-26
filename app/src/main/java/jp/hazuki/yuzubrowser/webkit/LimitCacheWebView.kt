@@ -38,6 +38,7 @@ import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.tab.manager.TabCache
 import jp.hazuki.yuzubrowser.tab.manager.TabData
 import jp.hazuki.yuzubrowser.tab.manager.TabIndexData
+import jp.hazuki.yuzubrowser.toolbar.OnWebViewScrollChangeListener
 import jp.hazuki.yuzubrowser.utils.JsonUtils
 import jp.hazuki.yuzubrowser.utils.WebViewUtils
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector
@@ -723,6 +724,8 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
         to.setMyOnScrollChangedListener(mOnScrollChangedListener)
         from.setScrollBarListener(null)
         to.setScrollBarListener(mScrollBarListener)
+        to.paddingScrollChangedListener = from.paddingScrollChangedListener
+        from.paddingScrollChangedListener = null
 
         mStateChangeListener?.invoke(this, todata)
         to.requestWebFocus()
@@ -837,6 +840,12 @@ class LimitCacheWebView(context: Context) : FrameLayout(context), CustomWebView,
         get() = currentTab.mWebView.isNestedScrollingEnabledMethod
         set(value) {
             currentTab.mWebView.isNestedScrollingEnabledMethod = value
+        }
+
+    override var paddingScrollChangedListener: OnWebViewScrollChangeListener?
+        get() = currentTab.mWebView.paddingScrollChangedListener
+        set(value) {
+            currentTab.mWebView.paddingScrollChangedListener = value
         }
 
     override fun setVerticalScrollBarEnabled(enabled: Boolean) {

@@ -23,6 +23,7 @@ import android.os.Message
 import android.print.PrintDocumentAdapter
 import android.view.View
 import android.webkit.*
+import jp.hazuki.yuzubrowser.toolbar.OnWebViewScrollChangeListener
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
@@ -66,6 +67,8 @@ interface CustomWebView {
     var isToolbarShowing: Boolean
 
     var isNestedScrollingEnabledMethod: Boolean
+
+    var paddingScrollChangedListener: OnWebViewScrollChangeListener?
 
     fun canGoBack(): Boolean
 

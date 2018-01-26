@@ -33,6 +33,7 @@ import android.widget.FrameLayout
 import jp.hazuki.yuzubrowser.browser.BrowserManager
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.tab.manager.TabData
+import jp.hazuki.yuzubrowser.toolbar.OnWebViewScrollChangeListener
 import jp.hazuki.yuzubrowser.utils.WebViewUtils
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webkit.listener.OnScrollChangedListener
@@ -592,6 +593,8 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
         to.setMyOnScrollChangedListener(mOnScrollChangedListener)
         from.setScrollBarListener(null)
         to.setScrollBarListener(mScrollBarListener)
+        to.paddingScrollChangedListener = from.paddingScrollChangedListener
+        from.paddingScrollChangedListener = null
 
         mStateChangeListener?.invoke(this, todata)
         to.requestWebFocus()
@@ -704,6 +707,12 @@ class CacheWebView(context: Context) : FrameLayout(context), CustomWebView {
         get() = mList[mCurrent].mWebView.isNestedScrollingEnabledMethod
         set(value) {
             mList[mCurrent].mWebView.isNestedScrollingEnabledMethod = value
+        }
+
+    override var paddingScrollChangedListener: OnWebViewScrollChangeListener?
+        get() = mList[mCurrent].mWebView.paddingScrollChangedListener
+        set(value) {
+            mList[mCurrent].mWebView.paddingScrollChangedListener = value
         }
 
     override fun setVerticalScrollBarEnabled(enabled: Boolean) {

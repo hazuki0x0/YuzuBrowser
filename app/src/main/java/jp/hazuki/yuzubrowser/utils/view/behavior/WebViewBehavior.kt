@@ -24,6 +24,7 @@ import android.view.View
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.browser.BrowserController
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
+import jp.hazuki.yuzubrowser.utils.view.PaddingFrameLayout
 
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
@@ -33,6 +34,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
     private lateinit var topToolBar: View
     private lateinit var bottomBar: View
     private lateinit var paddingFrame: View
+    private lateinit var overlayPaddingFrame: PaddingFrameLayout
     private lateinit var controller: BrowserController
     private var webView: CustomWebView? = null
     private var prevY: Int = 0
@@ -43,6 +45,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
             topToolBar = parent.findViewById(R.id.topToolbarLayout)
             bottomBar = parent.findViewById(R.id.bottomOverlayLayout)
             paddingFrame = child.findViewById(R.id.paddingFrame)
+            overlayPaddingFrame = child.findViewById(R.id.overlayToolbarScrollPadding)
             isInitialized = true
             return true
         }
@@ -86,8 +89,10 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
             controller.expandToolbar()
             data.mWebView.isNestedScrollingEnabledMethod = false
             paddingFrame.visibility = View.VISIBLE
+            overlayPaddingFrame.forceHide = true
         } else {
             paddingFrame.visibility = View.GONE
+            overlayPaddingFrame.forceHide = false
         }
     }
 

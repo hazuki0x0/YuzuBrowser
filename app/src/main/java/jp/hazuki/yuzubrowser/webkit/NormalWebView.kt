@@ -24,6 +24,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import jp.hazuki.yuzubrowser.toolbar.OnWebViewScrollChangeListener
 import jp.hazuki.yuzubrowser.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
@@ -47,6 +48,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
     private var onScrollChangedListener: OnScrollChangedListener? = null
     private var scrollBarListener: OnScrollChangedListener? = null
     private var scrollableChangeListener: OnSwipeableChangeListener? = null
+    override var paddingScrollChangedListener: OnWebViewScrollChangeListener? = null
 
     private val childHelper = NestedScrollingChildHelper(this)
     private val scrollSlop: Int = ViewConfiguration.get(context).scaledPagingTouchSlop
@@ -128,6 +130,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
         super.onScrollChanged(l, t, oldl, oldt)
         scrollBarListener?.invoke(l, t, oldl, oldt)
         onScrollChangedListener?.invoke(l, t, oldl, oldt)
+        paddingScrollChangedListener?.onScrollChanged(this, l, t)
         titleBar?.translationX = l.toFloat() //can move X
     }
 

@@ -51,7 +51,7 @@ import jp.hazuki.yuzubrowser.webkit.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.browser_activity.*
 
-open class BrowserToolbarManager(context: Context, override val containerView: View, controller: ActionController, iconManager: ActionIconManager, requestCallback: RequestCallback) : ToolbarManager, LayoutContainer {
+open class BrowserToolbarManager(context: Context, override val containerView: View, controller: ActionController, iconManager: ActionIconManager, requestCallback: RequestCallback) : ToolbarManager, LayoutContainer, OnWebViewScrollChangeListener {
     override val tabBar = TabBar(context, controller, iconManager, requestCallback)
     override val urlBar = if (AppData.toolbar_url_box.get()) WhiteUrlBar(context, controller, iconManager, requestCallback) else UrlBar(context, controller, iconManager, requestCallback)
     override val progressBar = ProgressToolBar(context, requestCallback)
@@ -79,6 +79,10 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     init {
         bottomAlwaysToolbarLayout.background =
                 ColorDrawable(context.getResColor(R.color.deep_gray))
+
+        overlayToolbarScrollPadding.addOnLayoutChangeListener { _, _, top, _, bottom, _, _, _, _ ->
+            overlayToolbarScrollPadding.height = bottom - top
+        }
     }
 
     override fun addToolbarView(isPortrait: Boolean) {
@@ -314,6 +318,20 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
             }
 
             bottomOverlayLayout.translationY = newTrans
+        }
+    }
+
+    override fun onScrollChanged(webView: CustomWebView, x: Int, y: Int) {
+        val height = overlayToolbarScrollPadding.realHeight
+        if (height > 0) {
+            val target = webView.computeVerticalScrollRangeMethod() - webView.computeVerticalScrollExtentMethod()
+            if (y >= target - height) {
+                if (!overlayToolbarScrollPadding.visible) {
+                    overlayToolbarScrollPadding.visible = true
+                }
+            } else if (y >= target - height * 2 && overlayToolbarScrollPadding.visible) {
+                overlayToolbarScrollPadding.visible = false
+            }
         }
     }
 

@@ -182,10 +182,14 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
                 }
             }
         }
-        topToolbarLayout.viewTreeObserver.addOnGlobalLayoutListener {
-            coordinator.setToolbarHeight(topToolbarLayout.height)
-            tabManager.onLayoutCreated()
-        }
+        topToolbarLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                topToolbarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                coordinator.setToolbarHeight(topToolbarLayout.height)
+                tabManager.onLayoutCreated()
+                overlayToolbarScrollPadding.height = bottomOverlayItemLayout.height
+            }
+        })
 
         webViewFastScroller.attachAppBarLayout(coordinator, appbar)
         webGestureOverlayView.setWebFrame(appbar)
@@ -690,6 +694,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         oldTab?.run {
             mWebView.setOnMyCreateContextMenuListener(null)
             mWebView.setGestureDetector(null)
+            mWebView.paddingScrollChangedListener = null
             webFrameLayout.removeView(mWebView.view)
             webViewBehavior.setWebView(null)
             webViewFastScroller.detachWebView()
@@ -704,6 +709,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             webViewFastScroller.attachWebView(it)
 
             it.setOnMyCreateContextMenuListener(userActionManager.onCreateContextMenuListener)
+            it.paddingScrollChangedListener = toolbar
             userActionManager.setGestureDetector(it)
         }
 

@@ -75,6 +75,13 @@
                         android:layout_height="0px"
                         android:visibility="gone"
                         android:layout_weight="0"/>
+
+                    <jp.hazuki.yuzubrowser.utils.view.PaddingFrameLayout
+                        android:id="@+id/overlayToolbarScrollPadding"
+                        android:layout_width="match_parent"
+                        android:layout_height="0px"
+                        android:visibility="gone"
+                        android:layout_weight="0"/>
                 </LinearLayout>
 
                 <jp.hazuki.yuzubrowser.utils.view.webviewfastscroll.WebViewFastScroller
