@@ -84,14 +84,14 @@
                         android:layout_weight="0"/>
                 </LinearLayout>
 
-                <jp.hazuki.yuzubrowser.utils.view.webviewfastscroll.WebViewFastScroller
+                <jp.hazuki.yuzubrowser.utils.view.fastscroll.WebViewFastScroller
                     android:id="@+id/webViewFastScroller"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    app:wfs_hideDelay="1200"
-                    app:wfs_barColor="@color/deep_gray"
-                    app:wfs_handleNormalColor="@color/scroll_bar"/>
+                    app:fs_hideDelay="1200"
+                    app:fs_barColor="@color/deep_gray"
+                    app:fs_handleNormalColor="@color/scroll_bar"/>
 
                 <jp.hazuki.yuzubrowser.gesture.view.CustomGestureOverlayView
                     android:id="@+id/webGestureOverlayViewInner"

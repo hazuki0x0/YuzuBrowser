@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Daniel Ciao
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.view.webviewfastscroll
+package jp.hazuki.yuzubrowser.utils.view.fastscroll
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -180,25 +180,25 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
         val a = context.obtainStyledAttributes(attrs, R.styleable.WebViewFastScroller, defStyleAttr, defStyleRes)
 
         mBarColor = a.getColor(
-                R.styleable.WebViewFastScroller_wfs_barColor,
+                R.styleable.WebViewFastScroller_fs_barColor,
                 ThemeUtils.getColorFromThemeRes(context, R.attr.colorControlNormal))
 
         mHandleNormalColor = a.getColor(
-                R.styleable.WebViewFastScroller_wfs_handleNormalColor,
+                R.styleable.WebViewFastScroller_fs_handleNormalColor,
                 ThemeUtils.getColorFromThemeRes(context, R.attr.colorControlNormal))
 
         mHandlePressedColor = a.getColor(
-                R.styleable.WebViewFastScroller_wfs_handlePressedColor,
+                R.styleable.WebViewFastScroller_fs_handlePressedColor,
                 ThemeUtils.getColorFromThemeRes(context, R.attr.colorAccent))
 
         mTouchTargetWidth = a.getDimensionPixelSize(
-                R.styleable.WebViewFastScroller_wfs_touchTargetWidth,
+                R.styleable.WebViewFastScroller_fs_touchTargetWidth,
                 context.convertDpToPx(24))
 
-        hideDelay = a.getInt(R.styleable.WebViewFastScroller_wfs_hideDelay,
+        hideDelay = a.getInt(R.styleable.WebViewFastScroller_fs_hideDelay,
                 DEFAULT_AUTO_HIDE_DELAY)
 
-        mHidingEnabled = a.getBoolean(R.styleable.WebViewFastScroller_wfs_hidingEnabled, true)
+        mHidingEnabled = a.getBoolean(R.styleable.WebViewFastScroller_fs_hidingEnabled, true)
 
         a.recycle()
 
@@ -464,6 +464,6 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     companion object {
-        private val DEFAULT_AUTO_HIDE_DELAY = 1500
+        private const val DEFAULT_AUTO_HIDE_DELAY = 1500
     }
 }

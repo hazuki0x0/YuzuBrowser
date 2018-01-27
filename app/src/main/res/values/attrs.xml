@@ -98,12 +98,12 @@
     <attr name="iconColor" format="color" />
 
     <declare-styleable name="WebViewFastScroller">
-        <attr name="wfs_barColor" format="color"/>
-        <attr name="wfs_handleNormalColor" format="color"/>
-        <attr name="wfs_handlePressedColor" format="color"/>
-        <attr name="wfs_touchTargetWidth" format="dimension"/>
-        <attr name="wfs_hideDelay" format="integer"/>
-        <attr name="wfs_hidingEnabled" format="boolean"/>
+        <attr name="fs_barColor" format="color"/>
+        <attr name="fs_handleNormalColor" format="color"/>
+        <attr name="fs_handlePressedColor" format="color"/>
+        <attr name="fs_touchTargetWidth" format="dimension"/>
+        <attr name="fs_hideDelay" format="integer"/>
+        <attr name="fs_hidingEnabled" format="boolean"/>
     </declare-styleable>
 
     <attr name="urlBarBoxColor" format="color"/>
