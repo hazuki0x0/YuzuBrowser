@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BreadcrumbsView">
+        <attr name="popupTheme"/>
+        <attr name="breadcrumbs_currentTextColor" format="color"/>
+        <attr name="breadcrumbs_defaultTextColor" format="color"/>
+    </declare-styleable>
+
+</resources>

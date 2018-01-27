@@ -215,6 +215,7 @@ public class AppData {
     public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);
     public static final BooleanContainer mining_protect = new BooleanContainer("mining_protect", true);
     public static final BooleanContainer fake_chrome = new BooleanContainer("fake_chrome", false);
+    public static final BooleanContainer bookmark_breadcrumbs = new BooleanContainer("bookmark_breadcrumbs", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

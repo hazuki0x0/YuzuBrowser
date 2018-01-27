@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="dropdown_offset_y_fix_value">4.5dp</dimen>
+    <dimen name="dropdown_start_padding_increase">24dp</dimen> <!-- 24dp (arrow size) -->
+
+</resources>

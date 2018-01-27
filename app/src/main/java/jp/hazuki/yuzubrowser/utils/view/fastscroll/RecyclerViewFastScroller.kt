@@ -215,6 +215,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
             private var mLastPressedYAdjustedToInitial: Float = 0.toFloat()
 
             override fun onTouch(v: View, ev: MotionEvent): Boolean {
+                val recyclerView = recyclerView ?: return true
                 val event = MotionEvent.obtain(ev)
                 val action = event.actionMasked
                 event.offsetLocation(0f, (-appBarLayoutOffset).toFloat())
@@ -224,12 +225,12 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
                     MotionEvent.ACTION_DOWN -> {
                         handle.isPressed = true
 
-                        //mRecyclerView.stopScroll();
+                        recyclerView.stopScroll()
 
                         var nestedScrollAxis = ViewCompat.SCROLL_AXIS_NONE
                         nestedScrollAxis = nestedScrollAxis or ViewCompat.SCROLL_AXIS_VERTICAL
 
-                        recyclerView!!.startNestedScroll(nestedScrollAxis)
+                        recyclerView.startNestedScroll(nestedScrollAxis)
 
                         mInitialBarHeight = bar.height.toFloat()
                         mLastPressedYAdjustedToInitial = event.y + handle.y + bar.y
@@ -242,7 +243,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
                         val deltaPressedYFromLastAdjustedToInitial = newHandlePressedYAdjustedToInitial - mLastPressedYAdjustedToInitial
 
                         val dY = (deltaPressedYFromLastAdjustedToInitial / mInitialBarHeight *
-                                (recyclerView!!.computeVerticalScrollRange() + if (appBarLayout == null) 0 else appBarLayout!!.totalScrollRange).toFloat()
+                                (recyclerView.computeVerticalScrollRange() + if (appBarLayout == null) 0 else appBarLayout!!.totalScrollRange).toFloat()
                                 * computeDeltaScale(event)).toInt()
 
                         val coordinator = coordinatorLayout
@@ -261,7 +262,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
                     MotionEvent.ACTION_UP -> {
                         mLastPressedYAdjustedToInitial = -1f
 
-                        recyclerView!!.stopNestedScroll()
+                        recyclerView.stopNestedScroll()
 
                         handle.isPressed = false
                         postAutoHide()

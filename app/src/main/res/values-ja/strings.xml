@@ -288,4 +288,5 @@
     <string name="permission_ask">確認</string>
     <string name="allow">許可</string>
     <string name="block">拒否</string>
+    <string name="breadcrumb">パンくずリスト</string>
 </resources>

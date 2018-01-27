@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,11 @@ class BookmarkActivity : LongPressFixActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
+            elevation = 0f
+        }
 
         val intent = intent
         var pickMode = false
