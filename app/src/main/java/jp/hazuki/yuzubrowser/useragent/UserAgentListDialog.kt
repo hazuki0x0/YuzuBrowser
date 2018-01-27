@@ -23,7 +23,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.webkit.WebSettings
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.extensions.getFakeChromeUserAgent
@@ -39,13 +38,14 @@ class UserAgentListDialog : DialogFragment() {
         val entryValues = arrayOfNulls<String>(mUserAgentList.size + 1)
 
         var ua = arguments!!.getString(UA)
+        val defaultUserAgent = if (AppData.fake_chrome.get()) activity.getFakeChromeUserAgent() else ""
 
         if (ua == null) ua = ""
 
-        var pos = if (WebSettings.getDefaultUserAgent(activity) == ua) 0 else -1
+        var pos = if (defaultUserAgent == ua) 0 else -1
 
         entries[0] = context!!.getString(R.string.default_text)
-        entryValues[0] = if (AppData.fake_chrome.get()) activity.getFakeChromeUserAgent() else ""
+        entryValues[0] = defaultUserAgent
 
         var userAgent: UserAgent
 
