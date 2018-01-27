@@ -216,7 +216,7 @@
         <item>5</item>
     </integer-array>
 
-    <string name="pref_search_url">Search engine URL</string>
+    <string name="pref_search_url">Search engine URL settings</string>
     <string name="pref_search_url_error">%s not found</string>
     <string name="pref_lpress_settings">Long press settings</string>
     <string name="pref_lpress_link">Link</string>
