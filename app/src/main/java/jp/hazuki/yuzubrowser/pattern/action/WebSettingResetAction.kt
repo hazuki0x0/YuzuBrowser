@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.pattern.action
 
+import android.webkit.CookieManager
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 
 class WebSettingResetAction(tabData: MainTabData) {
@@ -23,6 +24,7 @@ class WebSettingResetAction(tabData: MainTabData) {
     private val javaScriptEnable: Boolean
     private val navLockEnable: Boolean
     private val loadImage: Boolean
+    private val thirdCookie: Boolean
     var patternAction: WebSettingPatternAction? = null
 
     init {
@@ -31,6 +33,7 @@ class WebSettingResetAction(tabData: MainTabData) {
         javaScriptEnable = settings.javaScriptEnabled
         navLockEnable = tabData.isNavLock
         loadImage = settings.loadsImagesAutomatically
+        thirdCookie = CookieManager.getInstance().acceptThirdPartyCookies(tabData.mWebView.webView)
     }
 
     fun reset(tab: MainTabData) {
@@ -40,5 +43,6 @@ class WebSettingResetAction(tabData: MainTabData) {
         settings.javaScriptEnabled = javaScriptEnable
         tab.isNavLock = navLockEnable
         settings.loadsImagesAutomatically = loadImage
+        CookieManager.getInstance().setAcceptThirdPartyCookies(tab.mWebView.webView, thirdCookie)
     }
 }

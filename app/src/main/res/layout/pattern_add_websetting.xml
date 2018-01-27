@@ -111,6 +111,26 @@
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"
                 android:layout_alignBottom="@+id/loadImageCheckBox"/>
+
+            <CheckBox
+                android:id="@+id/thirdCookieCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/loadImageSwitch"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:text="@string/pref_accept_third_cookie"
+                android:layout_toStartOf="@+id/thirdCookieSwitch"/>
+
+            <Switch
+                android:id="@+id/thirdCookieSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/thirdCookieCheckBox"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:layout_alignBottom="@+id/thirdCookieCheckBox"/>
         </RelativeLayout>
     </LinearLayout>
 

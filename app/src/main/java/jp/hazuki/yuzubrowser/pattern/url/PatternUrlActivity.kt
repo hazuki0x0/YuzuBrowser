@@ -42,6 +42,8 @@ import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.ImeUtils
 import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherFactory
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.pattern_add_websetting.*
 import java.util.*
 import java.util.regex.PatternSyntaxException
 
@@ -116,7 +118,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
     class SettingWebDialog : DialogFragment() {
 
         private var header: View? = null
-        private lateinit var viewUaEditText: EditText
+        private lateinit var layout: SettingWebDialogView
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val arguments = arguments ?: throw IllegalArgumentException()
@@ -129,98 +131,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     (view.findViewById<View>(R.id.inner) as LinearLayout).addView(header, 0)
             }
 
-            val uaCheckBox: CheckBox = view.findViewById(R.id.uaCheckBox)
-            viewUaEditText = view.findViewById(R.id.uaEditText)
-            val uaButton: ImageButton = view.findViewById(R.id.uaButton)
-            val jsCheckBox: CheckBox = view.findViewById(R.id.jsCheckBox)
-            val jsSwitch: Switch = view.findViewById(R.id.jsSwitch)
-            val navLockCheckBox: CheckBox = view.findViewById(R.id.navLockCheckBox)
-            val navLockSwitch: Switch = view.findViewById(R.id.navLockSwitch)
-            val loadImageCheckBox: CheckBox = view.findViewById(R.id.loadImageCheckBox)
-            val loadImageSwitch: Switch = view.findViewById(R.id.loadImageSwitch)
-
-            if (checker != null) {
-                val action = checker.action as WebSettingPatternAction
-                val ua = action.userAgentString
-                uaCheckBox.isChecked = ua != null
-                if (ua != null) {
-                    viewUaEditText.setText(ua)
-                } else {
-                    viewUaEditText.isEnabled = false
-                    uaButton.isEnabled = false
-                }
-
-                when (action.javaScriptSetting) {
-                    WebSettingPatternAction.UNDEFINED -> {
-                        jsCheckBox.isChecked = false
-                        jsSwitch.isChecked = false
-                        jsSwitch.isEnabled = false
-                    }
-                    WebSettingPatternAction.ENABLE -> {
-                        jsCheckBox.isChecked = true
-                        jsSwitch.isChecked = true
-                    }
-                    WebSettingPatternAction.DISABLE -> {
-                        jsCheckBox.isChecked = true
-                        jsSwitch.isChecked = false
-                    }
-                }
-
-                when (action.navLock) {
-                    WebSettingPatternAction.UNDEFINED -> {
-                        navLockCheckBox.isChecked = false
-                        navLockSwitch.isChecked = false
-                        navLockSwitch.isEnabled = false
-                    }
-                    WebSettingPatternAction.ENABLE -> {
-                        navLockCheckBox.isChecked = true
-                        navLockSwitch.isChecked = true
-                    }
-                    WebSettingPatternAction.DISABLE -> {
-                        navLockCheckBox.isChecked = true
-                        navLockSwitch.isChecked = false
-                    }
-                }
-
-                when (action.loadImage) {
-                    WebSettingPatternAction.UNDEFINED -> {
-                        loadImageCheckBox.isChecked = false
-                        loadImageSwitch.isChecked = false
-                        loadImageSwitch.isEnabled = false
-                    }
-                    WebSettingPatternAction.ENABLE -> {
-                        loadImageCheckBox.isChecked = true
-                        loadImageSwitch.isChecked = true
-                    }
-                    WebSettingPatternAction.DISABLE -> {
-                        loadImageCheckBox.isChecked = true
-                        loadImageSwitch.isChecked = false
-                    }
-                }
-            } else {
-                viewUaEditText.isEnabled = false
-                uaButton.isEnabled = false
-                jsSwitch.isEnabled = false
-                navLockSwitch.isEnabled = false
-                loadImageSwitch.isEnabled = false
-            }
-
-            uaCheckBox.setOnCheckedChangeListener { _, b ->
-                viewUaEditText.isEnabled = b
-                uaButton.isEnabled = b
-            }
-
-            uaButton.setOnClickListener { _ ->
-                val intent = Intent(activity, UserAgentListActivity::class.java)
-                intent.putExtra(Intent.EXTRA_TEXT, viewUaEditText.text.toString())
-                startActivityForResult(intent, REQUEST_USER_AGENT)
-            }
-
-            jsCheckBox.setOnCheckedChangeListener { _, b -> jsSwitch.isEnabled = b }
-
-            navLockCheckBox.setOnCheckedChangeListener { _, b -> navLockSwitch.isEnabled = b }
-
-            loadImageCheckBox.setOnCheckedChangeListener { _, b -> loadImageSwitch.isEnabled = b }
+            layout = SettingWebDialogView(view).apply { init(checker) }
 
             val alertDialog = AlertDialog.Builder(activity)
                     .setTitle(R.string.pattern_change_websettings)
@@ -231,38 +142,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
             alertDialog.setOnShowListener { _ ->
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
-                    var ua: String? = null
-                    if (uaCheckBox.isChecked) {
-                        ua = viewUaEditText.text.toString()
-                    }
+                    val action = layout.getAction()
 
-                    var js = WebSettingPatternAction.UNDEFINED
-                    if (jsCheckBox.isChecked) {
-                        js = if (jsSwitch.isChecked) {
-                            WebSettingPatternAction.ENABLE
-                        } else {
-                            WebSettingPatternAction.DISABLE
-                        }
-                    }
-
-                    var navLock = WebSettingPatternAction.UNDEFINED
-                    if (navLockCheckBox.isChecked) {
-                        navLock = if (navLockSwitch.isChecked) {
-                            WebSettingPatternAction.ENABLE
-                        } else {
-                            WebSettingPatternAction.DISABLE
-                        }
-                    }
-                    var image = WebSettingPatternAction.UNDEFINED
-                    if (loadImageCheckBox.isChecked) {
-                        image = if (loadImageSwitch.isChecked) {
-                            WebSettingPatternAction.ENABLE
-                        } else {
-                            WebSettingPatternAction.DISABLE
-                        }
-                    }
-
-                    val action = WebSettingPatternAction(ua, js, navLock, image)
                     if (activity is PatternUrlActivity) {
                         val newChecker = (activity as PatternUrlActivity).makeActionChecker(action, header)
                         if (newChecker != null) {
@@ -279,9 +160,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            if (requestCode == REQUEST_USER_AGENT && resultCode == RESULT_OK) {
-                viewUaEditText.setText(data?.getStringExtra(Intent.EXTRA_TEXT))
-            }
+            layout.handleResult(requestCode, resultCode, data)
         }
 
         companion object {
@@ -297,6 +176,170 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 bundle.putSerializable(CHECKER, checker)
                 fragment.arguments = bundle
                 return fragment
+            }
+        }
+
+        private inner class SettingWebDialogView(override val containerView: View) : LayoutContainer {
+
+            fun init(checker: PatternUrlChecker?) {
+                setData(checker)
+                setListeners()
+            }
+
+            fun getAction(): WebSettingPatternAction {
+                var ua: String? = null
+                if (uaCheckBox.isChecked) {
+                    ua = uaEditText.text.toString()
+                }
+
+                var js = WebSettingPatternAction.UNDEFINED
+                if (jsCheckBox.isChecked) {
+                    js = if (jsSwitch.isChecked) {
+                        WebSettingPatternAction.ENABLE
+                    } else {
+                        WebSettingPatternAction.DISABLE
+                    }
+                }
+
+                var navLock = WebSettingPatternAction.UNDEFINED
+                if (navLockCheckBox.isChecked) {
+                    navLock = if (navLockSwitch.isChecked) {
+                        WebSettingPatternAction.ENABLE
+                    } else {
+                        WebSettingPatternAction.DISABLE
+                    }
+                }
+                var image = WebSettingPatternAction.UNDEFINED
+                if (loadImageCheckBox.isChecked) {
+                    image = if (loadImageSwitch.isChecked) {
+                        WebSettingPatternAction.ENABLE
+                    } else {
+                        WebSettingPatternAction.DISABLE
+                    }
+                }
+
+                var thirdCookie = WebSettingPatternAction.UNDEFINED
+                if (thirdCookieCheckBox.isChecked) {
+                    thirdCookie = if (thirdCookieSwitch.isChecked) {
+                        WebSettingPatternAction.ENABLE
+                    } else {
+                        WebSettingPatternAction.DISABLE
+                    }
+                }
+
+                return WebSettingPatternAction(ua, js, navLock, image, thirdCookie)
+            }
+
+            private fun setData(checker: PatternUrlChecker?) {
+                if (checker == null) {
+                    uaEditText.isEnabled = false
+                    uaButton.isEnabled = false
+                    jsSwitch.isEnabled = false
+                    navLockSwitch.isEnabled = false
+                    loadImageSwitch.isEnabled = false
+                    thirdCookieSwitch.isEnabled = false
+                } else {
+                    val action = checker.action as WebSettingPatternAction
+                    val ua = action.userAgentString
+                    uaCheckBox.isChecked = ua != null
+                    if (ua != null) {
+                        uaEditText.setText(ua)
+                    } else {
+                        uaEditText.isEnabled = false
+                        uaButton.isEnabled = false
+                    }
+
+                    when (action.javaScriptSetting) {
+                        WebSettingPatternAction.UNDEFINED -> {
+                            jsCheckBox.isChecked = false
+                            jsSwitch.isChecked = false
+                            jsSwitch.isEnabled = false
+                        }
+                        WebSettingPatternAction.ENABLE -> {
+                            jsCheckBox.isChecked = true
+                            jsSwitch.isChecked = true
+                        }
+                        WebSettingPatternAction.DISABLE -> {
+                            jsCheckBox.isChecked = true
+                            jsSwitch.isChecked = false
+                        }
+                    }
+
+                    when (action.navLock) {
+                        WebSettingPatternAction.UNDEFINED -> {
+                            navLockCheckBox.isChecked = false
+                            navLockSwitch.isChecked = false
+                            navLockSwitch.isEnabled = false
+                        }
+                        WebSettingPatternAction.ENABLE -> {
+                            navLockCheckBox.isChecked = true
+                            navLockSwitch.isChecked = true
+                        }
+                        WebSettingPatternAction.DISABLE -> {
+                            navLockCheckBox.isChecked = true
+                            navLockSwitch.isChecked = false
+                        }
+                    }
+
+                    when (action.loadImage) {
+                        WebSettingPatternAction.UNDEFINED -> {
+                            loadImageCheckBox.isChecked = false
+                            loadImageSwitch.isChecked = false
+                            loadImageSwitch.isEnabled = false
+                        }
+                        WebSettingPatternAction.ENABLE -> {
+                            loadImageCheckBox.isChecked = true
+                            loadImageSwitch.isChecked = true
+                        }
+                        WebSettingPatternAction.DISABLE -> {
+                            loadImageCheckBox.isChecked = true
+                            loadImageSwitch.isChecked = false
+                        }
+                    }
+
+                    when (action.thirdCookie) {
+                        WebSettingPatternAction.UNDEFINED -> {
+                            thirdCookieCheckBox.isChecked = false
+                            thirdCookieSwitch.isChecked = false
+                            thirdCookieSwitch.isEnabled = false
+                        }
+                        WebSettingPatternAction.ENABLE -> {
+                            thirdCookieCheckBox.isChecked = true
+                            thirdCookieSwitch.isChecked = true
+                        }
+                        WebSettingPatternAction.DISABLE -> {
+                            thirdCookieCheckBox.isChecked = true
+                            thirdCookieSwitch.isChecked = false
+                        }
+                    }
+                }
+            }
+
+            fun handleResult(requestCode: Int, resultCode: Int, data: Intent?) {
+                if (requestCode == REQUEST_USER_AGENT && resultCode == RESULT_OK) {
+                    uaEditText.setText(data?.getStringExtra(Intent.EXTRA_TEXT))
+                }
+            }
+
+            private fun setListeners() {
+                uaCheckBox.setOnCheckedChangeListener { _, b ->
+                    uaEditText.isEnabled = b
+                    uaButton.isEnabled = b
+                }
+
+                uaButton.setOnClickListener { _ ->
+                    val intent = Intent(activity, UserAgentListActivity::class.java)
+                    intent.putExtra(Intent.EXTRA_TEXT, uaEditText.text.toString())
+                    startActivityForResult(intent, REQUEST_USER_AGENT)
+                }
+
+                jsCheckBox.setOnCheckedChangeListener { _, b -> jsSwitch.isEnabled = b }
+
+                navLockCheckBox.setOnCheckedChangeListener { _, b -> navLockSwitch.isEnabled = b }
+
+                loadImageCheckBox.setOnCheckedChangeListener { _, b -> loadImageSwitch.isEnabled = b }
+
+                thirdCookieCheckBox.setOnCheckedChangeListener { _, b -> thirdCookieSwitch.isEnabled = b }
             }
         }
     }
