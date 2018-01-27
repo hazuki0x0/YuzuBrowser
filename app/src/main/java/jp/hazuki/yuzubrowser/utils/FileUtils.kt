@@ -81,6 +81,20 @@ fun getParsedFileName(filename: String): ParsedFileName {
     }
 }
 
+fun Uri.isAlwaysConvertible(context: Context): Boolean {
+    if (scheme == "file") return true
+
+    if (DocumentsContract.isDocumentUri(context, this)) {
+        val docId = DocumentsContract.getDocumentId(this)
+        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val type = split[0]
+
+        return "primary".equals(type, ignoreCase = true)
+    }
+
+    return false
+}
+
 fun Context.getPathFromUri(uri: Uri): String? {
 
     if (DocumentsContract.isDocumentUri(this, uri)) { // DocumentProvider

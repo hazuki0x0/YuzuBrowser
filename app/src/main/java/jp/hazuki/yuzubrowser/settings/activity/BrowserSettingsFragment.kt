@@ -28,6 +28,8 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.adblock.AdBlockActivity
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
+import jp.hazuki.yuzubrowser.utils.isAlwaysConvertible
+import org.jetbrains.anko.longToast
 
 class BrowserSettingsFragment : YuzuPreferenceFragment() {
 
@@ -87,6 +89,10 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
 
                 AppData.download_folder.set(uri.toString())
                 AppData.commit(activity, AppData.download_folder)
+
+                if (!uri.isAlwaysConvertible(activity)) {
+                    activity.longToast(R.string.pref_storage_location_warn)
+                }
             }
         }
     }
