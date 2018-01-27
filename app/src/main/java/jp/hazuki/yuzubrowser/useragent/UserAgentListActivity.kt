@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.utils.extensions
+package jp.hazuki.yuzubrowser.useragent
 
-inline fun <reified T> Any?.isInstanceOf(action: (T) -> Unit) {
-    if (this is T) action(this)
-}
+import android.content.Intent
+import android.os.Bundle
 
-fun StringBuilder.replace(oldValue: String, newValue: String) {
-    var index = indexOf(oldValue)
-    while (index >= 0) {
-        replace(index, index + oldValue.length, newValue)
-        index += newValue.length - oldValue.length
-        index = indexOf(oldValue, index)
+import jp.hazuki.yuzubrowser.R
+import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
+
+class UserAgentListActivity : ThemeActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        UserAgentListDialog
+                .newInstance(intent.getStringExtra(Intent.EXTRA_TEXT))
+                .show(supportFragmentManager, "ua")
+    }
+
+    override fun lightThemeResource(): Int {
+        return R.style.BrowserMinThemeLight_Transparent
     }
 }

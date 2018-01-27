@@ -9,6 +9,11 @@
             android:title="@string/pref_user_agent" />
 
         <jp.hazuki.yuzubrowser.settings.preference.UserAgentListSettingsPreference android:title="@string/action_useragent_setting" />
+
+        <SwitchPreference
+            android:key="fake_chrome"
+            android:title="@string/pref_fake_chrome"
+            android:summary="@string/pref_fake_chrome_summary"/>
     </PreferenceCategory>
 
 

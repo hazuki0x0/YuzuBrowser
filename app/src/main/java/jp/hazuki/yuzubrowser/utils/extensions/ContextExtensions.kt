@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import android.os.Build
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
+import android.webkit.WebSettings
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 
@@ -65,3 +66,9 @@ fun Context.convertDpToFloatPx(dp: Int): Float = resources.displayMetrics.densit
 val Context.density: Float
     get() = resources.displayMetrics.density
 
+fun Context.getFakeChromeUserAgent(): String {
+    val ua = StringBuilder(WebSettings.getDefaultUserAgent(this))
+    ua.replace("; wv", "")
+    ua.replace("Version/4.0 ", "")
+    return ua.toString()
+}

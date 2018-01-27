@@ -439,4 +439,6 @@
     <string name="ad_block_blocked_page">広告ブロックがこのページをブロックしました</string>
     <string name="ad_block_blocked_filter">以下のフィルターがブロックしました</string>
     <string name="pref_storage_location_warn">この保存場所は、他のアプリでは正しく連携しない場合があります。</string>
+    <string name="pref_fake_chrome">Chromeに偽装する</string>
+    <string name="pref_fake_chrome_summary">デフォルトのUserAgentをChromeに偽装する</string>
 </resources>

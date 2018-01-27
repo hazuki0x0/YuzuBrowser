@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -214,6 +214,7 @@ public class AppData {
     public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
     public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);
     public static final BooleanContainer mining_protect = new BooleanContainer("mining_protect", true);
+    public static final BooleanContainer fake_chrome = new BooleanContainer("fake_chrome", false);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

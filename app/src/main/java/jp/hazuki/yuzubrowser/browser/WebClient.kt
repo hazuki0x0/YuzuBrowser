@@ -62,6 +62,7 @@ import jp.hazuki.yuzubrowser.toolbar.sub.GeolocationPermissionToolbar
 import jp.hazuki.yuzubrowser.userjs.UserScript
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.utils.*
+import jp.hazuki.yuzubrowser.utils.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermission
@@ -284,7 +285,11 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         setting.allowContentAccess = AppData.allow_content_access.get()
         setting.allowFileAccess = AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_ENABLE
         setting.defaultTextEncodingName = AppData.default_encoding.get()
-        setting.userAgentString = AppData.user_agent.get()
+        if (AppData.fake_chrome.get() && AppData.user_agent.get() == "") {
+            setting.userAgentString = activity.getFakeChromeUserAgent()
+        } else {
+            setting.userAgentString = AppData.user_agent.get()
+        }
         setting.loadWithOverviewMode = AppData.load_overview.get()
         setting.useWideViewPort = AppData.web_wideview.get()
         WebViewUtils.setDisplayZoomButtons(setting, AppData.show_zoom_button.get())
