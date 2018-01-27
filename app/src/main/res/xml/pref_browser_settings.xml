@@ -60,10 +60,10 @@
             <jp.hazuki.yuzubrowser.settings.preference.SearchUrlPreference
                 android:key="search_url"
                 android:singleLine="true"
-                android:title="@string/pref_search_url"/>
+                android:title="@string/pref_search_url_settings"/>
 
             <PreferenceScreen
-                android:title="@string/pref_search_url_settings">
+                android:title="@string/pref_search_url">
                 <intent
                     android:action="android.intent.action.MAIN"
                     android:targetPackage="@string/package_name"
