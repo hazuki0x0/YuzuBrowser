@@ -20,19 +20,38 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.ViewConfiguration
 
 class OutSideClickableRecyclerView(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs) {
 
+    private var click = false
+    private var clickTime = 0L
     private var listener: (() -> Unit)? = null
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop.toFloat()
+    private val longPressTimeout = ViewConfiguration.getLongPressTimeout()
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_UP && findChildViewUnder(event.x, event.y) == null) {
-            listener?.invoke()
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> if (findChildViewUnder(event.x, event.y) == null) {
+                click = true
+                clickTime = System.currentTimeMillis()
+            }
+            MotionEvent.ACTION_MOVE -> if (!pointInView(event.x, event.y, touchSlop)) click = false
+            MotionEvent.ACTION_UP -> if (click && System.currentTimeMillis() - clickTime < longPressTimeout
+                    && findChildViewUnder(event.x, event.y) == null) {
+                listener?.invoke()
+            }
+            else -> click = false
         }
         return super.dispatchTouchEvent(event)
     }
 
     fun setOnOutSideClickListener(listener: (() -> Unit)?) {
         this.listener = listener
+    }
+
+    private fun pointInView(localX: Float, localY: Float, slop: Float): Boolean {
+        return localX >= -slop && localY >= -slop && localX < right - left + slop &&
+                localY < bottom - top + slop
     }
 }
