@@ -111,7 +111,7 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
                         putExtra("aspectY", 1)
                         putExtra("scale", true)
                         putExtra("return-data", true)
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
                     startActivityForResult(intent, REQUEST_CROP_IMAGE)
                 } catch (e: ActivityNotFoundException) {
