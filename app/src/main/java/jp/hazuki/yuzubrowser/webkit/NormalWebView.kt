@@ -197,7 +197,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                     startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
                 }
 
-                if (scrollY != 0) {
+                if (scrollY > scrollSlop) {
                     setSwipeable(false)
                 }
 
@@ -233,7 +233,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                 }
                 firstY = eventY
                 downScrollY = scrollY
-                if (downScrollY == 0 && isToolbarShowing) {
+                if (downScrollY < scrollSlop && isToolbarShowing) {
                     setSwipeable(true)
                 }
             }
@@ -242,6 +242,9 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
                 returnValue = super.onTouchEvent(ev)
                 // end NestedScroll
                 stopNestedScroll()
+                if (scrollY < scrollSlop && isToolbarShowing) {
+                    setSwipeable(true)
+                }
             }
         }
         return returnValue
