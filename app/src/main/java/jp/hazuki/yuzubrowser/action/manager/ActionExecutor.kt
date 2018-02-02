@@ -45,6 +45,7 @@ import jp.hazuki.yuzubrowser.adblock.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.browser.BrowserController
 import jp.hazuki.yuzubrowser.browser.BrowserManager
+import jp.hazuki.yuzubrowser.browser.Scripts
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.utils.getDownloadFolderUri
 import jp.hazuki.yuzubrowser.download.download
@@ -75,6 +76,8 @@ import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.SeekBarDialog
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.webkit.TabType
+import jp.hazuki.yuzubrowser.webkit.evaluateJavascript
+import jp.hazuki.yuzubrowser.webkit.getUserAgent
 import jp.hazuki.yuzubrowser.webkit.handler.*
 import java.io.File
 import java.io.IOException
@@ -739,8 +742,10 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.ADD_TO_HOME -> {
                 val tab = controller.getTab(actionTarget)
-                val bitmap = FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
-                PackageUtils.createShortcut(controller.activity, tab.title, tab.url, bitmap)
+                tab.mWebView.evaluateJavascript(Scripts.GET_ICON_URL) {
+                    val iconUrl = if (it.startsWith('"') && it.endsWith('"')) it.substring(1, it.length - 1) else it
+                    createShortCut(tab, iconUrl)
+                }
             }
             SingleAction.SUB_GESTURE -> controller.showSubGesture()
             SingleAction.CLEAR_DATA -> ClearBrowserDataAlertDialog(controller.activity).show(controller.activity.supportFragmentManager)
@@ -990,4 +995,17 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
     private fun getString(id: Int): String = controller.activity.getString(id)
 
     private fun startActivity(intent: Intent) = controller.activity.startActivity(intent)
+
+    private fun createShortCut(tab: MainTabData, iconUrl: String) = ui {
+        val bitmap = if (iconUrl.isEmpty() || iconUrl == "null") {
+            FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
+        } else {
+            val userAgent = tab.mWebView.getUserAgent()
+            async { HttpUtils.getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url)) }
+                    .await()
+                    ?: FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
+        }
+
+        PackageUtils.createShortcut(controller.activity, tab.title, tab.url, bitmap)
+    }
 }
