@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,11 +98,6 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         if (item is BookmarkSite) {
             addToIndex(item)
         }
-    }
-
-    fun moveToFirst(folder: BookmarkFolder, item: BookmarkItem) {
-        folder.list.remove(item)
-        folder.list.add(0, item)
     }
 
     fun addAll(folder: BookmarkFolder, addlist: Collection<BookmarkItem>) {

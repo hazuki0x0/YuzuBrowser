@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ private val NAME_UTF_8 = Pattern.compile("filename\\*=UTF-8''(\\S+)")
 private val NAME_NORMAL = Pattern.compile("filename=\"(.*)\"")
 
 fun HttpClient.getFileName(root: DocumentFile, url: String, mimeType: String?, defaultExt: String?): String {
-    var name: String? = null
     headerFields["Content-Disposition"]?.let { contents ->
         for (raw in contents) {
             val utf8 = NAME_UTF_8.matcher(raw)
