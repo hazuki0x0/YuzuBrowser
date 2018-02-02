@@ -61,7 +61,8 @@ public class SafeFileProvider extends ContentProvider {
         if (mAllowedFolder == null)
             return super.openFile(uri, mode);
 
-        File file = new File(uri.buildUpon().scheme("file").authority("").build().toString());
+        URI normalUri = URI.create(uri.buildUpon().scheme("file").authority("").build().toString()).normalize();
+        File file = new File(normalUri);
 
         try {
             if (file.exists() && file.isFile() && file.canRead()) {
