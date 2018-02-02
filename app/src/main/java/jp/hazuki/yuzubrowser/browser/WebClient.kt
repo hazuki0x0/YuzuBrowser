@@ -84,7 +84,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         }
     }
     private val webViewRenderingManager = WebViewRenderingManager()
-    private val scrollableToolbarHeight = { controller.appBarLayout.totalScrollRange }
+    private val scrollableToolbarHeight = { controller.appBarLayout.totalScrollRange + controller.pagePaddingHeight }
     private var browserHistoryManager: BrowserHistoryAsyncManager? = null
     private var resourceCheckerList: ArrayList<ResourceChecker>? = null
     private var adBlockController: AdBlockController? = null

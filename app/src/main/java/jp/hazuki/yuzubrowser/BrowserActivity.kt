@@ -172,9 +172,12 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         superFrameLayout.setOnImeShownListener { visible ->
             if (isImeShown != visible) {
                 isImeShown = visible
+                webViewBehavior.isImeShown = visible
                 val tab = tabManagerIn.currentTabData
-                if (tab != null)
+                if (tab != null) {
                     toolbar.notifyChangeWebState(tab)
+                    webViewBehavior.adjustWebView(tab, topToolbarLayout.height + bottomOverlayLayout.height)
+                }
                 toolbar.onImeChanged(visible)
 
                 if (!visible && isFullscreenMode) {
@@ -1312,6 +1315,9 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         set(value) {
             webClient.renderingMode = value
         }
+
+    override val pagePaddingHeight: Int
+        get() = topToolbarLayout.height + bottomOverlayLayout.height
 
     override var isFullscreenMode: Boolean = false
         set(enable) {

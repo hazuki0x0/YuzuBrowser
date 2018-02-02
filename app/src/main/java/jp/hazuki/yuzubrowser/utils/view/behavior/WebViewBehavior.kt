@@ -25,7 +25,6 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.browser.BrowserController
 import jp.hazuki.yuzubrowser.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.utils.view.PaddingFrameLayout
-
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
 
 class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.ScrollingViewBehavior(context, attrs) {
@@ -39,6 +38,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
     private var webView: CustomWebView? = null
     private var prevY: Int = 0
     private var paddingHeight = 0
+    var isImeShown = false
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View?): Boolean {
         if (dependency is AppBarLayout) {
@@ -85,7 +85,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
             paddingFrame.layoutParams = params
         }
 
-        if (data.isFinished && !data.mWebView.isScrollable) {
+        if (data.isFinished && !data.mWebView.isScrollable && !isImeShown) {
             controller.expandToolbar()
             data.mWebView.isNestedScrollingEnabledMethod = false
             paddingFrame.visibility = View.VISIBLE

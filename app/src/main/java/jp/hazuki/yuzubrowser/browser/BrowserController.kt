@@ -90,6 +90,7 @@ interface BrowserController : BrowserInfo {
         get() = tabManager.size()
     override val currentTabData: MainTabData?
         get() = tabManager.currentTabData
+    val pagePaddingHeight: Int
     val actionNameArray: ActionNameArray
     val webRtcRequest: WebRtcRequest
 
