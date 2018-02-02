@@ -81,6 +81,7 @@ public class ThemeData {
                 parser.nextToken();
                 if ("lightTheme".equals(field)) {
                     lightTheme = getBoolean(parser);
+                    continue;
                 }
                 if ("tabBackgroundNormal".equalsIgnoreCase(field)) {
                     tabBackgroundNormal = getColorOrBitmapDrawable(context, folder, parser);
