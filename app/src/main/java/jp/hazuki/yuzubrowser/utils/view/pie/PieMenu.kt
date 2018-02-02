@@ -110,10 +110,15 @@ class PieMenu @JvmOverloads constructor(
 
     fun removeItem(item: PieItem) {
         items.remove(item)
+        counts[item.level]--
     }
 
     fun clearItems() {
         items.clear()
+        levels = 0
+        for (i in 0 until MAX_LEVELS) {
+            counts[i] = 0
+        }
     }
 
     private fun onTheLeft(): Boolean {
@@ -414,6 +419,6 @@ class PieMenu @JvmOverloads constructor(
 
     companion object {
 
-        private val MAX_LEVELS = 5
+        private const val MAX_LEVELS = 5
     }
 }
