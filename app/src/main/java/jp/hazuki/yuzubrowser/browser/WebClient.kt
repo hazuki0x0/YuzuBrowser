@@ -422,6 +422,22 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
 
             if (AppData.save_tabs_for_crash.get())
                 controller.tabManager.saveData()
+
+            if (speedDialManager.isNeedUpdate(data.originalUrl)) {
+                web.evaluateJavascript(Scripts.GET_ICON_URL) {
+                    val iconUrl = if (it.startsWith('"') && it.endsWith('"')) it.substring(1, it.length - 1) else it
+
+                    if (iconUrl.isEmpty() || iconUrl == "null") {
+                        speedDialManager.updateAsync(data.originalUrl, faviconManager.get(data.originalUrl))
+                    } else {
+                        val userAgent = data.mWebView.getUserAgent()
+                        thread {
+                            speedDialManager.updateAsync(data.originalUrl,
+                                    HttpUtils.getImage(iconUrl, userAgent, url, CookieManager.getInstance().getCookie(url)))
+                        }
+                    }
+                }
+            }
         }
 
         override fun onFormResubmission(web: CustomWebView, dontResend: Message, resend: Message) {
@@ -589,7 +605,6 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         override fun onReceivedIcon(web: CustomWebView, icon: Bitmap) {
             val data = controller.getTabOrNull(web) ?: return
 
-            speedDialManager.updateAsync(data.originalUrl, icon)
             faviconManager.updateAsync(data.originalUrl, icon)
 
             data.onReceivedIcon(icon)

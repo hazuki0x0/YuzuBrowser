@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ class SpeedDialManager(val context: Context) {
             put(COLUMN_ORDER, nowId + 1)
             put(COLUMN_ICON, (speedDial.icon ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(context, R.drawable.ic_public_white_24dp))).iconBytes)
             put(COLUMN_FAVICON, speedDial.isFavicon)
-            put(COLUMN_LAST_UPDATE, System.currentTimeMillis())
+            put(COLUMN_LAST_UPDATE, if (speedDial.isFavicon) -1 else System.currentTimeMillis())
         }
         val id = db.insert(TABLE_NAME, null, values)
         speedDial.id = id.toInt()
@@ -116,7 +116,7 @@ class SpeedDialManager(val context: Context) {
             put(COLUMN_TITLE, speedDial.title)
             put(COLUMN_ICON, (speedDial.icon ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(context, R.drawable.ic_public_white_24dp))).iconBytes)
             put(COLUMN_FAVICON, speedDial.isFavicon)
-            put(COLUMN_LAST_UPDATE, System.currentTimeMillis())
+            put(COLUMN_LAST_UPDATE, if (speedDial.isFavicon) -1 else System.currentTimeMillis())
         }
         db.update(TABLE_NAME, values, COLUMN_ID + " = ?", arrayOf(Integer.toString(speedDial.id)))
     }
@@ -148,6 +148,15 @@ class SpeedDialManager(val context: Context) {
             updateListTime()
     }
 
+    @Synchronized
+    fun isNeedUpdate(url: String): Boolean {
+        val db = mOpenHelper.readableDatabase
+        val time = System.currentTimeMillis() - 24 * 60 * 60 * 1000
+        db.query(TABLE_NAME, null, COLUMN_FAVICON + " = 1 AND " + COLUMN_URL + " = ? AND " +
+                COLUMN_LAST_UPDATE + " <= ?", arrayOf(url, time.toString()), null, null, null).use { c ->
+            return c.moveToFirst()
+        }
+    }
 
     @Synchronized
     operator fun get(id: Int): SpeedDial? {

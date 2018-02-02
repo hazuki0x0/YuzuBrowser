@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,12 @@ import jp.hazuki.yuzubrowser.utils.Logger;
 
 public class FaviconAsyncManager {
 
+    private final FaviconManager manager;
     private FaviconThread faviconThread;
 
     public FaviconAsyncManager(Context context) {
-        faviconThread = new FaviconThread(FaviconManager.getInstance(context));
+        manager = FaviconManager.getInstance(context);
+        faviconThread = new FaviconThread();
         faviconThread.start();
     }
 
@@ -41,6 +43,10 @@ public class FaviconAsyncManager {
             faviconThread.addQueue(new FaviconItem(url, icon));
     }
 
+    public Bitmap get(String url) {
+        return manager.get(url);
+    }
+
     private static final class FaviconItem {
         private final String url;
         private final Bitmap icon;
@@ -51,13 +57,9 @@ public class FaviconAsyncManager {
         }
     }
 
-    private static class FaviconThread extends Thread {
-        private final FaviconManager manager;
-        private final LinkedBlockingQueue<FaviconItem> queue = new LinkedBlockingQueue<>();
+    private class FaviconThread extends Thread {
 
-        FaviconThread(FaviconManager FaviconManager) {
-            manager = FaviconManager;
-        }
+        private final LinkedBlockingQueue<FaviconItem> queue = new LinkedBlockingQueue<>();
 
         @SuppressWarnings("InfiniteLoopStatement")
         @Override

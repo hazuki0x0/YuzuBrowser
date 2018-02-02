@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,10 @@ class SpeedDialAsyncManager(context: Context) {
     fun updateAsync(url: String?, icon: Bitmap?) {
         if (url != null && icon != null)
             sdThread.addQueue(SDItem(url, icon))
+    }
+
+    fun isNeedUpdate(url: String?): Boolean {
+        return if (url != null) manager.isNeedUpdate(url) else false
     }
 
     private class SDItem internal constructor(val url: String, val icon: Bitmap)
