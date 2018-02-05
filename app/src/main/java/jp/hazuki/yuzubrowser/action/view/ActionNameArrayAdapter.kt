@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,11 @@
 package jp.hazuki.yuzubrowser.action.view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CheckBox
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.ActionNameArray
@@ -32,6 +30,7 @@ import jp.hazuki.yuzubrowser.action.SingleAction
 class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) : BaseAdapter() {
     private val checked = BooleanArray(count)
     private val inflater = LayoutInflater.from(context)
+    private val icons = context.resources.obtainTypedArray(R.array.action_icons)
     private var mListener: OnSettingButtonListener? = null
 
     override fun getCount(): Int {
@@ -46,12 +45,16 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
         return position.toLong()
     }
 
-    fun getName(position: Int): String {
+    private fun getName(position: Int): String {
         return nameArray.actionList[position]!!
     }
 
     fun getItemValue(position: Int): Int {
         return nameArray.actionValues[position]
+    }
+
+    private fun getIcon(position: Int): Drawable? {
+        return icons.getDrawable(position)
     }
 
     fun isChecked(position: Int): Boolean {
@@ -77,6 +80,7 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
             holder = view.tag as ViewHolder
         }
 
+        holder.icon.setImageDrawable(getIcon(position))
         holder.text.text = getName(position)
 
         val checked = isChecked(position)
@@ -87,10 +91,7 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
             holder.setting.visibility = View.VISIBLE
             holder.setting.isEnabled = checked
             holder.setting.imageAlpha = if (checked) 0xff else 0x88
-            holder.setting.setOnClickListener {
-                if (mListener != null)
-                    mListener!!.invoke(position)
-            }
+            holder.setting.setOnClickListener { mListener?.invoke(position) }
         } else {
             holder.setting.visibility = View.GONE
         }
@@ -113,6 +114,7 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
     }
 
     internal class ViewHolder(view: View) {
+        val icon: ImageView = view.findViewById(R.id.iconImageView)
         val text: TextView = view.findViewById(R.id.nameTextView)
         val setting: ImageButton = view.findViewById(R.id.settingsButton)
         val checkBox: CheckBox = view.findViewById(R.id.checkBox)
