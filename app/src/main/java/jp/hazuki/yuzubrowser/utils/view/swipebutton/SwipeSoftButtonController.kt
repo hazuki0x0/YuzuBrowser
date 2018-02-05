@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,12 @@ class SwipeSoftButtonController
         get() = getIcon(currentWhatNo)
 
     val defaultIcon: Drawable?
-        get() = if (iconManager == null) null else iconManager!![mActionList!!.press]
+        get() {
+            val actionList = mActionList ?: return null
+            val iconManager = iconManager ?: return null
+
+            return iconManager[actionList.press]
+        }
 
     fun setActionData(actionlist: SoftButtonActionFile, controller: ActionController, iconManager: ActionIconManager) {
         mActionList = actionlist
@@ -44,14 +49,15 @@ class SwipeSoftButtonController
     }
 
     fun getIcon(whatNo: Int): Drawable? {
+        val actionList = mActionList ?: return null
         return iconManager?.let {
             when (whatNo) {
-                SwipeController.SWIPE_CANCEL, SwipeController.SWIPE_PRESS -> return it[mActionList!!.press]
-                SwipeController.SWIPE_LPRESS -> return it[mActionList!!.lpress]
-                SwipeController.SWIPE_UP -> return it[mActionList!!.up]
-                SwipeController.SWIPE_DOWN -> return it[mActionList!!.down]
-                SwipeController.SWIPE_LEFT -> return it[mActionList!!.left]
-                SwipeController.SWIPE_RIGHT -> return it[mActionList!!.right]
+                SwipeController.SWIPE_CANCEL, SwipeController.SWIPE_PRESS -> it[actionList.press]
+                SwipeController.SWIPE_LPRESS -> it[actionList.lpress]
+                SwipeController.SWIPE_UP -> it[actionList.up]
+                SwipeController.SWIPE_DOWN -> it[actionList.down]
+                SwipeController.SWIPE_LEFT -> it[actionList.left]
+                SwipeController.SWIPE_RIGHT -> it[actionList.right]
                 else -> null
             }
         }
@@ -59,20 +65,16 @@ class SwipeSoftButtonController
 
     override fun onEventActionUp(whatNo: Int) {
         //mBackgroundDrawable.setState(STATE_NOTHING);
+        val actionList = mActionList ?: return
+        val controller = controller ?: return
 
-        if (mActionList != null && controller != null) {
-            controller!!.run {
-                when (whatNo) {
-                    SwipeController.SWIPE_PRESS -> run(mActionList!!.press)
-                    SwipeController.SWIPE_LPRESS -> {
-                    }
-                    SwipeController.SWIPE_UP -> run(mActionList!!.up)
-                    SwipeController.SWIPE_DOWN -> run(mActionList!!.down)
-                    SwipeController.SWIPE_LEFT -> run(mActionList!!.left)
-                    SwipeController.SWIPE_RIGHT -> run(mActionList!!.right)
-                    else -> Unit
-                }
-            }
+        when (whatNo) {
+            SwipeController.SWIPE_PRESS -> controller.run(actionList.press)
+            SwipeController.SWIPE_LPRESS -> controller.run(actionList.lpress)
+            SwipeController.SWIPE_UP -> controller.run(actionList.up)
+            SwipeController.SWIPE_DOWN -> controller.run(actionList.down)
+            SwipeController.SWIPE_LEFT -> controller.run(actionList.left)
+            SwipeController.SWIPE_RIGHT -> controller.run(actionList.right)
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.utils.view.swipebutton
 
 import android.content.Context
-import android.support.v7.widget.AppCompatImageButton
 import android.util.AttributeSet
 import android.view.MotionEvent
 
@@ -25,10 +24,13 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.manager.ActionController
 import jp.hazuki.yuzubrowser.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.action.manager.SoftButtonActionFile
+import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.theme.ThemeData
+import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 
-class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : AppCompatImageButton(context, attrs), SwipeController.OnChangeListener {
+class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : OverlayImageButton(context, attrs), SwipeController.OnChangeListener {
     private val mController = SwipeSoftButtonController(getContext().applicationContext)
+    private val smallIconSize = context.convertDpToPx(12)
 
     init {
         scaleType = ScaleType.CENTER_INSIDE
@@ -38,6 +40,7 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
         mController.setActionData(action_list, controller, iconManager)
         mController.setOnChangeListener(this)
         setImageDrawable(mController.defaultIcon)
+        setOverlayIcon(AppData.toolbar_small_icon.get())
         setBackgroundResource(R.drawable.swipebtn_image_background_normal)
     }
 
@@ -47,6 +50,7 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun notifyChangeState() {
         mController.notifyChangeState()
+        setOverlayIcon(AppData.toolbar_small_icon.get())
     }
 
     fun setSense(sense: Int) {
@@ -62,18 +66,21 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
 
     override fun onEventOutSide(): Boolean {
         setImageDrawable(mController.defaultIcon)
+        overlay?.setVisible(true, false)
         setBackgroundResource(R.drawable.swipebtn_image_background_normal)
         return false
     }
 
     override fun onEventCancel(): Boolean {
         setImageDrawable(mController.defaultIcon)
+        overlay?.setVisible(true, false)
         setBackgroundResource(R.drawable.swipebtn_image_background_normal)
         return false
     }
 
     override fun onEventActionUp(whatNo: Int): Boolean {
         setImageDrawable(mController.defaultIcon)
+        overlay?.setVisible(true, false)
         setBackgroundResource(R.drawable.swipebtn_image_background_normal)
         return false
     }
@@ -88,5 +95,12 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
 
     override fun onChangeState(whatNo: Int) {
         setImageDrawable(mController.icon)
+        overlay?.setVisible(whatNo == SwipeController.SWIPE_PRESS || whatNo == SwipeController.SWIPE_CANCEL, false)
+    }
+
+    private fun setOverlayIcon(show: Boolean) {
+        val icon = if (show) mController.getIcon(SwipeController.SWIPE_LPRESS) else null
+
+        overlay = if (icon != null) SmallButtonDrawable(icon, smallIconSize) else null
     }
 }

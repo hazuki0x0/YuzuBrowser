@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ class TabListActionTextDrawable(context: Context, tabs: Int) : Drawable() {
 
         val xPos = bounds.left + bounds.width() / 2
         val yPos = bounds.top + bounds.height() / 2 + r.height() / 2 + paddingY
+        paint.textSize
         canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), paint)
     }
 
@@ -57,5 +58,13 @@ class TabListActionTextDrawable(context: Context, tabs: Int) : Drawable() {
 
     override fun getOpacity(): Int {
         return PixelFormat.TRANSPARENT
+    }
+
+    override fun setBounds(left: Int, top: Int, right: Int, bottom: Int) {
+        super.setBounds(left, top, right, bottom)
+
+        if (bottom - top < paint.textSize * 2) {
+            paint.textSize = (bottom - top) * 5 / 12f
+        }
     }
 }

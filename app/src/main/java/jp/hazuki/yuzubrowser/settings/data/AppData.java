@@ -89,6 +89,7 @@ public class AppData {
     public static final BooleanContainer toolbar_always_show_url = new BooleanContainer("toolbar_always_show_url", true);
     public static final BooleanContainer toolbar_show_favicon = new BooleanContainer("toolbar_show_favicon", true);
     public static final BooleanContainer toolbar_auto_open = new BooleanContainer("toolbar_auto_open", true);
+    public static final BooleanContainer toolbar_small_icon = new BooleanContainer("toolbar_small_icon", true);
     public static final IntContainer swipebtn_sensitivity = new IntContainer("swipebtn_sensitivity", 150);
     public static final StringContainer default_encoding = new StringContainer("default_encoding", "UTF-8");
     public static final StringContainer user_agent = new StringContainer("user_agent", "");

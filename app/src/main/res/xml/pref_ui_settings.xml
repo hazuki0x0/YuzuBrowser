@@ -21,6 +21,9 @@
         <SwitchPreference
             android:key="toolbar_auto_open"
             android:title="@string/pref_toolbar_show_loading"/>
+        <SwitchPreference
+            android:key="toolbar_small_icon"
+            android:title="@string/pref_toolbar_small_icon"/>
         <jp.hazuki.yuzubrowser.settings.preference.common.SeekbarPreference
             android:key="overlay_bottom_alpha"
             android:title="@string/pref_overlay_bottom_alpha"
