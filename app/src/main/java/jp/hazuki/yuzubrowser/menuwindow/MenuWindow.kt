@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,12 @@ import android.os.Handler
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.ActionList
 import jp.hazuki.yuzubrowser.action.ActionNameArray
 import jp.hazuki.yuzubrowser.action.manager.ActionController
+import jp.hazuki.yuzubrowser.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.FontUtils
 import jp.hazuki.yuzubrowser.utils.extensions.convertDpToFloatPx
@@ -36,7 +34,7 @@ import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 
 typealias OnMenuCloseListener = () -> Unit
 
-class MenuWindow(context: Context, actionList: ActionList, controller: ActionController) : PopupWindow.OnDismissListener {
+class MenuWindow(context: Context, actionList: ActionList, controller: ActionController, iconManager: ActionIconManager) : PopupWindow.OnDismissListener {
 
     private val windowMargin = context.convertDpToPx(4)
     private val window = PopupWindow(context)
@@ -68,15 +66,22 @@ class MenuWindow(context: Context, actionList: ActionList, controller: ActionCon
 
         val fontSize = FontUtils.getTextSize(AppData.font_size.menu.get())
         for (action in actionList) {
-            val child = inflater.inflate(R.layout.drop_down_list_item, v, false) as TextView
+            val child = inflater.inflate(R.layout.menu_list_item, v, false)
+            val icon = child.findViewById<ImageView>(R.id.iconImageView)
+            val name = child.findViewById<TextView>(R.id.actionNameTextView)
             if (fontSize >= 0) {
-                child.textSize = fontSize.toFloat()
+                name.textSize = fontSize.toFloat()
             }
             child.setOnClickListener {
                 controller.run(action)
                 window.dismiss()
             }
-            child.text = action.toString(array)
+            if (AppData.menu_icon.get()) {
+                icon.setImageDrawable(iconManager[action])
+            } else {
+                icon.visibility = View.GONE
+            }
+            name.text = action.toString(array)
             layout.addView(child)
         }
 

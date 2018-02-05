@@ -442,4 +442,5 @@
     <string name="pref_fake_chrome">Chromeに偽装する</string>
     <string name="pref_fake_chrome_summary">デフォルトのUserAgentをChromeに偽装する</string>
     <string name="pref_toolbar_small_icon">長押し時のアイコンを表示</string>
+    <string name="pref_show_icon">アイコンを表示する</string>
 </resources>

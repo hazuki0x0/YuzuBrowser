@@ -220,6 +220,15 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:key="ps_ui_menu"
+        android:title="@string/pref_menu_settings">
+
+        <SwitchPreference
+            android:key="menu_icon"
+            android:title="@string/pref_show_icon"/>
+    </PreferenceScreen>
+
+    <PreferenceScreen
         android:key="ps_font_size"
         android:title="@string/pref_font_size">
 

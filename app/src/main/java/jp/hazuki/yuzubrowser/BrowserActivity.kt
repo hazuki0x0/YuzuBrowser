@@ -230,7 +230,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         webViewBehavior.setController(this)
 
         val menuAction = MenuActionManager.getInstance(applicationContext)
-        menuWindow = MenuWindow(this, menuAction.browser_activity.list, actionController).apply { setListener { setFullscreenIfEnable() } }
+        menuWindow = MenuWindow(this, menuAction.browser_activity.list, actionController, iconManager).apply { setListener { setFullscreenIfEnable() } }
 
         window.decorView.setOnSystemUiVisibilityChangeListener { setFullscreenIfEnable() }
 
@@ -652,7 +652,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             }
         }
 
-        menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController)
+        menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController, iconManager)
 
         webClient.onPreferenceReset()
         isEnableQuickControl = AppData.qc_enable.get()
