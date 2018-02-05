@@ -416,6 +416,8 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
 
             if (data === controller.currentTabData) {
                 controller.notifyChangeWebState(data)
+
+                web.view.postDelayed({ controller.adjustBrowserPadding(data) }, 50)
             }
 
             controller.tabManager.takeThumbnailIfNeeded(data)

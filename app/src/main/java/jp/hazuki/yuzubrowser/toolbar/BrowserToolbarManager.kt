@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -307,7 +307,7 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     override fun onWebViewScroll(web: CustomWebView, e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float) {
-        if (topToolbarLayout.height == 0) {
+        if (topToolbarLayout.height == 0 && web.isScrollable) {
             val translationY = bottomOverlayLayout.translationY
             val newTrans: Float
 

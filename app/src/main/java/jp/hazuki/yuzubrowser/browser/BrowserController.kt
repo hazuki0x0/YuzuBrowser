@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,7 @@ interface BrowserController : BrowserInfo {
     fun requestIconChange() = notifyChangeWebState()
     fun requestAdjustWebView()
     fun expandToolbar()
+    fun adjustBrowserPadding(tab: MainTabData)
 
     val tabManager: TabManager
     val superFrameLayoutInfo: CoordinatorLayout

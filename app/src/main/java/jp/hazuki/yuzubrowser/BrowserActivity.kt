@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -176,7 +176,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
                 val tab = tabManagerIn.currentTabData
                 if (tab != null) {
                     toolbar.notifyChangeWebState(tab)
-                    webViewBehavior.adjustWebView(tab, topToolbarLayout.height + bottomOverlayLayout.height)
+                    adjustBrowserPadding(tab)
                 }
                 toolbar.onImeChanged(visible)
 
@@ -574,6 +574,10 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         return super.dispatchKeyEvent(event)
     }
 
+    override fun adjustBrowserPadding(tab: MainTabData) {
+        webViewBehavior.adjustWebView(tab, topToolbarLayout.height + bottomOverlayLayout.height)
+    }
+
     private fun handleIntent(intent: Intent?): Boolean {
         if (intent == null) return false
 
@@ -967,7 +971,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     override fun requestAdjustWebView() {
         val data = tabManagerIn.currentTabData ?: return
         data.mWebView.computeVerticalScrollRangeMethod()
-        webViewBehavior.adjustWebView(data, topToolbarLayout.height + bottomOverlayLayout.height)
+        adjustBrowserPadding(data)
     }
 
     override fun expandToolbar() {
