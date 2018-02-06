@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ class BrowserApplication : Application() {
                 .build()
         Fabric.with(this, crashlytics, Answers())
         CrashlyticsUtils.setChromeVersion(this)
+        CrashlyticsUtils.setWebViewMode()
         AppUtils.registNotification(this)
 
         Logger.d(TAG, "onCreate()")

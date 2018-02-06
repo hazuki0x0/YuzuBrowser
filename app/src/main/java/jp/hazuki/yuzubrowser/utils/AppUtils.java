@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017-2018 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jp.hazuki.yuzubrowser.utils;
 
 import android.app.Notification;
@@ -15,6 +31,7 @@ import jp.hazuki.yuzubrowser.BrowserActivity;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.Constants;
 import jp.hazuki.yuzubrowser.R;
+import jp.hazuki.yuzubrowser.settings.data.AppData;
 
 public class AppUtils {
     public static void restartApp(Context context) {
@@ -34,7 +51,20 @@ public class AppUtils {
                 Build.MANUFACTURER + "/" +
                 Build.MODEL + "/" +
                 Build.VERSION.RELEASE + "/" +
+                getWebViewMode() + "/" +
                 "Chrome " + CrashlyticsUtils.getChromeVersion(context);
+    }
+
+    private static String getWebViewMode() {
+        if (AppData.fast_back.get()) {
+            int size = AppData.fast_back_cache_size.get();
+            if (size == 0) {
+                return "I";
+            } else if (size > 1) {
+                return "L";
+            }
+        }
+        return "N";
     }
 
     public static void registNotification(Context context) {

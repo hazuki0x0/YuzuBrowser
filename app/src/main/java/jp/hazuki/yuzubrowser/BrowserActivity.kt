@@ -628,6 +628,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         toolbar.onPreferenceReset()
         tabManagerIn.onPreferenceReset()
         userActionManager.onPreferenceReset()
+        CrashlyticsUtils.setWebViewMode()
 
         if (ThemeData.createInstance(applicationContext, AppData.theme_setting.get()) != null) {
             val themeData = ThemeData.getInstance()

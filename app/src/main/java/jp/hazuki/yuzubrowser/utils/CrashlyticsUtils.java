@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,29 @@ import com.crashlytics.android.Crashlytics;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jp.hazuki.yuzubrowser.settings.data.AppData;
+
 public final class CrashlyticsUtils {
     private static Pattern VERSION_REGEX = Pattern.compile("Chrome/([.0-9]+)");
     private static final String CHROME_VERSION = "chrome version";
+    private static final String WEB_VIEW_MODE = "WebView mode";
 
     public static void setChromeVersion(Context context) {
         Crashlytics.setString(CHROME_VERSION, getChromeVersion(context));
+    }
+
+    public static void setWebViewMode() {
+        if (AppData.fast_back.get()) {
+            int size = AppData.fast_back_cache_size.get();
+            if (size == 0) {
+                Crashlytics.setString(WEB_VIEW_MODE, "Infinite cache");
+                return;
+            } else if (size > 1) {
+                Crashlytics.setString(WEB_VIEW_MODE, "Limit cache");
+                return;
+            }
+        }
+        Crashlytics.setString(WEB_VIEW_MODE, "Normal");
     }
 
     public static String getChromeVersion(Context context) {
