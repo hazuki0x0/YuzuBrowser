@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_tab_loop">Scheda ciclo continuo</string>
+    <string name="action_action_cant_back">Azione su nessuna cronologia</string>
+    <string name="action_finish_alert">Mostra avviso</string>
+    <string name="action_finish_close_tab">Chiudi scheda al termine</string>
+    <string name="action_action_cant_close_tab">Azione sull\'ultima scheda</string>
+    <string name="action_select_menu">Seleziona menu</string>
+    <string name="action_target_tab">Scheda di destinazione</string>
+
+    <string-array name="action_start_activity_template">
+        <item>Applicazione</item>
+        <item>Scorciatoia</item>
+        <item>Condividi pagina</item>
+        <item>Apri in un\'altra app</item>
+    </string-array>
+
+    <string name="action_start_activity_edit_intent">Modifica intento</string>
+    <string name="action_start_activity_edit_url">Modifica l\'URL della query</string>
+    <string name="action_screenshot_all">Cattura tutto</string>
+    <string name="action_screenshot_path">Salva directory</string>
+    <string name="action_screenshot_full_error">Il rendering lento deve essere abilitato se si desidera utilizzare \"Cattura tutto\".</string>
+    <string name="action_mousepointer_backfinish">Esci quando si preme il pulsante Indietro</string>
+    <string name="action_translate_from">Da</string>
+    <string name="action_translate_to">A</string>
+    <string name="action_translate_auto_select">Auto selezione</string>
+    <string name="action_translate_select_each">Seleziona ogni volta</string>
+    <string name="action_web_scroll_x_coordinate">Coordinata X</string>
+    <string name="action_web_scroll_y_coordinate">Coordinata Y</string>
+    <string name="action_web_scroll_x_y_zero">Errore : X o Y non possono essere 0</string>
+
+    <string-array name="action_web_scroll_type_list">
+        <item>Scorrimento veloce</item>
+        <item>Scorrimento a getto</item>
+    </string-array>
+
+    <string name="action_custom_name">Nome dell\'azione</string>
+    <string name="action_useragent_setting">Impostazioni UserAgent</string>
+    <string name="action_custom_setting">Impostazioni azione personalizzata</string>
+    <string name="action_start_activity_setting">Impostazioni attività</string>
+    <string name="action_web_encode_setting">Impostazioni codifica del testo</string>
+    <string name="action_vibration_setting">Periodo di tempo (ms.)</string>
+    <string name="action_auto_scroll_speed">Velocità Auto scorrimento</string>
+    <string name="action_auto_scroll_speed_zero">Errore : la velocità non può essere 0</string>
+
+    <string name="action_tab_list">Modalità elenco schede</string>
+    <string-array name="action_tab_list">
+        <item>Elenco verticale</item>
+        <item>Elenco verticale inversa</item>
+        <item>Elenco orizzontale</item>
+    </string-array>
+    <string name="action_tab_list_button">Nuova posizione pulsante schede</string>
+    <string-array name="action_tab_list_button">
+        <item>Destra</item>
+        <item>Sinistra</item>
+    </string-array>
+    <string name="action_tab_list_last_tab">Comportamento alla chiusura dell\'ultima scheda</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>Nessuna</item>
+        <item>Nuova scheda</item>
+        <item>Termina</item>
+        <item>Termina con avviso</item>
+    </string-array>
+
+    <string name="action_open_menu">Visualizzazione posizione del menù</string>
+    <string-array name="action_open_menu_list">
+        <item>Sinistra</item>
+        <item>Centro</item>
+        <item>Destra</item>
+    </string-array>
+
+    <string name="action_bottom_search_bar">Mostra barra di ricerca in basso</string>
+    <string name="show_toast">Mostra toast</string>
+</resources>

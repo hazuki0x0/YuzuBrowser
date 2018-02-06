@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="resblock_res_type_list">
+        <item>Stringa vuota</item>
+        <item>Immagine PNG vuota</item>
+    </string-array>
+
+    <string-array name="edit_user_agent">
+        <item>Modifica</item>
+        <item>Elimina</item>
+    </string-array>
+
+    <string-array name="new_speed_dial_mode">
+        <item>Input diretto</item>
+        <item>Segnalibri</item>
+        <item>Cronologie</item>
+        <item>Elenco app</item>
+        <item>Elenco scorciatoie</item>
+    </string-array>
+
+    <string-array name="add_bookmark_option">
+        <item>Aggiungi segnalibro</item>
+        <item>Elimina segnalibro</item>
+    </string-array>
+
+</resources>

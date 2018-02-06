@@ -1,0 +1,189 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+</head>
+<body>
+<h1 class="head">Specifiche del modello</h1>
+<details>
+    <summary>Di base</summary>
+    <div class="details_info">
+        Wildcard
+        <ul>
+            <li>'#'</li>
+            Corrisponde ad un singolo carattere numerico(0-9) (interpretato come '\d')
+            <li>'?'</li>
+            Corrisponde a qualsiasi carattere singolo (interpretato come '.')
+            <li>'*'</li>
+            Corrisponde a qualsiasi zero o più caratteri (interpretato come '.*')
+            <li>'+'</li>
+            Corrisponde ad uno o più caratteri (interpretati come '.+')
+        </ul>
+        Se si desidera utilizzare questi caratteri come lettere ordinarie, anteporre la barra
+        rovesciata. <br>
+        '\#', '\?', '\*', '\+'<br><br>
+        Inoltre, puoi usare l\'espressione regolare circondando con<code>[]</code>.<br>
+        Tutti i modelli si distinguono tra lettere maiuscole e minuscole.
+    </div>
+</details>
+<details>
+    <summary>Descrizione Wildcard</summary>
+    <div class="details_info">
+        <ul>
+            <li>Wildcard'#'</li>
+        </ul>
+        <div class="li_info">
+            '#' corrisponde a 0-9 uno dei numeri.<br>
+            ex.1)Stringa modello = <code>IMG#.jpg</code><br>
+            Se un URL include <code>IMG0.jpg</code> or <code>IMG1.jpg</code> or ... or <code>IMG8.jpg</code>
+            o <code>IMG9.jpg</code>, corrisponde.<br>
+            Nel caso in cui <code>http://www.test.com/IMG.jpg</code>, poiché un numero non viene
+            dopo "IMG", questo URL non corrisponde.<br>
+            ex.2)Stringa modello = <code>IMG###.jpg</code><br>
+            Se un URL include <code>IMG000.jpg</code> o <code>IMG001.jpg</code> o ... o <code>IMG998.jpg</code>
+            oo <code>IMG999.jpg</code>, corrisponde.<br>
+            Nel caso in cui <code>http://www.test.com/IMG0a1.jpg</code>, poiché non include
+            tre valori numerici consecutivi, questo URL non corrisponde.
+        </div>
+        <ul>
+            <li>Wildcard'?'</li>
+        </ul>
+        <div class="li_info">
+            '?' corrisponde a qualsiasi singolo carattere.<br>
+            ex.1)Stringa modello = <code>IMG_?.jpg</code><br>
+            Se un URL include l\'espressione in cui viene inserito qualche carattere tra
+            <code>IMG_</code> e <code>.jpg</code>, corrisponde.<br>
+            Nel caso di <code>http://www.test.com/IMG_l.jpg</code>, questo URL corrisponde.<br>
+            Nel caso di <code>http://www.test.com/IMG_00.jpg</code> ,due
+            caratteri(<code>00</code>) sono racchiusi tra <code>IMG_</code> snd
+            <code>.jpg</code>, non corrisponde.<br>
+            ex.2)Stringa modello = <code>IMG_???.jpg</code><br>
+            Questo modello corrisponde all\'URL in cui sono inseriti alcuni tre caratteri tra
+            <code>IMG_</code> e <code>.jpg</code>.
+        </div>
+        <ul>
+            <li>Wildcard'*'</li>
+        </ul>
+        <div class="li_info">
+            '*' corrisponde a qualsiasi zero o più caratteri.<br>
+            ex.)Stringa modello = <code>IMG_*.jpg</code><br>
+            Se un URL include l\'espressione che alcuni zero o più caratteri sono inseriti tra
+            <code>IMG_</code> e <code>.jpg</code>, corrisponde.<br>
+            Pertanto corrisponde sia a <code>IMG_.jpg</code>, <code>IMG_000.jpg</code> e <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Wildcard'+'</li>
+        </ul>
+        <div class="li_info">
+            '+' corrisponde a uno o più caratteri.<br>
+            ex.)Stringa modello = <code>IMG_+.jpg</code><br>
+            Se un URL include l\'espressione in cui sono inseriti uno o più caratteri tra
+            <code>IMG_</code> e <code>.jpg</code>, corrisponde.<br>
+            Pertanto corrisponde sia a <code>IMG_.jpg</code>, <code>IMG_000.jpg</code> e <code>IMG_000abc.jpg</code>.
+            <font color="red">Non corrisponde, se non c\'è niente tra <code>IMG_</code> e
+                <code>.jpg</code>.</font><br>
+            Pertanto corrisponde sia a <code>IMG_000.jpg</code> e <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Espressione regolare</li>
+        </ul>
+        <div class="li_info">
+            Il modello racchiuso tra '[]' viene trattato come un\'espressione regolare.<br>
+            Le espressioni regolari sono conformi alle specifiche Java. <br>
+            ex.)<code>[https?://www\.test\.com/IMG_*\.jpg]</code>
+        </div>
+    </div>
+</details>
+<details id="insecure_content">
+    <summary>Corrispondenza modelli</summary>
+    <div class="details_info">
+        Se non si applica uno schema come <code>http://</code>, sarà automaticamente
+        integrato (aggiungi <code>^\w+://</code>)<br>
+        Se crei un modello come <code>*test.com</code>, corrisponderà all\'URL, come ad esempio
+        <code>http://other.com/?page=test.com</code>.
+        <ul>
+            <li>Se si desidera sostituire un sottodominio</li>
+        </ul>
+        <div class="li_info">
+            Inizia con <code>*.</code>or <code>http://*.</code>. (Sostituire <code>*.</code> con
+            <code>((?![./]).)*</code>)<br>
+            ex.)Stringa modello =<code>*.test.com</code><br>
+            Corrisponde a <code>mobile.test.com</code>, <code>doc.test.com</code><br>
+            Tuttavia, <code>mobile.doc.test.com</code> non corrisponde perché contiene il
+            sottodominio
+            <code>.</code>.
+        </div>
+        <ul>
+            <li>Se il modello inizia con <code>http*://</code></li>
+        </ul>
+        <div class="li_info">
+            Questo non è necessario perché questa parte è automaticamente completata dal
+            browser.<br>
+            Questa descrizione sarà sostituita internamente da <code>https?://</code> per evitare
+            falsi
+            positivi.
+        </div>
+    </div>
+</details>
+<details>
+    <summary>Ad block</summary>
+    <div class="details_info">
+        Se non si utilizzano wildcard, sarà più veloce.<br>
+        Inoltre, le prestazioni sono peggiori se esiste un modello complesso nell\'espressione
+        regolare.<br>
+        <ul>
+            <li>Se non usi wildcard wildcard(<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            Se c\'è una stringa specifica nell\'URL, bloccala.<br>
+            ex.)Stringa modello =<code>ad.jpg</code><br>
+            Blocca <code>http://test.com/ad/ad.jpg</code>,
+            <code>https://test.jp/ad/img/ad.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Se non usi wildcard(<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            Vedere la descrizione della wildcard per ulteriori informazioni.<br>
+            ex.)Stringa modello =<code>/ad/+.jpg</code><br>
+            Blocca <code>http://test.com/ad/01.jpg</code>, <code>https://test.jp/ad/img/advertisement.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Blocco Host</li>
+        </ul>
+        <div class="li_info">
+            Blocca tutti gli host specificati.<br>
+            <ul>
+                <li>Corrispondenza perfetta</li>
+            </ul>
+            <div class="li_info">
+                <code>h ad.test.com</code> Specifica mettendo uno spazio dopo la 'h'.<br>
+                E' utile per bloccare <code>http://ad.test.com</code> senza bloccare <code>http://test.com</code>.<br>
+                Anche le Wild cards possono essere utilizzate. <br>
+                ex.)<code>h ad.+.com</code>, <code>h ad.test.*</code><br>
+                <code>127.0.0.1 ad.com</code> può anche essere specificato in un formato host, come
+                da esempio.
+            </div>
+            <ul>
+                <li>Corrispondenza parziale</li>
+            </ul>
+            <div class="li_info">
+                <code>c ad.com</code> Specifica mettendo uno spazio dopo la 'c'.<br>
+                Blocca <code>http://ad.com</code>, <code>http://abc.ad.com</code>, <code>http://ad001.ad.com</code>
+                etc.<br>
+                <font color="red">Le Wild cards NON possono essere utilizzate.</font>
+            </div>
+            <ul>
+                <li>Quando si utilizzano espressioni regolari nel blocco host</li>
+            </ul>
+            <div class="li_info">
+                <code>h [test\.com]</code> può essere specificato.
+            </div>
+        </div>
+    </div>
+</details>
+</body>
+</html>
