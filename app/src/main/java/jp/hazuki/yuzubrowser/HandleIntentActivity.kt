@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser
 
 import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.BadParcelableException
@@ -28,6 +29,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.WebUtils
+import jp.hazuki.yuzubrowser.utils.createLanguageContext
 
 class HandleIntentActivity : AppCompatActivity() {
     companion object {
@@ -102,5 +104,9 @@ class HandleIntentActivity : AppCompatActivity() {
         send.putExtra(BrowserActivity.EXTRA_WINDOW_MODE, window)
         send.putExtra(BrowserActivity.EXTRA_SHOULD_OPEN_IN_NEW_TAB, openInNewTab)
         startActivity(send)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(newBase.createLanguageContext(AppData.language.get()))
     }
 }

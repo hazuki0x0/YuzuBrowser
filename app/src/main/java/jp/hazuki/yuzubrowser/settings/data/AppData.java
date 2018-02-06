@@ -218,6 +218,7 @@ public class AppData {
     public static final BooleanContainer fake_chrome = new BooleanContainer("fake_chrome", false);
     public static final BooleanContainer bookmark_breadcrumbs = new BooleanContainer("bookmark_breadcrumbs", true);
     public static final BooleanContainer menu_icon = new BooleanContainer("menu_icon", true);
+    public static final StringContainer language = new StringContainer("language", "");
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.utils.app
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.StyleRes
 import android.support.v7.app.AppCompatActivity
@@ -24,6 +25,7 @@ import android.support.v7.app.AppCompatActivity
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.theme.ThemeData
+import jp.hazuki.yuzubrowser.utils.createLanguageContext
 
 @SuppressLint("Registered")
 open class ThemeActivity : AppCompatActivity() {
@@ -41,6 +43,10 @@ open class ThemeActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(newBase.createLanguageContext(AppData.language.get()))
     }
 
     @StyleRes

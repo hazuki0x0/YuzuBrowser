@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package jp.hazuki.yuzubrowser.debug
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.ListFragment
 import android.view.View
 import android.widget.ArrayAdapter
@@ -27,6 +30,7 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.view.ActionStringActivity
+import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 
 class DebugActivity : ThemeActivity() {
@@ -44,7 +48,7 @@ class DebugActivity : ThemeActivity() {
     class ItemFragment : ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-            val list = arrayOf("file list", "activity list", "action json string", "action list json string", "environment")
+            val list = arrayOf("file list", "activity list", "action json string", "action list json string", "environment", "language")
             listAdapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, list)
         }
 
@@ -65,6 +69,27 @@ class DebugActivity : ThemeActivity() {
                     putExtra(ActionStringActivity.EXTRA_ACTIVITY, ActionStringActivity.ACTION_LIST_ACTIVITY)
                 })
                 4 -> startActivity(Intent(activity, EnvironmentActivity::class.java))
+                5 -> LanguageFragment().show(childFragmentManager, "language")
+            }
+        }
+
+        class LanguageFragment : DialogFragment() {
+
+            override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+                val activity = activity ?: throw IllegalStateException()
+                val names = activity.resources.getStringArray(R.array.language_list)
+                val values = activity.resources.getStringArray(R.array.language_value)
+                val checked = values.indexOf(AppData.language.get())
+
+                return AlertDialog.Builder(activity)
+                        .setTitle("Language")
+                        .setSingleChoiceItems(names, checked) { dialog, which ->
+                            AppData.language.set(values[which])
+                            AppData.commit(activity, AppData.language)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create()
             }
         }
     }
