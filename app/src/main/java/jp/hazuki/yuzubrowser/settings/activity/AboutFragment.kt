@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,10 @@ class AboutFragment : YuzuPreferenceFragment() {
             OpenSourceLicenseDialog().show(childFragmentManager, "osl")
             true
         }
+        findPreference("translation").setOnPreferenceClickListener {
+            TranslationDialog().show(childFragmentManager, "translation")
+            true
+        }
 
         findPreference("privacy_policy").setOnPreferenceClickListener {
             startActivity(intentFor<BrowserActivity>().apply {
@@ -95,6 +99,15 @@ class AboutFragment : YuzuPreferenceFragment() {
             builder.setTitle(R.string.open_source_license)
                     .setView(webView)
             return builder.create()
+        }
+    }
+
+    class TranslationDialog : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return AlertDialog.Builder(activity)
+                    .setTitle(R.string.pref_translation)
+                    .setView(WebView(activity).apply { loadUrl("file:///android_asset/translators.html") })
+                    .create()
         }
     }
 

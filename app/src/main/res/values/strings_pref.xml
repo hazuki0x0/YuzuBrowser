@@ -835,4 +835,6 @@
     <string name="pref_fake_chrome_summary">Impersonate default UserAgent as Chrome</string>
     <string name="pref_toolbar_small_icon">Show long pressed icon</string>
     <string name="pref_show_icon">Show icon</string>
+    <string name="pref_translation">Translation</string>
+    <string name="pref_translators">Hazuki</string>
 </resources>

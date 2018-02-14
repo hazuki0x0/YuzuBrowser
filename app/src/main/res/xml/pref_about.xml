@@ -17,6 +17,10 @@
         android:key="osl"
         android:title="@string/open_source_license" />
     <Preference
+        android:key="translation"
+        android:title="@string/pref_translation"
+        android:summary="@string/pref_translators"/>
+    <Preference
         android:key="privacy_policy"
         android:title="@string/pref_privacy_policy"/>
     <PreferenceCategory android:title="@string/pref_log">
