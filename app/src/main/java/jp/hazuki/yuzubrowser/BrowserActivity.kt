@@ -720,7 +720,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             it.paddingScrollChangedListener = toolbar
             userActionManager.setGestureDetector(it)
         }
-
+        CookieManager.getInstance().setAcceptCookie(newTab.isEnableCookie)
     }
 
     private fun addTab(index: Int, tab: MainTabData) {

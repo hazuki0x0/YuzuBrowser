@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -218,6 +218,15 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     }
                 }
 
+                var cookie = WebSettingPatternAction.UNDEFINED
+                if (cookieCheckBox.isChecked) {
+                    cookie = if (cookieSwitch.isChecked) {
+                        WebSettingPatternAction.ENABLE
+                    } else {
+                        WebSettingPatternAction.DISABLE
+                    }
+                }
+
                 var thirdCookie = WebSettingPatternAction.UNDEFINED
                 if (thirdCookieCheckBox.isChecked) {
                     thirdCookie = if (thirdCookieSwitch.isChecked) {
@@ -227,7 +236,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     }
                 }
 
-                return WebSettingPatternAction(ua, js, navLock, image, thirdCookie)
+                return WebSettingPatternAction(ua, js, navLock, image, cookie, thirdCookie)
             }
 
             private fun setData(checker: PatternUrlChecker?) {
@@ -237,6 +246,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     jsSwitch.isEnabled = false
                     navLockSwitch.isEnabled = false
                     loadImageSwitch.isEnabled = false
+                    cookieSwitch.isEnabled = false
                     thirdCookieSwitch.isEnabled = false
                 } else {
                     val action = checker.action as WebSettingPatternAction
@@ -297,6 +307,22 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                         }
                     }
 
+                    when (action.cookie) {
+                        WebSettingPatternAction.UNDEFINED -> {
+                            cookieCheckBox.isChecked = false
+                            cookieSwitch.isChecked = false
+                            cookieSwitch.isEnabled = false
+                        }
+                        WebSettingPatternAction.ENABLE -> {
+                            cookieCheckBox.isChecked = true
+                            cookieSwitch.isChecked = true
+                        }
+                        WebSettingPatternAction.DISABLE -> {
+                            cookieCheckBox.isChecked = true
+                            cookieSwitch.isChecked = false
+                        }
+                    }
+
                     when (action.thirdCookie) {
                         WebSettingPatternAction.UNDEFINED -> {
                             thirdCookieCheckBox.isChecked = false
@@ -338,6 +364,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 navLockCheckBox.setOnCheckedChangeListener { _, b -> navLockSwitch.isEnabled = b }
 
                 loadImageCheckBox.setOnCheckedChangeListener { _, b -> loadImageSwitch.isEnabled = b }
+
+                cookieCheckBox.setOnCheckedChangeListener { _, b -> cookieSwitch.isEnabled = b }
 
                 thirdCookieCheckBox.setOnCheckedChangeListener { _, b -> thirdCookieSwitch.isEnabled = b }
             }

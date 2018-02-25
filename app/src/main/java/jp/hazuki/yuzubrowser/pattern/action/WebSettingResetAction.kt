@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,10 @@ class WebSettingResetAction(tabData: MainTabData) {
         settings.javaScriptEnabled = javaScriptEnable
         tab.isNavLock = navLockEnable
         settings.loadsImagesAutomatically = loadImage
-        CookieManager.getInstance().setAcceptThirdPartyCookies(tab.mWebView.webView, thirdCookie)
+        tab.cookieMode = MainTabData.COOKIE_UNDEFINED
+        CookieManager.getInstance().run {
+            setAcceptCookie(tab.isEnableCookie)
+            setAcceptThirdPartyCookies(tab.mWebView.webView, thirdCookie)
+        }
     }
 }

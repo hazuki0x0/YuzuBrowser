@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.tab.manager;
@@ -206,6 +206,7 @@ public class MainTabData extends TabData {
     private boolean bgTab;
     private boolean startDocument;
     private boolean iconReceived;
+    private int cookieMode = COOKIE_UNDEFINED;
 
     public WebSettingResetAction getResetAction() {
         return resetAction;
@@ -235,4 +236,24 @@ public class MainTabData extends TabData {
     public View getTabView() {
         return mTabView;
     }
+
+    public boolean isEnableCookie() {
+        if (cookieMode == COOKIE_UNDEFINED) {
+            return !AppData.private_mode.get() && AppData.accept_cookie.get();
+        } else {
+            return cookieMode == COOKIE_ENABLE;
+        }
+    }
+
+    public int getCookieMode() {
+        return cookieMode;
+    }
+
+    public void setCookieMode(int mode) {
+        cookieMode = mode;
+    }
+
+    public static final int COOKIE_ENABLE = 1;
+    public static final int COOKIE_DISABLE = 0;
+    public static final int COOKIE_UNDEFINED = -1;
 }

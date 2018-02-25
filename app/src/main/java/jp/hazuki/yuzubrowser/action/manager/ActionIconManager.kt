@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,8 @@ class ActionIconManager(val info: BrowserInfo) {
                     info.resourcesByInfo.getDrawable(R.drawable.ic_crop_original_disable_white_24px, info.themeByInfo)
             }
             SingleAction.TOGGLE_COOKIE -> {
-                return if (AppData.accept_cookie.get())
+                val tab = info.currentTabData ?: return null
+                return if (tab.isEnableCookie)
                     info.resourcesByInfo.getDrawable(R.drawable.ic_cookie_24dp, info.themeByInfo)
                 else
                     info.resourcesByInfo.getDrawable(R.drawable.ic_cookie_disable_24dp, info.themeByInfo)
