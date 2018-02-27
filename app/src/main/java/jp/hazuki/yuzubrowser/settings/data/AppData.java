@@ -121,7 +121,7 @@ public class AppData {
     //public static final BooleanContainer pause_web_tab_change = new BooleanContainer("pause_web_tab_change", true);
     public static final BooleanContainer web_app_cache = new BooleanContainer("web_app_cache", true);
     public static final BooleanContainer web_geolocation = new BooleanContainer("web_geolocation", true);
-    public static final StringContainer layout_algorithm = new StringContainer("layout_algorithm", "TEXT_AUTOSIZING");
+    public static final StringContainer layout_algorithm = new StringContainer("layout_algorithm", "NORMAL");
     public static final BooleanContainer save_history = new BooleanContainer("save_history", true);
     public static final IntContainer newtab_link = new IntContainer("newtab_link", BrowserManager.LOAD_URL_TAB_CURRENT);
     public static final IntContainer newtab_speeddial = new IntContainer("newtab_speeddial", BrowserManager.LOAD_URL_TAB_CURRENT);
