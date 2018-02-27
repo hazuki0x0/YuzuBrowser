@@ -40,12 +40,14 @@ class AdBlockController(context: Context) {
     private var whiteList: FastMatcherList? = null
     private var whitePageList: FastMatcherList? = null
     private var adBlocker: AdBlocker? = null
+    private var updating = false
 
     init {
         update()
     }
 
     fun update() {
+        updating = true
         launch {
             lateinit var blackFilter: FilterMatcher
             lateinit var whiteFilter: FilterMatcher
@@ -63,6 +65,7 @@ class AdBlockController(context: Context) {
                 whitePageList = it
                 adBlocker = AdBlocker(blackFilter, whiteFilter, it)
             }
+            updating = false
         }
     }
 
@@ -71,6 +74,8 @@ class AdBlockController(context: Context) {
     }
 
     fun onResume() {
+        if (updating) return
+
         launch {
             manager.updateOrder(AdBlockManager.BLACK_TABLE_NAME, blackList)
             manager.updateOrder(AdBlockManager.WHITE_TABLE_NAME, whiteList)

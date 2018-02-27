@@ -500,7 +500,8 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             val tabIndexData = controller.tabManager.getIndexData(web.identityId)
-            val uri = Uri.parse(tabIndexData.url)
+            val uri = if (tabIndexData != null) Uri.parse(tabIndexData.url) else Uri.parse(web.url
+                    ?: return null)
 
             adBlockController?.run {
                 val result = isBlock(uri, request.url)

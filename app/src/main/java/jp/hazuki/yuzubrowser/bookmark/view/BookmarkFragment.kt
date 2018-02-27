@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         }
 
         setList(root)
-        breadCrumbsView.addItem(bookmarkCrumbItem(root))
+        addAllFolderToBreadCrumbs(root)
     }
 
     private fun setList(folder: BookmarkFolder) {
@@ -258,6 +258,13 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
 
     private fun showBreadCrumbs(show: Boolean) {
         breadCrumbsView.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun addAllFolderToBreadCrumbs(folder: BookmarkFolder) {
+        if (folder.parent != null) {
+            addAllFolderToBreadCrumbs(folder.parent)
+        }
+        breadCrumbsView.addItem(bookmarkCrumbItem((folder)))
     }
 
     private fun getSelectedBookmark(items: List<Int>): List<BookmarkItem> = items.map { mCurrentFolder.get(it) }

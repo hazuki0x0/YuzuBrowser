@@ -70,7 +70,7 @@ class SwipeSoftButtonController
 
         when (whatNo) {
             SwipeController.SWIPE_PRESS -> controller.run(actionList.press)
-            SwipeController.SWIPE_LPRESS -> controller.run(actionList.lpress)
+        //SwipeController.SWIPE_LPRESS -> Nothing
             SwipeController.SWIPE_UP -> controller.run(actionList.up)
             SwipeController.SWIPE_DOWN -> controller.run(actionList.down)
             SwipeController.SWIPE_LEFT -> controller.run(actionList.left)

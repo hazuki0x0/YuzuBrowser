@@ -30,6 +30,7 @@ import jp.hazuki.yuzubrowser.action.SingleAction
 class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) : BaseAdapter() {
     private val checked = BooleanArray(count)
     private val inflater = LayoutInflater.from(context)
+    private val iconPosDB = context.resources.getIntArray(R.array.action_values)
     private val icons = context.resources.obtainTypedArray(R.array.action_icons)
     private var mListener: OnSettingButtonListener? = null
 
@@ -54,7 +55,9 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
     }
 
     private fun getIcon(position: Int): Drawable? {
-        return icons.getDrawable(position)
+        val iconPos = iconPosDB.indexOf(nameArray.actionValues[position])
+
+        return if (iconPos >= 0) icons.getDrawable(iconPos) else null
     }
 
     fun isChecked(position: Int): Boolean {
