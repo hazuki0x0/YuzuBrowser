@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ class DownloadListAdapter(private val context: Context, private val database: Do
     operator fun get(position: Int) = items[position]
 
     fun remove(position: Int) {
-        if (position > 0) {
+        if (position >= 0) {
             items.removeAt(position)
             notifyItemRemoved(position)
         }

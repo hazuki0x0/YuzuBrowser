@@ -137,7 +137,6 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                     val index = adapter.indexOf(info)
                     if (index >= 0) {
                         adapter.remove(index)
-                        adapter.notifyItemRemoved(index)
                     }
                 }
                 false
@@ -150,7 +149,6 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                     database.delete(info.id)
                     val index = adapter.indexOf(info)
                     adapter.remove(index)
-                    adapter.notifyItemRemoved(index)
                 }
                 false
             }
