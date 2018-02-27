@@ -12,11 +12,13 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="58dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/urlTextView"
-        android:scaleType="fitStart"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"/>
 
     <TextView
@@ -25,7 +27,7 @@
         android:textColor="?android:attr/textColorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
+        android:layout_marginStart="56dp"
         android:maxLines="1" />
 
     <TextView
@@ -34,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleTextView"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="72dp"
+        android:layout_marginStart="56dp"
         android:maxLines="1"
         android:layout_toStartOf="@+id/timeTextView"/>
 
