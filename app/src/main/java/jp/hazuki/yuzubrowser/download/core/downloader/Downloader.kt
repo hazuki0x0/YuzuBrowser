@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,10 @@ interface Downloader {
         fun getDownloader(context: Context, info: DownloadFileInfo, request: DownloadRequest): Downloader {
             return if (info.url.startsWith("data:")) {
                 Base64Downloader(context.contentResolver, info)
-            } else {
+            } else if (info.url.startsWith("http:", true) || info.url.startsWith("https:", true)) {
                 HttpDownloader(context, info, request)
+            } else {
+                UniversalDownloader(context, info, request)
             }
         }
     }
