@@ -442,7 +442,7 @@
     <string name="pref_fake_chrome">Travestito da Chrome</string>
     <string name="pref_fake_chrome_summary">Impersonare UserAgent predefinito come Chrome</string>
 +   <string name="pref_toolbar_small_icon">Mostra le icone per la pressione lunga</string>
-+   <string name="pref_show_icon">Mostra icona</string>
++   <string name="pref_show_icon">Mostra icone</string>
     <string name="pref_translation">Traduzione</string>
     <string name="pref_translators">Strange</string>
 </resources>
