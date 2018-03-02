@@ -34,7 +34,7 @@
     <string name="pref_allow_content_access">Consenti l\'accesso al contenuto</string>
     <string name="pref_default_encoding">Codifica del testo predefinita</string>
     <string name="pref_text_encoding">Codifica del testo</string>
-    <string name="pref_softbtn_settings">Impostazioni del pulsante della barra strumenti</string>
+    <string name="pref_softbtn_settings">Impostazioni dei pulsanti della barra strumenti</string>
     <string name="pref_btn_tab_left">Pulsante sinistro nella barra delle schede</string>
     <string name="pref_btn_tab_right">Pulsante destro nella barra delle schede</string>
     <string name="pref_btn_url_left">Pulsante sinistro nella barra URL</string>
@@ -438,5 +438,11 @@
     <string name="pref_privacy_policy">politica sulla privacy</string>
     <string name="mining_protect">Nessuna moneta</string>
     <string name="mining_protect_summary">Protezione mineraria da criptovaluta</string>
+    <string name="pref_storage_location_warn">Questa posizione di archiviazione potrebbe non funzionare correttamente con altre app.</string>
+    <string name="pref_fake_chrome">Travestito da Chrome</string>
+    <string name="pref_fake_chrome_summary">Impersonare UserAgent predefinito come Chrome</string>
++   <string name="pref_toolbar_small_icon">Mostra le icone per la pressione lunga</string>
++   <string name="pref_show_icon">Mostra icone</string>
+    <string name="pref_translation">Traduzione</string>
     <string name="pref_translators">Strange</string>
 </resources>
