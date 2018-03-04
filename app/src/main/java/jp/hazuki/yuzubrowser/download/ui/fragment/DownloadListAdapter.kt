@@ -73,7 +73,7 @@ class DownloadListAdapter(private val context: Context, private val database: Do
         }
 
         holder.itemView.setOnClickListener { listener.onRecyclerItemClicked(it, holder.adapterPosition) }
-        holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo -> listener.onCreateContextMenu(menu, v, menuInfo, position) }
+        holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo -> listener.onCreateContextMenu(menu, v, menuInfo, holder.adapterPosition) }
     }
 
     fun update(info: DownloadFileInfo) {
