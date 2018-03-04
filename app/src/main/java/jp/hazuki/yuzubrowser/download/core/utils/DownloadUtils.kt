@@ -153,7 +153,7 @@ fun Uri.toDocumentFile(context: Context): DocumentFile {
     return when (scheme) {
         ContentResolver.SCHEME_CONTENT -> DocumentFile.fromTreeUri(context, this)
         "file" -> DocumentFile.fromFile(File(path))
-        else -> throw IllegalStateException()
+        else -> throw IllegalStateException("unknown scheme :$scheme")
     }
 }
 
