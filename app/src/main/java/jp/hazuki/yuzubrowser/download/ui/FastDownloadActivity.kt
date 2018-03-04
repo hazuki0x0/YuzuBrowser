@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.download.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.provider.DocumentFile
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
@@ -27,6 +26,7 @@ import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.downloader.Downloader
+import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
@@ -83,7 +83,7 @@ class FastDownloadActivity : ThemeActivity() {
     }
 
     private fun download(url: String, referrer: String?, defExt: String): Uri? {
-        val root = DocumentFile.fromSingleUri(applicationContext, Uri.parse(AppData.download_folder.get()))
+        val root = Uri.parse(AppData.download_folder.get()).toDocumentFile(applicationContext)
         val file = DownloadFile(url, null, DownloadRequest(referrer, null, defExt))
         val meta = MetaData(applicationContext, root, file.url, file.request)
         val info = DownloadFileInfo(root, file, meta)

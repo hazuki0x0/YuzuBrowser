@@ -66,6 +66,7 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
 
         val tmp = existTmp
                 ?: info.root.createFile(info.mimeType, "${info.name}${Constants.download.TMP_FILE_SUFFIX}")
+                ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}")
 
         try {
             conn.connect()

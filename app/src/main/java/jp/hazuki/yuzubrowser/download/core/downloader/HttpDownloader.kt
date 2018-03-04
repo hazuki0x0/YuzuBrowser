@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
         }
 
         val tmp = existTmp ?: info.root.createFile(info.mimeType, "${info.name}${Constants.download.TMP_FILE_SUFFIX}")
+        ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}")
 
         try {
             httpClient.connect()
