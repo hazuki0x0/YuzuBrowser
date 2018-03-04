@@ -1236,7 +1236,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     }
 
     override fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int) {
-        tabManagerIn[webViewNo].mWebView.webView.saveArchive(root, file)
+        tabManagerIn[webViewNo].mWebView.saveArchive(root, file)
     }
 
     override fun startActivity(intent: Intent, @RequestCause cause: Long) {
