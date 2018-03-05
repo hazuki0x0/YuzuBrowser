@@ -103,27 +103,25 @@ fun Context.getPathFromUri(uri: Uri): String? {
         if (uri.isExternalStorageDocument()) { // ExternalStorageProvider
             val docId = DocumentsContract.getDocumentId(uri)
             val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val type = split[0]
 
-            if ("primary".equals(type, ignoreCase = true)) {
-                return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
-            }
-
-            // TODO handle non-primary volumes
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val path = "/storage/$type/${split[1]}"
-                if (File(path).exists()) {
-                    return path
+            if (split.size >= 2) {
+                val type = split[0]
+                val result = resolveStorage(type, split[1])
+                if (result != null && result.isNotEmpty()) {
+                    return result
                 }
             }
 
         } else if (uri.isContentUri() && uri.isTreeUri()) { // Tree Uri
             val place = uri.pathSegments
             val split = place[1].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val type = split[0]
 
-            if ("primary".equals(type, ignoreCase = true)) {
-                return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+            if (split.size >= 2) {
+                val type = split[0]
+                val result = resolveStorage(type, split[1])
+                if (result != null && result.isNotEmpty()) {
+                    return result
+                }
             }
 
         } else if (uri.isDownloadsDocument()) { // DownloadsProvider
@@ -158,6 +156,29 @@ fun Context.getPathFromUri(uri: Uri): String? {
     } else if ("file".equals(uri.scheme, ignoreCase = true)) { // File
         return uri.path
     }
+    return null
+}
+
+private fun Context.resolveStorage(type: String, extPath: String): String? {
+    if ("primary".equals(type, ignoreCase = true)) {
+        return Environment.getExternalStorageDirectory().toString() + "/" + extPath
+    }
+
+    // TODO handle non-primary volumes
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val path = "/storage/$type/$extPath"
+        if (File(path).exists()) {
+            return path
+        }
+    }
+    val storages = getExternalStorageDirectories()
+    for (storage in storages) {
+        val path = (if (storage.endsWith("/")) storage else "$storage/") + extPath
+        if (File(path).exists()) {
+            return path
+        }
+    }
+
     return null
 }
 
