@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.utils
 
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
@@ -81,12 +82,12 @@ fun getParsedFileName(filename: String): ParsedFileName {
     }
 }
 
-fun Uri.isAlwaysConvertible(context: Context): Boolean {
+fun Uri.isAlwaysConvertible(): Boolean {
     if (scheme == "file") return true
 
-    if (DocumentsContract.isDocumentUri(context, this)) {
-        val docId = DocumentsContract.getDocumentId(this)
-        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+    if (isContentUri() && isTreeUri()) {
+        val place = pathSegments
+        val split = place[1].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val type = split[0]
 
         return "primary".equals(type, ignoreCase = true)
@@ -114,6 +115,15 @@ fun Context.getPathFromUri(uri: Uri): String? {
                 if (File(path).exists()) {
                     return path
                 }
+            }
+
+        } else if (uri.isContentUri() && uri.isTreeUri()) { // Tree Uri
+            val place = uri.pathSegments
+            val split = place[1].split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val type = split[0]
+
+            if ("primary".equals(type, ignoreCase = true)) {
+                return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
             }
 
         } else if (uri.isDownloadsDocument()) { // DownloadsProvider
@@ -176,18 +186,30 @@ fun Context.getDataColumn(uri: Uri, selection: String?, selectionArgs: Array<Str
     return null
 }
 
-fun Uri.isExternalStorageDocument(): Boolean {
+private fun Uri.isExternalStorageDocument(): Boolean {
     return "com.android.externalstorage.documents" == authority
 }
 
-fun Uri.isDownloadsDocument(): Boolean {
+private fun Uri.isDownloadsDocument(): Boolean {
     return "com.android.providers.downloads.documents" == authority
 }
 
-fun Uri.isMediaDocument(): Boolean {
+private fun Uri.isMediaDocument(): Boolean {
     return "com.android.providers.media.documents" == authority
 }
 
-fun Uri.isGooglePhotosUri(): Boolean {
+private fun Uri.isGooglePhotosUri(): Boolean {
     return "com.google.android.apps.photos.content" == authority
+}
+
+//Copy from DocumentsContract.java
+private const val PATH_TREE = "tree"
+
+private fun Uri.isTreeUri(): Boolean {
+    val paths = pathSegments
+    return paths.size >= 2 && PATH_TREE == paths[0]
+}
+
+private fun Uri.isContentUri(): Boolean {
+    return ContentResolver.SCHEME_CONTENT == scheme
 }

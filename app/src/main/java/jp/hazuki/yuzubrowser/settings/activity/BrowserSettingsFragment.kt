@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.settings.activity
@@ -62,7 +62,7 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
             true
         }
 
-        findPreference("download2_folder").setOnPreferenceClickListener {
+        findPreference("download_folder").setOnPreferenceClickListener {
             startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
             true
         }
@@ -90,7 +90,7 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
                 AppData.download_folder.set(uri.toString())
                 AppData.commit(activity, AppData.download_folder)
 
-                if (!uri.isAlwaysConvertible(activity)) {
+                if (!uri.isAlwaysConvertible()) {
                     activity.longToast(R.string.pref_storage_location_warn)
                 }
             }

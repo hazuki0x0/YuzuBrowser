@@ -45,13 +45,8 @@
         android:key="download_action"
         android:title="@string/pref_download_action" />
 
-    <EditTextPreference
-        android:key="download_folder"
-        android:singleLine="true"
-        android:title="@string/pref_download_folder"/>
-
     <Preference
-        android:key="download2_folder"
+        android:key="download_folder"
         android:title="@string/pref_download_folder"/>
 
     <jp.hazuki.yuzubrowser.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
