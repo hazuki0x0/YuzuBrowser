@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ class AdBlockManager internal constructor(context: Context) {
         values.put(COLUMN_COUNT, adBlock.count)
         values.put(COLUMN_TIME, adBlock.time)
         return try {
-            db.update(table, values, COLUMN_ID + " = ?", arrayOf(Integer.toString(adBlock.id)))
+            db.update(table, values, "$COLUMN_ID = ?", arrayOf(Integer.toString(adBlock.id)))
             true
         } catch (e: SQLiteConstraintException) {
             false
@@ -82,7 +82,7 @@ class AdBlockManager internal constructor(context: Context) {
 
     private fun delete(table: String, id: Int) {
         val db = mOpenHelper.writableDatabase
-        db.delete(table, COLUMN_ID + " = ?", arrayOf(Integer.toString(id)))
+        db.delete(table, "$COLUMN_ID = ?", arrayOf(Integer.toString(id)))
         updateListTime(table)
     }
 
@@ -110,7 +110,7 @@ class AdBlockManager internal constructor(context: Context) {
 
     private fun getAllItems(table: String): ArrayList<AdBlock> {
         val db = mOpenHelper.readableDatabase
-        db.query(table, null, null, null, null, null, COLUMN_COUNT + " DESC").use { c ->
+        db.query(table, null, null, null, null, null, "$COLUMN_COUNT DESC").use { c ->
             val id = c.getColumnIndex(COLUMN_ID)
             val match = c.getColumnIndex(COLUMN_MATCH)
             val enable = c.getColumnIndex(COLUMN_ENABLE)
@@ -126,7 +126,7 @@ class AdBlockManager internal constructor(context: Context) {
 
     private fun getEnableItems(table: String): ArrayList<AdBlock> {
         val db = mOpenHelper.readableDatabase
-        db.query(table, null, COLUMN_ENABLE + " = 1", null, null, null, COLUMN_COUNT + " DESC").use { c ->
+        db.query(table, null, "$COLUMN_ENABLE = 1", null, null, null, "$COLUMN_COUNT DESC").use { c ->
             val id = c.getColumnIndex(COLUMN_ID)
             val match = c.getColumnIndex(COLUMN_MATCH)
             val enable = c.getColumnIndex(COLUMN_ENABLE)
@@ -170,6 +170,34 @@ class AdBlockManager internal constructor(context: Context) {
         }
     }
 
+    internal fun updateMatcher(table: String, list: FastMatcherList?) {
+        if (list == null) return
+        var updated = false
+        val db = mOpenHelper.writableDatabase
+        db.beginTransaction()
+        synchronized(list) {
+            try {
+                for (matcher in list) {
+                    if (matcher.isUpdate) {
+                        val values = ContentValues()
+                        values.put(COLUMN_COUNT, matcher.frequency)
+                        values.put(COLUMN_TIME, matcher.time)
+                        db.update(table, values, COLUMN_ID + "=" + matcher.id, null)
+                        matcher.saved()
+                        updated = true
+                    }
+                }
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
+            }
+            if (updated) {
+                list.dbTime = System.currentTimeMillis()
+                list.save(appContext, table)
+            }
+        }
+    }
+
     internal fun getFastMatcherCachedList(table: String): FastMatcherList {
         val cache = FastMatcherCache(appContext, table)
         return if (getListUpdateTime(table) > cache.getLastTime()) {
@@ -184,7 +212,7 @@ class AdBlockManager internal constructor(context: Context) {
         val dbTime = getListUpdateTime(table)
         val decoder = ItemDecoder()
         val db = mOpenHelper.readableDatabase
-        db.query(table, null, COLUMN_ENABLE + " = 1", null, null, null, COLUMN_COUNT + " DESC").use { c ->
+        db.query(table, null, "$COLUMN_ENABLE = 1", null, null, null, "$COLUMN_COUNT DESC").use { c ->
             val id = c.getColumnIndex(COLUMN_ID)
             val match = c.getColumnIndex(COLUMN_MATCH)
             val count = c.getColumnIndex(COLUMN_COUNT)
@@ -200,7 +228,7 @@ class AdBlockManager internal constructor(context: Context) {
 
     private fun getListUpdateTime(table: String): Long {
         val db = mOpenHelper.readableDatabase
-        db.query(INFO_TABLE_NAME, null, INFO_COLUMN_NAME + " = ?", arrayOf(table), null, null, null, "1").use { c ->
+        db.query(INFO_TABLE_NAME, null, "$INFO_COLUMN_NAME = ?", arrayOf(table), null, null, null, "1").use { c ->
             var time: Long = -1
             if (c.moveToFirst())
                 time = c.getLong(c.getColumnIndex(INFO_COLUMN_LAST_TIME))
@@ -212,7 +240,7 @@ class AdBlockManager internal constructor(context: Context) {
         val db = mOpenHelper.writableDatabase
         val values = ContentValues()
         values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis())
-        db.update(INFO_TABLE_NAME, values, INFO_COLUMN_NAME + " = ?", arrayOf(table))
+        db.update(INFO_TABLE_NAME, values, "$INFO_COLUMN_NAME = ?", arrayOf(table))
     }
 
     private fun initList(context: Context) {
@@ -322,10 +350,10 @@ class AdBlockManager internal constructor(context: Context) {
         }
 
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            db.execSQL("DROP TABLE IF EXISTS " + BLACK_TABLE_NAME)
-            db.execSQL("DROP TABLE IF EXISTS " + WHITE_TABLE_NAME)
-            db.execSQL("DROP TABLE IF EXISTS " + WHITE_PAGE_TABLE_NAME)
-            db.execSQL("DROP TABLE IF EXISTS " + INFO_TABLE_NAME)
+            db.execSQL("DROP TABLE IF EXISTS $BLACK_TABLE_NAME")
+            db.execSQL("DROP TABLE IF EXISTS $WHITE_TABLE_NAME")
+            db.execSQL("DROP TABLE IF EXISTS $WHITE_PAGE_TABLE_NAME")
+            db.execSQL("DROP TABLE IF EXISTS $INFO_TABLE_NAME")
             onCreate(db)
         }
 

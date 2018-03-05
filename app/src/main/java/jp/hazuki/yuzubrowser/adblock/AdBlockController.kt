@@ -77,8 +77,8 @@ class AdBlockController(context: Context) {
         if (updating) return
 
         launch {
-            manager.updateOrder(AdBlockManager.BLACK_TABLE_NAME, blackList)
-            manager.updateOrder(AdBlockManager.WHITE_TABLE_NAME, whiteList)
+            manager.updateMatcher(AdBlockManager.BLACK_TABLE_NAME, blackList)
+            manager.updateMatcher(AdBlockManager.WHITE_TABLE_NAME, whiteList)
             manager.updateOrder(AdBlockManager.WHITE_PAGE_TABLE_NAME, whitePageList)
         }
     }

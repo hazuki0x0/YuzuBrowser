@@ -26,7 +26,7 @@ private const val FOLDER = "fastMatcher"
 private const val CACHE_HEADER = "\u008aYF\u00d8CACHE\u00d82"
 
 class FastMatcherCache(context: Context, fileName: String) {
-    private val path = File(context.cacheDir, FOLDER + "/" + fileName)
+    private val path = File(context.cacheDir, "$FOLDER/$fileName")
 
     fun getLastTime(): Long {
         if (!path.exists()) return -1
@@ -116,7 +116,7 @@ class FastMatcherCache(context: Context, fileName: String) {
 }
 
 fun FastMatcherList.save(context: Context, fileName: String) {
-    val path = File(context.cacheDir, FOLDER + "/" + fileName)
+    val path = File(context.cacheDir, "$FOLDER/$fileName")
     if (!path.parentFile.exists()) {
         if (!path.parentFile.mkdirs()) return
     }
