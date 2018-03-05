@@ -93,10 +93,7 @@ class AdBlockController(context: Context) {
         val builder = StringBuilder("<meta charset=utf-8>" +
                 "<meta content=\"width=device-width,initial-scale=1,minimum-scale=1\"name=viewport>" +
                 "<style>body{padding:5px 15px;background:#fafafa}body,p{text-align:center}p{margin:20px 0 0}" +
-                "pre{margin:5px 0;padding:5px;background:#ddd}button{margin:15px;border:0;cursor:pointer;" +
-                "outline:0;appearance:none;transition:box-shadow .2s cubic-bezier(0.4,0,0.2,1);padding:5px;" +
-                "font-size:.875em;padding:10px 24px;color:#fff;background-color:#4285f4;border-radius:3px}" +
-                "</style><title>")
+                "pre{margin:5px 0;padding:5px;background:#ddd}</style><title>")
                 .append(context.getText(R.string.pref_ad_block))
                 .append("</title><p>")
                 .append(context.getText(R.string.ad_block_blocked_page))
@@ -106,9 +103,7 @@ class AdBlockController(context: Context) {
                 .append(context.getText(R.string.ad_block_blocked_filter))
                 .append("<pre>")
                 .append(pattern)
-                .append("</pre><button onclick=history.back()>")
-                .append(context.getText(R.string.go_back))
-                .append("</button>")
+                .append("</pre>")
 
         return getNoCacheResponse("text/html", builder)
     }
