@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherList
 import java.util.regex.Pattern
 
 class AdBlocker(
-        private val blackList: FilterMatcher,
-        private val whiteList: FilterMatcher,
+        val blackList: FilterMatcher,
+        val whiteList: FilterMatcher,
         private val whitePageList: FastMatcherList) {
 
     private val resultCache = LruCache<String, Filter?>()

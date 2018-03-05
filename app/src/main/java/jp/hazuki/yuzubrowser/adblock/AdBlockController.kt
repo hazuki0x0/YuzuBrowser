@@ -36,8 +36,6 @@ class AdBlockController(context: Context) {
     private val dummy = WebResourceResponse("text/plain", "UTF-8", EmptyInputStream())
 
     private val manager: AdBlockManager = AdBlockManager(context)
-    private var blackList: FastMatcherList? = null
-    private var whiteList: FastMatcherList? = null
     private var whitePageList: FastMatcherList? = null
     private var adBlocker: AdBlocker? = null
     private var updating = false
@@ -52,12 +50,10 @@ class AdBlockController(context: Context) {
             lateinit var blackFilter: FilterMatcher
             lateinit var whiteFilter: FilterMatcher
             manager.getFastMatcherCachedList(AdBlockManager.BLACK_TABLE_NAME).let {
-                blackList = it
                 blackFilter = FilterMatcher(it.iterator())
             }
 
             manager.getFastMatcherCachedList(AdBlockManager.WHITE_TABLE_NAME).let {
-                whiteList = it
                 whiteFilter = FilterMatcher(it.iterator())
             }
 
@@ -77,8 +73,8 @@ class AdBlockController(context: Context) {
         if (updating) return
 
         launch {
-            manager.updateMatcher(AdBlockManager.BLACK_TABLE_NAME, blackList)
-            manager.updateMatcher(AdBlockManager.WHITE_TABLE_NAME, whiteList)
+            manager.updateMatcher(AdBlockManager.BLACK_TABLE_NAME, adBlocker?.blackList)
+            manager.updateMatcher(AdBlockManager.WHITE_TABLE_NAME, adBlocker?.whiteList)
             manager.updateOrder(AdBlockManager.WHITE_PAGE_TABLE_NAME, whitePageList)
         }
     }

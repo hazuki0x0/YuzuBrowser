@@ -149,6 +149,44 @@ fun FastMatcherList.save(context: Context, fileName: String) {
     }
 }
 
+fun save(context: Context, fileName: String, matches: Iterator<FastMatcher>) {
+    val path = File(context.cacheDir, "$FOLDER/$fileName")
+    if (!path.parentFile.exists()) {
+        if (!path.parentFile.mkdirs()) return
+    }
+
+    try {
+        BufferedOutputStream(FileOutputStream(path)).use { os ->
+            os.write(CACHE_HEADER.toByteArray())
+            os.write(System.currentTimeMillis().toByteArray())
+
+            matches.forEach { matcher ->
+                os.write(matcher.type and 0xff)
+                os.write(matcher.id.toByteArray())
+                os.write(matcher.frequency.toByteArray())
+                os.write(matcher.time.toByteArray())
+
+                val text = matcher.pattern.toByteArray()
+                val size = text.size
+                if (size > 0xffff) {
+                    os.write(0xff)
+                    os.write(0xff)
+                    os.write(size.toByteArray())
+                } else {
+                    os.write(size.toShortByteArray())
+                }
+                os.write(text)
+            }
+        }
+    } catch (e: IOException) {
+        ErrorReport.printAndWriteLog(e)
+    }
+}
+
+fun needSave(context: Context, fileName: String): Boolean {
+    return !File(context.cacheDir, "$FOLDER/$fileName").exists()
+}
+
 private fun Long.toByteArray(): ByteArray {
     val bytes = ByteArray(8)
     bytes[0] = and(0xff).toByte()

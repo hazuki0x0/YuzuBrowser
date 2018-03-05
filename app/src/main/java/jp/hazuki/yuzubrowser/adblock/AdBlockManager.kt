@@ -21,6 +21,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import jp.hazuki.yuzubrowser.adblock.faster.core.FilterMatcher
 import jp.hazuki.yuzubrowser.utils.fastmatch.*
 import java.io.BufferedInputStream
 import java.io.IOException
@@ -170,14 +171,14 @@ class AdBlockManager internal constructor(context: Context) {
         }
     }
 
-    internal fun updateMatcher(table: String, list: FastMatcherList?) {
+    internal fun updateMatcher(table: String, list: FilterMatcher?) {
         if (list == null) return
         var updated = false
         val db = mOpenHelper.writableDatabase
         db.beginTransaction()
         synchronized(list) {
             try {
-                for (matcher in list) {
+                for (matcher in list.getFastMatchFilters()) {
                     if (matcher.isUpdate) {
                         val values = ContentValues()
                         values.put(COLUMN_COUNT, matcher.frequency)
@@ -191,9 +192,8 @@ class AdBlockManager internal constructor(context: Context) {
             } finally {
                 db.endTransaction()
             }
-            if (updated) {
-                list.dbTime = System.currentTimeMillis()
-                list.save(appContext, table)
+            if (updated || needSave(appContext, table)) {
+                save(appContext, table, list.getFastMatchFilters())
             }
         }
     }

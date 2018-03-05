@@ -21,6 +21,7 @@ import jp.hazuki.yuzubrowser.adblock.faster.BaseFilter
 import jp.hazuki.yuzubrowser.adblock.faster.Filter
 import jp.hazuki.yuzubrowser.adblock.faster.ListFilter
 import jp.hazuki.yuzubrowser.adblock.faster.findAll
+import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcher
 import java.util.regex.Pattern
 
 class FilterMatcher(iterator: Iterator<Filter>) {
@@ -120,6 +121,63 @@ class FilterMatcher(iterator: Iterator<Filter>) {
 
     fun find(key: String, pageUrl: Uri, requestUri: Uri, isThirdParty: Boolean): Filter? {
         return filtersByKey[key]?.find(key, pageUrl, requestUri, isThirdParty)
+    }
+
+    fun getFastMatchFilters(): Iterator<FastMatcher> {
+        return object : Iterator<FastMatcher> {
+            private val it = filtersByKey.entries.iterator()
+            private var filterList: Iterator<Filter>? = null
+            private var next: FastMatcher? = null
+
+            override fun hasNext(): Boolean {
+                do {
+                    val result = ensureNext()
+                } while (result && next == null)
+
+                return next != null
+            }
+
+            override fun next(): FastMatcher {
+                if (next == null) {
+                    if (!hasNext()) {
+                        throw IllegalStateException("No item")
+                    }
+                }
+
+                val data = next!!
+                next = null
+
+                return data
+            }
+
+            private fun ensureNext(): Boolean {
+                val list = filterList
+                if (list != null) {
+                    if (list.hasNext()) {
+                        val data = list.next()
+                        if (data is FastMatcher) {
+                            next = data
+                        }
+                        if (!list.hasNext()) {
+                            filterList = null
+                        }
+                    }
+                    return true
+                }
+
+                if (it.hasNext()) {
+                    val data = it.next().value
+                    if (data is ListFilter) {
+                        filterList = data.iterator()
+                    } else if (data is FastMatcher) {
+                        next = data
+                    }
+                    return true
+                }
+
+                return false
+            }
+        }
     }
 
     companion object {
