@@ -82,6 +82,7 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                     var len = -1
                     var progress = info.currentSize
                     val buffer = ByteArray(BUFFER_SIZE)
+                    var oldSize: Long
                     var oldSec = System.currentTimeMillis()
 
                     while (input.read(buffer, 0, BUFFER_SIZE).also { len = it } >= 0) {
@@ -91,9 +92,14 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                         progress += len
 
                         if (System.currentTimeMillis() > oldSec + NOTIFICATION_INTERVAL) {
+                            oldSize = info.currentSize
                             info.currentSize = progress
+
+                            val time = System.currentTimeMillis()
+                            info.transferSpeed = ((progress - oldSize) * 1000.0 / (time - oldSec)).toLong()
                             downloadListener?.onFileDownloading(info, progress)
-                            oldSec = System.currentTimeMillis()
+
+                            oldSec = time
                         }
                     }
                 }

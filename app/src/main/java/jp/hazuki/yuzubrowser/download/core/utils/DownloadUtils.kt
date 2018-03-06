@@ -137,10 +137,10 @@ fun DownloadFileInfo.getNotificationString(context: Context): String {
     return if (size > 0) {
         "${currentSize * 100 / size}% (${Formatter.formatFileSize(context, currentSize)}" +
                 " / ${Formatter.formatFileSize(context, size)}" +
-                "  ${Formatter.formatFileSize(context, currentSize)}/s)"
+                "  ${Formatter.formatFileSize(context, transferSpeed)}/s)"
     } else {
         Formatter.formatFileSize(context, currentSize) +
-                "  ${Formatter.formatFileSize(context, currentSize)}/s"
+                "  ${Formatter.formatFileSize(context, transferSpeed)}/s"
     }
 }
 

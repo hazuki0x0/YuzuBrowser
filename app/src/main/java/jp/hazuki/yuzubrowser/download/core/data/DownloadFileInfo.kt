@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ class DownloadFileInfo(
     ) : this(file.url, meta.mineType, root, file.name ?: meta.name, meta.size, meta.resumable)
 
     var currentSize = 0L
+    var transferSpeed = 0L
 
     companion object {
         const val STATE_DOWNLOADING = 0
