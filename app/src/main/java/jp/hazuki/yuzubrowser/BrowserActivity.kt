@@ -399,7 +399,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode.toLong()) {
+        when (requestCode) {
             BrowserController.REQUEST_WEB_UPLOAD -> webClient.webUploadResult(resultCode, data)
             BrowserController.REQUEST_SEARCHBOX -> {
                 if (resultCode != RESULT_OK || data == null) return
@@ -1239,8 +1239,8 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         tabManagerIn[webViewNo].mWebView.saveArchive(root, file)
     }
 
-    override fun startActivity(intent: Intent, @RequestCause cause: Long) {
-        startActivityForResult(intent, cause.toInt())
+    override fun startActivity(intent: Intent, @RequestCause cause: Int) {
+        startActivityForResult(intent, cause)
     }
 
     override fun onWebViewCreated(tab: MainTabData) {

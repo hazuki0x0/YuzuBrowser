@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -293,22 +293,24 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<Boolean>? {
-        when (id) {
-            0 -> return RestoreTask(activity, args.getSerializable("file") as File)
-            1 -> return BackupTask(activity, args.getSerializable("file") as File)
-            2 -> return BookmarkHtmlImportTask(activity,
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Boolean> {
+        if (args == null) throw IllegalArgumentException("args must not be null")
+
+        return when (id) {
+            0 -> RestoreTask(activity, args.getSerializable("file") as File)
+            1 -> BackupTask(activity, args.getSerializable("file") as File)
+            2 -> BookmarkHtmlImportTask(activity,
                     args.getSerializable("file") as File,
                     args.getSerializable("manager") as BookmarkManager,
                     args.getSerializable("folder") as BookmarkFolder,
                     Handler())
-            3 -> return BookmarkHtmlExportTask(activity,
+            3 -> BookmarkHtmlExportTask(activity,
                     args.getSerializable("file") as File,
                     args.getSerializable("folder") as BookmarkFolder)
-            4 -> return SpeedDialRestoreTask(activity, args.getSerializable("file") as File)
-            5 -> return SpeedDialBackupTask(activity, args.getSerializable("file") as File)
+            4 -> SpeedDialRestoreTask(activity, args.getSerializable("file") as File)
+            5 -> SpeedDialBackupTask(activity, args.getSerializable("file") as File)
+            else -> throw IllegalArgumentException("unknown id:$id")
         }
-        return null
     }
 
     override fun onLoadFinished(loader: android.support.v4.content.Loader<Boolean>, data: Boolean) {

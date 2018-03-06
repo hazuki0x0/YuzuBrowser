@@ -32,7 +32,7 @@ class DownloadListAdapter(private val context: Context, private val database: Do
     private val items = ArrayList<DownloadFileInfo>(database.getList(0, 100))
     private val inflater = LayoutInflater.from(context)
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): InfoHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoHolder {
         return InfoHolder(inflater.inflate(R.layout.fragment_download_list_item, parent, false))
     }
 

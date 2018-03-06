@@ -69,7 +69,7 @@ interface BrowserController : BrowserInfo {
     fun addBookmark(tab: MainTabData)
     fun savePage(tab: MainTabData)
     fun startActivity(intent: Intent)
-    fun startActivity(intent: Intent, @RequestCause cause: Long)
+    fun startActivity(intent: Intent, @RequestCause cause: Int)
     fun showCustomView(view: View, callback: WebChromeClient.CustomViewCallback)
     fun hideCustomView()
     fun getVideoLoadingProgressView(): View?
@@ -117,16 +117,16 @@ interface BrowserController : BrowserInfo {
     override var isEnableGesture: Boolean
 
     companion object {
-        const val REQUEST_WEB_UPLOAD = 1L
-        const val REQUEST_SEARCHBOX = 2L
-        const val REQUEST_BOOKMARK = 3L
-        const val REQUEST_HISTORY = 4L
-        const val REQUEST_SETTING = 5L
-        const val REQUEST_USERAGENT = 6L
-        const val REQUEST_DEFAULT_USERAGENT = 7L
-        const val REQUEST_USERJS_SETTING = 8L
-        const val REQUEST_WEB_ENCODE_SETTING = 9L
-        const val REQUEST_SHARE_IMAGE = 10L
-        const val REQUEST_ACTION_LIST = 11L
+        const val REQUEST_WEB_UPLOAD = 1
+        const val REQUEST_SEARCHBOX = 2
+        const val REQUEST_BOOKMARK = 3
+        const val REQUEST_HISTORY = 4
+        const val REQUEST_SETTING = 5
+        const val REQUEST_USERAGENT = 6
+        const val REQUEST_DEFAULT_USERAGENT = 7
+        const val REQUEST_USERJS_SETTING = 8
+        const val REQUEST_WEB_ENCODE_SETTING = 9
+        const val REQUEST_SHARE_IMAGE = 10
+        const val REQUEST_ACTION_LIST = 11
     }
 }

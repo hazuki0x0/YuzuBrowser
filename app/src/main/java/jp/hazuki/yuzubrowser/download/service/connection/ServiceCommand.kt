@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ package jp.hazuki.yuzubrowser.download.service.connection
 import android.support.annotation.IntDef
 
 @IntDef(
-        ServiceSocket.REGISTER_OBSERVER.toLong(),
-        ServiceSocket.UNREGISTER_OBSERVER.toLong(),
-        ServiceSocket.UPDATE.toLong(),
-        ServiceSocket.GET_DOWNLOAD_INFO.toLong(),
-        ServiceSocket.CANCEL_DOWNLOAD.toLong(),
-        ServiceSocket.PAUSE_DOWNLOAD.toLong()
+        ServiceSocket.REGISTER_OBSERVER,
+        ServiceSocket.UNREGISTER_OBSERVER,
+        ServiceSocket.UPDATE,
+        ServiceSocket.GET_DOWNLOAD_INFO,
+        ServiceSocket.CANCEL_DOWNLOAD,
+        ServiceSocket.PAUSE_DOWNLOAD
 )
 annotation class ServiceCommand

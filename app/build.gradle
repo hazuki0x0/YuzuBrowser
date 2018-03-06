@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017-2018 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -99,15 +115,15 @@ dependencies {
     implementation "com.takisoft.fix:preference-v7:${android_support_fix_lib_version}"
     testImplementation 'junit:junit:4.12'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
     implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
     implementation 'org.jsoup:jsoup:1.11.2'
     implementation project(':libraries:floatingactionbutton')
     implementation project(':libraries:colorpicker')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true
     }
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.2.0'
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.2.2'
     implementation project(':libraries:asyncpermissions')
     implementation project(':libraries:BreadcrumbsView')
 
