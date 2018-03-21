@@ -20,11 +20,12 @@ inline fun <reified T> Any?.isInstanceOf(action: (T) -> Unit) {
     if (this is T) action(this)
 }
 
-fun StringBuilder.replace(oldValue: String, newValue: String) {
+fun StringBuilder.replace(oldValue: String, newValue: String): StringBuilder {
     var index = indexOf(oldValue)
     while (index >= 0) {
         replace(index, index + oldValue.length, newValue)
         index += newValue.length - oldValue.length
         index = indexOf(oldValue, index)
     }
+    return this
 }
