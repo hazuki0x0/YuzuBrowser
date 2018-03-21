@@ -18,10 +18,4 @@
         android:id="@+id/multiSelect"
         android:title="@string/multi_select" />
 
-    <item
-        android:id="@+id/breadcrumbs"
-        android:title="@string/breadcrumb"
-        android:checkable="true"
-        app:showAsAction="never"/>
-
 </menu>

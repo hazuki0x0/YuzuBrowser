@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
@@ -43,14 +42,10 @@ class AddBookmarkFolderDialog @JvmOverloads constructor(context: Context, privat
         titleEditText = view.findViewById(R.id.titleEditText)
         addToTopCheckBox = view.findViewById(R.id.addToTopCheckBox)
 
-        if (item != null) {
-            addToTopCheckBox.visibility = View.GONE
-        }
-
         titleEditText.setText(title)
 
         mDialog = AlertDialog.Builder(context)
-                .setTitle(if (item == null) R.string.add_folder else R.string.edit_bookmark)
+                .setTitle(R.string.add_folder)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, null)

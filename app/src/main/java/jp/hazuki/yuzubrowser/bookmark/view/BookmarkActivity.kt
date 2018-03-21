@@ -30,11 +30,7 @@ class BookmarkActivity : LongPressFixActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
-        supportActionBar?.run {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
-            elevation = 0f
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val intent = intent
         var pickMode = false

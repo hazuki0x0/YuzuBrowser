@@ -45,9 +45,7 @@ import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector
-import kotlinx.android.synthetic.main.fragment_bookmark.*
-import moe.feng.common.view.breadcrumbs.DefaultBreadcrumbsCallback
-import moe.feng.common.view.breadcrumbs.model.BreadcrumbItem
+import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 
 
@@ -80,7 +78,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_bookmark, container, false)
+        return inflater.inflate(R.layout.fragment_recycler_with_scroller, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,21 +98,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
 
         recyclerView.addOnItemTouchListener(locationDetector)
 
-        breadCrumbsView.callback = object : DefaultBreadcrumbsCallback() {
-            override fun onNavigateBack(p0: BreadcrumbItem, position: Int) {
-                setList((p0 as BookmarkCrumbItem).bookmark)
-            }
-
-            override fun onNavigateNewLocation(p0: BreadcrumbItem?, p1: Int) {}
-        }
-
-        fastScroller.let {
-            it.attachRecyclerView(recyclerView)
-            it.attachAppBarLayout(coordinator, appbar)
-        }
-
         setList(root)
-        addAllFolderToBreadCrumbs(root)
     }
 
     private fun setList(folder: BookmarkFolder) {
@@ -126,7 +110,6 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         }
 
         adapter = BookmarkItemAdapter(activity, folder.itemList, pickMode, AppData.open_bookmark_new_tab.get(), this)
-        fastScroller.attachAdapter(adapter)
         recyclerView.adapter = adapter
     }
 
@@ -141,11 +124,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 }
                 activity?.finish()
             }
-            is BookmarkFolder -> {
-                setList(item)
-                breadCrumbsView.addItem(bookmarkCrumbItem(item))
-                appbar.setExpanded(true, false)
-            }
+            is BookmarkFolder -> setList(item)
             else -> throw IllegalStateException("Unknown BookmarkItem type")
         }
     }
@@ -204,21 +183,14 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         }
         return if (mCurrentFolder.parent != null) {
             setList(mCurrentFolder.parent)
-            breadCrumbsView.removeLastItem()
             false
         } else {
             true
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (!pickMode) {
-            inflater.inflate(R.menu.bookmark, menu)
-            val breadcrumbs = menu.getItem(3)
-            val show = AppData.bookmark_breadcrumbs.get()
-            breadcrumbs.isChecked = show
-            showBreadCrumbs(show)
-        }
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        if (!pickMode) inflater.inflate(R.menu.bookmark, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -244,27 +216,8 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 (activity as AppCompatActivity).startSupportActionMode(this)
                 return true
             }
-            R.id.breadcrumbs -> {
-                val checked = !item.isChecked
-                item.isChecked = checked
-                AppData.bookmark_breadcrumbs.set(checked)
-                AppData.commit(activity, AppData.bookmark_breadcrumbs)
-                showBreadCrumbs(checked)
-                return true
-            }
         }
         return false
-    }
-
-    private fun showBreadCrumbs(show: Boolean) {
-        breadCrumbsView.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    private fun addAllFolderToBreadCrumbs(folder: BookmarkFolder) {
-        if (folder.parent != null) {
-            addAllFolderToBreadCrumbs(folder.parent)
-        }
-        breadCrumbsView.addItem(bookmarkCrumbItem((folder)))
     }
 
     private fun getSelectedBookmark(items: List<Int>): List<BookmarkItem> = items.map { mCurrentFolder.get(it) }
@@ -540,13 +493,6 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
             return adapter.isSortMode
         }
     }
-
-    private fun bookmarkCrumbItem(bookmark: BookmarkFolder): BookmarkCrumbItem {
-        return BookmarkCrumbItem(bookmark,
-                if (bookmark.title.isNullOrEmpty()) getString(R.string.bookmark) else bookmark.title)
-    }
-
-    private class BookmarkCrumbItem(val bookmark: BookmarkFolder, title: String) : BreadcrumbItem(listOf(title))
 
     companion object {
         private const val MODE_PICK = "pick"

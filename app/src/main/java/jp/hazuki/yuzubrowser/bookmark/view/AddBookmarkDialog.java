@@ -70,7 +70,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
         //urlEditText.setText(url);
 
         mDialog = new AlertDialog.Builder(context)
-                .setTitle(mItem == null ? R.string.add_bookmark : R.string.edit_bookmark)
+                .setTitle(R.string.add_bookmark)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, null)
@@ -98,7 +98,6 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
         } else {
             folderTextView.setVisibility(View.GONE);
             folderButton.setVisibility(View.GONE);
-            addToTopCheckBox.setVisibility(View.GONE);
         }
     }
 
@@ -123,6 +122,9 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
                     mManager.addFirst(mParent, item);
                 else
                     mManager.add(mParent, item);
+            }
+            if (mItem != null && addToTopCheckBox.isChecked()) {
+                mManager.moveToFirst(mParent, mItem);
             }
 
             if (mManager.save()) {
