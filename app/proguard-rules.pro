@@ -24,6 +24,7 @@
 -keepclassmembers public final enum org.codehaus.jackson.annotate.JsonAutoDetect$Visibility {
 public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
 -keep class android.support.v7.widget.SearchView { *; }
+-keep class android.support.v7.widget.** { *; }
 -keepattributes SourceFile,LineNumberTable
 -keeppackagenames org.jsoup.nodes
 -keepclassmembernames class kotlinx.** {
