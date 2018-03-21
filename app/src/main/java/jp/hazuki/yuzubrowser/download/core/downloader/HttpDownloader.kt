@@ -60,7 +60,7 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
         }
 
         val tmp = existTmp ?: info.root.createFile(info.mimeType, "${info.name}${Constants.download.TMP_FILE_SUFFIX}")
-        ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}")
+        ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
 
         try {
             httpClient.connect()
