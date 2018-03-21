@@ -22,7 +22,7 @@ import jp.hazuki.yuzubrowser.utils.extensions.replace
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
-private val TLD_REGEX = "^([^:]+://[^/]+)\\.tld(/.*)?\$".toRegex()
+private val TLD_REGEX = "^([^:]+://[^/]+)\\\\.tld(/.*)?\$".toRegex()
 
 fun makeUrlPattern(patternUrl: String?): Pattern? {
     if (patternUrl == null) return null
