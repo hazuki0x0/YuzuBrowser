@@ -32,6 +32,7 @@ import android.view.View
 import android.webkit.*
 import android.widget.EditText
 import android.widget.Toast
+import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.adblock.AdBlockActivity
@@ -503,13 +504,18 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             val uri = Uri.parse(tabIndexData.url ?: "")
 
             adBlockController?.run {
-                val result = isBlock(uri, request.url)
-                if (result != null) {
-                    return if (request.isForMainFrame) {
-                        createMainFrameDummy(activity, request.url, result.pattern)
-                    } else {
-                        createDummy(request.url)
+                try {
+                    val result = isBlock(uri, request.url)
+                    if (result != null) {
+                        return if (request.isForMainFrame) {
+                            createMainFrameDummy(activity, request.url, result.pattern)
+                        } else {
+                            createDummy(request.url)
+                        }
                     }
+                } catch (e: Exception) {
+                    Crashlytics.logException(e)
+                    throw e
                 }
             }
 
