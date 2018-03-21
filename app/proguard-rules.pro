@@ -30,3 +30,6 @@ public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+-keepclassmembers class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator CREATOR;
+}
