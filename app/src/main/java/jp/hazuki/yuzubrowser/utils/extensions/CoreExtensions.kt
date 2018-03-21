@@ -24,7 +24,7 @@ fun StringBuilder.replace(oldValue: String, newValue: String): StringBuilder {
     var index = indexOf(oldValue)
     while (index >= 0) {
         replace(index, index + oldValue.length, newValue)
-        index += newValue.length - oldValue.length
+        index += newValue.length
         index = indexOf(oldValue, index)
     }
     return this
