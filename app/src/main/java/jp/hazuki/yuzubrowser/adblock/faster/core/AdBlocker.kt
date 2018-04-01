@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.adblock.faster.core
 
 import android.net.Uri
+import android.os.Build
 import jp.hazuki.yuzubrowser.adblock.faster.Filter
 import jp.hazuki.yuzubrowser.adblock.faster.findAll
 import jp.hazuki.yuzubrowser.adblock.faster.utils.isThirdParty
@@ -28,7 +29,7 @@ class AdBlocker(
         val whiteList: FilterMatcher,
         private val whitePageList: FastMatcherList) {
 
-    private val resultCache = LruCache<String, Filter?>()
+    private val resultCache = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) ClassicAndroidLruCache() else LruCache<String, Filter?>()
     private val candidatesCreator = Pattern.compile("[a-z0-9%]{3,}", Pattern.CASE_INSENSITIVE)
 
     fun clear() {
@@ -67,7 +68,7 @@ class AdBlocker(
         return result
     }
 
-    private class LruCache<K, V> : LinkedHashMap<K, V>(INITIAL_CAPACITY, LOAD_FACTOR, true) {
+    private open class LruCache<K, V> : LinkedHashMap<K, V>(INITIAL_CAPACITY, LOAD_FACTOR, true) {
 
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<K, V>?): Boolean {
             return size > CACHE_SIZE
@@ -78,6 +79,18 @@ class AdBlocker(
             internal const val INITIAL_CAPACITY = 16
             internal const val LOAD_FACTOR = 0.75f
             internal const val CACHE_SIZE = 1024
+        }
+    }
+
+    //Avoid NullPointerException bug less than android 7.0
+    private class ClassicAndroidLruCache<K, V> : LruCache<K, V>() {
+
+        override fun put(key: K, value: V): V? {
+            return try {
+                super.put(key, value)
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 }
