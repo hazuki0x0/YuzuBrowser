@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.net.Uri
 import jp.hazuki.yuzubrowser.download.compatible.ConvertDownloadInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
+import jp.hazuki.yuzubrowser.settings.data.AppData
 import org.jetbrains.anko.db.*
 
 class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpenHelper(context, NAME, null, VERSION) {
@@ -45,6 +46,20 @@ class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpen
                 COL_URL to info.url,
                 COL_MIME_TYPE to info.mimeType,
                 COL_ROOT to info.root.uri.toString(),
+                COL_NAME to info.name,
+                COL_SIZE to info.size,
+                COL_RESUMABLE to info.resumable,
+                COL_START_TIME to info.startTime,
+                COL_STATE to info.state)
+                .whereArgs("$COL_ID = ${info.id}")
+                .exec()
+    }
+
+    fun updateWithEmptyRoot(info: DownloadFileInfo) = use {
+        update(TABLE,
+                COL_URL to info.url,
+                COL_MIME_TYPE to info.mimeType,
+                COL_ROOT to "",
                 COL_NAME to info.name,
                 COL_SIZE to info.size,
                 COL_RESUMABLE to info.resumable,
@@ -112,7 +127,11 @@ class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpen
                     columns[COL_ID] as Long,
                     columns[COL_URL] as String,
                     columns[COL_MIME_TYPE] as String,
-                    Uri.parse(columns[COL_ROOT] as String).toDocumentFile(context),
+                    Uri.parse(
+                            (columns[COL_ROOT] as String?).let {
+                                if (it.isNullOrEmpty()) AppData.download_folder.get() else it
+                            }
+                    ).toDocumentFile(context),
                     columns[COL_NAME] as String,
                     columns[COL_SIZE] as Long,
                     (columns[COL_RESUMABLE] as Long) != 0L,

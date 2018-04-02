@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.*
+import android.support.annotation.StringRes
 import android.support.v4.app.NotificationCompat
 import android.support.v4.provider.DocumentFile
 import jp.hazuki.yuzubrowser.BrowserApplication
@@ -49,6 +50,7 @@ import jp.hazuki.yuzubrowser.utils.Logger
 import jp.hazuki.yuzubrowser.utils.getPathFromUri
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
+import org.jetbrains.anko.toast
 
 class DownloadService : Service(), ServiceClient.ServiceClientListener {
 
@@ -208,7 +210,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
         @SuppressLint("WakelockTimeout")
         override fun run() {
             val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread")
-            wakelock.acquire()
+            prepareThread(wakelock)
 
             if (info.id < 0) {
                 database.insert(info)
@@ -217,19 +219,22 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
                 database.update(info)
             }
 
+            if (!info.root.exists()) {
+                failedCheckFolder(info, R.string.download_failed_root_not_exists)
+                endThreaded(wakelock)
+                return
+            } else if (!info.root.canWrite()) {
+                failedCheckFolder(info, R.string.download_failed_root_not_writable)
+                endThreaded(wakelock)
+                return
+            }
+
             downloader = Downloader.getDownloader(this@DownloadService, info, request)
             downloader.downloadListener = this
 
             downloader.download()
 
-            wakelock.release()
-
-            synchronized(threadList) {
-                threadList.remove(this)
-                if (threadList.isEmpty()) {
-                    stopSelf()
-                }
-            }
+            endThreaded(wakelock)
         }
 
         fun cancel() = downloader.cancel()
@@ -347,6 +352,40 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
             } catch (e: RemoteException) {
                 ErrorReport.printAndWriteLog(e)
             }
+        }
+
+        @SuppressLint("WakelockTimeout")
+        private fun prepareThread(wakeLock: PowerManager.WakeLock) {
+            wakeLock.acquire()
+        }
+
+        private fun endThreaded(wakeLock: PowerManager.WakeLock) {
+            wakeLock.release()
+
+            synchronized(threadList) {
+                threadList.remove(this)
+                if (threadList.isEmpty()) {
+                    stopSelf()
+                }
+            }
+        }
+
+        private fun failedCheckFolder(info: DownloadFileInfo, @StringRes message: Int) {
+            info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
+            database.updateWithEmptyRoot(info)
+            handler.post { toast(message) }
+            NotificationCompat.Builder(this@DownloadService, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY).run {
+                setOngoing(false)
+                setContentTitle(info.name)
+                setWhen(System.currentTimeMillis())
+                setProgress(0, 0, false)
+                setAutoCancel(true)
+                setContentText(getText(message))
+                setSmallIcon(android.R.drawable.stat_sys_warning)
+                setContentIntent(PendingIntent.getActivity(applicationContext, 0, intentFor<DownloadListActivity>(), 0))
+                notificationManager.notify(info.id.toInt(), build())
+            }
+            updateInfo(ServiceSocket.UPDATE, info)
         }
     }
 
