@@ -77,7 +77,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED) {
             info.getFile()?.let {
                 try {
-                    startActivity(createFileOpenIntent(activity, it.uri, info.mimeType))
+                    startActivity(createFileOpenIntent(activity, it.uri, info.mimeType, info.name))
                 } catch (e: ActivityNotFoundException) {
                     activity.longToast(R.string.app_notfound)
                 }
@@ -96,7 +96,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
             DownloadFileInfo.STATE_DOWNLOADED -> if (file != null) {
                 menu.add(R.string.open_file).setOnMenuItemClickListener {
                     try {
-                        startActivity(createFileOpenIntent(activity, file.uri, info.mimeType))
+                        startActivity(createFileOpenIntent(activity, file.uri, info.mimeType, info.name))
                     } catch (e: ActivityNotFoundException) {
                         activity.longToast(R.string.app_notfound)
                     }

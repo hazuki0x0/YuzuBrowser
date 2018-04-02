@@ -131,7 +131,7 @@ fun getDownloadFolderUri(): Uri {
     return Uri.parse(AppData.download_folder.get())
 }
 
-fun DownloadFileInfo.createFileOpenIntent(context: Context) = createFileOpenIntent(context, root.findFile(name).uri, mimeType)
+fun DownloadFileInfo.createFileOpenIntent(context: Context) = createFileOpenIntent(context, root.findFile(name).uri, mimeType, name)
 
 fun DownloadFileInfo.getNotificationString(context: Context): String {
     return if (size > 0) {

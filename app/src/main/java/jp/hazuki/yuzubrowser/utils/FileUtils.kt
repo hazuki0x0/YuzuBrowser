@@ -25,6 +25,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.v4.provider.DocumentFile
+import android.webkit.MimeTypeMap
 import java.io.File
 
 
@@ -80,6 +81,23 @@ fun getParsedFileName(filename: String): ParsedFileName {
     } else {
         ParsedFileName(filename, null)
     }
+}
+
+fun getMineType(fileName: String): String {
+    val lastDot = fileName.lastIndexOf('.')
+    if (lastDot >= 0) {
+        val extension = fileName.substring(lastDot + 1).toLowerCase()
+        val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+        if (mime != null) {
+            return mime
+        }
+
+        when (extension) {
+            "mht", "mhtml" -> return "multipart/related"
+            "js" -> return "application/javascript"
+        }
+    }
+    return "application/octet-stream"
 }
 
 fun Uri.isAlwaysConvertible(): Boolean {
