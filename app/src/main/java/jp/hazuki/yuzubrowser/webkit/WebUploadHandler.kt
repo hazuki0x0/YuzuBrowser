@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import jp.hazuki.yuzubrowser.utils.getMineType
 
 class WebUploadHandler {
     private var uploadMsg: ValueCallback<Array<Uri>>? = null
@@ -41,6 +42,36 @@ class WebUploadHandler {
 
     fun onShowFileChooser(uploadMsg: ValueCallback<Array<Uri>>, params: WebChromeClient.FileChooserParams): Intent {
         this.uploadMsg = uploadMsg
-        return params.createIntent()
+        return params.createChooserIntent()
+    }
+
+    private fun WebChromeClient.FileChooserParams.createChooserIntent(): Intent {
+        var mimeType = "*/*"
+        var acceptTypes = acceptTypes.toList()
+        if (acceptTypes.isNotEmpty()) {
+            var joined = acceptTypes.joinToString("|")
+            var modified = false
+
+            // Recreate types list if need
+            if (joined.contains(',')) {
+                acceptTypes = joined.split('|', ',')
+                modified = true
+            }
+            // Convert extension to MimeType
+            if (acceptTypes.any { !it.contains('/') }) {
+                acceptTypes = acceptTypes.map { if (it.contains('/')) it else getMineType(it) }
+                modified = true
+            }
+
+            if (modified) {
+                joined = acceptTypes.joinToString("|")
+            }
+            mimeType = "$joined|*/*"
+        }
+
+        return Intent(Intent.ACTION_GET_CONTENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = mimeType
+        }
     }
 }
