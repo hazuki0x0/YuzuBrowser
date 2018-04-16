@@ -80,6 +80,7 @@
     <string name="open_map">Apri la mappa</string>
     <string name="copy_map_address">Copia l\'indirizzo della mappa</string>
     <string name="download_success">Download riuscito.</string>
+    <string name="download_paused">Download in pausa.</string>
     <string name="download_fail">Download fallito.</string>
     <string name="download_cancel">Download cancellato.</string>
     <string name="download">Download</string>
@@ -124,6 +125,9 @@
     <string name="proxy_address_error">Il formato dell\'indirizzo proxy è sbagliato</string>
     <string name="open_file">Apri il file</string>
     <string name="open_url">Apri URL</string>
+    <string name="pause">Pausa</string>
++    <string name="pause_download">Metti in pausa il download</string>
++    <string name="resume_download">Riprendi download</string>
     <string name="cancel_download">Annulla download</string>
     <string name="clear_download">Rimuovere dalla lista</string>
     <string name="delete_download">Elimina il file</string>
@@ -285,4 +289,10 @@
     <string name="permission_ask">Chiedi</string>
     <string name="allow">Consenti</string>
     <string name="block">Blocca</string>
+    <string name="ad_block">Blocco Ads</string>
+    <string name="ad_block_blocked_page">Il blocco Ads ha bloccato la seguente pagina:</string>
+    <string name="ad_block_blocked_filter">A causa del seguente filtro:</string>
+    <string name="breadcrumb">Briciole di pane</string>
+    <string name="download_failed_root_not_exists">Impossibile scaricare perché la cartella di destinazione dei download non è stata trovata</string>
+    <string name="download_failed_root_not_writable">Impossibile scaricare perché la cartella di destinazione dei download non può essere scritta</string>
 </resources>
