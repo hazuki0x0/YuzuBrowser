@@ -126,8 +126,8 @@
     <string name="open_file">Apri il file</string>
     <string name="open_url">Apri URL</string>
     <string name="pause">Pausa</string>
-+    <string name="pause_download">Metti in pausa il download</string>
-+    <string name="resume_download">Riprendi download</string>
++   <string name="pause_download">Metti in pausa il download</string>
++   <string name="resume_download">Riprendi download</string>
     <string name="cancel_download">Annulla download</string>
     <string name="clear_download">Rimuovere dalla lista</string>
     <string name="delete_download">Elimina il file</string>
