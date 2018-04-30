@@ -41,7 +41,7 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
         mController.setActionData(action_list, controller, iconManager)
         mController.setOnChangeListener(this)
 
-        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
+        onSetNormalBackground()
     }
 
     fun notifyChangeState() {
@@ -65,26 +65,34 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
     override fun onLongPress() {}
 
     override fun onEventOutSide(): Boolean {
-        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
+        onSetNormalBackground()
         return false
     }
 
     override fun onEventCancel(): Boolean {
-        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
+        onSetNormalBackground()
         return false
     }
 
     override fun onEventActionUp(whatNo: Int): Boolean {
-        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
+        onSetNormalBackground()
         return false
     }
 
     override fun onEventActionDown(): Boolean {
+        onSetPressedBackground()
+        return false
+    }
+
+    protected open fun onSetNormalBackground() {
+        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
+    }
+
+    protected open fun onSetPressedBackground() {
         if (ThemeData.isEnabled() && ThemeData.getInstance().toolbarTextButtonBackgroundPress != null)
             background = ThemeData.getInstance().toolbarTextButtonBackgroundPress
         else
             setBackgroundResource(R.drawable.swipebtn_text_background_pressed)
-        return false
     }
 
     override fun onChangeState(whatNo: Int) {}
