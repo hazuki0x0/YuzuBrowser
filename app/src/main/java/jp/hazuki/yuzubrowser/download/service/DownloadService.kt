@@ -203,12 +203,15 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
         private val notification = NotificationCompat.Builder(this@DownloadService, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY)
         private val bigTextStyle = NotificationCompat.BigTextStyle()
 
-        private lateinit var downloader: Downloader
+        private var downloader: Downloader? = null
 
         private var isActionAdded = false
+        private var isAbort = false
 
         @SuppressLint("WakelockTimeout")
         override fun run() {
+            if (isAbort) return
+
             val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread")
             prepareThread(wakelock)
 
@@ -229,7 +232,9 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
                 return
             }
 
-            downloader = Downloader.getDownloader(this@DownloadService, info, request)
+            val downloader = Downloader.getDownloader(this@DownloadService, info, request)
+            this.downloader = downloader
+
             downloader.downloadListener = this
 
             downloader.download()
@@ -237,11 +242,14 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
             endThreaded(wakelock)
         }
 
-        fun cancel() = downloader.cancel()
+        fun cancel() = downloader?.cancel()
 
-        fun pause() = downloader.pause()
+        fun pause() = downloader?.pause()
 
-        fun abort() = downloader.abort()
+        fun abort() {
+            downloader?.abort()
+            isAbort = true
+        }
 
         override fun onStartDownload(info: DownloadFileInfo) {
             database.update(info)
