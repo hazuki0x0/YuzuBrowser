@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/ripple"/>
+
+    <padding
+        android:left="@dimen/swipebtn_bg_padding"
+        android:right="@dimen/swipebtn_bg_padding"/>
+
+</shape>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
     fun setActionData(action_list: SoftButtonActionFile, controller: ActionController, iconManager: ActionIconManager) {
         mController.setActionData(action_list, controller, iconManager)
         mController.setOnChangeListener(this)
+
+        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
     }
 
     fun notifyChangeState() {
@@ -63,17 +65,17 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
     override fun onLongPress() {}
 
     override fun onEventOutSide(): Boolean {
-        setBackgroundResource(R.drawable.swipebtn_image_background_normal)
+        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
         return false
     }
 
     override fun onEventCancel(): Boolean {
-        setBackgroundResource(R.drawable.swipebtn_image_background_normal)
+        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
         return false
     }
 
     override fun onEventActionUp(whatNo: Int): Boolean {
-        setBackgroundResource(R.drawable.swipebtn_image_background_normal)
+        setBackgroundResource(R.drawable.swipebtn_text_background_normal)
         return false
     }
 
@@ -81,7 +83,7 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
         if (ThemeData.isEnabled() && ThemeData.getInstance().toolbarButtonBackgroundPress != null)
             background = ThemeData.getInstance().toolbarButtonBackgroundPress
         else
-            setBackgroundResource(R.drawable.swipebtn_image_background_pressed)
+            setBackgroundResource(R.drawable.swipebtn_text_background_pressed)
         return false
     }
 

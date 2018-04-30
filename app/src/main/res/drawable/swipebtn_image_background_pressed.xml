@@ -3,4 +3,10 @@
 
     <solid android:color="@color/ripple" />
 
+    <padding
+        android:bottom="@dimen/swipebtn_bg_padding"
+        android:left="@dimen/swipebtn_bg_padding"
+        android:right="@dimen/swipebtn_bg_padding"
+        android:top="@dimen/swipebtn_bg_padding"/>
+
 </shape>
