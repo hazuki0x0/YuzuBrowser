@@ -817,7 +817,7 @@
     <string name="pref_basic_settings">Basic settings</string>
     <string name="pref_white_url_box">Show URL box</string>
     <string name="pref_enable_web_rtc">Enable WebRTC</string>
-    <string name="pref_content_settings">Content settings</string>
+    <string name="pref_content_settings">Website content settings</string>
     <string name="pref_speeddial_layout">Layout</string>
     <string-array name="pref_speeddial_layout_list">
         <item>Large icon</item>
