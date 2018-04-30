@@ -23,14 +23,17 @@ import android.net.Uri
 import android.support.v4.provider.DocumentFile
 import android.text.format.Formatter
 import android.util.Base64
-import android.webkit.URLUtil
+import android.webkit.MimeTypeMap
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.settings.data.AppData
+import jp.hazuki.yuzubrowser.utils.FileUtils
 import jp.hazuki.yuzubrowser.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.utils.extensions.createFileOpenIntent
 import java.io.File
 import java.io.IOException
+import java.net.URLDecoder
+import java.util.*
 import java.util.regex.Pattern
 
 fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): Boolean {
@@ -88,12 +91,10 @@ fun guessDownloadFileName(root: DocumentFile, url: String, contentDisposition: S
         guessType = null
     }
 
-    var filename = URLUtil.guessFileName(url, contentDisposition, guessType)
-    if (filename.isNullOrEmpty()) {
+    var filename = guessFileName(url, contentDisposition, guessType)
+    if (filename.isEmpty()) {
         filename = "index.html"
 
-    } else if (filename.endsWith(".htm")) {
-        filename += "l"
     }
 
     var extension = defaultExt
@@ -125,6 +126,110 @@ fun guessDownloadFileName(root: DocumentFile, url: String, contentDisposition: S
     }
 
     return createUniqueFileName(root, filename, Constants.download.TMP_FILE_SUFFIX)
+}
+
+private fun guessFileName(url: String, contentDisposition: String?, mimeType: String?): String {
+    var fileName = if (contentDisposition != null) guessFileNameFromContentDisposition(contentDisposition) else null
+
+    if (fileName != null) return fileName
+
+    // If all the other http-related approaches failed, use the plain uri
+    var decodedUrl: String? = Uri.decode(url)
+    if (decodedUrl != null) {
+        val queryIndex = decodedUrl.indexOf('?')
+        // If there is a query string strip it, same as desktop browsers
+        if (queryIndex > 0) {
+            decodedUrl = decodedUrl.substring(0, queryIndex)
+        }
+        if (!decodedUrl.endsWith("/")) {
+            val index = decodedUrl.lastIndexOf('/') + 1
+            if (index > 0) {
+                fileName = decodedUrl.substring(index)
+            }
+        }
+    }
+
+    // Finally, if couldn't get filename from URI, get a generic filename
+    if (fileName == null) {
+        fileName = "downloadfile"
+    }
+
+    val dotIndex = fileName.indexOf('.')
+    var extension: String? = null
+
+    if (dotIndex < 0) {
+        if (mimeType != null) {
+            extension = getExtensionFromMimeType(mimeType)
+            if (extension != null) {
+                extension = ".$extension"
+            }
+        }
+        if (extension == null) {
+            extension = if (mimeType != null && mimeType.toLowerCase(Locale.ROOT).startsWith("text/")) {
+                if (mimeType.equals("text/html", ignoreCase = true)) {
+                    ".html"
+                } else {
+                    ".txt"
+                }
+            } else {
+                ".bin"
+            }
+        }
+    } else {
+        if (mimeType != null) {
+            // Compare the last segment of the extension against the mime type.
+            // If there's a mismatch, discard the entire extension.
+            val lastDotIndex = fileName.lastIndexOf('.')
+            val typeFromExt = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileName.substring(lastDotIndex + 1))
+            if (typeFromExt != null && !typeFromExt.equals(mimeType, ignoreCase = true)) {
+                extension = getExtensionFromMimeType(mimeType)
+                if (extension != null) {
+                    extension = ".$extension"
+                }
+            }
+        }
+        if (extension == null) {
+            extension = fileName.substring(dotIndex)
+        }
+        fileName = fileName.substring(0, dotIndex)
+    }
+
+    if (extension == ".htm") {
+        extension = ".html"
+    }
+
+    return fileName + extension
+}
+
+private fun getExtensionFromMimeType(mimeType: String): String? {
+    return when (mimeType) {
+        "multipart/related", "message/rfc822", "application/x-mimearchive" -> ".mhtml"
+        "application/javascript", "application/x-javascript", "text/javascript" -> ".js"
+        else -> MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+    }
+}
+
+private val NAME_UTF_8 = Pattern.compile("filename\\*=UTF-8''(\\S+)")
+private val NAME_NORMAL = Pattern.compile("filename=\"(.*)\"")
+
+fun guessFileNameFromContentDisposition(contentDisposition: String): String? {
+    val utf8 = NAME_UTF_8.matcher(contentDisposition)
+    if (utf8.find()) {
+        /** RFC 6266 */
+        return URLDecoder.decode(utf8.group(1), "UTF-8")
+    }
+
+    val normal = NAME_NORMAL.matcher(contentDisposition)
+    if (normal.find()) {
+        return try {
+            URLDecoder.decode(normal.group(1), "UTF-8")
+        } catch (e: IllegalArgumentException) {
+            FileUtils.replaceProhibitionWord(normal.group(1))
+        }
+    }
+
+    return null
 }
 
 fun getDownloadFolderUri(): Uri {

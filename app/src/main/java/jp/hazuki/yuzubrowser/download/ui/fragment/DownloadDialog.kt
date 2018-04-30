@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,8 @@ class DownloadDialog : DialogFragment() {
 
         val name = file.name
         if (name != null) {
-            filenameEditText.setText(name)
+            val resolvedName = createUniqueFileName(root, name)
+            filenameEditText.setText(resolvedName)
             view.visibility = View.VISIBLE
         } else {
             ui {

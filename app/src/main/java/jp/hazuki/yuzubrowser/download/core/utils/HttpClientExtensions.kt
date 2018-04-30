@@ -18,28 +18,14 @@ package jp.hazuki.yuzubrowser.download.core.utils
 
 import android.support.v4.provider.DocumentFile
 import jp.hazuki.yuzubrowser.download.core.downloader.client.HttpClient
-import jp.hazuki.yuzubrowser.utils.FileUtils
 import jp.hazuki.yuzubrowser.utils.createUniqueFileName
-import java.net.URLDecoder
-import java.util.regex.Pattern
-
-private val NAME_UTF_8 = Pattern.compile("filename\\*=UTF-8''(\\S+)")
-private val NAME_NORMAL = Pattern.compile("filename=\"(.*)\"")
 
 fun HttpClient.getFileName(root: DocumentFile, url: String, mimeType: String?, defaultExt: String?): String {
     headerFields["Content-Disposition"]?.let { contents ->
         for (raw in contents) {
-            val utf8 = NAME_UTF_8.matcher(raw)
-            if (utf8.find()) { /* RFC 6266 */
-                return createUniqueFileName(root, URLDecoder.decode(utf8.group(1), "UTF-8"))
-            }
-            val normal = NAME_NORMAL.matcher(raw)
-            if (normal.find()) {
-                return try {
-                    createUniqueFileName(root, URLDecoder.decode(normal.group(1), "UTF-8"))
-                } catch (e: IllegalArgumentException) {
-                    createUniqueFileName(root, FileUtils.replaceProhibitionWord(normal.group(1)))
-                }
+            val name = guessFileNameFromContentDisposition(raw)
+            if (name != null) {
+                return createUniqueFileName(root, name)
             }
         }
     }

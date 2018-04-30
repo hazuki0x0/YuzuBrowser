@@ -19,66 +19,12 @@ package jp.hazuki.yuzubrowser.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import jp.hazuki.yuzubrowser.settings.data.AppData;
 
 public final class HttpUtils {
-
-    private static final Pattern NAME_UTF_8 = Pattern.compile("filename\\*=UTF-8''(\\S+)");
-    private static final Pattern NAME_NORMAL = Pattern.compile("filename=\"(.*)\"");
-
-    public static File getFileName(String url, String defaultExt, Map<String, List<String>> header) {
-        if (header.get("Content-Disposition") != null) {
-            List<String> lines = header.get("Content-Disposition");
-            for (String raw : lines) {
-                if (raw != null) {
-                    Matcher utf8 = NAME_UTF_8.matcher(raw);
-                    if (utf8.find()) { /* RFC 6266 */
-                        try {
-                            return FileUtils.createUniqueFile(AppData.download_folder.get(), URLDecoder.decode(utf8.group(1), "UTF-8"));
-                        } catch (UnsupportedEncodingException e) {
-                            throw new AssertionError("UTF-8 is unknown");
-                        }
-                    }
-                    Matcher normal = NAME_NORMAL.matcher(raw);
-                    if (normal.find()) {
-                        try {
-                            return FileUtils.createUniqueFile(AppData.download_folder.get(), URLDecoder.decode(normal.group(1), "UTF-8"));
-                        } catch (IllegalArgumentException e) {
-                            return FileUtils.createUniqueFile(AppData.download_folder.get(), FileUtils.replaceProhibitionWord(normal.group(1)));
-                        } catch (UnsupportedEncodingException e) {
-                            throw new AssertionError("UTF-8 is unknown");
-                        }
-                    }
-                }
-            }
-        }
-
-        if (header.get("Content-Type") != null) {
-            List<String> lines = header.get("Content-Type");
-            if (lines.size() > 0) {
-                String mineType = lines.get(0);
-                int index = mineType.indexOf(';');
-                if (index > -1) {
-                    mineType = mineType.substring(0, index);
-                }
-                return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, mineType, defaultExt);
-            }
-        }
-
-        return WebDownloadUtils.guessDownloadFile(AppData.download_folder.get(), url, null, null, defaultExt);
-    }
 
     public static Bitmap getImage(String url, String userAgent, String referrer) {
         return getImage(url, userAgent, referrer, null);
