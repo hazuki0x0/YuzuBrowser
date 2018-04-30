@@ -240,7 +240,7 @@ public class FileUtils {
     }
 
     public static String getMineType(File file) {
-        return FileUtilsKt.getMineType(file.getName());
+        return FileUtilsKt.getMimeType(file.getName());
     }
 
     public static final FileComparator FILE_COMPARATOR = new FileComparator();

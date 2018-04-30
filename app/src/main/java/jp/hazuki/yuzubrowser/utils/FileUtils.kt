@@ -84,7 +84,7 @@ fun getParsedFileName(filename: String): ParsedFileName {
     }
 }
 
-fun getMineType(fileName: String): String {
+fun getMimeType(fileName: String): String {
     val lastDot = fileName.lastIndexOf('.')
     if (lastDot >= 0) {
         val extension = fileName.substring(lastDot + 1).toLowerCase()

@@ -20,7 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
-import jp.hazuki.yuzubrowser.utils.getMineType
+import jp.hazuki.yuzubrowser.utils.getMimeType
 
 class WebUploadHandler {
     private var uploadMsg: ValueCallback<Array<Uri>>? = null
@@ -59,7 +59,7 @@ class WebUploadHandler {
             }
             // Convert extension to MimeType
             if (acceptTypes.any { !it.contains('/') }) {
-                acceptTypes = acceptTypes.map { if (it.contains('/')) it else getMineType(it) }
+                acceptTypes = acceptTypes.map { if (it.contains('/')) it else getMimeType(it) }
                 modified = true
             }
 

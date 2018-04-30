@@ -27,7 +27,7 @@ import android.os.Build
 import android.support.v4.app.Fragment
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider
-import jp.hazuki.yuzubrowser.utils.getMineType
+import jp.hazuki.yuzubrowser.utils.getMimeType
 import jp.hazuki.yuzubrowser.utils.getPathFromUri
 import org.jetbrains.anko.*
 import org.jetbrains.anko.internals.AnkoInternals
@@ -69,7 +69,7 @@ fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: Str
         }
     }
 
-    var resolvedMineType = getMineType(name)
+    var resolvedMineType = getMimeType(name)
     if (resolvedMineType == Constants.mimeType.UNKNOWN) {
         resolvedMineType = mimeType
     }
