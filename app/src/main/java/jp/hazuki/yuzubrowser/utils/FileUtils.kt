@@ -26,6 +26,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.v4.provider.DocumentFile
 import android.webkit.MimeTypeMap
+import jp.hazuki.yuzubrowser.Constants
 import java.io.File
 
 
@@ -97,7 +98,7 @@ fun getMineType(fileName: String): String {
             "js" -> return "application/javascript"
         }
     }
-    return "application/octet-stream"
+    return Constants.mimeType.UNKNOWN
 }
 
 fun Uri.isAlwaysConvertible(): Boolean {

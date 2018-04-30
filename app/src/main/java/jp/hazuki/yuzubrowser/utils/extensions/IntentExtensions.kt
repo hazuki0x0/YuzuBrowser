@@ -25,6 +25,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.support.v4.app.Fragment
+import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider
 import jp.hazuki.yuzubrowser.utils.getMineType
 import jp.hazuki.yuzubrowser.utils.getPathFromUri
@@ -68,8 +69,13 @@ fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: Str
         }
     }
 
+    var resolvedMineType = getMineType(name)
+    if (resolvedMineType == Constants.mimeType.UNKNOWN) {
+        resolvedMineType = mimeType
+    }
+
     return Intent(Intent.ACTION_VIEW).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        setDataAndType(target, if (mimeType.isNotEmpty()) mimeType else getMineType(name))
+        setDataAndType(target, resolvedMineType)
     }
 }

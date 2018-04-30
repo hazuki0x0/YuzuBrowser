@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ public final class Constants {
     }
 
     public static final class mimeType {
+        public static final String UNKNOWN = "application/octet-stream";
         public static final String MHTML = "multipart/related";
         public static final String HTML = "text/html";
     }
