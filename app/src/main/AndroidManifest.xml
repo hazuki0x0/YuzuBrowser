@@ -348,6 +348,10 @@
         <activity
             android:name=".webrtc.ui.WebPermissionActivity"
             android:label="@string/pref_content_settings"/>
+        <activity
+            android:name=".download.ui.FallbackFolderSelectActivity"
+            android:label="@string/pref_download_folder"
+            android:theme="@style/BrowserMinThemeBlack.Transparent"/>
     </application>
 
 </manifest>

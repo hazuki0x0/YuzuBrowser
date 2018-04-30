@@ -23,9 +23,9 @@ import android.os.Bundle
 import android.support.v14.preference.SwitchPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceScreen
-
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.adblock.AdBlockActivity
+import jp.hazuki.yuzubrowser.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.settings.preference.common.StrToIntListPreference
 import jp.hazuki.yuzubrowser.utils.isAlwaysConvertible
@@ -63,7 +63,11 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
         }
 
         findPreference("download_folder").setOnPreferenceClickListener {
-            startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
+            try {
+                startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
+            } catch (e: Exception) {
+                startActivityForResult(Intent(activity, FallbackFolderSelectActivity::class.java), REQUEST_FOLDER)
+            }
             true
         }
     }
@@ -84,8 +88,10 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
 
                 val uri = data.data
 
-                activity.contentResolver.takePersistableUriPermission(uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                if (uri.scheme == "content") {
+                    activity.contentResolver.takePersistableUriPermission(uri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
 
                 AppData.download_folder.set(uri.toString())
                 AppData.commit(activity, AppData.download_folder)
