@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,6 +111,11 @@ public class DownloadFileProvider extends ContentProvider {
         return 0;
     }
 
+    public static Uri getUriFromPath(String filePath) {
+        String path = PATH + '/' + Uri.encode(filePath, "/");
+        return new Uri.Builder().scheme(SCHEME).authority(AUTHORITY).encodedPath(path).build();
+    }
+
     public static Uri getUriForFIle(File file) {
         String path;
         try {
@@ -118,8 +123,7 @@ public class DownloadFileProvider extends ContentProvider {
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to resolve canonical path for " + file);
         }
-        path = PATH + '/' + Uri.encode(path, "/");
-        return new Uri.Builder().scheme(SCHEME).authority(AUTHORITY).encodedPath(path).build();
+        return getUriFromPath(path);
     }
 
     public File getFileForUri(Uri uri) {

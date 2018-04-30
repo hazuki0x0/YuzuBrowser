@@ -51,6 +51,7 @@ import jp.hazuki.yuzubrowser.browser.*
 import jp.hazuki.yuzubrowser.browser.openable.BrowserOpenable
 import jp.hazuki.yuzubrowser.browser.ui.Toolbar
 import jp.hazuki.yuzubrowser.download.service.DownloadFile
+import jp.hazuki.yuzubrowser.download.service.DownloadFileProvider
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.SaveWebArchiveDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
@@ -458,8 +459,12 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             }
             BrowserController.REQUEST_SHARE_IMAGE -> {
                 if (resultCode != RESULT_OK || data == null) return
-                val uri = data.data
+                var uri = data.data
                 val mineType = data.getStringExtra(FastDownloadActivity.EXTRA_MINE_TYPE)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme == "file") {
+                    uri = DownloadFileProvider.getUriFromPath(uri.path)
+                }
 
                 val open = Intent(Intent.ACTION_SEND)
                 if (mineType != null)

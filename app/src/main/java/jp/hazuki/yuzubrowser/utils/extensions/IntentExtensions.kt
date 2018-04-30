@@ -31,7 +31,6 @@ import jp.hazuki.yuzubrowser.utils.getMimeType
 import jp.hazuki.yuzubrowser.utils.getPathFromUri
 import org.jetbrains.anko.*
 import org.jetbrains.anko.internals.AnkoInternals
-import java.io.File
 
 inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any?>) = AnkoInternals.internalStartActivity(activity!!, T::class.java, params)
 
@@ -59,7 +58,7 @@ inline fun Fragment.sendSMS(number: String, text: String = ""): Boolean = activi
 
 fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: String): Intent {
     val target = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        if (uri.scheme == "file") DownloadFileProvider.getUriForFIle(File(uri.path)) else uri
+        if (uri.scheme == "file") DownloadFileProvider.getUriFromPath(uri.path) else uri
     } else {
         if (uri.scheme == "file") {
             uri
