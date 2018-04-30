@@ -158,12 +158,17 @@ class BookmarkManager private constructor(context: Context) : Serializable {
     }
 
     fun moveTo(from: BookmarkFolder, to: BookmarkFolder, siteIndex: Int) {
-        to.list.add(from.list.removeAt(siteIndex))
+        val item = from.list.removeAt(siteIndex)
+        to.list.add(item)
+        if (item is BookmarkFolder) {
+            item.parent = to
+        }
     }
 
     fun moveAll(from: BookmarkFolder, to: BookmarkFolder, items: List<BookmarkItem>) {
         from.list.removeAll(items)
         to.list.addAll(items)
+        items.filterIsInstance<BookmarkFolder>().forEach { it.parent = to }
     }
 
     fun search(query: String): List<BookmarkSite> {
