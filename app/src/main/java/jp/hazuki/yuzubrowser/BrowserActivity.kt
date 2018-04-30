@@ -121,6 +121,9 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             }
         }
     }
+    private val paddingReset = Runnable {
+        adjustBrowserPadding(tabManagerIn.currentTabData)
+    }
 
     private lateinit var toolbar: Toolbar
     private lateinit var tabManagerIn: UiTabManager
@@ -562,6 +565,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
         } else if (tabManagerIn.currentTabData?.mWebView?.canGoBack() == true) {
             tabManagerIn.currentTabData.mWebView.goBack()
             handler.postDelayed(takeCurrentTabScreen, 500)
+            handler.postDelayed(paddingReset, 50)
         } else {
             userActionManager.onBackKey()
         }
@@ -898,6 +902,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
                 } else {
                     tab.mWebView.goBackOrForward(next)
                 }
+                handler.postDelayed(paddingReset, 50)
             }
             dialog.dismiss()
         }

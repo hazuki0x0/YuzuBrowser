@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -390,6 +390,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     tab.mWebView.goBack()
 
                     controller.superFrameLayoutInfo.postDelayed(takeCurrentTabScreen, 500)
+                    controller.superFrameLayoutInfo.postDelayed(paddingReset, 50)
                 } else {
                     checkAndRun((action as GoBackSingleAction).defaultAction, target)
                 }
@@ -406,6 +407,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     }
                     tab.mWebView.goForward()
                     controller.superFrameLayoutInfo.postDelayed(takeCurrentTabScreen, 500)
+                    controller.superFrameLayoutInfo.postDelayed(paddingReset, 50)
                 }
             }
             SingleAction.WEB_RELOAD_STOP -> {
@@ -982,7 +984,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 controller.openInRightBgTab(url, type)
                 return true
             }
-            else -> throw IllegalArgumentException("Unknown perform:" + perform)
+            else -> throw IllegalArgumentException("Unknown perform:$perform")
         }
     }
 
@@ -990,6 +992,10 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
         val data = controller.tabManager.currentTabData
         if (data != null && data.isShotThumbnail)
             controller.tabManager.forceTakeThumbnail(data)
+    }
+
+    private val paddingReset = Runnable {
+        controller.adjustBrowserPadding(controller.tabManager.currentTabData)
     }
 
     private fun getString(id: Int): String = controller.activity.getString(id)
