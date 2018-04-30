@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class ThemeData {
     public int progressColor, progressIndeterminateColor;
     public int toolbarBackgroundColor;
     public int toolbarTextColor, toolbarImageColor;
-    public ShapeDrawable toolbarButtonBackgroundPress;
+    public ShapeDrawable toolbarButtonBackgroundPress, toolbarTextButtonBackgroundPress;
     public int qcItemBackgroundColorNormal, qcItemBackgroundColorSelect, qcItemColor;
     public int statusBarColor;
     private boolean statusBarDarkIcon;
@@ -194,10 +194,15 @@ public class ThemeData {
                     try {
                         int padding = context.getResources().getDimensionPixelOffset(R.dimen.swipebtn_bg_padding);
                         Rect paddingRect = new Rect(padding, padding, padding, padding);
+                        Rect textPaddingRect = new Rect(padding, 0, padding, 0);
 
                         toolbarButtonBackgroundPress = new ShapeDrawable(new RectShape());
                         toolbarButtonBackgroundPress.setPadding(paddingRect);
                         toolbarButtonBackgroundPress.getPaint().setColor(Long.decode(parser.getText().trim()).intValue());
+
+                        toolbarTextButtonBackgroundPress = new ShapeDrawable(new RectShape());
+                        toolbarTextButtonBackgroundPress.setPadding(textPaddingRect);
+                        toolbarTextButtonBackgroundPress.getPaint().setColor(Long.decode(parser.getText().trim()).intValue());
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }

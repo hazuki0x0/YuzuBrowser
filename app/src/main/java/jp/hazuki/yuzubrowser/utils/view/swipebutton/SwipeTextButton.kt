@@ -80,8 +80,8 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
     }
 
     override fun onEventActionDown(): Boolean {
-        if (ThemeData.isEnabled() && ThemeData.getInstance().toolbarButtonBackgroundPress != null)
-            background = ThemeData.getInstance().toolbarButtonBackgroundPress
+        if (ThemeData.isEnabled() && ThemeData.getInstance().toolbarTextButtonBackgroundPress != null)
+            background = ThemeData.getInstance().toolbarTextButtonBackgroundPress
         else
             setBackgroundResource(R.drawable.swipebtn_text_background_pressed)
         return false
