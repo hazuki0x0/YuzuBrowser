@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import jp.hazuki.yuzubrowser.BrowserApplication
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.adblock.AdBlock
 import jp.hazuki.yuzubrowser.adblock.AdBlockManager
+import jp.hazuki.yuzubrowser.utils.view.ConfirmDialog
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.fragment_ad_block_list.*
@@ -39,7 +40,7 @@ import java.io.IOException
 import java.io.PrintWriter
 import java.util.*
 
-class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener, AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback, DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener {
+class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener, AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback, DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener, ConfirmDialog.OnConfirmedListener {
 
     private lateinit var provider: AdBlockManager.AdBlockItemProvider
     private lateinit var adapter: AdBlockArrayRecyclerAdapter
@@ -271,20 +272,24 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                 AdBlockDeleteAllDialog().show(childFragmentManager, "delete_all")
                 return true
             }
+            R.id.resetAllCount -> {
+                ConfirmDialog(CONFIRM_COUNT, getString(R.string.reset_all_counts), getString(R.string.reset_all_counts_mes))
+                        .show(childFragmentManager, "reset_all")
+            }
             R.id.sort_count -> {
-                Collections.sort(adapter.items) { (_, _, _, c1), (_, _, _, c2) -> c2 - c1 }
+                adapter.items.sortWith(Comparator { (_, _, _, c1), (_, _, _, c2) -> c2 - c1 })
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true
             }
             R.id.sort_date -> {
-                Collections.sort(adapter.items) { (_, _, _, _, t1), (_, _, _, _, t2) -> t2.compareTo(t1) }
+                adapter.items.sortWith(Comparator { (_, _, _, _, t1), (_, _, _, _, t2) -> t2.compareTo(t1) })
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true
             }
             R.id.sort_name -> {
-                Collections.sort(adapter.items) { (_, m1), (_, m2) -> m1.compareTo(m2) }
+                adapter.items.sortWith(Comparator { (_, m1), (_, m2) -> m1.compareTo(m2) })
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true
@@ -297,6 +302,16 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         provider.deleteAll()
         adapter.clear()
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onConfirmed(id: Int) {
+        when (id) {
+            CONFIRM_COUNT -> {
+                provider.resetCount()
+                adapter.items.forEach { it.count = 0 }
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onAttach(context: Context?) {
@@ -321,6 +336,8 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         private const val ARG_TYPE = "type"
         private const val REQUEST_SELECT_FILE = 1
         private const val REQUEST_SELECT_EXPORT = 2
+
+        private const val CONFIRM_COUNT = 1
 
         operator fun invoke(type: Int): AdBlockFragment {
             return AdBlockFragment().apply {

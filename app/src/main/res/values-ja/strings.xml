@@ -291,4 +291,6 @@
     <string name="breadcrumb">パンくずリスト</string>
     <string name="download_failed_root_not_exists">ダウンロード先フォルダが見つからないためダウンロードできません</string>
     <string name="download_failed_root_not_writable">ダウンロード先フォルダが書き込めないためダウンロードできません</string>
+    <string name="reset_all_counts">カウントをリセット</string>
+    <string name="reset_all_counts_mes">すべての要素のカウントをリセットしますか？</string>
 </resources>
