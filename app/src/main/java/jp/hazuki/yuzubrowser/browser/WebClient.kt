@@ -64,6 +64,7 @@ import jp.hazuki.yuzubrowser.userjs.UserScript
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.utils.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermission
@@ -92,6 +93,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
     private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
+    private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min,js") }
 
     var renderingMode
         get() = webViewRenderingManager.mode
@@ -99,8 +101,10 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             if (value == renderingMode) return
 
             webViewRenderingManager.mode = value
+            val js = invertJs.replace("%s", webViewRenderingManager.isInvertMode.toString())
             controller.tabManager.loadedData.forEach {
                 webViewRenderingManager.setWebViewRendering(it.mWebView)
+                it.mWebView.evaluateJavascript(js, null)
             }
         }
 
@@ -179,9 +183,13 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             miningProtector = null
         }
 
+        val js by lazy(LazyThreadSafetyMode.NONE) { invertJs.replace("%s", webViewRenderingManager.isInvertMode.toString()) }
+        val isInverted = webViewRenderingManager.isInverted
+
         controller.tabManager.loadedData.forEach {
             initWebSetting(it.mWebView)
             it.mWebView.onPreferenceReset()
+            if (isInverted) it.mWebView.evaluateJavascript(js, null)
         }
 
         controller.tabManager.currentTabData?.let {
@@ -406,6 +414,10 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             val data = controller.getTabOrNull(web) ?: return
 
             applyUserScript(web, url, false)
+
+            if (webViewRenderingManager.isInvertMode) {
+                web.evaluateJavascript(invertJs.replace("%s", "true"), null)
+            }
 
             if (controller.isActivityPaused) {
                 pauseWebViewTimers(data)
