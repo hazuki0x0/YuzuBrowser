@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.view.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.utils.view.recycler.RecyclerTouchLocationDetector
+import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 
 
