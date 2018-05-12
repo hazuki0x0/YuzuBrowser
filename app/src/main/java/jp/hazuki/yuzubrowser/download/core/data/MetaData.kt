@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,14 @@ package jp.hazuki.yuzubrowser.download.core.data
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.os.Parcelable
 import android.support.v4.provider.DocumentFile
 import android.webkit.CookieManager
 import jp.hazuki.yuzubrowser.download.core.downloader.client.HttpClient
 import jp.hazuki.yuzubrowser.download.core.utils.*
+import jp.hazuki.yuzubrowser.settings.data.AppData
+import jp.hazuki.yuzubrowser.utils.createUniqueFileName
 import kotlinx.android.parcel.Parcelize
 import java.io.IOException
 
@@ -42,7 +45,8 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
                 client.connect()
 
                 val mimeType = client.mimeType
-                val name = client.getFileName(root, url, mimeType, request.defaultExt)
+                val folder = Uri.parse(AppData.download_folder.get()).toDocumentFile(context)
+                val name = createUniqueFileName(folder, client.getFileName(root, url, mimeType, request.defaultExt))
                 MetaData(name, mimeType, client.contentLength, client.isResumable)
             } catch (e: IOException) {
                 MetaData(guessDownloadFileName(root, url, null, null, request.defaultExt), "application/octet-stream", -1, false)
