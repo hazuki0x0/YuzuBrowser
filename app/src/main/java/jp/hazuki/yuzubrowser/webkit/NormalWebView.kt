@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
     private var gestureDetector: MultiTouchGestureDetector? = null
     private var onScrollChangedListener: OnScrollChangedListener? = null
     private var scrollBarListener: OnScrollChangedListener? = null
-    private var scrollableChangeListener: OnSwipeableChangeListener? = null
+    override var scrollableChangeListener: OnScrollableChangeListener? = null
     override var paddingScrollChangedListener: OnWebViewScrollChangeListener? = null
 
     private val childHelper = NestedScrollingChildHelper(this)
@@ -105,7 +105,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
         scrollBarListener = l
     }
 
-    fun setOnScrollableChangeListener(listener: OnSwipeableChangeListener) {
+    fun setOnScrollableChangeListener(listener: OnScrollableChangeListener) {
         scrollableChangeListener = listener
     }
 
@@ -296,7 +296,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
     override fun setSwipeable(swipeable: Boolean) {
         if (isSwipeable != swipeable) {
             isSwipeable = swipeable
-            scrollableChangeListener?.onSwipeableChanged(isScrollable && isSwipeable)
+            scrollableChangeListener?.onScrollableChanged(isScrollable && isSwipeable)
         }
     }
 
@@ -309,7 +309,7 @@ class NormalWebView @JvmOverloads constructor(context: Context, attrs: Attribute
         val old = isScrollable
         isScrollable = scrollRange > height + scrollSlop + (scrollableHeight?.invoke() ?: 0)
         if (old != isScrollable) {
-            scrollableChangeListener?.onSwipeableChanged(isScrollable && isSwipeable)
+            scrollableChangeListener?.onScrollableChanged(isScrollable && isSwipeable)
         }
 
         if (isScrollable && !isNestedScrollingEnabled) {

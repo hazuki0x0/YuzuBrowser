@@ -63,7 +63,7 @@ class DownloadDialog : DialogFragment() {
 
         val name = file.name
         if (name != null) {
-            val resolvedName = createUniqueFileName(root, name)
+            val resolvedName = createUniqueFileName(root, name, Constants.download.TMP_FILE_SUFFIX)
             filenameEditText.setText(resolvedName)
             view.visibility = View.VISIBLE
         } else {

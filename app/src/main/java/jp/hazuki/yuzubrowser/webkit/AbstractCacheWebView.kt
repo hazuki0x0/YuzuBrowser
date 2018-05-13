@@ -70,6 +70,11 @@ abstract class AbstractCacheWebView(context: Context) : FrameLayout(context), Cu
         }
         downloadListener?.onDownloadStart(url, userAgent, contentDisposition, mimetype, contentLength)
     }
+    override var scrollableChangeListener: OnScrollableChangeListener? = null
+        set(value) {
+            field = value
+            tabs.forEach { it.mWebView.scrollableChangeListener = value }
+        }
 
     protected abstract fun removeCurrentTab(tab: TabData)
     protected abstract fun resetCurrentTab(): TabData
@@ -455,6 +460,9 @@ abstract class AbstractCacheWebView(context: Context) : FrameLayout(context), Cu
 
         stateChangeListener?.invoke(this, toData)
         to.requestWebFocus()
+        if (from.isScrollable != to.isScrollable) {
+            scrollableChangeListener?.onScrollableChanged(to.isScrollable)
+        }
     }
 
     protected fun settingWebView(from: CustomWebView, to: CustomWebView) {

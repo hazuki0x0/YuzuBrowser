@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,6 @@
 
 package jp.hazuki.yuzubrowser.webkit
 
-interface OnSwipeableChangeListener {
-    fun onSwipeableChanged(scrollable: Boolean)
+interface OnScrollableChangeListener {
+    fun onScrollableChanged(scrollable: Boolean)
 }

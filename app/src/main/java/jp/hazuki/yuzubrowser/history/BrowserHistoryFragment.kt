@@ -67,12 +67,14 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
-        recyclerView.addOnScrollListener(object : LoadMoreListener(layoutManager) {
+        val listener = object : LoadMoreListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {
                 adapter.loadMore()
                 recyclerView.post { adapter.notifyDataSetChanged() }
             }
-        })
+        }
+        recyclerView.addOnScrollListener(listener)
+        touchScrollBar.addScrollListener(listener)
 
         manager = BrowserHistoryManager.getInstance(activity)
         adapter = BrowserHistoryAdapter(activity, manager, pickMode, this)

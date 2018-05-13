@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ import jp.hazuki.yuzubrowser.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView
+import kotlinx.android.synthetic.main.tab_list.*
 import kotlinx.coroutines.experimental.Job
 import java.util.*
 
@@ -69,12 +70,13 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
     private var initDecodedQuery = ""
 
     private var openNewTab: Boolean = false
+    private var bottomBoxMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val reverse = intent.getBooleanExtra(EXTRA_REVERSE, false)
+        bottomBoxMode = intent.getBooleanExtra(EXTRA_REVERSE, false)
 
-        if (reverse)
+        if (bottomBoxMode)
             setContentView(R.layout.search_activity_reverse)
         else
             setContentView(R.layout.search_activity)
@@ -99,7 +101,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         recyclerView.addItemDecoration(DividerItemDecoration(
                 this, getResColor(R.color.divider)))
 
-        if (reverse) {
+        if (bottomBoxMode) {
             layoutManager.reverseLayout = true
         }
 
@@ -245,6 +247,9 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
             adapter.clear()
             adapter.addAll(suggestions)
             adapter.notifyDataSetChanged()
+            if (bottomBoxMode && adapter.itemCount > 0) {
+                recyclerView.scrollToPosition(0)
+            }
         }
     }
 

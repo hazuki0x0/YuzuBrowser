@@ -75,7 +75,6 @@ import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialog
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialogFactory
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewPageFastScroller
 import jp.hazuki.yuzubrowser.utils.*
-import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.utils.view.PointerView
 import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
@@ -87,7 +86,7 @@ import kotlinx.android.synthetic.main.browser_activity.*
 import java.lang.StringBuilder
 import java.util.*
 
-class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
+class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
 
     private val asyncPermissions by lazy { AsyncPermissions(this) }
     private val handler = Handler(Looper.getMainLooper())
@@ -123,6 +122,12 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     }
     private val paddingReset = Runnable {
         adjustBrowserPadding(tabManagerIn.currentTabData)
+    }
+    private var scrollableChangeListener = object : OnScrollableChangeListener {
+        override fun onScrollableChanged(scrollable: Boolean) {
+            val tab = currentTabData ?: return
+            adjustBrowserPadding(tab)
+        }
     }
 
     private lateinit var toolbar: Toolbar
@@ -712,6 +717,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             mWebView.setOnMyCreateContextMenuListener(null)
             mWebView.setGestureDetector(null)
             mWebView.paddingScrollChangedListener = null
+            mWebView.scrollableChangeListener = null
             webFrameLayout.removeView(mWebView.view)
             webViewBehavior.setWebView(null)
             webViewFastScroller.detachWebView()
@@ -727,9 +733,14 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
             it.setOnMyCreateContextMenuListener(userActionManager.onCreateContextMenuListener)
             it.paddingScrollChangedListener = toolbar
+            it.scrollableChangeListener = scrollableChangeListener
             userActionManager.setGestureDetector(it)
         }
         CookieManager.getInstance().setAcceptCookie(newTab.isEnableCookie)
+
+        if (oldTab == null || oldTab.mWebView.isScrollable != newTab.mWebView.isScrollable) {
+            adjustBrowserPadding(newTab)
+        }
     }
 
     private fun addTab(index: Int, tab: MainTabData) {

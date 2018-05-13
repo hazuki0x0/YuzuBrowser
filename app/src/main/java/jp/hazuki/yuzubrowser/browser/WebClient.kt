@@ -26,11 +26,11 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Message
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.webkit.*
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.Constants
@@ -64,15 +64,17 @@ import jp.hazuki.yuzubrowser.userjs.UserScript
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermission
 import org.jetbrains.anko.longToast
 import java.net.URISyntaxException
+import java.text.DateFormat
 import kotlin.concurrent.thread
 
-class WebClient(private val activity: AppCompatActivity, private val controller: BrowserController) {
+class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) {
     private val patternManager = PatternUrlManager(activity.applicationContext)
     private val speedDialManager = SpeedDialAsyncManager(activity.applicationContext)
     private val speedDialHtml = SpeedDialHtml(activity.applicationContext)
@@ -259,8 +261,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             private fun actionDownload(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-                DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null)
-                        .show(activity.supportFragmentManager, "download")
+                activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null), "download")
             }
 
             private fun actionOpen(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
@@ -488,9 +489,19 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             if (!activity.isFinishing) {
+                val view = View.inflate(activity, R.layout.dialog_ssl_error, null)
+                view.findViewById<TextView>(R.id.urlTextView).apply {
+                    text = error.url
+                    setOnLongClickListener {
+                        activity.setClipboardWithToast(text.toString())
+                        true
+                    }
+                }
+                view.findViewById<TextView>(R.id.messageTextView).text = activity.getString(R.string.ssl_error_mes, error.getErrorMessages(activity))
+
                 AlertDialog.Builder(activity)
                         .setTitle(R.string.ssl_error_title)
-                        .setMessage(activity.getString(R.string.ssl_error_mes, error.getErrorMessages(activity)))
+                        .setView(view)
                         .setPositiveButton(android.R.string.yes) { _, _ -> handler.proceed() }
                         .setNegativeButton(android.R.string.no) { _, _ -> handler.cancel() }
                         .setOnCancelListener { handler.cancel() }
@@ -967,15 +978,19 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         }
         if (hasError(SslError.SSL_EXPIRED)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_expired))
+                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_expired_info), DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT).format(certificate.validNotAfterDate))
         }
         if (hasError(SslError.SSL_IDMISMATCH)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_domain_mismatch))
+                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_domain_mismatch_info), certificate.issuedTo.cName)
         }
         if (hasError(SslError.SSL_NOTYETVALID)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_not_yet_valid))
+                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_not_yet_valid_info), DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT).format(certificate.validNotBeforeDate))
         }
         if (hasError(SslError.SSL_UNTRUSTED)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_untrusted))
+                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_untrusted_info), certificate.issuedBy.dName)
         }
         if (hasError(SslError.SSL_INVALID)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_invalid))
@@ -983,8 +998,14 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
         return builder.toString()
     }
 
-    private fun StringBuilder.appendError(sequence: CharSequence) {
+    private fun StringBuilder.appendError(sequence: CharSequence): StringBuilder {
         append(" - ").append(sequence).append("\n")
+        return this
+    }
+
+    private fun StringBuilder.appendErrorInfo(sequence: CharSequence, info: CharSequence): StringBuilder {
+        append("   ").append(sequence).append(info).append('\n')
+        return this
     }
 
     companion object {

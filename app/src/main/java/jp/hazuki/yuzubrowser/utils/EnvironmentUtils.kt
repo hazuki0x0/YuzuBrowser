@@ -52,6 +52,8 @@ fun Context.getExternalStorageDirectories(): Array<String> {
     val externalDirs = getExternalFilesDirs(null)
 
     for (file in externalDirs) {
+        if (file == null) continue
+
         val path = file.path.split("/Android")[0]
 
         if (Environment.isExternalStorageRemovable(file)) {
