@@ -116,7 +116,9 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
-                tmp.renameTo(info.name)
+                if (!tmp.renameTo(info.name)) {
+                    throw IOException("Rename is failed. name:\"${info.name}\", mimetype:${info.mimeType},exists:${info.root.findFile(info.name) != null}")
+                }
             }
 
             info.state = DownloadFileInfo.STATE_DOWNLOADED
