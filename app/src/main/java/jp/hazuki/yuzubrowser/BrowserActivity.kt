@@ -124,6 +124,12 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
     private val paddingReset = Runnable {
         adjustBrowserPadding(tabManagerIn.currentTabData)
     }
+    private var scrollableChangeListener = object : OnScrollableChangeListener {
+        override fun onScrollableChanged(scrollable: Boolean) {
+            val tab = currentTabData ?: return
+            adjustBrowserPadding(tab)
+        }
+    }
 
     private lateinit var toolbar: Toolbar
     private lateinit var tabManagerIn: UiTabManager
@@ -712,6 +718,7 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
             mWebView.setOnMyCreateContextMenuListener(null)
             mWebView.setGestureDetector(null)
             mWebView.paddingScrollChangedListener = null
+            mWebView.scrollableChangeListener = null
             webFrameLayout.removeView(mWebView.view)
             webViewBehavior.setWebView(null)
             webViewFastScroller.detachWebView()
@@ -727,9 +734,14 @@ class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvid
 
             it.setOnMyCreateContextMenuListener(userActionManager.onCreateContextMenuListener)
             it.paddingScrollChangedListener = toolbar
+            it.scrollableChangeListener = scrollableChangeListener
             userActionManager.setGestureDetector(it)
         }
         CookieManager.getInstance().setAcceptCookie(newTab.isEnableCookie)
+
+        if (oldTab == null || oldTab.mWebView.isScrollable != newTab.mWebView.isScrollable) {
+            adjustBrowserPadding(newTab)
+        }
     }
 
     private fun addTab(index: Int, tab: MainTabData) {

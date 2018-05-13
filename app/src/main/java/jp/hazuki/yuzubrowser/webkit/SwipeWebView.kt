@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,13 @@ import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.utils.ThemeUtils
 
-class SwipeWebView private constructor(context: Context, override val webView: NormalWebView) : SwipeRefreshLayout(context), CustomWebView by webView, SwipeRefreshLayout.OnRefreshListener, OnSwipeableChangeListener {
+class SwipeWebView private constructor(context: Context, override val webView: NormalWebView) : SwipeRefreshLayout(context), CustomWebView by webView, SwipeRefreshLayout.OnRefreshListener, OnScrollableChangeListener {
 
     constructor(context: Context) : this(context, WebViewProvider.getInstance(context))
 
     private var enableSwipe = false
     private var isSwipeEnable = false
+    override var scrollableChangeListener: OnScrollableChangeListener? = null
 
     private val mWebChromeClientWrapper = object : CustomWebChromeClientWrapper(this) {
         override fun onProgressChanged(web: CustomWebView, newProgress: Int) {
@@ -89,8 +90,9 @@ class SwipeWebView private constructor(context: Context, override val webView: N
         postDelayed({ isRefreshing = false }, TIMEOUT.toLong())
     }
 
-    override fun onSwipeableChanged(scrollable: Boolean) {
+    override fun onScrollableChanged(scrollable: Boolean) {
         setEnableInternal(enableSwipe && scrollable)
+        scrollableChangeListener?.onScrollableChanged(scrollable)
     }
 
     override fun setEnabled(enabled: Boolean) {

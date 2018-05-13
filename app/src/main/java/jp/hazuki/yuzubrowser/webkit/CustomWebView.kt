@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2018 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,8 @@ interface CustomWebView {
     var isNestedScrollingEnabledMethod: Boolean
 
     var paddingScrollChangedListener: OnWebViewScrollChangeListener?
+
+    var scrollableChangeListener: OnScrollableChangeListener?
 
     fun canGoBack(): Boolean
 
