@@ -64,8 +64,8 @@ import jp.hazuki.yuzubrowser.userjs.UserScript
 import jp.hazuki.yuzubrowser.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.extensions.getFakeChromeUserAgent
-import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.utils.extensions.readAssetsText
+import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webkit.listener.OnWebStateChangeListener
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermission
@@ -660,7 +660,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 controller.removeTab(i)
         }
 
-        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: WebChromeClient.FileChooserParams): Boolean {
+        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>?>, fileChooserParams: WebChromeClient.FileChooserParams): Boolean {
             if (webUploadHandler == null)
                 webUploadHandler = WebUploadHandler()
 
