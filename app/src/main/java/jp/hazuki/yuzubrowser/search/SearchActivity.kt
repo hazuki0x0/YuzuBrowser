@@ -248,7 +248,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
             adapter.addAll(suggestions)
             adapter.notifyDataSetChanged()
             if (bottomBoxMode && adapter.itemCount > 0) {
-                recyclerView.scrollToPosition(adapter.itemCount - 1)
+                recyclerView.scrollToPosition(0)
             }
         }
     }
