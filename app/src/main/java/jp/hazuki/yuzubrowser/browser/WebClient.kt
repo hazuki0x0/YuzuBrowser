@@ -26,7 +26,6 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Message
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.webkit.*
@@ -74,7 +73,7 @@ import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread
 
-class WebClient(private val activity: AppCompatActivity, private val controller: BrowserController) {
+class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) {
     private val patternManager = PatternUrlManager(activity.applicationContext)
     private val speedDialManager = SpeedDialAsyncManager(activity.applicationContext)
     private val speedDialHtml = SpeedDialHtml(activity.applicationContext)
@@ -254,8 +253,7 @@ class WebClient(private val activity: AppCompatActivity, private val controller:
             }
 
             private fun actionDownload(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-                DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null)
-                        .show(activity.supportFragmentManager, "download")
+                activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null), "download")
             }
 
             private fun actionOpen(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {

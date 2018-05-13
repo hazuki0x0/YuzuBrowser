@@ -75,7 +75,6 @@ import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialog
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialogFactory
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewPageFastScroller
 import jp.hazuki.yuzubrowser.utils.*
-import jp.hazuki.yuzubrowser.utils.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.utils.view.PointerView
 import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
@@ -87,7 +86,7 @@ import kotlinx.android.synthetic.main.browser_activity.*
 import java.lang.StringBuilder
 import java.util.*
 
-class BrowserActivity : LongPressFixActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
+class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
 
     private val asyncPermissions by lazy { AsyncPermissions(this) }
     private val handler = Handler(Looper.getMainLooper())
