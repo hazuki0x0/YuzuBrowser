@@ -210,22 +210,31 @@ private fun getExtensionFromMimeType(mimeType: String): String? {
     }
 }
 
-private val NAME_UTF_8 = Pattern.compile("filename\\*=UTF-8''(\\S+)")
-private val NAME_NORMAL = Pattern.compile("filename=\"(.*)\"")
+private const val NAME_UTF_8 = "filename\\*=UTF-8''(\\S+)"
+private const val NAME_NORMAL = "filename=\"(.*)\""
+private const val NAME_NO_QUOT = "filename=(\\S+)"
 
 fun guessFileNameFromContentDisposition(contentDisposition: String): String? {
-    val utf8 = NAME_UTF_8.matcher(contentDisposition)
-    if (utf8.find()) {
+    val utf8 = NAME_UTF_8.toRegex().find(contentDisposition)
+    if (utf8 != null) {
         /** RFC 6266 */
-        return URLDecoder.decode(utf8.group(1), "UTF-8")
+        return URLDecoder.decode(utf8.groupValues[1], "UTF-8")
     }
 
-    val normal = NAME_NORMAL.matcher(contentDisposition)
-    if (normal.find()) {
+    val normal = NAME_NORMAL.toRegex().find(contentDisposition)
+    if (normal != null) {
         return try {
-            URLDecoder.decode(normal.group(1), "UTF-8")
+            URLDecoder.decode(normal.groupValues[1], "UTF-8")
         } catch (e: IllegalArgumentException) {
-            FileUtils.replaceProhibitionWord(normal.group(1))
+            FileUtils.replaceProhibitionWord(normal.groupValues[1])
+        }
+    }
+    val noQuot = NAME_NO_QUOT.toRegex().find(contentDisposition)
+    if (noQuot != null) {
+        return try {
+            URLDecoder.decode(noQuot.groupValues[1], "UTF-8")
+        } catch (e: IllegalArgumentException) {
+            FileUtils.replaceProhibitionWord(noQuot.groupValues[1])
         }
     }
 
