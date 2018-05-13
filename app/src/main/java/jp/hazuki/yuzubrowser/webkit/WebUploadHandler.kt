@@ -46,32 +46,22 @@ class WebUploadHandler {
     }
 
     private fun WebChromeClient.FileChooserParams.createChooserIntent(): Intent {
-        var mimeType = "*/*"
         var acceptTypes = acceptTypes.toList()
         if (acceptTypes.isNotEmpty()) {
-            var joined = acceptTypes.joinToString("|")
-            var modified = false
+            acceptTypes = acceptTypes.filter { it.isNotEmpty() }
 
-            // Recreate types list if need
-            if (joined.contains(',')) {
-                acceptTypes = joined.split('|', ',')
-                modified = true
-            }
             // Convert extension to MimeType
             if (acceptTypes.any { !it.contains('/') }) {
                 acceptTypes = acceptTypes.map { if (it.contains('/')) it else getMimeType(it) }
-                modified = true
             }
-
-            if (modified) {
-                joined = acceptTypes.joinToString("|")
-            }
-            mimeType = "$joined|*/*"
         }
 
         return Intent(Intent.ACTION_GET_CONTENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = mimeType
+            if (acceptTypes.isNotEmpty()) {
+                putExtra(Intent.EXTRA_MIME_TYPES, acceptTypes.toTypedArray())
+            }
+            type = "*/*"
         }
     }
 }
