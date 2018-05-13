@@ -51,7 +51,7 @@ fun createUniqueFileName(root: DocumentFile, fileName: String): String {
 }
 
 fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): String {
-    if (root.findFile(fileName) == null) return fileName
+    if (root.findFile(fileName) == null && root.findFile(fileName + suffix) == null) return fileName
 
     val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
     var i = 1
@@ -68,7 +68,7 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
         builder.append(suffix)
         tmpName = builder.toString()
         builder.delete(0, builder.length)
-    } while (root.findFile(newName) != null && root.findFile(tmpName) != null)
+    } while (root.findFile(newName) != null || root.findFile(tmpName) != null)
 
     return newName
 }

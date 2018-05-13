@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.download.core.utils
 
 import android.support.v4.provider.DocumentFile
+import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.download.core.downloader.client.HttpClient
 import jp.hazuki.yuzubrowser.utils.createUniqueFileName
 
@@ -25,7 +26,7 @@ fun HttpClient.getFileName(root: DocumentFile, url: String, mimeType: String?, d
         for (raw in contents) {
             val name = guessFileNameFromContentDisposition(raw)
             if (name != null) {
-                return createUniqueFileName(root, name)
+                return createUniqueFileName(root, name, Constants.download.TMP_FILE_SUFFIX)
             }
         }
     }
