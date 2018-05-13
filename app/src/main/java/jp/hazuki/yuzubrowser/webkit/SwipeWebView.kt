@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Paint
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.widget.SwipeRefreshLayout
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,20 @@ class SwipeWebView private constructor(context: Context, override val webView: N
     private var enableSwipe = false
     private var isSwipeEnable = false
     override var scrollableChangeListener: OnScrollableChangeListener? = null
+    private var disableWhileZooming = false
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            disableWhileZooming = true
+            return false
+        }
+
+        override fun onDoubleTapEvent(e: MotionEvent): Boolean {
+            if (e.actionMasked == MotionEvent.ACTION_UP) {
+                disableWhileZooming = false
+            }
+            return false
+        }
+    })
 
     private val mWebChromeClientWrapper = object : CustomWebChromeClientWrapper(this) {
         override fun onProgressChanged(web: CustomWebView, newProgress: Int) {
@@ -110,14 +125,15 @@ class SwipeWebView private constructor(context: Context, override val webView: N
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        if (isSwipeEnable && isScrollable) {
+        gestureDetector.onTouchEvent(ev)
+        if (isSwipeEnable && isScrollable && !disableWhileZooming) {
             return super.onInterceptTouchEvent(ev)
         }
         return false
     }
 
-    override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        if (isSwipeEnable && isScrollable) {
+    override fun onTouchEvent(ev: MotionEvent): Boolean {
+        if (isSwipeEnable && isScrollable && !disableWhileZooming) {
             return super.onTouchEvent(ev)
         }
         return false
