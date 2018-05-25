@@ -95,7 +95,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
-    private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min,js") }
+    private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
 
     var renderingMode
         get() = webViewRenderingManager.mode
