@@ -82,7 +82,6 @@ import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.webrtc.core.WebRtcRequest
-import kotlinx.android.synthetic.main.browser_activity.*
 import java.lang.StringBuilder
 import java.util.*
 
@@ -1343,7 +1342,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         }
 
     override val pagePaddingHeight: Int
-        get() = topToolbarLayout.height + bottomOverlayLayout.height
+        get() = topToolbarLayout.height + bottomOverlayLayout.height + paddingFrame.height
 
     override var isFullscreenMode: Boolean = false
         set(enable) {
