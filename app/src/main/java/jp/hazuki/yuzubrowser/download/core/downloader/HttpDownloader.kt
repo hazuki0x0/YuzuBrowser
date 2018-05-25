@@ -117,7 +117,10 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
                 return false
             } else {
                 if (!tmp.renameTo(info.name)) {
-                    throw IOException("Rename is failed. name:\"${info.name}\", mimetype:${info.mimeType},exists:${info.root.findFile(info.name) != null}")
+                    throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                }
+                if (info.root.findFile(info.name) == null) {
+                    throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
                 }
             }
 
@@ -132,7 +135,11 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
                 tmp.delete()
                 info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
             }
-            downloadListener?.onFileDownloadFailed(info, null)
+            if (e is DownloadException) {
+                downloadListener?.onFileDownloadFailed(info, e.message)
+            } else {
+                downloadListener?.onFileDownloadFailed(info, null)
+            }
         }
         return false
     }
@@ -161,6 +168,8 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
             info.root.findFile("${info.name}${Constants.download.TMP_FILE_SUFFIX}")?.delete()
         }
     }
+
+    private class DownloadException(message: String) : IOException(message)
 
     companion object {
         private const val BUFFER_SIZE = 1024 * 2
