@@ -1343,7 +1343,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         }
 
     override val pagePaddingHeight: Int
-        get() = topToolbarLayout.height + bottomOverlayLayout.height
+        get() = topToolbarLayout.height + bottomOverlayLayout.height + paddingFrame.height
 
     override var isFullscreenMode: Boolean = false
         set(enable) {
