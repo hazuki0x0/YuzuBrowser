@@ -330,7 +330,11 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
         override fun onFileDownloading(info: DownloadFileInfo, progress: Long) {
             notification.run {
                 setAction(info)
-                setProgress(1000, (progress * 1000 / info.size).toInt(), info.size <= 0)
+                if (info.size <= 0) {
+                    setProgress(0, 0, true)
+                } else {
+                    setProgress(1000, (progress * 1000 / info.size).toInt(), false)
+                }
                 setStyle(bigTextStyle.bigText(info.getNotificationString(applicationContext)))
                 notificationManager.notify(info.id.toInt(), build())
             }
