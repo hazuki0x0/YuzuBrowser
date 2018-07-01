@@ -5,6 +5,7 @@
         <item>English</item>
         <item>Italian</item>
         <item>Japanese</item>
+        <item>Ukrainian</item>
     </string-array>
 
     <string-array name="language_value">
@@ -12,5 +13,6 @@
         <item>en</item>
         <item>it</item>
         <item>ja</item>
+        <item>uk</item>
     </string-array>
 </resources>
