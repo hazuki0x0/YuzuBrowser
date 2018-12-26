@@ -55,6 +55,7 @@ android {
         debug {
             ext.enableCrashlytics = false
             ext.alwaysUpdateBuildId = false
+            applicationIdSuffix ".debug"
         }
     }
     packagingOptions {
