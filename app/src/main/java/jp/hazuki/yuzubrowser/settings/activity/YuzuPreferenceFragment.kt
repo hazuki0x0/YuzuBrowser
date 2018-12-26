@@ -24,7 +24,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompatDividers
+import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.settings.preference.NightModePreference
@@ -33,7 +33,7 @@ import jp.hazuki.yuzubrowser.settings.preference.SlowRenderingPreference
 import jp.hazuki.yuzubrowser.settings.preference.WebTextSizePreference
 import jp.hazuki.yuzubrowser.settings.preference.common.*
 
-abstract class YuzuPreferenceFragment : PreferenceFragmentCompatDividers() {
+abstract class YuzuPreferenceFragment : PreferenceFragmentCompat() {
 
     var preferenceResId: Int = 0
         private set
@@ -50,7 +50,6 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompatDividers() {
             super.onCreateView(inflater, container, savedInstanceState)
         } finally {
             activity?.let {
-                setDividerPreferences(DIVIDER_PADDING_CHILD or DIVIDER_CATEGORY_BETWEEN or DIVIDER_CATEGORY_AFTER_LAST or DIVIDER_PREFERENCE_BETWEEN)
                 preferenceManager.sharedPreferencesName = AppData.PREFERENCE_NAME
                 val a = it.theme.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
                 val divider = a.getDrawable(0)

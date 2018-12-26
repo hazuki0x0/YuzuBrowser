@@ -33,7 +33,7 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
     private lateinit var bottomToolbar: View
     private lateinit var bottomBar: View
 
-    override fun layoutDependsOn(parent: CoordinatorLayout?, bottomBar: LinearLayout, dependency: View?): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
         if (dependency is AppBarLayout) {
             this.bottomBar = bottomBar
             topToolbar = dependency.findViewById(R.id.topToolbarLayout)
@@ -44,7 +44,7 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
         return false
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout?, bottomBar: LinearLayout, dependency: View): Boolean {
+    override fun onDependentViewChanged(parent: CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
         val bottomBarHeight = bottomToolbar.height
 
         if (topToolbar.height != 0) {

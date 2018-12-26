@@ -26,7 +26,8 @@ import jp.hazuki.yuzubrowser.adblock.faster.core.FilterMatcher
 import jp.hazuki.yuzubrowser.utils.IOUtils
 import jp.hazuki.yuzubrowser.utils.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.utils.fastmatch.FastMatcherList
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -46,7 +47,7 @@ class AdBlockController(context: Context) {
 
     fun update() {
         updating = true
-        launch {
+        GlobalScope.launch {
             lateinit var blackFilter: FilterMatcher
             lateinit var whiteFilter: FilterMatcher
             manager.getFastMatcherCachedList(AdBlockManager.BLACK_TABLE_NAME).let {
@@ -72,7 +73,7 @@ class AdBlockController(context: Context) {
     fun onResume() {
         if (updating) return
 
-        launch {
+        GlobalScope.launch {
             manager.updateMatcher(AdBlockManager.BLACK_TABLE_NAME, adBlocker?.blackList)
             manager.updateMatcher(AdBlockManager.WHITE_TABLE_NAME, adBlocker?.whiteList)
             manager.updateOrder(AdBlockManager.WHITE_PAGE_TABLE_NAME, whitePageList)

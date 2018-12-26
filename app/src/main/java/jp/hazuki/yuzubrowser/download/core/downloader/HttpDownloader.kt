@@ -82,10 +82,11 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
             }
 
             context.contentResolver.openOutputStream(tmp.uri, mode).use { output ->
+                if (output == null) throw IllegalStateException()
                 httpClient.inputStream.use { input ->
                     downloadListener?.onStartDownload(info)
 
-                    var len = -1
+                    var len: Int
                     var progress = info.currentSize
                     val buffer = ByteArray(BUFFER_SIZE)
                     var oldSize: Long

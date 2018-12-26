@@ -145,7 +145,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             REQUEST_SELECT_FILE -> if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-                listener!!.requestImport(data.data)
+                listener!!.requestImport(data.data!!)
             }
             REQUEST_SELECT_EXPORT -> if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
                 val handler = Handler()

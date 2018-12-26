@@ -50,8 +50,8 @@ class ActionNameArray : Serializable, Parcelable {
     }
 
     constructor(source: Parcel) {
-        actionList = source.createStringArray()
-        actionValues = source.createIntArray()
+        actionList = source.createStringArray()!!
+        actionValues = source.createIntArray()!!
     }
 
     override fun describeContents(): Int {

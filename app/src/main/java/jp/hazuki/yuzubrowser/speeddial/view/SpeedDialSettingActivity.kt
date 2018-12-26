@@ -173,7 +173,7 @@ class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, Fragmen
     }
 
     private fun shouldDisplayHomeUp() {
-        val canBack = fragmentManager.backStackEntryCount == 0
+        val canBack = supportFragmentManager.backStackEntryCount == 0
         supportActionBar?.setDisplayHomeAsUpEnabled(canBack)
     }
 

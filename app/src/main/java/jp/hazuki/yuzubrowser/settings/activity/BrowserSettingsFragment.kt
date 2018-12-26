@@ -86,7 +86,7 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
                 val activity = activity ?: return
                 if (resultCode != Activity.RESULT_OK || data == null) return
 
-                val uri = data.data
+                val uri = data.data ?: return
 
                 if (uri.scheme == "content") {
                     activity.contentResolver.takePersistableUriPermission(uri,

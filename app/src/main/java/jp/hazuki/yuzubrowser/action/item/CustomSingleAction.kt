@@ -77,7 +77,7 @@ class CustomSingleAction : SingleAction {
     }
 
     private constructor(source: Parcel) : super(source.readInt()) {
-        action = source.readParcelable(Action::class.java.classLoader)
+        action = source.readParcelable(Action::class.java.classLoader)!!
         mName = source.readString()
     }
 

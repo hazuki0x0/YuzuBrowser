@@ -76,10 +76,11 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
             }
 
             context.contentResolver.openOutputStream(tmp.uri, "w").use { output ->
+                if (output == null) throw IllegalStateException()
                 conn.inputStream.use { input ->
                     downloadListener?.onStartDownload(info)
 
-                    var len = -1
+                    var len: Int
                     var progress = info.currentSize
                     val buffer = ByteArray(BUFFER_SIZE)
                     var oldSize: Long

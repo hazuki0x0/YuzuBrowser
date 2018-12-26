@@ -46,7 +46,7 @@ class FallbackFolderSelectActivity : AppCompatActivity() {
             val activity = activity ?: throw IllegalStateException()
             val arguments = arguments ?: throw IllegalArgumentException()
 
-            val root = arguments.getString(ROOT)
+            val root = arguments.getString(ROOT) ?: throw IllegalArgumentException()
             val path = arguments.getString(PATH)
             val parent = File(path)
             val directories = parent.listFiles()

@@ -58,7 +58,7 @@ class SaveWebArchiveDialog : DialogFragment() {
 
         saveArchiveCheckBox.visibility = View.VISIBLE
 
-        val file = arguments.getParcelable<DownloadFile>(ARG_FILE)
+        val file = arguments.getParcelable<DownloadFile>(ARG_FILE) ?: throw IllegalArgumentException()
 
         root = Uri.parse(AppData.download_folder.get()).toDocumentFile(activity)
 
@@ -108,8 +108,9 @@ class SaveWebArchiveDialog : DialogFragment() {
         when (requestCode) {
             REQUEST_FOLDER -> {
                 if (resultCode != Activity.RESULT_OK || data == null) return
+                val uri = data.data ?: return
 
-                root = data.data.toDocumentFile(activity)
+                root = uri.toDocumentFile(activity)
                 folderButton.text = root.name
             }
         }

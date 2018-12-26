@@ -151,7 +151,7 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
     }
 
     private inner class Touch : ItemTouchHelper.Callback() {
-        override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
             return if (manager.size > 1) {
                 ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or
                         ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
@@ -160,7 +160,7 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
             }
         }
 
-        override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             edited = true
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             return true
@@ -172,11 +172,11 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
             val searchUrl = adapter.remove(position)
 
             Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.undo, {
+                    .setAction(R.string.undo) {
                         edited = true
                         adapter.add(position, searchUrl)
                         adapter.notifyItemInserted(position)
-                    })
+                    }
                     .show()
         }
 

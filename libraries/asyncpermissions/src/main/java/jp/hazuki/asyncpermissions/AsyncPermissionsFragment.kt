@@ -24,7 +24,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.PermissionChecker
 import android.support.v7.app.AppCompatActivity
-import kotlinx.coroutines.experimental.CancellableContinuation
+import kotlinx.coroutines.CancellableContinuation
+import kotlin.coroutines.resume
 
 class AsyncPermissionsFragment : Fragment() {
 

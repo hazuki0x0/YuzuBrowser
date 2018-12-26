@@ -39,7 +39,7 @@ class UserScriptInfo : Parcelable {
 
     private constructor(parcel: Parcel) {
         id = parcel.readLong()
-        data = parcel.readString()
+        data = parcel.readString()!!
         isEnabled = parcel.readByte().toInt() != 0
     }
 

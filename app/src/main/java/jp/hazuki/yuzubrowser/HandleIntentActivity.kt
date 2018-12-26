@@ -51,9 +51,9 @@ class HandleIntentActivity : AppCompatActivity() {
 
         if (Intent.ACTION_VIEW == action) {
             var url = intent.dataString
-            if (TextUtils.isEmpty(url))
+            if (url.isNullOrEmpty())
                 url = intent.getStringExtra(Intent.EXTRA_TEXT)
-            if (!TextUtils.isEmpty(url)) {
+            if (!url.isNullOrEmpty()) {
                 try {
                     val openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false)
                     startBrowser(url, openInNewTab, openInNewTab)

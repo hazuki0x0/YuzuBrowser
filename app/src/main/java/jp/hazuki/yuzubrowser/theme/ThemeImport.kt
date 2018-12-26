@@ -20,17 +20,15 @@ import android.content.Context
 import android.net.Uri
 import jp.hazuki.yuzubrowser.BrowserApplication
 import jp.hazuki.yuzubrowser.R
-import jp.hazuki.yuzubrowser.utils.Deferred
 import jp.hazuki.yuzubrowser.utils.ErrorReport
 import jp.hazuki.yuzubrowser.utils.FileUtils
-import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.extensions.forEach
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.zip.ZipInputStream
 
-internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> = async {
+internal fun importTheme(context: Context, uri: Uri):Result {
     val root = File(BrowserApplication.externalUserDirectory, "theme")
     val tmpFolder = File(root, System.currentTimeMillis().toString())
 
@@ -46,7 +44,7 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
                     }
                     if (!file.mkdirs()) {
                         FileUtils.deleteFile(tmpFolder)
-                        return@async Result(false, context.getString(R.string.cant_create_folder))
+                        return Result(false, context.getString(R.string.cant_create_folder))
                     }
                 } else {
                     if (file.exists()) {
@@ -54,11 +52,11 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
                     } else if (!file.parentFile.exists()) {
                         if (!file.parentFile.mkdirs()) {
                             FileUtils.deleteFile(tmpFolder)
-                            return@async Result(false, context.getString(R.string.cant_create_folder))
+                            return Result(false, context.getString(R.string.cant_create_folder))
                         }
                     }
                     FileOutputStream(file).use { os ->
-                        var len = 0
+                        var len: Int
                         while (zis.read(buffer).also { len = it } > 0) {
                             os.write(buffer, 0, len)
                         }
@@ -69,7 +67,7 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
     } catch (e: IOException) {
         e.printStackTrace()
         FileUtils.deleteFile(tmpFolder)
-        return@async Result(false, context.getString(R.string.theme_unknown_error))
+        return Result(false, context.getString(R.string.theme_unknown_error))
     }
 
     val manifestFile = File(tmpFolder, ThemeManifest.MANIFEST)
@@ -79,7 +77,7 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
         manifest = ThemeManifest.decodeManifest(manifestFile)
         if (manifest == null) {
             FileUtils.deleteFile(tmpFolder)
-            return@async Result(false, context.getString(R.string.theme_manifest_not_found))
+            return Result(false, context.getString(R.string.theme_manifest_not_found))
         }
     } catch (e: ThemeManifest.IllegalManifestException) {
         FileUtils.deleteFile(tmpFolder)
@@ -89,14 +87,14 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
             2 -> R.string.theme_unknown_version
             else -> R.string.theme_unknown_error
         }
-        return@async Result(false, context.getString(text))
+        return Result(false, context.getString(text))
     }
 
 
     val name = FileUtils.replaceProhibitionWord(manifest.name)
     if (name.isEmpty()) {
         FileUtils.deleteFile(tmpFolder)
-        return@async Result(false, context.getString(R.string.theme_broken_manifest))
+        return Result(false, context.getString(R.string.theme_broken_manifest))
     }
 
     val theme = File(root, name)
@@ -111,11 +109,11 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
                         if (dest.id == manifest.id) {
                             if (dest.version == manifest.version) {
                                 FileUtils.deleteFile(tmpFolder)
-                                return@async Result(false, context.getString(R.string.theme_installed_version))
+                                return Result(false, context.getString(R.string.theme_installed_version))
                             }
                         } else {
                             FileUtils.deleteFile(tmpFolder)
-                            return@async Result(false, context.getString(R.string.theme_same_name, manifest.name))
+                            return Result(false, context.getString(R.string.theme_same_name, manifest.name))
                         }
                     }
                 } catch (e: ThemeManifest.IllegalManifestException) {
@@ -127,11 +125,11 @@ internal suspend fun importTheme(context: Context, uri: Uri): Deferred<Result> =
     }
 
     if (tmpFolder.renameTo(theme)) {
-        return@async Result(true, manifest.name)
+        return Result(true, manifest.name)
     }
 
     FileUtils.deleteFile(tmpFolder)
-    return@async Result(false, context.getString(R.string.theme_unknown_error))
+    return Result(false, context.getString(R.string.theme_unknown_error))
 }
 
 class Result constructor(val isSuccess: Boolean, val message: String)

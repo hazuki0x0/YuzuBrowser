@@ -340,7 +340,7 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
         mCoordinatorLayout = coordinatorLayout
         mAppBarLayout = appBarLayout
 
-        appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             show(true)
 
             val layoutParams = layoutParams as ViewGroup.MarginLayoutParams
@@ -348,7 +348,7 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
             mAppBarLayoutOffset = -verticalOffset
 
             setLayoutParams(layoutParams)
-        }
+        })
     }
 
     fun setOnHandleTouchListener(listener: View.OnTouchListener) {

@@ -319,7 +319,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
     fun attachRecyclerView(recyclerView: RecyclerView) {
         this.recyclerView = recyclerView
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 show(true)
             }
         })
@@ -338,8 +338,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
     fun attachAppBarLayout(coordinatorLayout: CoordinatorLayout, appBarLayout: AppBarLayout) {
         this.coordinatorLayout = coordinatorLayout
         this.appBarLayout = appBarLayout
-
-        appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             show(true)
 
             val layoutParams = layoutParams as ViewGroup.MarginLayoutParams
@@ -347,7 +346,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
             appBarLayoutOffset = -verticalOffset
 
             setLayoutParams(layoutParams)
-        }
+        })
     }
 
     fun setOnHandleTouchListener(listener: View.OnTouchListener) {

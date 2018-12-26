@@ -30,10 +30,10 @@ class GestureFrameLayout(context: Context, attrs: AttributeSet?) : FrameLayout(c
     private val gestureOverlay: CustomGestureOverlayView by bind(R.id.webGestureOverlayViewInner)
 
     fun setWebFrame(appBarLayout: AppBarLayout) {
-        appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             viewOffset = verticalOffset + appBarLayout.totalScrollRange
             gestureOverlay.translationY = -viewOffset.toFloat()
-        }
+        })
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

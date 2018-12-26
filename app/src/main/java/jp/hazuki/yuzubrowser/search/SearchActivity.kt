@@ -45,14 +45,15 @@ import jp.hazuki.yuzubrowser.theme.ThemeData
 import jp.hazuki.yuzubrowser.utils.UrlUtils
 import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
-import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.extensions.clipboardText
 import jp.hazuki.yuzubrowser.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.utils.view.recycler.OutSideClickableRecyclerView
 import kotlinx.android.synthetic.main.tab_list.*
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import java.util.*
 
 class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
@@ -233,7 +234,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
         queryJob?.cancel()
         queryJob = ui {
-            val search = async { getSearchQuery(query) }
+            val search = async(Dispatchers.Default) { getSearchQuery(query) }
             val histories = if (AppData.search_suggest_histories.get()) async { getHistoryQuery(query) } else null
             val bookmarks = if (AppData.search_suggest_bookmarks.get()) async { getBookmarkQuery(query) } else null
 

@@ -17,7 +17,7 @@
 package jp.hazuki.asyncpermissions
 
 import android.support.v7.app.AppCompatActivity
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class AsyncPermissions(activity: AppCompatActivity) {
 

@@ -30,9 +30,9 @@ import jp.hazuki.yuzubrowser.utils.ImageUtils
 import jp.hazuki.yuzubrowser.utils.Logger
 import java.util.*
 
-fun decodeToReaderData(context: Context, url: String, userAgent: String): ReaderData? {
+fun decodeToReaderData(context: Context, url: String, userAgent: String?): ReaderData? {
     val fetcher = HtmlFetcher()
-    if (TextUtils.isEmpty(userAgent)) {
+    if (userAgent.isNullOrEmpty()) {
         fetcher.userAgent = WebSettings.getDefaultUserAgent(context)
     } else {
         fetcher.userAgent = userAgent
@@ -66,7 +66,7 @@ fun decodeToReaderData(context: Context, url: String, userAgent: String): Reader
     return null
 }
 
-private fun getImage(context: Context, imageUrl: String, url: String, userAgent: String): Drawable {
+private fun getImage(context: Context, imageUrl: String, url: String, userAgent: String?): Drawable {
     val drawable = ImageUtils.getDrawable(context, HttpUtils.getImage(imageUrl, userAgent, url))
     return drawable ?: ColorDrawable(0)
 }

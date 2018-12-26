@@ -92,9 +92,9 @@ class CloseAutoSelectAction : SingleAction, Parcelable {
     }
 
     private constructor(source: Parcel) : super(source.readInt()) {
-        defaultAction = source.readParcelable(Action::class.java.classLoader)
-        intentAction = source.readParcelable(Action::class.java.classLoader)
-        windowAction = source.readParcelable(Action::class.java.classLoader)
+        defaultAction = source.readParcelable(Action::class.java.classLoader)!!
+        intentAction = source.readParcelable(Action::class.java.classLoader)!!
+        windowAction = source.readParcelable(Action::class.java.classLoader)!!
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {

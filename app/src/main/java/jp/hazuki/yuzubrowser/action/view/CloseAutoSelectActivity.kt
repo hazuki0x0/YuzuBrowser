@@ -25,7 +25,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
-
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.action.Action
 import jp.hazuki.yuzubrowser.utils.app.OnActivityResultListener
@@ -91,6 +90,7 @@ class CloseAutoSelectActivity : ThemeActivity() {
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
+            val activity = activity ?: throw IllegalStateException()
             val arguments = arguments ?: throw IllegalArgumentException()
 
             defaultAction = arguments.getParcelable(DEFAULT) ?: Action()
@@ -119,7 +119,7 @@ class CloseAutoSelectActivity : ThemeActivity() {
                         .setTitle(R.string.pref_close_window)
                         .create(),
                         REQUEST_WINDOW)
-                else -> throw IllegalArgumentException("Unknown position:" + position)
+                else -> throw IllegalArgumentException("Unknown position:$position")
             }
         }
 

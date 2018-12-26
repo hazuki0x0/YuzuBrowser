@@ -41,8 +41,8 @@ fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileIn
         try {
             val image = Base64.decode(imageData.getData(), Base64.DEFAULT)
 
-            openOutputStream(info.root.createFile(imageData.mimeType, info.name).uri).use { outputStream ->
-
+            openOutputStream(info.root.createFile(imageData.mimeType, info.name)!!.uri).use { outputStream ->
+                checkNotNull(outputStream)
                 outputStream.write(image)
                 outputStream.flush()
             }
@@ -245,7 +245,7 @@ fun getDownloadFolderUri(): Uri {
     return Uri.parse(AppData.download_folder.get())
 }
 
-fun DownloadFileInfo.createFileOpenIntent(context: Context) = createFileOpenIntent(context, root.findFile(name).uri, mimeType, name)
+fun DownloadFileInfo.createFileOpenIntent(context: Context) = createFileOpenIntent(context, root.findFile(name)!!.uri, mimeType, name)
 
 fun DownloadFileInfo.getNotificationString(context: Context): String {
     return if (size > 0) {
@@ -265,7 +265,7 @@ fun DownloadFileInfo.checkFlag(flag: Int): Boolean = (state and flag) == flag
 
 fun Uri.toDocumentFile(context: Context): DocumentFile {
     return when (scheme) {
-        ContentResolver.SCHEME_CONTENT -> DocumentFile.fromTreeUri(context, this)
+        ContentResolver.SCHEME_CONTENT -> DocumentFile.fromTreeUri(context, this)!!
         "file" -> DocumentFile.fromFile(File(path))
         else -> throw IllegalStateException("unknown scheme :$scheme, Uri:$this")
     }

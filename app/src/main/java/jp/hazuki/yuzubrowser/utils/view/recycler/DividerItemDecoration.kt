@@ -32,7 +32,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration {
 
     constructor(context: Context) {
         val a = context.obtainStyledAttributes(ATTRS)
-        mDivider = a.getDrawable(0)
+        mDivider = a.getDrawable(0)!!
         a.recycle()
     }
 
@@ -40,7 +40,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration {
         mDivider = DividerColorDrawable(context, color)
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         drawVertical(c, parent)
     }
 
@@ -60,7 +60,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration {
         }
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         outRect.set(0, 0, 0, mDivider.intrinsicHeight)
     }
 

@@ -33,6 +33,10 @@ fun readItLater(context: Context, resolver: ContentResolver, url: String?, webVi
         put(ReadItLaterProvider.URL, page)
         put(ReadItLaterProvider.TITLE, webView.title ?: page)
     })
+    if (uri == null) {
+        Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show()
+        return
+    }
     val cursor = resolver.query(uri, null, null, null, null)
     if (cursor != null) {
         cursor.moveToFirst()

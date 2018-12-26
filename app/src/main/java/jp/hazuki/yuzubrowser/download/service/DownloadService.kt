@@ -212,7 +212,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
         override fun run() {
             if (isAbort) return
 
-            val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread")
+            val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread:wakelock")
             prepareThread(wakelock)
 
             if (info.id < 0) {

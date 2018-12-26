@@ -19,12 +19,13 @@ package jp.hazuki.yuzubrowser.theme
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.activity.MainSettingsActivity
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ThemeImportActivity : ThemeActivity() {
 
@@ -33,11 +34,13 @@ class ThemeImportActivity : ThemeActivity() {
         setContentView(R.layout.fragment_base)
 
         if (intent != null && Intent.ACTION_VIEW == intent.action && intent.data != null) {
+            val uri = intent.data ?: return
+
             ui {
                 val dialog = ProgressDialog("Installing...", false, false)
                 dialog.show(supportFragmentManager, "dialog")
 
-                val result = importTheme(applicationContext, intent.data).await()
+                val result = withContext(Dispatchers.Default) { importTheme(applicationContext, uri) }
 
                 dialog.dismiss()
                 if (result.isSuccess) {

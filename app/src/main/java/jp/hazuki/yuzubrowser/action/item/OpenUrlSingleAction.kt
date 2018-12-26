@@ -82,7 +82,7 @@ class OpenUrlSingleAction : SingleAction, Parcelable {
     }
 
     private constructor(source: Parcel) : super(source.readInt()) {
-        url = source.readString()
+        url = source.readString()!!
         targetTab = source.readInt()
     }
 

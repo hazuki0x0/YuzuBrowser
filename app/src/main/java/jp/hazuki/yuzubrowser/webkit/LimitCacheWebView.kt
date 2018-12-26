@@ -212,6 +212,7 @@ class LimitCacheWebView(context: Context) : AbstractCacheWebView(context), TabCa
         for (i in tabIndexList.indices) {
             val indexData = tabIndexList[i]
             val state = inState.getBundle(BUNDLE_WEB_NO + i)
+            checkNotNull(state)
             tabSaveData.put(indexData.id, state)
 
             if (inState.getBoolean(BUNDLE_LOADED + indexData.id, false)) {

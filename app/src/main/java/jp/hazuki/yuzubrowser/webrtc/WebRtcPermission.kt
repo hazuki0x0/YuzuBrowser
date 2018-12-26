@@ -30,6 +30,7 @@ class WebRtcPermission(private val database: WebPermissionsDatabase) {
 
     fun requestPermission(permissionRequest: PermissionRequest, webRtcRequest: WebRtcRequest) {
         val host = permissionRequest.origin.host
+        checkNotNull(host)
         val resources = permissionRequest.resources
         val permissions = permissionRequest.permissions
         val site = sitePermissions[host] ?: database[host]?.also { sitePermissions[host] = it }

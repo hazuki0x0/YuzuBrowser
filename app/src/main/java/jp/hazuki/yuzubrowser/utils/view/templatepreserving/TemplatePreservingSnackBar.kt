@@ -74,7 +74,7 @@ private constructor(parent: ViewGroup, content: View, contentViewCallback: Conte
         return this
     }
 
-    private class ContentViewCallback internal constructor(private val content: View) : BaseTransientBottomBar.ContentViewCallback {
+    private class ContentViewCallback internal constructor(private val content: View) : android.support.design.snackbar.ContentViewCallback {
 
         override fun animateContentIn(delay: Int, duration: Int) {
             // add custom *in animations for your views

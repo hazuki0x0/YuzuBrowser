@@ -48,6 +48,7 @@ class DebugActivity : ThemeActivity() {
     class ItemFragment : ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
+            val activity = activity ?: throw IllegalStateException()
             val list = arrayOf("file list", "activity list", "action json string", "action list json string", "environment", "language")
             listAdapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, list)
         }

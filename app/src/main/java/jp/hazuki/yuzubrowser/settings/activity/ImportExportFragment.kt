@@ -140,8 +140,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                                             bundle.putSerializable("manager", manager)
                                             bundle.putSerializable("folder", root)
                                             loaderManager.restartLoader(2, bundle, this@ImportExportFragment)
-                                            progress = ProgressDialog(getString(R.string.restoring)).also {
-                                                it.show(childFragmentManager, "progress")
+                                            progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
+                                                dialog.show(childFragmentManager, "progress")
                                             }
                                             handler.setDialog(progress)
                                         }
@@ -196,8 +196,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                                 val bundle = Bundle()
                                 bundle.putSerializable("file", file)
                                 loaderManager.restartLoader(4, bundle, this@ImportExportFragment)
-                                progress = ProgressDialog(getString(R.string.restoring)).also {
-                                    it.show(childFragmentManager, "progress")
+                                progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
+                                    dialog.show(childFragmentManager, "progress")
                                 }
                                 handler.setDialog(progress)
                             }
@@ -243,8 +243,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                                             val bundle = Bundle()
                                             bundle.putSerializable("file", file)
                                             loaderManager.restartLoader(0, bundle, this@ImportExportFragment)
-                                            progress = ProgressDialog(getString(R.string.restoring)).also {
-                                                it.show(childFragmentManager, "progress")
+                                            progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
+                                                dialog.show(childFragmentManager, "progress")
                                             }
                                             handler.setDialog(progress)
                                         }
@@ -330,7 +330,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
     }
 
-    val appCompatActivity: AppCompatActivity
+    private val appCompatActivity: AppCompatActivity
         get() = activity as AppCompatActivity
 
     private class DialogHandler : Handler() {

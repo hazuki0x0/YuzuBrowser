@@ -30,9 +30,9 @@ import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
-import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
+import kotlinx.coroutines.async
 
 class FastDownloadActivity : ThemeActivity() {
 

@@ -79,12 +79,16 @@ import jp.hazuki.yuzubrowser.webkit.TabType
 import jp.hazuki.yuzubrowser.webkit.evaluateJavascript
 import jp.hazuki.yuzubrowser.webkit.getUserAgent
 import jp.hazuki.yuzubrowser.webkit.handler.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.jetbrains.anko.toast
 import java.io.File
 import java.io.IOException
 
 class ActionExecutor(private val controller: BrowserController) : ActionController {
     override fun run(action: SingleAction, target: ActionController.HitTestResultTargetInfo): Boolean {
         val result = target.webView.hitTestResult ?: return false
+        val url = result.extra ?: return false
 
         when (result.type) {
             WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
@@ -94,46 +98,46 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_OPEN_NEW -> {
-                        controller.openInNewTab(result.extra, TabType.WINDOW)
+                        controller.openInNewTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_BG -> {
-                        controller.openInBackground(result.extra, TabType.WINDOW)
+                        controller.openInBackground(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_NEW_RIGHT -> {
-                        controller.openInRightNewTab(result.extra, TabType.WINDOW)
+                        controller.openInRightNewTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_BG_RIGHT -> {
-                        controller.openInRightBgTab(result.extra, TabType.WINDOW)
+                        controller.openInRightBgTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_SHARE -> {
-                        WebUtils.shareWeb(controller.activity, result.extra, null)
+                        WebUtils.shareWeb(controller.activity, url, null)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_OTHERS -> {
-                        controller.activity.startActivity(PackageUtils.createChooser(controller.activity, result.extra, controller.applicationContextInfo.getText(R.string.open_other_app)))
+                        controller.activity.startActivity(PackageUtils.createChooser(controller.activity, url, controller.applicationContextInfo.getText(R.string.open_other_app)))
                         return true
                     }
                     SingleAction.LPRESS_COPY_URL -> {
-                        controller.applicationContextInfo.setClipboardWithToast(result.extra)
+                        controller.applicationContextInfo.setClipboardWithToast(url)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
-                        DownloadDialog(result.extra, target.webView.settings.userAgentString)//TODO referer
+                        DownloadDialog(url, target.webView.settings.userAgentString)//TODO referer
                                 .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE -> {
-                        val file = DownloadFile(result.extra, null, DownloadRequest(null, target.webView.settings.userAgentString, null))
+                        val file = DownloadFile(url, null, DownloadRequest(null, target.webView.settings.userAgentString, null))
                         controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
                     SingleAction.LPRESS_PATTERN_MATCH -> {
                         controller.activity.startActivity(Intent(controller.activity, PatternUrlActivity::class.java).apply {
-                            putExtra(Intent.EXTRA_TEXT, result.extra)
+                            putExtra(Intent.EXTRA_TEXT, url)
                         })
                         return true
                     }
@@ -157,80 +161,80 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             WebView.HitTestResult.IMAGE_TYPE -> {
                 when (action.id) {
                     SingleAction.LPRESS_OPEN_IMAGE -> {
-                        target.webView.loadUrl(result.extra)
+                        target.webView.loadUrl(url)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_NEW -> {
-                        controller.openInNewTab(result.extra, TabType.WINDOW)
+                        controller.openInNewTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_BG -> {
-                        controller.openInBackground(result.extra, TabType.WINDOW)
+                        controller.openInBackground(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_NEW_RIGHT -> {
-                        controller.openInRightNewTab(result.extra, TabType.WINDOW)
+                        controller.openInRightNewTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_BG_RIGHT -> {
-                        controller.openInRightBgTab(result.extra, TabType.WINDOW)
+                        controller.openInRightBgTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_SHARE_IMAGE_URL -> {
-                        WebUtils.shareWeb(controller.activity, result.extra, null)
+                        WebUtils.shareWeb(controller.activity, url, null)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_OTHERS -> {
-                        controller.activity.startActivity(PackageUtils.createChooser(controller.activity, result.extra, controller.activity.getText(R.string.open_other_app)))
+                        controller.activity.startActivity(PackageUtils.createChooser(controller.activity, url, controller.activity.getText(R.string.open_other_app)))
                         return true
                     }
                     SingleAction.LPRESS_COPY_IMAGE_URL -> {
-                        controller.applicationContextInfo.setClipboardWithToast(result.extra)
+                        controller.applicationContextInfo.setClipboardWithToast(url)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog(result.extra, target.webView.settings.userAgentString, target.webView.url, ".jpg")
+                        DownloadDialog(url, target.webView.settings.userAgentString, target.webView.url, ".jpg")
                                 .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
-                        controller.openInNewTab(SearchUtils.makeGoogleImageSearch(result.extra), TabType.WINDOW)
+                        controller.openInNewTab(SearchUtils.makeGoogleImageSearch(url), TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_IMAGE_RES_BLOCK -> {
                         controller.activity.startActivity(Intent(controller.activity, ResourceBlockListActivity::class.java).apply {
                             setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE)
-                            putExtra(Intent.EXTRA_TEXT, result.extra)
+                            putExtra(Intent.EXTRA_TEXT, url)
                         })
                         return true
                     }
                     SingleAction.LPRESS_PATTERN_MATCH -> {
                         controller.activity.startActivity(Intent(controller.activity, PatternUrlActivity::class.java).apply {
-                            putExtra(Intent.EXTRA_TEXT, result.extra)
+                            putExtra(Intent.EXTRA_TEXT, url)
                         })
                         return true
                     }
                     SingleAction.LPRESS_SHARE_IMAGE -> {
                         val intent = Intent(controller.activity, FastDownloadActivity::class.java)
-                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, result.extra)
+                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
                         intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
                         intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
                         controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
-                        val file = DownloadFile(result.extra, null,
+                        val file = DownloadFile(url, null,
                                 DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
                         controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
-                        AddAdBlockDialog.addBackListInstance(result.extra)
+                        AddAdBlockDialog.addBackListInstance(url)
                                 .show(controller.activity.supportFragmentManager, "add black")
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST -> {
-                        AddAdBlockDialog.addWhiteListInstance(result.extra)
+                        AddAdBlockDialog.addWhiteListInstance(url)
                                 .show(controller.activity.supportFragmentManager, "add white")
                         return true
                     }
@@ -276,69 +280,69 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE -> {
-                        target.webView.loadUrl(result.extra)
+                        target.webView.loadUrl(url)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_NEW -> {
-                        controller.openInNewTab(result.extra, TabType.WINDOW)
+                        controller.openInNewTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_BG -> {
-                        controller.openInBackground(result.extra, TabType.WINDOW)
+                        controller.openInBackground(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_NEW_RIGHT -> {
-                        controller.openInRightNewTab(result.extra, TabType.WINDOW)
+                        controller.openInRightNewTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_BG_RIGHT -> {
-                        controller.openInRightBgTab(result.extra, TabType.WINDOW)
+                        controller.openInRightBgTab(url, TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_SHARE_IMAGE_URL -> {
-                        WebUtils.shareWeb(controller.activity, result.extra, null)
+                        WebUtils.shareWeb(controller.activity, url, null)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_OTHERS -> {
-                        controller.activity.startActivity(PackageUtils.createChooser(controller.activity, result.extra, controller.activity.getText(R.string.open_other_app)))
+                        controller.activity.startActivity(PackageUtils.createChooser(controller.activity, url, controller.activity.getText(R.string.open_other_app)))
                         return true
                     }
                     SingleAction.LPRESS_COPY_IMAGE_URL -> {
-                        controller.applicationContextInfo.setClipboardWithToast(result.extra)
+                        controller.applicationContextInfo.setClipboardWithToast(url)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog(result.extra, target.webView.settings.userAgentString, target.webView.url, ".jpg")
+                        DownloadDialog(url, target.webView.settings.userAgentString, target.webView.url, ".jpg")
                                 .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
-                        controller.openInNewTab(SearchUtils.makeGoogleImageSearch(result.extra), TabType.WINDOW)
+                        controller.openInNewTab(SearchUtils.makeGoogleImageSearch(url), TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_IMAGE_RES_BLOCK -> {
                         controller.activity.startActivity(Intent(controller.activity, ResourceBlockListActivity::class.java).apply {
                             setAction(ResourceBlockListActivity.ACTION_BLOCK_IMAGE)
-                            putExtra(Intent.EXTRA_TEXT, result.extra)
+                            putExtra(Intent.EXTRA_TEXT, url)
                         })
                         return true
                     }
                     SingleAction.LPRESS_PATTERN_MATCH -> {
                         controller.activity.startActivity(Intent(controller.activity, PatternUrlActivity::class.java).apply {
-                            putExtra(Intent.EXTRA_TEXT, result.extra)
+                            putExtra(Intent.EXTRA_TEXT, url)
                         })
                         return true
                     }
                     SingleAction.LPRESS_SHARE_IMAGE -> {
                         val intent = Intent(controller.activity, FastDownloadActivity::class.java)
-                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, result.extra)
+                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
                         intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
                         intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
                         controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
-                        val file = DownloadFile(result.extra, null,
+                        val file = DownloadFile(url, null,
                                 DownloadRequest(target.webView.url, target.webView.settings.userAgentString, ".jpg"))
                         controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
@@ -348,18 +352,18 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
-                        AddAdBlockDialog.addBackListInstance(result.extra)
+                        AddAdBlockDialog.addBackListInstance(url)
                                 .show(controller.activity.supportFragmentManager, "add black")
                         return true
                     }
                     SingleAction.LPRESS_ADD_WHITE_LIST -> {
                         target.webView.requestFocusNodeHref(WebSrcImageWhiteListHandler(controller.activity).obtainMessage())
-                        AddAdBlockDialog.addWhiteListInstance(result.extra)
+                        AddAdBlockDialog.addWhiteListInstance(url)
                                 .show(controller.activity.supportFragmentManager, "add white")
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST -> {
-                        AddAdBlockDialog.addWhiteListInstance(result.extra).show(controller.activity.supportFragmentManager, "add white")
+                        AddAdBlockDialog.addWhiteListInstance(url).show(controller.activity.supportFragmentManager, "add white")
                         return true
                     }
                     else -> return run(action, target, null)
@@ -503,10 +507,10 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 titleTextView.text = tab.title
                 val url = tab.url
                 urlTextView.text = UrlUtils.decodeUrl(url)
-                urlTextView.setOnLongClickListener({ _ ->
+                urlTextView.setOnLongClickListener {
                     controller.applicationContextInfo.setClipboardWithToast(url)
                     true
-                })
+                }
 
                 AlertDialog.Builder(controller.activity)
                         .setTitle(R.string.page_info)
@@ -523,7 +527,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 when {
                     url == null -> controller.applicationContextInfo.setClipboardWithToast(title)
                     title == null -> controller.applicationContextInfo.setClipboardWithToast(url)
-                    else -> controller.applicationContextInfo.setClipboardWithToast(title + " " + url)
+                    else -> controller.applicationContextInfo.setClipboardWithToast("$title $url")
                 }
             }
             SingleAction.TAB_HISTORY -> controller.showTabHistory(actionTarget)
@@ -555,7 +559,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                                 Toast.makeText(controller.applicationContextInfo, R.string.failed, Toast.LENGTH_SHORT).show()
                             FileUtils.notifyImageFile(controller.applicationContextInfo, file.absolutePath)
                         }
-                        else -> Toast.makeText(controller.applicationContextInfo, "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show()
+                        else -> Toast.makeText(controller.applicationContextInfo, "Unknown screenshot type : $type", Toast.LENGTH_LONG).show()
                     }
                 } catch (e: IOException) {
                     ErrorReport.printAndWriteLog(e)
@@ -571,7 +575,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     when (type) {
                         ShareScreenshotSingleAction.SS_TYPE_ALL -> result = WebViewUtils.savePictureOverall(controller.getTab(actionTarget).mWebView, file)
                         ShareScreenshotSingleAction.SS_TYPE_PART -> result = WebViewUtils.savePicturePart(controller.getTab(actionTarget).mWebView.webView, file)
-                        else -> Toast.makeText(controller.applicationContextInfo, "Unknown screenshot type : " + type, Toast.LENGTH_LONG).show()
+                        else -> Toast.makeText(controller.applicationContextInfo, "Unknown screenshot type : $type", Toast.LENGTH_LONG).show()
                     }
 
                     if (result) {
@@ -865,13 +869,13 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 if (target is ActionController.HitTestResultTargetInfo) {
                     builder.setTitle(target.result.extra)
                             .setAdapter(
-                                    ActionListViewAdapter(controller.activity, actionList, target.actionNameArray),
-                                    { _, which -> checkAndRun(actionList[which], target) })
+                                    ActionListViewAdapter(controller.activity, actionList, target.actionNameArray)
+                            ) { _, which -> checkAndRun(actionList[which], target) }
                 } else {
                     builder.setTitle(tab.url)
                             .setAdapter(
-                                    ActionListViewAdapter(controller.activity, actionList, null),
-                                    { _, which -> checkAndRun(actionList[which], target) })
+                                    ActionListViewAdapter(controller.activity, actionList, null)
+                            ) { _, which -> checkAndRun(actionList[which], target) }
                 }
 
                 builder.show()
@@ -925,7 +929,12 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 var jobName = tab.url
                 if (TextUtils.isEmpty(jobName))
                     jobName = "about:blank"
-                manager.print(jobName, tab.mWebView.createPrintDocumentAdapter(title), null)
+                val adapter = tab.mWebView.createPrintDocumentAdapter(title)
+                if (adapter == null) {
+                    controller.activity.toast(R.string.failed)
+                } else {
+                    manager.print(jobName, adapter, null)
+                }
             } else {
                 Toast.makeText(controller.activity, R.string.print_not_support, Toast.LENGTH_SHORT).show()
             }
@@ -1007,8 +1016,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
         } else {
             val userAgent = tab.mWebView.getUserAgent()
-            async { HttpUtils.getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url)) }
-                    .await()
+            withContext(Dispatchers.Default) { HttpUtils.getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url)) }
                     ?: FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
         }
 

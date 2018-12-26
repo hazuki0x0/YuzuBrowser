@@ -37,9 +37,10 @@ import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.download
 import jp.hazuki.yuzubrowser.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.utils.ui
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DownloadDialog : DialogFragment() {
 
@@ -59,6 +60,8 @@ class DownloadDialog : DialogFragment() {
         val file = arguments.getParcelable<DownloadFile>(ARG_FILE)
         var meta = arguments.getParcelable<MetaData?>(ARG_META)
 
+        checkNotNull(file)
+
         root = Uri.parse(AppData.download_folder.get()).toDocumentFile(activity)
 
         val name = file.name
@@ -68,7 +71,7 @@ class DownloadDialog : DialogFragment() {
             view.visibility = View.VISIBLE
         } else {
             ui {
-                val metadata = getMetaData(activity, root, file).await()
+                val metadata = withContext(Dispatchers.Default) { getMetaData(activity, root, file) }
                 filenameEditText.setText(metadata.name)
                 view.visibility = View.VISIBLE
                 meta = metadata
@@ -119,15 +122,17 @@ class DownloadDialog : DialogFragment() {
         when (requestCode) {
             REQUEST_FOLDER -> {
                 if (resultCode != Activity.RESULT_OK || data == null) return
+                val uri = data.data
+                checkNotNull(uri) {"intent uri is null"}
 
-                root = data.data.toDocumentFile(activity)
+                root = uri.toDocumentFile(activity)
                 folderButton.text = root.name
             }
         }
     }
 
-    private fun getMetaData(context: Context, root: DocumentFile, file: DownloadFile) = async {
-        return@async MetaData(context, root, file.url, file.request)
+    private fun getMetaData(context: Context, root: DocumentFile, file: DownloadFile): MetaData {
+        return MetaData(context, root, file.url, file.request)
     }
 
     companion object {

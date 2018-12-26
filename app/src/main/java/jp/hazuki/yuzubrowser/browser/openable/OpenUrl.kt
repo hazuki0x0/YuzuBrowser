@@ -7,7 +7,7 @@ import jp.hazuki.yuzubrowser.browser.BrowserController
 
 class OpenUrl(val url: String, private val target: Int) : BrowserOpenable {
 
-    constructor(source: Parcel) : this(source.readString(), source.readInt())
+    constructor(source: Parcel) : this(source.readString()!!, source.readInt())
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(url)

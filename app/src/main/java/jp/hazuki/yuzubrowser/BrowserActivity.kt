@@ -17,15 +17,12 @@
 package jp.hazuki.yuzubrowser
 
 import android.app.AlertDialog
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.gesture.GestureOverlayView
 import android.media.AudioManager
-import android.net.ConnectivityManager
 import android.os.*
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
@@ -76,13 +73,14 @@ import jp.hazuki.yuzubrowser.toolbar.sub.WebViewFindDialogFactory
 import jp.hazuki.yuzubrowser.toolbar.sub.WebViewPageFastScroller
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.extensions.saveArchive
+import jp.hazuki.yuzubrowser.utils.network.ConnectionStateMonitor
 import jp.hazuki.yuzubrowser.utils.view.PointerView
 import jp.hazuki.yuzubrowser.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.webkit.*
 import jp.hazuki.yuzubrowser.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.webrtc.core.WebRtcRequest
-import java.lang.StringBuilder
+import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
 
 class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
@@ -91,18 +89,14 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     private val handler = Handler(Looper.getMainLooper())
     private val actionController = ActionExecutor(this)
     private val iconManager = ActionIconManager(this)
-    private val networkStateChangedFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-    private val networkStateBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION != intent.action) return
-            val networkUp = !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
-            if (isNetworkUp != networkUp) {
-                for (tab in tabManager.loadedData) {
-                    tab.mWebView.setNetworkAvailable(networkUp)
-                }
+    private val connectionStateMonitor = ConnectionStateMonitor { isAvailable ->
+        handler.post {
+            for (tab in tabManager.loadedData) {
+                tab.mWebView.setNetworkAvailable(isAvailable)
             }
         }
     }
+
     private val saveTabsRunnable = object : Runnable {
         override fun run() {
             tabManagerIn.saveData()
@@ -137,7 +131,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     private lateinit var webClient: WebClient
     private lateinit var menuWindow: MenuWindow
 
-    private var isNetworkUp = false
     private var isActivityDestroyed = false
     private var isResumed = false
     override var isActivityPaused: Boolean = true
@@ -205,12 +198,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         webViewFastScroller.attachAppBarLayout(coordinator, appbar)
         webGestureOverlayView.setWebFrame(appbar)
 
-        (getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.run {
-            activeNetworkInfo?.run {
-                isNetworkUp = isAvailable
-            }
-        }
-
         onPreferenceReset()
         tabManagerIn.setOnWebViewCreatedListener(this)
 
@@ -270,7 +257,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         WebViewUtils.enablePlatformNotifications()
         WebViewProxy.setProxy(applicationContext, AppData.proxy_set.get(), AppData.proxy_address.get())
 
-        registerReceiver(networkStateBroadcastReceiver, networkStateChangedFilter)
+        connectionStateMonitor.enable(this)
 
         val tab = tabManagerIn.currentTabData
         if (tab != null && tab.mWebView.view.parent == null) {
@@ -329,7 +316,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         WebViewProxy.resetProxy(applicationContext)
         WebViewUtils.disablePlatformNotifications()
 
-        unregisterReceiver(networkStateBroadcastReceiver)
+        connectionStateMonitor.disable(this)
     }
 
     override fun onDestroy() {
@@ -466,7 +453,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
             }
             BrowserController.REQUEST_SHARE_IMAGE -> {
                 if (resultCode != RESULT_OK || data == null) return
-                var uri = data.data
+                var uri = data.data ?: return
                 val mineType = data.getStringExtra(FastDownloadActivity.EXTRA_MINE_TYPE)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme == "file") {
@@ -620,16 +607,17 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         if (Intent.ACTION_VIEW == action) {
             var url = intent.dataString
             val window = intent.getBooleanExtra(EXTRA_WINDOW_MODE, false)
-            if (TextUtils.isEmpty(url))
+            if (url.isNullOrEmpty())
                 url = intent.getStringExtra(Intent.EXTRA_TEXT)
-            if (!TextUtils.isEmpty(url))
+            if (!url.isNullOrEmpty())
                 openInNewTab(url, if (window) TabType.WINDOW else TabType.INTENT, intent.getBooleanExtra(EXTRA_SHOULD_OPEN_IN_NEW_TAB, false))
             else {
                 Logger.w(TAG, "ACTION_VIEW : url is null or empty.")
                 return false
             }
         } else if (Constants.intent.ACTION_OPEN_DEFAULT == action) {
-            openInNewTab(intent.dataString, TabType.DEFAULT)
+            val url = intent.dataString ?: return false
+            openInNewTab(url, TabType.DEFAULT)
         } else {
             return false
         }
@@ -1104,8 +1092,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         web.view.id = View.generateViewId()
         web.webView.isFocusableInTouchMode = true
         web.webView.isFocusable = true
-        web.webView.isDrawingCacheEnabled = false
-        web.webView.setWillNotCacheDrawing(true)
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            web.webView.isDrawingCacheEnabled = false
+            web.webView.setWillNotCacheDrawing(true)
+        }
         webClient.initWebSetting(web)
         val enableCookie = if (AppData.private_mode.get())
             AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
@@ -1216,7 +1207,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
                 openInRightBgTab(transport)
                 return true
             }
-            else -> throw IllegalArgumentException("Unknown perform:" + perform)
+            else -> throw IllegalArgumentException("Unknown perform:$perform")
         }
     }
 
@@ -1242,7 +1233,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
                 openInRightBgTab(url, type)
                 return true
             }
-            else -> throw IllegalArgumentException("Unknown perform:" + perform)
+            else -> throw IllegalArgumentException("Unknown perform:$perform")
         }
     }
 

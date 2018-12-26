@@ -30,10 +30,11 @@ import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.utils.createFileOpenIntent
 import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.download.service.DownloadFile
-import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.webkit.CustomWebView
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast
 import java.io.File
 
@@ -47,7 +48,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
         val tmpFile = File(context.cacheDir, "page.tmp")
         saveWebArchiveMethod(tmpFile.absolutePath)
 
-        delay(50)
+        delay(1000)
         var success = tmpFile.exists()
         if (success) {
             var size = 0L
@@ -60,14 +61,19 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
             val name = file.name!!
 
             val saveTo = root.createFile(Constants.mimeType.MHTML, name)
-            async {
-                tmpFile.inputStream().use { input ->
-                    context.contentResolver.openOutputStream(saveTo.uri, "w").use { out ->
-                        input.copyTo(out)
-                    }
+            if (saveTo == null) {
+                context.toast(R.string.failed)
+                return@ui
+            }
+            withContext(Dispatchers.Default) {
+            tmpFile.inputStream().use { input ->
+                context.contentResolver.openOutputStream(saveTo.uri, "w").use { out ->
+                    checkNotNull(out)
+                    input.copyTo(out)
                 }
-                tmpFile.delete()
-            }.await()
+            }
+            tmpFile.delete()
+        }
 
             success = saveTo.exists()
 
@@ -75,7 +81,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
             info.state = if (success) DownloadFileInfo.STATE_DOWNLOADED else DownloadFileInfo.STATE_UNKNOWN_ERROR
             DownloadDatabase.getInstance(context).insert(info)
 
-            if (success && saveTo != null) {
+            if (success) {
                 context.toast(context.getString(R.string.saved_file) + name)
 
                 val notify = NotificationCompat.Builder(context, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY)

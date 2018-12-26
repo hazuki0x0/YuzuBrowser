@@ -23,9 +23,9 @@ abstract class LoadMoreListener(private val linearLayoutManager: LinearLayoutMan
 
     private var previousTotal = 0
     private var loading = true
-    private var current_page = 1
+    private var currentPage = 1
 
-    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
         if (dx == 0 && dy == 0) return
@@ -41,9 +41,9 @@ abstract class LoadMoreListener(private val linearLayoutManager: LinearLayoutMan
         }
 
         if (!loading && lastVisibleItem >= totalItemCount - 10) {
-            current_page++
+            currentPage++
 
-            onLoadMore(current_page)
+            onLoadMore(currentPage)
 
             loading = true
         }

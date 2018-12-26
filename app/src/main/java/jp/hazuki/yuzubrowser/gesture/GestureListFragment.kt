@@ -50,7 +50,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
         val activity = activity ?: return
         val arguments = arguments ?: throw IllegalArgumentException()
 
-        val mActionNameArray = arguments.getParcelable<ActionNameArray>(ActionNameArray.INTENT_EXTRA)
+        val mActionNameArray = arguments.getParcelable<ActionNameArray>(ActionNameArray.INTENT_EXTRA) ?: throw IllegalArgumentException()
         mGestureId = arguments.getInt(GestureManager.INTENT_EXTRA_GESTURE_ID)
         mManager = GestureManager.getInstance(activity.applicationContext, mGestureId)
         mManager.load()

@@ -110,16 +110,18 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
     private fun getList(): MutableList<ReadItem> {
         val activity = activity ?: throw IllegalStateException()
 
-        val cursor = activity.contentResolver.query(ReadItLaterProvider.EDIT_URI, null, null, null, null)
-        val list = ArrayList<ReadItem>()
-        while (cursor.moveToNext()) {
-            list.add(ReadItem(
-                    cursor.getLong(ReadItLaterProvider.COL_TIME),
-                    cursor.getString(ReadItLaterProvider.COL_URL),
-                    cursor.getString(ReadItLaterProvider.COL_TITLE)))
+        activity.contentResolver.query(ReadItLaterProvider.EDIT_URI, null, null, null, null).use {cursor ->
+            checkNotNull(cursor)
+            val list = ArrayList<ReadItem>()
+            while (cursor.moveToNext()) {
+                list.add(ReadItem(
+                        cursor.getLong(ReadItLaterProvider.COL_TIME),
+                        cursor.getString(ReadItLaterProvider.COL_URL),
+                        cursor.getString(ReadItLaterProvider.COL_TITLE)))
+            }
+            return list
         }
-        cursor.close()
-        return list
+
     }
 
     private class ReaderAdapter(context: Context, list: MutableList<ReadItem>, listener: OnRecyclerListener)
@@ -132,6 +134,7 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
             return ReaderViewHolder(inflater.inflate(R.layout.read_it_later_item, parent, false), this)
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ReaderViewHolder, item: ReadItem, position: Int) {
             val d = Date(item.time)
             holder.time.text = date.format(d) + " " + time.format(d)

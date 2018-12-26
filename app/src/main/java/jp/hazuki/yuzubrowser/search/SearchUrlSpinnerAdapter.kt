@@ -49,6 +49,7 @@ class SearchUrlSpinnerAdapter(context: Context, objects: List<SearchUrl>) : Arra
         }
 
         val searchUrl = getItem(position)
+        checkNotNull(searchUrl) {"position:$position is not available"}
 
         view.findViewById<SearchSimpleIconView>(R.id.iconColorView).setSearchUrl(searchUrl)
         view.findViewById<TextView>(R.id.titleTextView).text = if (searchUrl.title.isNotEmpty()) searchUrl.title else searchUrl.url

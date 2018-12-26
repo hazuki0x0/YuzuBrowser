@@ -31,11 +31,12 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.UrlUtils
-import jp.hazuki.yuzubrowser.utils.async
 import jp.hazuki.yuzubrowser.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.utils.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class ReaderFragment : Fragment() {
@@ -80,7 +81,7 @@ class ReaderFragment : Fragment() {
         }
 
         val url = arguments.getString(ARG_URL)
-        if (TextUtils.isEmpty(url)) {
+        if (url.isNullOrBlank()) {
             setFailedText()
             return
         }
@@ -96,7 +97,7 @@ class ReaderFragment : Fragment() {
                 it.show(childFragmentManager, "loading")
             }
 
-            val data = async { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }.await()
+            val data = withContext(Dispatchers.Default) { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }
             if (isAdded) {
                 if (isResumed) {
                     dialog.dismiss()

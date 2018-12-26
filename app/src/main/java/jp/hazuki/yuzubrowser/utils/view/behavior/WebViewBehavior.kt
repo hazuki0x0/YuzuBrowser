@@ -40,7 +40,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
     private var paddingHeight = 0
     var isImeShown = false
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View?): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
         if (dependency is AppBarLayout) {
             topToolBar = parent.findViewById(R.id.topToolbarLayout)
             bottomBar = parent.findViewById(R.id.bottomOverlayLayout)
@@ -52,7 +52,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
         return false
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout?, child: View?, dependency: View): Boolean {
+    override fun onDependentViewChanged(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
         val bottom = dependency.bottom
 
         val webView = webView
