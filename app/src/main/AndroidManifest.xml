@@ -8,46 +8,6 @@
         android:name="android.webkit.WebView.EnableSafeBrowsing"
         android:value="true"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_GPS" />
-    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-
-    <uses-permission-sdk-23 android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-
-    <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false"/>
-    <uses-feature
-        android:name="android.hardware.location"
-        android:required="false"/>
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false"/>
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false"/>
-    <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="false"/>
-
-    <permission
-        android:name="${applicationId}.permission.myapp.signature"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="jp.hazuki.yuzubrowser.permission.myapp.signature" />
-
     <supports-screens
         android:smallScreens="true"
         android:normalScreens="true"
@@ -55,7 +15,7 @@
         android:xlargeScreens="true" />
 
     <application
-        android:name=".BrowserApplication"
+        android:name=".BrowserBaseApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_settings"
         android:hardwareAccelerated="true"
@@ -67,7 +27,7 @@
         android:theme="@style/CustomThemeBlack"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name=".BrowserActivity"
+            android:name=".legacy.BrowserActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
@@ -148,14 +108,14 @@
             </intent-filter>
         </activity-alias>
         <activity
-            android:name=".settings.activity.MainSettingsActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:label="@string/pref_settings"
             android:theme="@style/CustomThemeBlack.Pref" />
         <activity-alias
             android:name=".CreateSettingsShortCut"
-            android:targetActivity=".settings.activity.MainSettingsActivity"
+            android:targetActivity="jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity"
             android:label="@string/browser_settings">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT"/>
@@ -163,45 +123,45 @@
             </intent-filter>
         </activity-alias>
         <activity
-            android:name=".action.view.ActionActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_settings" />
         <activity
-            android:name=".action.view.ActionListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.ActionListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".action.view.ActionListManagerActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.ActionListManagerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".search.SearchActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.search.SearchActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
-            android:name=".pattern.url.PatternUrlActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_pattern_match" />
         <activity
-            android:name=".debug.DebugActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.debug.DebugActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />
         <activity
-            android:name=".debug.DebugFileListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.debug.DebugFileListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".debug.TextEditActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.debug.TextEditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".debug.ActivityListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.debug.ActivityListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".debug.EnvironmentActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.debug.EnvironmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".action.view.ActionStringActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.ActionStringActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <provider
-            android:name=".search.SuggestProvider"
+            android:name="jp.hazuki.yuzubrowser.provider.SuggestProvider"
             android:authorities="${applicationId}.search.SuggestProvider"
             android:exported="false"
             android:permission="${applicationId}.permission.myapp.signature"
@@ -209,110 +169,110 @@
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
 
         <service
-            android:name="jp.hazuki.yuzubrowser.download.service.DownloadService"
+            android:name="jp.hazuki.yuzubrowser.legacy.download.service.DownloadService"
             android:exported="false" />
 
         <activity
-            android:name="jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.download.ui.FastDownloadActivity"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserMinThemeBlack.Transparent"/>
-        <activity android:name="jp.hazuki.yuzubrowser.download.ui.DownloadListActivity"/>
+        <activity android:name="jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity"/>
 
         <provider
-            android:name=".browser.SafeFileProvider"
+            android:name=".provider.SafeFileProvider"
             android:authorities="${applicationId}.browser.SafeFileProvider"
             android:exported="false"
             android:permission="${applicationId}.permission.myapp.signature"
             android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
         <provider
-            android:name="jp.hazuki.yuzubrowser.download.service.DownloadFileProvider"
+            android:name="jp.hazuki.yuzubrowser.provider.DownloadFileProvider"
             android:authorities="${applicationId}.downloadFileProvider"
             android:exported="false"
             android:grantUriPermissions="true" />
 
         <activity
-            android:name=".history.BrowserHistoryActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/history" />
         <activity
-            android:name=".bookmark.view.BookmarkActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/bookmark" />
         <activity
-            android:name=".gesture.AddGestureActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.gesture.AddGestureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".gesture.GestureListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.gesture.GestureListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".gesture.GestureTestActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.gesture.GestureTestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".action.item.startactivity.StartActivityPreferenceActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivityPreferenceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_start_activity_setting" />
         <activity
-            android:name=".action.item.CustomSingleActionActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.item.CustomSingleActionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_custom_setting" />
         <activity
-            android:name=".useragent.UserAgentListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenSize"
             android:label="@string/action_useragent_setting"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
-            android:name=".webencode.WebTextEncodeListActivity"
+            android:name=".legacy.webencode.WebTextEncodeListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_web_encode_setting"
             android:theme="@style/BrowserMinThemeBlack.Transparent" />
         <activity
-            android:name=".userjs.UserScriptListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_userjs_manage" />
         <activity
-            android:name=".userjs.UserScriptEditActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptEditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/userjs_edit" />
         <activity
-            android:name=".utils.view.filelist.FileListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".resblock.ResourceBlockListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_resblock_manage" />
         <activity
-            android:name=".action.view.SoftButtonActionArrayActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionArrayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".action.view.SoftButtonActionActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".useragent.UserAgentSettingActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.useragent.UserAgentSettingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_useragent_setting" />
         <activity
-            android:name=".webencode.WebTextEncodeSettingActivity"
+            android:name=".legacy.webencode.WebTextEncodeSettingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_web_encode_setting" />
         <activity
-            android:name=".action.view.CloseAutoSelectActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.action.view.CloseAutoSelectActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_close_auto_select" />
         <activity
-            android:name=".speeddial.view.SpeedDialSettingActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.speeddial.view.SpeedDialSettingActivity"
             android:label="@string/pref_speed_dial_setting" />
         <activity
-            android:name=".gesture.multiFinger.MultiFingerSettingsActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.MultiFingerSettingsActivity"
             android:label="@string/pref_multi_finger_gesture_settings" />
         <activity
-            android:name=".help.HelpActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.help.HelpActivity"
             android:label="@string/pref_help"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".theme.ThemeImportActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.theme.ThemeImportActivity"
             android:label="@string/theme_importer"
             android:theme="@style/BrowserMinThemeBlack.Transparent"
             android:configChanges="keyboardHidden|orientation|screenSize">
@@ -328,28 +288,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".adblock.AdBlockActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity"
             android:theme="@style/CustomThemeBlack.Pref"
             android:label="@string/pref_ad_block" />
         <activity
-            android:name=".reader.ReaderActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.reader.ReaderActivity"
             android:theme="@style/BrowserMinThemeBlack.NoTitle"/>
         <activity
-            android:name=".readitlater.ReadItLaterActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterActivity"
             android:label="@string/read_it_later"/>
 
         <provider
             android:authorities="${applicationId}.readItLaterProvider"
-            android:name=".readitlater.ReadItLaterProvider"
+            android:name="jp.hazuki.yuzubrowser.provider.ReadItLaterProvider"
             android:exported="false"/>
         <activity
-            android:name=".search.settings.SearchUrlListActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlListActivity"
             android:label="@string/pref_search_url_settings"/>
         <activity
-            android:name=".webrtc.ui.WebPermissionActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity"
             android:label="@string/pref_content_settings"/>
         <activity
-            android:name=".download.ui.FallbackFolderSelectActivity"
+            android:name="jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity"
             android:label="@string/pref_download_folder"
             android:theme="@style/BrowserMinThemeBlack.Transparent"/>
     </application>

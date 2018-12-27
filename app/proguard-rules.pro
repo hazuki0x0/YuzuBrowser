@@ -16,7 +16,7 @@
 #   public *;
 #}
 
--keep class jp.hazuki.yuzubrowser.utils.view.behavior.** { *; }
+-keep class jp.hazuki.yuzubrowser.legacy.utils.view.behavior.** { *; }
 
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keep @com.fasterxml.jackson.annotation.JsonIgnoreProperties class * { *; }

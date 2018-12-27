@@ -1,0 +1,82 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        lintOptions {
+            disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+androidExtensions {
+    experimental = true
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation Libs.junit
+    androidTestImplementation Libs.espressoCore
+    androidTestImplementation Libs.androidRunner
+
+    implementation Libs.support_appcompat_v7
+    implementation Libs.support_design
+    implementation Libs.support_recyclerview
+    implementation Libs.support_constraint_layout
+    implementation Libs.support_fix_preference
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    kaptTest Libs.dagger2_compiler
+
+    implementation Libs.jackson
+    implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation project(':libraries:floatingactionbutton')
+    implementation project(':libraries:colorpicker')
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+        transitive = true
+    }
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.2.3'
+    implementation project(':libraries:asyncpermissions')
+    implementation project(':libraries:BreadcrumbsView')
+
+    implementation Libs.kotlin_stdlib
+    implementation Libs.kotlin_coroutines
+    implementation Libs.kotlin_coroutines_android
+    implementation Libs.kotlin_anko_commons
+    implementation Libs.kotlin_anko_sql
+}

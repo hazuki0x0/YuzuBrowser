@@ -27,13 +27,14 @@ import android.speech.RecognizerResultsIntent
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.widget.Toast
-import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.WebUtils
-import jp.hazuki.yuzubrowser.utils.createLanguageContext
+import jp.hazuki.yuzubrowser.legacy.BrowserActivity
+import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
+import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
+import jp.hazuki.yuzubrowser.legacy.utils.createLanguageContext
 
 class HandleIntentActivity : AppCompatActivity() {
     companion object {
-        const val EXTRA_OPEN_FROM_YUZU = "jp.hazuki.yuzubrowser.extra.open.from.yuzu"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

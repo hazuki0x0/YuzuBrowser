@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:title="@string/pref_ui_settings">
+
+    <Preference
+        android:key="restart"
+        android:title="@string/reflect_setting"
+        android:summary="@string/reflect_setting_mes" />
+
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.ThemePreference
+        android:key="theme_setting"
+        android:title="@string/theme_setting" />
+
+    <PreferenceScreen
+        android:key="ps_toolbar"
+        android:title="@string/pref_toolbar_settings">
+        <SwitchPreference
+            android:key="snap_toolbar"
+            android:title="@string/pref_snap_toolbar" />
+        <SwitchPreference
+            android:key="toolbar_auto_open"
+            android:title="@string/pref_toolbar_show_loading"/>
+        <SwitchPreference
+            android:key="toolbar_small_icon"
+            android:title="@string/pref_toolbar_small_icon"/>
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+            android:key="overlay_bottom_alpha"
+            android:title="@string/pref_overlay_bottom_alpha"
+            app:seekMax="255"
+            app:seekMin="0" />
+
+        <PreferenceScreen
+            android:key="ps_toolbar_tab"
+            android:title="@string/pref_tab_bar">
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_list"
+                android:entryValues="@array/pref_toolbar_location_values"
+                android:key="toolbar_location_tab"
+                android:title="@string/pref_toolbar_location" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntListPreference
+                android:entryValues="@array/pref_toolbar_location_priority_values"
+                android:key="toolbar_location_priority_tab"
+                android:title="@string/pref_toolbar_location_priority" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_values"
+                android:key="toolbar_location_l_tab"
+                android:title="@string/pref_toolbar_location_landscape" />
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_priority_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_priority_values"
+                android:key="toolbar_location_l_priority_tab"
+                android:title="@string/pref_toolbar_location_priority_landscape" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.MultiListIntPreference
+                android:entries="@array/pref_toolbar_visibility_list"
+                android:key="toolbar_visibility_tab"
+                android:max="@integer/pref_toolbar_visibility_count"
+                android:title="@string/pref_toolbar_visibility" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="toolbar_size_tab"
+                android:title="@string/pref_toolbar_size"
+                app:seekMax="100"
+                app:seekMin="1" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_tab_type_list"
+                android:entryValues="@array/pref_tab_type_values"
+                android:key="tab_type"
+                android:title="@string/pref_tab_type" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="tab_size_x"
+                android:title="@string/pref_tab_size_x"
+                app:seekMax="400"
+                app:seekMin="10" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="tab_font_size"
+                android:title="@string/pref_tab_font_size"
+                app:seekMax="50"
+                app:seekMin="1" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:key="show_tab_divider"
+                android:title="@string/pref_show_divider"
+                android:entries="@array/pref_show_divider_list"
+                android:entryValues="@array/pref_show_divider_values" />
+
+            <SwitchPreference
+                android:key="toolbar_show_favicon"
+                android:title="@string/pref_show_favicon" />
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="ps_toolbar_url"
+            android:title="@string/pref_url_bar">
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_list"
+                android:entryValues="@array/pref_toolbar_location_values"
+                android:key="toolbar_location_url"
+                android:title="@string/pref_toolbar_location" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntListPreference
+                android:entryValues="@array/pref_toolbar_location_priority_values"
+                android:key="toolbar_location_priority_url"
+                android:title="@string/pref_toolbar_location_priority" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_values"
+                android:key="toolbar_location_l_url"
+                android:title="@string/pref_toolbar_location_landscape" />
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_priority_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_priority_values"
+                android:key="toolbar_location_l_priority_url"
+                android:title="@string/pref_toolbar_location_priority_landscape" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.MultiListIntPreference
+                android:entries="@array/pref_toolbar_visibility_list"
+                android:key="toolbar_visibility_url"
+                android:max="@integer/pref_toolbar_visibility_count"
+                android:title="@string/pref_toolbar_visibility" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="toolbar_size_url"
+                android:title="@string/pref_toolbar_size"
+                app:seekMax="100"
+                app:seekMin="1" />
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="toolbar_text_size_url"
+                android:title="@string/pref_toolbar_text_size"
+                app:seekMax="50"
+                app:seekMin="1" />
+            <SwitchPreference
+                android:key="toolbar_url_box"
+                android:title="@string/pref_white_url_box"/>
+            <SwitchPreference
+                android:key="toolbar_always_show_url"
+                android:title="@string/pref_always_show_url" />
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="ps_toolbar_progress"
+            android:title="@string/pref_progress_bar">
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_list"
+                android:entryValues="@array/pref_toolbar_location_values"
+                android:key="toolbar_location_progress"
+                android:title="@string/pref_toolbar_location" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntListPreference
+                android:entryValues="@array/pref_toolbar_location_priority_values"
+                android:key="toolbar_location_priority_progress"
+                android:title="@string/pref_toolbar_location_priority" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_values"
+                android:key="toolbar_location_l_progress"
+                android:title="@string/pref_toolbar_location_landscape" />
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_priority_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_priority_values"
+                android:key="toolbar_location_l_priority_progress"
+                android:title="@string/pref_toolbar_location_priority_landscape" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.MultiListIntPreference
+                android:entries="@array/pref_toolbar_visibility_list"
+                android:key="toolbar_visibility_progress"
+                android:max="@integer/pref_toolbar_visibility_count"
+                android:title="@string/pref_toolbar_visibility" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="toolbar_size_progress"
+                android:title="@string/pref_toolbar_size"
+                app:seekMax="100"
+                app:seekMin="1" />
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="ps_toolbar_custom"
+            android:title="@string/pref_custom_bar">
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_custom_list"
+                android:entryValues="@array/pref_toolbar_location_custom_values"
+                android:key="toolbar_location_custom1"
+                android:title="@string/pref_toolbar_location" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntListPreference
+                android:entryValues="@array/pref_toolbar_location_priority_values"
+                android:key="toolbar_location_priority_custom1"
+                android:title="@string/pref_toolbar_location_priority" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_custom_landscape_list"
+                android:entryValues="@array/pref_toolbar_location_custom_landscape_values"
+                android:key="toolbar_location_l_custom1"
+                android:title="@string/pref_toolbar_location_landscape" />
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+                android:entries="@array/pref_toolbar_location_landscape_priority_list"
+                android:entryValues="@array/pref_toolbar_location_landscape_priority_values"
+                android:key="toolbar_location_l_priority_custom1"
+                android:title="@string/pref_toolbar_location_priority_landscape" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.MultiListIntPreference
+                android:entries="@array/pref_toolbar_visibility_list"
+                android:key="toolbar_visibility_custom1"
+                android:max="@integer/pref_toolbar_visibility_count"
+                android:title="@string/pref_toolbar_visibility" />
+
+            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+                android:key="toolbar_size_custom1"
+                android:title="@string/pref_toolbar_size"
+                app:seekMax="100"
+                app:seekMin="1" />
+        </PreferenceScreen>
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="ps_ui_menu"
+        android:title="@string/pref_menu_settings">
+
+        <SwitchPreference
+            android:key="menu_icon"
+            android:title="@string/pref_show_icon"/>
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="ps_font_size"
+        android:title="@string/pref_font_size">
+
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_bookmark"
+            android:title="@string/pref_bookmark"/>
+
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_history"
+            android:title="@string/pref_history"/>
+
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_menu"
+            android:title="@string/pref_menu"/>
+
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_text_size_list"
+            android:entryValues="@array/pref_text_size_values"
+            android:key="font_size_read_it_later"
+            android:title="@string/read_it_later"/>
+    </PreferenceScreen>
+
+    <Preference
+        android:key="reader_settings"
+        android:title="@string/pref_reader_settings"/>
+
+    <PreferenceScreen
+        android:key="ps_touch_scrollbar"
+        android:title="@string/pref_touch_scrollbar">
+
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            android:entries="@array/pref_touch_scrollbar_list"
+            android:entryValues="@array/pref_touch_scrollbar_values"
+            android:key="touch_scrollbar"
+            android:title="@string/pref_display_position"/>
+
+        <SwitchPreference
+            android:key="touch_scrollbar_fixed_toolbar"
+            android:title="@string/pref_touch_scrollbar_do_not_move_toolbar"/>
+
+    </PreferenceScreen>
+
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_oritentation_list"
+        android:entryValues="@array/pref_oritentation_values"
+        android:key="oritentation"
+        android:title="@string/pref_oritentation" />
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_oritentation_list"
+        android:entryValues="@array/pref_oritentation_values"
+        android:key="web_customview_oritentation"
+        android:title="@string/pref_web_customview_oritentation" />
+
+    <SwitchPreference
+        android:key="fullscreen"
+        android:title="@string/pref_fullscreen" />
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        android:entries="@array/pref_fullscreen_mode_list"
+        android:entryValues="@array/pref_fullscreen_mode_values"
+        android:key="fullscreen_hide_mode"
+        android:title="@string/pref_fullscreen_mode"/>
+    <SwitchPreference
+        android:key="keep_screen_on"
+        android:title="@string/pref_keep_screen_on" />
+</PreferenceScreen>

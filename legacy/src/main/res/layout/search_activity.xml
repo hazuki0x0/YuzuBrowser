@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BB000000"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/search_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/deep_gray"
+        android:paddingStart="4dp"
+        android:paddingEnd="0dp"
+        android:gravity="center">
+
+        <Spinner
+            android:id="@+id/searchUrlSpinner"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:hint="@string/search_editText_hint"
+            android:imeOptions="actionGo"
+            android:inputType="text|textUri"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="0dp">
+
+            <requestFocus />
+        </EditText>
+
+        <jp.hazuki.yuzubrowser.legacy.search.SearchButton
+            android:id="@+id/searchButton"
+            style="@style/ToolbarImageButton"
+            android:layout_width="@dimen/general_default_size"
+            android:layout_height="@dimen/general_default_size"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/search"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_search_white_24dp"
+            android:tint="@color/white" />
+    </LinearLayout>
+
+    <jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OutSideClickableRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
