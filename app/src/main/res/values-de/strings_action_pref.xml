@@ -51,7 +51,7 @@
         <item>umgekehrte vertikale Liste</item>
         <item>horizontale Liste</item>
     </string-array>
-    <string name="action_tab_list_button">Position der 'Neuer Reiter'-Taste</string>
+    <string name="action_tab_list_button">Position der \'Neuer Reiter\'-Taste</string>
     <string-array name="action_tab_list_button">
         <item>Rechts</item>
         <item>Links</item>

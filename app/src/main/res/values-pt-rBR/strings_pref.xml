@@ -59,7 +59,7 @@
     <string name="pref_sensitivity_distance">Sensibilidade (distância)</string>
     <string name="pref_browser_settings">Configurações de navegador</string>
     <string name="pref_pattern_match">Correspondência de padrão</string>
-    <string name="pref_home_page">Pagina inicial</string>
+    <string name="pref_home_page">Página inicial</string>
     <string name="pref_hardbtn_settings">Configurações de botão de hardware</string>
     <string name="pref_btn_back_press">Pressão em voltar</string>
     <string name="pref_btn_back_lpress">Pressão longa em voltar</string>
@@ -179,8 +179,6 @@
 
     <string name="pref_toolbar_visibility">Visibilidade</string>
 
-    <integer name="pref_toolbar_visibility_count">6</integer>
-
     <string-array name="pref_toolbar_visibility_list">
         <item>Visível</item>
         <item>Ocultar na tela cheia</item>
@@ -269,7 +267,6 @@
     <string name="pref_backup_settings_confirm">Fazer backup das configurações?</string>
     <string name="pref_restore_settings_confirm">Todas configurações atuais serão perdidas, mas você tem certeza da restauração?\nAlém disso, isto reinicia automaticamente quando a restauração estiver completada.</string>
 
-    <string name="copyright" translatable="false">©2017-2018 Hazuki</string>
     <string name="version">Versão</string>
     <string name="build">Pacote</string>
     <string name="build_time">Data do pacote</string>

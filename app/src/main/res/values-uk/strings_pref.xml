@@ -492,8 +492,6 @@
 
     <string name="pref_toolbar_visibility">Відображення</string>
 
-    <integer name="pref_toolbar_visibility_count">6</integer>
-
     <string-array name="pref_toolbar_visibility_list">
         <item>Відображати</item>
         <item>Приховати на повноекранному режимі</item>

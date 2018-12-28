@@ -182,8 +182,6 @@
 
     <string name="pref_toolbar_visibility">Sichtbarkeit</string>
 
-    <integer name="pref_toolbar_visibility_count">6</integer>
-
     <string-array name="pref_toolbar_visibility_list">
         <item>sichtbar</item>
         <item>Im Vollbildmodus ausblenden</item>
