@@ -43,3 +43,6 @@
 
 # Javascript interface
 -keepattributes JavascriptInterface
+-keepclasseswithmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
