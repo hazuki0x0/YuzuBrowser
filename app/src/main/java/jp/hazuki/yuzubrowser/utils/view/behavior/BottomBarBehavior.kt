@@ -48,7 +48,7 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
         val bottomBarHeight = bottomToolbar.height
 
         if (topToolbar.height != 0) {
-            val height = -dependency.top * bottomBarHeight / dependency.height
+            val height = -dependency.top * bottomBarHeight / topToolbar.height
 
             bottomBar.translationY = Math.min(height, bottomBarHeight).toFloat()
         }
