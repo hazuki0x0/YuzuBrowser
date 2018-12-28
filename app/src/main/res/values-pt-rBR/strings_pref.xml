@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_settings">Configurações</string>
+    <string name="pref_about">Sobre</string>
+    <string name="pref_ui_settings">Configurações de interface</string>
+    <string name="pref_toolbar_settings">Configurações de barra de ferramentas</string>
+    <string name="pref_tab_bar">Barra da guia</string>
+    <string name="pref_url_bar">Barra do URL</string>
+    <string name="pref_progress_bar">Barra de progresso</string>
+    <string name="pref_tab_type">Tipo de guia</string>
+
+    <string-array name="pref_tab_type_list">
+        <item>Rolável</item>
+        <item>Completa</item>
+    </string-array>
+
+    <string name="pref_page_settings">Configurações de página</string>
+    <string name="pref_toolbar_location">Posição (retrato)</string>
+    <string name="pref_toolbar_location_landscape">Posição (paisagem)</string>
+    <string name="pref_toolbar_location_priority">Prioridade de posicionamento (retrato)</string>
+    <string name="pref_toolbar_location_priority_landscape">Prioridade de posicionamento (paisagem)</string>
+    <string name="pref_toolbar_location_undefine">Não definida</string>
+    <string name="pref_toolbar_location_top">Barra superior</string>
+    <string name="pref_toolbar_location_top_always">Barra superior(Sempre mostrar)</string>
+    <string name="pref_toolbar_location_bottom">Barra inferior</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">Barra de sobreposição inferior(Sempre mostrar)</string>
+    <string name="pref_toolbar_location_bottom_always">Barra inferior(Sempre mostrar)</string>
+    <string name="pref_toolbar_location_web">Barra da web</string>
+    <string name="pref_toolbar_location_web_fix">Barra da web (fixada)</string>
+    <string name="pref_toolbar_location_left">Barra da esquerda</string>
+    <string name="pref_toolbar_location_right">Barra da direita</string>
+    <string name="pref_allow_content_access">Permitir acesso de conteúdo</string>
+    <string name="pref_default_encoding">Codificação de texto padrão</string>
+    <string name="pref_text_encoding">Codificação de texto</string>
+    <string name="pref_softbtn_settings">Configurações de botão da barra de ferramentas</string>
+    <string name="pref_btn_tab_left">Botão esquerdo da barra de guia</string>
+    <string name="pref_btn_tab_right">Botão direito da barra de guia</string>
+    <string name="pref_btn_url_left">Botão esquerdo da barra de URL</string>
+    <string name="pref_btn_url_right">Botão direito da barra de URL</string>
+    <string name="pref_btn_url_center">Botão central da barra de URL(caixa de URL)</string>
+    <string name="pref_btn_action_press">Pressão</string>
+    <string name="pref_btn_action_lpress">Pressão longa</string>
+    <string name="pref_btn_action_up">Deslizar para cima</string>
+    <string name="pref_btn_action_down">Deslizar para baixo</string>
+    <string name="pref_btn_action_left">Deslizar para esquerda</string>
+    <string name="pref_btn_action_right">Deslizar para direita</string>
+    <string name="pref_toolbar_size">Tamanho da barra</string>
+    <string name="pref_toolbar_text_size">Tamanho do texto</string>
+    <string name="pref_text_size">Tamanho do texto</string>
+
+    <string name="pref_private_mode">Modo privado</string>
+    <string name="pref_javascript">Ativar script do Java</string>
+    <string name="pref_web_db">Ativar banco de dados</string>
+    <string name="pref_web_dom_db">Ativar armazenamento DOM</string>
+    <string name="pref_menu_settings">Configurações de menu de opções</string>
+    <string name="pref_user_agent">Agente do usuário</string>
+
+    <string name="pref_sensitivity_distance">Sensibilidade (distância)</string>
+    <string name="pref_browser_settings">Configurações de navegador</string>
+    <string name="pref_pattern_match">Correspondência de padrão</string>
+    <string name="pref_home_page">Pagina inicial</string>
+    <string name="pref_hardbtn_settings">Configurações de botão de hardware</string>
+    <string name="pref_btn_back_press">Pressão em voltar</string>
+    <string name="pref_btn_back_lpress">Pressão longa em voltar</string>
+    <string name="pref_btn_serach_press">Pressão em pesquisar</string>
+    <string name="pref_btn_volume_up">Volume para cima</string>
+    <string name="pref_btn_volume_down">Volume para baixo</string>
+    <string name="pref_btn_volume_default_play">Alterar volume durante a reprodução de vídeo</string>
+    <string name="pref_btn_camera_press">Pressão na câmera</string>
+    <string name="pref_btn_menu_press">Pressão no menu</string>
+    <string name="pref_load_overview">Carregar com modo de visualização geral</string>
+    <string name="pref_web_wideview">Usar janela de visualização ampla</string>
+    <string name="pref_oritentation">Orientação</string>
+    <string name="pref_web_customview_oritentation">Orientação de vídeo em tela cheia</string>
+    <string name="pref_oritentation_unspecified">Não especificada</string>
+    <string name="pref_oritentation_landscape">Paisagem</string>
+    <string name="pref_oritentation_portrait">Retrato</string>
+    <string name="pref_oritentation_sensor">Sensor</string>
+    <string name="pref_oritentation_no_sensor">Sem sensor</string>
+    <string name="pref_search_url">Configurações de URL do motor de pesquisa</string>
+    <string name="pref_search_url_error">%s não encontrado</string>
+    <string name="pref_lpress_settings">Configurações de pressão longa</string>
+    <string name="pref_lpress_link">Link</string>
+    <string name="pref_lpress_image">Imagem</string>
+    <string name="pref_lpress_linkimage">Link da imagem</string>
+    <string name="pref_tab_size_x">Mostrar largura da guia</string>
+    <string name="pref_tab_font_size">Tamanho da fonte da guia</string>
+    <string name="pref_action_settings">Configurações de ação</string>
+    <string name="pref_tab_action">Ação da guia</string>
+    <string name="pref_show_zoom_button">Mostrar botões de zoom</string>
+    <string name="pref_fullscreen">Tela cheia</string>
+    <string name="pref_keep_screen_on">Manter tela ligada</string>
+    <string name="pref_accept_cookie">Aceitar cookies</string>
+    <string name="pref_accept_third_cookie">Aceitar cookies de terceiros</string>
+    <string name="pref_accept_cookie_private">Aceitar cookies no modo privado</string>
+    <string name="pref_web_cache">Modo do cache</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>Padrão</item>
+        <item>Sem cache</item>
+        <item>Carregar cache preferencialmente</item>
+        <item>Carregar cache apenas</item>
+    </string-array>
+
+    <string name="pref_web_popup">Ativar janela pop-up</string>
+    <string name="pref_download_action">Ação do download</string>
+
+    <string-array name="pref_download_action_list">
+        <item>Fazer nada</item>
+        <item>Automático</item>
+        <item>Sempre download</item>
+        <item>Sempre abrir</item>
+        <item>Compartilhar</item>
+        <item>Selecionar</item>
+    </string-array>
+
+    <string name="pref_download_folder">Diretório de download</string>
+    <string name="pref_pause_web_background">Pausar web em plano de fundo</string>
+    <string name="pref_pause_web_tab_change">Pausar web ao alterar guia</string>
+    <string name="pref_pause_web_tab_change_disable_summary">Desativado devido a um problema no WebView</string>
+    <string name="pref_btn_custom">Botão da barra personalizada</string>
+    <string name="pref_custom_bar">Barra personalizada</string>
+    <string name="pref_save_formdata">Salvar dados de formulários da web</string>
+    <string name="pref_web_app_cache">Ativar cache do app</string>
+    <string name="pref_web_geolocation">Ativar geolocalização</string>
+    <string name="pref_privacy_settings">Configurações de privacidade</string>
+    <string name="pref_clear_browser_data">Limpar dados</string>
+    <string name="pref_layout_algorithm">Algoritmo de layout</string>
+
+    <string-array name="pref_layout_algorithm_list">
+        <item>Normal</item>
+        <item>Autodimensionamento de texto</item>
+        <item>Coluna única (descontinuada)</item>
+        <item>Colunas estreitas (descontinuada)</item>
+    </string-array>
+
+    <string name="pref_save_history">Salvar histórico</string>
+    <string name="pref_newtab_settings">Configurações de nova guia</string>
+
+    <string-array name="pref_newtab_list">
+        <item>Guia atual</item>
+        <item>Nova guia</item>
+        <item>Guia em plano de fundo</item>
+        <item>Nova guia na direita</item>
+        <item>Guia na direita em plano de fundo</item>
+    </string-array>
+
+    <string name="pref_newtab_link">Link</string>
+    <string name="pref_newtab_bookmark">Marcador</string>
+    <string name="pref_newtab_history">Histórico</string>
+    <string name="pref_newtab_blank">target="_blank"</string>
+    <string name="pref_proxy_settings">Configurações de proxy</string>
+    <string name="pref_ssl_error_alert">Mostrar avisos de segurança</string>
+    <string name="pref_gesture_settings">Configurações de gesto</string>
+    <string name="pref_web_gesture_settings">Configurações de gesto da web</string>
+    <string name="pref_sub_gesture_settings">Configurações de subgesto</string>
+    <string name="pref_gesture_enable">Ativar gesto</string>
+    <string name="pref_gesture_line">Mostrar linha do gesto</string>
+    <string name="pref_gesture_score">Pontuação do gesto</string>
+    <string name="pref_lpress_others">Outros</string>
+    <string name="pref_clear_data_at_finish">Limpar dados ao finalizar</string>
+    <string name="pref_security_settings">Configurações de segurança</string>
+    <string name="pref_file_access">Configurações de acesso de arquivos locais</string>
+
+    <string-array name="pref_file_access_list">
+        <item>Desativar (mais seguro)</item>
+        <item>Ativar na sandbox (seguro)</item>
+        <item>Ativar (não seguro)</item>
+    </string-array>
+
+    <string name="pref_mixed_content">Configurações de conteúdo inseguro no https</string>
+
+    <string-array name="pref_mixed_content_list">
+        <item>Nunca permitir (mais seguro)</item>
+        <item>Compatibilidade (padrão)</item>
+        <item>Sempre permitir (não seguro)</item>
+    </string-array>
+
+    <string name="pref_toolbar_visibility">Visibilidade</string>
+
+    <integer name="pref_toolbar_visibility_count">6</integer>
+
+    <string-array name="pref_toolbar_visibility_list">
+        <item>Visível</item>
+        <item>Ocultar na tela cheia</item>
+        <item>Ocultar no fim do carregamento</item>
+        <item>Ocultar na tela de retrato</item>
+        <item>Ocultar na tela de paisagem</item>
+        <item>Ocultar na escolha do layout</item>
+    </string-array>
+
+    <string name="pref_web_swipe_settings">Configurações de deslize com dois dedos</string>
+    <string name="pref_web_swipe_enable">Ativar ação de deslize com dois dedos</string>
+    <string name="pref_flick_settings">Configurações de deslize de borda</string>
+    <string name="pref_flick_left">Ação de deslize de borda para esquerda</string>
+    <string name="pref_flick_right">Ação de deslize de borda para direita</string>
+    <string name="pref_flick_up">Ação de deslize de borda para cima</string>
+    <string name="pref_flick_down">Ação de deslize de borda para baixo</string>
+    <string name="pref_sensitivity_speed">Sensibilidade (velocidade)</string>
+    <string name="pref_flick_enable">Ativar ação de deslize de borda</string>
+    <string name="pref_flick_disable_scrolling">Desativar deslize de borda ao rolar horizontalmente</string>
+    <string name="pref_qc_settings">Configurações de controle rápido</string>
+    <string name="pref_qc_enable">Ativar controle rápido</string>
+    <string name="pref_qc_rad_start">Raio</string>
+    <string name="pref_qc_rad_inc">Incremento do raio</string>
+    <string name="pref_qc_slop">Mancha</string>
+    <string name="pref_qc_r_pos">Posição de reação</string>
+
+    <string-array name="pref_qc_r_pos_list">
+        <item>Esquerda e direita</item>
+        <item>Esquerda</item>
+        <item>Direita</item>
+    </string-array>
+
+    <string name="pref_qc_level1">Nível 1</string>
+    <string name="pref_qc_level2">Nível 2</string>
+    <string name="pref_qc_level3">Nível 3</string>
+    <string name="pref_overlay_bottom_alpha">Canal alfa da barra inferior</string>
+    <string name="pref_save_last_tabs">Salvar guias na saída</string>
+    <string name="pref_save_pinned_tabs">Salvar guias fixadas na saída</string>
+    <string name="pref_save_closed_tab">Salvar guias fechadas</string>
+    <string name="pref_flick_edge">Verificação da borda</string>
+    <string name="pref_import_export">Importar/Exportar</string>
+    <string name="pref_import_bookmark">Restaurar marcadores</string>
+    <string name="pref_import_bookmark_confirm">Restaurar marcadores?</string>
+    <string name="pref_export_bookmark">Fazer backup dos marcadores</string>
+    <string name="pref_export_bookmark_confirm">Fazer backup dos marcadores?</string>
+    <string name="pref_import_html_bookmark">Importar marcadores html</string>
+    <string name="pref_import_html_bookmark_confirm">Importar marcadores?</string>
+    <string name="pref_export_html_bookmark">Exportar marcadores html</string>
+    <string name="pref_export_html_bookmark_confirm">Exportar marcadores?</string>
+    <string name="pref_fast_back">Retorno rápido</string>
+    <string name="pref_fast_back_cache_size">Tamanho de cache do retorno rápido</string>
+    <string name="pref_fast_back_cache_size_comment">0 = ilimitado</string>
+    <string name="pref_userjs_settings">Configurações de script do usuário</string>
+    <string name="pref_userjs_enable">Ativar script do usuário</string>
+    <string name="pref_userjs_manage">Gerenciar script do usuário</string>
+    <string name="pref_rendering">Modo de renderização</string>
+    <string name="pref_auto_tab_save_delay">Intervalo de autossalvamento (seg.)</string>
+    <string name="pref_resblock_settings">Configurações de interrupção de recurso</string>
+    <string name="pref_resblock_enable">Ativar interrupção de recurso</string>
+    <string name="pref_resblock_manage">Gerenciar interrupção de recurso</string>
+    <string name="pref_minimum_font">Tamanho mínimo da fonte</string>
+
+    <string name="pref_kill_process">Matar processo na saída (não recomendado)</string>
+    <string name="pref_app_settings">Configurações do app</string>
+    <string name="pref_search_suggest">Tipo de sugestão de pesquisa</string>
+
+    <string-array name="pref_search_suggest_list">
+        <item>Rede</item>
+        <item>Consultas recentes</item>
+        <item>Ambos</item>
+        <item>Nenhum</item>
+    </string-array>
+
+    <string name="pref_history_settings">Configurações de histórico</string>
+    <string name="pref_history_max_day">Duração para manter histórico (dia)</string>
+    <string name="pref_history_max_count">Contagem máxima de histórico</string>
+
+    <string name="open_source_license">Licença de código aberto</string>
+    <string name="pref_log">Registro</string>
+    <string name="pref_detailed_log">Registro detalhado de saída</string>
+    <string name="pref_delete_all_logs">Excluir todos registros</string>
+    <string name="pref_delete_log_mes">Excluir todos registros?</string>
+
+    <string name="backup_settings">Configurações de backup</string>
+    <string name="restore_settings">Configurações de restauração</string>
+    <string name="pref_backup_settings_confirm">Fazer backup das configurações?</string>
+    <string name="pref_restore_settings_confirm">Todas configurações atuais serão perdidas, mas você tem certeza da restauração?\nAlém disso, isto reinicia automaticamente quando a restauração estiver completada.</string>
+
+    <string name="copyright" translatable="false">©2017-2018 Hazuki</string>
+    <string name="version">Versão</string>
+    <string name="build">Pacote</string>
+    <string name="build_time">Data do pacote</string>
+
+    <string name="theme_setting">Configurações de tema</string>
+
+    <string name="reflect_setting">Refletir configuração agora</string>
+    <string name="reflect_setting_mes">Algumas alterações não terão efeito até que você reinicie o app.</string>
+
+    <string name="pref_close_auto_select">Configurações de distinção do fechamento de guia</string>
+    <string name="pref_close_default">Padrão</string>
+    <string name="pref_close_intent">Da intenção</string>
+    <string name="pref_close_window">Nova janela (target=_blank)</string>
+
+    <string name="pref_pull_to_refresh">Puxar para atualizar</string>
+
+    <string name="pref_share_unkown_scheme">Compartilhar esquema desconhecido</string>
+    <string name="pref_share_unkown_scheme_summary">Abrir um esquema de URL desconhecido com outro app</string>
+
+    <string name="pref_speed_dial_setting">Configurações de acesso rápido</string>
+    <string name="pref_edit_speeddial">Editar acesso rápido</string>
+    <string name="pref_speeddial_ui_settings">Configurações de interface do acesso rápido</string>
+    <string name="pref_speeddial_show_header">Mostrar cabeçalho</string>
+    <string name="pref_speeddial_show_search_bar">Mostrar barra de pesquisa</string>
+    <string name="pref_speeddial_show_icon">Mostrar ícone</string>
+    <string name="pref_speeddial_column">Número de colunas no modo vertical</string>
+    <string name="pref_speeddial_column_landscape">Número de colunas no modo paisagem</string>
+    <string name="pref_speeddial_column_max_width">Largura máxima da coluna</string>
+    <string name="pref_speeddial_dark_theme">Usar tema escuro</string>
+
+
+    <string name="pref_double_tap_flick_settings">Configurações de duplo toque com deslize de borda</string>
+    <string name="pref_double_tap_flick_enable">Ativar duplo toque com deslize de borda</string>
+
+    <string name="operation_settings">Configurações de operação</string>
+    <string name="open_bookmark_new_tab">Ação do ícone do marcador</string>
+    <string name="open_bookmark_new_tab_info">Quando você toca no ícone do site, abre noutra guia</string>
+    <string name="open_bookmark_new_tab_action">Ação do ícone</string>
+    <string name="save_bookmark_folder">Lembrar localização da pasta de marcadores</string>
+
+    <string name="pref_search_suggest_engine">Motor de sugestões de pesquisa</string>
+
+    <string name="pref_number_of_tab_to_cache">Número de guias no cache</string>
+    <string name="pref_dark_theme">Tema escuro</string>
+    <string name="pref_light_theme">Tema claro</string>
+
+    <string-array name="pref_rendering_list">
+        <item>Normal</item>
+        <item>Invertida</item>
+        <item>Escala de cinza</item>
+        <item>Escala de cinza invertida</item>
+        <item>Modo noturno</item>
+    </string-array>
+
+    <string name="pref_night_mode_settings">Configurações de modo noturno</string>
+    <string name="pref_color_temperature">Temperatura da cor</string>
+    <string name="pref_warm_color">Cor quente</string>
+    <string name="pref_cool_color">Cor fria</string>
+    <string name="pref_brightness">Brilho</string>
+    <string name="pref_dark">Escuro</string>
+    <string name="pref_bright">Brilhante</string>
+
+    <string name="pref_move_to_parent">Mover para guia pai quando guia for fechada</string>
+    <string name="pref_move_to_left_tab">Mover para guia da esquerda quando guia for fechada</string>
+    <string name="pref_multi_finger_gesture_settings">Configurações de gesto multitoque</string>
+    <string name="pref_multi_finger_gesture_enable">Ativar gesto multitoque</string>
+    <string name="pref_multi_finger_gesture_name_enable">Mostrar nome da ação</string>
+    <string name="pref_number_of_fingers">Número de dedos</string>
+    <string name="pref_sensitivity">Sensibilidade</string>
+    <string name="pref_help">Ajuda</string>
+    <string name="pref_help_url">file:///android_asset/help/pt-rBR/index.html</string>
+    <string name="pref_block_images">Bloquear imagens</string>
+
+    <string name="pref_ad_block">Configurações de bloqueio de anúncio</string>
+    <string name="pref_ad_block_enable">Ativar bloqueio de anúncio</string>
+    <string name="pref_ad_block_black">Lista negra</string>
+    <string name="pref_ad_block_white">Lista branca</string>
+    <string name="pref_ad_block_white_page">Lista de página branca</string>
+    <string name="exclude_comment">Excluir linhas de comentário</string>
+    <string name="pref_edit">Editar</string>
+    <string name="pref_delete">Excluir</string>
+    <string name="pref_select_all">Selecionar todos</string>
+    <string name="pref_reset_count">Redefinir contagem</string>
+    <string name="pref_ad_block_delete_confirm">Excluir \"%1$s\"?</string>
+    <string name="pref_ad_block_delete_selected_confirm">Excluir itens selecionados?</string>
+    <string name="pref_ad_block_delete">\"%1$s\" excluído(s).</string>
+    <string name="pref_export">Exportar</string>
+    <string name="pref_exported">Exportação completada</string>
+    <string name="pref_delete_all">Excluir todos</string>
+    <string name="pref_delete_all_confirm">Excluir todos itens?</string>
+    <string name="pref_sort">Ordenar</string>
+    <string name="pref_sort_count">Por contagem</string>
+    <string name="pref_sort_date">Por data</string>
+    <string name="pref_sort_name">Por nome</string>
+
+    <string name="pref_show_divider">Divisores de exibição</string>
+    <string-array name="pref_show_divider_list">
+        <item>Automático</item>
+        <item>Mostrar</item>
+        <item>Ocultar</item>
+    </string-array>
+
+    <string name="pref_speed_dial">Acesso rápido</string>
+    <string name="pref_restore_speed_dial">Restaurar acesso rápido</string>
+    <string name="pref_backup_speed_dial">Fazer backup do acesso rápido</string>
+    <string name="pref_backup_speed_dial_confirm">Fazer backup do acesso rápido?</string>
+    <string name="pref_snap_toolbar">Barra de ferramentas de pressão</string>
+    <string name="pref_toolbar_show_loading">Mostrar barra de ferramentas ao carregar</string>
+    <string name="pref_enable_safe_browsing">Ativar navegação segura</string>
+    <string name="pref_required_android_O">Android 8.0 (Oreo) ou superior é necessário para desativar</string>
+    <string name="pref_always_show_url">Sempre mostrar URL</string>
+    <string name="pref_show_favicon">Mostrar ícone de favorito</string>
+
+    <string name="pref_touch_scrollbar">Configurações de barra de rolagem de toque</string>
+    <string name="pref_display_position">Posição de exibição</string>
+    <string name="pref_touch_scrollbar_do_not_move_toolbar">Não mover barra de ferramentas</string>
+    <string-array name="pref_touch_scrollbar_list">
+        <item>Ocultar</item>
+        <item>Direita</item>
+        <item>Esquerda</item>
+    </string-array>
+
+    <string name="pref_reader_settings">Configurações de leitura</string>
+    <string name="pref_reader_text_size">Tamanho do texto</string>
+    <string name="pref_reader_text_font">Fonte do corpo</string>
+    <string name="pref_reader_theme">Tema de leitura</string>
+    <string name="pref_reader_theme_same_as">As mesmas que as configurações do app</string>
+
+    <string name="pref_font_size">Configurações de tamanho da fonte</string>
+    <string name="pref_menu">Menu de opções</string>
+    <string name="pref_history">Histórico</string>
+    <string name="pref_bookmark">Marcador</string>
+    <string name="pref_speeddial_item_text_size">Tamanho do texto do item</string>
+    <string-array name="pref_text_size_list">
+        <item>Padrão</item>
+        <item>Minúsculo</item>
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+        <item>Enorme</item>
+    </string-array>
+
+    <string name="pref_search_settings">Configurações de pesquisa</string>
+    <string name="pref_search_url_settings">Configurações de motor de pesquisa</string>
+    <string name="pref_search_url_show_icon">Mostrar ícone de alternância na barra de pesquisa</string>
+    <string name="pref_search_cat_search">Motor de pesquisa</string>
+    <string name="pref_search_cat_suggest">Sugestão de pesquisa</string>
+    <string name="pref_fullscreen_mode">Modo de tela cheia</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>Ocultar barra de status</item>
+        <item>Ocultar barra de navegação</item>
+        <item>Ocultar ambas</item>
+    </string-array>
+    <string name="pref_slow_rendering">Renderização lenta</string>
+    <string name="pref_slow_rendering_alert">Aviso\nCongelamentos podem ocorrer frequentemente se esta função estiver ativada.\nAlém disso, é necessário reiniciar o navegador desde os apps recentes para alternar esta configuração.\nNÃO recomendamos usar esta função, exceto ao usar captura de todas capturas de tela.</string>
+    <string name="browser_settings">Configurações de navegador</string>
+    <string name="pref_basic_settings">Configurações básicas</string>
+    <string name="pref_white_url_box">Mostrar caixa do URL</string>
+    <string name="pref_enable_web_rtc">Ativar WebRTC</string>
+    <string name="pref_content_settings">Configurações de conteúdo do site</string>
+    <string name="pref_speeddial_layout">Layout</string>
+    <string-array name="pref_speeddial_layout_list">
+        <item>Ícone grande</item>
+        <item>Ícone pequeno</item>
+    </string-array>
+    <string name="pref_privacy_policy">Política de Privacidade</string>
+    <string name="mining_protect">Nenhuma moeda</string>
+    <string name="mining_protect_summary">Proteção de mineração de criptomoeda</string>
+    <string name="pref_storage_location_warn">Este local de armazenamento pode não funcionar corretamente com outros apps.</string>
+    <string name="pref_fake_chrome">Disfarçado como Chrome</string>
+    <string name="pref_fake_chrome_summary">Representar agente do usuário padrão como Chrome</string>
+    <string name="pref_toolbar_small_icon">Mostrar ícone pressionado longo</string>
+    <string name="pref_show_icon">Mostrar ícone</string>
+    <string name="pref_translation">Tradução</string>
+    <string name="pref_translators">brT</string>
+</resources>
