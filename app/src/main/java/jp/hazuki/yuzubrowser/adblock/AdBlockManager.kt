@@ -198,13 +198,6 @@ class AdBlockManager internal constructor(context: Context) {
         }
     }
 
-    fun resetCount(table: String) {
-        val db = mOpenHelper.writableDatabase
-        val count = ContentValues()
-        count.put(COLUMN_COUNT, 0)
-        db.update(table, count, null, null)
-    }
-
     internal fun getFastMatcherCachedList(table: String): FastMatcherList {
         val cache = FastMatcherCache(appContext, table)
         return if (getListUpdateTime(table) > cache.getLastTime()) {
@@ -302,10 +295,6 @@ class AdBlockManager internal constructor(context: Context) {
 
         fun deleteAll() {
             manager.deleteAll(table)
-        }
-
-        fun resetCount() {
-            manager.resetCount(table)
         }
     }
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="resblock_res_type_list">
+        <item>Пустая строка</item>
+        <item>Пустое изображение PNG</item>
+    </string-array>
+    <string-array name="edit_user_agent">
+        <item>Изменить</item>
+        <item>Удалить</item>
+    </string-array>
+
+    <string-array name="new_speed_dial_mode">
+        <item>Прямой ввод</item>
+        <item>Закладки</item>
+        <item>История</item>
+        <item>Список приложений</item>
+        <item>Список ярлыков</item>
+    </string-array>
+    <string-array name="add_bookmark_option">
+        <item>Добавить закладку</item>
+        <item>Удалить закладку</item>
+    </string-array>
+</resources>

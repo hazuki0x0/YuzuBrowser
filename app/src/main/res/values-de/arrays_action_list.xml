@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="action_list">
+        <item>Zurück</item>
+        <item>Weiter</item>
+        <item>Aktualisieren/Stopp</item>
+        <item>Aktualisieren</item>
+        <item>Seite laden stoppen</item>
+        <item>Startseite</item>
+        <item>Vergrößern</item>
+        <item>Verkleinern</item>
+        <item>Seite nach oben</item>
+        <item>Seite nach unten</item>
+        <item>Seitenanfang</item>
+        <item>Seitenende</item>
+        <item>benutzerdefinierter Bildlauf</item>
+        <item>Scrollen auf der Suchleisten-Seite</item>
+        <item>Automatisches Scrollen der Seite</item>
+        <item>Fokus nach oben</item>
+        <item>Fokus unten</item>
+        <item>Fokus links</item>
+        <item>Fokus rechts</item>
+        <item>Fokussierte Ansicht anklicken</item>
+        <item>JavaScript umschalten</item>
+        <item>Bild laden umschalten</item>
+        <item>Cookies umschalten</item>
+        <item>UserScript umschalten</item>
+        <item>Navigationssperre umschalten</item>
+        <item>Seiteninformation</item>
+        <item>Seiten URL kopieren</item>
+        <item>Seiten Titel kopieren</item>
+        <item>URL und Titel kopieren</item>
+        <item>Reiter-Verlauf</item>
+        <item>Mauszeiger</item>
+        <item>Auf der Seite suchen</item>
+        <item>Screenshot speichern</item>
+        <item>Screenshot teilen</item>
+        <item>Seite speichern</item>
+        <item>URL öffnen</item>
+        <item>Seite übersetzen</item>
+        <item>Neuer Reiter</item>
+        <item>Reiter schließen</item>
+        <item>Alles schließen</item>
+        <item>Übrige schließen</item>
+        <item>zum linken Reiter verschieben</item>
+        <item>zum rechten Reiter verschieben</item>
+        <item>Reiter nach links verschieben</item>
+        <item>Reiter nach rechts verschieben</item>
+        <item>Reiterliste</item>
+        <item>Alle linken Reiter schließen</item>
+        <item>Alle rechten Reiter schließen</item>
+        <item>Reiter wiederherstellen</item>
+        <item>Reiter replizieren</item>
+        <item>Suchfeld anzeigen</item>
+        <item>In das Suchfeld einfügen</item>
+        <item>URL einfügen</item>
+        <item>Lesezeichen</item>
+        <item>Verlauf</item>
+        <item>Download Liste</item>
+        <item>Einstellungen</item>
+        <item>Schnellwahl öffnen</item>
+        <item>Lesezeichen hinzufügen</item>
+        <item>zur Schnellwahl hinzufügen</item>
+        <item>Mustervergleich hinzufügen</item>
+        <item>zum Startbildschirm hinzufügen</item>
+        <item>Sub-Geste</item>
+        <item>Daten löschen</item>
+        <item>Proxy-Einstellungen anzeigen</item>
+        <item>Einstellungen zur Ausrichtung</item>
+        <item>Einstellungen für den geöffneten Link</item>
+        <item>Einstellungen für den UserAgent</item>
+        <item>Standardeinstellungen für den UserAgent</item>
+        <item>Einstellungen für die Seiten-Schriftgröße</item>
+        <item>Einstellungen für UserScript</item>
+        <item>Einstellungen für die Textkodierung</item>
+        <item>Darstellungsmodus</item>
+        <item>Sichtbarkeit der Reiter-Leiste umschalten</item>
+        <item>Sichtbarkeit der URL-Leiste umschalten</item>
+        <item>Sichtbarkeit der Fortschrittsleiste umschalten</item>
+        <item>Sichtbarkeit der benutzerdefinierten Leiste umschalten</item>
+        <item>Web-Titelzeile kombinieren</item>
+        <item>Web-Geste umschalten</item>
+        <item>Schnelles Streichen umschalten</item>
+        <item>Schnellsteuerung umschalten</item>
+        <item>Geste mit mehreren Berührungen umschalten</item>
+        <item>Werbeblocker umschalten</item>
+        <item>Black List öffnen</item>
+        <item>White List öffnen</item>
+        <item>White Page List öffnen</item>
+        <item>zur White Page List hinzufügen</item>
+        <item>Share page</item>
+        <item>in einer anderen App öffnen</item>
+        <item>Startaktivität</item>
+        <item>Vollbildschirm umschalten</item>
+        <item>Optionsmenü öffnen</item>
+        <item>Benutzerdefiniertes Menü anzeigen</item>
+        <item>Oberfläche</item>
+        <item>Aufgabe nach hinten verschieben</item>
+        <item>Benutzerdefinierte Aktion</item>
+        <item>Vibration</item>
+        <item>Toast-Benachrichtigung anzeigen</item>
+        <item>Privater Modus</item>
+        <item>Reiter unterschiedlich beenden</item>
+        <item>Seitenquelltext anzeigen</item>
+        <item>Drucken</item>
+        <item>Reiter anpinnen</item>
+        <item>Aktionsliste</item>
+        <item>Lesemodus</item>
+        <item>Später-Lesen</item>
+        <item>Später-Lesen-Liste</item>
+    </string-array>
+</resources>

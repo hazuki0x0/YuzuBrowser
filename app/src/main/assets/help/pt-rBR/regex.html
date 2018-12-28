@@ -1,0 +1,183 @@
+<html>
+<head>
+    <meta charset="ascii"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+</head>
+<body>
+<h1 class="head">Especificação de padrão</h1>
+<details>
+    <summary>Básico</summary>
+    <div class="details_info">
+        Curinga
+        <ul>
+            <li>&#39;#&#39;</li>
+            Corresponde a um único caractere (0-9)númerico (interpretado como &#39;\d&#39;)
+            <li>&#39;?&#39;</li>
+            Corresponde a qualquer caractere único (interpretado como &#39;.&#39;)
+            <li>&#39;*&#39;</li>
+            Corresponde a zero ou mais caracteres (interpretados como &#39;.*&#39;)
+            <li>&#39;+&#39;</li>
+            Corresponde a qualquer um ou mais caracteres (interpretados como &#39;.+&#39;)
+        </ul>
+        Se você quiser usar estes caracteres como letras comuns, preceda com barra invertida. <br>
+        &#39;\#&#39;, &#39;\?&#39;, &#39;\*&#39;, &#39;\+&#39;<br><br>
+        Além disso, você pode usar a expressão regular ao circundar com<code>[]</code>.<br>
+        Todos padrões são distinguidos entre letras maiúsculas e minúsculas.
+    </div>
+</details>
+<details>
+    <summary>Descrição do curinga</summary>
+    <div class="details_info">
+        <ul>
+            <li>Curinga&#39;#&#39;</li>
+        </ul>
+        <div class="li_info">
+            &#39;#&#39; corresponde a um dos números 0-9.<br>
+            ex.1)Cadeia padrão = <code>IMG#.jpg</code><br>
+            Se um URL inclui <code>IMG0.jpg</code> ou <code>IMG1.jpg</code> ou ... ou <code>IMG8.jpg</code>
+            ou <code>IMG9.jpg</code>, ele é correspondido.<br>
+            No caso de <code>http://www.test.com/IMG.jpg</code>, devido um número não vir
+            após &quot;IMG&quot;, este URL não é correspondido.<br>
+            ex.2)Cadeia padrão = <code>IMG###.jpg</code><br>
+            Se um URL inclui <code>IMG000.jpg</code> ou <code>IMG001.jpg</code> ou ... ou <code>IMG998.jpg</code>
+            ou <code>IMG999.jpg</code>, ele é correspondido.<br>
+            No caso de <code>http://www.test.com/IMG0a1.jpg</code>, devido ele não incluir
+            três valores numéricos consecutivos, este URL não é correspondido.
+        </div>
+        <ul>
+            <li>Curinga&#39;?&#39;</li>
+        </ul>
+        <div class="li_info">
+            &#39;?&#39; corresponde a qualquer caractere único.<br>
+            ex.1)Cadeia padrão = <code>IMG_?.jpg</code><br>
+            Se um URL inclui a expressão que algum caractere é inserido entre
+            <code>IMG_</code> e <code>.jpg</code>, ele é correspondido.<br>
+            No caso de <code>http://www.test.com/IMG_l.jpg</code>, este URL é correspondido.<br>
+            No caso de <code>http://www.test.com/IMG_00.jpg</code>, dois
+            caracteres(<code>00</code>) estão encaixados entre <code>IMG_</code> e
+            <code>.jpg</code>, ele não é correspondido.<br>
+            ex.2)Cadeia padrão = <code>IMG_???.jpg</code><br>
+            Este padrão corresponde ao URL que alguns três caracteres são inseridos entre
+            <code>IMG_</code> e <code>.jpg</code>.
+        </div>
+        <ul>
+            <li>Curinga&#39;*&#39;</li>
+        </ul>
+        <div class="li_info">
+            &#39;*&#39; corresponde a qualquer zero ou mais caracteres.<br>
+            ex.)Cadeia padrão = <code>IMG_*.jpg</code><br>
+            Se um URL inclui a expressão que algum zero ou mais caracteres é inserido entre
+            <code>IMG_</code> e <code>.jpg</code>, ele é correspondido.<br>
+            Portanto, ele corresponde a ambos de <code>IMG_.jpg</code>, <code>IMG_000.jpg</code> e <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Curinga&#39;+&#39;</li>
+        </ul>
+        <div class="li_info">
+            &#39;+&#39; corresponde a qualquer um ou mais caracteres.<br>
+            ex.)Cadeia padrão = <code>IMG_+.jpg</code><br>
+            Se um URL inclui a expressão que um ou mais caracteres é inserido entre
+            <code>IMG_</code> e <code>.jpg</code>, ele é correspondido.<br>
+            Portanto, ele corresponde a ambos de <code>IMG_.jpg</code>, <code>IMG_000.jpg</code> e <code>IMG_000abc.jpg</code>.
+            <font color="red">Ele não corresponde, se não houver nada entre <code>IMG_</code> e
+                <code>.jpg</code>.</font><br>
+            Portanto, ele corresponde a ambos de <code>IMG_000.jpg</code> e <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Expressão regular</li>
+        </ul>
+        <div class="li_info">
+            O padrão incluído em &#39;[ ]&#39; é tratado como uma expressão regular.<br>
+            Expressões regulares estão em conformidade com as especificações do Java. <br>
+            ex.)<code>[https?://www\.test\.com/IMG_*\.jpg]</code>
+        </div>
+    </div>
+</details>
+<details id="insecure_content">
+    <summary>Correspondência de padrão</summary>
+    <div class="details_info">
+        Se você não aplicar um esquema como <code>http://</code>, ele será automaticamente
+        complementado.(adicione <code>^\w+://</code>)<br>
+       Se você fizer um padrão como <code>*test.com</code>, ele corresponderá ao URL, como <code>http://other.com/?page=test.com</code>.
+        <ul>
+            <li>Se você quiser substituir um subdomínio</li>
+        </ul>
+        <div class="li_info">
+            Inicie com <code>*.</code>ou <code>http://*.</code>. (substitua <code>*.</code> com
+            <code>((?![./]).)*</code>)<br>
+            ex.)Cadeia padrão =<code>*.test.com</code><br>
+            Corresponde a <code>mobile.test.com</code>, <code>doc.test.com</code><br>
+            Contudo, <code>mobile.doc.test.com</code> não corresponde porque o subdomínio contém
+            <code>.</code>.
+        </div>
+        <ul>
+            <li>Se o padrão inicia com <code>http*://</code></li>
+        </ul>
+        <div class="li_info">
+            Isto não é necessário porque esta parte é automaticamente complementada pelo
+            navegador.<br>
+            Esta descrição será substituída internamente com <code>https?://</code> para prevenir falsos
+            positivos.
+        </div>
+    </div>
+</details>
+<details>
+    <summary>Bloqueio de anúncio</summary>
+    <div class="details_info">
+        Se você não usar curinga, será mais rápido.<br>
+        Além disso, o desempenho é pior se houver um padrão complexo na expressão
+        regular.<br>
+        <ul>
+            <li>Se você não usar curinga(<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            Se houver uma cadeia especificada no URL, bloqueie-a.<br>
+            ex.)Cadeia padrão =<code>ad.jpg</code><br>
+            Bloqueia <code>http://test.com/ad/ad.jpg</code>, <code>https://test.jp/ad/img/ad.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Se você não usar curinga(<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            Consulte a descrição do curinga para mais informações.<br>
+            ex.)Cadeia padrão =<code>/ad/+.jpg</code><br>
+            Bloqueia <code>http://test.com/ad/01.jpg</code>, <code>https://test.jp/ad/img/advertisement.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Bloqueio de host</li>
+        </ul>
+        <div class="li_info">
+            Bloqueia todos hosts especificados.<br>
+            <ul>
+                <li>Correspondência perfeita</li>
+            </ul>
+            <div class="li_info">
+                <code>h ad.test.com</code> Especifique colocar um espaço após o &#39;h&#39;, tal como.<br>
+                Isto é útil para bloquear <code>http://ad.test.com</code> sem bloquear <code>http://test.com</code>.<br>
+                Curingas também podem ser usados. <br>
+                ex.)<code>h ad.+.com</code>, <code>h ad.test.*</code><br>
+                <code>127.0.0.1 ad.com</code> também pode ser especificado num formato de host, tal como.
+            </div>
+            <ul>
+                <li>Correspondência parcial</li>
+            </ul>
+            <div class="li_info">
+                <code>c ad.com</code> Especifique colocar um espaço após o &#39;c&#39;, tal como.<br>
+                Bloqueia <code>http://ad.com</code>, <code>http://abc.ad.com</code>, <code>http://ad001.ad.com</code>
+                etc.<br>
+                <font color="red">Curingas NÃO podem ser usados.</font>
+            </div>
+            <ul>
+                <li>Ao usar expressões regulares no bloqueio de host</li>
+            </ul>
+            <div class="li_info">
+                <code>h [test\.com]</code> pode ser especificado tal como.
+            </div>
+        </div>
+    </div>
+</details>
+</body>
+</html>

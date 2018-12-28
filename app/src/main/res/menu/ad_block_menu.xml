@@ -10,10 +10,6 @@
         android:title="@string/pref_delete_all" />
 
     <item
-        android:id="@+id/resetAllCount"
-        android:title="@string/reset_all_counts"/>
-
-    <item
         android:id="@+id/sort"
         android:title="@string/pref_sort">
         <menu>

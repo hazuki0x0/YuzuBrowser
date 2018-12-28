@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_settings">Beállítások</string>
+    <string name="pref_about">Névjegy</string>
+    <string name="pref_ui_settings">Felület beállításai</string>
+    <string name="pref_tab_bar">Lapsor</string>
+    <string name="pref_url_bar">URL sáv</string>
+    <string name="pref_progress_bar">Betöltési sáv</string>
+    <string name="pref_tab_type">Lap típusa</string>
+
+    <string name="pref_page_settings">Oldalbeállítások</string>
+    <string name="pref_toolbar_location">Tájolás (álló)</string>
+    <string name="pref_toolbar_location_top">Felső sáv</string>
+    <string name="pref_toolbar_location_bottom">Alsó sáv</string>
+    <string name="pref_translators">windanesz</string>
+</resources>

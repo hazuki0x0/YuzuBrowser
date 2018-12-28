@@ -27,7 +27,12 @@ fun Context.createLanguageContext(lang: String): Context {
     val sysLocale = config.getSystemLocale()
 
     if (lang.isNotEmpty() && sysLocale.language != lang) {
-        val locale = Locale(lang)
+        val locale = if (lang.contains('-')) {
+            val language = lang.split('-')
+            Locale(language[0], language[1])
+        } else {
+            Locale(lang)
+        }
         config.setLocale(locale)
         return ContextWrapper(createConfigurationContext(config))
     }

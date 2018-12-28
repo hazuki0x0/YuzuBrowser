@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,6 @@ class WebViewRenderingManager {
     var mode: Int = 0
         set(mode) {
             field = mode
-            isInverted = isInvertMode
-
             paint.colorFilter = when (mode) {
                 0 -> null
                 1 -> ColorMatrixColorFilter(NEGATIVE_COLOR)
@@ -56,12 +54,6 @@ class WebViewRenderingManager {
                 else -> null
             }
         }
-
-    val isInvertMode: Boolean
-        get() = mode == 1 || mode == 3
-
-    var isInverted = false
-        private set
 
     fun onPreferenceReset() {
         colorTemp = AppData.night_mode_color.get()

@@ -1,0 +1,129 @@
+<html>
+<head>
+    <meta charset="ascii"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+    <script type="text/javascript" src="../link.js"></script>
+</head>
+<body>
+<h1 class="head">Browser-Einstellungen</h1>
+<details id="pattern">
+    <summary>Mustervergleich</summary>
+    <p class="details_info">
+        Der Mustervergleich erm&ouml;glicht es Ihnen eine vordefinierte URL automatisch in einer anderen Anwendung zu &ouml;ffnen, JavaScript und UserAgent zu &auml;ndern oder Sperren zu setzen<br>
+        Um einen Mustervergleich zu erstellen, beachten Sie bitte <a href="regex.html">Spezifikation Mustervergleich</a>.
+    </p>
+</details>
+<details>
+    <summary>UserScript-Einstellungen</summary>
+    <p class="details_info">Dort kann man UserScripte erstellen und verwalten</p>
+</details>
+<details id="ad_block">
+    <summary>Werbeblocker-Einstellungen</summary>
+    <p class="details_info">
+        Sie k&ouml;nnen Werbeblocker einrichten.<br>
+        Informationen zum Schreiben der jeweiligen Liste finden Sie unter <a href="regex.html">Spezifikation Mustervergleich</a>.
+    </p>
+</details>
+<details id="res_interrupt">
+    <summary>Ressourcen-Interrupt-Einstellungen</summary>
+    <p class="details_info">&Uuml;berpr&uuml;ft die URL und blockiert Bilder, externe Skripte, etc.<br>Es kann auch f&uuml;r verwendet werden, um Werbung zu blockieren.</p>
+</details>
+<details>
+    <summary>Startseite</summary>
+    <p class="details_info">&ouml;ffnet die angegebene URL beim &Ouml;ffnen eines neuen Reiters etc. <br>
+        Die Voreinstellung ist Schnellwahl (yuzu:speeddial).</p>
+</details>
+<details>
+    <summary>Download Aktion</summary>
+    <p class="details_info">Sie k&ouml;nnen das Verhalten beim Herunterladen von Dateien usw. &auml;ndern. <br><br>
+        <b>Nichts unternehmen</b><br>
+        Der Download-Request wird ignoriert.<br>
+        <b>Auto</b><br>
+        Im Falle einer Videowiedergabe-Anforderung oder dergleichen wird die URL von einer anderen Anwendung ge&ouml;ffnet, ansonsten wird ein Download-Dialog angezeigt.<br>
+        <b>Immer herunterladen</b><br>
+        Immer den Download-Dialog anzeigen.<br>
+        <b>Immer &ouml;ffnen</b><br>
+        Immer die URL in einer anderen Anwendung &ouml;ffnen.<br>
+        <b>teilen</b><br>
+        Immer URLs teilen.<br>
+        <b>ausw&auml;hlen</b><br>
+        Jedes Mal, wenn Sie eine Download-Anfrage erhalten, k&ouml;nnen Sie ausw&auml;hlen, welches Verfahren (&ouml;ffnen, herunterladen und teilen) Sie verwenden m&ouml;chten.</p>
+</details>
+<details>
+    <summary>Proxy Einstellungen</summary>
+    <p class="details_info">Dort k&ouml;nnen Sie einen Proxy einstellen</p>
+</details>
+<details>
+    <summary>Sucheinstellungen</summary>
+    <div class="details_info">
+        <dl>
+            <dt>Suchmaschineneinstellungen</dt>
+            <dd>W&auml;hlen Sie die von Ihnen eingerichtete Suchmaschine aus.</dd>
+            <dt>URL-Einstellungen der Suchmaschine</dt>
+            <dd>Sie k&ouml;nnen den Titel, die URL und die Farbe der Suchmaschine einstellen.<br>Setzen Sie den Suchbegriff als
+                &#39;%s&#39;
+            </dd>
+            <dt>Umschalte-Symbol in der Suchleiste anzeigen</dt>
+            <dd>Sie k&ouml;nnen einstellen, ob das Symbol f&uuml;r die Suchmaschinenumschaltung in der Suchleiste angezeigt werden soll.
+            </dd>
+            <dt>Suchvorschlag-Typ</dt>
+            <dd>Der Suchvorschlag kann aus dem Netzwerk, aus fr&uuml;heren Abfragen und aus beiden eingestellt werden.</dd>
+            <dt>Verlauf anzeigen</dt>
+            <dd>Zeigt den Verlauf im Suchvorschlag an.</dd>
+            <dt>Lesezeichen anzeigen</dt>
+            <dd>Zeigt Lesezeichen im Suchvorschlag an.</dd>
+        </dl>
+    </div>
+</details>
+<details>
+    <summary>Reiter speichern beim Beenden</summary>
+    <p class="details_info">Sie k&ouml;nnen einstellen, ob bei Verwendung der Aktion [Beenden] der Reiter gespeichert werden soll.</p>
+</details>
+<details>
+    <summary>Angepinnte Reiter beim Beenden speichern</summary>
+    <p class="details_info">Speichert den angepinnten Reiter bei Verwendung der Aktion [Beenden].</p>
+</details>
+<details>
+    <summary>Geschlossene Reiter speichern</summary>
+    <p class="details_info">Aktivieren Sie diese Option, wenn Sie die Aktion [Reiter wiederherstellen] verwenden <br>Wenn die Aktion [Reiter wiederherstellen] nicht verwendet wird, ist es besser, die Option zwecks Speicheroptimierung zu deaktivieren.</p>
+</details>
+<details>
+    <summary>Einstellungen f&uuml;r Neuer Reiter</summary>
+    <p class="details_info">Kann Einstellungen beim &Ouml;ffnen eines neuen Reiters festlegen</p>
+</details>
+<details>
+    <summary>Anzahl der Reiter im Zwischenspeicher</summary>
+    <p class="details_info">Einstellen der H&ouml;chstzahl der im Speicher gehaltenen Registerkarten</p>
+</details>
+<details>
+    <summary>Web bei Wechsel des Reiters anhalten</summary>
+    <p class="details_info">Reiter stoppen die Verarbeitung, wenn sie in den Hintergrund treten.</p>
+</details>
+<details>
+    <summary>Web im Hintergrund anhalten</summary>
+    <p class="details_info">Alle Reiter stoppen die Verarbeitung, wenn die Anwendung in den Hintergrund tritt.</p>
+</details>
+<details>
+    <summary>Unbekanntes Schema teilen</summary>
+    <p class="details_info">Versuchen Sie, die URL von einer anderen Anwendung zu &ouml;ffnen, die kein Schema unterst&uuml;tzt.
+        (z.B. Intent: // oder Twitter: //)</p>
+</details>
+<details>
+    <summary>Download-Verzeichnis</summary>
+    <p class="details_info">Geben Sie den Zielordner an<br>Bei einer SD-Karte ist dies nur m&ouml;glich unter
+        /storage/sdcard1/Android/data/jp.hazuki.yuzubrowser/files</p>
+</details>
+<details>
+    <summary>Automatisches Speicherinterval (sec.)</summary>
+    <p class="details_info">Automatisches Speicherintervall einstellen (sec.)<br>Automatisches Speichern wird nicht ausgef&uuml;hrt, wenn es 0 sec. ist.</p>
+</details>
+<details>
+    <summary>Verlangsamter Bildaufbau</summary>
+    <p>
+        Es ist eine Einstellung, um einen Vollbild-Screenshot zu machen.<br>
+        Es wird nicht empfohlen, andere Einstellungen als Vollbild-Screenshots zu aktivieren, da die Wahrscheinlichkeit eines h&auml;ufigen Einfrierens besteht.
+    </p>
+</details>
+</body>
+</html>

@@ -73,7 +73,6 @@ import jp.hazuki.yuzubrowser.userjs.UserScriptListActivity
 import jp.hazuki.yuzubrowser.utils.*
 import jp.hazuki.yuzubrowser.utils.extensions.clipboardText
 import jp.hazuki.yuzubrowser.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.utils.view.ContextMenuTitleView
 import jp.hazuki.yuzubrowser.utils.view.SeekBarDialog
 import jp.hazuki.yuzubrowser.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.webkit.TabType
@@ -868,13 +867,13 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
 
                 val builder = AlertDialog.Builder(controller.activity)
                 if (target is ActionController.HitTestResultTargetInfo) {
-                    builder.setCustomTitle(ContextMenuTitleView(controller.activity, target.result.extra))
-                    builder.setAdapter(
+                    builder.setTitle(target.result.extra)
+                            .setAdapter(
                                     ActionListViewAdapter(controller.activity, actionList, target.actionNameArray)
                             ) { _, which -> checkAndRun(actionList[which], target) }
                 } else {
-                    builder.setCustomTitle(ContextMenuTitleView(controller.activity, tab.url))
-                    builder.setAdapter(
+                    builder.setTitle(tab.url)
+                            .setAdapter(
                                     ActionListViewAdapter(controller.activity, actionList, null)
                             ) { _, which -> checkAndRun(actionList[which], target) }
                 }
