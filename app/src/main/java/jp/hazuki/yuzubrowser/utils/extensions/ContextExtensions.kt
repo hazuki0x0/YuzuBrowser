@@ -72,3 +72,7 @@ fun Context.getFakeChromeUserAgent(): String {
     ua.replace("Version/4.0 ", "")
     return ua.toString()
 }
+
+fun Context.readAssetsText(fileName: String): String {
+    return assets.open(fileName).reader().use { it.readText() }
+}

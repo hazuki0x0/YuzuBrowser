@@ -300,4 +300,6 @@
     <string name="breadcrumb">Breadcrumbs</string>
     <string name="download_failed_root_not_exists">Unable to download because the download destination folder is not found</string>
     <string name="download_failed_root_not_writable">Unable to download because the download destination folder cannot be written</string>
+    <string name="reset_all_counts">Reset all counts</string>
+    <string name="reset_all_counts_mes">Are you sure you want to reset all counts?</string>
 </resources>
