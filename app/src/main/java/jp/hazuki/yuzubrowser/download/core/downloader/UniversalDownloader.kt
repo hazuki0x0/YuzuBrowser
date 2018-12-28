@@ -111,7 +111,13 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
-                tmp.renameTo(info.name)
+                if (!tmp.renameTo(info.name)) {
+                    if (info.root.findFile(info.name) == null)
+                        throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                }
+                if (info.root.findFile(info.name) == null) {
+                    throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                }
             }
 
             info.state = DownloadFileInfo.STATE_DOWNLOADED
@@ -146,6 +152,8 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
             info.root.findFile("${info.name}${Constants.download.TMP_FILE_SUFFIX}")?.delete()
         }
     }
+
+    private class DownloadException(message: String) : IOException(message)
 
     companion object {
         private const val BUFFER_SIZE = 1024 * 2

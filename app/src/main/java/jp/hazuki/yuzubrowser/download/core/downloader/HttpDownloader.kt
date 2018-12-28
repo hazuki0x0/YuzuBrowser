@@ -118,7 +118,8 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
                 return false
             } else {
                 if (!tmp.renameTo(info.name)) {
-                    throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                    if (info.root.findFile(info.name) == null)
+                        throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
                 }
                 if (info.root.findFile(info.name) == null) {
                     throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
