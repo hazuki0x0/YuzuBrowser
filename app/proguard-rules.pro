@@ -35,12 +35,11 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 -keepclassmembers class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator CREATOR;
 }
 
 # Javascript interface
 -keepattributes JavascriptInterface
--keepclasseswithmembers class * {
-    @android.webkit.JavascriptInterface <methods>;
-}
