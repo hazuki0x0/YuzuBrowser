@@ -20,10 +20,12 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
+import android.support.v4.content.ContextCompat
 import android.webkit.WebSettings
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
@@ -94,5 +96,9 @@ fun Context.getVersionCode(): Int {
         @Suppress("DEPRECATION")
         info.versionCode
     }
+}
 
+fun Context.getBitmap(drawableId: Int): Bitmap {
+    val drawable = ContextCompat.getDrawable(this, drawableId)!!
+    return drawable.getBitmap()
 }

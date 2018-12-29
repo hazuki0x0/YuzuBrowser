@@ -265,7 +265,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
             updateInfo(ServiceSocket.UPDATE, info)
         }
 
-        override fun onFileDownloaded(info: DownloadFileInfo) {
+        override fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: DocumentFile) {
             database.update(info)
             NotificationCompat.Builder(this@DownloadService, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY).run {
                 setOngoing(false)
@@ -275,7 +275,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
                 setAutoCancel(true)
                 setContentText(getText(R.string.download_success))
                 setSmallIcon(android.R.drawable.stat_sys_download_done)
-                setContentIntent(PendingIntent.getActivity(applicationContext, 0, info.createFileOpenIntent(this@DownloadService), 0))
+                setContentIntent(PendingIntent.getActivity(applicationContext, 0, info.createFileOpenIntent(this@DownloadService, downloadedFile), 0))
                 notificationManager.notify(info.id.toInt(), build())
             }
             updateInfo(ServiceSocket.UPDATE, info)

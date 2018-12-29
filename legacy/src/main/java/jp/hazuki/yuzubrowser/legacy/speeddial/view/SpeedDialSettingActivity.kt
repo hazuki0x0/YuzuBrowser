@@ -13,11 +13,11 @@ import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDial
 import jp.hazuki.yuzubrowser.legacy.speeddial.WebIcon
-import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.AppInfo
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ApplicationListFragment
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ShortCutListFragment
+import jp.hazuki.yuzubrowser.legacy.utils.extensions.getBitmap
 import jp.hazuki.yuzubrowser.legacy.utils.stack.SingleStack
 
 class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, FragmentManager.OnBackStackChangedListener, SpeedDialSettingActivityFragment.OnSpeedDialAddListener, SpeedDialSettingActivityEditFragment.GoBackController, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {
@@ -111,7 +111,7 @@ class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, Fragmen
                     val component = intent.component
                     if (component != null) {
                         val drawable = packageManager.getApplicationIcon(component.packageName)
-                        icon = ImageUtils.getBitmap(drawable)
+                        icon = drawable.getBitmap()
                     }
                 } catch (e: PackageManager.NameNotFoundException) {
                     e.printStackTrace()
@@ -130,7 +130,7 @@ class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, Fragmen
         goBack()
         val intent = Intent()
         intent.setClassName(appInfo.packageName, appInfo.className)
-        val webIcon = WebIcon.createIcon(ImageUtils.getBitmap(appInfo.icon))
+        val webIcon = WebIcon.createIcon(appInfo.icon.getBitmap())
         val speedDial = SpeedDial(intent.toUri(Intent.URI_INTENT_SCHEME), appInfo.appName, webIcon, false)
         speedDialStack.addItem(speedDial)
     }

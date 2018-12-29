@@ -26,7 +26,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.ResourceUtils
+import jp.hazuki.yuzubrowser.legacy.utils.extensions.getBitmap
 
 class PointerView(context: Context) : RelativeLayout(context) {
     //private static final String TAG = "PointerView";
@@ -109,7 +109,7 @@ class PointerView(context: Context) : RelativeLayout(context) {
 
         mGestureDetector = MultiTouchGestureDetector(context, MyMultiTouchGestureListener())
 
-        val bitmap = ResourceUtils.getBitmap(context, R.drawable.ic_mouse_cursor)
+        val bitmap = context.getBitmap(R.drawable.ic_mouse_cursor)
         val matrix = Matrix()
         val dimen = resources.getDimension(R.dimen.dimen_cursor)
         matrix.postScale(dimen / bitmap.height, dimen / bitmap.height)

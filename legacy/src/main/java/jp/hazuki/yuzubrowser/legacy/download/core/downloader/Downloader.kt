@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy.download.core.downloader
 
 import android.content.Context
+import android.support.v4.provider.DocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
 
@@ -47,7 +48,7 @@ interface Downloader {
 
         fun onStartDownload(info: DownloadFileInfo)
 
-        fun onFileDownloaded(info: DownloadFileInfo)
+        fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: DocumentFile)
 
         fun onFileDownloadAbort(info: DownloadFileInfo)
 

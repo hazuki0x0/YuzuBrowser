@@ -85,13 +85,8 @@ public class ImageUtils {
             if (!parent.exists() && !parent.mkdirs())
                 return false;
 
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(file);
+        try (OutputStream os = new FileOutputStream(file)) {
             bitmap.compress(CompressFormat.PNG, 100, os);
-        } finally {
-            if (os != null)
-                os.close();
         }
         return true;
     }
@@ -145,16 +140,6 @@ public class ImageUtils {
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         vectorDrawable.draw(canvas);
         return bitmap;
-    }
-
-    public static Bitmap getBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof VectorDrawable) {
-            return ImageUtils.getBitmap((VectorDrawable) drawable);
-        } else {
-            throw new IllegalArgumentException("unsupported drawable type : " + drawable.getClass().getName());
-        }
     }
 
     public static Drawable getDrawable(Context context, Bitmap bitmap) {

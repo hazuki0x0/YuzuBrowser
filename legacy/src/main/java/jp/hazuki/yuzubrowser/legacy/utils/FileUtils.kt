@@ -55,6 +55,7 @@ fun createUniqueFileName(root: DocumentFile, fileName: String): String {
 fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): String {
     if (root.findFile(fileName) == null && root.findFile(fileName + suffix) == null) return fileName
 
+    val checkName = CheckName(root)
     val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
     var i = 1
     val builder = StringBuilder()
@@ -70,9 +71,44 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
         builder.append(suffix)
         tmpName = builder.toString()
         builder.delete(0, builder.length)
-    } while (root.findFile(newName) != null || root.findFile(tmpName) != null)
+    } while (checkName.exists(newName) || root.findFile(tmpName) != null)
 
     return newName
+}
+
+private fun DocumentFile.sortedFileName(): List<String> {
+    val files = listFiles()
+    return files.map { it.name ?: "" }
+            .sortedWith(Comparator { s1, s2 ->
+                val compared = compareLength(s1, s2)
+                if (compared == 0) {
+                    s1.compareTo(s2)
+                } else {
+                    compared
+                }
+            })
+}
+
+private class CheckName(root: DocumentFile) {
+    private val files = root.sortedFileName()
+    private val length = files.size
+    private var index = 0
+
+    fun exists(name: String): Boolean {
+        do {
+            if (files[index] == name) return true
+            index++
+        } while (length > index)
+        return false
+    }
+}
+
+private fun compareLength(s1: String, s2: String): Int {
+    return when {
+        s1.length > s2.length -> 1
+        s1.length < s2.length -> -1
+        else -> 0
+    }
 }
 
 class ParsedFileName internal constructor(var prefix: String, var suffix: String?)
