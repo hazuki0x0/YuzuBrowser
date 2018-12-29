@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_settings">Настройки</string>
+    <string name="pref_about">О приложении</string>
+    <string name="pref_ui_settings">Настройки интерфейса</string>
+    <string name="pref_toolbar_settings">Настройки панели инструментов</string>
+    <string name="pref_tab_bar">Панель вкладки</string>
+    <string name="pref_url_bar">Панель адреса</string>
+    <string name="pref_progress_bar">Индикатор выполнения</string>
+    <string name="pref_tab_type">Тип вкладки</string>
+
+    <string-array name="pref_tab_type_list">
+        <item>Rolável</item>
+        <item>Completa</item>
+    </string-array>
+
+    <string name="pref_page_settings">Параметры страницы</string>
+    <string name="pref_toolbar_location">Положение (портрет)</string>
+    <string name="pref_toolbar_location_landscape">Положение (альбом)</string>
+    <string name="pref_toolbar_location_priority">Приоритет позиционирования (портрет)</string>
+    <string name="pref_toolbar_location_priority_landscape">Приоритет позиционирования (альбом)</string>
+    <string name="pref_toolbar_location_undefine">Не определено</string>
+    <string name="pref_toolbar_location_top">Верхняя панель</string>
+    <string name="pref_toolbar_location_top_always">Верхняя панель (всегда отображать)</string>
+    <string name="pref_toolbar_location_bottom">Нижняя панель</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">Наложение нижней панели (всегда отображать)</string>
+    <string name="pref_toolbar_location_bottom_always">Нижняя панель (всегда отображать)</string>
+    <string name="pref_toolbar_location_web">Веб-панель</string>
+    <string name="pref_toolbar_location_web_fix">Веб-панель (фиксированно)</string>
+    <string name="pref_toolbar_location_left">Левая панель</string>
+    <string name="pref_toolbar_location_right">Правая панель</string>
+    <string name="pref_allow_content_access">Разрешить доступ к содержимому</string>
+    <string name="pref_default_encoding">Кодировка текста по умолчанию</string>
+    <string name="pref_text_encoding">Кодировка текста</string>
+    <string name="pref_softbtn_settings">Настройки кнопок панели инструментов</string>
+    <string name="pref_btn_tab_left">Левая кнопка панели вкладок</string>
+    <string name="pref_btn_tab_right">Правая кнопка панели вкладок</string>
+    <string name="pref_btn_url_left">Левая кнопка панели адреса</string>
+    <string name="pref_btn_url_right">Правая кнопка панели адреса</string>
+    <string name="pref_btn_url_center">Кнопка по центру панели адреса (поле адреса)</string>
+    <string name="pref_btn_action_press">Нажатие</string>
+    <string name="pref_btn_action_lpress">Длительное нажатие</string>
+    <string name="pref_btn_action_up">Смахивание вверх</string>
+    <string name="pref_btn_action_down">Смахивание вниз</string>
+    <string name="pref_btn_action_left">Смахивание влево</string>
+    <string name="pref_btn_action_right">Смахивание вправо</string>
+    <string name="pref_toolbar_size">Размер панели</string>
+    <string name="pref_toolbar_text_size">Размер текста</string>
+    <string name="pref_text_size">Размер текста</string>
+
+    <string name="pref_private_mode">Приватный режим</string>
+    <string name="pref_javascript">Разрешить JavaScript</string>
+    <string name="pref_web_db">Включить базу данных</string>
+    <string name="pref_web_dom_db">Включить хранилище DOM</string>
+    <string name="pref_menu_settings">Параметры настройки меню</string>
+    <string name="pref_user_agent">UserAgent</string>
+
+    <string name="pref_sensitivity_distance">Чувствительность (расстояние)</string>
+    <string name="pref_browser_settings">Настройки обозревателя</string>
+    <string name="pref_pattern_match">Действия по шаблону</string>
+    <string name="pref_home_page">Главная страница</string>
+    <string name="pref_hardbtn_settings">Настройки аппаратных кнопок</string>
+    <string name="pref_btn_back_press">Нажатие кнопки возврата</string>
+    <string name="pref_btn_back_lpress">Длительное нажатие кнопки возврата</string>
+    <string name="pref_btn_serach_press">Нажатие поиска</string>
+    <string name="pref_btn_volume_up">Увеличение громкости</string>
+    <string name="pref_btn_volume_down">Уменьшение громкости</string>
+    <string name="pref_btn_volume_default_play">Изменять громкость во время воспроизведения видео</string>
+    <string name="pref_btn_camera_press">Нажатие кнопки камеру</string>
+    <string name="pref_btn_menu_press">Меню нажатий</string>
+    <string name="pref_load_overview">Загрузка в режиме обзора</string>
+    <string name="pref_web_wideview">Использовать просмотр wideview</string>
+    <string name="pref_oritentation">Ориентация</string>
+    <string name="pref_web_customview_oritentation">Ориентация полноэкранного видео</string>
+    <string name="pref_oritentation_unspecified">Не указано</string>
+    <string name="pref_oritentation_landscape">Альбом</string>
+    <string name="pref_oritentation_portrait">Портрет</string>
+    <string name="pref_oritentation_sensor">Датчик</string>
+    <string name="pref_oritentation_no_sensor">Нет датчика</string>
+    <string name="pref_search_url">Настройки поисковой системы</string>
+    <string name="pref_search_url_error">%s не найдено</string>
+    <string name="pref_lpress_settings">Нажатие и удержание кнопки настроек</string>
+    <string name="pref_lpress_link">Ссылка</string>
+    <string name="pref_lpress_image">Изображение</string>
+    <string name="pref_lpress_linkimage">Ссылка на изображение</string>
+    <string name="pref_tab_size_x">Отображение ширины вкладки</string>
+    <string name="pref_tab_font_size">Размер шрифта таблиц</string>
+    <string name="pref_action_settings">Настройки действий</string>
+    <string name="pref_tab_action">Действие вкладки</string>
+    <string name="pref_show_zoom_button">Показывать кнопки масштабирования</string>
+    <string name="pref_fullscreen">Полноэкранный режим</string>
+    <string name="pref_keep_screen_on">Оставлять экран включённым</string>
+    <string name="pref_accept_cookie">Принимать cookies</string>
+    <string name="pref_accept_third_cookie">Принимать сторонние cookies</string>
+    <string name="pref_accept_cookie_private">Принимать cookies в приватном режиме</string>
+    <string name="pref_web_cache">Режим кеширования</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>Padrão</item>
+        <item>Sem cache</item>
+        <item>Carregar cache preferencialmente</item>
+        <item>Carregar cache apenas</item>
+    </string-array>
+
+    <string name="pref_web_popup">Включить всплывающее окно</string>
+    <string name="pref_download_action">Действие при загрузке</string>
+
+    <string-array name="pref_download_action_list">
+        <item>Fazer nada</item>
+        <item>Automático</item>
+        <item>Sempre download</item>
+        <item>Sempre abrir</item>
+        <item>Compartilhar</item>
+        <item>Selecionar</item>
+    </string-array>
+
+    <string name="pref_download_folder">Папка загрузок</string>
+    <string name="pref_pause_web_background">Приостановить веб в фоне</string>
+    <string name="pref_pause_web_tab_change">Приостановить веб при смене вкладки</string>
+    <string name="pref_pause_web_tab_change_disable_summary">Отключено из-за ошибки в WebView</string>
+    <string name="pref_btn_custom">Пользовательская кнопка панели</string>
+    <string name="pref_custom_bar">Пользовательская панель</string>
+    <string name="pref_save_formdata">Сохранять данные форм</string>
+    <string name="pref_web_app_cache">Включить кеш приложения</string>
+    <string name="pref_web_geolocation">Включить геолокацию</string>
+    <string name="pref_privacy_settings">Приватность</string>
+    <string name="pref_clear_browser_data">Очистить данные</string>
+    <string name="pref_layout_algorithm">Метод компоновки</string>
+
+    <string-array name="pref_layout_algorithm_list">
+        <item>Normal</item>
+        <item>Autodimensionamento de texto</item>
+        <item>Coluna única (descontinuada)</item>
+        <item>Colunas estreitas (descontinuada)</item>
+    </string-array>
+
+    <string name="pref_save_history">Сохранять историю</string>
+    <string name="pref_newtab_settings">Настройки новой вкладки</string>
+
+    <string-array name="pref_newtab_list">
+        <item>Guia atual</item>
+        <item>Nova guia</item>
+        <item>Guia em plano de fundo</item>
+        <item>Nova guia na direita</item>
+        <item>Guia na direita em plano de fundo</item>
+    </string-array>
+
+    <string name="pref_newtab_link">Ссылка</string>
+    <string name="pref_newtab_bookmark">Закладки</string>
+    <string name="pref_newtab_history">История</string>
+    <string name="pref_newtab_blank">target=_blank</string>
+    <string name="pref_proxy_settings">Настройки прокси</string>
+    <string name="pref_ssl_error_alert">Показывать предупреждения безопасности</string>
+    <string name="pref_gesture_settings">Настройки жестов</string>
+    <string name="pref_web_gesture_settings">Настройки жестов</string>
+    <string name="pref_sub_gesture_settings">Настройки дополнительных жестов</string>
+    <string name="pref_gesture_enable">Включить жесты</string>
+    <string name="pref_gesture_line">Показать строку жестов</string>
+    <string name="pref_gesture_score">Оценка жестов</string>
+    <string name="pref_lpress_others">Другое</string>
+    <string name="pref_clear_data_at_finish">Очистка данных при завершении</string>
+    <string name="pref_security_settings">Настройки безопасности</string>
+    <string name="pref_file_access">Настройки локального доступа к файлам</string>
+
+    <string-array name="pref_file_access_list">
+        <item>Desativar (mais seguro)</item>
+        <item>Ativar na sandbox (seguro)</item>
+        <item>Ativar (não seguro)</item>
+    </string-array>
+
+    <string name="pref_mixed_content">Настройки небезопасного содержимого HTTPS</string>
+
+    <string-array name="pref_mixed_content_list">
+        <item>Nunca permitir (mais seguro)</item>
+        <item>Compatibilidade (padrão)</item>
+        <item>Sempre permitir (não seguro)</item>
+    </string-array>
+
+    <string name="pref_toolbar_visibility">Видимость</string>
+
+    <string-array name="pref_toolbar_visibility_list">
+        <item>Visível</item>
+        <item>Ocultar na tela cheia</item>
+        <item>Ocultar no fim do carregamento</item>
+        <item>Ocultar na tela de retrato</item>
+        <item>Ocultar na tela de paisagem</item>
+        <item>Ocultar na escolha do layout</item>
+    </string-array>
+
+    <string name="pref_web_swipe_settings">Настройки действия смахивания двумя пальцами</string>
+    <string name="pref_web_swipe_enable">Включить действие смахивания двумя пальцами</string>
+    <string name="pref_flick_settings">Настройки перелистывания</string>
+    <string name="pref_flick_left">Действия перелистывания слева</string>
+    <string name="pref_flick_right">Действия перелистывания справа</string>
+    <string name="pref_flick_up">Действие перелистывания вверх</string>
+    <string name="pref_flick_down">Действие перелистывания вниз</string>
+    <string name="pref_sensitivity_speed">Чувствительность (скорость)</string>
+    <string name="pref_flick_enable">Включить перелистывание</string>
+    <string name="pref_flick_disable_scrolling">Отключить перелистывание при горизонтальной прокрутке</string>
+    <string name="pref_qc_settings">Настройки быстрого управления</string>
+    <string name="pref_qc_enable">Включить быстрое управление</string>
+    <string name="pref_qc_rad_start">Радиус</string>
+    <string name="pref_qc_rad_inc">Приращение радиуса</string>
+    <string name="pref_qc_slop">Зона срабатывания кругового меню</string>
+    <string name="pref_qc_r_pos">Реагирующее положение</string>
+
+    <string-array name="pref_qc_r_pos_list">
+        <item>Esquerda e direita</item>
+        <item>Esquerda</item>
+        <item>Direita</item>
+    </string-array>
+
+    <string name="pref_qc_level1">Уровень 1</string>
+    <string name="pref_qc_level2">Уровень 2</string>
+    <string name="pref_qc_level3">Уровень 3</string>
+    <string name="pref_overlay_bottom_alpha">Прозрачность нижней панели</string>
+    <string name="pref_save_last_tabs">Сохранять вкладки при выходе</string>
+    <string name="pref_save_pinned_tabs">Сохранять закреплённые вкладки при выходе</string>
+    <string name="pref_save_closed_tab">Сохранять закрытые вкладки</string>
+    <string name="pref_flick_edge">Проверка края</string>
+    <string name="pref_import_export">Импорт/экспорт</string>
+    <string name="pref_import_bookmark">Восстановление закладок</string>
+    <string name="pref_import_bookmark_confirm">Вы действительно хотите восстановить закладки?</string>
+    <string name="pref_export_bookmark">Резервирование закладок</string>
+    <string name="pref_export_bookmark_confirm">Вы действительно хотите создать резервную копию закладок?</string>
+    <string name="pref_import_html_bookmark">Импорт закладок из HTML</string>
+    <string name="pref_import_html_bookmark_confirm">Действительно хотите импортировать закладки?</string>
+    <string name="pref_export_html_bookmark">Экспорт закладок в HTML</string>
+    <string name="pref_export_html_bookmark_confirm">Вы действительно хотите экспортировать закладки?</string>
+    <string name="pref_fast_back">Быстрый возврат</string>
+    <string name="pref_fast_back_cache_size">Размер кеша быстрого возврата</string>
+    <string name="pref_fast_back_cache_size_comment">0 = неограниченно</string>
+    <string name="pref_userjs_settings">Настройки скриптов</string>
+    <string name="pref_userjs_enable">Включить скрипты</string>
+    <string name="pref_userjs_manage">Управление скриптами</string>
+    <string name="pref_rendering">Режим визуализации</string>
+    <string name="pref_auto_tab_save_delay">Интервал автосохранения (сек.)</string>
+    <string name="pref_resblock_settings">Настройки блокировки ресурсов</string>
+    <string name="pref_resblock_enable">Включить блокировку ресурсов</string>
+    <string name="pref_resblock_manage">Управление блокировкой ресурсов</string>
+    <string name="pref_minimum_font">Минимальный размер шрифта</string>
+
+    <string name="pref_kill_process">Уничтожить процесс при выходе (не рекомендуется)</string>
+    <string name="pref_app_settings">Настройки</string>
+    <string name="pref_search_suggest">Тип поисковых предложений</string>
+
+    <string-array name="pref_search_suggest_list">
+        <item>Rede</item>
+        <item>Consultas recentes</item>
+        <item>Ambos</item>
+        <item>Nenhum</item>
+    </string-array>
+
+    <string name="pref_history_settings">Настройки истории</string>
+    <string name="pref_history_max_day">Продолжительность хранения истории (дней)</string>
+    <string name="pref_history_max_count">Максимальный размер истории</string>
+
+    <string name="open_source_license">Лицензия Open Source</string>
+    <string name="pref_log">Журнал</string>
+    <string name="pref_detailed_log">Подробный журнал вывода</string>
+    <string name="pref_delete_all_logs">Удалить все журналы</string>
+    <string name="pref_delete_log_mes">Вы действительно хотите удалить все журналы?</string>
+
+    <string name="backup_settings">Резервирование настроек</string>
+    <string name="restore_settings">Восстановление настроек</string>
+    <string name="pref_backup_settings_confirm">Вы действительно хотите сделать резервную копию настроек?</string>
+    <string name="pref_restore_settings_confirm">"Все текущие настройки будут потеряны. Вы уверены, что хотите их восстановить?\nКроме того, приложение будет автоматически перезапущено после завершения восстановления."</string>
+
+    <string name="version">Версия</string>
+    <string name="build">Сборка</string>
+    <string name="build_time">Дата сборки</string>
+
+    <string name="theme_setting">Темы</string>
+
+    <string name="reflect_setting">Отразить настройку сейчас</string>
+    <string name="reflect_setting_mes">Некоторые изменения не вступят в силу до перезапуска приложения.</string>
+
+    <string name="pref_close_auto_select">Настройки отличия завершения вкладки</string>
+    <string name="pref_close_default">По умолчанию</string>
+    <string name="pref_close_intent">От намерения</string>
+    <string name="pref_close_window">Новое окно (target=_blank)</string>
+
+    <string name="pref_pull_to_refresh">Потянуть для обновления</string>
+
+    <string name="pref_share_unkown_scheme">Поделиться неизвестной схемой</string>
+    <string name="pref_share_unkown_scheme_summary">Открыть неизвестную схему адреса в другом приложением</string>
+
+    <string name="pref_speed_dial_setting">Настройки быстрого набора</string>
+    <string name="pref_edit_speeddial">Изменить параметры быстрого набора</string>
+    <string name="pref_speeddial_ui_settings">Параметры пользовательского интерфейса быстрого набора</string>
+    <string name="pref_speeddial_show_header">Показывать заголовок</string>
+    <string name="pref_speeddial_show_search_bar">Показывать строку поиска</string>
+    <string name="pref_speeddial_show_icon">Показывать значок</string>
+    <string name="pref_speeddial_column">Количество столбцов в вертикальном режиме</string>
+    <string name="pref_speeddial_column_landscape">Количество столбцов в альбомном режиме</string>
+    <string name="pref_speeddial_column_max_width">Максимальная ширина столбца</string>
+    <string name="pref_speeddial_dark_theme">Использовать тёмную тему</string>
+
+
+    <string name="pref_double_tap_flick_settings">Настройки двойного перелистывания</string>
+    <string name="pref_double_tap_flick_enable">Включить двойное перелистывание</string>
+
+    <string name="operation_settings">Настройки операций</string>
+    <string name="open_bookmark_new_tab">Действие на значке закладки</string>
+    <string name="open_bookmark_new_tab_info">При нажатии на значок сайта открыть в другой вкладке</string>
+    <string name="open_bookmark_new_tab_action">Действие на значке</string>
+    <string name="save_bookmark_folder">Помнить папку закладок</string>
+
+    <string name="pref_search_suggest_engine">Система поисковых предложений</string>
+
+    <string name="pref_number_of_tab_to_cache">Количество вкладок для кеширования</string>
+    <string name="pref_dark_theme">Тёмная тема</string>
+    <string name="pref_light_theme">Светлая тема</string>
+
+    <string-array name="pref_rendering_list">
+        <item>Normal</item>
+        <item>Invertida</item>
+        <item>Escala de cinza</item>
+        <item>Escala de cinza invertida</item>
+        <item>Modo noturno</item>
+    </string-array>
+
+    <string name="pref_night_mode_settings">Настройки ночного режима</string>
+    <string name="pref_color_temperature">Цветовая температура</string>
+    <string name="pref_warm_color">Тёплый цвет</string>
+    <string name="pref_cool_color">Холодный цвет</string>
+    <string name="pref_brightness">Яркость</string>
+    <string name="pref_dark">Тёмная</string>
+    <string name="pref_bright">Светлые</string>
+
+    <string name="pref_move_to_parent">Переходить на родительскую вкладку при закрытии вкладки</string>
+    <string name="pref_move_to_left_tab">Переходить на вкладку слева при закрытии вкладки</string>
+    <string name="pref_multi_finger_gesture_settings">Настройки жестов с несколькими касаниями</string>
+    <string name="pref_multi_finger_gesture_enable">Включить жесты с несколькими касаниями</string>
+    <string name="pref_multi_finger_gesture_name_enable">Показывать имя действия</string>
+    <string name="pref_number_of_fingers">Количество пальцев</string>
+    <string name="pref_sensitivity">Чувствительность</string>
+    <string name="pref_help">Помощь</string>
+    <string name="pref_help_url">file:///android_asset/help/en/index.html</string>
+    <string name="pref_block_images">Блокировать изображения</string>
+
+    <string name="pref_ad_block">Настройки блокировки рекламы</string>
+    <string name="pref_ad_block_enable">Включить блокировку рекламы</string>
+    <string name="pref_ad_block_black">Чёрный список</string>
+    <string name="pref_ad_block_white">Белый список</string>
+    <string name="pref_ad_block_white_page">Белый список страниц</string>
+    <string name="exclude_comment">Исключить строки комментариев</string>
+    <string name="pref_edit">Изменить</string>
+    <string name="pref_delete">Удалить</string>
+    <string name="pref_select_all">Выбрать все</string>
+    <string name="pref_reset_count">Сбросить счётчик</string>
+    <string name="pref_ad_block_delete_confirm">Вы уверены, что хотите удалить \"%1$s\"?</string>
+    <string name="pref_ad_block_delete_selected_confirm">Вы действительно хотите удалить выбранные элементы?</string>
+    <string name="pref_ad_block_delete">\"%1$s\" удалено.</string>
+    <string name="pref_export">Экспорт</string>
+    <string name="pref_exported">Экспорт завершён.</string>
+    <string name="pref_delete_all">Удалить все</string>
+    <string name="pref_delete_all_confirm">Вы действительно хотите удалить все элементы?</string>
+    <string name="pref_sort">Сортировать</string>
+    <string name="pref_sort_count">По количеству</string>
+    <string name="pref_sort_date">По дате</string>
+    <string name="pref_sort_name">По названию</string>
+
+    <string name="pref_show_divider">Показывать разделители</string>
+    <string-array name="pref_show_divider_list">
+        <item>Automático</item>
+        <item>Mostrar</item>
+        <item>Ocultar</item>
+    </string-array>
+
+    <string name="pref_speed_dial">Быстрый набор</string>
+    <string name="pref_restore_speed_dial">Восстановление быстрого набора</string>
+    <string name="pref_backup_speed_dial">Резервирование быстрого набора</string>
+    <string name="pref_backup_speed_dial_confirm">Вы действительно хотите сделать резервную копию быстрого набора?</string>
+    <string name="pref_snap_toolbar">Фиксировать панели инструментов</string>
+    <string name="pref_toolbar_show_loading">Показывать панель инструментов при загрузке</string>
+    <string name="pref_enable_safe_browsing">Включить безопасный просмотр</string>
+    <string name="pref_required_android_O">Для отключения требуется Android 8.0 или выше</string>
+    <string name="pref_always_show_url">Всегда показывать адрес</string>
+    <string name="pref_show_favicon">Показывать значок сайта</string>
+
+    <string name="pref_touch_scrollbar">Настройки прокрутки</string>
+    <string name="pref_display_position">Место отображения</string>
+    <string name="pref_touch_scrollbar_do_not_move_toolbar">Не перемещать панель инструментов</string>
+    <string-array name="pref_touch_scrollbar_list">
+        <item>Ocultar</item>
+        <item>Direita</item>
+        <item>Esquerda</item>
+    </string-array>
+
+    <string name="pref_reader_settings">Настройки чтения</string>
+    <string name="pref_reader_text_size">Размер текста</string>
+    <string name="pref_reader_text_font">Основной шрифт</string>
+    <string name="pref_reader_theme">Тема чтения</string>
+    <string name="pref_reader_theme_same_as">Как настройки приложения</string>
+
+    <string name="pref_font_size">Настройки размера шрифта</string>
+    <string name="pref_menu">Меню параметров</string>
+    <string name="pref_history">История</string>
+    <string name="pref_bookmark">Закладки</string>
+    <string name="pref_speeddial_item_text_size">Размер текста элемента</string>
+    <string-array name="pref_text_size_list">
+        <item>Padrão</item>
+        <item>Minúsculo</item>
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+        <item>Enorme</item>
+    </string-array>
+
+    <string name="pref_search_settings">Настройки поиска</string>
+    <string name="pref_search_url_settings">Выбор поисковой системы</string>
+    <string name="pref_search_url_show_icon">Показывать значок на панели поиска</string>
+    <string name="pref_search_cat_search">Поисковая система</string>
+    <string name="pref_search_cat_suggest">Поисковые предложения</string>
+    <string name="pref_fullscreen_mode">Параметры полноэкранного режима</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>Ocultar barra de status</item>
+        <item>Ocultar barra de navegação</item>
+        <item>Ocultar ambas</item>
+    </string-array>
+    <string name="pref_slow_rendering">Медленная визуализация</string>
+    <string name="pref_slow_rendering_alert">"Внимание!\nМожет часто возникать замораживание, если эта функция включена.\nКроме того, для переключения этого параметра необходимо удалить браузер списка из последних приложений.\nМы НЕ рекомендуем использовать эту функцию, кроме использования захвата всех скриншотов."</string>
+    <string name="browser_settings">Настройки обозревателя</string>
+    <string name="pref_basic_settings">Основные настройки</string>
+    <string name="pref_white_url_box">Показывать поле адреса</string>
+    <string name="pref_enable_web_rtc">Включить WebRTC</string>
+    <string name="pref_content_settings">Настройки содержимого</string>
+    <string name="pref_speeddial_layout">Внешний вид</string>
+    <string-array name="pref_speeddial_layout_list">
+        <item>Ícone grande</item>
+        <item>Ícone pequeno</item>
+    </string-array>
+    <string name="pref_privacy_policy">Политика конфиденциальности</string>
+    <string name="mining_protect">Без монетизации</string>
+    <string name="mining_protect_summary">Защита от майнинга криптовалют</string>
+    <string name="pref_storage_location_warn">Это хранилище может не работать должным образом с другими приложениями.</string>
+    <string name="pref_fake_chrome">Маскироваться под Chrome</string>
+    <string name="pref_fake_chrome_summary">Использовать по умолчанию UserAgent как в Chrome</string>
+    <string name="pref_toolbar_small_icon">Показывать значок при длительном нажатии</string>
+    <string name="pref_show_icon">Показывать значок</string>
+    <string name="pref_translation">Перевод</string>
+    <string name="pref_translators">papasha55, Viktor245, solokot</string>
+</resources>

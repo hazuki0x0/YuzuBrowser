@@ -74,6 +74,10 @@ fun Context.getFakeChromeUserAgent(): String {
     return ua.toString()
 }
 
+fun Context.readAssetsText(fileName: String): String {
+    return assets.open(fileName).reader().use { it.readText() }
+}
+
 inline val Context.browserApplicationContext: BrowserApplication
     get() = applicationContext as BrowserApplication
 
@@ -87,6 +91,7 @@ fun Context.getVersionCode(): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         info.longVersionCode.toInt()
     } else {
+        @Suppress("DEPRECATION")
         info.versionCode
     }
 

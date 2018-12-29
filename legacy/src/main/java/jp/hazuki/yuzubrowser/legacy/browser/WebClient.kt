@@ -65,6 +65,7 @@ import jp.hazuki.yuzubrowser.legacy.userjs.UserScript
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.legacy.utils.*
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.legacy.utils.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webkit.*
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener
@@ -96,6 +97,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
+    private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
 
     var renderingMode
         get() = webViewRenderingManager.mode
@@ -103,8 +105,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             if (value == renderingMode) return
 
             webViewRenderingManager.mode = value
+            val js = invertJs.replace("%s", webViewRenderingManager.isInvertMode.toString())
             controller.tabManager.loadedData.forEach {
                 webViewRenderingManager.setWebViewRendering(it.mWebView)
+                it.mWebView.evaluateJavascript(js, null)
             }
         }
 
@@ -183,9 +187,13 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             miningProtector = null
         }
 
+        val js by lazy(LazyThreadSafetyMode.NONE) { invertJs.replace("%s", webViewRenderingManager.isInvertMode.toString()) }
+        val isInverted = webViewRenderingManager.isInverted
+
         controller.tabManager.loadedData.forEach {
             initWebSetting(it.mWebView)
             it.mWebView.onPreferenceReset()
+            if (isInverted) it.mWebView.evaluateJavascript(js, null)
         }
 
         controller.tabManager.currentTabData?.let {
@@ -409,6 +417,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             val data = controller.getTabOrNull(web) ?: return
 
             applyUserScript(web, url, false)
+
+            if (webViewRenderingManager.isInvertMode) {
+                web.evaluateJavascript(invertJs.replace("%s", "true"), null)
+            }
 
             if (controller.isActivityPaused) {
                 pauseWebViewTimers(data)
@@ -650,7 +662,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 controller.removeTab(i)
         }
 
-        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>, fileChooserParams: WebChromeClient.FileChooserParams): Boolean {
+        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>?>, fileChooserParams: WebChromeClient.FileChooserParams): Boolean {
             if (webUploadHandler == null)
                 webUploadHandler = WebUploadHandler()
 

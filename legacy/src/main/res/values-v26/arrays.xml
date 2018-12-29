@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="clear_browser_data" translatable="false">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="clear_browser_data" translatable="false" tools:ignore="InconsistentArrays">
         <item>@string/caches</item>
         <item>@string/cookies</item>
         <item>@string/passwords</item>
@@ -10,7 +10,7 @@
         <item>@string/recent_search_queries</item>
         <item>@string/favicon_cache</item>
     </string-array>
-    <integer-array name="clear_browser_data_id">
+    <integer-array name="clear_browser_data_id" tools:ignore="InconsistentArrays">
         <item>0</item>
         <item>1</item>
         <item>2</item>

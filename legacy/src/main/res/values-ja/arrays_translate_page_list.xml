@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string-array name="translate_language_list">
         <item>アフリカーンス語</item>
         <item>アルバニア語</item>
@@ -67,5 +66,4 @@
         <item>ウェールズ語</item>
         <item>イディッシュ語</item>
     </string-array>
-
 </resources>

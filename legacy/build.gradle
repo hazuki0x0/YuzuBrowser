@@ -4,21 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion Build.compile_sdk_version
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion Build.min_sdk_version
+        targetSdkVersion Build.target_sdk_version
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        lintOptions {
-            disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
-        }
     }
 
     compileOptions {
@@ -33,6 +27,9 @@ android {
         }
     }
 
+    lintOptions {
+        disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
+    }
 }
 
 androidExtensions {

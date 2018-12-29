@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Настройки</string>
+    <string name="action_tab_loop">Зациклить вкладку</string>
+    <string name="action_action_cant_back">Действие без истории</string>
+    <string name="action_finish_alert">Показывать оповещение</string>
+    <string name="action_finish_close_tab">Закрыть вкладку в конце</string>
+    <string name="action_action_cant_close_tab">Действие на последней вкладке</string>
+    <string name="action_select_menu">Меню выбора</string>
+    <string name="action_target_tab">Целевая вкладка</string>
+
+    <string-array name="action_start_activity_template">
+        <item>Приложение</item>
+        <item>Ярлык</item>
+        <item>Поделиться страницей</item>
+        <item>Открыть в другом приложении</item>
+    </string-array>
+
+    <string name="action_start_activity_edit_intent">Изменить намерение</string>
+    <string name="action_start_activity_edit_url">Изменить адрес запроса</string>
+    <string name="action_screenshot_all">Захватить всё</string>
+    <string name="action_screenshot_path">Папка сохранения</string>
+    <string name="action_screenshot_full_error">Если требуется использовать \"Захват всего\", необходимо включить медленную визуализацию.</string>
+    <string name="action_mousepointer_backfinish">Закончить при нажатии кнопки возврата</string>
+    <string name="action_translate_from">От</string>
+    <string name="action_translate_to">Кому</string>
+    <string name="action_translate_auto_select">Автовыбор</string>
+    <string name="action_translate_select_each">Выбрать каждый раз</string>
+    <string name="action_web_scroll_x_coordinate">X-координата</string>
+    <string name="action_web_scroll_y_coordinate">Y-координата</string>
+    <string name="action_web_scroll_x_y_zero">Ошибка: X или Y не должно быть 0</string>
+
+    <string-array name="action_web_scroll_type_list">
+        <item>Быстрая прокрутка</item>
+        <item>Прокрутка перелистыванием</item>
+    </string-array>
+
+    <string name="action_custom_name">Имя действия</string>
+    <string name="action_useragent_setting">Настройки UserAgent</string>
+    <string name="action_custom_setting">Настройка пользовательских действий</string>
+    <string name="action_start_activity_setting">Настройка активности</string>
+    <string name="action_web_encode_setting">Настройка кодировки текста</string>
+    <string name="action_vibration_setting">Период времени (мс)</string>
+    <string name="action_auto_scroll_speed">Автоскорость прокрутки</string>
+    <string name="action_auto_scroll_speed_zero">Ошибка: скорость не должна быть 0</string>
+
+    <string name="action_tab_list">Режим списка вкладок</string>
+    <string-array name="action_tab_list">
+        <item>Вертикальный список</item>
+        <item>Вертикальный обратный список</item>
+        <item>Горизонтальный список</item>
+    </string-array>
+    <string name="action_tab_list_button">Позиция новой вкладки</string>
+    <string-array name="action_tab_list_button">
+        <item>Справа</item>
+        <item>Слева</item>
+    </string-array>
+    <string name="action_tab_list_last_tab">Поведение при закрытии последней вкладки</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>Нет</item>
+        <item>Новая вкладка</item>
+        <item>Выход</item>
+        <item>Выход с предупреждением</item>
+    </string-array>
+
+    <string name="action_open_menu">Отображение позиции меню</string>
+    <string-array name="action_open_menu_list">
+        <item>Слева</item>
+        <item>По центру</item>
+        <item>Справа</item>
+    </string-array>
+
+    <string name="action_bottom_search_bar">Показывать панель поиска внизу</string>
+    <string name="show_toast">Показать всплывающее уведомление</string>
+</resources>
