@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.Context
+import android.support.v4.provider.DocumentFile
 import android.webkit.CookieManager
 import jp.hazuki.yuzubrowser.Constants
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
@@ -112,22 +113,26 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
                 }
             }
 
+            var downloadedFile: DocumentFile? = null
+
             if (abort) {
                 deleteTempIfNeed()
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
                 if (!tmp.renameTo(info.name)) {
-                    if (info.root.findFile(info.name) == null)
+                    downloadedFile = info.root.findFile(info.name)
+                    if (downloadedFile == null)
                         throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
                 }
-                if (info.root.findFile(info.name) == null) {
+                downloadedFile = downloadedFile ?: info.root.findFile(info.name)
+                if (downloadedFile == null) {
                     throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
                 }
             }
 
             info.state = DownloadFileInfo.STATE_DOWNLOADED
-            downloadListener?.onFileDownloaded(info)
+            downloadListener?.onFileDownloaded(info, downloadedFile)
             return true
         } catch (e: IOException) {
             ErrorReport.printAndWriteLog(e)

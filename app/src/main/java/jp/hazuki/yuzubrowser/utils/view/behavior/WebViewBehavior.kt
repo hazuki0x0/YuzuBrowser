@@ -58,7 +58,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
         val webView = webView
         if (webView != null) {
             webView.isToolbarShowing = dependency.top == 0
-            if (!webView.isTouching) {
+            if (!webView.isTouching && webView.webScrollY != 0) {
                 webView.scrollBy(0, bottom - prevY)
                 if (bottom == 0) {
                     webView.setSwipeable(false)

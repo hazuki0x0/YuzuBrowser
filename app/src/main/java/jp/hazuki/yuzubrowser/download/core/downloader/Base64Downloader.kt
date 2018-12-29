@@ -26,9 +26,10 @@ class Base64Downloader(private val contentResolver: ContentResolver, private val
 
     override fun download(): Boolean {
         downloadListener?.onStartDownload(info)
-        return if (contentResolver.saveBase64Image(decodeBase64Image(info.url), info)) {
+        val downloadedFile = contentResolver.saveBase64Image(decodeBase64Image(info.url), info)
+        return if (downloadedFile != null) {
             info.state = DownloadFileInfo.STATE_DOWNLOADED
-            downloadListener?.onFileDownloaded(info)
+            downloadListener?.onFileDownloaded(info, downloadedFile)
             true
         } else {
             info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR

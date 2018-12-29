@@ -36,7 +36,7 @@ import java.net.URLDecoder
 import java.util.*
 import java.util.regex.Pattern
 
-fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): Boolean {
+fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): DocumentFile? {
     if (imageData.isValid) {
         try {
             val image = Base64.decode(imageData.getData(), Base64.DEFAULT)
@@ -46,15 +46,14 @@ fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileIn
                 outputStream.write(image)
                 outputStream.flush()
             }
-            return true
-
+            return info.root.findFile(info.name)
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
-    return false
+    return null
 }
 
 fun decodeBase64Image(url: String): Base64Image {
@@ -245,7 +244,7 @@ fun getDownloadFolderUri(): Uri {
     return Uri.parse(AppData.download_folder.get())
 }
 
-fun DownloadFileInfo.createFileOpenIntent(context: Context) = createFileOpenIntent(context, root.findFile(name)!!.uri, mimeType, name)
+fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: DocumentFile) = createFileOpenIntent(context, downloadedFile.uri, mimeType, name)
 
 fun DownloadFileInfo.getNotificationString(context: Context): String {
     return if (size > 0) {

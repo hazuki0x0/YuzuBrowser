@@ -24,12 +24,12 @@ import android.widget.EditText
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.R
 import jp.hazuki.yuzubrowser.utils.ErrorReport
-import jp.hazuki.yuzubrowser.utils.ImageUtils
 import jp.hazuki.yuzubrowser.utils.WebUtils
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.utils.appinfo.AppInfo
 import jp.hazuki.yuzubrowser.utils.appinfo.ApplicationListFragment
 import jp.hazuki.yuzubrowser.utils.appinfo.ShortCutListFragment
+import jp.hazuki.yuzubrowser.utils.extensions.getBitmap
 import java.net.URISyntaxException
 
 class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreferenceFragment.OnActionListener, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {
@@ -142,7 +142,7 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
         @Suppress("DEPRECATION")
         val result = Intent().apply {
             putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent)
-            putExtra(Intent.EXTRA_SHORTCUT_ICON, ImageUtils.getBitmap(info.icon))
+            putExtra(Intent.EXTRA_SHORTCUT_ICON, info.icon.getBitmap())
         }
         setResult(RESULT_OK, result)
         finish()
