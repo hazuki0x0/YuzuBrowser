@@ -44,6 +44,7 @@ public class SpeedDialRestoreTask extends AsyncTaskLoader<Boolean> {
         File db = getContext().getDatabasePath(SpeedDialManager.DB_NAME);
 
 
+        getContext().deleteDatabase(SpeedDialManager.DB_NAME);
         try (FileInputStream fis = new FileInputStream(from);
              ZipInputStream zis = new ZipInputStream(fis);
              FileOutputStream fos = new FileOutputStream(db)) {

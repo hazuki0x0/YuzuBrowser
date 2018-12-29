@@ -207,6 +207,11 @@ class SpeedDialManager(val context: Context) {
         updateListTime()
     }
 
+    fun close() {
+        val db = mOpenHelper.writableDatabase
+        db.close()
+    }
+
     private fun updateListTime() {
         val db = mOpenHelper.writableDatabase
         val values = ContentValues().apply { put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis()) }
@@ -214,7 +219,7 @@ class SpeedDialManager(val context: Context) {
     }
 
     private fun checkUrl(url: String?): Boolean {
-        return !url.isNullOrEmpty() && !url!!.regionMatches(0, "about:", 0, 6, ignoreCase = true)
+        return !url.isNullOrEmpty() && !url.regionMatches(0, "about:", 0, 6, ignoreCase = true)
     }
 
     private class MyOpenHelper private constructor(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {

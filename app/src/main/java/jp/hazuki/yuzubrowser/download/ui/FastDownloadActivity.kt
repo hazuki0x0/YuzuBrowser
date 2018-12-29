@@ -32,7 +32,8 @@ import jp.hazuki.yuzubrowser.settings.data.AppData
 import jp.hazuki.yuzubrowser.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.utils.ui
 import jp.hazuki.yuzubrowser.utils.view.ProgressDialog
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FastDownloadActivity : ThemeActivity() {
 
@@ -54,7 +55,7 @@ class FastDownloadActivity : ThemeActivity() {
         ui {
             val dialog = ProgressDialog(getString(R.string.now_downloading))
             dialog.show(supportFragmentManager, "dialog")
-            val uri = async { download(url, intent.getStringExtra(EXTRA_FILE_REFERER), intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)) }.await()
+            val uri = withContext(Dispatchers.Default) { download(url, intent.getStringExtra(EXTRA_FILE_REFERER), intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)) }
             dialog.dismiss()
             if (uri != null) {
                 val result = Intent()

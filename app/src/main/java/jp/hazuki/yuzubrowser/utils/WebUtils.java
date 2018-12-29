@@ -35,9 +35,9 @@ public class WebUtils {
         throw new UnsupportedOperationException();
     }
 
-    private static final Pattern URI_SCHEMA = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu):)(.*)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern URI_SCHEMA = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu|blob):)(.*)", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern URL_EXTRACTION = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu):)(\\S*)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern URL_EXTRACTION = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu|blob):)(\\S*)", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern URL_SUB_DOMAIN = Pattern.compile("://.*\\.", Pattern.LITERAL);
 
@@ -71,6 +71,7 @@ public class WebUtils {
             case "content":
             case "javascript":
             case "view-source":
+            case "blob":
                 return false;
             default:
                 return true;
