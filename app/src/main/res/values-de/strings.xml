@@ -115,7 +115,7 @@
     <string name="folder">Ordner</string>
     <string name="sort">Sortierung</string>
     <string name="end_sort_label">Sortierung beendet.</string>
-    <string name="start_sort">♪ sortiere ... ♪</string>
+    <string name="start_sort">♪ sortiere … ♪</string>
     <string name="end_sort">Sortierung abgeschlossen!</string>
     <string name="edit_bookmark">Lesezeichen bearbeiten</string>
     <string name="move_bookmark">Verschieben nach…</string>
@@ -178,8 +178,8 @@
     <string name="userjs_info_version">Version</string>
     <string name="userjs_info_author">Autor</string>
     <string name="userjs_info_description">Beschreibung</string>
-    <string name="userjs_info_include">@include-Regeln</string>
-    <string name="userjs_info_exclude">@exclude-Regeln</string>
+    <string name="userjs_info_include">\@include-Regeln</string>
+    <string name="userjs_info_exclude">\@exclude-Regeln</string>
     <string name="userjs_add_file_confirm">Datei hinzufügen "%s"?</string>
     <string name="save">Speichern</string>
     <string name="not_save">Nicht speichern</string>
