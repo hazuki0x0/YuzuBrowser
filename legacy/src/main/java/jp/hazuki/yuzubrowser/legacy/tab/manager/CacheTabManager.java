@@ -28,12 +28,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData;
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView;
 
 class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<MainTabData> {
@@ -114,8 +114,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
         TabIndexData data = mTabStorage.removeAndDelete(no);
         mTabView.remove(no);
         synchronized (mTabCache) {
-            if (mTabCache.containsKey(data.getId()))
-                mTabCache.remove(data.getId());
+            mTabCache.remove(data.getId());
         }
         if (mCurrentNo > no) {
             mCurrentNo -= 1;
@@ -311,8 +310,7 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
             @Override
             public void onRemove(int index, long id) {
                 synchronized (mTabCache) {
-                    if (mTabCache.containsKey(id))
-                        mTabCache.remove(id);
+                    mTabCache.remove(id);
                 }
             }
         });

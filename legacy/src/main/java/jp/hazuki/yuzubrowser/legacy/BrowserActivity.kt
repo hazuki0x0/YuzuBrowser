@@ -72,12 +72,12 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewPageFastScroller
 import jp.hazuki.yuzubrowser.legacy.utils.*
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.legacy.utils.network.ConnectionStateMonitor
-import jp.hazuki.yuzubrowser.legacy.utils.view.PointerView
 import jp.hazuki.yuzubrowser.legacy.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.legacy.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.legacy.webkit.*
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
+import jp.hazuki.yuzubrowser.ui.widget.PointerView
 import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
 

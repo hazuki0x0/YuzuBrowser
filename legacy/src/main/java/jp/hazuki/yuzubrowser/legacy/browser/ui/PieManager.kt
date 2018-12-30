@@ -18,6 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.browser.ui
 
 import android.content.Context
 import android.view.ViewGroup
+import jp.hazuki.utility.extensions.density
+import jp.hazuki.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
@@ -25,8 +27,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.QuickControlActionManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.density
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.utils.view.pie.PieItem
 import jp.hazuki.yuzubrowser.legacy.utils.view.pie.PieMenu
 

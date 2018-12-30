@@ -31,9 +31,9 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.OnWebViewScrollChangeListener
 import jp.hazuki.yuzubrowser.legacy.utils.WebViewUtils
-import jp.hazuki.yuzubrowser.legacy.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener
+import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
 import java.util.*
 
 abstract class AbstractCacheWebView(context: Context) : FrameLayout(context), CustomWebView {

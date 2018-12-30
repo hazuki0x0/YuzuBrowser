@@ -42,11 +42,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import jp.hazuki.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtilsKt;
 import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.ContextExtensionsKt;
 
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";

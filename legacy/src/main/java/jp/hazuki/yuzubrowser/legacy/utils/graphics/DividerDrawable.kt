@@ -20,7 +20,7 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.annotation.IntRange
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
+import jp.hazuki.utility.extensions.convertDpToPx
 
 class DividerDrawable(context: Context) : Drawable() {
 

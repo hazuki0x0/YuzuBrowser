@@ -22,11 +22,10 @@ import android.support.v14.preference.SwitchPreference
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.Preference
 import jp.hazuki.asyncpermissions.AsyncPermissions
-
+import jp.hazuki.utility.extensions.startActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.legacy.browser.requestLocationPermission
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.startActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity
 

@@ -19,9 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector
 import android.content.Context
 import android.os.SystemClock
 import android.view.MotionEvent
-
+import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
 
 internal class MfGestureAnalyzer(context: Context) {
     private var sensitivity: Int = context.convertDpToPx(AppData.multi_finger_gesture_sensitivity.get())

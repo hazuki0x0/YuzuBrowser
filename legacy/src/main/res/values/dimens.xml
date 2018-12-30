@@ -8,7 +8,6 @@
     <dimen name="qc_slop">10dp</dimen>
     <dimen name="qc_touch_offset">15dp</dimen>
     <dimen name="qc_item_size">26dp</dimen>
-    <dimen name="dimen_cursor">25dp</dimen>
     <dimen name="flick_slop">15dip</dimen>
     <dimen name="swipebtn_bg_padding">7dp</dimen>
 

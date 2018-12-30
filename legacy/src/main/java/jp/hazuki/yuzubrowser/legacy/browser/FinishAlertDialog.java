@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.CustomDialogPreference;
+import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;
 
 public class FinishAlertDialog extends CustomDialogPreference {
     private final boolean mShowMessage;

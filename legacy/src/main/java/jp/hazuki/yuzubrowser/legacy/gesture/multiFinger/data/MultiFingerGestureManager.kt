@@ -19,8 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data
 import android.content.Context
 import com.fasterxml.jackson.core.JsonEncoding
 import com.fasterxml.jackson.core.JsonToken
+import jp.hazuki.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.action.Action
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
 import java.io.IOException
 import java.util.*

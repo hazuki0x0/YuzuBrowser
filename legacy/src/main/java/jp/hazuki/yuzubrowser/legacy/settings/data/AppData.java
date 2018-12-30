@@ -28,6 +28,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import jp.hazuki.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.action.ActionList;
@@ -64,7 +65,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.legacy.utils.Logger;
 import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList;
 

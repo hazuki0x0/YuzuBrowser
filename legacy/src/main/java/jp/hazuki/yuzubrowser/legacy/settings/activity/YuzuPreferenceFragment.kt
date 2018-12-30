@@ -31,7 +31,7 @@ import jp.hazuki.yuzubrowser.legacy.settings.preference.NightModePreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.SearchUrlPreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.SlowRenderingPreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.WebTextSizePreference
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.*
+import jp.hazuki.yuzubrowser.ui.preference.*
 
 abstract class YuzuPreferenceFragment : PreferenceFragmentCompat() {
 

@@ -17,7 +17,7 @@ import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.CustomDialogPreference;
+import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;
 
 public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
 

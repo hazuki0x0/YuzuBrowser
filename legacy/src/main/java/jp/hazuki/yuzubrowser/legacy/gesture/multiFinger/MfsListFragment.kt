@@ -29,9 +29,9 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureItem
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureManager
-import jp.hazuki.yuzubrowser.legacy.utils.view.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 
 class MfsListFragment : Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {

@@ -31,9 +31,9 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlock
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockManager
-import jp.hazuki.yuzubrowser.legacy.utils.view.ConfirmDialog
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.dialog.ConfirmDialog
 import kotlinx.android.synthetic.main.fragment_ad_block_list.*
 import java.io.IOException
 import java.io.PrintWriter

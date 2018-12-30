@@ -32,6 +32,8 @@ import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import jp.hazuki.utility.extensions.clipboardText
+import jp.hazuki.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -47,8 +49,6 @@ import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.clipboardText
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OutSideClickableRecyclerView

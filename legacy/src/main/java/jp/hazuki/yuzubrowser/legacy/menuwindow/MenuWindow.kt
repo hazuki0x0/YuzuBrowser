@@ -22,6 +22,8 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import jp.hazuki.utility.extensions.convertDpToFloatPx
+import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
@@ -29,8 +31,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.FontUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToFloatPx
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
 
 typealias OnMenuCloseListener = () -> Unit
 

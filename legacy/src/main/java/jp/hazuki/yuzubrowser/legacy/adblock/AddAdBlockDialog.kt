@@ -25,8 +25,8 @@ import android.text.InputType
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import jp.hazuki.utility.extensions.density
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.density
 
 class AddAdBlockDialog : DialogFragment() {
 

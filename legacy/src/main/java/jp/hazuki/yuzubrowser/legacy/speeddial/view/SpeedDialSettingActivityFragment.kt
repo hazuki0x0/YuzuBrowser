@@ -31,9 +31,9 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDial
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialManager
-import jp.hazuki.yuzubrowser.legacy.utils.view.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 import java.util.*
 

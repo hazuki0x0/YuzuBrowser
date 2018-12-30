@@ -18,10 +18,10 @@ package jp.hazuki.yuzubrowser.legacy.theme
 
 import android.content.Context
 import android.net.Uri
+import jp.hazuki.utility.extensions.forEach
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.forEach
 import jp.hazuki.yuzubrowser.legacy.utils.externalUserDirectory
 import java.io.File
 import java.io.FileOutputStream

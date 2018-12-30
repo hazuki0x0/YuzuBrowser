@@ -27,6 +27,7 @@ import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import jp.hazuki.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
@@ -37,7 +38,6 @@ import jp.hazuki.yuzubrowser.legacy.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.legacy.download.service.connection.ActivityClient
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadCommandController
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.createFileOpenIntent
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.intentFor
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.LoadMoreListener
 import org.jetbrains.anko.longToast

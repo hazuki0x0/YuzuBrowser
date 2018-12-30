@@ -50,7 +50,7 @@
         android:key="fast_back"
         android:title="@string/pref_fast_back" />
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+    <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:dependency="fast_back"
         android:key="fast_back_cache_size"
         android:title="@string/pref_fast_back_cache_size"
@@ -65,7 +65,7 @@
     <!--android:enabled="false"-->
     <!--android:key="force_scalable"-->
     <!--android:title="@string/pref_force_scalable" />-->
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+    <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
         android:entries="@array/pref_rendering_list"
         android:entryValues="@array/pref_rendering_values"
         android:key="rendering"
@@ -76,7 +76,7 @@
         android:title="@string/pref_night_mode_settings" />
 
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+    <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="minimum_font"
         android:title="@string/pref_minimum_font"
         app:seekMax="72"
@@ -86,7 +86,7 @@
         android:key="text_size"
         android:title="@string/pref_text_size" />
 
-    <!--<jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference-->
+    <!--<jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference-->
     <!--android:enabled="false"-->
     <!--android:entries="@array/pref_wifi_depend_bool_list"-->
     <!--android:entryValues="@array/pref_wifi_depend_bool_values"-->

@@ -34,6 +34,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.TextView
 import android.widget.Toast
+import jp.hazuki.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -72,14 +73,13 @@ import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.*
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.clipboardText
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.legacy.utils.view.ContextMenuTitleView
-import jp.hazuki.yuzubrowser.legacy.utils.view.SeekBarDialog
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.getUserAgent
 import jp.hazuki.yuzubrowser.legacy.webkit.handler.*
+import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
+import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast

@@ -30,12 +30,12 @@ import android.widget.Toast
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
+import jp.hazuki.utility.extensions.density
+import jp.hazuki.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.density
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
 import java.io.IOException
 

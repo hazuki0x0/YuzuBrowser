@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.userjs
 
 import android.os.Parcel
 import android.os.Parcelable
+import jp.hazuki.utility.extensions.forEachLine
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.Logger
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader

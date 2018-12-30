@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
@@ -30,7 +31,6 @@ import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.FullTabLayout
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.ScrollableTabLayout
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout

@@ -24,9 +24,9 @@ import android.print.PrintDocumentAdapter
 import android.view.View
 import android.webkit.*
 import jp.hazuki.yuzubrowser.legacy.toolbar.OnWebViewScrollChangeListener
-import jp.hazuki.yuzubrowser.legacy.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener
+import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
 
 interface CustomWebView {
 

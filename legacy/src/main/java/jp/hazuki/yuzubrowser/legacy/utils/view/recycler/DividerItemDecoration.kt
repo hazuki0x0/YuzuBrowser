@@ -24,7 +24,7 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
+import jp.hazuki.utility.extensions.convertDpToPx
 
 class DividerItemDecoration : RecyclerView.ItemDecoration {
 

@@ -33,6 +33,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
+import jp.hazuki.utility.extensions.getFakeChromeUserAgent
+import jp.hazuki.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -64,8 +66,6 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.sub.GeolocationPermissionToolbar
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScript
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.legacy.utils.*
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getFakeChromeUserAgent
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webkit.*
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener

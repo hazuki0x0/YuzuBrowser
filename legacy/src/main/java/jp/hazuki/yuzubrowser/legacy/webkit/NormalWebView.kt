@@ -25,9 +25,9 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.legacy.toolbar.OnWebViewScrollChangeListener
-import jp.hazuki.yuzubrowser.legacy.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener
+import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
 
 class NormalWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = android.R.attr.webViewStyle) : JvmWebViewBridge(context, attrs, defStyle) {
 

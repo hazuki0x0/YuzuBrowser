@@ -24,11 +24,11 @@ import android.view.*
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.resblock.checker.NormalChecker
-import jp.hazuki.yuzubrowser.legacy.utils.view.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerFabFragment
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.SimpleViewHolder
+import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 
 class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, CheckerEditDialog.OnCheckerEdit, DeleteDialogCompat.OnDelete {
     private lateinit var manager: ResourceBlockManager

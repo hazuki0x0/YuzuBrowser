@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
 import android.content.Context
 import android.view.Gravity
+import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
@@ -29,7 +30,6 @@ import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.UrlUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeTextButton
 
 abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: BrowserToolbarManager.RequestCallback) : ToolbarBase(context, AppData.toolbar_url, layout, request_callback) {

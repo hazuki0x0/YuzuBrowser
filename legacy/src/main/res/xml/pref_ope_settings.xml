@@ -13,7 +13,7 @@
             android:title="@string/open_bookmark_new_tab"
             android:summary="@string/open_bookmark_new_tab_info" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:dependency="open_bookmark_new_tab"
             android:defaultValue="1"
             android:key="open_bookmark_icon_action"

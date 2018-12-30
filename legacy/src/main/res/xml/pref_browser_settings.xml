@@ -3,7 +3,7 @@
                   xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:title="@string/pref_browser_settings">
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntentPreference
+    <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
         android:title="@string/pref_pattern_match"
         app:intent="jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity" />
 
@@ -14,7 +14,7 @@
             android:key="userjs_enable"
             android:title="@string/pref_userjs_enable" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntentPreference
+        <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
             android:title="@string/pref_userjs_manage"
             app:intent="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity" />
     </PreferenceScreen>
@@ -29,7 +29,7 @@
             android:key="resblock_enable"
             android:title="@string/pref_resblock_enable" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.IntentPreference
+        <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
             android:title="@string/pref_resblock_manage"
             app:intent="jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity" />
     </PreferenceScreen>
@@ -39,7 +39,7 @@
         android:singleLine="true"
         android:title="@string/pref_home_page" />
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+    <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
         android:entries="@array/pref_download_action_list"
         android:entryValues="@array/pref_download_action_values"
         android:key="download_action"
@@ -75,13 +75,13 @@
         </PreferenceCategory>
 
         <PreferenceCategory android:title="@string/pref_search_cat_suggest">
-            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
                 android:entries="@array/pref_search_suggest_list"
                 android:entryValues="@array/pref_search_suggest_values"
                 android:key="search_suggest"
                 android:title="@string/pref_search_suggest"/>
 
-            <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+            <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
                 android:entries="@array/pref_search_suggest_engine_list"
                 android:entryValues="@array/pref_search_suggest_engine_values"
                 android:key="search_suggest_engine"
@@ -118,34 +118,34 @@
     <PreferenceScreen
         android:key="ps_new_tab_settings"
         android:title="@string/pref_newtab_settings">
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_link"
             android:title="@string/pref_newtab_link" />
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_bookmark"
             android:title="@string/pref_newtab_bookmark" />
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_history"
             android:title="@string/pref_newtab_history" />
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_speeddial"
             android:title="@string/pref_speed_dial"/>
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_blank"
             android:title="@string/pref_newtab_blank" />
     </PreferenceScreen>
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+    <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="tab_cache_number"
         android:title="@string/pref_number_of_tab_to_cache"
         app:seekMax="50"
@@ -165,7 +165,7 @@
         android:title="@string/pref_share_unkown_scheme"
         android:summary="@string/pref_share_unkown_scheme_summary" />
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+    <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="auto_tab_save_delay"
         android:title="@string/pref_auto_tab_save_delay"
         app:seekMax="3600"

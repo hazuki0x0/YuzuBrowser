@@ -14,10 +14,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.Arrays;
 
+import jp.hazuki.utility.utils.ArrayUtils;
+import jp.hazuki.utility.utils.Predicate;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.util.Predicate;
 
 public class FileListViewController {
     private final Context mContext;

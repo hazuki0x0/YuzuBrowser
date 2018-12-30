@@ -44,7 +44,7 @@
         android:text="@string/folder"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <jp.hazuki.yuzubrowser.legacy.utils.view.SpinnerButton
+    <jp.hazuki.yuzubrowser.ui.widget.SpinnerButton
         android:id="@+id/folderButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -21,8 +21,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.support.v4.app.NotificationCompat
 import android.support.v4.provider.DocumentFile
-import android.view.View
-import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
@@ -37,10 +35,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast
 import java.io.File
-
-inline fun ViewGroup.forEach(action: (View) -> Unit) {
-    for (i in 0 until childCount) action(getChildAt(i))
-}
 
 fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
     ui {

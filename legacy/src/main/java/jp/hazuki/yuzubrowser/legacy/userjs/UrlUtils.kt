@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.legacy.userjs
 
+import jp.hazuki.utility.extensions.replace
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils.maybeContainsUrlScheme
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.replace
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 

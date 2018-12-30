@@ -26,6 +26,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import jp.hazuki.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
@@ -45,7 +46,6 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_TO
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_UNDEFINED
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_WEB
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.*
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
 import kotlinx.android.extensions.LayoutContainer

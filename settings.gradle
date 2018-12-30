@@ -1,1 +1,5 @@
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy'
+include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':utility', ':languages'
+
+def modulesRepoDir = new File('module')
+project(':ui').projectDir = new File(modulesRepoDir, 'ui')
+project(':utility').projectDir = new File(modulesRepoDir, 'utility')

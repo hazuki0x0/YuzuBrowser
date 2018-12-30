@@ -30,8 +30,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.BuildConfig;
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 
 public class DownloadFileProvider extends ContentProvider {

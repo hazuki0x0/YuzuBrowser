@@ -123,6 +123,8 @@ dependencies {
         transitive = true
     }
     implementation project(':legacy')
+    implementation project(':utility')
+    implementation project(':languages')
 
     implementation Libs.kotlin_stdlib
 }

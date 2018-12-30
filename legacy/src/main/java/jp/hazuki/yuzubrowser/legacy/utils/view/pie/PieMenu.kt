@@ -23,9 +23,9 @@ import android.view.MotionEvent
 import android.view.SoundEffectConstants
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import jp.hazuki.utility.extensions.dimension
+import jp.hazuki.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.dimension
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getResColor
 import java.util.*
 
 class PieMenu @JvmOverloads constructor(

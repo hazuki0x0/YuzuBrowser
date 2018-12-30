@@ -32,6 +32,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import jp.hazuki.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternActivity
@@ -39,7 +40,6 @@ import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingPatternAction
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
-import jp.hazuki.yuzubrowser.legacy.utils.ImeUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherFactory
 import kotlinx.android.extensions.LayoutContainer
@@ -493,7 +493,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
             urlEditText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ImeUtils.hideIme(activity, urlEditText)
+                    activity.hideIme(urlEditText)
                     val url1 = urlEditText.text.toString()
                     intent = Intent(Intent.ACTION_VIEW, Uri.parse(if (WebUtils.maybeContainsUrlScheme(url1)) url1 else "http://" + url1))
                     val newOpenAppList = pm.queryIntentActivities(intent, flag)

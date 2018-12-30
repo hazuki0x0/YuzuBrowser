@@ -20,8 +20,8 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.support.annotation.IntRange
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToFloatPx
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
+import jp.hazuki.utility.extensions.convertDpToFloatPx
+import jp.hazuki.utility.extensions.convertDpToPx
 
 class TabListActionTextDrawable(context: Context, tabs: Int) : Drawable() {
 

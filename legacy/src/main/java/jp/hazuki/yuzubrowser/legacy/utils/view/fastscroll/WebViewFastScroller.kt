@@ -39,10 +39,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnScrollChangedListener
 

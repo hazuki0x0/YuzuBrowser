@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import java.io.File;
 
-import jp.hazuki.yuzubrowser.legacy.utils.view.SpinnerButton;
+import jp.hazuki.yuzubrowser.ui.widget.SpinnerButton;
 
 public class FileListButton extends SpinnerButton implements Button.OnClickListener {
     private final FileListDialog mDialog;

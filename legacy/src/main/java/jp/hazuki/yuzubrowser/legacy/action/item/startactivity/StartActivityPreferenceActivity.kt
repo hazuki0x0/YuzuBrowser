@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.EditText
 import android.widget.Toast
+import jp.hazuki.utility.extensions.getBitmap
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
@@ -29,7 +30,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.AppInfo
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ApplicationListFragment
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ShortCutListFragment
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getBitmap
 import java.net.URISyntaxException
 
 class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreferenceFragment.OnActionListener, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {

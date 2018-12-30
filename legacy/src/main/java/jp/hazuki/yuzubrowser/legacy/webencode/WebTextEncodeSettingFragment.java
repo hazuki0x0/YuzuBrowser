@@ -34,9 +34,9 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.view.DeleteDialogCompat;
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration;
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener;
+import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat;
 
 import static jp.hazuki.yuzubrowser.legacy.webencode.SelectActionDialog.DELETE;
 import static jp.hazuki.yuzubrowser.legacy.webencode.SelectActionDialog.EDIT;

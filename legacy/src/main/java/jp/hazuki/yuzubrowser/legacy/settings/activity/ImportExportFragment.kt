@@ -38,16 +38,16 @@ import jp.hazuki.yuzubrowser.legacy.bookmark.util.BookmarkIdGenerator
 import jp.hazuki.yuzubrowser.legacy.browser.checkStoragePermission
 import jp.hazuki.yuzubrowser.legacy.browser.openRequestPermissionSettings
 import jp.hazuki.yuzubrowser.legacy.browser.requestStoragePermission
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.AlertDialogPreference
 import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialBackupTask
 import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialRestoreTask
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.utils.ui
-import jp.hazuki.yuzubrowser.legacy.utils.view.ProgressDialog
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListDialog
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListViewController
+import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
+import jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
 import java.io.File
 import java.lang.ref.WeakReference
 

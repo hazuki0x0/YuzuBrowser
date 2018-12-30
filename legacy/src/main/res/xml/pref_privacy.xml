@@ -54,7 +54,7 @@
         android:key="contentSettings"
         android:title="@string/pref_content_settings"/>
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+    <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
         android:entries="@array/pref_web_cache_list"
         android:entryValues="@array/pref_web_cache_values"
         android:key="web_cache"
@@ -67,12 +67,12 @@
             android:key="save_history"
             android:title="@string/pref_save_history" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+        <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="history_max_day"
             android:title="@string/pref_history_max_day"
             app:seekMax="3652"
             app:seekMin="0" />
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekbarPreference
+        <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="history_max_count"
             android:title="@string/pref_history_max_count"
             app:seekMax="9999"
@@ -86,13 +86,13 @@
             android:key="allow_content_access"
             android:title="@string/pref_allow_content_access" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_file_access_list"
             android:entryValues="@array/pref_file_access_values"
             android:key="file_access"
             android:title="@string/pref_file_access" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
+        <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_mixed_content_list"
             android:entryValues="@array/pref_mixed_contents_values"
             android:key="mixed_content"

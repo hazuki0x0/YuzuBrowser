@@ -33,15 +33,15 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import jp.hazuki.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils
-import jp.hazuki.yuzubrowser.legacy.utils.view.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_user_script_list.*
 import kotlinx.android.synthetic.main.fragment_userjs_item.*

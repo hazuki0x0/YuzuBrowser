@@ -22,8 +22,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
 
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeSettingActivity;
+import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference;
 
 public class PageSettingFragment extends YuzuPreferenceFragment {
 

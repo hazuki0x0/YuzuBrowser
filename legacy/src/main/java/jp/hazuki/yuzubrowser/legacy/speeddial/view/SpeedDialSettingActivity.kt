@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.view.MenuItem
+import jp.hazuki.utility.extensions.getBitmap
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
@@ -17,7 +18,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.AppInfo
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ApplicationListFragment
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ShortCutListFragment
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getBitmap
 import jp.hazuki.yuzubrowser.legacy.utils.stack.SingleStack
 
 class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, FragmentManager.OnBackStackChangedListener, SpeedDialSettingActivityFragment.OnSpeedDialAddListener, SpeedDialSettingActivityEditFragment.GoBackController, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {

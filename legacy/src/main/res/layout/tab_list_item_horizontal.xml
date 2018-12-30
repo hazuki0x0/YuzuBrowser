@@ -61,7 +61,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_history_white_24dp" />
 
-    <jp.hazuki.yuzubrowser.legacy.utils.view.FullFillTextView
+    <jp.hazuki.yuzubrowser.ui.widget.FullFillTextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

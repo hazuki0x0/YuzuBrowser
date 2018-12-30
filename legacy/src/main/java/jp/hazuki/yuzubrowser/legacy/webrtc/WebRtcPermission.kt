@@ -18,7 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.webrtc
 
 import android.content.Context
 import android.webkit.PermissionRequest
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.permissions
+import jp.hazuki.utility.extensions.permissions
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.PermissionState
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebPermissions

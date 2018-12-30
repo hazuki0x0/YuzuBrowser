@@ -31,7 +31,7 @@ import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
-import jp.hazuki.yuzubrowser.legacy.utils.view.ProgressDialog
+import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.async
 
 class FastDownloadActivity : ThemeActivity() {

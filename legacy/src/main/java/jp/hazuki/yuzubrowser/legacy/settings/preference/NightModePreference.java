@@ -27,8 +27,8 @@ import android.widget.SeekBar;
 
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.YuzuPreferenceDialog;
 import jp.hazuki.yuzubrowser.legacy.utils.ColorFilterUtils;
+import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog;
 
 public class NightModePreference extends DialogPreference {
 

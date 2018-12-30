@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <declare-styleable name="StrToIntListPreference">
-        <attr name="android:entries" />
-        <attr name="android:entryValues" />
-    </declare-styleable>
-    <declare-styleable name="IntListPreference">
-        <attr name="android:entryValues" />
-    </declare-styleable>
-    <declare-styleable name="IntentPreference">
-        <attr name="intent" format="string" />
-    </declare-styleable>
-    <declare-styleable name="SeekbarPreference">
-        <attr name="seekMax" format="integer" />
-        <attr name="seekMin" format="integer" />
-        <attr name="comment" format="string" />
-    </declare-styleable>
-    <declare-styleable name="FloatSeekbarPreference" parent="SeekbarPreference">
-        <attr name="denominator" format="integer" />
-    </declare-styleable>
-    <declare-styleable name="MultiListIntPreference">
-        <attr name="android:entries" />
-        <attr name="android:max" />
-    </declare-styleable>
     <declare-styleable name="GestureListPreference">
         <attr name="gestureId">
             <enum name="web" value="0" />
@@ -94,8 +72,6 @@
         <attr name="actionId" />
     </declare-styleable>
 
-    <attr name="spinnerButtonStyle" format="reference" />
-    <attr name="iconColor" format="color" />
 
     <declare-styleable name="WebViewFastScroller">
         <attr name="fs_barColor" format="color"/>

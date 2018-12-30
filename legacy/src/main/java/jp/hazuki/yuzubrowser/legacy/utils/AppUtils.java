@@ -27,11 +27,11 @@ import android.view.View;
 
 import java.util.Arrays;
 
+import jp.hazuki.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.Constants;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.ContextExtensionsKt;
 
 public class AppUtils {
     public static void restartApp(Context context) {

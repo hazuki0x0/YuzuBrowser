@@ -13,8 +13,8 @@ import android.widget.EditText;
 
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.CustomDialogPreference;
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy;
+import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;
 
 public class ProxySettingDialog extends CustomDialogPreference {
     private boolean mSaveSettings = true;

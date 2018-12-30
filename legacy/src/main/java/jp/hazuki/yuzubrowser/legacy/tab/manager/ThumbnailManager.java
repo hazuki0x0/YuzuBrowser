@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Region;
 
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.ContextExtensionsKt;
+import jp.hazuki.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.utils.image.ImageCache;
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView;
 

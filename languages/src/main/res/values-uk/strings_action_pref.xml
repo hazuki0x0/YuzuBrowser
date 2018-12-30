@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Налаштування</string>
+    <string name="action_tab_loop">Цикл вкладок</string>
+    <string name="action_action_cant_back">Дія без історії</string>
+    <string name="action_finish_alert">Показати сповіщення</string>
+    <string name="action_finish_close_tab">Закрити вкладку при виході</string>
+    <string name="action_action_cant_close_tab">Дія на останній вкладці</string>
+    <string name="action_select_menu">Виберіть меню</string>
+    <string name="action_target_tab">Цільова вкладка</string>
+
+    <string-array name="action_start_activity_template">
+        <item>Відкрити додаток</item>
+        <item>Відкрити  ярлик</item>
+        <item>Поділитися сторінкою</item>
+        <item>Відкрити в іншому додатку</item>
+    </string-array>
+
+    <string name="action_start_activity_edit_intent">Змінити намір</string>
+    <string name="action_start_activity_edit_url">Редагувати адресу запиту</string>
+    <string name="action_screenshot_all">Захопити все</string>
+    <string name="action_screenshot_path">Зберегти в каталог</string>
+    <string name="action_screenshot_full_error">Якщо ви хочете використовувати функцію \"Захопити все\", повинно бути ввімкнено \“Повільне відображення\”.</string>
+    <string name="action_mousepointer_backfinish">Вийти, коли натиснута кнопка \"Назад\"</string>
+    <string name="action_translate_from">з</string>
+    <string name="action_translate_to">на</string>
+    <string name="action_translate_auto_select">Автоматичний вибір</string>
+    <string name="action_translate_select_each">Виберати кожен раз</string>
+    <string name="action_web_scroll_x_coordinate">X-координати</string>
+    <string name="action_web_scroll_y_coordinate">Y-координати</string>
+    <string name="action_web_scroll_x_y_zero">Помилка: X або Y не може бути рівним 0</string>
+
+    <string-array name="action_web_scroll_type_list">
+        <item>Швидка прокрутка</item>
+        <item>Плавна прокрутка</item>
+    </string-array>
+
+    <string name="action_custom_name">Назва дії</string>
+    <string name="action_useragent_setting">Налаштування агента користувача</string>
+    <string name="action_custom_setting">Налаштування дії користувача</string>
+    <string name="action_start_activity_setting">Налаштування операції</string>
+    <string name="action_web_encode_setting">Налаштування кодування тексту</string>
+    <string name="action_vibration_setting">Тривалість (мс.)</string>
+    <string name="action_auto_scroll_speed">Швидкість авто-прокрутки</string>
+    <string name="action_auto_scroll_speed_zero">Помилка: Швидкість не повинна бути 0</string>
+
+    <string name="action_tab_list">Режим списку вкладок</string>
+    <string-array name="action_tab_list">
+        <item>Вертикальний список</item>
+        <item>Вертикальний зворотний список</item>
+        <item>Горизонтальний список</item>
+    </string-array>
+    <string name="action_tab_list_button">Позиція кнопки нової вкладки</string>
+    <string-array name="action_tab_list_button">
+        <item>Справа</item>
+        <item>Зліва</item>
+    </string-array>
+    <string name="action_tab_list_last_tab">Дія при закритті останньої вкладки</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>Немає</item>
+        <item>Нова вкладка</item>
+        <item>Вихід</item>
+        <item>Вихід з сповіщенням</item>
+    </string-array>
+
+    <string name="action_open_menu">Показати позицію меню</string>
+    <string-array name="action_open_menu_list">
+        <item>Зліва</item>
+        <item>По центру</item>
+        <item>Справа</item>
+    </string-array>
+
+    <string name="action_bottom_search_bar">Показувати панель пошуку внизу</string>
+    <string name="show_toast">Показувати спливаюче повідомлення</string>
+</resources>

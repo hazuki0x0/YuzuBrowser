@@ -18,12 +18,12 @@ package jp.hazuki.yuzubrowser.legacy.speeddial
 
 import android.content.Context
 import android.webkit.WebResourceResponse
+import jp.hazuki.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.utils.HtmlUtils
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getNoCacheResponse
 import java.io.*
 import java.nio.charset.StandardCharsets
 

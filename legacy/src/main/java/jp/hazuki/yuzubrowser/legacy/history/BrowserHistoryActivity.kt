@@ -20,11 +20,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.WindowManager
+import jp.hazuki.utility.extensions.convertDpToFloatPx
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToFloatPx
 
 class BrowserHistoryActivity : ThemeActivity() {
 

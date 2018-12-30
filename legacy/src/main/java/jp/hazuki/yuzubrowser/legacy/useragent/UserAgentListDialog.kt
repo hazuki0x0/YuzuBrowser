@@ -24,9 +24,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.webkit.WebSettings
+import jp.hazuki.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getFakeChromeUserAgent
 
 class UserAgentListDialog : DialogFragment() {
 

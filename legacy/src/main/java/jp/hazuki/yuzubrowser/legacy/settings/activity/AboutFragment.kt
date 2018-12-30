@@ -25,13 +25,13 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import jp.hazuki.utility.extensions.getVersionName
+import jp.hazuki.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.getVersionName
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.intentFor
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import java.io.File
 
@@ -42,7 +42,7 @@ class AboutFragment : YuzuPreferenceFragment() {
         addPreferencesFromResource(R.xml.pref_about)
         val version = findPreference("version")
         version.setOnPreferenceClickListener {
-            activity?.setClipboardWithToast(AppUtils.getVersionDeviceInfo(activity))
+            activity.setClipboardWithToast(AppUtils.getVersionDeviceInfo(activity))
             true
         }
 

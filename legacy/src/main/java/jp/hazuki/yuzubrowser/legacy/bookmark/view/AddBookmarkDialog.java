@@ -34,7 +34,7 @@ import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkFoldersDialog.OnFolderSelectedListener;
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController;
-import jp.hazuki.yuzubrowser.legacy.utils.view.SpinnerButton;
+import jp.hazuki.yuzubrowser.ui.widget.SpinnerButton;
 
 public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements OnFolderSelectedListener {
     protected final Context mContext;

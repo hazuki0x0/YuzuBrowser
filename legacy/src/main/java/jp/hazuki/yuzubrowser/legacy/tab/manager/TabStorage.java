@@ -41,8 +41,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
-import jp.hazuki.yuzubrowser.legacy.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;

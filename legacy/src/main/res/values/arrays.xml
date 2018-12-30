@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string-array name="clear_browser_data" translatable="false">
+    <string-array name="clear_browser_data" translatable="false" tools:ignore="InconsistentArrays">
         <item>@string/caches</item>
         <item>@string/cookies</item>
         <item>@string/passwords</item>
@@ -12,7 +12,7 @@
         <item>@string/recent_search_queries</item>
         <item>@string/favicon_cache</item>
     </string-array>
-    <integer-array name="clear_browser_data_id">
+    <integer-array name="clear_browser_data_id" tools:ignore="InconsistentArrays">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -23,31 +23,4 @@
         <item>7</item>
         <item>8</item>
     </integer-array>
-    <string-array name="resblock_res_type_list">
-        <item>Empty string</item>
-        <item>Empty PNG image</item>
-    </string-array>
-    <string-array name="edit_user_agent">
-        <item>Edit</item>
-        <item>Delete</item>
-    </string-array>
-
-    <string-array name="new_speed_dial_mode">
-        <item>Direct input</item>
-        <item>Bookmarks</item>
-        <item>Histories</item>
-        <item>Apps list</item>
-        <item>Shortcuts list</item>
-    </string-array>
-
-    <string-array name="add_bookmark_option">
-        <item>Add bookmark</item>
-        <item>Delete bookmark</item>
-    </string-array>
-    <string-array name="permissions_choice" translatable="false">
-        <item>@string/permission_ask</item>
-        <item>@string/allow</item>
-        <item>@string/block</item>
-    </string-array>
-
 </resources>

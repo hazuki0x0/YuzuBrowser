@@ -27,8 +27,8 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.StrToIntListPreference
 import jp.hazuki.yuzubrowser.legacy.utils.isAlwaysConvertible
+import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
 import org.jetbrains.anko.longToast
 
 class BrowserSettingsFragment : YuzuPreferenceFragment() {

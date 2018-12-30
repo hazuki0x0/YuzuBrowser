@@ -39,9 +39,9 @@ import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.MathUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.legacy.utils.view.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomOnCreateContextMenuListener
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 

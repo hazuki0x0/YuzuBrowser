@@ -25,8 +25,8 @@ import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.SeekBarPreferenceController;
-import jp.hazuki.yuzubrowser.legacy.settings.preference.common.YuzuPreferenceDialog;
+import jp.hazuki.yuzubrowser.ui.preference.SeekBarPreferenceController;
+import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog;
 
 public class WebTextSizePreference extends DialogPreference {
     private int mValue;

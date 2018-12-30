@@ -28,13 +28,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import jp.hazuki.utility.extensions.convertDpToPx
+import jp.hazuki.utility.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.UrlUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.convertDpToPx
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.legacy.utils.ui
-import jp.hazuki.yuzubrowser.legacy.utils.view.ProgressDialog
+import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
