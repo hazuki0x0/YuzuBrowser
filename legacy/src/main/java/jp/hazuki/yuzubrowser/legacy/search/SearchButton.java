@@ -1,10 +1,10 @@
 package jp.hazuki.yuzubrowser.legacy.search;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import androidx.appcompat.widget.AppCompatImageButton;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeController;
 

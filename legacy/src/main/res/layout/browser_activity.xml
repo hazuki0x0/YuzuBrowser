@@ -22,7 +22,7 @@
                                                                  android:layout_toRightOf="@+id/leftToolbarLayout"
                                                                  tools:ignore="RtlHardcoded">
 
-            <android.support.design.widget.AppBarLayout
+            <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -48,7 +48,7 @@
                     layout="@layout/find_onpage"
                     android:visibility="gone"/>
 
-            </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
 
             <jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout

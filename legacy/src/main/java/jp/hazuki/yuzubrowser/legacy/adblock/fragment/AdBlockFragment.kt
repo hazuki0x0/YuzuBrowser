@@ -22,12 +22,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ActionMode
-import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlock
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockManager
@@ -39,11 +37,11 @@ import java.io.IOException
 import java.io.PrintWriter
 import java.util.*
 
-class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener, AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback, DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener, ConfirmDialog.OnConfirmedListener {
+class AdBlockFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener, AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback, DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener, ConfirmDialog.OnConfirmedListener {
 
     private lateinit var provider: AdBlockManager.AdBlockItemProvider
     private lateinit var adapter: AdBlockArrayRecyclerAdapter
-    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var layoutManager: androidx.recyclerview.widget.LinearLayoutManager
     private var listener: AdBlockFragmentListener? = null
     private var actionMode: ActionMode? = null
     private var type: Int = 0
@@ -60,7 +58,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         listener!!.setFragmentTitle(type)
         provider = AdBlockManager.getProvider(activity.applicationContext, type)
         adapter = AdBlockArrayRecyclerAdapter(activity, provider.allItems, this)
-        layoutManager = LinearLayoutManager(activity)
+        layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
 
         recyclerView.let {
             it.layoutManager = layoutManager

@@ -16,12 +16,11 @@
 
 package jp.hazuki.yuzubrowser.legacy.download.core.utils
 
-import android.support.v4.provider.DocumentFile
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.download.core.downloader.client.HttpClient
 import jp.hazuki.yuzubrowser.legacy.utils.createUniqueFileName
 
-fun HttpClient.getFileName(root: DocumentFile, url: String, mimeType: String?, defaultExt: String?): String {
+fun HttpClient.getFileName(root: androidx.documentfile.provider.DocumentFile, url: String, mimeType: String?, defaultExt: String?): String {
     headerFields["Content-Disposition"]?.let { contents ->
         for (raw in contents) {
             val name = guessFileNameFromContentDisposition(raw)

@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.download.core.data
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Parcelable
-import android.support.v4.provider.DocumentFile
 import android.webkit.CookieManager
 import jp.hazuki.yuzubrowser.legacy.download.core.downloader.client.HttpClient
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.*
@@ -32,7 +31,7 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
 
     companion object {
 
-        operator fun invoke(context: Context, root: DocumentFile, url: String, request: DownloadRequest): MetaData {
+        operator fun invoke(context: Context, root: androidx.documentfile.provider.DocumentFile, url: String, request: DownloadRequest): MetaData {
             return try {
                 val client = HttpClient.create(url, "HEAD")
                 client.connectTimeout = 1000

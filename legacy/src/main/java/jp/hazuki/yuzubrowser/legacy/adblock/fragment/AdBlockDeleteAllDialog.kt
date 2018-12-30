@@ -20,10 +20,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import jp.hazuki.yuzubrowser.legacy.R
 
-class AdBlockDeleteAllDialog : DialogFragment() {
+class AdBlockDeleteAllDialog : androidx.fragment.app.DialogFragment() {
 
     private var listener: OnDeleteAllListener? = null
 

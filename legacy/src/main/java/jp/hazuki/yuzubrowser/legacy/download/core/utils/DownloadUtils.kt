@@ -20,7 +20,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.support.v4.provider.DocumentFile
 import android.text.format.Formatter
 import android.util.Base64
 import android.webkit.MimeTypeMap
@@ -36,7 +35,7 @@ import java.net.URLDecoder
 import java.util.*
 import java.util.regex.Pattern
 
-fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): DocumentFile? {
+fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): androidx.documentfile.provider.DocumentFile? {
     if (imageData.isValid) {
         try {
             val image = Base64.decode(imageData.getData(), Base64.DEFAULT)
@@ -77,7 +76,7 @@ class Base64Image(url: String) {
     }
 }
 
-fun guessDownloadFileName(root: DocumentFile, url: String, contentDisposition: String?, mimetype: String?, defaultExt: String?): String {
+fun guessDownloadFileName(root: androidx.documentfile.provider.DocumentFile, url: String, contentDisposition: String?, mimetype: String?, defaultExt: String?): String {
     var guessType = mimetype
     if (url.startsWith("data:")) {
         val data = url.split(',').dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -244,7 +243,7 @@ fun getDownloadFolderUri(): Uri {
     return Uri.parse(AppData.download_folder.get())
 }
 
-fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: DocumentFile) = createFileOpenIntent(context, downloadedFile.uri, mimeType, name)
+fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: androidx.documentfile.provider.DocumentFile) = createFileOpenIntent(context, downloadedFile.uri, mimeType, name)
 
 fun DownloadFileInfo.getNotificationString(context: Context): String {
     return if (size > 0) {
@@ -257,15 +256,15 @@ fun DownloadFileInfo.getNotificationString(context: Context): String {
     }
 }
 
-fun DownloadFileInfo.getFile(): DocumentFile? =
+fun DownloadFileInfo.getFile(): androidx.documentfile.provider.DocumentFile? =
         if (state == DownloadFileInfo.STATE_DOWNLOADED) root.findFile(name) else null
 
 fun DownloadFileInfo.checkFlag(flag: Int): Boolean = (state and flag) == flag
 
-fun Uri.toDocumentFile(context: Context): DocumentFile {
+fun Uri.toDocumentFile(context: Context): androidx.documentfile.provider.DocumentFile {
     return when (scheme) {
-        ContentResolver.SCHEME_CONTENT -> DocumentFile.fromTreeUri(context, this)!!
-        "file" -> DocumentFile.fromFile(File(path))
+        ContentResolver.SCHEME_CONTENT -> androidx.documentfile.provider.DocumentFile.fromTreeUri(context, this)!!
+        "file" -> androidx.documentfile.provider.DocumentFile.fromFile(File(path))
         else -> throw IllegalStateException("unknown scheme :$scheme, Uri:$this")
     }
 }

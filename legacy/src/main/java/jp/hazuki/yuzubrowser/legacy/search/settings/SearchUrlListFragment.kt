@@ -18,16 +18,13 @@ package jp.hazuki.yuzubrowser.legacy.search.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
@@ -35,7 +32,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerMenu
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 
-class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete {
+class SearchUrlListFragment : androidx.fragment.app.Fragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete {
 
     private lateinit var adapter: UrlAdapter
     private lateinit var manager: SearchUrlManager
@@ -46,8 +43,8 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
         val activity = activity ?: return
 
         rootView = view
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         recyclerView.addItemDecoration(DividerItemDecoration(activity))
 
         val touchHelper = ItemTouchHelper(Touch())
@@ -151,7 +148,7 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
     }
 
     private inner class Touch : ItemTouchHelper.Callback() {
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return if (manager.size > 1) {
                 ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or
                         ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
@@ -160,13 +157,13 @@ class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListene
             }
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             edited = true
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             edited = true
             val position = viewHolder.adapterPosition
             val searchUrl = adapter.remove(position)

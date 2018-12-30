@@ -18,10 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
-
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceFragmentCompat;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.help.HelpActivity;
 

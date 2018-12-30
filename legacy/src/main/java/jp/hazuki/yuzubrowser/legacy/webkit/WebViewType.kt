@@ -16,7 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.webkit
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 @IntDef(WebViewFactory.MODE_NORMAL, WebViewFactory.MODE_CACHE, WebViewFactory.MODE_LIMIT_CACHE)
 annotation class WebViewType

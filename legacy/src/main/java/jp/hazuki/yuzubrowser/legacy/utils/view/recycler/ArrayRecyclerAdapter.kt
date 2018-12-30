@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +24,7 @@ import android.view.ViewGroup
 import java.util.*
 
 
-abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder<T>>(context: Context, val items: MutableList<T>, listener: OnRecyclerListener?) : RecyclerView.Adapter<VH>() {
+abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder<T>>(context: Context, val items: MutableList<T>, listener: OnRecyclerListener?) : androidx.recyclerview.widget.RecyclerView.Adapter<VH>() {
     private var listener: OnRecyclerListener? = listener
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var sortMode: Boolean = false
@@ -190,7 +189,7 @@ abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder
         return itemSelected.get(position, false)
     }
 
-    open class ArrayViewHolder<I>(itemView: View, adapter: ArrayRecyclerAdapter<I, *>) : RecyclerView.ViewHolder(itemView) {
+    open class ArrayViewHolder<I>(itemView: View, adapter: ArrayRecyclerAdapter<I, *>) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         private var target: I? = null
         protected val item: I

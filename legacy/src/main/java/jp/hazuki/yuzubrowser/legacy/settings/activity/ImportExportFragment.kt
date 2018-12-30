@@ -20,12 +20,9 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.*
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.Loader
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.backup.BackupTask
@@ -51,8 +48,8 @@ import jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
 import java.io.File
 import java.lang.ref.WeakReference
 
-class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallbacks<Boolean> {
-    private var progress: DialogFragment? = null
+class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.LoaderManager.LoaderCallbacks<Boolean> {
+    private var progress: androidx.fragment.app.DialogFragment? = null
     private val asyncPermissions by lazy { AsyncPermissions(appCompatActivity) }
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -293,7 +290,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Boolean> {
+    override fun onCreateLoader(id: Int, args: Bundle?): androidx.loader.content.Loader<Boolean> {
         if (args == null) throw IllegalArgumentException("args must not be null")
 
         return when (id) {
@@ -313,7 +310,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
     }
 
-    override fun onLoadFinished(loader: android.support.v4.content.Loader<Boolean>, data: Boolean) {
+    override fun onLoadFinished(loader: androidx.loader.content.Loader<Boolean>, data: Boolean) {
         handler.sendEmptyMessage(0)
 
         if (data) {
@@ -326,7 +323,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         }
     }
 
-    override fun onLoaderReset(loader: android.support.v4.content.Loader<Boolean>) {
+    override fun onLoaderReset(loader: androidx.loader.content.Loader<Boolean>) {
 
     }
 
@@ -334,7 +331,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         get() = activity as AppCompatActivity
 
     private class DialogHandler : Handler() {
-        private var dialogRef: WeakReference<DialogFragment>? = null
+        private var dialogRef: WeakReference<androidx.fragment.app.DialogFragment>? = null
 
         override fun handleMessage(msg: Message) {
             if (dialogRef == null) return
@@ -345,12 +342,12 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             }
         }
 
-        internal fun setDialog(dialog: DialogFragment?) {
-            dialogRef = WeakReference<DialogFragment>(dialog)
+        internal fun setDialog(dialog: androidx.fragment.app.DialogFragment?) {
+            dialogRef = WeakReference<androidx.fragment.app.DialogFragment>(dialog)
         }
     }
 
-    class PermissionDialog : DialogFragment() {
+    class PermissionDialog : androidx.fragment.app.DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val activity = activity ?: throw IllegalStateException()

@@ -17,11 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton
 
 import android.content.Context
-import android.support.v7.widget.AppCompatButton
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
-
+import androidx.appcompat.widget.AppCompatButton
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager

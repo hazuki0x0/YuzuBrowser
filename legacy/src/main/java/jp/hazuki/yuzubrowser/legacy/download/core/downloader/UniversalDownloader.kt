@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.download.core.downloader
 
 import android.content.Context
-import android.support.v4.provider.DocumentFile
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -107,7 +106,7 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                 }
             }
 
-            var downloadedFile: DocumentFile? = null
+            var downloadedFile: androidx.documentfile.provider.DocumentFile? = null
 
             if (abort) {
                 deleteTempIfNeed()

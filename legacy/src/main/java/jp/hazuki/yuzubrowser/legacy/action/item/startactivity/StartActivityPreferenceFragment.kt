@@ -18,13 +18,12 @@ package jp.hazuki.yuzubrowser.legacy.action.item.startactivity
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.ListFragment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import jp.hazuki.yuzubrowser.legacy.R
 
-class StartActivityPreferenceFragment : ListFragment() {
+class StartActivityPreferenceFragment : androidx.fragment.app.ListFragment() {
 
     private var mListener: OnActionListener? = null
 

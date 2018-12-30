@@ -4,13 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.webkit.CookieManager;
 import android.webkit.WebViewDatabase;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;

@@ -20,14 +20,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.utility.extensions.dimension
 import jp.hazuki.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
@@ -90,7 +88,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
         startActivityForResult(intent, RESULT_REQUEST_ADD)
     }
 
-    override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
+    override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
         return false
     }
 
@@ -110,7 +108,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
         }
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int) {
+    override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int) {
         val item = adapter.remove(index)
         Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.undo) {
@@ -167,7 +165,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
         private const val RESULT_REQUEST_EDIT = 1
         private const val ITEM_ID = "id"
 
-        operator fun invoke(gestureId: Int, nameArray: ActionNameArray): Fragment {
+        operator fun invoke(gestureId: Int, nameArray: ActionNameArray): androidx.fragment.app.Fragment {
             return GestureListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(GestureManager.INTENT_EXTRA_GESTURE_ID, gestureId)

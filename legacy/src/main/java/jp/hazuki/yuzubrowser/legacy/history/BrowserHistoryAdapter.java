@@ -7,8 +7,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.legacy.R;

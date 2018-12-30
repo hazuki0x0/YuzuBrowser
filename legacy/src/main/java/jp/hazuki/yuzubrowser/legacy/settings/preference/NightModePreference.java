@@ -18,13 +18,13 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 
+import androidx.preference.DialogPreference;
+import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.ColorFilterUtils;

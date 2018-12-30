@@ -22,10 +22,10 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
-import android.support.v4.content.res.ResourcesCompat
 import android.util.StateSet
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.res.ResourcesCompat
 import jp.hazuki.utility.extensions.forEach
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData

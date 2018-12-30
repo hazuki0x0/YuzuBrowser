@@ -20,7 +20,7 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.drawable.Drawable
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
 
 class LauncherIconDrawable(private val icon: Drawable) : Drawable() {
 

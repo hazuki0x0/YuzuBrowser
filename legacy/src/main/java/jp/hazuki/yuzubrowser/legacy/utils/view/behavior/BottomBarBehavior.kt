@@ -17,23 +17,21 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.behavior
 
 import android.content.Context
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.yuzubrowser.legacy.R
 
 
-class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {
+class BottomBarBehavior(context: Context, attrs: AttributeSet) : androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {
 
     private var isInitialized = false
     private lateinit var topToolbar: View
     private lateinit var bottomToolbar: View
     private lateinit var bottomBar: View
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
+    override fun layoutDependsOn(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
         if (dependency is AppBarLayout) {
             this.bottomBar = bottomBar
             topToolbar = dependency.findViewById(R.id.topToolbarLayout)
@@ -44,7 +42,7 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayo
         return false
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
+    override fun onDependentViewChanged(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
         val bottomBarHeight = bottomToolbar.height
 
         if (topToolbar.height != 0) {

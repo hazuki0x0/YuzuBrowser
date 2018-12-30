@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -24,9 +24,9 @@
             <requestFocus />
         </EditText>
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -38,6 +38,6 @@
             android:inputType="numberSigned"
             android:hint="@string/action_web_scroll_y_coordinate" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

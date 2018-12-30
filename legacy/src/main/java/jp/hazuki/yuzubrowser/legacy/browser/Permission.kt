@@ -28,8 +28,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.legacy.R
@@ -120,7 +119,7 @@ private suspend fun AppCompatActivity.handleResult(asyncPermissions: AsyncPermis
     }
 }
 
-class PermissionDialog : DialogFragment() {
+class PermissionDialog : androidx.fragment.app.DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()
 

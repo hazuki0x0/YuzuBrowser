@@ -20,7 +20,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -30,7 +29,7 @@ import com.android.colorpicker.ColorPickerDialog
 import com.android.colorpicker.ColorPickerSwatch
 import jp.hazuki.yuzubrowser.legacy.R
 
-class SearchSettingDialog : DialogFragment(), ColorPickerSwatch.OnColorSelectedListener {
+class SearchSettingDialog : androidx.fragment.app.DialogFragment(), ColorPickerSwatch.OnColorSelectedListener {
 
     companion object {
         private const val ARG_INDEX = "index"

@@ -16,7 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.webkit.handler
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
 import java.lang.ref.WeakReference
 

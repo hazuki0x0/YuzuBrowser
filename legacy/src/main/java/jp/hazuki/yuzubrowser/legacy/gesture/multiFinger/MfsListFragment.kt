@@ -18,13 +18,10 @@ package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureItem
@@ -34,7 +31,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 
-class MfsListFragment : Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {
+class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {
 
     private lateinit var manager: MultiFingerGestureManager
     private lateinit var adapter: MfsListAdapter
@@ -49,7 +46,7 @@ class MfsListFragment : Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDel
         val activity = activity ?: return
 
         recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             val helper = ItemTouchHelper(ListTouch())
             helper.attachToRecyclerView(this)
             addItemDecoration(helper)
@@ -120,21 +117,21 @@ class MfsListFragment : Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDel
     }
 
     private inner class ListTouch : ItemTouchHelper.Callback() {
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             return true
         }
 
-        override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
+        override fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
             super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
             manager.save()
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             val item = adapter.remove(position)
 

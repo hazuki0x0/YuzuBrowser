@@ -20,7 +20,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -73,7 +72,7 @@ class AboutFragment : YuzuPreferenceFragment() {
         }
     }
 
-    class OpenSourceLicenseDialog : DialogFragment() {
+    class OpenSourceLicenseDialog : androidx.fragment.app.DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val webView = WebView(activity)
             webView.webViewClient = object : WebViewClient() {
@@ -103,7 +102,7 @@ class AboutFragment : YuzuPreferenceFragment() {
         }
     }
 
-    class TranslationDialog : DialogFragment() {
+    class TranslationDialog : androidx.fragment.app.DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return AlertDialog.Builder(activity)
                     .setTitle(R.string.pref_translation)
@@ -112,7 +111,7 @@ class AboutFragment : YuzuPreferenceFragment() {
         }
     }
 
-    class DeleteLogDialog : DialogFragment() {
+    class DeleteLogDialog : androidx.fragment.app.DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val builder = AlertDialog.Builder(activity)
             builder.setTitle(R.string.pref_delete_all_logs)

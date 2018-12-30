@@ -23,13 +23,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.ErrorReportServer;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;

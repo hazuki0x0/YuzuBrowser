@@ -20,14 +20,12 @@ import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ActionMode
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
-import android.support.v7.widget.SearchView
 import android.text.TextUtils
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.showAddBookmarkDialog
@@ -44,7 +42,7 @@ import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 
 
-class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
+class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
 
     private var pickMode: Boolean = false
     private lateinit var adapter: BrowserHistoryAdapter
@@ -65,7 +63,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
         pickMode = arguments.getBoolean(PICK_MODE)
 
-        val layoutManager = LinearLayoutManager(activity)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         val listener = object : LoadMoreListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {

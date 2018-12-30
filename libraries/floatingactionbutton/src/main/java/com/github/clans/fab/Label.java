@@ -35,13 +35,14 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 public class Label extends AppCompatTextView {
 

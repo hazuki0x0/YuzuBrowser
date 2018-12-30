@@ -24,10 +24,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingResetAction;

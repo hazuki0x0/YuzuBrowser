@@ -20,11 +20,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v14.preference.SwitchPreference
-import android.support.v4.app.DialogFragment
-import android.support.v7.preference.DialogPreference
-import android.support.v7.preference.Preference
 import android.util.AttributeSet
+import androidx.preference.DialogPreference
+import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import jp.hazuki.yuzubrowser.legacy.R
 
 class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPreference(context, attrs) {
@@ -37,7 +36,7 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
         }
     }
 
-    class WarningDialog : DialogFragment() {
+    class WarningDialog : androidx.fragment.app.DialogFragment() {
 
         companion object {
             private const val ARG_KEY = "key"

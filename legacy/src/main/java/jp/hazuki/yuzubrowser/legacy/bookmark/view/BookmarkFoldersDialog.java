@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.bookmark.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem;

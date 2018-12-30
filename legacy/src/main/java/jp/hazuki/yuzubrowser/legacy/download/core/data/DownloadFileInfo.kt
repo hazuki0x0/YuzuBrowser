@@ -16,14 +16,13 @@
 
 package jp.hazuki.yuzubrowser.legacy.download.core.data
 
-import android.support.v4.provider.DocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 
 class DownloadFileInfo(
         var id: Long,
         val url: String,
         val mimeType: String,
-        val root: DocumentFile,
+        val root: androidx.documentfile.provider.DocumentFile,
         val name: String,
         var size: Long,
         var resumable: Boolean = false,
@@ -34,7 +33,7 @@ class DownloadFileInfo(
     constructor (
             url: String,
             mimeType: String,
-            root: DocumentFile,
+            root: androidx.documentfile.provider.DocumentFile,
             name: String,
             size: Long,
             resumable: Boolean = false,
@@ -42,7 +41,7 @@ class DownloadFileInfo(
     ) : this(-1, url, mimeType, root, name, size, resumable, startTime, STATE_DOWNLOADING)
 
     constructor(
-            root: DocumentFile,
+            root: androidx.documentfile.provider.DocumentFile,
             file: DownloadFile,
             meta: MetaData
     ) : this(file.url, meta.mineType, root, file.name ?: meta.name, meta.size, meta.resumable)

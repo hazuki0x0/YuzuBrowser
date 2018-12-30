@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.OnCancelListener
 import android.graphics.drawable.Drawable
-import android.support.v7.app.AlertDialog
 import android.view.View
-
+import androidx.appcompat.app.AlertDialog
 import jp.hazuki.yuzubrowser.ui.preference.SeekBarPreferenceController
 
 class SeekBarDialog(context: Context) {

@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.backup;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +27,7 @@ import java.net.URI;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import androidx.loader.content.AsyncTaskLoader;
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
 
 public class BackupTask extends AsyncTaskLoader<Boolean> {

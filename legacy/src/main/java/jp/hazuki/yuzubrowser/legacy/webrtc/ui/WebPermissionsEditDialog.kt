@@ -21,14 +21,13 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.Spinner
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.PermissionState
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebPermissions
 
-class WebPermissionsEditDialog : DialogFragment() {
+class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
 
     private var listener: OnPermissionEditedListener? = null
 

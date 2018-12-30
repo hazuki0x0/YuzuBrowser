@@ -16,7 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.browser
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 @IntDef(BrowserController.REQUEST_WEB_UPLOAD,
         BrowserController.REQUEST_SEARCHBOX,

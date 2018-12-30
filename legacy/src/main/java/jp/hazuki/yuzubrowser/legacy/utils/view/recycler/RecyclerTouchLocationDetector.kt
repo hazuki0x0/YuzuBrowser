@@ -17,11 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.MotionEvent
 
-class RecyclerTouchLocationDetector : RecyclerView.OnItemTouchListener {
+class RecyclerTouchLocationDetector : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
     private var location: RecyclerTouchLocation = RecyclerTouchLocation.NONE
 
     val gravity: Int
@@ -34,7 +33,7 @@ class RecyclerTouchLocationDetector : RecyclerView.OnItemTouchListener {
             }
         }
 
-    override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+    override fun onInterceptTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent): Boolean {
         if (e.actionMasked == MotionEvent.ACTION_DOWN) {
             val half = rv.width / 2
             val x = e.x
@@ -43,7 +42,7 @@ class RecyclerTouchLocationDetector : RecyclerView.OnItemTouchListener {
         return false
     }
 
-    override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+    override fun onTouchEvent(rv: androidx.recyclerview.widget.RecyclerView, e: MotionEvent) {}
 
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
 

@@ -23,12 +23,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
-import android.support.annotation.DimenRes
-import android.support.v4.content.ContextCompat
 import android.view.WindowManager
 import android.webkit.WebSettings
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.core.content.ContextCompat
 
 @ColorInt
 fun Context.getResColor(@ColorRes id: Int): Int {

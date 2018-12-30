@@ -2,11 +2,11 @@ package jp.hazuki.yuzubrowser.ui.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.DialogPreference;
+import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.ui.R;
 
 public class SeekbarPreference extends DialogPreference {

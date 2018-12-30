@@ -20,8 +20,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.AppCompatImageButton
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageButton
 
 open class OverlayImageButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : AppCompatImageButton(context, attrs) {
     var overlay: Drawable? = null

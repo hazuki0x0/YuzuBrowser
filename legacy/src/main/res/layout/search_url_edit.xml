@@ -16,7 +16,7 @@
         android:background="@drawable/oval_icon_background"
         android:foreground="?android:attr/selectableItemBackgroundBorderless"/>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -30,9 +30,9 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="@string/title"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textInputLayout3"
@@ -44,6 +44,6 @@
             android:layout_height="wrap_content"
             android:inputType="textUri"
             android:hint="@string/url"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </RelativeLayout>

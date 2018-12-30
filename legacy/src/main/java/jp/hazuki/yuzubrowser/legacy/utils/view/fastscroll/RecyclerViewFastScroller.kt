@@ -26,20 +26,18 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.StateListDrawable
-import android.support.annotation.ColorInt
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewCompat
-import android.support.v4.view.animation.FastOutLinearInInterpolator
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.ColorInt
+import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -55,8 +53,8 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
 
     internal var appBarLayoutOffset: Int = 0
 
-    internal var recyclerView: RecyclerView? = null
-    internal var coordinatorLayout: CoordinatorLayout? = null
+    internal var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
+    internal var coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout? = null
     internal var appBarLayout: AppBarLayout? = null
 
     internal var animator: AnimatorSet? = null
@@ -70,8 +68,8 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
     private var barInset: Int = 0
 
     private var hideOverride: Boolean = false
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private val adapterObserver = object : RecyclerView.AdapterDataObserver() {
+    private var adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>? = null
+    private val adapterObserver = object : androidx.recyclerview.widget.RecyclerView.AdapterDataObserver() {
         override fun onChanged() {
             requestLayout()
         }
@@ -249,7 +247,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
                         val coordinator = coordinatorLayout
                         val appBar = appBarLayout
                         if (!AppData.touch_scrollbar_fixed_toolbar.get() && coordinator != null && appBar != null) {
-                            val params = appBar.layoutParams as CoordinatorLayout.LayoutParams
+                            val params = appBar.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
                             val behavior = params.behavior as AppBarLayout.Behavior?
                             behavior?.onNestedPreScroll(coordinator, appBar,
                                     this@RecyclerViewFastScroller, 0, dY, IntArray(2), ViewCompat.TYPE_TOUCH)
@@ -316,10 +314,10 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
         bar.background = drawable
     }
 
-    fun attachRecyclerView(recyclerView: RecyclerView) {
+    fun attachRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
         this.recyclerView = recyclerView
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 show(true)
             }
         })
@@ -328,14 +326,14 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
         }
     }
 
-    fun attachAdapter(adapter: RecyclerView.Adapter<*>?) {
+    fun attachAdapter(adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>?) {
         if (this.adapter === adapter) return
         this.adapter?.unregisterAdapterDataObserver(adapterObserver)
         adapter?.registerAdapterDataObserver(adapterObserver)
         this.adapter = adapter
     }
 
-    fun attachAppBarLayout(coordinatorLayout: CoordinatorLayout, appBarLayout: AppBarLayout) {
+    fun attachAppBarLayout(coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout, appBarLayout: AppBarLayout) {
         this.coordinatorLayout = coordinatorLayout
         this.appBarLayout = appBarLayout
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->

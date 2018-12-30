@@ -16,7 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.webkit;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 @IntDef({TabType.DEFAULT, TabType.WINDOW, TabType.INTENT})
 public @interface TabType {

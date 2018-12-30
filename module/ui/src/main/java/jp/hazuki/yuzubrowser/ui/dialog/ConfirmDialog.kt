@@ -20,9 +20,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 
-class ConfirmDialog : DialogFragment() {
+class ConfirmDialog : androidx.fragment.app.DialogFragment() {
 
     private var listener: OnConfirmedListener? = null
 

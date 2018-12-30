@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.preference.Preference;
 
+import androidx.annotation.Nullable;
+import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeSettingActivity;
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference;

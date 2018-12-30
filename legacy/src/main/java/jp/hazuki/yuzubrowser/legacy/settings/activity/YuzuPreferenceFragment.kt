@@ -17,14 +17,13 @@
 package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceScreen
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
+import androidx.preference.Preference
+import androidx.preference.PreferenceScreen
+import com.takisoft.preferencex.PreferenceFragmentCompat
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.settings.preference.NightModePreference
@@ -84,7 +83,7 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompat() {
         val fragmentManager = fragmentManager ?: return
 
         if (fragmentManager.findFragmentByTag(FRAGMENT_DIALOG_TAG) == null) {
-            val dialog: DialogFragment
+            val dialog: androidx.fragment.app.DialogFragment
 
             when (preference) {
                 is StrToIntListPreference -> dialog = StrToIntListPreference.PreferenceDialog.newInstance(preference)

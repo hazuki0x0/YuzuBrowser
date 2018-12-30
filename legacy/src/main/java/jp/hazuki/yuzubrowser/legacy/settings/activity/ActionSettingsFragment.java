@@ -18,8 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.MultiFingerSettingsActivity;
 

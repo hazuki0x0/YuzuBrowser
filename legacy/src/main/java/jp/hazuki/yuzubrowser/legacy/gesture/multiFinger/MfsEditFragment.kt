@@ -21,15 +21,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -39,7 +37,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.fragment_multi_finger_edit.*
 
-class MfsEditFragment : Fragment() {
+class MfsEditFragment : androidx.fragment.app.Fragment() {
 
     private var listener: OnMfsEditFragmentListener? = null
     private lateinit var item: MultiFingerGestureItem
@@ -106,7 +104,7 @@ class MfsEditFragment : Fragment() {
         }
 
         recyclerView.let {
-            it.layoutManager = LinearLayoutManager(activity)
+            it.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             adapter = MfsFingerAdapter(activity, item.traces, null)
             it.adapter = adapter
         }

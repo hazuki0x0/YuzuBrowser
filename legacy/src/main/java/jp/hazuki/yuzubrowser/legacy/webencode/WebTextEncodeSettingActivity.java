@@ -17,9 +17,9 @@
 package jp.hazuki.yuzubrowser.legacy.webencode;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBar;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity;
 

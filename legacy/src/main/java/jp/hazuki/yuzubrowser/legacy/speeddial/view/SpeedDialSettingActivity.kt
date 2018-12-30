@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.view.MenuItem
 import jp.hazuki.utility.extensions.getBitmap
 import jp.hazuki.yuzubrowser.legacy.R
@@ -20,7 +19,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ApplicationListFragment
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ShortCutListFragment
 import jp.hazuki.yuzubrowser.legacy.utils.stack.SingleStack
 
-class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, FragmentManager.OnBackStackChangedListener, SpeedDialSettingActivityFragment.OnSpeedDialAddListener, SpeedDialSettingActivityEditFragment.GoBackController, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {
+class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, androidx.fragment.app.FragmentManager.OnBackStackChangedListener, SpeedDialSettingActivityFragment.OnSpeedDialAddListener, SpeedDialSettingActivityEditFragment.GoBackController, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {
 
     private val speedDialStack = object : SingleStack<SpeedDial>() {
         override fun processItem(item: SpeedDial) {

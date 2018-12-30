@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
+import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentSettingActivity;
 
 public class UserAgentListSettingsPreference extends Preference {

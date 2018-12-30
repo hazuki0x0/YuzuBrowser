@@ -3,9 +3,9 @@ package jp.hazuki.yuzubrowser.ui.preference;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
+import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.ui.R;
 
 public class IntentPreference extends Preference {

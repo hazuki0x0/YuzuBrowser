@@ -16,8 +16,6 @@
 
 package jp.hazuki.yuzubrowser.legacy.utils.image;
 
-import android.support.annotation.NonNull;
-
 import com.crashlytics.android.Crashlytics;
 
 import java.io.BufferedInputStream;
@@ -50,6 +48,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
 
 /**
  * *****************************************************************************
@@ -974,7 +974,7 @@ public final class DiskLruCache implements Closeable {
             this.lengths = new long[valueCount];
         }
 
-        public String getLengths() throws IOException {
+        public String getLengths() {
             StringBuilder result = new StringBuilder();
             for (long size : lengths) {
                 result.append(' ').append(size);

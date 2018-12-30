@@ -17,9 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.utils.image;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 
 import java.nio.ByteBuffer;
+
+import androidx.annotation.NonNull;
 
 public class Gochiusearch {
 

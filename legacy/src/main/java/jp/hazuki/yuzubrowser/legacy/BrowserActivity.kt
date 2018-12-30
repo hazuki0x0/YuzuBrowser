@@ -24,14 +24,12 @@ import android.content.res.Resources
 import android.gesture.GestureOverlayView
 import android.media.AudioManager
 import android.os.*
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.provider.DocumentFile
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.*
 import android.webkit.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
@@ -169,8 +167,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
 
         WebViewProvider.setProvider(this)
 
-        webViewBehavior = (webGestureOverlayView.layoutParams as CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
-        bottomBarBehavior = (bottomOverlayLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
+        webViewBehavior = (webGestureOverlayView.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
+        bottomBarBehavior = (bottomOverlayLayout.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
         superFrameLayout.setOnImeShownListener { visible ->
             if (isImeShown != visible) {
                 isImeShown = visible
@@ -1248,7 +1246,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         readItLater(this, contentResolver, tab.originalUrl, tab.mWebView)
     }
 
-    override fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int) {
+    override fun onSaveWebViewToFile(root: androidx.documentfile.provider.DocumentFile, file: DownloadFile, webViewNo: Int) {
         tabManagerIn[webViewNo].mWebView.saveArchive(root, file)
     }
 
@@ -1311,7 +1309,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     override val appBarLayout: AppBarLayout
         get() = appbar
 
-    override val superFrameLayoutInfo: CoordinatorLayout
+    override val superFrameLayoutInfo: androidx.coordinatorlayout.widget.CoordinatorLayout
         get() = superFrameLayout
 
     override val activity: AppCompatActivity

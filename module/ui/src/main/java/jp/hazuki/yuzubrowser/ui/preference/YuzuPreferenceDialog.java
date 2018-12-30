@@ -17,8 +17,9 @@
 package jp.hazuki.yuzubrowser.ui.preference;
 
 import android.os.Bundle;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceDialogFragmentCompat;
 
 public abstract class YuzuPreferenceDialog extends PreferenceDialogFragmentCompat {
 

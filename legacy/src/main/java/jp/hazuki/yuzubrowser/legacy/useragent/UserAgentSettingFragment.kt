@@ -17,13 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.useragent
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.DELETE
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.EDIT
@@ -31,7 +28,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 
-class UserAgentSettingFragment : Fragment(), DeleteUserAgentDialog.OnDelete, EditUserAgentDialog.OnEditedUserAgent, SelectActionDialog.OnActionSelect, OnRecyclerListener {
+class UserAgentSettingFragment : androidx.fragment.app.Fragment(), DeleteUserAgentDialog.OnDelete, EditUserAgentDialog.OnEditedUserAgent, SelectActionDialog.OnActionSelect, OnRecyclerListener {
     private lateinit var mUserAgentList: UserAgentList
     private lateinit var mAdapter: UserAgentRecyclerAdapter
 
@@ -47,7 +44,7 @@ class UserAgentSettingFragment : Fragment(), DeleteUserAgentDialog.OnDelete, Edi
         mUserAgentList.read(activity)
 
         recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             val helper = ItemTouchHelper(ListTouch())
             helper.attachToRecyclerView(this)
             addItemDecoration(helper)
@@ -119,17 +116,17 @@ class UserAgentSettingFragment : Fragment(), DeleteUserAgentDialog.OnDelete, Edi
 
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             mAdapter.move(viewHolder.adapterPosition, target.adapterPosition)
             mUserAgentList.write(activity)
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             val ua = mAdapter.remove(position)
 

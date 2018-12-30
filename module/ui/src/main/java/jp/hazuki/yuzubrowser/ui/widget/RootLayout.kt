@@ -18,17 +18,15 @@ package jp.hazuki.yuzubrowser.ui.widget
 
 import android.app.Activity
 import android.content.Context
-import android.support.annotation.AttrRes
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
-
+import androidx.annotation.AttrRes
 import jp.hazuki.utility.extensions.isImeShown
 
 class RootLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         @AttrRes defStyleAttr: Int = 0
-) : CoordinatorLayout(context, attrs, defStyleAttr) {
+) : androidx.coordinatorlayout.widget.CoordinatorLayout(context, attrs, defStyleAttr) {
     private var onImeShownListener: ((Boolean) -> Unit)? = null
 
 

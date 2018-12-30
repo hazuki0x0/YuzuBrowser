@@ -23,9 +23,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
+import androidx.appcompat.app.AppCompatActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import java.io.File
 
@@ -40,7 +39,7 @@ class FallbackFolderSelectActivity : AppCompatActivity() {
             FolderSelectFragment(rootPath, rootPath).show(supportFragmentManager, TAG)
     }
 
-    class FolderSelectFragment : DialogFragment() {
+    class FolderSelectFragment : androidx.fragment.app.DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val activity = activity ?: throw IllegalStateException()

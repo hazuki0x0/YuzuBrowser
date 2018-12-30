@@ -20,11 +20,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ListFragment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
-
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
@@ -57,7 +55,7 @@ class SoftButtonActionActivity : ThemeActivity() {
     }
 
 
-    class ActionFragment : ListFragment() {
+    class ActionFragment : androidx.fragment.app.ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             listAdapter = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1).apply {

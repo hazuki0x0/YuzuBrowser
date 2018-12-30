@@ -17,17 +17,14 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import jp.hazuki.yuzubrowser.legacy.R
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 
-abstract class RecyclerFabFragment : Fragment() {
+abstract class RecyclerFabFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.recycler_with_fab, container, false)
@@ -41,7 +38,7 @@ abstract class RecyclerFabFragment : Fragment() {
             setOnLongClickListener { onAddButtonLongClick() }
         }
         recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             val helper = ItemTouchHelper(ListTouch())
             helper.attachToRecyclerView(this)
             addItemDecoration(helper)
@@ -49,7 +46,7 @@ abstract class RecyclerFabFragment : Fragment() {
         }
     }
 
-    protected fun setRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>) {
+    protected fun setRecyclerViewAdapter(adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>) {
         recyclerView.adapter = adapter
     }
 
@@ -60,11 +57,11 @@ abstract class RecyclerFabFragment : Fragment() {
 
     protected open fun onAddButtonLongClick() = false
 
-    abstract fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean
+    abstract fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean
 
-    protected open fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {}
+    protected open fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {}
 
-    abstract fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int)
+    abstract fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int)
 
     open val isLongPressDragEnabled: Boolean = true
 
@@ -77,19 +74,19 @@ abstract class RecyclerFabFragment : Fragment() {
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             return this@RecyclerFabFragment.onMove(recyclerView, viewHolder.adapterPosition, target.adapterPosition)
         }
 
-        override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
+        override fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
             this@RecyclerFabFragment.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             this@RecyclerFabFragment.onSwiped(viewHolder, viewHolder.adapterPosition)
         }
 

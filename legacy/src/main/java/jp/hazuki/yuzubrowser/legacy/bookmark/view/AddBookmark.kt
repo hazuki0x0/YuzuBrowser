@@ -17,10 +17,9 @@
 package jp.hazuki.yuzubrowser.legacy.bookmark.view
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
 
-fun showAddBookmarkDialog(context: Context, fragmentManager: FragmentManager, title: String?, url: String) {
+fun showAddBookmarkDialog(context: Context, fragmentManager: androidx.fragment.app.FragmentManager, title: String?, url: String) {
     if (BookmarkManager.getInstance(context).isBookmarked(url)) {
         AddBookmarkOptionDialog.newInstance(title ?: "", url)
                 .show(fragmentManager, "bookmarkOption")

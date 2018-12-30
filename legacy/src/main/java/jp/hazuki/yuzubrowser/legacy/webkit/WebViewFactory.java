@@ -18,8 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.webkit;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 
 public class WebViewFactory {

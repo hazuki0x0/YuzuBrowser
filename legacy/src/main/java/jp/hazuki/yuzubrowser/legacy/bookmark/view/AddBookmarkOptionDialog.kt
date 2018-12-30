@@ -19,12 +19,11 @@ package jp.hazuki.yuzubrowser.legacy.bookmark.view
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 
-class AddBookmarkOptionDialog : DialogFragment() {
+class AddBookmarkOptionDialog : androidx.fragment.app.DialogFragment() {
 
     companion object {
         private const val ARG_URL = "url"

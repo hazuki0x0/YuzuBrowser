@@ -1,9 +1,10 @@
 package jp.hazuki.yuzubrowser.ui.preference;
 
 import android.content.Context;
-import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
+
+import androidx.preference.DialogPreference;
+import androidx.preference.Preference;
 
 public class AlertDialogPreference extends DialogPreference {
     private OnButtonClickListener mPositiveButtonListener;

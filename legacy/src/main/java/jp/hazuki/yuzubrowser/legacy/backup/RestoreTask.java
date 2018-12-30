@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.backup;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -29,6 +28,7 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import androidx.loader.content.AsyncTaskLoader;
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 

@@ -20,7 +20,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.text.InputType
 import android.view.ViewGroup
 import android.widget.EditText
@@ -28,7 +27,7 @@ import android.widget.LinearLayout
 import jp.hazuki.utility.extensions.density
 import jp.hazuki.yuzubrowser.legacy.R
 
-class AddAdBlockDialog : DialogFragment() {
+class AddAdBlockDialog : androidx.fragment.app.DialogFragment() {
 
     private var listener: OnAdBlockListUpdateListener? = null
 

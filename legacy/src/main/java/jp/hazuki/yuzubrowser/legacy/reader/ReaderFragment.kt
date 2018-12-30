@@ -18,8 +18,6 @@ package jp.hazuki.yuzubrowser.legacy.reader
 
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.style.ImageSpan
@@ -39,7 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class ReaderFragment : Fragment() {
+class ReaderFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var titleTextView: TextView
     private lateinit var bodyTextView: TextView
@@ -88,7 +86,7 @@ class ReaderFragment : Fragment() {
 
         activity.title = UrlUtils.decodeUrlHost(url)
 
-        fragmentManager?.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
+        fragmentManager?.findFragmentByTag("loading").isInstanceOf<androidx.fragment.app.DialogFragment> {
             it.dismiss()
         }
 

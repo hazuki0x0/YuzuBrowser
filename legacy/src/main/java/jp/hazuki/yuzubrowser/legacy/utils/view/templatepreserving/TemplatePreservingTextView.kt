@@ -45,11 +45,11 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.templatepreserving
 
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.text.TextUtils.TruncateAt
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 
 /**
  * A [AppCompatTextView] that truncates content within a template, instead of truncating

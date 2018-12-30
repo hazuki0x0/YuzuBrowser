@@ -21,9 +21,8 @@ package jp.hazuki.yuzubrowser.legacy.utils.database
 
 import android.content.Context
 import android.database.Cursor
-import android.support.v4.content.AsyncTaskLoader
 
-abstract class CursorLoaderBase(context: Context) : AsyncTaskLoader<Cursor>(context) {
+abstract class CursorLoaderBase(context: Context) : androidx.loader.content.AsyncTaskLoader<Cursor>(context) {
     private var mCursor: Cursor? = null
 
     abstract override fun loadInBackground(): Cursor

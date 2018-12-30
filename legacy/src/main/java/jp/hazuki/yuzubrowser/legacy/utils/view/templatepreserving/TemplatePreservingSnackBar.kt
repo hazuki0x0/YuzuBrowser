@@ -16,15 +16,14 @@
 
 package jp.hazuki.yuzubrowser.legacy.utils.view.templatepreserving
 
-import android.support.annotation.StringRes
-import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.CoordinatorLayout
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import jp.hazuki.yuzubrowser.legacy.R
 
 class TemplatePreservingSnackBar
@@ -74,7 +73,7 @@ private constructor(parent: ViewGroup, content: View, contentViewCallback: Conte
         return this
     }
 
-    private class ContentViewCallback internal constructor(private val content: View) : android.support.design.snackbar.ContentViewCallback {
+    private class ContentViewCallback internal constructor(private val content: View) : com.google.android.material.snackbar.ContentViewCallback {
 
         override fun animateContentIn(delay: Int, duration: Int) {
             // add custom *in animations for your views
@@ -114,7 +113,7 @@ private constructor(parent: ViewGroup, content: View, contentViewCallback: Conte
             var selection = view
             var fallback: ViewGroup? = null
             do {
-                if (selection is CoordinatorLayout) {
+                if (selection is androidx.coordinatorlayout.widget.CoordinatorLayout) {
                     // We've found a CoordinatorLayout, use it
                     return selection
                 } else if (selection is FrameLayout) {

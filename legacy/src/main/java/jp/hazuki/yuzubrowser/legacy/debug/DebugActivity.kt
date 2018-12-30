@@ -20,13 +20,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.ListFragment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
-
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionStringActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -44,7 +41,7 @@ class DebugActivity : ThemeActivity() {
     }
 
 
-    class ItemFragment : ListFragment() {
+    class ItemFragment : androidx.fragment.app.ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             val activity = activity ?: throw IllegalStateException()
@@ -73,7 +70,7 @@ class DebugActivity : ThemeActivity() {
             }
         }
 
-        class LanguageFragment : DialogFragment() {
+        class LanguageFragment : androidx.fragment.app.DialogFragment() {
 
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
                 val activity = activity ?: throw IllegalStateException()

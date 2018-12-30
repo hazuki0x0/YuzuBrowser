@@ -18,12 +18,12 @@ package jp.hazuki.yuzubrowser.legacy.bookmark.netscape;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.v4.content.AsyncTaskLoader;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 
+import androidx.loader.content.AsyncTaskLoader;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager;

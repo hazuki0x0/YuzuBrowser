@@ -24,7 +24,6 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.print.PrintManager
-import android.support.v4.print.PrintHelper
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
@@ -34,6 +33,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.print.PrintHelper
 import jp.hazuki.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants

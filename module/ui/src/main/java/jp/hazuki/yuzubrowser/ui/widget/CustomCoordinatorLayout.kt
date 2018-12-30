@@ -17,11 +17,10 @@
 package jp.hazuki.yuzubrowser.ui.widget
 
 import android.content.Context
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 
-class CustomCoordinatorLayout : CoordinatorLayout {
+class CustomCoordinatorLayout : androidx.coordinatorlayout.widget.CoordinatorLayout {
 
     private var toolbarHeight = 0
 

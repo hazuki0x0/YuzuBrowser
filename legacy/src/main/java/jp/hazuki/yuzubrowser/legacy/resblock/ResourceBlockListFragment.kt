@@ -18,10 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.resblock
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.resblock.checker.NormalChecker
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
@@ -51,16 +50,16 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
         }
     }
 
-    override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
+    override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
         adapter.move(fromIndex, toIndex)
         return true
     }
 
-    public override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
+    public override fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
         manager.save(context!!.applicationContext)
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int) {
+    override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int) {
         val checker = manager.remove(index)
         adapter.notifyItemRemoved(index)
         val context = context!!.applicationContext

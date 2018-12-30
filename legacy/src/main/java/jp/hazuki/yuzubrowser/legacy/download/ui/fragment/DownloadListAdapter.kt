@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.download.ui.fragment
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,7 @@ import jp.hazuki.yuzubrowser.legacy.download.service.DownloadDatabase
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.download_list_item.*
 
-class DownloadListAdapter(private val context: Context, private val database: DownloadDatabase, private val listener: OnRecyclerMenuListener) : RecyclerView.Adapter<DownloadListAdapter.InfoHolder>() {
+class DownloadListAdapter(private val context: Context, private val database: DownloadDatabase, private val listener: OnRecyclerMenuListener) : androidx.recyclerview.widget.RecyclerView.Adapter<DownloadListAdapter.InfoHolder>() {
     private val items = ArrayList<DownloadFileInfo>(database.getList(0, 100))
     private val inflater = LayoutInflater.from(context)
 
@@ -109,5 +108,5 @@ class DownloadListAdapter(private val context: Context, private val database: Do
 
     override fun getItemCount() = items.size
 
-    class InfoHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+    class InfoHolder(override val containerView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(containerView), LayoutContainer
 }

@@ -21,7 +21,7 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
 
 class SimpleLayerDrawable(private vararg val drawables: Drawable) : Drawable() {
 

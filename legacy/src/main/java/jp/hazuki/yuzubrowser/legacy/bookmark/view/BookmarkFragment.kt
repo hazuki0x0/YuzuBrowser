@@ -21,15 +21,12 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ActionMode
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.PopupMenu
+import androidx.recyclerview.widget.ItemTouchHelper
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem
@@ -49,7 +46,7 @@ import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 
 
-class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback {
+class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback {
 
     private var pickMode: Boolean = false
 
@@ -85,7 +82,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         val activity = activity ?: return
         val arguments = arguments ?: throw IllegalArgumentException()
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         val helper = ItemTouchHelper(Touch())
         helper.attachToRecyclerView(recyclerView)
         recyclerView.addItemDecoration(helper)
@@ -477,17 +474,17 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
 
     private inner class Touch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             mManager.save()
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {}
 
         override fun isLongPressDragEnabled(): Boolean {
             return adapter.isSortMode

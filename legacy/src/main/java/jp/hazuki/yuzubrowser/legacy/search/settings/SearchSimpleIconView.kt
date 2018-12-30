@@ -19,10 +19,10 @@ package jp.hazuki.yuzubrowser.legacy.search.settings
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
+import androidx.appcompat.widget.AppCompatTextView
 import jp.hazuki.yuzubrowser.legacy.R
 
 class SearchSimpleIconView @JvmOverloads constructor(

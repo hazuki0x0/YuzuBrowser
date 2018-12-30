@@ -20,9 +20,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v14.preference.SwitchPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceScreen
+import androidx.preference.Preference
+import androidx.preference.PreferenceScreen
+import androidx.preference.SwitchPreference
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity

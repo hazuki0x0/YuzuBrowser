@@ -16,8 +16,6 @@
 
 package jp.hazuki.yuzubrowser.legacy.settings.activity
 
-import android.support.v4.app.Fragment
-
 interface ReplaceFragmentListener {
-    fun replaceFragment(fragment: Fragment, key: String)
+    fun replaceFragment(fragment: androidx.fragment.app.Fragment, key: String)
 }

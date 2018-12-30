@@ -17,18 +17,15 @@
 package jp.hazuki.yuzubrowser.legacy.settings.preference
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
-import android.support.v7.preference.DialogPreference
-import android.support.v7.preference.Preference
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import androidx.appcompat.app.AlertDialog
+import androidx.preference.DialogPreference
+import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchSimpleIconView
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrl
@@ -61,8 +58,8 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
 
             manager = SearchUrlManager(context!!)
             val view = View.inflate(context, R.layout.recycler_view, null)
-            val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-            recyclerView.layoutManager = LinearLayoutManager(activity)
+            val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
+            recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             recyclerView.addItemDecoration(DividerItemDecoration(activity))
 
             recyclerView.adapter = Adapter(activity, manager, this)

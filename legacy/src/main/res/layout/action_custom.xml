@@ -6,7 +6,7 @@
                 android:layout_height="match_parent"
                 android:padding="8dp">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/name" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
         android:id="@+id/icon"
@@ -41,7 +41,7 @@
         android:visibility="gone"
         android:text="@string/use_favicon" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="31dp"

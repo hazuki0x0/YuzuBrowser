@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.ui.preference
 
 import android.content.Context
 import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
 import android.text.InputType
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -27,6 +26,7 @@ import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import jp.hazuki.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.ui.R
 

@@ -22,12 +22,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.provider.DocumentFile
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
@@ -42,9 +40,9 @@ import jp.hazuki.yuzubrowser.legacy.utils.ui
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class DownloadDialog : DialogFragment() {
+class DownloadDialog : androidx.fragment.app.DialogFragment() {
 
-    private lateinit var root: DocumentFile
+    private lateinit var root: androidx.documentfile.provider.DocumentFile
     private lateinit var folderButton: Button
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -131,7 +129,7 @@ class DownloadDialog : DialogFragment() {
         }
     }
 
-    private fun getMetaData(context: Context, root: DocumentFile, file: DownloadFile): MetaData {
+    private fun getMetaData(context: Context, root: androidx.documentfile.provider.DocumentFile, file: DownloadFile): MetaData {
         return MetaData(context, root, file.url, file.request)
     }
 

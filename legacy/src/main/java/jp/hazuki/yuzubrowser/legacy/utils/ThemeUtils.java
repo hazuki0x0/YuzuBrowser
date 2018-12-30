@@ -17,10 +17,11 @@
 package jp.hazuki.yuzubrowser.legacy.utils;
 
 import android.content.Context;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.TypedValue;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.core.content.res.ResourcesCompat;
 
 public final class ThemeUtils {
 

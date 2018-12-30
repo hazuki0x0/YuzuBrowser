@@ -21,11 +21,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
@@ -112,13 +110,13 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
         activity.setResult(RESULT_OK, data)
     }
 
-    override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
+    override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
         adapter.move(fromIndex, toIndex)
         onActionListChanged()
         return true
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int) {
+    override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int) {
         val action = mList.removeAt(index)
         adapter.notifyDataSetChanged()
         onActionListChanged()
@@ -216,7 +214,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
         private const val RESULT_REQUEST_ADD_EASY = 3
         private const val RESULT_REQUEST_JSON = 4
 
-        fun newInstance(actionList: ActionList, nameArray: ActionNameArray): Fragment {
+        fun newInstance(actionList: ActionList, nameArray: ActionNameArray): androidx.fragment.app.Fragment {
             return ActionListFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(EXTRA_ACTION_LIST, actionList)

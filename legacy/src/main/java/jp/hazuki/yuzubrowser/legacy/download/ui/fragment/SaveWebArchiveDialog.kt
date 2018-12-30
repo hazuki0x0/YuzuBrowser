@@ -22,13 +22,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.provider.DocumentFile
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
@@ -40,10 +38,10 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
 
-class SaveWebArchiveDialog : DialogFragment() {
+class SaveWebArchiveDialog : androidx.fragment.app.DialogFragment() {
     private var listener: OnSaveWebViewListener? = null
 
-    private lateinit var root: DocumentFile
+    private lateinit var root: androidx.documentfile.provider.DocumentFile
     private lateinit var folderButton: Button
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -161,6 +159,6 @@ class SaveWebArchiveDialog : DialogFragment() {
     }
 
     interface OnSaveWebViewListener {
-        fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int)
+        fun onSaveWebViewToFile(root: androidx.documentfile.provider.DocumentFile, file: DownloadFile, webViewNo: Int)
     }
 }

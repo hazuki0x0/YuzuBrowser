@@ -27,7 +27,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -39,6 +38,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.ErrorReportServer;
 import jp.hazuki.yuzubrowser.legacy.search.suggest.ISuggest;

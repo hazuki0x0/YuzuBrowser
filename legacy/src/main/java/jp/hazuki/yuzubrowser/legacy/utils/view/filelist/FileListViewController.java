@@ -1,7 +1,6 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.filelist;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.Arrays;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.utility.utils.Predicate;
 import jp.hazuki.yuzubrowser.legacy.R;

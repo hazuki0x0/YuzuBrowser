@@ -11,8 +11,8 @@ object AppVersions {
 }
 
 object Versions {
-    const val support_lib = "28.0.0"
-    const val support_fix_lib = "$support_lib.0"
+    const val androidX = "1.0.0"
+    const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
     const val dagger2 = "2.20"
     const val jackson = "2.9.5"
@@ -20,17 +20,17 @@ object Versions {
     const val kotlin_coroutines = "1.1.0"
     const val kotlin_anko = "0.10.8"
     const val junit = "4.12"
-    const val espresso = "3.0.2"
-    const val runner = "1.0.2"
+    const val espresso = "3.1.0"
+    const val runner = "1.1.0"
 }
 
 object Libs {
-    val support_annotations = "com.android.support:support-annotations:${Versions.support_lib}"
-    val support_appcompat_v7 = "com.android.support:appcompat-v7:${Versions.support_lib}"
-    val support_design = "com.android.support:design:${Versions.support_lib}"
-    val support_recyclerview = "com.android.support:recyclerview-v7:${Versions.support_lib}"
-    val support_constraint_layout = "com.android.support.constraint:constraint-layout:${Versions.support_constraint_lib}"
-    val support_fix_preference = "com.takisoft.fix:preference-v7:${Versions.support_fix_lib}"
+    val support_annotations = "androidx.annotation:annotation:${Versions.androidX}"
+    val support_appcompat_v7 = "androidx.appcompat:appcompat:${Versions.androidX}"
+    val support_design = "com.google.android.material:material:${Versions.androidX}"
+    val support_recyclerview = "androidx.recyclerview:recyclerview:${Versions.androidX}"
+    val support_constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.support_constraint_lib}"
+    val support_fix_preference = "com.takisoft.preferencex:preferencex:${Versions.support_fix_lib}"
     val jackson = "com.fasterxml.jackson.core:jackson-databind:${Versions.jackson}"
     val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     val kotlin_android_extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
@@ -41,8 +41,8 @@ object Libs {
     val dagger2 = "com.google.dagger:dagger:${Versions.dagger2}"
     val dagger2_compiler = "com.google.dagger:dagger-compiler:${Versions.dagger2}"
     val junit = "junit:junit:${Versions.junit}"
-    val espressoCore = "com.android.support.test.espresso:espresso-core:${Versions.espresso}"
-    val androidRunner = "com.android.support.test:runner:${Versions.runner}"
+    val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+    val androidRunner = "androidx.test:runner:${Versions.runner}"
 }
 
 object Dependencies {

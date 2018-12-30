@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.speeddial.io;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +25,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import androidx.loader.content.AsyncTaskLoader;
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialManager;
 
 public class SpeedDialBackupTask extends AsyncTaskLoader<Boolean> {

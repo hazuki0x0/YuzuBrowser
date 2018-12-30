@@ -26,7 +26,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +36,8 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.regex.Pattern;
+
+import androidx.core.content.res.ResourcesCompat;
 
 public class ImageUtils {
     private ImageUtils() {

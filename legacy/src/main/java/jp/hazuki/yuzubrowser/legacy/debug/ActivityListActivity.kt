@@ -22,7 +22,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Bundle
-import android.support.v4.app.ListFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 
@@ -45,7 +43,7 @@ class ActivityListActivity : ThemeActivity() {
                 .commit()
     }
 
-    class ActivityListFragment : ListFragment() {
+    class ActivityListFragment : androidx.fragment.app.ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 

@@ -32,7 +32,7 @@ android {
         targetSdkVersion Build.target_sdk_version
         versionCode AppVersions.version_code
         versionName AppVersions.version_name
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "GIT_HASH", "\"${gitHash}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""

@@ -18,17 +18,16 @@ package jp.hazuki.yuzubrowser.legacy.tab
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.item.TabListSingleAction
 import jp.hazuki.yuzubrowser.legacy.tab.adapter.TabListRecyclerAdapterFactory
@@ -75,12 +74,12 @@ constructor(context: Context, attrs: AttributeSet?, mode: Int, left: Boolean, va
     fun setTabManager(manager: TabManager) {
         tabManager = manager
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
 
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
         if (horizontal) {
-            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            layoutManager.orientation = androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
         } else if (reverse) {
             layoutManager.stackFromEnd = true
         }
@@ -163,7 +162,7 @@ constructor(context: Context, attrs: AttributeSet?, mode: Int, left: Boolean, va
 
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return if ((viewHolder as TabListRecyclerBaseAdapter.ViewHolder).indexData.isPinning) {
                 if (horizontal) {
                     ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
@@ -179,7 +178,7 @@ constructor(context: Context, attrs: AttributeSet?, mode: Int, left: Boolean, va
             }
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             snackbar?.run {
                 if (isShown) dismiss()
             }
@@ -188,7 +187,7 @@ constructor(context: Context, attrs: AttributeSet?, mode: Int, left: Boolean, va
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             if (adapter.itemCount > 1) {
                 snackbar?.run {
                     if (isShown) dismiss()

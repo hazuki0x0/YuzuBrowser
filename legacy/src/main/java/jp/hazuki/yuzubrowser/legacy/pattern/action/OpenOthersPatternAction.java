@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData;

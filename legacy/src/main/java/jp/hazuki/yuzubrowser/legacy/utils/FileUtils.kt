@@ -24,7 +24,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.v4.provider.DocumentFile
 import android.webkit.MimeTypeMap
 import jp.hazuki.yuzubrowser.legacy.Constants
 import java.io.File
@@ -32,7 +31,7 @@ import java.io.File
 val externalUserDirectory: File
     get() = File(Environment.getExternalStorageDirectory().toString() + File.separator + "YuzuBrowser" + File.separator)
 
-fun createUniqueFileName(root: DocumentFile, fileName: String): String {
+fun createUniqueFileName(root: androidx.documentfile.provider.DocumentFile, fileName: String): String {
     if (root.findFile(fileName) == null) return fileName
 
     val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
@@ -52,7 +51,7 @@ fun createUniqueFileName(root: DocumentFile, fileName: String): String {
     return newName
 }
 
-fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): String {
+fun createUniqueFileName(root: androidx.documentfile.provider.DocumentFile, fileName: String, suffix: String): String {
     if (root.findFile(fileName) == null && root.findFile(fileName + suffix) == null) return fileName
 
     val checkName = CheckName(root)
@@ -76,7 +75,7 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
     return newName
 }
 
-private fun DocumentFile.sortedFileName(): List<String> {
+private fun androidx.documentfile.provider.DocumentFile.sortedFileName(): List<String> {
     val files = listFiles()
     return files.map { it.name ?: "" }
             .sortedWith(Comparator { s1, s2 ->
@@ -89,7 +88,7 @@ private fun DocumentFile.sortedFileName(): List<String> {
             })
 }
 
-private class CheckName(root: DocumentFile) {
+private class CheckName(root: androidx.documentfile.provider.DocumentFile) {
     private val files = root.sortedFileName()
     private val length = files.size
     private var index = 0

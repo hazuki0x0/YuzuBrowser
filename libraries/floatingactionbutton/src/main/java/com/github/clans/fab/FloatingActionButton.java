@@ -42,10 +42,6 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -55,6 +51,12 @@ import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
 
 @CoordinatorLayout.DefaultBehavior(FloatingActionButton.Behavior.class)
 public class FloatingActionButton extends AppCompatImageButton {
@@ -524,7 +526,7 @@ public class FloatingActionButton extends AppCompatImageButton {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void onActionDown() {
-        RippleDrawable ripple = (RippleDrawable) mBackgroundDrawable;
+        RippleDrawable ripple = mBackgroundDrawable;
         ripple.setState(new int[]{android.R.attr.state_enabled, android.R.attr.state_pressed});
         ripple.setHotspot(calculateCenterX(), calculateCenterY());
         ripple.setVisible(true, true);
@@ -532,7 +534,7 @@ public class FloatingActionButton extends AppCompatImageButton {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void onActionUp() {
-        RippleDrawable ripple = (RippleDrawable) mBackgroundDrawable;
+        RippleDrawable ripple = mBackgroundDrawable;
         ripple.setState(new int[]{android.R.attr.state_enabled});
         ripple.setHotspot(calculateCenterX(), calculateCenterY());
         ripple.setVisible(true, true);

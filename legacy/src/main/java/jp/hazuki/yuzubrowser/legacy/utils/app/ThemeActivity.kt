@@ -19,8 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.utils.app
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.StyleRes
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.StyleRes
+import androidx.appcompat.app.AppCompatActivity
 
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData

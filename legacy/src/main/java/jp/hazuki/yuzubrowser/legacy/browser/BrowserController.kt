@@ -17,13 +17,12 @@
 package jp.hazuki.yuzubrowser.legacy.browser
 
 import android.content.Intent
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
 import jp.hazuki.yuzubrowser.legacy.action.item.OpenOptionsMenuAction
@@ -81,7 +80,7 @@ interface BrowserController : BrowserInfo {
     fun adjustBrowserPadding(tab: MainTabData)
 
     val tabManager: TabManager
-    val superFrameLayoutInfo: CoordinatorLayout
+    val superFrameLayoutInfo: androidx.coordinatorlayout.widget.CoordinatorLayout
     val activity: AppCompatActivity
     val toolbarManager: ToolbarManager
     val appBarLayout: AppBarLayout

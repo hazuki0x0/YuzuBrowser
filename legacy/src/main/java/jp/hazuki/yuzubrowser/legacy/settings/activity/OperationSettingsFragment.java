@@ -17,8 +17,8 @@
 package jp.hazuki.yuzubrowser.legacy.settings.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
 import jp.hazuki.yuzubrowser.legacy.R;
 
 public class OperationSettingsFragment extends YuzuPreferenceFragment {

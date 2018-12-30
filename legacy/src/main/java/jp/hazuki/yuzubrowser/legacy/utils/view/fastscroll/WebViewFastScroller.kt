@@ -26,19 +26,18 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.StateListDrawable
-import android.support.annotation.ColorInt
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewCompat
-import android.support.v4.view.animation.FastOutLinearInInterpolator
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.ColorInt
+import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -57,7 +56,7 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
     internal var mAppBarLayoutOffset: Int = 0
 
     internal var mWebView: CustomWebView? = null
-    internal var mCoordinatorLayout: CoordinatorLayout? = null
+    internal var mCoordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout? = null
     internal var mAppBarLayout: AppBarLayout? = null
 
     internal var mAnimator: AnimatorSet? = null
@@ -253,7 +252,7 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
                         val coordinator = mCoordinatorLayout
                         val appBar = mAppBarLayout
                         if (!AppData.touch_scrollbar_fixed_toolbar.get() && coordinator != null && appBar != null) {
-                            val params = appBar.layoutParams as CoordinatorLayout.LayoutParams
+                            val params = appBar.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
                             val behavior = params.behavior as AppBarLayout.Behavior?
                             behavior?.onNestedPreScroll(coordinator, appBar,
                                     this@WebViewFastScroller, 0, dY, IntArray(2), ViewCompat.TYPE_TOUCH)
@@ -336,7 +335,7 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
         mWebView = null
     }
 
-    fun attachAppBarLayout(coordinatorLayout: CoordinatorLayout, appBarLayout: AppBarLayout) {
+    fun attachAppBarLayout(coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout, appBarLayout: AppBarLayout) {
         mCoordinatorLayout = coordinatorLayout
         mAppBarLayout = appBarLayout
 

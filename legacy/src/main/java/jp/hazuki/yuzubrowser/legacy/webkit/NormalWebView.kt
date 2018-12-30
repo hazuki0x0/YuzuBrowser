@@ -17,13 +17,13 @@
 package jp.hazuki.yuzubrowser.legacy.webkit
 
 import android.content.Context
-import android.support.v4.view.NestedScrollingChildHelper
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import androidx.core.view.NestedScrollingChildHelper
+import androidx.core.view.ViewCompat
 import jp.hazuki.yuzubrowser.legacy.toolbar.OnWebViewScrollChangeListener
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener

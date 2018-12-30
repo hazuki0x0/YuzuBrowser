@@ -18,14 +18,13 @@ package jp.hazuki.yuzubrowser.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import jp.hazuki.yuzubrowser.ui.R
 
 
-open class ProgressDialog : DialogFragment() {
+open class ProgressDialog : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()

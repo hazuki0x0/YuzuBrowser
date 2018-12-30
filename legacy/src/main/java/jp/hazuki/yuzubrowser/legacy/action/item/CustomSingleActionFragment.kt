@@ -21,17 +21,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
@@ -43,7 +40,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerMenu
 import kotlinx.android.synthetic.main.action_custom.*
 
-class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.OnRecyclerMenuListener {
+class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, RecyclerMenu.OnRecyclerMenuListener {
 
     private lateinit var adapter: ActionAdapter
     private lateinit var actionNameArray: ActionNameArray
@@ -55,7 +52,7 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
         recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             addItemDecoration(DividerItemDecoration(activity))
 
             val helper = ItemTouchHelper(Touch())
@@ -154,16 +151,16 @@ class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.
 
     private inner class Touch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
             return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             val action = adapter.remove(position)
 

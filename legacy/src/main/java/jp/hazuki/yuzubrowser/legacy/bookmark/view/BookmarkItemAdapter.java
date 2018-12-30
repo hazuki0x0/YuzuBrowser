@@ -22,7 +22,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem;

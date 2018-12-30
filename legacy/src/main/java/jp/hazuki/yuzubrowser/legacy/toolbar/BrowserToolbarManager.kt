@@ -21,11 +21,11 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
-import android.support.design.widget.AppBarLayout
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController

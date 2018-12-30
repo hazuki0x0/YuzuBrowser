@@ -17,9 +17,9 @@
 package jp.hazuki.yuzubrowser.legacy.settings.preference;
 
 import android.content.Context;
-import android.support.v7.preference.ListPreference;
 import android.util.AttributeSet;
 
+import androidx.preference.ListPreference;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList;
 
 public class WebTextEncodeListPreference extends ListPreference {

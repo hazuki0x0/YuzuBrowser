@@ -1,13 +1,13 @@
 package jp.hazuki.yuzubrowser.legacy.bookmark.netscape;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import androidx.loader.content.AsyncTaskLoader;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder;
 
 public class BookmarkHtmlExportTask extends AsyncTaskLoader<Boolean> {

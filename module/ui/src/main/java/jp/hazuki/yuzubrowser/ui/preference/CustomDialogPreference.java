@@ -1,12 +1,13 @@
 package jp.hazuki.yuzubrowser.ui.preference;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.DialogPreference;
+import androidx.preference.Preference;
 
 public abstract class CustomDialogPreference extends DialogPreference {
     public CustomDialogPreference(Context context) {

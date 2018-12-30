@@ -22,11 +22,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
-import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.loader.content.AsyncTaskLoader;
 
 public class AppListTask extends AsyncTaskLoader<ArrayList<AppInfo>> {
 

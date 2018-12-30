@@ -18,11 +18,11 @@ package jp.hazuki.yuzubrowser.legacy.gesture.view
 
 import android.content.Context
 import android.gesture.GestureOverlayView
-import android.support.design.widget.AppBarLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.yuzubrowser.legacy.R
 
 class GestureFrameLayout(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {

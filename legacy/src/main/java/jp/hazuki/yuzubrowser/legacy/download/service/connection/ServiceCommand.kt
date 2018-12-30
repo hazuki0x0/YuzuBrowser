@@ -16,7 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.download.service.connection
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 @IntDef(
         ServiceSocket.REGISTER_OBSERVER,

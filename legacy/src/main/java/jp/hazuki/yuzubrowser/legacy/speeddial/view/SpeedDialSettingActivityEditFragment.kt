@@ -23,7 +23,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +35,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils
 import kotlinx.android.synthetic.main.fragment_edit_speeddial.*
 import java.io.File
 
-class SpeedDialSettingActivityEditFragment : Fragment() {
+class SpeedDialSettingActivityEditFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var speedDial: SpeedDial
     private var mCallBack: SpeedDialEditCallBack? = null
@@ -154,7 +153,7 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
         private const val REQUEST_PICK_IMAGE = 100
         private const val REQUEST_CROP_IMAGE = 101
 
-        fun newInstance(speedDial: SpeedDial): Fragment {
+        fun newInstance(speedDial: SpeedDial): androidx.fragment.app.Fragment {
             val fragment = SpeedDialSettingActivityEditFragment()
             val bundle = Bundle()
             bundle.putSerializable(DATA, speedDial)

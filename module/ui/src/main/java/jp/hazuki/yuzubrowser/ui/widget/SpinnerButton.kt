@@ -17,9 +17,8 @@
 package jp.hazuki.yuzubrowser.ui.widget
 
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
-
+import androidx.appcompat.widget.AppCompatTextView
 import jp.hazuki.yuzubrowser.ui.R
 
 open class SpinnerButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.spinnerButtonStyle) : AppCompatTextView(context, attrs, defStyleAttr)

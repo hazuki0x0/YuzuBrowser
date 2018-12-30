@@ -20,10 +20,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import jp.hazuki.yuzubrowser.legacy.R;
 
 public class SelectActionDialog extends DialogFragment {

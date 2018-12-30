@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.utils.graphics
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.support.annotation.IntRange
+import androidx.annotation.IntRange
 import jp.hazuki.utility.extensions.convertDpToFloatPx
 import jp.hazuki.utility.extensions.convertDpToPx
 

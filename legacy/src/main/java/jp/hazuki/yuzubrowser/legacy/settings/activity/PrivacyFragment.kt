@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v14.preference.SwitchPreference
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.Preference
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.utility.extensions.startActivity
 import jp.hazuki.yuzubrowser.legacy.R

@@ -18,17 +18,16 @@ package jp.hazuki.yuzubrowser.legacy.webkit
 
 import android.content.Context
 import android.graphics.Paint
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
 
-class SwipeWebView private constructor(context: Context, override val webView: NormalWebView) : SwipeRefreshLayout(context), CustomWebView by webView, SwipeRefreshLayout.OnRefreshListener, OnScrollableChangeListener {
+class SwipeWebView private constructor(context: Context, override val webView: NormalWebView) : androidx.swiperefreshlayout.widget.SwipeRefreshLayout(context), CustomWebView by webView, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener, OnScrollableChangeListener {
 
     constructor(context: Context) : this(context, WebViewProvider.getInstance(context))
 

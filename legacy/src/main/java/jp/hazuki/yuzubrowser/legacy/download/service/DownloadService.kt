@@ -26,9 +26,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.*
-import android.support.annotation.StringRes
-import android.support.v4.app.NotificationCompat
-import android.support.v4.provider.DocumentFile
+import androidx.annotation.StringRes
+import androidx.core.app.NotificationCompat
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
@@ -189,7 +188,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
         }
     }
 
-    private inner class FirstDownloadThread(private val root: DocumentFile, private val file: DownloadFile, private val metadata: MetaData?) : DownloadThread(file.request) {
+    private inner class FirstDownloadThread(private val root: androidx.documentfile.provider.DocumentFile, private val file: DownloadFile, private val metadata: MetaData?) : DownloadThread(file.request) {
         override val info: DownloadFileInfo by lazy {
             DownloadFileInfo(root, file, metadata ?: MetaData(this@DownloadService, root, file.url, file.request))
         }
@@ -265,7 +264,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
             updateInfo(ServiceSocket.UPDATE, info)
         }
 
-        override fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: DocumentFile) {
+        override fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: androidx.documentfile.provider.DocumentFile) {
             database.update(info)
             NotificationCompat.Builder(this@DownloadService, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY).run {
                 setOngoing(false)

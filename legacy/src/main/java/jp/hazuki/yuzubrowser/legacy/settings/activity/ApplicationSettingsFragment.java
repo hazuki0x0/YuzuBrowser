@@ -20,10 +20,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v14.preference.SwitchPreference;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
+import androidx.preference.SwitchPreference;
 import jp.hazuki.yuzubrowser.legacy.R;
 
 public class ApplicationSettingsFragment extends YuzuPreferenceFragment {

@@ -23,16 +23,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.support.design.widget.Snackbar
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
@@ -48,7 +44,7 @@ import kotlinx.android.synthetic.main.fragment_userjs_item.*
 import java.io.File
 import java.io.IOException
 
-class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
+class UserScriptListFragment : androidx.fragment.app.Fragment(), OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
     private lateinit var mDb: UserScriptDatabase
     private lateinit var adapter: UserJsAdapter
 
@@ -63,7 +59,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
         mDb = UserScriptDatabase.getInstance(activity.applicationContext)
 
         recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             addItemDecoration(DividerItemDecoration(activity))
             val helper = ItemTouchHelper(ListTouch())
             helper.attachToRecyclerView(this)
@@ -185,16 +181,16 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
 
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
+        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int =
                 ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             mDb.saveAll(adapter.items)
             return true
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
             val index = viewHolder.adapterPosition
             val js = adapter.remove(index)
             Snackbar.make(linear, R.string.deleted, Snackbar.LENGTH_SHORT)
@@ -215,7 +211,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
         override fun isLongPressDragEnabled(): Boolean = adapter.isSortMode
     }
 
-    class InfoDialog : DialogFragment() {
+    class InfoDialog : androidx.fragment.app.DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val view = View.inflate(activity, R.layout.userjs_info_dialog, null)
@@ -245,7 +241,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
             private const val INCLUDE = "include"
             private const val EXCLUDE = "exclude"
 
-            fun newInstance(script: UserScript): DialogFragment {
+            fun newInstance(script: UserScript): androidx.fragment.app.DialogFragment {
                 return InfoDialog().apply {
                     arguments = Bundle().apply {
                         putString(NAME, script.name)

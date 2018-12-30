@@ -19,8 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.utils.extensions
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.support.v4.app.NotificationCompat
-import android.support.v4.provider.DocumentFile
+import androidx.core.app.NotificationCompat
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
@@ -36,7 +35,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast
 import java.io.File
 
-fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
+fun CustomWebView.saveArchive(root: androidx.documentfile.provider.DocumentFile, file: DownloadFile) {
     ui {
         val context = webView.context
         val tmpFile = File(context.cacheDir, "page.tmp")

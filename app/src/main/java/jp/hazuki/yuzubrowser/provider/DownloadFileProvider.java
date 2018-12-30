@@ -23,13 +23,13 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;

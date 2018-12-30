@@ -20,7 +20,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.R;

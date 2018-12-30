@@ -20,9 +20,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
 import android.view.*
 import android.widget.TextView
@@ -40,7 +37,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback {
+class ReadItLaterFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, ActionMode.Callback {
 
     private lateinit var adapter: ReaderAdapter
     private lateinit var readItLaterProvider: IReadItLaterProvider
@@ -54,9 +51,9 @@ class ReadItLaterFragment : Fragment(), OnRecyclerListener, ActionMode.Callback 
 
         readItLaterProvider = (activity.applicationContext as BrowserApplication).providerManager.readItLaterProvider
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         recyclerView.addItemDecoration(DividerItemDecoration(activity))
 
         adapter = ReaderAdapter(activity, getList(), this)

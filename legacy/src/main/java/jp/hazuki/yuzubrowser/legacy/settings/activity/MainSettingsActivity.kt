@@ -3,11 +3,10 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.PreferenceScreen
 import android.view.Menu
 import android.view.MenuItem
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceScreen
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
@@ -70,7 +69,7 @@ class MainSettingsActivity : ThemeActivity(), PreferenceFragmentCompat.OnPrefere
         }
     }
 
-    override fun replaceFragment(fragment: Fragment, key: String) {
+    override fun replaceFragment(fragment: androidx.fragment.app.Fragment, key: String) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .addToBackStack(key)

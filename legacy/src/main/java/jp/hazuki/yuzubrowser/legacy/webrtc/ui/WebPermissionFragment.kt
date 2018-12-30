@@ -17,8 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.webrtc.ui
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +31,7 @@ import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 
 @ContainerOptions(CacheImplementation.NO_CACHE)
-class WebPermissionFragment : Fragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
+class WebPermissionFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
 
     private lateinit var adapter: WebPermissionAdapter
 
@@ -49,7 +47,7 @@ class WebPermissionFragment : Fragment(), OnRecyclerListener, WebPermissionsEdit
                 this)
 
         recyclerView.run {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             addItemDecoration(DividerItemDecoration(activity))
             adapter = this@WebPermissionFragment.adapter
         }

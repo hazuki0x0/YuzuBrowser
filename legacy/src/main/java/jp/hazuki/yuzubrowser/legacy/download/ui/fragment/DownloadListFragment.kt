@@ -20,9 +20,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +39,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.LoadMoreListener
 import org.jetbrains.anko.longToast
 
-class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener {
+class DownloadListFragment : androidx.fragment.app.Fragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener {
 
     private var commandController: DownloadCommandController? = null
     private lateinit var adapter: DownloadListAdapter
@@ -55,8 +52,8 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        val layoutManager = LinearLayoutManager(activity)
+        val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         recyclerView.addOnScrollListener(object : LoadMoreListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {
                 adapter.loadMore()

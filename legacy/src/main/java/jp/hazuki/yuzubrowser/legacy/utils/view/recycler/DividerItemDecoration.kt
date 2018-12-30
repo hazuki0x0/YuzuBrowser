@@ -21,12 +21,11 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.annotation.ColorInt
 import jp.hazuki.utility.extensions.convertDpToPx
 
-class DividerItemDecoration : RecyclerView.ItemDecoration {
+class DividerItemDecoration : androidx.recyclerview.widget.RecyclerView.ItemDecoration {
 
     private val mDivider: Drawable
 
@@ -40,11 +39,11 @@ class DividerItemDecoration : RecyclerView.ItemDecoration {
         mDivider = DividerColorDrawable(context, color)
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    override fun onDraw(c: Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
         drawVertical(c, parent)
     }
 
-    private fun drawVertical(c: Canvas, parent: RecyclerView) {
+    private fun drawVertical(c: Canvas, parent: androidx.recyclerview.widget.RecyclerView) {
         val left = parent.paddingLeft
         val right = parent.width - parent.paddingRight
 
@@ -52,7 +51,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration {
         for (i in 0 until childCount) {
             val child = parent.getChildAt(i)
             val params = child
-                    .layoutParams as RecyclerView.LayoutParams
+                    .layoutParams as androidx.recyclerview.widget.RecyclerView.LayoutParams
             val top = child.bottom + params.bottomMargin
             val bottom = top + mDivider.intrinsicHeight
             mDivider.setBounds(left, top, right, bottom)
@@ -60,7 +59,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration {
         }
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
         outRect.set(0, 0, 0, mDivider.intrinsicHeight)
     }
 

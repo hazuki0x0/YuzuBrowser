@@ -17,12 +17,11 @@
 package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 
-class OutSideClickableRecyclerView(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs) {
+class OutSideClickableRecyclerView(context: Context, attrs: AttributeSet) : androidx.recyclerview.widget.RecyclerView(context, attrs) {
 
     private var click = false
     private var clickTime = 0L

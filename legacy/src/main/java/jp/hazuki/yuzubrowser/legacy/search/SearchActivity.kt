@@ -24,7 +24,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -101,7 +100,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
         recyclerView.setOnOutSideClickListener { finish() }
 
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         recyclerView.addItemDecoration(DividerItemDecoration(
                 this, getResColor(R.color.divider)))

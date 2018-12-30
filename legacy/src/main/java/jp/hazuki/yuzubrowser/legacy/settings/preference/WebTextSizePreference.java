@@ -19,11 +19,11 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.DialogPreference;
+import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.ui.preference.SeekBarPreferenceController;
 import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog;

@@ -26,7 +26,6 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -79,11 +78,11 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         return headerView
     }
 
-    override fun getWebSettingDialog(checker: PatternUrlChecker?): DialogFragment {
+    override fun getWebSettingDialog(checker: PatternUrlChecker?): androidx.fragment.app.DialogFragment {
         return SettingWebDialog.getInstance(getPosition(checker), checker)
     }
 
-    override fun getOpenOtherDialog(checker: PatternUrlChecker?): DialogFragment {
+    override fun getOpenOtherDialog(checker: PatternUrlChecker?): androidx.fragment.app.DialogFragment {
         return OpenOtherDialog.newInstance(getPosition(checker), checker, urlEditText.text.toString())
     }
 
@@ -115,7 +114,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         return super.onOptionsItemSelected(item)
     }
 
-    class SettingWebDialog : DialogFragment() {
+    class SettingWebDialog : androidx.fragment.app.DialogFragment() {
 
         private var header: View? = null
         private lateinit var layout: SettingWebDialogView
@@ -169,7 +168,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
             private const val REQUEST_USER_AGENT = 1
 
-            fun getInstance(id: Int, checker: PatternUrlChecker?): DialogFragment {
+            fun getInstance(id: Int, checker: PatternUrlChecker?): androidx.fragment.app.DialogFragment {
                 val fragment = SettingWebDialog()
                 val bundle = Bundle()
                 bundle.putInt(ID, id)
@@ -372,7 +371,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         }
     }
 
-    class OpenOtherDialog : DialogFragment() {
+    class OpenOtherDialog : androidx.fragment.app.DialogFragment() {
 
         private var patternActivity: PatternUrlActivity? = null
         private var intent: Intent? = null

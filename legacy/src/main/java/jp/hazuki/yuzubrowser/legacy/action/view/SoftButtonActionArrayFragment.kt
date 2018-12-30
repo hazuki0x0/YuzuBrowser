@@ -19,11 +19,9 @@ package jp.hazuki.yuzubrowser.legacy.action.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
@@ -56,12 +54,12 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         checkMax()
     }
 
-    override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
+    override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
         adapter.move(fromIndex, toIndex)
         return true
     }
 
-    override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
+    override fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
         mActionArray.write(context!!.applicationContext)
     }
 
@@ -97,7 +95,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         startActivityForResult(intent, RESULT_REQUEST_ADD)
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int) {
+    override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int) {
         val file = mActionArray.list.removeAt(index)
         val context = context!!.applicationContext
         adapter.notifyDataSetChanged()
@@ -181,7 +179,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         private const val ACTION_ID = "id"
         private const val RESULT_REQUEST_ADD = 1
 
-        fun newInstance(actionType: Int, actionId: Int): Fragment {
+        fun newInstance(actionType: Int, actionId: Int): androidx.fragment.app.Fragment {
             return SoftButtonActionArrayFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ACTION_TYPE, actionType)
