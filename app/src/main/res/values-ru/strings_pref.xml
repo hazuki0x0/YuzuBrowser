@@ -11,8 +11,8 @@
     <string name="pref_tab_type">Тип вкладки</string>
 
     <string-array name="pref_tab_type_list">
-        <item>Rolável</item>
-        <item>Completa</item>
+        <item>Прокручиваемый</item>
+        <item>Полный</item>
     </string-array>
 
     <string name="pref_page_settings">Параметры страницы</string>
@@ -97,22 +97,22 @@
     <string name="pref_web_cache">Режим кеширования</string>
 
     <string-array name="pref_web_cache_list">
-        <item>Padrão</item>
-        <item>Sem cache</item>
-        <item>Carregar cache preferencialmente</item>
-        <item>Carregar cache apenas</item>
+        <item>По умолчанию</item>
+        <item>Без кеша</item>
+        <item>Предпочесть загрузку из кеша</item>
+        <item>Загружать только из кеша</item>
     </string-array>
 
     <string name="pref_web_popup">Включить всплывающее окно</string>
     <string name="pref_download_action">Действие при загрузке</string>
 
     <string-array name="pref_download_action_list">
-        <item>Fazer nada</item>
-        <item>Automático</item>
-        <item>Sempre download</item>
-        <item>Sempre abrir</item>
-        <item>Compartilhar</item>
-        <item>Selecionar</item>
+        <item>Ничего не делать</item>
+        <item>Автовыбор</item>
+        <item>Всегда загружать</item>
+        <item>Всегда открывать</item>
+        <item>Поделиться</item>
+        <item>Предложить выбор</item>
     </string-array>
 
     <string name="pref_download_folder">Папка загрузок</string>
@@ -129,21 +129,21 @@
     <string name="pref_layout_algorithm">Метод компоновки</string>
 
     <string-array name="pref_layout_algorithm_list">
-        <item>Normal</item>
-        <item>Autodimensionamento de texto</item>
-        <item>Coluna única (descontinuada)</item>
-        <item>Colunas estreitas (descontinuada)</item>
+        <item>Обычный</item>
+        <item>Авторазмер текста</item>
+        <item>Один столбец (не рекомендуется)</item>
+        <item>Узкие столбцы (не рекомендуется)</item>
     </string-array>
 
     <string name="pref_save_history">Сохранять историю</string>
     <string name="pref_newtab_settings">Настройки новой вкладки</string>
 
     <string-array name="pref_newtab_list">
-        <item>Guia atual</item>
-        <item>Nova guia</item>
-        <item>Guia em plano de fundo</item>
-        <item>Nova guia na direita</item>
-        <item>Guia na direita em plano de fundo</item>
+        <item>Текущая вкладка</item>
+        <item>Новая вкладка</item>
+        <item>Вкладка в фоне</item>
+        <item>Новая вкладка справа</item>
+        <item>Вкладка в фоне справа</item>
     </string-array>
 
     <string name="pref_newtab_link">Ссылка</string>
@@ -164,28 +164,28 @@
     <string name="pref_file_access">Настройки локального доступа к файлам</string>
 
     <string-array name="pref_file_access_list">
-        <item>Desativar (mais seguro)</item>
-        <item>Ativar na sandbox (seguro)</item>
-        <item>Ativar (não seguro)</item>
+        <item>Отключить (безопасно)</item>
+        <item>Включить в песочнице (безопасно)</item>
+        <item>Включить (небезопасно)</item>
     </string-array>
 
     <string name="pref_mixed_content">Настройки небезопасного содержимого HTTPS</string>
 
     <string-array name="pref_mixed_content_list">
-        <item>Nunca permitir (mais seguro)</item>
-        <item>Compatibilidade (padrão)</item>
-        <item>Sempre permitir (não seguro)</item>
+        <item>Никогда не разрешать (безопасно)</item>
+        <item>Совместимость (по умолчанию)</item>
+        <item>Всегда разрешать (небезопасно)</item>
     </string-array>
 
     <string name="pref_toolbar_visibility">Видимость</string>
 
     <string-array name="pref_toolbar_visibility_list">
-        <item>Visível</item>
-        <item>Ocultar na tela cheia</item>
-        <item>Ocultar no fim do carregamento</item>
-        <item>Ocultar na tela de retrato</item>
-        <item>Ocultar na tela de paisagem</item>
-        <item>Ocultar na escolha do layout</item>
+        <item>Отображается</item>
+        <item>Скрыть на полноэкранном режиме</item>
+        <item>Скрыть при завершении загрузки</item>
+        <item>Скрыть на портретном экране</item>
+        <item>Скрыть на альбомном экране</item>
+        <item>Скрыть при сжатии макета</item>
     </string-array>
 
     <string name="pref_web_swipe_settings">Настройки действия смахивания двумя пальцами</string>
@@ -206,9 +206,9 @@
     <string name="pref_qc_r_pos">Реагирующее положение</string>
 
     <string-array name="pref_qc_r_pos_list">
-        <item>Esquerda e direita</item>
-        <item>Esquerda</item>
-        <item>Direita</item>
+        <item>Слева и справа</item>
+        <item>Слева</item>
+        <item>Справа</item>
     </string-array>
 
     <string name="pref_qc_level1">Уровень 1</string>
@@ -246,10 +246,10 @@
     <string name="pref_search_suggest">Тип поисковых предложений</string>
 
     <string-array name="pref_search_suggest_list">
-        <item>Rede</item>
-        <item>Consultas recentes</item>
-        <item>Ambos</item>
-        <item>Nenhum</item>
+        <item>Из сети</item>
+        <item>Последние запросы</item>
+        <item>Из сети и запросы</item>
+        <item>Нет</item>
     </string-array>
 
     <string name="pref_history_settings">Настройки истории</string>
@@ -314,11 +314,11 @@
     <string name="pref_light_theme">Светлая тема</string>
 
     <string-array name="pref_rendering_list">
-        <item>Normal</item>
-        <item>Invertida</item>
-        <item>Escala de cinza</item>
-        <item>Escala de cinza invertida</item>
-        <item>Modo noturno</item>
+        <item>Нормальный</item>
+        <item>Инвертный</item>
+        <item>Полутоновой</item>
+        <item>Инвертный полутоновой</item>
+        <item>Ночной режим</item>
     </string-array>
 
     <string name="pref_night_mode_settings">Настройки ночного режима</string>
@@ -364,9 +364,9 @@
 
     <string name="pref_show_divider">Показывать разделители</string>
     <string-array name="pref_show_divider_list">
-        <item>Automático</item>
-        <item>Mostrar</item>
-        <item>Ocultar</item>
+        <item>Автовыбор</item>
+        <item>Показывать</item>
+        <item>Скрывать</item>
     </string-array>
 
     <string name="pref_speed_dial">Быстрый набор</string>
@@ -384,9 +384,9 @@
     <string name="pref_display_position">Место отображения</string>
     <string name="pref_touch_scrollbar_do_not_move_toolbar">Не перемещать панель инструментов</string>
     <string-array name="pref_touch_scrollbar_list">
-        <item>Ocultar</item>
-        <item>Direita</item>
-        <item>Esquerda</item>
+        <item>Скрыть</item>
+        <item>Справа</item>
+        <item>Слева</item>
     </string-array>
 
     <string name="pref_reader_settings">Настройки чтения</string>
@@ -401,12 +401,12 @@
     <string name="pref_bookmark">Закладки</string>
     <string name="pref_speeddial_item_text_size">Размер текста элемента</string>
     <string-array name="pref_text_size_list">
-        <item>Padrão</item>
-        <item>Minúsculo</item>
-        <item>Pequeno</item>
-        <item>Médio</item>
-        <item>Grande</item>
-        <item>Enorme</item>
+        <item>По умолчанию</item>
+        <item>Очень маленький</item>
+        <item>Маленький</item>
+        <item>Средний</item>
+        <item>Большой</item>
+        <item>Огромный</item>
     </string-array>
 
     <string name="pref_search_settings">Настройки поиска</string>
@@ -416,9 +416,9 @@
     <string name="pref_search_cat_suggest">Поисковые предложения</string>
     <string name="pref_fullscreen_mode">Параметры полноэкранного режима</string>
     <string-array name="pref_fullscreen_mode_list">
-        <item>Ocultar barra de status</item>
-        <item>Ocultar barra de navegação</item>
-        <item>Ocultar ambas</item>
+        <item>Скрыть панель состояния</item>
+        <item>Скрыть панель навигации</item>
+        <item>Скрыть обе панели</item>
     </string-array>
     <string name="pref_slow_rendering">Медленная визуализация</string>
     <string name="pref_slow_rendering_alert">"Внимание!\nМожет часто возникать замораживание, если эта функция включена.\nКроме того, для переключения этого параметра необходимо удалить браузер списка из последних приложений.\nМы НЕ рекомендуем использовать эту функцию, кроме использования захвата всех скриншотов."</string>
@@ -429,8 +429,8 @@
     <string name="pref_content_settings">Настройки содержимого</string>
     <string name="pref_speeddial_layout">Внешний вид</string>
     <string-array name="pref_speeddial_layout_list">
-        <item>Ícone grande</item>
-        <item>Ícone pequeno</item>
+        <item>Большие значки</item>
+        <item>Маленькие значки</item>
     </string-array>
     <string name="pref_privacy_policy">Политика конфиденциальности</string>
     <string name="mining_protect">Без монетизации</string>

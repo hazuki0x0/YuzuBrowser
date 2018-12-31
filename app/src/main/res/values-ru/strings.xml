@@ -149,7 +149,6 @@
     <string name="login">Вход</string>
     <string name="edit_action">Изменение действия</string>
     <string name="action_cant_empty">Действие не может быть пустым.</string>
-    <!-- <string name="gesture_exists">Gesto já existe.</string> -->
     <string name="action_empty">Пустое действие</string>
     <string name="gesture_test">Тест жеста</string>
     <string name="move_up">Переместить вверх</string>
@@ -298,4 +297,6 @@
     <string name="breadcrumb">Фрагменты</string>
     <string name="download_failed_root_not_exists">Загрузка невозможна, так как папка назначения загрузки не найдена</string>
     <string name="download_failed_root_not_writable">Загрузка невозможна, поскольку папка назначения загрузки недоступна для записи</string>
+    <string name="reset_all_counts">Сбросить все счётчики</string>
+    <string name="reset_all_counts_mes">Вы уверены, что хотите сбросить все счётчики?</string>
 </resources>
