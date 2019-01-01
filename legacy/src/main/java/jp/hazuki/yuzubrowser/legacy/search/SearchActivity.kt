@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,9 @@ import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import jp.hazuki.utility.extensions.clipboardText
-import jp.hazuki.utility.extensions.getResColor
+import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
+import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -45,7 +46,6 @@ import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestItem
 import jp.hazuki.yuzubrowser.legacy.search.suggest.Suggestion
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui

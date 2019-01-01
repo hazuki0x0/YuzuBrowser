@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
-import jp.hazuki.yuzubrowser.legacy.utils.UrlUtils;
 
 class HorizontalTabListAdapter extends TabListRecyclerBaseAdapter {
     HorizontalTabListAdapter(Context context, TabManager list, OnRecyclerListener listener) {

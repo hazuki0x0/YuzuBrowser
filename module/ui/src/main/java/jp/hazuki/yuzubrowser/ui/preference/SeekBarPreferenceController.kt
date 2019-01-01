@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import jp.hazuki.utility.extensions.hideIme
+import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.ui.R
 
 open class SeekBarPreferenceController(private val mContext: Context) {

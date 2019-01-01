@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
-import jp.hazuki.yuzubrowser.legacy.utils.Logger
 import jp.hazuki.yuzubrowser.legacy.utils.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity

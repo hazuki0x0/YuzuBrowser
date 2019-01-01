@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,12 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
-import jp.hazuki.utility.extensions.getFakeChromeUserAgent
-import jp.hazuki.utility.extensions.readAssetsText
+import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
+import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
+import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -62,32 +66,35 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialAsyncManager
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialHtml
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
+import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.GeolocationPermissionToolbar
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScript
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptDatabase
-import jp.hazuki.yuzubrowser.legacy.utils.*
+import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.legacy.utils.HttpUtils
+import jp.hazuki.yuzubrowser.legacy.utils.WebDownloadUtils
+import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.legacy.webkit.*
-import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnWebStateChangeListener
+import jp.hazuki.yuzubrowser.legacy.webkit.TabType
+import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
+import jp.hazuki.yuzubrowser.legacy.webkit.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
+import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
+import jp.hazuki.yuzubrowser.webview.CustomWebView
+import jp.hazuki.yuzubrowser.webview.CustomWebViewClient
+import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
+import jp.hazuki.yuzubrowser.webview.utility.evaluateJavascript
+import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
 import org.jetbrains.anko.longToast
 import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread
 
-class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) {
+class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) : WebViewUtility {
     private val patternManager = PatternUrlManager(activity.applicationContext)
     private val speedDialManager = SpeedDialAsyncManager(activity.applicationContext)
     private val speedDialHtml = SpeedDialHtml(activity.applicationContext)
     private val faviconManager = FaviconAsyncManager(activity.applicationContext)
-    private val onWebStateChangeListener: OnWebStateChangeListener = { web, tabData ->
-        controller.getTabOrNull(web)?.let { tab ->
-            tab.onStateChanged(tabData)
-            if (tab == controller.currentTabData) {
-                controller.notifyChangeWebState(tab)
-            }
-        }
-    }
     private val webViewRenderingManager = WebViewRenderingManager()
     private val scrollableToolbarHeight = { controller.appBarLayout.totalScrollRange + controller.pagePaddingHeight }
     private val safeFileProvider = (activity.applicationContext as BrowserApplication).providerManager.safeFileProvider
@@ -279,9 +286,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
         })
 
-        web.setOnCustomWebViewStateChangeListener(onWebStateChangeListener)
-
-        val setting = web.settings
+        val setting = web.webSettings
         setting.setNeedInitialFocus(false)
         setting.defaultFontSize = 16
         setting.defaultFixedFontSize = 13
@@ -290,7 +295,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
         setting.mixedContentMode = AppData.mixed_content.get()
         setting.setSupportMultipleWindows(AppData.newtab_blank.get() != BrowserManager.LOAD_URL_TAB_CURRENT)
-        WebViewUtils.setTextSize(setting, AppData.text_size.get())
+        setting.textZoom = AppData.text_size.get()
         setting.javaScriptEnabled = AppData.javascript.get()
 
 
@@ -304,7 +309,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
         setting.loadWithOverviewMode = AppData.load_overview.get()
         setting.useWideViewPort = AppData.web_wideview.get()
-        WebViewUtils.setDisplayZoomButtons(setting, AppData.show_zoom_button.get())
+        setting.displayZoomButtons = AppData.show_zoom_button.get()
         setting.cacheMode = AppData.web_cache.get()
         setting.javaScriptCanOpenWindowsAutomatically = AppData.web_popup.get()
         setting.layoutAlgorithm = WebSettings.LayoutAlgorithm.valueOf(AppData.layout_algorithm.get())
@@ -313,8 +318,8 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         val noPrivate = !AppData.private_mode.get()
         setting.databaseEnabled = noPrivate && AppData.web_db.get()
         setting.domStorageEnabled = noPrivate && AppData.web_dom_db.get()
-        setting.setGeolocationEnabled(noPrivate && AppData.web_geolocation.get())
-        setting.setAppCacheEnabled(noPrivate && AppData.web_app_cache.get())
+        setting.geolocationEnabled = noPrivate && AppData.web_geolocation.get()
+        setting.appCacheEnabled = noPrivate && AppData.web_app_cache.get()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setting.safeBrowsingEnabled = AppData.safe_browsing.get()
@@ -323,16 +328,23 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             setting.saveFormData = noPrivate && AppData.save_formdata.get()
         }
 
-        setting.setAppCachePath(BrowserManager.getAppCacheFilePath(activity.applicationContext))
+        setting.setAppCachePath(activity.appCacheFilePath)
 
-        web.resetTheme()
+        var webViewTheme: CustomWebView.WebViewTheme? = null
+        if (ThemeData.isEnabled() && ThemeData.getInstance().progressColor != 0) {
+            val theme = ThemeData.getInstance()
+            val color = theme.progressColor
+            val isDark = if (theme.refreshUseDark) activity.getResColor(R.color.deep_gray) else 0
+            webViewTheme = CustomWebView.WebViewTheme(color, isDark)
+        }
+        web.setWebViewTheme(webViewTheme)
         web.swipeEnable = AppData.pull_to_refresh.get()
 
         //if add to this, should also add to AbstractCacheWebView#settingWebView
     }
 
     fun loadUrl(tab: MainTabData, url: String, shouldOpenInNewTab: Boolean) {
-        if (tab.isNavLock && !WebViewUtils.shouldLoadSameTabUser(url)) {
+        if (tab.isNavLock && !url.shouldLoadSameTabUser()) {
             controller.performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW)
             return
         }
@@ -356,7 +368,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             return false
 
         return if (perform == BrowserManager.LOAD_URL_TAB_CURRENT) false
-        else !WebViewUtils.shouldLoadSameTabUser(url) && controller.performNewTabLink(perform, tab, url, type)
+        else !url.shouldLoadSameTabUser() && controller.performNewTabLink(perform, tab, url, type)
     }
 
     private val mWebViewClient = object : CustomWebViewClient() {
@@ -454,6 +466,15 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                                     HttpUtils.getImage(iconUrl, userAgent, url, CookieManager.getInstance().getCookie(url)))
                         }
                     }
+                }
+            }
+        }
+
+        override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {
+            controller.getTabOrNull(web)?.let { tab ->
+                tab.onStateChanged(web.title, url, originalUrl, progress, isLoading)
+                if (tab == controller.currentTabData) {
+                    controller.notifyChangeWebState(tab)
                 }
             }
         }
@@ -925,7 +946,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     }
 
     private fun checkNewTabLinkAuto(perform: Int, tab: MainTabData, url: String): Boolean {
-        if (tab.isNavLock && !WebViewUtils.shouldLoadSameTabAuto(url)) {
+        if (tab.isNavLock && !url.shouldLoadSameTabAuto()) {
             controller.performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW)
             return true
         }
@@ -933,10 +954,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         if (perform == BrowserManager.LOAD_URL_TAB_CURRENT)
             return false
 
-        if (WebViewUtils.shouldLoadSameTabAuto(url))
+        if (url.shouldLoadSameTabAuto())
             return false
 
-        return if (WebViewUtils.shouldLoadSameTabScheme(url)) false else !(TextUtils.equals(url, tab.url) || tab.mWebView.isBackForwardListEmpty) && controller.performNewTabLink(perform, tab, url, TabType.WINDOW)
+        return if (url.shouldLoadSameTabScheme()) false else !((url == tab.url) || tab.mWebView.isBackForwardListEmpty) && controller.performNewTabLink(perform, tab, url, TabType.WINDOW)
     }
 
     private fun getNewTabPerformType(tab: MainTabData): Int {

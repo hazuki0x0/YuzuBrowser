@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,7 @@ class WebSettingPatternAction : PatternAction {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun run(context: Context, tab: MainTabData, url: String): Boolean {
-        val settings = tab.mWebView.settings
+        val settings = tab.mWebView.webSettings
 
         if (userAgentString != null)
             settings.userAgentString = userAgentString

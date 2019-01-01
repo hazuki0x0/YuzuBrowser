@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-import jp.hazuki.yuzubrowser.legacy.utils.Logger;
+import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 
 /**
  * Class to fetch articles. This class is thread safe.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import android.net.Uri
 import android.os.*
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
@@ -42,8 +44,6 @@ import jp.hazuki.yuzubrowser.legacy.download.service.connection.ServiceClient
 import jp.hazuki.yuzubrowser.legacy.download.service.connection.ServiceCommand
 import jp.hazuki.yuzubrowser.legacy.download.service.connection.ServiceSocket
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
-import jp.hazuki.yuzubrowser.legacy.utils.Logger
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.browserApplicationContext
 import jp.hazuki.yuzubrowser.legacy.utils.getPathFromUri
 import org.jetbrains.anko.intentFor

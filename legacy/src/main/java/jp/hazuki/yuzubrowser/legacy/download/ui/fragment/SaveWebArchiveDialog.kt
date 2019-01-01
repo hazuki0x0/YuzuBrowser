@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import jp.hazuki.yuzubrowser.legacy.download.download
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.createUniqueFileName
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class SaveWebArchiveDialog : androidx.fragment.app.DialogFragment() {
     private var listener: OnSaveWebViewListener? = null
@@ -151,7 +151,7 @@ class SaveWebArchiveDialog : androidx.fragment.app.DialogFragment() {
             return SaveWebArchiveDialog().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_FILE, DownloadFile(url, name,
-                            DownloadRequest(null, webView.settings.userAgentString, EXT_HTML)))
+                            DownloadRequest(null, webView.webSettings.userAgentString, EXT_HTML)))
                     putInt(ARG_NO, webViewNo)
                 }
             }

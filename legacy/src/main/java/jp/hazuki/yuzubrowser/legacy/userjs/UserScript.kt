@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.userjs
 
 import android.os.Parcel
 import android.os.Parcelable
-import jp.hazuki.utility.extensions.forEachLine
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
-import jp.hazuki.yuzubrowser.legacy.utils.Logger
+import jp.hazuki.yuzubrowser.core.utility.extensions.forEachLine
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader

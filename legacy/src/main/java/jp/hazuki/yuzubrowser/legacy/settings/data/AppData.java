@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,9 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import jp.hazuki.utility.extensions.ContextExtensionsKt;
+import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
+import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.action.ActionList;
@@ -56,13 +58,10 @@ import jp.hazuki.yuzubrowser.legacy.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.custom.FontSizeContainer;
-import jp.hazuki.yuzubrowser.legacy.tab.manager.BundleDataBaseConverter;
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData;
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgent;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentList;
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
-import jp.hazuki.yuzubrowser.legacy.utils.Logger;
 import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
@@ -392,9 +391,10 @@ public class AppData {
                 }
 
                 if (lastLaunch < 200000) {
-                    BundleDataBaseConverter converter = new BundleDataBaseConverter(context.getFileStreamPath("last_url_2.dat"));
-                    converter.readList(context);
-                    converter.clear();
+                    //TODO : add old app converter class
+                    //BundleDataBaseConverter converter = new BundleDataBaseConverter(context.getFileStreamPath("last_url_2.dat"));
+                    //converter.readList(context);
+                    //converter.clear();
                 }
 
                 if (lastLaunch < 300000) {

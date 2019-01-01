@@ -1,13 +1,11 @@
 /*
- * Copyright (C) 2017 Hazuki
- * fixed by Cynthia Project
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +23,10 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 
-public class MultiTouchGestureDetector {
+import androidx.annotation.NonNull;
+import jp.hazuki.yuzubrowser.core.utility.common.listener.OnTouchEventListener;
+
+public class MultiTouchGestureDetector implements OnTouchEventListener {
     public interface OnMultiTouchGestureListener {
         void onUp(MotionEvent e);
 
@@ -248,7 +249,8 @@ public class MultiTouchGestureDetector {
     }
 
 
-    public boolean onTouchEvent(MotionEvent ev) {
+    @Override
+    public boolean onTouchEvent(@NonNull MotionEvent ev) {
         final int action = ev.getAction();
         final float y = ev.getY();
         final float x = ev.getX();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import android.view.ContextMenu
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.webkit.WebView
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.*
 import jp.hazuki.yuzubrowser.legacy.browser.ui.PieManager
@@ -36,12 +37,11 @@ import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGest
 import jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.MathUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomOnCreateContextMenuListener
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
 import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
+import jp.hazuki.yuzubrowser.webview.CustomOnCreateContextMenuListener
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
@@ -123,7 +123,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
     }
 
     fun setGestureDetector(web: CustomWebView) {
-        web.setGestureDetector(gestureDetector)
+        web.setWebViewTouchDetector(gestureDetector)
     }
 
     fun onTouchEvent(event: MotionEvent): Boolean {

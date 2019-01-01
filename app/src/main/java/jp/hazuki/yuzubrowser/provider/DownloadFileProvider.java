@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import jp.hazuki.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.BuildConfig;
+import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 
 public class DownloadFileProvider extends ContentProvider {

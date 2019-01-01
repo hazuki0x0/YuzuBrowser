@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData;
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView;
+import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
 public class MainTabData extends TabData {
     public MainTabData(CustomWebView web, View view) {
@@ -102,20 +102,19 @@ public class MainTabData extends TabData {
     }
 
     @Override
-    public void onStateChanged(TabData tabdata) {
-        super.onStateChanged(tabdata);
-        if (getTitle() != null)
-            setText(getTitle());
+    public void onStateChanged(String title, String url, String originalUrl, int progress, Boolean isLoading) {
+        super.onStateChanged(title, url, originalUrl, progress, isLoading);
+        if (title != null)
+            setText(title);
         else
-            setText(getUrl());
+            setText(url);
 
-        String url = getOriginalUrl();
-        if (url != null && AppData.toolbar_show_favicon.get()) {
-            if (url.startsWith("yuzu:")) {
+        if (originalUrl != null && AppData.toolbar_show_favicon.get()) {
+            if (originalUrl.startsWith("yuzu:")) {
                 removeIcon();
             } else {
                 setIcon(new BitmapDrawable(context.getResources(),
-                        FaviconManager.getInstance(context).get(url)));
+                        FaviconManager.getInstance(context).get(originalUrl)));
             }
         }
     }

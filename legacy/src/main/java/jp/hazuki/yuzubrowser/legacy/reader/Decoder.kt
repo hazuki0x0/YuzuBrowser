@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import android.text.Html
 import android.text.Spanned
 import android.text.TextUtils
 import android.webkit.WebSettings
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.reader.snacktory.HtmlFetcher
 import jp.hazuki.yuzubrowser.legacy.utils.HttpUtils
-import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils
-import jp.hazuki.yuzubrowser.legacy.utils.Logger
 import java.util.*
 
 fun decodeToReaderData(context: Context, url: String, userAgent: String?): ReaderData? {

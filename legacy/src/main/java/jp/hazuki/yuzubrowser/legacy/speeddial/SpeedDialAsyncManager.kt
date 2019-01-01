@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.speeddial
 
 import android.content.Context
 import android.graphics.Bitmap
-import jp.hazuki.yuzubrowser.legacy.utils.Logger
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 

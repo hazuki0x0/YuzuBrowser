@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.annotation.IntRange
-import jp.hazuki.utility.extensions.convertDpToFloatPx
-import jp.hazuki.utility.extensions.convertDpToPx
+import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
+import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 
 class TabListActionTextDrawable(context: Context, tabs: Int) : Drawable() {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ import java.util.Arrays;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.ListFragment;
-import jp.hazuki.utility.utils.ArrayUtils;
-import jp.hazuki.utility.utils.Predicate;
+import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.Predicate;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 

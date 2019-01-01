@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 
-import jp.hazuki.utility.extensions.getBitmap
+import jp.hazuki.yuzubrowser.core.utility.extensions.getBitmap
 import jp.hazuki.yuzubrowser.ui.R
 
 class PointerView(context: Context) : RelativeLayout(context) {

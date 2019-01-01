@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,14 +85,14 @@ class ActionIconManager(val info: BrowserInfo) {
             SingleAction.FOCUS_CLICK -> return info.resourcesByInfo.getDrawable(R.drawable.ic_fiber_manual_record_white_24dp, info.themeByInfo)
             SingleAction.TOGGLE_JS -> {
                 val tab = info.currentTabData ?: return null
-                return if (tab.mWebView.settings.javaScriptEnabled)
+                return if (tab.mWebView.webSettings.javaScriptEnabled)
                     info.resourcesByInfo.getDrawable(R.drawable.ic_memory_white_24dp, info.themeByInfo)
                 else
                     info.resourcesByInfo.getDrawable(R.drawable.ic_memory_white_disable_24px, info.themeByInfo)
             }
             SingleAction.TOGGLE_IMAGE -> {
                 val tab = info.currentTabData ?: return null
-                return if (tab.mWebView.settings.loadsImagesAutomatically)
+                return if (tab.mWebView.webSettings.loadsImagesAutomatically)
                     info.resourcesByInfo.getDrawable(R.drawable.ic_crop_original_white_24px, info.themeByInfo)
                 else
                     info.resourcesByInfo.getDrawable(R.drawable.ic_crop_original_disable_white_24px, info.themeByInfo)

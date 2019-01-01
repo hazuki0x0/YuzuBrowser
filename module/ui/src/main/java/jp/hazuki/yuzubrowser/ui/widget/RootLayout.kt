@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import androidx.annotation.AttrRes
-import jp.hazuki.utility.extensions.isImeShown
+import jp.hazuki.yuzubrowser.core.utility.extensions.isImeShown
 
 class RootLayout @JvmOverloads constructor(
         context: Context,

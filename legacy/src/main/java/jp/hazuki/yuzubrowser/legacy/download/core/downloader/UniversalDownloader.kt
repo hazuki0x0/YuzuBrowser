@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package jp.hazuki.yuzubrowser.legacy.download.core.downloader
 import android.content.Context
 import android.webkit.CookieManager
 import android.webkit.WebSettings
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL

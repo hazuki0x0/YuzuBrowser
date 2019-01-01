@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import android.content.SharedPreferences;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 import jp.hazuki.yuzubrowser.legacy.settings.container.Containable;
 import jp.hazuki.yuzubrowser.legacy.settings.container.IntContainer;
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
 
 public class FontSizeContainer implements Containable {
     public final ArrayList<Containable> mPreferenceList = new ArrayList<>();

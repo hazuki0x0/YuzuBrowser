@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 
 public class HttpURLConnectionWrapper extends HttpClientBuilder {
     private final HttpURLConnection mConnection;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.google.android.material.appbar.AppBarLayout
-import jp.hazuki.utility.extensions.getResColor
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
@@ -47,7 +47,7 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_UN
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_WEB
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.*
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.browser_activity.*
 

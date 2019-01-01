@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
+
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
+import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 
 public class FileUtils {
     private static final String TAG = "FileUtils";

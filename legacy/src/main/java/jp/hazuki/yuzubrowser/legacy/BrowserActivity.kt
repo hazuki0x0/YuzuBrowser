@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
@@ -67,19 +70,32 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialog
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialogFactory
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewPageFastScroller
-import jp.hazuki.yuzubrowser.legacy.utils.*
+import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
+import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.legacy.utils.network.ConnectionStateMonitor
+import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.utils.view.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.legacy.utils.view.behavior.WebViewBehavior
-import jp.hazuki.yuzubrowser.legacy.webkit.*
+import jp.hazuki.yuzubrowser.legacy.webkit.TabType
+import jp.hazuki.yuzubrowser.legacy.webkit.WebCustomViewHandler
+import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager
+import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.ui.widget.PointerView
+import jp.hazuki.yuzubrowser.webview.CustomWebHistoryItem
+import jp.hazuki.yuzubrowser.webview.CustomWebView
+import jp.hazuki.yuzubrowser.webview.WebViewFactory
+import jp.hazuki.yuzubrowser.webview.WebViewType
+import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
+import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
+import javax.inject.Inject
 
-class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvider.CachedWebViewProvider, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
+class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
 
     private val asyncPermissions by lazy { AsyncPermissions(this) }
     private val handler = Handler(Looper.getMainLooper())
@@ -119,6 +135,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         }
     }
 
+    private val scrollChangedListener = { l: Int, t: Int, oldl: Int, oldt: Int ->
+        webViewFastScroller.onPageScroll()
+    }
+
     private lateinit var browserState: BrowserState
     private lateinit var toolbar: Toolbar
     private lateinit var tabManagerIn: UiTabManager
@@ -146,6 +166,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     private var findOnPage: WebViewFindDialog? = null
     private var delayAction: Action? = null
 
+    @Inject
+    internal lateinit var webViewFactory: WebViewFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -159,13 +182,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         }
 
         userActionManager = UserActionManager(this, this, actionController, iconManager)
-        tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this), this)
+        tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory), this)
         webClient = WebClient(this, this)
 
         toolbar = Toolbar(this, superFrameLayoutInfo, this, actionController, iconManager)
         toolbar.addToolbarView(resources)
-
-        WebViewProvider.setProvider(this)
 
         webViewBehavior = (webGestureOverlayView.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
         bottomBarBehavior = (bottomOverlayLayout.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
@@ -429,7 +450,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
                 if (resultCode != RESULT_OK || data == null) return
                 val ua = data.getStringExtra(Intent.EXTRA_TEXT) ?: return
                 val tab = tabManagerIn.currentTabData
-                tab.mWebView.settings.userAgentString = ua
+                tab.mWebView.webSettings.userAgentString = ua
                 tab.mWebView.reload()
             }
             BrowserController.REQUEST_DEFAULT_USERAGENT -> {
@@ -438,7 +459,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
                 AppData.user_agent.set(ua)
                 AppData.commit(this, AppData.user_agent)
                 for (tabData in tabManagerIn.loadedData) {
-                    tabData.mWebView.settings.userAgentString = ua
+                    tabData.mWebView.webSettings.userAgentString = ua
                     tabData.mWebView.reload()
                 }
             }
@@ -447,7 +468,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
                 if (resultCode != RESULT_OK || data == null) return
                 val encoding = data.getStringExtra(Intent.EXTRA_TEXT) ?: return
                 val tab = tabManagerIn.currentTabData
-                tab.mWebView.settings.defaultTextEncodingName = encoding
+                tab.mWebView.webSettings.defaultTextEncodingName = encoding
                 tab.mWebView.reload()
             }
             BrowserController.REQUEST_SHARE_IMAGE -> {
@@ -702,8 +723,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
 
         oldTab?.run {
             mWebView.setOnMyCreateContextMenuListener(null)
-            mWebView.setGestureDetector(null)
-            mWebView.paddingScrollChangedListener = null
+            mWebView.setWebViewTouchDetector(null)
             mWebView.scrollableChangeListener = null
             webFrameLayout.removeView(mWebView.view)
             webViewBehavior.setWebView(null)
@@ -719,7 +739,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
             webViewFastScroller.attachWebView(it)
 
             it.setOnMyCreateContextMenuListener(userActionManager.onCreateContextMenuListener)
-            it.paddingScrollChangedListener = toolbar
+            //TODO Rewrite
+            //it.paddingScrollChangedListener = toolbar
             it.scrollableChangeListener = scrollableChangeListener
             userActionManager.setGestureDetector(it)
         }
@@ -1065,7 +1086,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     }
 
     private fun addNewTab(@TabType type: Int): MainTabData {
-        return addNewTab(WebViewFactory.getMode(), type)
+        return addNewTab(webViewFactory.getMode(this), type)
     }
 
     private fun addNewTab(@WebViewType cacheType: Int, @TabType type: Int): MainTabData {
@@ -1088,7 +1109,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     }
 
     fun makeWebView(@WebViewType cacheType: Int): CustomWebView {
-        val web = WebViewFactory.create(this, cacheType)
+        val web = webViewFactory.create(this, cacheType)
         web.view.id = View.generateViewId()
         web.webView.isFocusableInTouchMode = true
         web.webView.isFocusable = true
@@ -1113,7 +1134,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     override fun openInNewTab(tab: MainTabData) {
         val bundle = Bundle()
         tab.mWebView.saveState(bundle)
-        openNewTab(WebViewFactory.getMode(bundle), bundle.getInt(TAB_TYPE, tab.tabType)).run {
+        openNewTab(webViewFactory.getMode(bundle), bundle.getInt(TAB_TYPE, tab.tabType)).run {
             mWebView.restoreState(bundle)
             mWebView.identityId = id
             url = tab.url
@@ -1127,11 +1148,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
     }
 
     private fun openInNewTab(state: Bundle) {
-        openNewTab(WebViewFactory.getMode(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state)
+        openNewTab(webViewFactory.getMode(state), state.getInt(TAB_TYPE, 0)).mWebView.restoreState(state)
     }
 
     private fun openNewTab(@TabType type: Int): MainTabData {
-        return openNewTab(WebViewFactory.getMode(), type)
+        return openNewTab(webViewFactory.getMode(this), type)
     }
 
     private fun openNewTab(@WebViewType cacheType: Int, @TabType type: Int): MainTabData {
@@ -1269,29 +1290,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         actionNameTextView.visibility = View.GONE
     }
 
-    private var cachedWebView: NormalWebView? = null
-    private var waitingForWebViewCache: Boolean = false
-    override fun getWebView(): NormalWebView {
-        val cache = cachedWebView
-        if (cache != null) {
-            cachedWebView = null
-            createWebViewCache()
-            return cache
-        }
-        createWebViewCache()
-        return NormalWebView(this)
-    }
-
-    private fun createWebViewCache() {
-        if (waitingForWebViewCache) return
-
-        waitingForWebViewCache = true
-        handler.postDelayed({
-            cachedWebView = NormalWebView(this)
-            waitingForWebViewCache = false
-        }, 100)
-    }
-
     override val resourcesByInfo: Resources
         get() = resources
 
@@ -1372,7 +1370,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
             CookieManager.getInstance().setAcceptCookie(enableCookie)
 
             tabManagerIn.loadedData.forEach {
-                val settings = it.mWebView.settings
+                val settings = it.mWebView.webSettings
 
                 it.mWebView.setAcceptThirdPartyCookies(
                         CookieManager.getInstance(), enableCookie && AppData.accept_third_cookie.get())
@@ -1383,9 +1381,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
                 }
                 settings.databaseEnabled = noPrivate && AppData.web_db.get()
                 settings.domStorageEnabled = noPrivate && AppData.web_dom_db.get()
-                settings.setGeolocationEnabled(noPrivate && AppData.web_geolocation.get())
-                settings.setAppCacheEnabled(noPrivate && AppData.web_app_cache.get())
-                settings.setAppCachePath(BrowserManager.getAppCacheFilePath(applicationContext))
+                settings.geolocationEnabled = noPrivate && AppData.web_geolocation.get()
+                settings.appCacheEnabled = noPrivate && AppData.web_app_cache.get()
+                settings.setAppCachePath(appCacheFilePath)
             }
 
             toolbar.notifyChangeWebState()

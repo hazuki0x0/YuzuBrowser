@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package jp.hazuki.yuzubrowser.legacy.browser
 
 import android.annotation.SuppressLint
-import jp.hazuki.yuzubrowser.legacy.utils.app.LongPressFixActivity
+import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerLongPressFixActivity
 import java.util.*
 
 @SuppressLint("Registered")
-open class BrowserBaseActivity : LongPressFixActivity() {
+open class BrowserBaseActivity : DaggerLongPressFixActivity() {
 
     private val dialogQueue = ArrayDeque<DialogNode>(4)
     private var isResumed = false

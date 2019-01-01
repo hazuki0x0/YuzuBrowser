@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import jp.hazuki.utility.extensions.ContextExtensionsKt;
+import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
+import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtilsKt;
-import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
 
 public class ThemeData {

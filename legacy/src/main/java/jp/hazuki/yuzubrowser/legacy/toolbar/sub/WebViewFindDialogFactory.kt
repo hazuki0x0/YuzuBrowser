@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
-import jp.hazuki.utility.extensions.hideIme
+import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.find_onpage.*
 

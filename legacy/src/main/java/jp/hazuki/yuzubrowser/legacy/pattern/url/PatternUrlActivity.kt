@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import jp.hazuki.utility.extensions.hideIme
+import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternActivity
 import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingPatternAction
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherFactory
 import kotlinx.android.extensions.LayoutContainer

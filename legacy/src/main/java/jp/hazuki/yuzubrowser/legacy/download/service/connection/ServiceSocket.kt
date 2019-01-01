@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadService
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.service.ServiceBindHelper
 import jp.hazuki.yuzubrowser.legacy.utils.service.ServiceConnectionHelper
 

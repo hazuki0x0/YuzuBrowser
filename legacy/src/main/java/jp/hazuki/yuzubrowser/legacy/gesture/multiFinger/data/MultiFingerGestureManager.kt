@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data
 import android.content.Context
 import com.fasterxml.jackson.core.JsonEncoding
 import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.utility.utils.ArrayUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
 import java.io.IOException

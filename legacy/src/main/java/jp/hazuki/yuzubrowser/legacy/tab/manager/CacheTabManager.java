@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.legacy.tab.manager;
@@ -27,14 +27,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.core.content.res.ResourcesCompat;
-import jp.hazuki.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData;
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView;
+import jp.hazuki.yuzubrowser.webview.CustomWebView;
+import jp.hazuki.yuzubrowser.webview.WebViewFactory;
 
 class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<MainTabData> {
     private int mCurrentNo = -1;
@@ -43,17 +46,18 @@ class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<Ma
 
     private BrowserActivity mWebBrowser;
     private final TabCache<MainTabData> mTabCache;
-    private final TabStorage mTabStorage;
+    @Inject
+    TabStorage mTabStorage;
     private final ThumbnailManager thumbnailManager;
     private final TabFaviconManager tabFaviconManager;
 
     private List<View> mTabView;
     private OnWebViewCreatedListener listener;
 
-    CacheTabManager(BrowserActivity activity) {
+    CacheTabManager(BrowserActivity activity, WebViewFactory factory) {
         mWebBrowser = activity;
         mTabCache = new TabCache<>(AppData.tabs_cache_number.get(), this);
-        mTabStorage = new TabStorage(activity);
+        mTabStorage = new TabStorage(activity, factory);
         mTabView = new ArrayList<>();
         thumbnailManager = new ThumbnailManager(activity);
         tabFaviconManager = new TabFaviconManager(activity);

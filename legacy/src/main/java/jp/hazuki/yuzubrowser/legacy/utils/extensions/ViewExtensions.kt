@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import jp.hazuki.yuzubrowser.legacy.download.core.utils.createFileOpenIntent
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.utils.ui
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

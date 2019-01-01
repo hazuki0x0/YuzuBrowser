@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,10 +112,8 @@ dependencies {
     testImplementation Libs.junit
     androidTestImplementation Libs.espressoCore
 
-    implementation Libs.dagger2
-    annotationProcessor Libs.dagger2_compiler
-    kapt Libs.dagger2_compiler
-    kaptTest Libs.dagger2_compiler
+    implementation Libs.kotshi
+    kapt Libs.kotshi_compiler
 
     implementation Libs.support_appcompat_v7
     implementation Libs.jackson
@@ -123,8 +121,16 @@ dependencies {
         transitive = true
     }
     implementation project(':legacy')
-    implementation project(':utility')
+    implementation project(':core')
     implementation project(':languages')
+    implementation project(':webview')
 
     implementation Libs.kotlin_stdlib
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    implementation Libs.dagger_android
+    implementation Libs.dagger_android_support
+    kapt Libs.dagger_android_processor
 }

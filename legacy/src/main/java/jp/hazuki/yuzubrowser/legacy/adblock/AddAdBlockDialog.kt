@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import android.text.InputType
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
-import jp.hazuki.utility.extensions.density
+import jp.hazuki.yuzubrowser.core.utility.extensions.density
 import jp.hazuki.yuzubrowser.legacy.R
 
 class AddAdBlockDialog : androidx.fragment.app.DialogFragment() {

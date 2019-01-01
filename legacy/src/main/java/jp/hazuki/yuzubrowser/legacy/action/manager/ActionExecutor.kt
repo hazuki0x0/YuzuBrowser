@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ import android.print.PrintManager
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
-import android.webkit.CookieManager
-import android.webkit.URLUtil
-import android.webkit.ValueCallback
-import android.webkit.WebView
+import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.print.PrintHelper
-import jp.hazuki.utility.extensions.clipboardText
+import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -76,10 +76,11 @@ import jp.hazuki.yuzubrowser.legacy.utils.*
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
-import jp.hazuki.yuzubrowser.legacy.webkit.getUserAgent
 import jp.hazuki.yuzubrowser.legacy.webkit.handler.*
 import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
+import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
+import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast
@@ -127,12 +128,12 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
-                        DownloadDialog(url, target.webView.settings.userAgentString)//TODO referer
+                        DownloadDialog(url, target.webView.webSettings.userAgentString)//TODO referer
                                 .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE -> {
-                        val file = DownloadFile(url, null, DownloadRequest(null, target.webView.settings.userAgentString, null))
+                        val file = DownloadFile(url, null, DownloadRequest(null, target.webView.webSettings.userAgentString, null))
                         controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
@@ -194,7 +195,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog(url, target.webView.settings.userAgentString, target.webView.url, ".jpg")
+                        DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
                                 .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
@@ -277,7 +278,9 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
-                        target.webView.requestFocusNodeHref(WebImageHandler(controller.activity, target.webView.settings.userAgentString).obtainMessage())
+                        target.webView.requestFocusNodeHref(WebImageHandler(controller.activity,
+                                target.webView.webSettings.userAgentString
+                                        ?: WebSettings.getDefaultUserAgent(controller.applicationContextInfo)).obtainMessage())
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE -> {
@@ -313,7 +316,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog(url, target.webView.settings.userAgentString, target.webView.url, ".jpg")
+                        DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
                                 .show(controller.activity.supportFragmentManager, "download")
                         return true
                     }
@@ -344,7 +347,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
                         val file = DownloadFile(url, null,
-                                DownloadRequest(target.webView.url, target.webView.settings.userAgentString, ".jpg"))
+                                DownloadRequest(target.webView.url, target.webView.webSettings.userAgentString, ".jpg"))
                         controller.activity.download(getDownloadFolderUri(), file, null)
                         return true
                     }
@@ -468,16 +471,16 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.TOGGLE_JS -> {
                 val web = controller.getTab(actionTarget).mWebView
-                val to = !web.settings.javaScriptEnabled
+                val to = !web.webSettings.javaScriptEnabled
                 Toast.makeText(controller.applicationContextInfo, if (to) R.string.toggle_enable else R.string.toggle_disable, Toast.LENGTH_SHORT).show()
-                web.settings.javaScriptEnabled = to
+                web.webSettings.javaScriptEnabled = to
                 web.reload()
             }
             SingleAction.TOGGLE_IMAGE -> {
                 val web = controller.getTab(actionTarget).mWebView
-                val to = !web.settings.loadsImagesAutomatically
+                val to = !web.webSettings.loadsImagesAutomatically
                 Toast.makeText(controller.applicationContextInfo, if (to) R.string.toggle_enable else R.string.toggle_disable, Toast.LENGTH_SHORT).show()
-                web.settings.loadsImagesAutomatically = to
+                web.webSettings.loadsImagesAutomatically = to
                 web.reload()
             }
             SingleAction.TOGGLE_COOKIE -> {
@@ -769,29 +772,29 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     .show()
             SingleAction.USERAGENT_SETTING -> {
                 val uaIntent = Intent(controller.applicationContextInfo, UserAgentListActivity::class.java)
-                uaIntent.putExtra(Intent.EXTRA_TEXT, controller.getTab(actionTarget).mWebView.settings.userAgentString)
+                uaIntent.putExtra(Intent.EXTRA_TEXT, controller.getTab(actionTarget).mWebView.webSettings.userAgentString)
                 controller.startActivity(uaIntent, BrowserController.REQUEST_USERAGENT)
             }
             SingleAction.TEXTSIZE_SETTING -> {
-                val setting = controller.getTab(actionTarget).mWebView.settings
+                val setting = controller.getTab(actionTarget).mWebView.webSettings
                 SeekBarDialog(controller.activity)
                         .setTitle(R.string.pref_text_size)
                         .setSeekMin(1)
                         .setSeekMax(300)
-                        .setValue(WebViewUtils.getTextSize(setting))
-                        .setPositiveButton(android.R.string.ok) { _, _, value -> WebViewUtils.setTextSize(setting, value) }
+                        .setValue(setting.textZoom)
+                        .setPositiveButton(android.R.string.ok) { _, _, value -> setting.textZoom = value }
                         .setNegativeButton(android.R.string.cancel, null)
                         .show()
             }
             SingleAction.USERJS_SETTING -> controller.startActivity(Intent(controller.applicationContextInfo, UserScriptListActivity::class.java), BrowserController.REQUEST_USERJS_SETTING)
             SingleAction.WEB_ENCODE_SETTING -> {
                 val webEncode = Intent(controller.applicationContextInfo, WebTextEncodeListActivity::class.java)
-                webEncode.putExtra(Intent.EXTRA_TEXT, controller.getTab(actionTarget).mWebView.settings.defaultTextEncodingName)
+                webEncode.putExtra(Intent.EXTRA_TEXT, controller.getTab(actionTarget).mWebView.webSettings.defaultTextEncodingName)
                 controller.startActivity(webEncode, BrowserController.REQUEST_WEB_ENCODE_SETTING)
             }
             SingleAction.DEFALUT_USERAGENT_SETTING -> {
                 val uaIntent = Intent(controller.applicationContextInfo, UserAgentListActivity::class.java)
-                uaIntent.putExtra(Intent.EXTRA_TEXT, controller.getTab(actionTarget).mWebView.settings.userAgentString)
+                uaIntent.putExtra(Intent.EXTRA_TEXT, controller.getTab(actionTarget).mWebView.webSettings.userAgentString)
                 controller.startActivity(uaIntent, BrowserController.REQUEST_DEFAULT_USERAGENT)
             }
             SingleAction.RENDER_SETTING -> {
@@ -960,7 +963,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 val tab = controller.getTab(actionTarget)
                 val intent = Intent(controller.activity, ReaderActivity::class.java)
                 intent.putExtra(Constants.intent.EXTRA_URL, tab.originalUrl)
-                intent.putExtra(Constants.intent.EXTRA_USER_AGENT, tab.mWebView.settings.userAgentString)
+                intent.putExtra(Constants.intent.EXTRA_USER_AGENT, tab.mWebView.webSettings.userAgentString)
                 intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
                 intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
                 startActivity(intent)

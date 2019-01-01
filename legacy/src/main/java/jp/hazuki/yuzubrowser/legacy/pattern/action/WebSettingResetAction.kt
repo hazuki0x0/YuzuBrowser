@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ class WebSettingResetAction(tabData: MainTabData) {
     var patternAction: WebSettingPatternAction? = null
 
     init {
-        val settings = tabData.mWebView.settings
+        val settings = tabData.mWebView.webSettings
         userAgent = settings.userAgentString
         javaScriptEnable = settings.javaScriptEnabled
         navLockEnable = tabData.isNavLock
@@ -37,7 +37,7 @@ class WebSettingResetAction(tabData: MainTabData) {
     }
 
     fun reset(tab: MainTabData) {
-        val settings = tab.mWebView.settings
+        val settings = tab.mWebView.webSettings
 
         settings.userAgentString = userAgent
         settings.javaScriptEnabled = javaScriptEnable

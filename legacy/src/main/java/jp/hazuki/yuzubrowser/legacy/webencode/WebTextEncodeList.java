@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 
 public class WebTextEncodeList extends ArrayList<WebTextEncode> {
     private static final long serialVersionUID = -5725369528478732443L;

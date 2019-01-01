@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.speeddial
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import java.io.Serializable
 
 class WebIcon(val iconBytes: ByteArray) : Serializable {

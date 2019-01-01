@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 Daniel Ciao
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,12 +37,11 @@ import androidx.core.view.ViewCompat
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import com.google.android.material.appbar.AppBarLayout
-import jp.hazuki.utility.extensions.convertDpToPx
+import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
-import jp.hazuki.yuzubrowser.legacy.webkit.listener.OnScrollChangedListener
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
@@ -172,8 +170,6 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
             }
         }
     }
-
-    private val scrollChangedListener: OnScrollChangedListener = { _, _, _, _ -> show(true) }
 
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.WebViewFastScroller, defStyleAttr, defStyleRes)
@@ -321,7 +317,6 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
 
     fun attachWebView(webView: CustomWebView) {
         mWebView = webView
-        webView.setScrollBarListener(scrollChangedListener)
         if (isScrollEnabled)
             webView.webView.isVerticalScrollBarEnabled = false
     }
@@ -329,7 +324,6 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
     fun detachWebView() {
         mWebView?.run {
             view.removeCallbacks(mHide)
-            setScrollBarListener(null)
             webView.isVerticalScrollBarEnabled = true
         }
         mWebView = null
@@ -352,6 +346,10 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
 
     fun setOnHandleTouchListener(listener: View.OnTouchListener) {
         mOnTouchListener = listener
+    }
+
+    fun onPageScroll() {
+        show(true)
     }
 
     /**

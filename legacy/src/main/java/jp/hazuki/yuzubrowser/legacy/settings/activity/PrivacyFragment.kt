@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import jp.hazuki.asyncpermissions.AsyncPermissions
-import jp.hazuki.utility.extensions.startActivity
+import jp.hazuki.yuzubrowser.core.utility.extensions.startActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.legacy.browser.requestLocationPermission

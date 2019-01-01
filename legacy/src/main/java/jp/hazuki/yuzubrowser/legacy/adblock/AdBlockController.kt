@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.adblock
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
-import jp.hazuki.utility.extensions.getNoCacheResponse
+import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.faster.Filter
 import jp.hazuki.yuzubrowser.legacy.adblock.faster.core.AdBlocker

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Region;
 
-import jp.hazuki.utility.extensions.ContextExtensionsKt;
+import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.utils.image.ImageCache;
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView;
+import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
 class ThumbnailManager {
     private final int height;

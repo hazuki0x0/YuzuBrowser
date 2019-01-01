@@ -17,8 +17,9 @@
             <option value="$PROJECT_DIR$/libraries/asyncpermissions" />
             <option value="$PROJECT_DIR$/libraries/colorpicker" />
             <option value="$PROJECT_DIR$/libraries/floatingactionbutton" />
+            <option value="$PROJECT_DIR$/module/core" />
             <option value="$PROJECT_DIR$/module/ui" />
-            <option value="$PROJECT_DIR$/module/utility" />
+            <option value="$PROJECT_DIR$/module/webview" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

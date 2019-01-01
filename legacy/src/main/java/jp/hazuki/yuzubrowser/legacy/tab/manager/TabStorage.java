@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.legacy.tab.manager;
@@ -41,27 +41,29 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import jp.hazuki.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
+import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView;
-import jp.hazuki.yuzubrowser.legacy.webkit.WebViewFactory;
+import jp.hazuki.yuzubrowser.webview.CustomWebView;
+import jp.hazuki.yuzubrowser.webview.WebViewFactory;
 
-class TabStorage {
+public class TabStorage {
     private static final String FILE_TAB_INDEX = "index";
     private static final String FILE_TAB_CURRENT = "current";
     private static final String FILE_TAB_THUMBNAIL_SUFFIX = "_thumb";
     private List<TabIndexData> mTabIndexDataList;
     private final File tabPath;
+    private final WebViewFactory webViewFactory;
     private OnWebViewCreatedListener listener;
 
-    public TabStorage(Context context) {
+    public TabStorage(Context context, WebViewFactory factory) {
         tabPath = context.getDir("tabs", Context.MODE_PRIVATE);
         mTabIndexDataList = loadIndexJson(new File(tabPath, FILE_TAB_INDEX));
+        webViewFactory = factory;
         loadThumbnails();
     }
 
@@ -152,7 +154,7 @@ class TabStorage {
     public MainTabData loadWebView(BrowserActivity webBrowser, TabIndexData data, View tabView) {
         if (data == null) return null;
         Bundle bundle = loadBundle(new File(tabPath, Long.toString(data.getId())));
-        CustomWebView webView = webBrowser.makeWebView(WebViewFactory.getMode(bundle));
+        CustomWebView webView = webBrowser.makeWebView(webViewFactory.getMode(bundle));
         webView.setIdentityId(data.getId());
         MainTabData tab = data.getMainTabData(webView, tabView);
         if (listener != null) {

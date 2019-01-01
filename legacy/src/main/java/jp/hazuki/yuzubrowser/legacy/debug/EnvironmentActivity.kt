@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.debug
 
 import android.os.Bundle
 import android.os.Environment
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.getExternalStorageDirectories
 import kotlinx.android.synthetic.main.environment_activity.*

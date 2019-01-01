@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy.webkit.listener
 
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabData
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 typealias OnScrollChangedListener = (l: Int, t: Int, oldl: Int, oldt: Int) -> Unit
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ import java.net.URI;
 import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.ErrorReportServer;
+import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.Logger;
 
 public class SafeFileProvider extends ContentProvider {
     private static final String TAG = "SafeFileProvider";

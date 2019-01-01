@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.ErrorReportServer;
+import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 import jp.hazuki.yuzubrowser.legacy.search.suggest.ISuggest;
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestBing;
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestDuckDuckGo;
@@ -48,7 +49,6 @@ import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestGoogle;
 import jp.hazuki.yuzubrowser.legacy.search.suggest.Suggestion;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.Logger;
 
 public class SuggestProvider extends ContentProvider {
     private static final String TAG = "GoogleSuggestProvider";

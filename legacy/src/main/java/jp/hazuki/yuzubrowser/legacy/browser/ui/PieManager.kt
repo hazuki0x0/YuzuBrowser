@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.browser.ui
 
 import android.content.Context
 import android.view.ViewGroup
-import jp.hazuki.utility.extensions.density
-import jp.hazuki.utility.extensions.getResColor
+import jp.hazuki.yuzubrowser.core.utility.extensions.density
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController

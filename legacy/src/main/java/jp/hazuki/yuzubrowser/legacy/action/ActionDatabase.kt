@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.text.TextUtils
-import jp.hazuki.yuzubrowser.legacy.utils.Logger
+import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import java.io.File
 
 class ActionDatabase(context: Context, file: File) {

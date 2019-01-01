@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.tab
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager
-import jp.hazuki.yuzubrowser.legacy.webkit.CustomWebView
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class BrowserTabManager(private val tabManager: TabManager, private val controller: BrowserController) : UiTabManager, TabManager by tabManager {
 
