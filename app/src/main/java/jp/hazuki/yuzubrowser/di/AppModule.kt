@@ -20,7 +20,9 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
+import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
+import jp.hazuki.yuzubrowser.webview.kotshi.WebViewJsonAdapterFactory
 import javax.inject.Singleton
 
 @Module
@@ -37,7 +39,8 @@ object AppModule {
     @JvmStatic
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
-                //.add(ApplicationJsonAdapterFactory.INSTANCE)
+                .add(ApplicationJsonAdapterFactory.INSTANCE)
+                .add(WebViewJsonAdapterFactory.INSTANCE)
                 .build()
     }
 }
