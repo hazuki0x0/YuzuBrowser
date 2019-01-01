@@ -873,13 +873,13 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
 
                 val builder = AlertDialog.Builder(controller.activity)
                 if (target is ActionController.HitTestResultTargetInfo) {
-                    builder.setCustomTitle(ContextMenuTitleView(controller.activity, target.result.extra
-                            ?: ""))
+                    builder.setCustomTitle(
+                            ContextMenuTitleView(controller.activity, target.result.extra ?: ""))
                             .setAdapter(
                                     ActionListViewAdapter(controller.activity, actionList, target.actionNameArray)
                             ) { _, which -> checkAndRun(actionList[which], target) }
                 } else {
-                    builder.setCustomTitle(ContextMenuTitleView(controller.activity, tab.url))
+                    builder.setCustomTitle(ContextMenuTitleView(controller.activity, tab.url ?: ""))
                             .setAdapter(
                                     ActionListViewAdapter(controller.activity, actionList, null)
                             ) { _, which -> checkAndRun(actionList[which], target) }
