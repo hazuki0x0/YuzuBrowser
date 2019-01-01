@@ -33,7 +33,7 @@ class SpeedDialManager(val context: Context) {
     val all: ArrayList<SpeedDial>
         @Synchronized get() {
             val db = mOpenHelper.readableDatabase
-            db.query(TABLE_NAME, null, null, null, null, null, COLUMN_ORDER + " asc").use { c ->
+            db.query(TABLE_NAME, null, null, null, null, null, "$COLUMN_ORDER asc").use { c ->
                 val list = ArrayList<SpeedDial>()
                 while (c.moveToNext()) {
                     list.add(SpeedDial(c.getInt(COLUMN_ID_INDEX),
@@ -50,7 +50,7 @@ class SpeedDialManager(val context: Context) {
     val indexData: List<SpeedDialIndex>
         @Synchronized get() {
             val db = mOpenHelper.readableDatabase
-            db.query(TABLE_NAME, arrayOf(COLUMN_ID, COLUMN_URL, COLUMN_TITLE, COLUMN_LAST_UPDATE), null, null, null, null, COLUMN_ORDER + " asc").use { c ->
+            db.query(TABLE_NAME, arrayOf(COLUMN_ID, COLUMN_URL, COLUMN_TITLE, COLUMN_LAST_UPDATE), null, null, null, null, "$COLUMN_ORDER asc").use { c ->
                 val list = arrayListOf<SpeedDialIndex>()
                 while (c.moveToNext()) {
                     list.add(SpeedDialIndex(c.getInt(0), c.getString(1), c.getString(2), c.getLong(3)))
@@ -74,7 +74,7 @@ class SpeedDialManager(val context: Context) {
     val listUpdateTime: Long
         get() {
             val db = mOpenHelper.readableDatabase
-            db.query(INFO_TABLE_NAME, null, INFO_COLUMN_NAME + " = ?", arrayOf(TABLE_NAME), null, null, null, "1").use { c ->
+            db.query(INFO_TABLE_NAME, null, "$INFO_COLUMN_NAME = ?", arrayOf(TABLE_NAME), null, null, null, "1").use { c ->
                 var time: Long = -1
                 if (c.moveToFirst())
                     time = c.getLong(c.getColumnIndex(INFO_COLUMN_LAST_TIME))
@@ -118,7 +118,7 @@ class SpeedDialManager(val context: Context) {
             put(COLUMN_FAVICON, speedDial.isFavicon)
             put(COLUMN_LAST_UPDATE, if (speedDial.isFavicon) -1 else System.currentTimeMillis())
         }
-        db.update(TABLE_NAME, values, COLUMN_ID + " = ?", arrayOf(Integer.toString(speedDial.id)))
+        db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(Integer.toString(speedDial.id)))
     }
 
     @Synchronized
@@ -137,7 +137,7 @@ class SpeedDialManager(val context: Context) {
                             put(COLUMN_ICON, WebIcon.createIcon(icon).iconBytes)
                             put(COLUMN_LAST_UPDATE, System.currentTimeMillis())
                         }
-                        db.update(TABLE_NAME, values, COLUMN_ID + " = ?", arrayOf(Integer.toString(c.getInt(COLUMN_ID_INDEX))))
+                        db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(Integer.toString(c.getInt(COLUMN_ID_INDEX))))
                         updated = true
                     }
                 } while (c.moveToNext())
@@ -161,7 +161,7 @@ class SpeedDialManager(val context: Context) {
     @Synchronized
     operator fun get(id: Int): SpeedDial? {
         val db = mOpenHelper.readableDatabase
-        db.query(TABLE_NAME, null, COLUMN_ID + " = ?", arrayOf(id.toString()), null, null, null).use { c ->
+        db.query(TABLE_NAME, null, "$COLUMN_ID = ?", arrayOf(id.toString()), null, null, null).use { c ->
             if (c.moveToFirst()) {
                 return SpeedDial(c.getInt(COLUMN_ID_INDEX),
                         c.getString(COLUMN_URL_INDEX),
@@ -177,7 +177,7 @@ class SpeedDialManager(val context: Context) {
     @Synchronized
     fun getImage(id: String): ByteArray? {
         val db = mOpenHelper.readableDatabase
-        db.query(TABLE_NAME, arrayOf(COLUMN_ICON), COLUMN_ID + " = " + id, null, null, null, null).use { c ->
+        db.query(TABLE_NAME, arrayOf(COLUMN_ICON), "$COLUMN_ID = $id", null, null, null, null).use { c ->
             if (c.moveToFirst()) {
                 return c.getBlob(0)
             }
@@ -203,18 +203,18 @@ class SpeedDialManager(val context: Context) {
     @Synchronized
     fun delete(id: Int) {
         val db = mOpenHelper.writableDatabase
-        db.delete(TABLE_NAME, COLUMN_ID + " = ?", arrayOf(id.toString()))
+        db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
         updateListTime()
     }
 
     private fun updateListTime() {
         val db = mOpenHelper.writableDatabase
         val values = ContentValues().apply { put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis()) }
-        db.update(INFO_TABLE_NAME, values, INFO_COLUMN_NAME + " = ?", arrayOf(TABLE_NAME))
+        db.update(INFO_TABLE_NAME, values, "$INFO_COLUMN_NAME = ?", arrayOf(TABLE_NAME))
     }
 
     private fun checkUrl(url: String?): Boolean {
-        return !url.isNullOrEmpty() && !url!!.regionMatches(0, "about:", 0, 6, ignoreCase = true)
+        return !url.isNullOrEmpty() && !url.regionMatches(0, "about:", 0, 6, ignoreCase = true)
     }
 
     private class MyOpenHelper private constructor(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -275,8 +275,8 @@ class SpeedDialManager(val context: Context) {
                     db.insert(INFO_TABLE_NAME, null, values)
                 }
                 else -> {
-                    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-                    db.execSQL("DROP TABLE IF EXISTS " + INFO_TABLE_NAME)
+                    db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+                    db.execSQL("DROP TABLE IF EXISTS $INFO_TABLE_NAME")
                     onCreate(db)
                 }
             }

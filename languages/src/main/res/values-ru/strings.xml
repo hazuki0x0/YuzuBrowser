@@ -1,3 +1,19 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="add">Добавить</string>
     <string name="cancel">Отменить</string>
@@ -149,7 +165,6 @@
     <string name="login">Вход</string>
     <string name="edit_action">Изменение действия</string>
     <string name="action_cant_empty">Действие не может быть пустым.</string>
-    <!-- <string name="gesture_exists">Gesto já existe.</string> -->
     <string name="action_empty">Пустое действие</string>
     <string name="gesture_test">Тест жеста</string>
     <string name="move_up">Переместить вверх</string>
@@ -270,6 +285,7 @@
     <string name="geolocation_permissions">Разрешения на геолокацию</string>
     <string name="recent_search_queries">Последние поисковые запросы</string>
     <string name="favicon_cache">Кеш значков</string>
+    <string name="pref_save_tab_for_crash">Сохранять часто открываемые вкладки</string>
     <string name="untitled">Без названия</string>
     <string name="loading_failed">Не удалось загрузить что-либо со страницы.</string>
     <string name="font_not_found">Файл шрифта не найден</string>
@@ -297,4 +313,6 @@
     <string name="breadcrumb">Фрагменты</string>
     <string name="download_failed_root_not_exists">Загрузка невозможна, так как папка назначения загрузки не найдена</string>
     <string name="download_failed_root_not_writable">Загрузка невозможна, поскольку папка назначения загрузки недоступна для записи</string>
+    <string name="reset_all_counts">Сбросить все счётчики</string>
+    <string name="reset_all_counts_mes">Вы уверены, что хотите сбросить все счётчики?</string>
 </resources>

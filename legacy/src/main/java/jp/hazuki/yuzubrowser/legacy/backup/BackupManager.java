@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,18 +76,18 @@ public class BackupManager {
     }
 
     private boolean isBackupFile(File file) {
+        String name = file.getName();
+        if (name.endsWith(".db-journal") || name.endsWith(".db-shm") || name.endsWith(".db-wal")) {
+            return false;
+        }
         switch (file.getName()) {
             case "WebViewChromiumPrefs.xml":
             case "permission.xml":
             case "last_url_2.dat":
             case "webhistory1.db":
-            case "webhistory1.db-journal":
             case "searchsuggest.db":
-            case "searchsuggest.db-journal":
             case "downloadinfolist1.db":
-            case "downloadinfolist1.db-journal":
             case "speeddial1.db":
-            case "speeddial1.db-journal":
                 return false;
             default:
                 return true;

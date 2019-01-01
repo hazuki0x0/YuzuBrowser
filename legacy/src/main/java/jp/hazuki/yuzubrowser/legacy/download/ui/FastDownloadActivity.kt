@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FastDownloadActivity : ThemeActivity() {
 
@@ -54,7 +55,7 @@ class FastDownloadActivity : ThemeActivity() {
         ui {
             val dialog = ProgressDialog(getString(R.string.now_downloading))
             dialog.show(supportFragmentManager, "dialog")
-            val uri = async { download(url, intent.getStringExtra(EXTRA_FILE_REFERER), intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)) }.await()
+            val uri = withContext(Dispatchers.Default) { download(url, intent.getStringExtra(EXTRA_FILE_REFERER), intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)) }
             dialog.dismiss()
             if (uri != null) {
                 val result = Intent()

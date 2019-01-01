@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,7 +171,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                 bundle.putSerializable("file", externalFile)
                 bundle.putSerializable("folder", manager.root)
                 loaderManager.restartLoader(3, bundle, this@ImportExportFragment)
-                progress = ProgressDialog(getString(R.string.restoring)).also {
+                progress = ProgressDialog(getString(R.string.exporting)).also {
                     it.show(childFragmentManager, "progress")
                 }
                 handler.setDialog(progress)
@@ -214,7 +214,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
                 loaderManager.restartLoader(5, bundle, this@ImportExportFragment)
-                progress = ProgressDialog(getString(R.string.restoring)).also {
+                progress = ProgressDialog(getString(R.string.backing_up)).also {
                     it.show(childFragmentManager, "progress")
                 }
                 handler.setDialog(progress)

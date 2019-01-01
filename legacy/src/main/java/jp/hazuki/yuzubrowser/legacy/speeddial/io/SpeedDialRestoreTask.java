@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class SpeedDialRestoreTask extends AsyncTaskLoader<Boolean> {
         if (!from.exists() || !from.canRead()) return Boolean.FALSE;
         File db = getContext().getDatabasePath(SpeedDialManager.DB_NAME);
 
-
+        getContext().deleteDatabase(SpeedDialManager.DB_NAME);
         try (FileInputStream fis = new FileInputStream(from);
              ZipInputStream zis = new ZipInputStream(fis);
              FileOutputStream fos = new FileOutputStream(db)) {
