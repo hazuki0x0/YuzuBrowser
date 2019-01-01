@@ -26,10 +26,8 @@ import android.webkit.WebViewDatabase;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.core.utility.utils.ReflectionUtils;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
 public class WebViewUtils {
@@ -88,20 +86,6 @@ public class WebViewUtils {
             if (bitmap != null)
                 bitmap.recycle();
         }
-    }
-
-    //TODO Remove it
-    @Deprecated
-    public static void enablePlatformNotifications() {
-        Method method = ReflectionUtils.getMethod(WebView.class, "enablePlatformNotifications");
-        ReflectionUtils.invokeMethod(method, null);
-    }
-
-    //TODO Remove it
-    @Deprecated
-    public static void disablePlatformNotifications() {
-        Method method = ReflectionUtils.getMethod(WebView.class, "disablePlatformNotifications");
-        ReflectionUtils.invokeMethod(method, null);
     }
 
     @SuppressWarnings("deprecation")

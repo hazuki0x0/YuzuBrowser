@@ -90,7 +90,6 @@ import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.WebViewFactory
 import jp.hazuki.yuzubrowser.webview.WebViewType
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
-import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
 import javax.inject.Inject
@@ -274,7 +273,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
 
-        WebViewUtils.enablePlatformNotifications()
         WebViewProxy.setProxy(applicationContext, AppData.proxy_set.get(), AppData.proxy_address.get())
 
         connectionStateMonitor.enable(this)
@@ -334,7 +332,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
         WebViewProxy.resetProxy(applicationContext)
-        WebViewUtils.disablePlatformNotifications()
 
         connectionStateMonitor.disable(this)
     }
