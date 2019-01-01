@@ -46,3 +46,12 @@
 -keepclasseswithmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# Moshi
+-keepclassmembers class ** {
+  @com.squareup.moshi.FromJson *;
+  @com.squareup.moshi.ToJson *;
+}
+-dontwarn okio.**
+# JSR 305 annotations
+-dontwarn javax.annotation.**
