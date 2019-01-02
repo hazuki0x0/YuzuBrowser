@@ -19,9 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.action.item
 import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
@@ -31,34 +30,35 @@ import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
 import java.io.IOException
 
 class PasteGoSingleAction : SingleAction, Parcelable {
-    var targetTab: Int = 0
+    var targetTab: Int = BrowserManager.LOAD_URL_TAB_CURRENT
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_TARGET_TAB != parser.currentName) {
-                    parser.skipChildren()
-                    continue
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_TARGET_TAB -> {
+                        if (reader.peek() != JsonReader.Token.NUMBER) return
+                        targetTab = reader.nextInt()
+                    }
+                    else -> reader.skipValue()
                 }
-                if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                targetTab = parser.intValue
             }
-        } else {
-            targetTab = BrowserManager.LOAD_URL_TAB_CURRENT
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeNumberField(FIELD_TARGET_TAB, targetTab)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_TARGET_TAB)
+        writer.value(targetTab)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

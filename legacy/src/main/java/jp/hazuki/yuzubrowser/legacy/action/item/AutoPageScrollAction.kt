@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.legacy.action.item
@@ -22,9 +22,8 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -36,27 +35,28 @@ class AutoPageScrollAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_SPEED == parser.currentName) {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    scrollSpeed = parser.intValue
-                    continue
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_SPEED -> scrollSpeed = reader.nextInt()
+                    else -> reader.skipValue()
                 }
-                parser.skipChildren()
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeNumberField(FIELD_NAME_SPEED, scrollSpeed)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_SPEED)
+        writer.value(scrollSpeed)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

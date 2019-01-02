@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.action.item
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -33,28 +32,31 @@ class VibrationSingleAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_TIME != parser.currentName) {
-                    parser.skipChildren()
-                    continue
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_TIME -> {
+                        if (reader.peek() != JsonReader.Token.NUMBER) return
+                        time = reader.nextInt()
+                    }
+                    else -> reader.skipValue()
                 }
-                if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                time = parser.intValue
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeNumberField(FIELD_NAME_TIME, time)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_TIME)
+        writer.value(time)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

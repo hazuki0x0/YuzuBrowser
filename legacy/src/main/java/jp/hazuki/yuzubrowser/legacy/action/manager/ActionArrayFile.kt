@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package jp.hazuki.yuzubrowser.legacy.action.manager
 
 import android.content.Context
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.action.ActionFile
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import java.io.File
@@ -36,13 +36,13 @@ class ActionArrayFile(private val FOLDER_NAME: String, private val id: Int) : Ac
     }
 
     @Throws(IOException::class)
-    override fun load(parser: JsonParser): Boolean {
-        return list.loadAction(parser)
+    override fun load(reader: JsonReader): Boolean {
+        return list.loadAction(reader)
     }
 
     @Throws(IOException::class)
-    override fun write(generator: JsonGenerator): Boolean {
-        list.writeAction(generator)
+    override fun write(writer: JsonWriter): Boolean {
+        list.writeAction(writer)
         return true
     }
 

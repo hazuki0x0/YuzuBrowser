@@ -20,10 +20,8 @@ import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
 import android.widget.CheckBox
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -35,31 +33,34 @@ class MousePointerSingleAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_BACK_FINISH != parser.currentName) {
-                    parser.skipChildren()
-                    continue
-                }
-                when (parser.nextToken()) {
-                    JsonToken.VALUE_TRUE -> isBackFinish = true
-                    JsonToken.VALUE_FALSE -> isBackFinish = false
-                    else -> Logger.w(TAG, "current token is not boolean value : " + parser.currentToken.toString())
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_BACK_FINISH -> {
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.skipValue()
+                        } else {
+                            isBackFinish = reader.nextBoolean()
+                        }
+                    }
+                    else -> reader.skipValue()
                 }
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeBooleanField(FIELD_NAME_BACK_FINISH, isBackFinish)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_BACK_FINISH)
+        writer.value(isBackFinish)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

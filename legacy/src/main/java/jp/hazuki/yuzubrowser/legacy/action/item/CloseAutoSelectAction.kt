@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.action.item
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -38,30 +37,29 @@ class CloseAutoSelectAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
+    constructor(id: Int, reader: JsonReader?) : super(id) {
         defaultAction = Action()
         intentAction = Action()
         windowAction = Action()
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (DEFAULT == parser.currentName) {
-                    defaultAction.loadAction(parser)
-                    continue
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    DEFAULT -> {
+                        defaultAction.loadAction(reader)
+                    }
+                    INTENT -> {
+                        intentAction.loadAction(reader)
+                    }
+                    WINDOW -> {
+                        windowAction.loadAction(reader)
+                    }
+                    else -> reader.skipValue()
                 }
-                if (INTENT == parser.currentName) {
-                    intentAction.loadAction(parser)
-                    continue
-                }
-                if (WINDOW == parser.currentName) {
-                    windowAction.loadAction(parser)
-                    continue
-                }
-
-                parser.skipChildren()
             }
+            reader.endObject()
         } else {
             defaultAction.add(SingleAction.makeInstance(SingleAction.CLOSE_TAB))
             intentAction.add(CloseTabSingleAction())
@@ -71,13 +69,16 @@ class CloseAutoSelectAction : SingleAction, Parcelable {
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        defaultAction.writeAction(DEFAULT, generator)
-        intentAction.writeAction(INTENT, generator)
-        windowAction.writeAction(WINDOW, generator)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(DEFAULT)
+        defaultAction.writeAction(writer)
+        writer.name(INTENT)
+        intentAction.writeAction(writer)
+        writer.name(WINDOW)
+        windowAction.writeAction(writer)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

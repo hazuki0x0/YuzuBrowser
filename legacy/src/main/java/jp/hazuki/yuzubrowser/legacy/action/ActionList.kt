@@ -18,19 +18,16 @@ package jp.hazuki.yuzubrowser.legacy.action
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.utils.util.JsonConvertable
+import okio.Buffer
 import java.io.IOException
-import java.io.StringWriter
 import java.util.*
 
 class ActionList : ArrayList<Action>, Parcelable, JsonConvertable {
 
-    constructor() : super() {}
+    constructor() : super()
 
     constructor(jsonStr: String) : super() {
         fromJsonString(jsonStr)
@@ -53,60 +50,46 @@ class ActionList : ArrayList<Action>, Parcelable, JsonConvertable {
     }
 
     @Throws(IOException::class)
-    fun writeAction(field_name: String, generator: JsonGenerator) {
-        generator.writeFieldName(field_name)
-        writeAction(generator)
-    }
-
-    @Throws(IOException::class)
-    fun writeAction(generator: JsonGenerator) {
-        generator.writeStartArray()
+    fun writeAction(writer: JsonWriter) {
+        writer.beginArray()
         for (action in this) {
-            action.writeAction(generator)
+            action.writeAction(writer)
         }
-        generator.writeEndArray()
+        writer.endArray()
     }
 
     @Throws(IOException::class)
-    fun loadAction(parser: JsonParser): Boolean {
-        if (parser.nextToken() != JsonToken.START_ARRAY) return false
-        while (true) {
+    fun loadAction(reader: JsonReader): Boolean {
+        if (reader.peek() != JsonReader.Token.BEGIN_ARRAY) return false
+        reader.beginArray()
+        while (reader.hasNext()) {
             val action = Action()
-            if (!action.loadAction(parser)) {
-                return if (parser.currentToken == JsonToken.END_ARRAY)
+            if (!action.loadAction(reader)) {
+                return if (reader.peek() == JsonReader.Token.END_ARRAY)
                     break
                 else
                     false
             }
             add(action)
         }
+        reader.endArray()
         return true
     }
 
     override fun toJsonString(): String? {
-        try {
-            val writer = StringWriter()
-            JsonUtils.getFactory().createGenerator(writer).use {
-                writeAction(it)
-            }
-            return writer.toString()
-        } catch (e: IOException) {
-            ErrorReport.printAndWriteLog(e)
+        val buffer = Buffer()
+        JsonWriter.of(buffer).use {
+            writeAction(it)
         }
-        return null
+        return buffer.readUtf8()
     }
 
     override fun fromJsonString(str: String): Boolean {
         clear()
 
-        try {
-            JsonUtils.getFactory().createParser(str).use {
-                return loadAction(it)
-            }
-        } catch (e: IOException) {
-            ErrorReport.printAndWriteLog(e)
+        JsonReader.of(Buffer().writeUtf8(str)).use {
+            return loadAction(it)
         }
-        return false
     }
 
     companion object {

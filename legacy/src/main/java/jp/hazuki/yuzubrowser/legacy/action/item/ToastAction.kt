@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
 import android.widget.EditText
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -36,28 +35,31 @@ class ToastAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_TEXT == parser.currentName) {
-                    if (parser.nextToken() == JsonToken.VALUE_STRING)
-                        text = parser.text
-                    continue
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_TEXT -> {
+                        if (reader.peek() != JsonReader.Token.STRING) return
+                        text = reader.nextString()
+                    }
+                    else -> reader.skipValue()
                 }
-                parser.skipChildren()
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeStringField(FIELD_TEXT, text)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_TEXT)
+        writer.value(text)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

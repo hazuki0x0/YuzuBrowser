@@ -17,11 +17,11 @@
 package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data
 
 import android.content.Context
-import com.fasterxml.jackson.core.JsonEncoding
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.action.Action
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
+import okio.Okio
 import java.io.IOException
 import java.util.*
 
@@ -72,73 +72,73 @@ class MultiFingerGestureManager(context: Context) {
         gestureItems.clear()
         if (jsonFile == null || !jsonFile.exists() || jsonFile.isDirectory) return
         try {
-            JsonUtils.getFactory().createParser(jsonFile).use { parser ->
-                if (parser.nextToken() == JsonToken.START_ARRAY) {
-                    while (parser.nextToken() != JsonToken.END_ARRAY) {
-                        if (parser.currentToken == JsonToken.START_OBJECT) {
+            JsonReader.of(Okio.buffer(Okio.source(jsonFile))).use { reader ->
+                if (reader.peek() == JsonReader.Token.BEGIN_ARRAY) {
+                    reader.beginArray()
+                    while (reader.hasNext()) {
+                        if (reader.peek() == JsonReader.Token.BEGIN_OBJECT) {
+                            reader.beginObject()
                             val item = MultiFingerGestureItem()
-                            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                                val name = parser.currentName
-                                if (name != null) {
-                                    when (name) {
-                                        JSON_FINGERS -> {
-                                            parser.nextToken()
-                                            item.fingers = parser.intValue
-                                        }
-                                        JSON_TRACES -> if (parser.nextToken() == JsonToken.START_ARRAY) {
-                                            while (parser.nextToken() != JsonToken.END_ARRAY) {
-                                                item.addTrace(parser.intValue)
-                                            }
-                                        } else {
-                                            parser.skipChildren()
-                                        }
-                                        JSON_ACTION -> {
-                                            val action = Action()
-                                            action.loadAction(parser)
-                                            item.action = action
-                                        }
-                                        else -> parser.skipChildren()
+                            while (reader.hasNext()) {
+                                when (reader.nextName()) {
+                                    JSON_FINGERS -> {
+                                        item.fingers = reader.nextInt()
                                     }
+                                    JSON_TRACES -> if (reader.peek() == JsonReader.Token.BEGIN_ARRAY) {
+                                        reader.beginArray()
+                                        while (reader.hasNext()) {
+                                            item.addTrace(reader.nextInt())
+                                        }
+                                        reader.endArray()
+                                    } else {
+                                        reader.skipValue()
+                                    }
+                                    JSON_ACTION -> {
+                                        val action = Action()
+                                        action.loadAction(reader)
+                                        item.action = action
+                                    }
+                                    else -> reader.skipValue()
                                 }
                             }
                             gestureItems.add(item)
+                            reader.endObject()
                         } else {
-                            parser.skipChildren()
+                            reader.skipValue()
                         }
                     }
+                    reader.endArray()
                 }
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 
     fun save() {
         try {
-            JsonUtils.getFactory().createGenerator(jsonFile, JsonEncoding.UTF8).use { generator ->
-                generator.writeStartArray()
-                for (item in gestureItems) {
-                    generator.writeStartObject()
+            JsonWriter.of(Okio.buffer(Okio.sink(jsonFile))).use { writer ->
+                writer.beginArray()
+                gestureItems.forEach { item ->
+                    writer.beginObject()
 
-                    generator.writeNumberField(JSON_FINGERS, item.fingers)
+                    writer.name(JSON_FINGERS)
+                    writer.value(item.fingers)
 
                     // finger actions
-                    generator.writeFieldName(JSON_TRACES)
-                    generator.writeStartArray()
-                    for (i in item.traces) {
-                        generator.writeNumber(i)
-                    }
-                    generator.writeEndArray()
+                    writer.name(JSON_TRACES)
+                    writer.beginArray()
+                    item.traces.forEach { writer.value(it) }
+                    writer.endArray()
 
                     // browser action
-                    generator.writeFieldName(JSON_ACTION)
-                    item.action.writeAction(generator)
+                    writer.name(JSON_ACTION)
+                    item.action.writeAction(writer)
 
-                    generator.writeEndObject()
+                    writer.endObject()
                 }
-                generator.writeEndArray()
-                generator.flush()
+                writer.endArray()
+                writer.flush()
             }
         } catch (e: IOException) {
             e.printStackTrace()

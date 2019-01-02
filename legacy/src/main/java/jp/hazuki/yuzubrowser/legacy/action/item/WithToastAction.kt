@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
 import android.widget.Switch
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -49,23 +48,30 @@ class WithToastAction private constructor(id: Int) : SingleAction(id), Parcelabl
     var showToast = false
         private set
 
-    constructor(id: Int, parser: JsonParser?) : this(id) {
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (FIELD_SHOW_TOAST == parser.currentName) {
-                    if (parser.nextValue().isBoolean)
-                        showToast = parser.booleanValue
+    constructor(id: Int, reader: JsonReader?) : this(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_SHOW_TOAST -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        showToast = reader.nextBoolean()
+                    }
+                    else -> reader.skipValue()
                 }
             }
+            reader.endObject()
         }
     }
 
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeBooleanField(FIELD_SHOW_TOAST, showToast)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_SHOW_TOAST)
+        writer.value(showToast)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

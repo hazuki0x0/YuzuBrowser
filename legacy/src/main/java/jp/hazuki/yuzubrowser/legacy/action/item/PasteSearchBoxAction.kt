@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
 import android.widget.CheckBox
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -38,33 +37,37 @@ class PasteSearchBoxAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (FIELD_OPEN_NEW_TAB == parser.currentName) {
-                    if (parser.nextValue().isBoolean)
-                        isOpenNewTab = parser.booleanValue
-                }
-                if (FIELD_REVERSE == parser.currentName) {
-                    if (parser.nextValue().isBoolean)
-                        isReverse = parser.booleanValue
-                }
-
-                if (parser.currentToken == JsonToken.START_OBJECT || parser.currentToken == JsonToken.START_ARRAY) {
-                    parser.skipChildren()
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_OPEN_NEW_TAB -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        isOpenNewTab = reader.nextBoolean()
+                    }
+                    FIELD_REVERSE -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        isReverse = reader.nextBoolean()
+                    }
+                    else -> reader.skipValue()
                 }
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeBooleanField(FIELD_OPEN_NEW_TAB, isOpenNewTab)
-        generator.writeBooleanField(FIELD_REVERSE, isReverse)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_OPEN_NEW_TAB)
+        writer.value(isOpenNewTab)
+        writer.name(FIELD_REVERSE)
+        writer.value(isReverse)
+        writer.endObject()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

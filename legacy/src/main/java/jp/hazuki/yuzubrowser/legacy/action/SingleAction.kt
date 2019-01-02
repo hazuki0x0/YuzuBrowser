@@ -18,8 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.action
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.action.item.*
 import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivitySingleAction
@@ -50,14 +50,14 @@ open class SingleAction : Parcelable {
 
     //node can be null
     @Throws(IOException::class)
-    private constructor(id: Int, parser: JsonParser?) : this(id) {
-        parser?.nextToken()
+    private constructor(id: Int, reader: JsonReader?) : this(id) {
+        reader?.skipValue()
     }
 
     @Throws(IOException::class)
-    open fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeNull()
+    open fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.nullValue()
     }
 
     open fun showMainPreference(context: ActionActivity): StartActivityInfo? {
@@ -237,7 +237,7 @@ open class SingleAction : Parcelable {
         }
 
         @Throws(IOException::class)
-        fun makeInstance(id: Int, parser: JsonParser?): SingleAction {
+        fun makeInstance(id: Int, parser: JsonReader?): SingleAction {
             return when (id) {
                 GO_BACK -> GoBackSingleAction(id, parser)
                 PAGE_SCROLL -> WebScrollSingleAction(id, parser)

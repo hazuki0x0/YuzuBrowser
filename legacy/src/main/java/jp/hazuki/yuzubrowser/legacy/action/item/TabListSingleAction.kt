@@ -21,10 +21,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
 import android.widget.Spinner
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -40,45 +38,43 @@ class TabListSingleAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                when (parser.currentName) {
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
                     FIELD_NAME_REVERSE -> {
-                        when (parser.nextToken()) {
-                            JsonToken.VALUE_TRUE -> mode = MODE_REVERSE
-                            JsonToken.VALUE_FALSE -> mode = MODE_NORMAL
-                            else -> Logger.w(TAG, "current token is not boolean value : " + parser.currentToken.toString())
-                        }
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        mode = if (reader.nextBoolean()) MODE_REVERSE else MODE_NORMAL
                     }
                     FIELD_NAME_MODE -> {
-                        if (parser.nextValue().isNumeric)
-                            mode = parser.intValue
-                    }
-                    FIELD_NAME_LEFT_BUTTON -> {
-                        if (parser.nextValue().isBoolean)
-                            isLeftButton = parser.booleanValue
+                        if (reader.peek() != JsonReader.Token.NUMBER) return
+                        mode = reader.nextInt()
                     }
                     FIELD_NAME_LAST_TAB_MODE -> {
-                        if (parser.nextValue().isNumeric)
-                            lastTabMode = parser.intValue
+                        if (reader.peek() != JsonReader.Token.NUMBER) return
+                        lastTabMode = reader.nextInt()
                     }
-                    else -> parser.skipChildren()
+                    else -> reader.skipValue()
                 }
-
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeNumberField(FIELD_NAME_MODE, mode)
-        generator.writeBooleanField(FIELD_NAME_LEFT_BUTTON, isLeftButton)
-        generator.writeNumberField(FIELD_NAME_LAST_TAB_MODE, lastTabMode)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_MODE)
+        writer.value(mode)
+        writer.name(FIELD_NAME_LEFT_BUTTON)
+        writer.value(isLeftButton)
+        writer.name(FIELD_NAME_LAST_TAB_MODE)
+        writer.value(lastTabMode)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

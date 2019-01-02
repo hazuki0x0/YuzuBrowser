@@ -21,10 +21,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
 import android.widget.CheckBox
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
@@ -38,40 +36,37 @@ class FinishSingleAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_ALERT == parser.currentName) {
-                    when (parser.nextToken()) {
-                        JsonToken.VALUE_TRUE -> isShowAlert = true
-                        JsonToken.VALUE_FALSE -> isShowAlert = false
-                        else -> Logger.w(TAG, "current token is not boolean value : " + parser.currentToken.toString())
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_ALERT -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        isShowAlert = reader.nextBoolean()
                     }
-                    continue
-                }
-                if (FIELD_NAME_CLOSE_TAB == parser.currentName) {
-                    when (parser.nextToken()) {
-                        JsonToken.VALUE_TRUE -> isCloseTab = true
-                        JsonToken.VALUE_FALSE -> isCloseTab = false
-                        else -> Logger.w(TAG, "current token is not boolean value : " + parser.currentToken.toString())
+                    FIELD_NAME_CLOSE_TAB -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        isCloseTab = reader.nextBoolean()
                     }
-                    continue
+                    else -> reader.skipValue()
                 }
-                parser.skipChildren()
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeBooleanField(FIELD_NAME_ALERT, isShowAlert)
-        generator.writeBooleanField(FIELD_NAME_CLOSE_TAB, isCloseTab)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_ALERT)
+        writer.value(isShowAlert)
+        writer.name(FIELD_NAME_CLOSE_TAB)
+        writer.value(isCloseTab)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

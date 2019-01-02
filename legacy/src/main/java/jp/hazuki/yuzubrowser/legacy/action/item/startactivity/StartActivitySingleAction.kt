@@ -28,9 +28,9 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import android.util.Base64
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
@@ -49,55 +49,56 @@ class StartActivitySingleAction : SingleAction, Parcelable {
     private var mIconCache: WeakReference<Drawable>? = null
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_INTENT == parser.currentName) {
-                    when (parser.nextToken()) {
-                        JsonToken.VALUE_STRING -> try {
-                            mIntent = Intent.parseUri(parser.text, 0)
-                        } catch (e: URISyntaxException) {
-                            ErrorReport.printAndWriteLog(e)
-                        }
-                        else -> {
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_INTENT -> {
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.skipValue()
+                        } else {
+                            try {
+                                mIntent = Intent.parseUri(reader.nextString(), 0)
+                            } catch (e: URISyntaxException) {
+                                ErrorReport.printAndWriteLog(e)
+                            }
                         }
                     }
-                    continue
+                    FIELD_NAME_ACTION_NAME -> {
+                        if (reader.peek() != JsonReader.Token.STRING) return
+                        mName = reader.nextString()
+                    }
+                    FIELD_NAME_ACTION_ICON -> {
+                        if (reader.peek() != JsonReader.Token.STRING) return
+                        mIcon = ImageUtils.convertToBitmap(Base64.decode(reader.nextString(), Base64.DEFAULT))
+                    }
+                    else -> reader.skipValue()
                 }
-                if (FIELD_NAME_ACTION_NAME == parser.currentName) {
-                    if (parser.nextToken() != JsonToken.VALUE_STRING) return
-                    mName = parser.text
-                    continue
-                }
-                if (FIELD_NAME_ACTION_ICON == parser.currentName) {
-                    if (parser.nextToken() != JsonToken.VALUE_STRING) return
-                    mIcon = ImageUtils.convertToBitmap(parser.binaryValue)
-                    continue
-                }
-                parser.skipChildren()
             }
-        } else {
-            mIntent = null
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        if (mIntent == null)
-            generator.writeNullField(FIELD_NAME_INTENT)
-        else {
-            generator.writeStringField(FIELD_NAME_INTENT, mIntent!!.toUri(0))
-            if (mName != null)
-                generator.writeStringField(FIELD_NAME_ACTION_NAME, mName)
-            if (mIcon != null)
-                generator.writeBinaryField(FIELD_NAME_ACTION_ICON, ImageUtils.convertToByteArray(mIcon))
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_INTENT)
+        writer.value(mIntent?.toUri(0))
+        val name = mName
+        if (name != null) {
+            writer.name(FIELD_NAME_ACTION_NAME)
+            writer.value(name)
         }
-        generator.writeEndObject()
+        if (mIcon != null) {
+            val icon = Base64.encodeToString(ImageUtils.convertToByteArray(mIcon), Base64.DEFAULT)
+            writer.name(FIELD_NAME_ACTION_ICON)
+            writer.value(icon)
+        }
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

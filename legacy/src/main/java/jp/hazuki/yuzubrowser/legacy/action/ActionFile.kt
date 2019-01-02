@@ -17,12 +17,14 @@
 package jp.hazuki.yuzubrowser.legacy.action
 
 import android.content.Context
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
-import java.io.*
+import okio.Okio
+import java.io.File
+import java.io.IOException
+import java.io.Serializable
 
 abstract class ActionFile : Serializable {
 
@@ -37,7 +39,7 @@ abstract class ActionFile : Serializable {
         if (!file.exists() || file.isDirectory) return true
 
         try {
-            JsonUtils.getFactory().createParser(BufferedInputStream(FileInputStream(file))).use {
+            JsonReader.of(Okio.buffer(Okio.source(file))).use {
                 if (!load(it)) {
                     Logger.e(TAG, "loadMain error (return false)")
                     return false
@@ -52,17 +54,18 @@ abstract class ActionFile : Serializable {
     }
 
     @Throws(IOException::class)
-    abstract fun load(parser: JsonParser): Boolean
+    abstract fun load(reader: JsonReader): Boolean
 
     fun write(context: Context): Boolean {
         val file = getFile(context)
 
         try {
-            JsonUtils.getFactory().createGenerator(BufferedOutputStream(FileOutputStream(file))).use {
+            JsonWriter.of(Okio.buffer(Okio.sink(file))).use {
                 if (!write(it)) {
                     Logger.e(TAG, "writeMain error (return false)")
                     return false
                 }
+                it.flush()
                 return true
             }
         } catch (e: IOException) {
@@ -72,7 +75,7 @@ abstract class ActionFile : Serializable {
     }
 
     @Throws(IOException::class)
-    abstract fun write(generator: JsonGenerator): Boolean
+    abstract fun write(writer: JsonWriter): Boolean
 
     companion object {
         private const val serialVersionUID = 9159377694255234638L

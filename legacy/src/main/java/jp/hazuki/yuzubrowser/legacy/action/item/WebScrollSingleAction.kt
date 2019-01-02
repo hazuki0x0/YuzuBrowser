@@ -27,9 +27,8 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.extensions.density
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
@@ -64,40 +63,35 @@ class WebScrollSingleAction : SingleAction, Parcelable {
         }
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
+    constructor(id: Int, reader: JsonReader?) : super(id) {
 
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_TYPE == parser.currentName) {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    mType = parser.intValue
-                    continue
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_TYPE -> mType = reader.nextInt()
+                    FIELD_NAME_X -> mX = reader.nextInt()
+                    FIELD_NAME_Y -> mY = reader.nextInt()
+                    else -> reader.skipValue()
                 }
-                if (FIELD_NAME_X == parser.currentName) {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    mX = parser.intValue
-                    continue
-                }
-                if (FIELD_NAME_Y == parser.currentName) {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    mY = parser.intValue
-                    continue
-                }
-                parser.skipChildren()
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeNumberField(FIELD_NAME_TYPE, mType)
-        generator.writeNumberField(FIELD_NAME_X, mX)
-        generator.writeNumberField(FIELD_NAME_Y, mY)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_TYPE)
+        writer.value(mType)
+        writer.name(FIELD_NAME_X)
+        writer.value(mX)
+        writer.name(FIELD_NAME_Y)
+        writer.value(mY)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

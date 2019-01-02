@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.action.item
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
@@ -33,19 +32,19 @@ class CloseTabSingleAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
+    constructor(id: Int, reader: JsonReader?) : super(id) {
         defaultAction = Action()
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_ACTION != parser.currentName) {
-                    parser.skipChildren()
-                    continue
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_ACTION -> defaultAction.loadAction(reader)
+                    else -> reader.skipValue()
                 }
-                defaultAction.loadAction(parser)
             }
+            reader.endObject()
         } else {
             defaultAction.add(SingleAction.makeInstance(SingleAction.FINISH))
         }
@@ -57,11 +56,12 @@ class CloseTabSingleAction : SingleAction, Parcelable {
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        defaultAction.writeAction(FIELD_NAME_ACTION, generator)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_ACTION)
+        defaultAction.writeAction(writer)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

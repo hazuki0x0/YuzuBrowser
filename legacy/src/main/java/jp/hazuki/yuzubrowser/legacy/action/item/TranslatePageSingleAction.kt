@@ -22,9 +22,8 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
@@ -38,40 +37,37 @@ class TranslatePageSingleAction : SingleAction, Parcelable {
         private set
 
     @Throws(IOException::class)
-    constructor(id: Int, parser: JsonParser?) : super(id) {
-
-        if (parser != null) {
-            if (parser.nextToken() != JsonToken.START_OBJECT) return
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME) return
-                if (FIELD_NAME_FROM == parser.currentName) {
-                    when (parser.nextToken()) {
-                        JsonToken.VALUE_STRING -> translateFrom = parser.text
-                        else -> {
-                        }
+    constructor(id: Int, reader: JsonReader?) : super(id) {
+        if (reader != null) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME) return
+                when (reader.nextName()) {
+                    FIELD_NAME_FROM -> {
+                        if (reader.peek() != JsonReader.Token.STRING) return
+                        translateFrom = reader.nextString()
                     }
-                    continue
-                }
-                if (FIELD_NAME_TO == parser.currentName) {
-                    when (parser.nextToken()) {
-                        JsonToken.VALUE_STRING -> translateTo = parser.text
-                        else -> {
-                        }
+                    FIELD_NAME_TO -> {
+                        if (reader.peek() != JsonReader.Token.STRING) return
+                        translateTo = reader.nextString()
                     }
-                    continue
+                    else -> reader.skipValue()
                 }
-                parser.skipChildren()
             }
+            reader.endObject()
         }
     }
 
     @Throws(IOException::class)
-    override fun writeIdAndData(generator: JsonGenerator) {
-        generator.writeNumber(id)
-        generator.writeStartObject()
-        generator.writeStringField(FIELD_NAME_FROM, translateFrom)
-        generator.writeStringField(FIELD_NAME_TO, translateTo)
-        generator.writeEndObject()
+    override fun writeIdAndData(writer: JsonWriter) {
+        writer.value(id)
+        writer.beginObject()
+        writer.name(FIELD_NAME_FROM)
+        writer.value(translateFrom)
+        writer.name(FIELD_NAME_TO)
+        writer.value(translateTo)
+        writer.endObject()
     }
 
     override fun describeContents(): Int {

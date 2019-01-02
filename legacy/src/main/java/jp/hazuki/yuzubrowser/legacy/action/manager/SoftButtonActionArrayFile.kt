@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 package jp.hazuki.yuzubrowser.legacy.action.manager
 
 import android.content.Context
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.action.ActionFile
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import java.io.File
@@ -77,28 +76,28 @@ class SoftButtonActionArrayFile(private val FOLDER_NAME: String, private val id:
     }
 
     @Throws(IOException::class)
-    override fun load(parser: JsonParser): Boolean {
-        if (parser.nextToken() != JsonToken.START_ARRAY) return false
-        while (true) {
+    override fun load(reader: JsonReader): Boolean {
+        if (reader.peek() != JsonReader.Token.BEGIN_ARRAY) return false
+        reader.beginArray()
+        while (reader.hasNext()) {
             val action = SoftButtonActionFile()
-            if (!action.load(parser)) {
-                return if (parser.currentToken == JsonToken.END_ARRAY)
+            if (!action.load(reader)) {
+                return if (reader.peek() == JsonReader.Token.END_ARRAY)
                     break
                 else
                     false
             }
             list.add(action)
         }
+        reader.endArray()
         return true
     }
 
     @Throws(IOException::class)
-    override fun write(generator: JsonGenerator): Boolean {
-        generator.writeStartArray()
-        for (action in list) {
-            action.write(generator)
-        }
-        generator.writeEndArray()
+    override fun write(writer: JsonWriter): Boolean {
+        writer.beginArray()
+        list.forEach { it.write(writer) }
+        writer.endArray()
         return true
     }
 
