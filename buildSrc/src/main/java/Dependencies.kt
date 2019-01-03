@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright (C) 2017-2019 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 object Build {
     const val compile_sdk_version = 28
     const val build_tools_version = "28.0.3"
@@ -33,6 +49,7 @@ object Versions {
     const val dagger = "2.20"
     const val kotshi = "1.0.6"
     const val jackson = "2.9.5"
+    const val okhttp = "3.12.1"
     const val kvs_schema = "5.1.0"
     const val kotlin = "1.3.11"
     const val kotlin_coroutines = "1.1.0"
@@ -55,6 +72,7 @@ object Libs {
     val jackson = "com.fasterxml.jackson.core:jackson-databind:${Versions.jackson}"
     val kotshi = "se.ansman.kotshi:api:${Versions.kotshi}"
     val kotshi_compiler = "se.ansman.kotshi:compiler:${Versions.kotshi}"
+    val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
 
     //Kotlin
     val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"

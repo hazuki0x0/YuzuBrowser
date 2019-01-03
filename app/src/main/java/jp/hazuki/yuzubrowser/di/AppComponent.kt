@@ -29,7 +29,8 @@ import javax.inject.Singleton
     AndroidInjectionModule::class,
     AppModule::class,
     WebViewModule::class,
-    ActivityModule::class
+    ActivityModule::class,
+    ProviderModule::class
 ])
 interface AppComponent : AndroidInjector<YuzuBrowserApplication> {
 

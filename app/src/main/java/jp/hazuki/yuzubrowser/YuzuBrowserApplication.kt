@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser
 
 import android.app.Activity
 import android.app.Application
+import android.content.ContentProvider
 import android.content.Context
 import android.webkit.WebView
 import com.crashlytics.android.Crashlytics
@@ -26,6 +27,7 @@ import com.crashlytics.android.core.CrashlyticsCore
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import dagger.android.HasContentProviderInjector
 import io.fabric.sdk.android.Fabric
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
@@ -36,7 +38,8 @@ import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.provider.ProviderManager
 import javax.inject.Inject
 
-class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInjector {
+class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInjector, HasContentProviderInjector {
+
     override val applicationId = BuildConfig.APPLICATION_ID
     override val permissionAppSignature = PERMISSION_MYAPP_SIGNATURE
     override val browserState = BrowserStateImpl()
@@ -44,7 +47,9 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInj
     override val context: Context
         get() = this
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidActivityInjector: DispatchingAndroidInjector<Activity>
+    @Inject
+    lateinit var dispatchingAndroidContentProviderInjector: DispatchingAndroidInjector<ContentProvider>
 
     override fun onCreate() {
         super.onCreate()
@@ -65,6 +70,10 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInj
             WebView.enableSlowWholeDocumentDraw()
         }
         Logger.isDebug = BuildConfig.DEBUG
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
 
         DaggerAppComponent.builder()
                 .create(this)
@@ -72,7 +81,11 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInj
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {
-        return dispatchingAndroidInjector
+        return dispatchingAndroidActivityInjector
+    }
+
+    override fun contentProviderInjector(): AndroidInjector<ContentProvider> {
+        return dispatchingAndroidContentProviderInjector
     }
 
     companion object {

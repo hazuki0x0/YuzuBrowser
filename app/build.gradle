@@ -114,6 +114,7 @@ dependencies {
 
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
+    implementation Libs.okhttp
 
     implementation Libs.support_appcompat_v7
     implementation Libs.jackson

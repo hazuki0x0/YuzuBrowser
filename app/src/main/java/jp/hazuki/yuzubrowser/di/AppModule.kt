@@ -23,6 +23,8 @@ import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.webview.kotshi.WebViewJsonAdapterFactory
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -41,6 +43,17 @@ object AppModule {
         return Moshi.Builder()
                 .add(ApplicationJsonAdapterFactory.INSTANCE)
                 .add(WebViewJsonAdapterFactory.INSTANCE)
+                .build()
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
                 .build()
     }
 }
