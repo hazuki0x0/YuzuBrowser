@@ -17,9 +17,13 @@
 package jp.hazuki.yuzubrowser.legacy.bookmark
 
 import android.content.Context
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
-import java.io.*
+import okio.Okio
+import java.io.File
+import java.io.IOException
+import java.io.Serializable
 import java.util.regex.Pattern
 
 class BookmarkManager private constructor(context: Context) : Serializable {
@@ -51,13 +55,10 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         if (!file.exists() || file.isDirectory) return true
 
         try {
-            BufferedInputStream(FileInputStream(file)).use { `is` ->
-
-                val parser = JsonUtils.getFactory().createParser(`is`)
-                root.readForRoot(parser)
-                parser.close()
-
+            JsonReader.of(Okio.buffer(Okio.source(file))).use {
+                root.readForRoot(it)
                 createIndex()
+
                 return true
             }
         } catch (e: IOException) {
@@ -72,11 +73,8 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         }
 
         try {
-            BufferedOutputStream(FileOutputStream(file)).use { os ->
-
-                val generator = JsonUtils.getFactory().createGenerator(os)
-                root.writeForRoot(generator)
-                generator.close()
+            JsonWriter.of(Okio.buffer(Okio.sink(file))).use {
+                root.writeForRoot(it)
                 return true
             }
         } catch (e: IOException) {

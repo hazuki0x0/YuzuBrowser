@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ public class BookmarkFoldersDialog {
                 if (convertView == null)
                     convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
                 BookmarkItem item = getItem(position);
-                ((TextView) convertView.findViewById(android.R.id.text1)).setText((item != null) ? item.title : "..");
+                ((TextView) convertView.findViewById(android.R.id.text1)).setText((item != null) ? item.getTitle() : "..");
                 return convertView;
             }
         });
@@ -102,14 +102,14 @@ public class BookmarkFoldersDialog {
         mListView.setOnItemClickListener((parent, view, position, id) -> {
             BookmarkFolder folder = mFolderList.get(position);
             if (folder == null)
-                folder = mCurrentFolder.parent;
+                folder = mCurrentFolder.getParent();
             setFolder(folder);
         });
 
         mListView.setOnItemLongClickListener((parent, view, position, id) -> {
             BookmarkFolder folder = mFolderList.get(position);
             if (folder == null)
-                folder = mCurrentFolder.parent;
+                folder = mCurrentFolder.getParent();
             return mOnFolderSelectedListener != null &&
                     mOnFolderSelectedListener.onFolderSelected(mDialog, folder);
         });
@@ -154,7 +154,7 @@ public class BookmarkFoldersDialog {
     private void setFolder(BookmarkFolder folder) {
         mFolderList.clear();
         mCurrentFolder = folder;
-        if (folder.parent != null)
+        if (folder.getParent() != null)
             mFolderList.add(null);//for move to prev folder
         for (BookmarkItem i : folder.getItemList())
             if (i instanceof BookmarkFolder && (mExcludeList == null || !mExcludeList.contains(i)))

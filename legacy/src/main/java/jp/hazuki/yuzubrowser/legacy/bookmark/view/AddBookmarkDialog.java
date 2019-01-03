@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
         if (mItem == null) {
             final BookmarkFolder root = mManager.getRoot();
             mParent = root;
-            folderButton.setText(root.title);
+            folderButton.setText(root.getTitle());
             folderButton.setOnClickListener(v -> new BookmarkFoldersDialog(mContext, mManager)
                     .setTitle(R.string.folder)
                     .setCurrentFolder(root)
@@ -150,7 +150,7 @@ public abstract class AddBookmarkDialog<S extends BookmarkItem, T> implements On
 
     @Override
     public boolean onFolderSelected(DialogInterface dialog, BookmarkFolder folder) {
-        folderButton.setText(folder.title);
+        folderButton.setText(folder.getTitle());
         mParent = folder;
         return false;
     }

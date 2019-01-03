@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jp.hazuki.yuzubrowser.legacy.bookmark.view;
@@ -87,7 +87,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     @Override
     public void onBindViewHolder(final BookmarkFolderHolder holder, BookmarkItem item, final int position) {
         if (item instanceof BookmarkSite) {
-            ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).url);
+            ((BookmarkSiteHolder) holder).url.setText(((BookmarkSite) item).getUrl());
             if (!openNewTab || pickMode || isMultiSelectMode()) {
                 ((BookmarkSiteHolder) holder).imageButton.setEnabled(false);
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(false);
@@ -96,7 +96,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
                 ((BookmarkSiteHolder) holder).imageButton.setClickable(true);
             }
 
-            Bitmap bitmap = faviconManager.get(((BookmarkSite) item).url);
+            Bitmap bitmap = faviconManager.get(((BookmarkSite) item).getUrl());
             if (bitmap != null) {
                 ((BookmarkSiteHolder) holder).imageButton.setImageBitmap(bitmap);
                 ((BookmarkSiteHolder) holder).imageButton.clearColorFilter();
@@ -132,7 +132,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
     }
 
     public byte[] getFavicon(BookmarkSite site) {
-        return faviconManager.getFaviconBytes(site.url);
+        return faviconManager.getFaviconBytes(site.getUrl());
     }
 
     @Override
@@ -171,7 +171,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         @Override
         public void setUp(BookmarkItem item) {
             super.setUp(item);
-            title.setText(item.title);
+            title.setText(item.getTitle());
         }
     }
 

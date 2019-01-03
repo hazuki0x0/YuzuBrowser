@@ -296,7 +296,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
         val bookmarks = BookmarkManager.getInstance(this).search(query)
         val list = ArrayList<SuggestHistory>(if (bookmarks.size >= 5) 5 else bookmarks.size)
         bookmarks.asSequence().take(5).forEach {
-            list.add(SuggestHistory(it.title, it.url))
+            list.add(SuggestHistory(it.title!!, it.url))
         }
         return list
     }

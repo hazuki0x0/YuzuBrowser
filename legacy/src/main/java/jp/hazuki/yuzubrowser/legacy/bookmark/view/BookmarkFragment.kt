@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,8 +178,9 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
             adapter.isMultiSelectMode = false
             return false
         }
-        return if (mCurrentFolder.parent != null) {
-            setList(mCurrentFolder.parent)
+        val parent = mCurrentFolder.parent
+        return if (parent != null) {
+            setList(parent)
             false
         } else {
             true
@@ -217,7 +218,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
         return false
     }
 
-    private fun getSelectedBookmark(items: List<Int>): List<BookmarkItem> = items.map { mCurrentFolder.get(it) }
+    private fun getSelectedBookmarks(items: List<Int>): List<BookmarkItem> = items.map { mCurrentFolder[it] }
 
     private fun showContextMenu(v: View, index: Int) {
         val activity = activity ?: return
@@ -227,7 +228,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
         val bookmarkItem: BookmarkItem?
         if (pickMode) {
             bookmarkItem = adapter[index]
-            menu.menu.add(R.string.select_this_item).setOnMenuItemClickListener { _ ->
+            menu.menu.add(R.string.select_this_item).setOnMenuItemClickListener {
 
                 if (bookmarkItem is BookmarkSite) {
                     pickBookmark(bookmarkItem)
@@ -249,7 +250,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                     inflater.inflate(R.menu.bookmark_multiselect_menu, menu.menu)
                     null
                 }
-                mCurrentFolder.get(index) is BookmarkSite -> {
+                mCurrentFolder[index] is BookmarkSite -> {
                     inflater.inflate(R.menu.bookmark_site_menu, menu.menu)
                     adapter[index]
                 }
@@ -345,7 +346,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                 val items = if (item is BookmarkFolder) {
                     item.itemList
                 } else {
-                    getSelectedBookmark(adapter.selectedItems)
+                    getSelectedBookmarks(adapter.selectedItems)
                 }
                 sendUrl(items, BrowserManager.LOAD_URL_TAB_NEW)
             }
@@ -353,12 +354,12 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                 val items = if (item is BookmarkFolder) {
                     item.itemList
                 } else {
-                    getSelectedBookmark(adapter.selectedItems)
+                    getSelectedBookmarks(adapter.selectedItems)
                 }
                 sendUrl(items, BrowserManager.LOAD_URL_TAB_BG)
             }
             R.id.moveAllBookmark -> {
-                val bookmarkItems = getSelectedBookmark(adapter.selectedItems)
+                val bookmarkItems = getSelectedBookmarks(adapter.selectedItems)
                 adapter.isMultiSelectMode = false
                 BookmarkFoldersDialog(activity, mManager)
                         .setTitle(R.string.move_bookmark)
@@ -376,7 +377,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_bookmark)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
-                        val selectedList = getSelectedBookmark(adapter.selectedItems)
+                        val selectedList = getSelectedBookmarks(adapter.selectedItems)
 
                         mManager.removeAll(mCurrentFolder, selectedList)
                         mManager.save()
@@ -401,20 +402,12 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.openAllNew -> {
-                val items = if (item is BookmarkFolder) {
-                    item.itemList
-                } else {
-                    getSelectedBookmark(adapter.selectedItems)
-                }
+                val items = getSelectedBookmarks(adapter.selectedItems)
                 sendUrl(items, BrowserManager.LOAD_URL_TAB_NEW)
                 return true
             }
             R.id.openAllBg -> {
-                val items = if (item is BookmarkFolder) {
-                    (item as BookmarkFolder).itemList
-                } else {
-                    getSelectedBookmark(adapter.selectedItems)
-                }
+                val items = getSelectedBookmarks(adapter.selectedItems)
                 sendUrl(items, BrowserManager.LOAD_URL_TAB_BG)
                 return true
             }
@@ -425,7 +418,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                 return true
             }
             R.id.moveAllBookmark -> {
-                val bookmarkItems = getSelectedBookmark(adapter.selectedItems)
+                val bookmarkItems = getSelectedBookmarks(adapter.selectedItems)
                 BookmarkFoldersDialog(activity, mManager)
                         .setTitle(R.string.move_bookmark)
                         .setCurrentFolder(mCurrentFolder, bookmarkItems)
@@ -444,7 +437,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                         .setTitle(R.string.confirm)
                         .setMessage(R.string.confirm_delete_bookmark)
                         .setPositiveButton(android.R.string.ok) { _, _ ->
-                            val selectedList = getSelectedBookmark(adapter.selectedItems)
+                            val selectedList = getSelectedBookmarks(adapter.selectedItems)
 
                             mManager.removeAll(mCurrentFolder, selectedList)
                             mManager.save()
