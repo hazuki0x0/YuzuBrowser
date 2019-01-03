@@ -55,3 +55,7 @@
 -dontwarn okio.**
 # JSR 305 annotations
 -dontwarn javax.annotation.**
+
+#Okhttp3
+-dontwarn com.squareup.okhttp3.**
+-dontwarn okhttp3.**
