@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public class SelectActionDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final WebTextEncode ua = (WebTextEncode) getArguments().getSerializable(ENCODING);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(ua.encoding)
+        builder.setTitle(ua.getEncoding())
                 .setItems(R.array.edit_user_agent, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

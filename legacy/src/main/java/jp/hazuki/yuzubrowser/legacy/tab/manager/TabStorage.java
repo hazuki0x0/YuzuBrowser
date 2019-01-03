@@ -23,10 +23,8 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.view.View;
 
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.squareup.moshi.JsonReader;
+import com.squareup.moshi.JsonWriter;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -47,9 +45,9 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 import jp.hazuki.yuzubrowser.webview.WebViewFactory;
+import okio.Okio;
 
 public class TabStorage {
     private static final String FILE_TAB_INDEX = "index";
@@ -282,50 +280,50 @@ public class TabStorage {
 
     private List<TabIndexData> loadIndexJson(File file) {
         List<TabIndexData> tabIndexDataList = new ArrayList<>();
-        try (JsonParser parser = JsonUtils.getFactory().createParser(file)) {
+        try (JsonReader reader = JsonReader.of(Okio.buffer(Okio.source(file)))) {
             // 配列の処理
-            if (parser.nextToken() == JsonToken.START_ARRAY) {
-                while (parser.nextToken() != JsonToken.END_ARRAY) {
+            if (reader.peek() == JsonReader.Token.BEGIN_ARRAY) {
+                reader.beginArray();
+                while (reader.hasNext()) {
                     // 各オブジェクトの処理
-                    if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
+                    if (reader.peek() == JsonReader.Token.BEGIN_OBJECT) {
+                        reader.beginObject();
                         TabIndexData tabIndexData = new TabIndexData();
-                        while (parser.nextToken() != JsonToken.END_OBJECT) {
-                            String name = parser.getCurrentName();
-                            parser.nextToken();
-                            if (name != null) {
-                                switch (name) {
-                                    case JSON_NAME_ID:
-                                        tabIndexData.setId(parser.getLongValue());
-                                        break;
-                                    case JSON_NAME_URL:
-                                        tabIndexData.setUrl(parser.getText());
-                                        break;
-                                    case JSON_NAME_TITLE:
-                                        tabIndexData.setTitle(parser.getText());
-                                        break;
-                                    case JSON_NAME_TAB_TYPE:
-                                        tabIndexData.setTabType(parser.getIntValue());
-                                        break;
-                                    case JSON_NAME_PARENT:
-                                        tabIndexData.setParent(parser.getLongValue());
-                                        break;
-                                    case JSON_NAME_NAV_LOCK:
-                                        tabIndexData.setNavLock(parser.getBooleanValue());
-                                        break;
-                                    case JSON_NAME_PINNING:
-                                        tabIndexData.setPinning(parser.getBooleanValue());
-                                        break;
-                                    default:
-                                        parser.skipChildren();
-                                        break;
-                                }
+                        while (reader.hasNext()) {
+                            switch (reader.nextName()) {
+                                case JSON_NAME_ID:
+                                    tabIndexData.setId(reader.nextLong());
+                                    break;
+                                case JSON_NAME_URL:
+                                    tabIndexData.setUrl(reader.nextString());
+                                    break;
+                                case JSON_NAME_TITLE:
+                                    tabIndexData.setTitle(reader.nextString());
+                                    break;
+                                case JSON_NAME_TAB_TYPE:
+                                    tabIndexData.setTabType(reader.nextInt());
+                                    break;
+                                case JSON_NAME_PARENT:
+                                    tabIndexData.setParent(reader.nextLong());
+                                    break;
+                                case JSON_NAME_NAV_LOCK:
+                                    tabIndexData.setNavLock(reader.nextBoolean());
+                                    break;
+                                case JSON_NAME_PINNING:
+                                    tabIndexData.setPinning(reader.nextBoolean());
+                                    break;
+                                default:
+                                    reader.skipValue();
+                                    break;
                             }
                         }
                         tabIndexDataList.add(tabIndexData);
+                        reader.endObject();
                     } else {
-                        parser.skipChildren();
+                        reader.skipValue();
                     }
                 }
+                reader.endArray();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -335,21 +333,27 @@ public class TabStorage {
     }
 
     private void saveIndexJson(File file, List<TabIndexData> tabIndexDataList) {
-        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(file, JsonEncoding.UTF8)) {
-            generator.writeStartArray();
+        try (JsonWriter writer = JsonWriter.of(Okio.buffer(Okio.sink(file)))) {
+            writer.beginArray();
             for (TabIndexData data : tabIndexDataList) {
-                generator.writeStartObject();
-                generator.writeNumberField(JSON_NAME_ID, data.getId());
-                generator.writeStringField(JSON_NAME_URL, data.getUrl());
-                generator.writeStringField(JSON_NAME_TITLE, data.getTitle());
-                generator.writeNumberField(JSON_NAME_TAB_TYPE, data.getTabType());
-                generator.writeNumberField(JSON_NAME_PARENT, data.getParent());
-                generator.writeBooleanField(JSON_NAME_NAV_LOCK, data.isNavLock());
-                generator.writeBooleanField(JSON_NAME_PINNING, data.isPinning());
-                generator.writeEndObject();
+                writer.beginObject();
+                writer.name(JSON_NAME_ID);
+                writer.value(data.getId());
+                writer.name(JSON_NAME_URL);
+                writer.value(data.getUrl());
+                writer.name(JSON_NAME_TITLE);
+                writer.value(data.getTitle());
+                writer.name(JSON_NAME_TAB_TYPE);
+                writer.value(data.getTabType());
+                writer.name(JSON_NAME_PARENT);
+                writer.value(data.getParent());
+                writer.name(JSON_NAME_NAV_LOCK);
+                writer.value(data.isNavLock());
+                writer.name(JSON_NAME_PINNING);
+                writer.value(data.isPinning());
+                writer.endObject();
             }
-            generator.writeEndArray();
-            generator.flush();
+            writer.endArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -359,30 +363,30 @@ public class TabStorage {
 
     public int loadCurrentTab() {
         int tab = 0;
-        try (JsonParser parser = JsonUtils.getFactory().createParser(new File(tabPath, FILE_TAB_CURRENT))) {
-            if (parser.nextToken() == JsonToken.START_OBJECT) {
-                while (parser.nextToken() != JsonToken.END_OBJECT) {
-                    String name = parser.getCurrentName();
-                    parser.nextToken();
-
-                    if (JSON_NAME_CURRENT_TAB.equals(name)) {
-                        tab = parser.getIntValue();
+        try (JsonReader reader = JsonReader.of(Okio.buffer(Okio.source(new File(tabPath, FILE_TAB_CURRENT))))) {
+            if (reader.peek() == JsonReader.Token.BEGIN_OBJECT) {
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    switch (reader.nextName()) {
+                        case JSON_NAME_CURRENT_TAB:
+                            tab = reader.nextInt();
+                            break;
                     }
                 }
+                reader.endObject();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return tab;
     }
 
     public void saveCurrentTab(int currentTab) {
-        try (JsonGenerator generator = JsonUtils.getFactory().createGenerator(new File(tabPath, FILE_TAB_CURRENT), JsonEncoding.UTF8)) {
-            generator.writeStartObject();
-            generator.writeNumberField(JSON_NAME_CURRENT_TAB, currentTab);
-            generator.writeEndObject();
-            generator.flush();
+        try (JsonWriter writer = JsonWriter.of(Okio.buffer(Okio.sink(new File(tabPath, FILE_TAB_CURRENT))))) {
+            writer.beginObject();
+            writer.name(JSON_NAME_CURRENT_TAB);
+            writer.value(currentTab);
+            writer.endObject();
         } catch (IOException e) {
             e.printStackTrace();
         }

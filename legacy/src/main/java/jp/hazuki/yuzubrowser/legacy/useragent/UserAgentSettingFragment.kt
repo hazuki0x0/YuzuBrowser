@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,30 @@
 
 package jp.hazuki.yuzubrowser.legacy.useragent
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.moshi.Moshi
+import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.DELETE
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.EDIT
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.recycler_with_fab.*
+import javax.inject.Inject
 
-class UserAgentSettingFragment : androidx.fragment.app.Fragment(), DeleteUserAgentDialog.OnDelete, EditUserAgentDialog.OnEditedUserAgent, SelectActionDialog.OnActionSelect, OnRecyclerListener {
+class UserAgentSettingFragment : DaggerFragment(), DeleteUserAgentDialog.OnDelete, EditUserAgentDialog.OnEditedUserAgent, SelectActionDialog.OnActionSelect, OnRecyclerListener {
     private lateinit var mUserAgentList: UserAgentList
     private lateinit var mAdapter: UserAgentRecyclerAdapter
+
+    @Inject
+    lateinit var moshi: Moshi
+    @Inject
+    lateinit var applicationContext: Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -41,7 +50,7 @@ class UserAgentSettingFragment : androidx.fragment.app.Fragment(), DeleteUserAge
         val activity = activity ?: return
 
         mUserAgentList = UserAgentList()
-        mUserAgentList.read(activity)
+        mUserAgentList.read(activity, moshi)
 
         recyclerView.run {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
@@ -59,20 +68,20 @@ class UserAgentSettingFragment : androidx.fragment.app.Fragment(), DeleteUserAge
 
     override fun onDelete(position: Int) {
         mAdapter.remove(position)
-        mUserAgentList.write(activity)
+        mUserAgentList.write(applicationContext, moshi)
     }
 
     override fun onEdited(position: Int, name: String, ua: String) {
         if (position < 0) {
             mUserAgentList.add(UserAgent(name, ua))
-            mUserAgentList.write(activity)
+            mUserAgentList.write(applicationContext, moshi)
             mAdapter.notifyItemInserted(mAdapter.size() - 1)
         } else {
             val userAgent = mUserAgentList[position]
             userAgent.name = name
             userAgent.useragent = ua
             mUserAgentList[position] = userAgent
-            mUserAgentList.write(activity)
+            mUserAgentList.write(applicationContext, moshi)
             mAdapter.notifyItemChanged(position)
         }
     }
@@ -122,7 +131,7 @@ class UserAgentSettingFragment : androidx.fragment.app.Fragment(), DeleteUserAge
 
         override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             mAdapter.move(viewHolder.adapterPosition, target.adapterPosition)
-            mUserAgentList.write(activity)
+            mUserAgentList.write(applicationContext, moshi)
             return true
         }
 
@@ -138,7 +147,7 @@ class UserAgentSettingFragment : androidx.fragment.app.Fragment(), DeleteUserAge
                     .addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                             if (event != Snackbar.Callback.DISMISS_EVENT_ACTION && event != Snackbar.Callback.DISMISS_EVENT_MANUAL) {
-                                mUserAgentList.write(activity)
+                                mUserAgentList.write(applicationContext, moshi)
                             }
                         }
                     })

@@ -19,23 +19,16 @@ package jp.hazuki.yuzubrowser.legacy.utils.matcher;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.squareup.moshi.JsonReader;
+import com.squareup.moshi.JsonWriter;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
 
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
+import okio.Okio;
 
 public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>> {
     private final File mFile;
@@ -78,7 +71,7 @@ public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>
         mList.set(id, to);
     }
 
-    protected abstract T newInstance(JsonParser parser) throws IOException;
+    protected abstract T newInstance(JsonReader reader) throws IOException;
 
     public boolean load(Context context) {
         mList.clear();
@@ -86,16 +79,17 @@ public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>
         if (!mFile.exists() || !mFile.isFile())
             return true;
 
-        try (InputStream is = new BufferedInputStream(new FileInputStream(mFile));
-             JsonParser parser = JsonUtils.getFactory().createParser(is)) {
-
-            if (parser.nextToken() != JsonToken.START_ARRAY) return false;
-            while (parser.nextToken() != JsonToken.END_ARRAY) {
-                if (parser.getCurrentToken() != JsonToken.START_ARRAY) return false;
-                mList.add(newInstance(parser));
-                if (parser.nextToken() != JsonToken.END_ARRAY) return false;
+        try (JsonReader reader = JsonReader.of(Okio.buffer(Okio.source(mFile)))) {
+            if (reader.peek() != JsonReader.Token.BEGIN_ARRAY) return false;
+            reader.beginArray();
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.BEGIN_ARRAY) return false;
+                reader.beginArray();
+                mList.add(newInstance(reader));
+                if (reader.peek() != JsonReader.Token.END_ARRAY) return false;
+                reader.endArray();
             }
-            return true;
+            reader.endArray();
         } catch (PatternSyntaxException | IOException e) {
             ErrorReport.printAndWriteLog(e);
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -104,20 +98,16 @@ public abstract class AbstractPatternManager<T extends AbstractPatternChecker<?>
     }
 
     public boolean save(Context context) {
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(mFile));
-             JsonGenerator generator = JsonUtils.getFactory().createGenerator(os)) {
-
-            generator.writeStartArray();
+        try (JsonWriter writer = JsonWriter.of(Okio.buffer(Okio.sink(mFile)))) {
+            writer.beginArray();
             for (T item : mList) {
                 if (item != null) {
-                    generator.writeStartArray();
-                    item.write(generator);
-                    generator.writeEndArray();
+                    writer.beginArray();
+                    item.write(writer);
+                    writer.endArray();
                 }
             }
-            generator.writeEndArray();
-
-            return true;
+            writer.endArray();
         } catch (IOException e) {
             ErrorReport.printAndWriteLog(e);
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();

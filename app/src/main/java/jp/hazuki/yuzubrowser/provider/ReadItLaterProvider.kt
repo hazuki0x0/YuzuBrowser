@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.provider
 
-import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.content.UriMatcher
@@ -26,16 +25,21 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
+import com.squareup.moshi.Moshi
+import dagger.android.DaggerContentProvider
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.legacy.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterIndex
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItem
 import java.io.File
+import javax.inject.Inject
 
-class ReadItLaterProvider : ContentProvider() {
+class ReadItLaterProvider : DaggerContentProvider() {
 
     private lateinit var directory: File
     private lateinit var index: ReadItLaterIndex
+    @Inject
+    lateinit var moshi: Moshi
 
     companion object {
         const val TIME = IReadItLaterProvider.TIME
@@ -85,8 +89,9 @@ class ReadItLaterProvider : ContentProvider() {
     }
 
     override fun onCreate(): Boolean {
+        super.onCreate()
         directory = context!!.getDir("readItLater", Context.MODE_PRIVATE)
-        index = ReadItLaterIndex(directory)
+        index = ReadItLaterIndex(moshi, directory)
         return true
     }
 

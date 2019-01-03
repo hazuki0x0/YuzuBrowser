@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy
 
 import android.content.Context
+import com.squareup.moshi.Moshi
 import jp.hazuki.yuzubrowser.legacy.provider.IProviderManager
 
 interface BrowserApplication {
@@ -25,4 +26,5 @@ interface BrowserApplication {
     val permissionAppSignature: String
     val browserState: BrowserState
     val providerManager: IProviderManager
+    val moshi: Moshi
 }

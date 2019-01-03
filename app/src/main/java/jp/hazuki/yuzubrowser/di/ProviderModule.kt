@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import jp.hazuki.yuzubrowser.provider.ReadItLaterProvider
 import jp.hazuki.yuzubrowser.provider.SuggestProvider
 
 @Module
@@ -25,4 +26,7 @@ abstract class ProviderModule {
 
     @ContributesAndroidInjector
     abstract fun contributeSuggestProvider(): SuggestProvider
+
+    @ContributesAndroidInjector
+    abstract fun contributeReadItLaterProvider(): ReadItLaterProvider
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.webencode;
+package jp.hazuki.yuzubrowser.legacy.useragent
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-import java.io.Serializable;
+@Module
+abstract class UserAgentModule {
 
-public class WebTextEncode implements Serializable {
-    @JsonProperty("0")
-    public String encoding;
+    @ContributesAndroidInjector
+    abstract fun contributeUserAgentListDialog(): UserAgentListDialog
 
-    /**
-     * Constructor for Jackson Databind
-     */
-    public WebTextEncode() {
-    }
-
-    public WebTextEncode(String encoding) {
-        this.encoding = encoding;
-    }
+    @ContributesAndroidInjector
+    abstract fun contributeUserAgentSettingFragment(): UserAgentSettingFragment
 }

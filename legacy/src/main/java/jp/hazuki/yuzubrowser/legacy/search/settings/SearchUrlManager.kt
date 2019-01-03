@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,12 @@
 package jp.hazuki.yuzubrowser.legacy.search.settings
 
 import android.content.Context
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
+import com.squareup.moshi.Moshi
+import okio.Okio
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 
-class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
+class SearchUrlManager(context: Context, private val moshi: Moshi) : ArrayList<SearchUrl>() {
 
     val file: File
     var selectedId = 0
@@ -33,15 +30,6 @@ class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
 
     companion object {
         private const val NAME = "searchUrl.json"
-
-        private const val FIELD_SELECTED = "sel"
-        private const val FIELD_ITEMS = "item"
-        private const val FIELD_ID_CURRENT = "idc"
-
-        private const val FIELD_TITLE = "0"
-        private const val FIELD_URL = "1"
-        private const val FIELD_COLOR = "2"
-        private const val FIELD_ID = "3"
     }
 
     init {
@@ -52,80 +40,28 @@ class SearchUrlManager(context: Context) : ArrayList<SearchUrl>() {
     fun load() {
         clear()
         try {
-            FileInputStream(file).use {
-                val parser = JsonUtils.getFactory().createParser(it)
-                if (parser.nextToken() == JsonToken.START_OBJECT) {
-                    while (parser.nextToken() != JsonToken.END_OBJECT) {
-                        when (parser.currentName) {
-                            FIELD_SELECTED -> selectedId = parser.nextIntValue(0)
-                            FIELD_ID_CURRENT -> idCount = parser.nextIntValue(0)
-                            FIELD_ITEMS -> parseItems(parser)
-                            else -> {
-                                parser.nextToken()
-                                if (parser.currentToken == JsonToken.START_OBJECT || parser.currentToken == JsonToken.START_ARRAY) {
-                                    parser.skipChildren()
-                                }
-                            }
-                        }
-                    }
-                }
+            val items = Okio.buffer(Okio.source(file)).use {
+                val adapter = moshi.adapter(SearchSettings::class.java)
+                adapter.fromJson(it)
+            }
+            items?.let {
+                selectedId = it.selectedId
+                idCount = it.idCount
+                addAll(it.items)
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
 
-    private fun parseItems(parser: JsonParser) {
-        if (parser.nextToken() == JsonToken.START_ARRAY) {
-            while (parser.nextToken() != JsonToken.END_ARRAY) {
-                if (parser.currentToken == JsonToken.START_OBJECT) {
-                    var title: String? = null
-                    var url: String? = null
-                    var color = 0
-                    var id = -1
-                    while (parser.nextToken() != JsonToken.END_OBJECT) {
-                        when (parser.currentName) {
-                            FIELD_TITLE -> title = parser.nextTextValue()
-                            FIELD_URL -> url = parser.nextTextValue()
-                            FIELD_COLOR -> color = parser.nextIntValue(0)
-                            FIELD_ID -> id = parser.nextIntValue(-1)
-                            else -> {
-                                parser.nextToken()
-                                if (parser.currentToken == JsonToken.START_OBJECT || parser.currentToken == JsonToken.START_ARRAY) {
-                                    parser.skipChildren()
-                                }
-                            }
-                        }
-                    }
-                    if (title != null && url != null) {
-                        if (id < 0) {
-                            id = ++idCount
-                        }
-                        add(SearchUrl(id, title, url, color))
-                    }
-                }
-            }
-        }
-    }
-
     fun save() {
-        FileOutputStream(file).use {
-            val generator = JsonUtils.getFactory().createGenerator(it)
-            generator.writeStartObject()
-            generator.writeNumberField(FIELD_SELECTED, selectedId)
-            generator.writeNumberField(FIELD_ID_CURRENT, idCount)
-            generator.writeArrayFieldStart(FIELD_ITEMS)
-            for (item in this) {
-                generator.writeStartObject()
-                generator.writeStringField(FIELD_TITLE, item.title)
-                generator.writeStringField(FIELD_URL, item.url)
-                generator.writeNumberField(FIELD_COLOR, item.color)
-                generator.writeNumberField(FIELD_ID, item.id)
-                generator.writeEndObject()
+        try {
+            Okio.buffer(Okio.sink(file)).use {
+                val adapter = moshi.adapter(SearchSettings::class.java)
+                adapter.toJson(it, SearchSettings(selectedId, idCount, this))
             }
-            generator.writeEndArray()
-            generator.writeEndObject()
-            generator.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 

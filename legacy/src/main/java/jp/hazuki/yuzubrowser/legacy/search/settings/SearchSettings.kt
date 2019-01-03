@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.readitlater
+package jp.hazuki.yuzubrowser.legacy.search.settings
 
+import com.squareup.moshi.Json
 import se.ansman.kotshi.JsonSerializable
 
 @JsonSerializable
-data class ReadItem(var time: Long, var url: String, var title: String)
+data class SearchSettings(
+        @Json(name = "sel") val selectedId: Int,
+        @Json(name = "idc") val idCount: Int,
+        @Json(name = "item") val items: List<SearchUrl>
+)

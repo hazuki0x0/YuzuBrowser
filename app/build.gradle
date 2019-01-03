@@ -117,10 +117,11 @@ dependencies {
     implementation Libs.okhttp
 
     implementation Libs.support_appcompat_v7
-    implementation Libs.jackson
+    implementation Libs.support_fix_preference
     implementation ('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
         transitive = true
     }
+    implementation project(':ui')
     implementation project(':legacy')
     implementation project(':core')
     implementation project(':webview')

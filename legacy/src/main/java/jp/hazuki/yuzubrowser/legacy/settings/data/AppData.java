@@ -24,6 +24,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.webkit.WebSettings;
 
+import com.squareup.moshi.Moshi;
+
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -220,7 +222,7 @@ public class AppData {
     public static final StringContainer language = new StringContainer("language", "");
 
 
-    public static void settingInitialValue(Context context, SharedPreferences shared_preference) {
+    public static void settingInitialValue(Context context, SharedPreferences shared_preference, Moshi moshi) {
         int lastLaunch = lastLaunchVersion.get();
         if (lastLaunch < 0) {
             Logger.d(TAG, "is first launch");
@@ -348,7 +350,7 @@ public class AppData {
             uaList.add(new UserAgent("iPhone", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"));
             uaList.add(new UserAgent("iPad", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"));
             uaList.add(new UserAgent("PC", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36"));
-            uaList.write(context);
+            uaList.write(context, moshi);
 
             WebTextEncodeList encodes = new WebTextEncodeList();
             encodes.add(new WebTextEncode("ISO-8859-1"));
@@ -357,10 +359,10 @@ public class AppData {
             encodes.add(new WebTextEncode("Shift_JIS"));
             encodes.add(new WebTextEncode("EUC-JP"));
             encodes.add(new WebTextEncode("ISO-2022-JP"));
-            encodes.write(context);
+            encodes.write(context, moshi);
 
             {
-                SearchUrlManager urlManager = new SearchUrlManager(context);
+                SearchUrlManager urlManager = new SearchUrlManager(context, moshi);
                 String[] urls = context.getResources().getStringArray(R.array.default_search_url);
                 String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
                 int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
@@ -411,7 +413,7 @@ public class AppData {
                 }
 
                 if (lastLaunch < 300200) {
-                    SearchUrlManager urlManager = new SearchUrlManager(context);
+                    SearchUrlManager urlManager = new SearchUrlManager(context, moshi);
                     String[] urls = context.getResources().getStringArray(R.array.default_search_url);
                     String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
                     int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
@@ -455,12 +457,12 @@ public class AppData {
         }
     }
 
-    public static boolean load(Context context) {
+    public static boolean load(Context context, Moshi moshi) {
         SharedPreferences shared_preference = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         for (Containable pref : getPreferenceList()) {
             pref.read(shared_preference);
         }
-        settingInitialValue(context, shared_preference);
+        settingInitialValue(context, shared_preference, moshi);
         return true;
     }
 

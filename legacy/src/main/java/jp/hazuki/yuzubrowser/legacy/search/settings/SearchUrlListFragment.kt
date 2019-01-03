@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,19 +25,25 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.moshi.Moshi
+import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerMenu
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import javax.inject.Inject
 
-class SearchUrlListFragment : androidx.fragment.app.Fragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete {
+class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete {
 
     private lateinit var adapter: UrlAdapter
     private lateinit var manager: SearchUrlManager
     private lateinit var rootView: View
     private var edited = false
+
+    @Inject
+    lateinit var moshi: Moshi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
@@ -51,7 +57,7 @@ class SearchUrlListFragment : androidx.fragment.app.Fragment(), SearchSettingDia
         touchHelper.attachToRecyclerView(recyclerView)
         recyclerView.addItemDecoration(touchHelper)
 
-        manager = SearchUrlManager(activity)
+        manager = SearchUrlManager(activity, moshi)
         adapter = UrlAdapter(activity, manager, this, this)
 
         recyclerView.adapter = adapter

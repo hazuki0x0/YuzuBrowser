@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,9 @@
 
 package jp.hazuki.yuzubrowser.legacy.theme
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
-import java.io.BufferedInputStream
+import com.squareup.moshi.JsonReader
+import okio.Okio
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 
 class ThemeManifest @Throws(IllegalManifestException::class, IOException::class)
@@ -30,14 +27,14 @@ private constructor(val version: String, val name: String, val id: String) {
     class IllegalManifestException internal constructor(message: String, val errorType: Int) : Exception(message)
 
     companion object {
-        val MANIFEST = "manifest.json"
+        const val MANIFEST = "manifest.json"
 
-        private val FORMAT_VERSION = 1
+        private const val FORMAT_VERSION = 1
 
-        private val FIELD_FORMAT_VERSION = "format_version"
-        private val FIELD_VERSION = "version"
-        private val FIELD_NAME = "name"
-        private val FIELD_ID = "id"
+        private const val FIELD_FORMAT_VERSION = "format_version"
+        private const val FIELD_VERSION = "version"
+        private const val FIELD_NAME = "name"
+        private const val FIELD_ID = "id"
 
         fun getManifest(themeFolder: File): ThemeManifest? {
             try {
@@ -53,7 +50,7 @@ private constructor(val version: String, val name: String, val id: String) {
         fun decodeManifest(manifestFile: File): ThemeManifest? {
             if (manifestFile.exists() && manifestFile.isFile) {
                 try {
-                    BufferedInputStream(FileInputStream(manifestFile)).use { JsonUtils.getFactory().createParser(it).use { parser -> return decode(parser) } }
+                    JsonReader.of(Okio.buffer(Okio.source(manifestFile))).use { return decode(it) }
                 } catch (e: IOException) {
                     e.printStackTrace()
                     throw ThemeManifest.IllegalManifestException("unknown error", 0)
@@ -65,46 +62,42 @@ private constructor(val version: String, val name: String, val id: String) {
         }
 
         @Throws(IllegalManifestException::class, IOException::class)
-        private fun decode(parser: JsonParser): ThemeManifest {
-            if (parser.nextToken() != JsonToken.START_OBJECT)
+        private fun decode(reader: JsonReader): ThemeManifest {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT)
                 throw IllegalManifestException("broken manifest file", 1)
+            reader.beginObject()
 
             var version: String? = null
             var name: String? = null
             var id: String? = null
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.currentToken != JsonToken.FIELD_NAME)
+            while (reader.hasNext()) {
+                if (reader.peek() != JsonReader.Token.NAME)
                     throw IllegalManifestException("broken manifest file", 1)
-                val field = parser.text
-                parser.nextToken()
 
+                val field = reader.nextName()
                 if (FIELD_FORMAT_VERSION.equals(field, ignoreCase = true)) {
-                    if (parser.intValue > FORMAT_VERSION)
+                    if (reader.nextInt() > FORMAT_VERSION)
                         throw IllegalManifestException("unknown version of format", 2)
                     continue
                 }
 
                 if (FIELD_VERSION.equals(field, ignoreCase = true)) {
-                    version = parser.text.trim { it <= ' ' }
+                    version = reader.nextString().trim { it <= ' ' }
                     continue
                 }
 
                 if (FIELD_NAME.equals(field, ignoreCase = true)) {
-                    name = parser.text.trim { it <= ' ' }
+                    name = reader.nextString().trim { it <= ' ' }
                     continue
                 }
 
                 if (FIELD_ID.equals(field, ignoreCase = true)) {
-                    id = parser.text.trim { it <= ' ' }
+                    id = reader.nextString().trim { it <= ' ' }
                     continue
                 }
-
-                if (parser.currentToken != JsonToken.START_OBJECT && parser.currentToken != JsonToken.START_ARRAY) {
-                    parser.nextValue()
-                } else {
-                    parser.skipChildren()
-                }
+                reader.skipValue()
             }
+            reader.endObject()
 
             if (version == null || name == null || id == null)
                 throw IllegalManifestException("broken manifest file", 1)

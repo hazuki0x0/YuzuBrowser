@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.useragent
+package jp.hazuki.yuzubrowser.legacy.webencode
 
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
@@ -22,16 +22,13 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.webkit.WebSettings
 import androidx.fragment.app.DialogFragment
 import com.squareup.moshi.Moshi
 import dagger.android.support.AndroidSupportInjection
-import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import javax.inject.Inject
 
-class UserAgentListDialog : DialogFragment() {
+class WebTextEncodeListDialog : DialogFragment() {
 
     @Inject
     lateinit var moshi: Moshi
@@ -39,38 +36,34 @@ class UserAgentListDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()
         AndroidSupportInjection.inject(this)
-        val mUserAgentList = UserAgentList()
-        mUserAgentList.read(activity, moshi)
 
-        val entries = arrayOfNulls<String>(mUserAgentList.size + 1)
-        val entryValues = arrayOfNulls<String>(mUserAgentList.size + 1)
+        val encodes = WebTextEncodeList()
+        encodes.read(activity, moshi)
 
-        val ua = arguments!!.getString(UA)
-        val defaultUserAgent = if (AppData.fake_chrome.get()) activity.getFakeChromeUserAgent() else WebSettings.getDefaultUserAgent(activity)
+        val entries = arrayOfNulls<String>(encodes.size)
 
-        var pos = if (ua.isNullOrEmpty() || defaultUserAgent == ua) 0 else -1
+        var now = arguments!!.getString(ENCODING)
 
-        entries[0] = context!!.getString(R.string.default_text)
-        entryValues[0] = defaultUserAgent
+        if (now == null) now = ""
 
-        var userAgent: UserAgent
+        var pos = -1
 
-        var i = 1
-        while (mUserAgentList.size > i - 1) {
-            userAgent = mUserAgentList[i - 1]
-            entries[i] = userAgent.name
-            entryValues[i] = userAgent.useragent
-            if (ua == userAgent.useragent) {
+        var encode: WebTextEncode
+        var i = 0
+        while (encodes.size > i) {
+            encode = encodes[i]
+            entries[i] = encode.encoding
+            if (now == encode.encoding) {
                 pos = i
             }
             i++
         }
 
         val builder = AlertDialog.Builder(activity)
-        builder.setTitle(R.string.useragent)
+        builder.setTitle(R.string.web_encode)
                 .setSingleChoiceItems(entries, pos) { _, which ->
                     val intent = Intent()
-                    intent.putExtra(Intent.EXTRA_TEXT, entryValues[which])
+                    intent.putExtra(Intent.EXTRA_TEXT, entries[which])
                     activity.setResult(RESULT_OK, intent)
                     dismiss()
                 }
@@ -80,17 +73,18 @@ class UserAgentListDialog : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
+        val activity = activity
         activity?.finish()
     }
 
     companion object {
 
-        private const val UA = "ua"
+        private const val ENCODING = "enc"
 
-        fun newInstance(userAgent: String): UserAgentListDialog {
-            val dialog = UserAgentListDialog()
+        fun newInstance(webTextEncode: String): WebTextEncodeListDialog {
+            val dialog = WebTextEncodeListDialog()
             val bundle = Bundle()
-            bundle.putString(UA, userAgent)
+            bundle.putString(ENCODING, webTextEncode)
             dialog.arguments = bundle
             return dialog
         }

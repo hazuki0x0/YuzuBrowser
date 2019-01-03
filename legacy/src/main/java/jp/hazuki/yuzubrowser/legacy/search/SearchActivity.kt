@@ -32,6 +32,7 @@ import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import com.squareup.moshi.Moshi
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
@@ -48,7 +49,7 @@ import jp.hazuki.yuzubrowser.legacy.search.suggest.Suggestion
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OutSideClickableRecyclerView
@@ -57,8 +58,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import java.util.*
+import javax.inject.Inject
 
-class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
+class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback, SearchRecyclerAdapter.OnSuggestSelectListener, SuggestDeleteDialog.OnDeleteQuery {
 
     private lateinit var mContentUri: Uri
     private var mAppData: Bundle? = null
@@ -76,6 +78,9 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
     private var openNewTab: Boolean = false
     private var bottomBoxMode = false
 
+    @Inject
+    lateinit var moshi: Moshi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bottomBoxMode = intent.getBooleanExtra(EXTRA_REVERSE, false)
@@ -91,7 +96,7 @@ class SearchActivity : ThemeActivity(), TextWatcher, SearchButton.Callback, Sear
 
         suggestProvider = (applicationContext as BrowserApplication).providerManager.suggestProvider
         searchUrlSpinner = findViewById(R.id.searchUrlSpinner)
-        manager = SearchUrlManager(this)
+        manager = SearchUrlManager(this, moshi)
         searchUrlSpinner.adapter = SearchUrlSpinnerAdapter(this, manager)
         searchUrlSpinner.setSelection(manager.getSelectedIndex())
 

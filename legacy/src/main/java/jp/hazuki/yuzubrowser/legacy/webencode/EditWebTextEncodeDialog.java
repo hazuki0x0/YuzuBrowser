@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class EditWebTextEncodeDialog extends DialogFragment {
     }
 
     public static EditWebTextEncodeDialog newInstance(int pos, WebTextEncode encode) {
-        return newInstance(pos, encode.encoding);
+        return newInstance(pos, encode.getEncoding());
     }
 
     private static EditWebTextEncodeDialog newInstance(int pos, String encoding) {

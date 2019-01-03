@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,13 @@
 
 package jp.hazuki.yuzubrowser.legacy.readitlater
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import okio.Okio
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
+import java.io.IOException
 
-class ReadItLaterIndex(root: File) : ArrayList<ReadItem>() {
-
-    companion object {
-        const val TIME = "time"
-        const val TITLE = "title"
-        const val URL = "url"
-    }
+class ReadItLaterIndex(private val moshi: Moshi, root: File) : ArrayList<ReadItem>() {
 
     private val indexFile: File = File(root, "index")
 
@@ -41,60 +33,26 @@ class ReadItLaterIndex(root: File) : ArrayList<ReadItem>() {
     fun load() {
         clear()
         try {
-            FileInputStream(indexFile).use {
-                val parser = JsonUtils.getFactory().createParser(it)
-                if (parser.nextToken() == JsonToken.START_ARRAY) {
-                    while (parser.nextToken() != JsonToken.END_ARRAY) {
-                        val item = read(parser)
-                        if (item != null) {
-                            add(item)
-                        }
-                    }
-                }
+            val items = Okio.buffer(Okio.source(indexFile)).use {
+                val type = Types.newParameterizedType(List::class.java, ReadItem::class.java)
+                val adapter = moshi.adapter<List<ReadItem>>(type)
+                adapter.fromJson(it)
             }
-        } catch (e: FileNotFoundException) {
+            items?.let { addAll(it) }
+        } catch (e: IOException) {
             e.printStackTrace()
         }
     }
 
     fun save() {
-        FileOutputStream(indexFile).use {
-            val generator = JsonUtils.getFactory().createGenerator(it)
-            generator.writeStartArray()
-            for (item in this) {
-                generator.writeStartObject()
-                generator.writeNumberField(TIME, item.time)
-                generator.writeStringField(TITLE, item.title)
-                generator.writeStringField(URL, item.url)
-                generator.writeEndObject()
+        try {
+            Okio.buffer(Okio.sink(indexFile)).use {
+                val type = Types.newParameterizedType(List::class.java, ReadItem::class.java)
+                val adapter = moshi.adapter<List<ReadItem>>(type)
+                adapter.toJson(it, this)
             }
-            generator.writeEndArray()
-            generator.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
-    }
-
-    private fun read(parser: JsonParser): ReadItem? {
-        if (parser.currentToken == JsonToken.START_OBJECT) {
-            var time = -1L
-            var title: String? = null
-            var url: String? = null
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                when (parser.currentName) {
-                    TIME -> time = parser.nextLongValue(-1)
-                    TITLE -> title = parser.nextTextValue()
-                    URL -> url = parser.nextTextValue()
-                    else -> {
-                        parser.nextToken()
-                        if (parser.currentToken == JsonToken.START_ARRAY || parser.currentToken == JsonToken.START_OBJECT) {
-                            parser.skipChildren()
-                        }
-                    }
-                }
-            }
-            if (time > 0 && title != null && url != null) {
-                return ReadItem(time, url, title)
-            }
-        }
-        return null
     }
 }

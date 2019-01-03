@@ -30,6 +30,7 @@ import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.AppBarLayout
+import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
@@ -169,6 +170,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     @Inject
     internal lateinit var webViewFactory: WebViewFactory
+    @Inject
+    internal lateinit var moshi: Moshi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,7 +181,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         browserState = (applicationContext as BrowserApplication).browserState
 
         if (browserState.isNeedLoad) {
-            AppData.load(this)
+            AppData.load(this, moshi)
             browserState.isNeedLoad = false
         }
 
@@ -442,7 +445,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 openable.open(this)
             }
             BrowserController.REQUEST_SETTING -> {
-                AppData.load(applicationContext)
+                AppData.load(applicationContext, moshi)
                 onPreferenceReset()
             }
             BrowserController.REQUEST_USERAGENT -> {

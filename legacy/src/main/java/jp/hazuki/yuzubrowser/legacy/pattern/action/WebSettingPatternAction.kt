@@ -19,9 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.pattern.action
 import android.annotation.SuppressLint
 import android.content.Context
 import android.webkit.CookieManager
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
@@ -52,62 +51,68 @@ class WebSettingPatternAction : PatternAction {
     }
 
     @Throws(IOException::class)
-    constructor(parser: JsonParser) {
-        if (parser.nextToken() != JsonToken.START_OBJECT) return
-        while (parser.nextToken() != JsonToken.END_OBJECT) {
-            if (parser.currentToken != JsonToken.FIELD_NAME) return
-            when (parser.currentName) {
+    constructor(reader: JsonReader) {
+        if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+        reader.beginObject()
+        while (reader.hasNext()) {
+            when (reader.nextName()) {
                 FIELD_NAME_UA -> {
-                    if (parser.nextToken() != JsonToken.VALUE_STRING) return
-                    userAgentString = parser.text
+                    if (reader.peek() != JsonReader.Token.STRING) return
+                    userAgentString = reader.nextString()
                 }
                 FIELD_NAME_JS -> {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    javaScriptSetting = parser.intValue
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    javaScriptSetting = reader.nextInt()
                 }
                 FIELD_NAME_NAV_LOCK -> {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    navLock = parser.intValue
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    navLock = reader.nextInt()
                 }
                 FIELD_NAME_IMAGE -> {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    loadImage = parser.intValue
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    loadImage = reader.nextInt()
                 }
                 FIELD_NAME_THIRD_COOKIE -> {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    thirdCookie = parser.intValue
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    thirdCookie = reader.nextInt()
                 }
                 FIELD_NAME_COOKIE -> {
-                    if (parser.nextToken() != JsonToken.VALUE_NUMBER_INT) return
-                    cookie = parser.intValue
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    cookie = reader.nextInt()
                 }
                 else -> {
-                    parser.skipChildren()
+                    reader.skipValue()
                 }
             }
         }
+        reader.endObject()
     }
 
-    override fun getTypeId(): Int {
-        return PatternAction.WEB_SETTING
-    }
+    override val typeId = PatternAction.WEB_SETTING
 
     override fun getTitle(context: Context): String {
         return context.getString(R.string.pattern_change_websettings)
     }
 
     @Throws(IOException::class)
-    override fun write(generator: JsonGenerator): Boolean {
-        generator.writeNumber(PatternAction.WEB_SETTING)
-        generator.writeStartObject()
-        if (userAgentString != null)
-            generator.writeStringField(FIELD_NAME_UA, userAgentString)
-        generator.writeNumberField(FIELD_NAME_JS, javaScriptSetting)
-        generator.writeNumberField(FIELD_NAME_NAV_LOCK, navLock)
-        generator.writeNumberField(FIELD_NAME_IMAGE, loadImage)
-        generator.writeNumberField(FIELD_NAME_THIRD_COOKIE, thirdCookie)
-        generator.writeNumberField(FIELD_NAME_COOKIE, cookie)
-        generator.writeEndObject()
+    override fun write(writer: JsonWriter): Boolean {
+        writer.value(PatternAction.WEB_SETTING)
+        writer.beginObject()
+        if (userAgentString != null) {
+            writer.name(FIELD_NAME_UA)
+            writer.value(userAgentString)
+        }
+        writer.name(FIELD_NAME_JS)
+        writer.value(javaScriptSetting)
+        writer.name(FIELD_NAME_NAV_LOCK)
+        writer.value(navLock)
+        writer.name(FIELD_NAME_IMAGE)
+        writer.value(loadImage)
+        writer.name(FIELD_NAME_THIRD_COOKIE)
+        writer.value(thirdCookie)
+        writer.name(FIELD_NAME_COOKIE)
+        writer.value(cookie)
+        writer.endObject()
         return true
     }
 

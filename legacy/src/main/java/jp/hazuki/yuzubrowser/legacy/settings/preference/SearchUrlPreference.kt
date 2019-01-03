@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.DialogPreference
 import androidx.preference.Preference
+import com.squareup.moshi.Moshi
+import dagger.android.support.AndroidSupportInjection
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchSimpleIconView
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrl
@@ -35,6 +37,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog
+import javax.inject.Inject
 
 class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPreference(context, attrs) {
 
@@ -46,6 +49,9 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
 
         private lateinit var manager: SearchUrlManager
 
+        @Inject
+        lateinit var moshi: Moshi
+
         companion object {
             @JvmStatic
             fun newInstance(preference: Preference): YuzuPreferenceDialog {
@@ -55,8 +61,9 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
 
         override fun onCreateDialogView(context: Context?): View {
             val activity = activity ?: throw IllegalStateException()
+            AndroidSupportInjection.inject(this)
 
-            manager = SearchUrlManager(context!!)
+            manager = SearchUrlManager(context!!, moshi)
             val view = View.inflate(context, R.layout.recycler_view, null)
             val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
             recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)

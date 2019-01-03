@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.readitlater
+package jp.hazuki.yuzubrowser.legacy.utils.matcher
 
-import se.ansman.kotshi.JsonSerializable
+import android.content.Context
 
-@JsonSerializable
-data class ReadItem(var time: Long, var url: String, var title: String)
+import com.squareup.moshi.JsonWriter
+
+import java.io.IOException
+import java.io.Serializable
+
+abstract class AbstractPatternAction : Serializable {
+    abstract fun getTitle(context: Context): String?
+
+    @Throws(IOException::class)
+    abstract fun write(writer: JsonWriter): Boolean
+}

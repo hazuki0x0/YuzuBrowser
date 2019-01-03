@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class EditUserAgentDialog extends DialogFragment {
     }
 
     public static EditUserAgentDialog newInstance(int pos, UserAgent userAgent) {
-        return newInstance(pos, userAgent.name, userAgent.useragent);
+        return newInstance(pos, userAgent.getName(), userAgent.getUseragent());
     }
 
     private static EditUserAgentDialog newInstance(int pos, String name, String ua) {

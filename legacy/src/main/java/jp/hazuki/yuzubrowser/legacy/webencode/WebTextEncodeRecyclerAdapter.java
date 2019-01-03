@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class WebTextEncodeRecyclerAdapter extends ArrayRecyclerAdapter<WebTextEn
 
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, WebTextEncode encode, int position) {
-        holder.getTextView().setText(encode.encoding);
+        holder.getTextView().setText(encode.getEncoding());
     }
 
     @Override

@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.readitlater
+package jp.hazuki.yuzubrowser.legacy.settings.di
 
-import se.ansman.kotshi.JsonSerializable
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+import jp.hazuki.yuzubrowser.legacy.settings.preference.SearchUrlPreference
 
-@JsonSerializable
-data class ReadItem(var time: Long, var url: String, var title: String)
+@Module
+abstract class SettingsModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeSearchUrlPreferenceDialog(): SearchUrlPreference.PreferenceDialog
+}

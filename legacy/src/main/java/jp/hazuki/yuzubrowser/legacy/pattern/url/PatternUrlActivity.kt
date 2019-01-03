@@ -72,7 +72,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             url = urlEditText.text
             urlEditText.text = null
         } else {
-            url = checker.patternUrl
+            url = checker.patternUrl ?: ""
         }
         editText.setText(url)
         return headerView
@@ -90,8 +90,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         super.settingBlockAction(checker, makeHeaderView(checker))
     }
 
-    override fun makeActionChecker(pattern_action: PatternAction?, header_view: View?): PatternUrlChecker? {
-        val patternUrl = (header_view!!.findViewById<View>(R.id.urlEditText) as EditText).text.toString()
+    override fun makeActionChecker(pattern_action: PatternAction, header_view: View): PatternUrlChecker? {
+        val patternUrl = (header_view.findViewById<View>(R.id.urlEditText) as EditText).text.toString()
         try {
             val checker = PatternUrlChecker(pattern_action, FastMatcherFactory(), patternUrl)
             urlEditText.setText("")
@@ -116,7 +116,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
     class SettingWebDialog : androidx.fragment.app.DialogFragment() {
 
-        private var header: View? = null
+        private lateinit var header: View
         private lateinit var layout: SettingWebDialogView
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -126,8 +126,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             val view = View.inflate(activity, R.layout.pattern_add_websetting, null) as ViewGroup
             if (activity is PatternUrlActivity) {
                 header = (activity as PatternUrlActivity).makeHeaderView(checker)
-                if (header != null)
-                    (view.findViewById<View>(R.id.inner) as LinearLayout).addView(header, 0)
+                (view.findViewById<View>(R.id.inner) as LinearLayout).addView(header, 0)
             }
 
             layout = SettingWebDialogView(view).apply { init(checker) }
@@ -139,8 +138,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     .setNegativeButton(android.R.string.cancel, null)
                     .create()
 
-            alertDialog.setOnShowListener { _ ->
-                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                     val action = layout.getAction()
 
                     if (activity is PatternUrlActivity) {
@@ -352,7 +351,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     uaButton.isEnabled = b
                 }
 
-                uaButton.setOnClickListener { _ ->
+                uaButton.setOnClickListener {
                     val intent = Intent(activity, UserAgentListActivity::class.java)
                     intent.putExtra(Intent.EXTRA_TEXT, uaEditText.text.toString())
                     startActivityForResult(intent, REQUEST_USER_AGENT)
@@ -400,7 +399,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             val pm = activity.packageManager
             val intentUrl = url.replace("*", "")
             intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse(if (WebUtils.maybeContainsUrlScheme(intentUrl)) intentUrl else "http://" + intentUrl))
+                    Uri.parse(if (WebUtils.maybeContainsUrlScheme(intentUrl)) intentUrl else "http://$intentUrl"))
             val flag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PackageManager.MATCH_ALL
             } else {
@@ -494,7 +493,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     activity.hideIme(urlEditText)
                     val url1 = urlEditText.text.toString()
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse(if (WebUtils.maybeContainsUrlScheme(url1)) url1 else "http://" + url1))
+                    intent = Intent(Intent.ACTION_VIEW, Uri.parse(if (WebUtils.maybeContainsUrlScheme(url1)) url1 else "http://$url1"))
                     val newOpenAppList = pm.queryIntentActivities(intent, flag)
                     Collections.sort(newOpenAppList, ResolveInfo.DisplayNameComparator(pm))
                     arrayAdapter.clear()

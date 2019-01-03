@@ -16,18 +16,17 @@
 
 package jp.hazuki.yuzubrowser
 
-import android.app.Activity
-import android.app.Application
-import android.content.ContentProvider
 import android.content.Context
 import android.webkit.WebView
+import androidx.fragment.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.core.CrashlyticsCore
+import com.squareup.moshi.Moshi
 import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasContentProviderInjector
+import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
@@ -38,7 +37,8 @@ import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.provider.ProviderManager
 import javax.inject.Inject
 
-class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInjector, HasContentProviderInjector {
+
+class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSupportFragmentInjector {
 
     override val applicationId = BuildConfig.APPLICATION_ID
     override val permissionAppSignature = PERMISSION_MYAPP_SIGNATURE
@@ -47,9 +47,9 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInj
     override val context: Context
         get() = this
     @Inject
-    lateinit var dispatchingAndroidActivityInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject
-    lateinit var dispatchingAndroidContentProviderInjector: DispatchingAndroidInjector<ContentProvider>
+    override lateinit var moshi: Moshi
 
     override fun onCreate() {
         super.onCreate()
@@ -64,7 +64,7 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInj
         Logger.d(TAG, "onCreate()")
         browserState.isNeedLoad = false
         ErrorReportServer.initialize(this)
-        AppData.load(this)
+        AppData.load(this, moshi)
         ErrorReportServer.setDetailedLog(AppData.detailed_log.get())
         if (AppData.slow_rendering.get()) {
             WebView.enableSlowWholeDocumentDraw()
@@ -72,20 +72,14 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasActivityInj
         Logger.isDebug = BuildConfig.DEBUG
     }
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-
-        DaggerAppComponent.builder()
-                .create(this)
-                .inject(this)
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return dispatchingAndroidFragmentInjector
     }
 
-    override fun activityInjector(): AndroidInjector<Activity> {
-        return dispatchingAndroidActivityInjector
-    }
-
-    override fun contentProviderInjector(): AndroidInjector<ContentProvider> {
-        return dispatchingAndroidContentProviderInjector
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        val appComponent = DaggerAppComponent.builder().create(this)
+        appComponent.inject(this)
+        return appComponent
     }
 
     companion object {

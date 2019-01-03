@@ -77,7 +77,6 @@ dependencies {
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
 
-    implementation Libs.jackson
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 

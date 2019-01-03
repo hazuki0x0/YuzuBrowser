@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,8 +54,8 @@ public class UserAgentRecyclerAdapter extends ArrayRecyclerAdapter<UserAgent, Us
         @Override
         public void setUp(UserAgent item) {
             super.setUp(item);
-            title.setText(item.name);
-            userAgent.setText(item.useragent);
+            title.setText(item.getName());
+            userAgent.setText(item.getUseragent());
         }
     }
 }

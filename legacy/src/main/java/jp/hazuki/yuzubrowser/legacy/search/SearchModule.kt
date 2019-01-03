@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.readitlater
+package jp.hazuki.yuzubrowser.legacy.search
 
-import se.ansman.kotshi.JsonSerializable
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlListFragment
 
-@JsonSerializable
-data class ReadItem(var time: Long, var url: String, var title: String)
+@Module
+abstract class SearchModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeSearchActivity(): SearchActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeSearchUrlListFragment(): SearchUrlListFragment
+}

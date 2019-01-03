@@ -32,21 +32,21 @@ import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.JsonReader;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.utils.FileUtilsKt;
-import jp.hazuki.yuzubrowser.legacy.utils.JsonUtils;
+import okio.Okio;
 
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
@@ -69,31 +69,29 @@ public class ThemeData {
     }
 
     private ThemeData(Context context, File folder) throws IOException {
-        try (InputStream is = new BufferedInputStream(new FileInputStream(new File(folder, "theme.json")))) {
-            JsonParser parser = JsonUtils.getFactory().createParser(is);
-
-            if (parser.nextToken() != JsonToken.START_OBJECT) return;
+        try (JsonReader reader = JsonReader.of(Okio.buffer(Okio.source(new File(folder, "theme.json"))))) {
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return;
+            reader.beginObject();
 
             boolean refreshColorDef = false;
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return;
-                String field = parser.getText();
-                parser.nextToken();
+
+            while (reader.hasNext()) {
+                String field = reader.nextName();
                 if ("lightTheme".equals(field)) {
-                    lightTheme = getBoolean(parser);
+                    lightTheme = getBoolean(reader);
                     continue;
                 }
                 if ("tabBackgroundNormal".equalsIgnoreCase(field)) {
-                    tabBackgroundNormal = getColorOrBitmapDrawable(context, folder, parser);
+                    tabBackgroundNormal = getColorOrBitmapDrawable(context, folder, reader);
                     continue;
                 }
                 if ("tabBackgroundSelect".equalsIgnoreCase(field)) {
-                    tabBackgroundSelect = getColorOrBitmapDrawable(context, folder, parser);
+                    tabBackgroundSelect = getColorOrBitmapDrawable(context, folder, reader);
                     continue;
                 }
                 if ("tabTextColorNormal".equalsIgnoreCase(field)) {
                     try {
-                        tabTextColorNormal = Long.decode(parser.getText().trim()).intValue();
+                        tabTextColorNormal = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -101,7 +99,7 @@ public class ThemeData {
                 }
                 if ("tabTextColorLock".equalsIgnoreCase(field)) {
                     try {
-                        tabTextColorLock = Long.decode(parser.getText().trim()).intValue();
+                        tabTextColorLock = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -109,7 +107,7 @@ public class ThemeData {
                 }
                 if ("tabTextColorPin".equalsIgnoreCase(field)) {
                     try {
-                        tabTextColorPin = Long.decode(parser.getText().trim()).intValue();
+                        tabTextColorPin = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -117,7 +115,7 @@ public class ThemeData {
                 }
                 if ("tabTextColorSelect".equalsIgnoreCase(field)) {
                     try {
-                        tabTextColorSelect = Long.decode(parser.getText().trim()).intValue();
+                        tabTextColorSelect = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -125,7 +123,7 @@ public class ThemeData {
                 }
                 if ("tabAccentColor".equalsIgnoreCase(field)) {
                     try {
-                        tabAccentColor = Long.decode(parser.getText().trim()).intValue();
+                        tabAccentColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -133,7 +131,7 @@ public class ThemeData {
                 }
                 if ("tabDividerColor".equalsIgnoreCase(field)) {
                     try {
-                        tabDividerColor = Long.decode(parser.getText().trim()).intValue();
+                        tabDividerColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -141,18 +139,18 @@ public class ThemeData {
                 }
                 if ("scrollbarAccentColor".equalsIgnoreCase(field)) {
                     try {
-                        scrollbarAccentColor = Long.decode(parser.getText().trim()).intValue();
+                        scrollbarAccentColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                 }
                 if ("showTabDivider".equalsIgnoreCase(field)) {
-                    showTabDivider = getBoolean(parser);
+                    showTabDivider = getBoolean(reader);
                     continue;
                 }
                 if ("progressColor".equalsIgnoreCase(field)) {
                     try {
-                        progressColor = Long.decode(parser.getText().trim()).intValue();
+                        progressColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -160,7 +158,7 @@ public class ThemeData {
                 }
                 if ("progressIndeterminateColor".equalsIgnoreCase(field)) {
                     try {
-                        progressIndeterminateColor = Long.decode(parser.getText().trim()).intValue();
+                        progressIndeterminateColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -168,7 +166,7 @@ public class ThemeData {
                 }
                 if ("toolbarBackgroundColor".equalsIgnoreCase(field)) {
                     try {
-                        toolbarBackgroundColor = Long.decode(parser.getText().trim()).intValue();
+                        toolbarBackgroundColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -176,7 +174,7 @@ public class ThemeData {
                 }
                 if ("toolbarTextColor".equalsIgnoreCase(field)) {
                     try {
-                        toolbarTextColor = Long.decode(parser.getText().trim()).intValue();
+                        toolbarTextColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -184,7 +182,7 @@ public class ThemeData {
                 }
                 if ("toolbarImageColor".equalsIgnoreCase(field)) {
                     try {
-                        toolbarImageColor = Long.decode(parser.getText().trim()).intValue();
+                        toolbarImageColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -195,14 +193,15 @@ public class ThemeData {
                         int padding = context.getResources().getDimensionPixelOffset(R.dimen.swipebtn_bg_padding);
                         Rect paddingRect = new Rect(padding, padding, padding, padding);
                         Rect textPaddingRect = new Rect(padding, 0, padding, 0);
+                        int color = Long.decode(reader.nextString().trim()).intValue();
 
                         toolbarButtonBackgroundPress = new ShapeDrawable(new RectShape());
                         toolbarButtonBackgroundPress.setPadding(paddingRect);
-                        toolbarButtonBackgroundPress.getPaint().setColor(Long.decode(parser.getText().trim()).intValue());
+                        toolbarButtonBackgroundPress.getPaint().setColor(color);
 
                         toolbarTextButtonBackgroundPress = new ShapeDrawable(new RectShape());
                         toolbarTextButtonBackgroundPress.setPadding(textPaddingRect);
-                        toolbarTextButtonBackgroundPress.getPaint().setColor(Long.decode(parser.getText().trim()).intValue());
+                        toolbarTextButtonBackgroundPress.getPaint().setColor(color);
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -210,7 +209,7 @@ public class ThemeData {
                 }
                 if ("qcItemBackgroundColorNormal".equalsIgnoreCase(field)) {
                     try {
-                        qcItemBackgroundColorNormal = Long.decode(parser.getText().trim()).intValue();
+                        qcItemBackgroundColorNormal = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -218,7 +217,7 @@ public class ThemeData {
                 }
                 if ("qcItemBackgroundColorSelect".equalsIgnoreCase(field)) {
                     try {
-                        qcItemBackgroundColorSelect = Long.decode(parser.getText().trim()).intValue();
+                        qcItemBackgroundColorSelect = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -226,7 +225,7 @@ public class ThemeData {
                 }
                 if ("qcItemColor".equalsIgnoreCase(field)) {
                     try {
-                        qcItemColor = Long.decode(parser.getText().trim()).intValue();
+                        qcItemColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -234,83 +233,90 @@ public class ThemeData {
                 }
                 if ("statusBarColor".equalsIgnoreCase(field)) {
                     try {
-                        statusBarColor = Long.decode(parser.getText().trim()).intValue();
+                        statusBarColor = Long.decode(reader.nextString().trim()).intValue();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                     continue;
                 }
                 if ("pullToRefreshDark".equalsIgnoreCase(field)) {
-                    refreshUseDark = getBoolean(parser);
+                    refreshUseDark = getBoolean(reader);
                     refreshColorDef = true;
                     continue;
                 }
                 if ("statusBarDarkIcon".equalsIgnoreCase(field)) {
-                    statusBarDarkIcon = getBoolean(parser);
+                    statusBarDarkIcon = getBoolean(reader);
                     continue;
                 }
-                if (parser.getCurrentToken() == JsonToken.START_OBJECT
-                        || parser.getCurrentToken() == JsonToken.START_ARRAY) {
-                    parser.skipChildren();
-                }
+                reader.skipValue();
             }
+            reader.endObject();
 
             toolbarImageColor = 0xFF000000 | toolbarImageColor;
             if (!refreshColorDef && !refreshUseDark) {
                 refreshUseDark = isColorLight(statusBarColor) && !lightTheme;
             }
-
-
-            parser.close();
+        } catch (JsonDataException e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String stackTrace = sw.toString(); // stack trace as a string
+            Toast.makeText(context, "Theme error:\n" + stackTrace, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 
 
-    private Drawable getColorOrBitmapDrawable(Context context, File folder, JsonParser parser) throws IOException {
-        String value;
+    private Drawable getColorOrBitmapDrawable(Context context, File folder, JsonReader reader) throws IOException {
+        String value = null;
         Rect expandArea = null, paddingArea = null;
         boolean autoScale = false;
         boolean scaleFilter = false;
-        if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
-            value = null;
-            while (parser.nextToken() != JsonToken.END_OBJECT) {
-                if (parser.getCurrentToken() != JsonToken.FIELD_NAME) return null;
-                String field = parser.getText();
+        if (reader.peek() == JsonReader.Token.BEGIN_OBJECT) {
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String field = reader.nextName();
                 if ("filename".equalsIgnoreCase(field)) {
-                    value = parser.nextTextValue();
+                    value = reader.nextString();
                     continue;
                 }
                 if ("expandArea".equalsIgnoreCase(field)) {
-                    if (parser.nextToken() != JsonToken.START_ARRAY) return null;
-                    expandArea = new Rect(parser.nextIntValue(0), parser.nextIntValue(0), parser.nextIntValue(0), parser.nextIntValue(0));
-                    if (parser.nextToken() != JsonToken.END_ARRAY) return null;
+                    if (reader.peek() != JsonReader.Token.BEGIN_ARRAY) return null;
+                    reader.beginArray();
+                    try {
+                        expandArea = new Rect(reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt());
+                    } catch (JsonDataException e) {
+                        return null;
+                    }
+                    if (reader.peek() != JsonReader.Token.END_ARRAY) return null;
+                    reader.endArray();
                     continue;
                 }
                 if ("paddingArea".equalsIgnoreCase(field)) {
-                    if (parser.nextToken() != JsonToken.START_ARRAY) return null;
-                    paddingArea = new Rect(parser.nextIntValue(0), parser.nextIntValue(0), parser.nextIntValue(0), parser.nextIntValue(0));
-                    if (parser.nextToken() != JsonToken.END_ARRAY) return null;
+                    if (reader.peek() != JsonReader.Token.BEGIN_ARRAY) return null;
+                    reader.beginArray();
+                    try {
+                        paddingArea = new Rect(reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt());
+                    } catch (JsonDataException e) {
+                        return null;
+                    }
+                    if (reader.peek() != JsonReader.Token.END_ARRAY) return null;
+                    reader.endArray();
                     continue;
                 }
                 if ("autoScale".equalsIgnoreCase(field)) {
-                    parser.nextToken();
-                    autoScale = getBoolean(parser);
+                    autoScale = getBoolean(reader);
                     continue;
                 }
                 if ("scaleFilter".equalsIgnoreCase(field)) {
-                    parser.nextToken();
-                    autoScale = getBoolean(parser);
+                    autoScale = getBoolean(reader);
                     continue;
                 }
-                if (parser.getCurrentToken() != JsonToken.START_OBJECT
-                        && parser.getCurrentToken() != JsonToken.START_ARRAY) {
-                    parser.nextValue();
-                } else {
-                    parser.skipChildren();
-                }
+                reader.skipValue();
             }
+            reader.endObject();
         } else {
-            value = parser.getText();
+            value = reader.nextString();
             try {
                 return new LayerDrawable(new Drawable[]{new ColorDrawable(Long.decode(value).intValue()), context.getDrawable(R.drawable.tab_background_normal)});
             } catch (NumberFormatException e) {
@@ -402,14 +408,11 @@ public class ThemeData {
 
     private static ThemeData sInstance;
 
-    private static boolean getBoolean(JsonParser parser) throws IOException {
-        switch (parser.getCurrentToken()) {
-            case VALUE_TRUE:
-                return true;
-            case VALUE_FALSE:
-                return false;
-            default:
-                return Boolean.valueOf(parser.getText().trim());
+    private static boolean getBoolean(JsonReader reader) throws IOException {
+        if (reader.peek() == JsonReader.Token.BOOLEAN) {
+            return reader.nextBoolean();
+        } else {
+            return Boolean.valueOf(reader.nextString().trim());
         }
     }
 

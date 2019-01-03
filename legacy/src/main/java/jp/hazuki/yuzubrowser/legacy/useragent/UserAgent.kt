@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.readitlater
+package jp.hazuki.yuzubrowser.legacy.useragent
 
+import com.squareup.moshi.Json
 import se.ansman.kotshi.JsonSerializable
+import java.io.Serializable
 
 @JsonSerializable
-data class ReadItem(var time: Long, var url: String, var title: String)
+data class UserAgent(
+        @Json(name = "1") var name: String,
+        @Json(name = "0") var useragent: String
+) : Serializable

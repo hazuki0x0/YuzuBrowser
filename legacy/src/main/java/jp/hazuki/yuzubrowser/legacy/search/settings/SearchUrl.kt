@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,19 @@
 
 package jp.hazuki.yuzubrowser.legacy.search.settings
 
+import com.squareup.moshi.Json
+import se.ansman.kotshi.JsonSerializable
+import se.ansman.kotshi.KotshiConstructor
 import java.io.Serializable
 
-class SearchUrl(var id: Int, var title: String, var url: String, var color: Int) : Serializable {
+@JsonSerializable
+
+data class SearchUrl @KotshiConstructor constructor(
+        @Json(name = "3") var id: Int,
+        @Json(name = "0") var title: String,
+        @Json(name = "1") var url: String,
+        @Json(name = "2") var color: Int
+) : Serializable {
 
     constructor(title: String, url: String, color: Int) : this(-1, title, url, color)
 
