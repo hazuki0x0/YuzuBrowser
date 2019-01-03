@@ -52,7 +52,7 @@ class MultiListIntPreference(context: Context, attrs: AttributeSet) : DialogPref
     }
 
     override fun onSetInitialValue(defaultValue: Any?) {
-        setValue(defaultValue as? Int ?: ArrayUtils.getBitsInt(mValue))
+        setValue(getPersistedInt(defaultValue as? Int ?: ArrayUtils.getBitsInt(mValue)))
     }
 
     class PrefernceDialog : YuzuPreferenceDialog() {
