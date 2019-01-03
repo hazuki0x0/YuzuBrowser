@@ -122,7 +122,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, t, oldl, oldt)
-        onScrollChangedListener?.invoke(l, t, oldl, oldt)
+        onScrollChangedListener?.invoke(this, l, t, oldl, oldt)
         titleBar?.translationX = l.toFloat() //can move X
     }
 

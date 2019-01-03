@@ -134,8 +134,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
     }
 
-    private val scrollChangedListener = { l: Int, t: Int, oldl: Int, oldt: Int ->
+    private val scrollChangedListener = { webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int ->
         webViewFastScroller.onPageScroll()
+        webViewPageFastScroller?.onScrollWebView(webView)
+        toolbar.onScrollChanged(webView, l, t)
     }
 
     private lateinit var browserState: BrowserState
@@ -737,7 +739,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
             it.setOnMyCreateContextMenuListener(userActionManager.onCreateContextMenuListener)
             //TODO Rewrite
-            //it.paddingScrollChangedListener = toolbar
+            it.setMyOnScrollChangedListener(scrollChangedListener)
             it.scrollableChangeListener = scrollableChangeListener
             userActionManager.setGestureDetector(it)
         }

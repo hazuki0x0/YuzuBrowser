@@ -16,4 +16,6 @@
 
 package jp.hazuki.yuzubrowser.webview.listener
 
-typealias OnScrollChangedListener = (l: Int, t: Int, oldl: Int, oldt: Int) -> Unit
+import jp.hazuki.yuzubrowser.webview.CustomWebView
+
+typealias OnScrollChangedListener = (webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int) -> Unit

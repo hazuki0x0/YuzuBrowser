@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.page_fast_scroll.view.*
 
 class WebViewPageFastScroller(context: Context) : SubToolbar(context) {
     private var mOnEndListener: (() -> Boolean)? = null
-    private var mWeb: CustomWebView? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.page_fast_scroll, this)
@@ -36,14 +35,6 @@ class WebViewPageFastScroller(context: Context) : SubToolbar(context) {
     }
 
     fun show(web: CustomWebView) {
-        mWeb = web
-
-        web.setMyOnScrollChangedListener { _, _, _, _ ->
-            seekBar.run {
-                max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
-                progress = web.computeVerticalScrollOffsetMethod()
-            }
-        }
         buttonUp.run {
             setOnClickListener { web.pageUp(false) }
             setOnLongClickListener {
@@ -80,14 +71,17 @@ class WebViewPageFastScroller(context: Context) : SubToolbar(context) {
     }
 
     fun close() {
-        mWeb?.run {
-            setMyOnScrollChangedListener(null)
-            mWeb = null
-        }
         mOnEndListener?.invoke()
     }
 
     fun setOnEndListener(l: (() -> Boolean)?) {
         mOnEndListener = l
+    }
+
+    fun onScrollWebView(web: CustomWebView) {
+        seekBar.run {
+            max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
+            progress = web.computeVerticalScrollOffsetMethod()
+        }
     }
 }
