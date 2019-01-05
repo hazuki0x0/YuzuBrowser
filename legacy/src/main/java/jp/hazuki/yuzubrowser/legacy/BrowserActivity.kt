@@ -90,6 +90,7 @@ import jp.hazuki.yuzubrowser.webview.CustomWebHistoryItem
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.WebViewFactory
 import jp.hazuki.yuzubrowser.webview.WebViewType
+import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
@@ -135,10 +136,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
     }
 
-    private val scrollChangedListener = { webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int ->
+    private val scrollChangedListener: OnScrollChangedListener = { webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int ->
         webViewFastScroller.onPageScroll()
         webViewPageFastScroller?.onScrollWebView(webView)
-        toolbar.onScrollChanged(webView, l, t)
     }
 
     private lateinit var browserState: BrowserState
@@ -1333,7 +1333,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
     override val pagePaddingHeight: Int
-        get() = topToolbarLayout.height + bottomOverlayLayout.height + paddingFrame.height
+        get() = topToolbarLayout.height + bottomOverlayLayout.height
 
     override var isFullscreenMode: Boolean = false
         set(enable) {

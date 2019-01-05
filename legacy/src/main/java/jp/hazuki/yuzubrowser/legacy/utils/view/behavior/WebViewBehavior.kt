@@ -82,6 +82,7 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
             val params = paddingFrame.layoutParams
             params.height = height
             paddingFrame.layoutParams = params
+            data.mWebView.computeVerticalScrollRangeMethod()
         }
 
         if (data.isFinished && !data.mWebView.isScrollable && !isImeShown) {
@@ -89,9 +90,11 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
             data.mWebView.isNestedScrollingEnabledMethod = false
             paddingFrame.visibility = View.VISIBLE
             overlayPaddingFrame.forceHide = true
+            data.mWebView.computeVerticalScrollRangeMethod()
         } else {
             paddingFrame.visibility = View.GONE
             overlayPaddingFrame.forceHide = false
+            data.mWebView.computeVerticalScrollRangeMethod()
         }
     }
 
