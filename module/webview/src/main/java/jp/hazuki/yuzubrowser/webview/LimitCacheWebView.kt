@@ -34,11 +34,10 @@ import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
 import java.util.*
 
 @SuppressLint("ViewConstructor")
-internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : AbstractCacheWebView(context), LRUCache.OnCacheOverFlowListener<WebViewPage>, WebViewUtility {
+internal class LimitCacheWebView(context: Context, private val moshi: Moshi, private val prefs: WebViewPrefs) : AbstractCacheWebView(context), LRUCache.OnCacheOverFlowListener<WebViewPage>, WebViewUtility {
     private val tabIndexList = ArrayList<Page>()
     private val tabSaveData = LongSparseArray<Bundle>()
-    private val settings = WebViewPrefs.get(context)
-    private val tabCache: LRUCache<Long, WebViewPage> = LRUCache(settings.fastBackCacheSize, this)
+    private val tabCache: LRUCache<Long, WebViewPage> = LRUCache(prefs.fastBackCacheSize, this)
     override var currentPage: WebViewPage = SwipeWebView(context).let { web ->
         val data = WebViewPage(web)
         tabIndexList.add(data.page)
@@ -277,7 +276,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
         get() = isFirst || current == 0 && tabIndexList.size == 1 && tabIndexList[0].url == null
 
     override fun onPreferenceReset() {
-        tabCache.cacheSize = settings.fastBackCacheSize
+        tabCache.cacheSize = prefs.fastBackCacheSize
     }
 
     override fun onCacheOverflow(tabData: WebViewPage) {

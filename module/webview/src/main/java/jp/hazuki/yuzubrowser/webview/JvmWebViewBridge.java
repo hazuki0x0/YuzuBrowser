@@ -92,6 +92,11 @@ public abstract class JvmWebViewBridge extends WebView implements CustomWebView 
     }
 
     @Override
+    public boolean isRedirect() {
+        return CustomWebView.DefaultImpls.isRedirect(this);
+    }
+
+    @Override
     public boolean isNestedScrollingEnabledMethod() {
         return isNestedScrollingEnabled();
     }

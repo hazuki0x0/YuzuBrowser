@@ -41,7 +41,7 @@ class WebViewFactory(private val moshi: Moshi, private val prefs: WebViewPrefs) 
         return when (mode) {
             MODE_NORMAL -> SwipeWebView(context)
             MODE_CACHE -> CacheWebView(context)
-            MODE_LIMIT_CACHE -> LimitCacheWebView(context, moshi)
+            MODE_LIMIT_CACHE -> LimitCacheWebView(context, moshi, prefs)
             else -> SwipeWebView(context)
         }
     }
