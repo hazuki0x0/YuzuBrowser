@@ -135,4 +135,6 @@ dependencies {
     implementation Libs.dagger_android
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
+
+    implementation Libs.kvs_schema
 }

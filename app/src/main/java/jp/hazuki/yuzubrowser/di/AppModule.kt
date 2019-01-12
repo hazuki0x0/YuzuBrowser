@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -31,6 +32,7 @@ import javax.inject.Singleton
 
 @Module
 object AppModule {
+    private const val PREFERENCE_NAME = "main_preference"
 
     @Provides
     @JvmStatic
@@ -64,5 +66,12 @@ object AppModule {
                 .readTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
                 .build()
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun provideSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 }

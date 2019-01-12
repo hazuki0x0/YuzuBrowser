@@ -1088,7 +1088,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     private fun addNewTab(@TabType type: Int): MainTabData {
-        return addNewTab(webViewFactory.getMode(this), type)
+        return addNewTab(webViewFactory.mode, type)
     }
 
     private fun addNewTab(@WebViewType cacheType: Int, @TabType type: Int): MainTabData {
@@ -1154,7 +1154,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     private fun openNewTab(@TabType type: Int): MainTabData {
-        return openNewTab(webViewFactory.getMode(this), type)
+        return openNewTab(webViewFactory.mode, type)
     }
 
     private fun openNewTab(@WebViewType cacheType: Int, @TabType type: Int): MainTabData {

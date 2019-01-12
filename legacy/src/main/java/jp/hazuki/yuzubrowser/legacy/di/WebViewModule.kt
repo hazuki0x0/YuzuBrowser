@@ -16,9 +16,11 @@
 
 package jp.hazuki.yuzubrowser.legacy.di
 
+import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import jp.hazuki.yuzubrowser.core.settings.WebViewPrefs
 import jp.hazuki.yuzubrowser.webview.WebViewFactory
 import javax.inject.Singleton
 
@@ -28,7 +30,14 @@ object WebViewModule {
     @Provides
     @Singleton
     @JvmStatic
-    fun provideWebViewFactory(moshi: Moshi): WebViewFactory {
-        return WebViewFactory(moshi)
+    fun provideWebViewFactory(moshi: Moshi, webViewPrefs: WebViewPrefs): WebViewFactory {
+        return WebViewFactory(moshi, webViewPrefs)
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun provideWebViewPrefs(prefs: SharedPreferences): WebViewPrefs {
+        return WebViewPrefs(prefs)
     }
 }

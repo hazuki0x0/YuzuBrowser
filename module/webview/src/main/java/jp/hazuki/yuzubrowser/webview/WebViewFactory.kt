@@ -22,20 +22,20 @@ import com.squareup.moshi.Moshi
 import jp.hazuki.yuzubrowser.core.settings.WebViewPrefs
 
 
-class WebViewFactory(private val moshi: Moshi) {
+class WebViewFactory(private val moshi: Moshi, private val prefs: WebViewPrefs) {
 
-    fun getMode(context: Context): Int {
-        val prefs = WebViewPrefs.get(context)
-        return if (prefs.fastBack) {
-            when (prefs.fastBackCacheSize) {
-                0 -> MODE_CACHE
-                1 -> MODE_NORMAL
-                else -> MODE_LIMIT_CACHE
+    val mode: Int
+        get() {
+            return if (prefs.fastBack) {
+                when (prefs.fastBackCacheSize) {
+                    0 -> MODE_CACHE
+                    1 -> MODE_NORMAL
+                    else -> MODE_LIMIT_CACHE
+                }
+            } else {
+                MODE_NORMAL
             }
-        } else {
-            MODE_NORMAL
         }
-    }
 
     fun create(context: Context, @WebViewType mode: Int): CustomWebView {
         return when (mode) {
