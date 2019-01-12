@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.download.service
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +27,7 @@ import android.net.Uri
 import android.os.*
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import dagger.android.DaggerService
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -46,11 +46,13 @@ import jp.hazuki.yuzubrowser.legacy.download.service.connection.ServiceSocket
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.browserApplicationContext
 import jp.hazuki.yuzubrowser.legacy.utils.getPathFromUri
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
+import javax.inject.Inject
 
-class DownloadService : Service(), ServiceClient.ServiceClientListener {
+class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
 
     private lateinit var handler: Handler
     private lateinit var powerManager: PowerManager
@@ -61,7 +63,11 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
     private val threadList = mutableListOf<DownloadThread>()
     private val observers = mutableListOf<Messenger>()
 
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
+
     override fun onCreate() {
+        super.onCreate()
         handler = Handler()
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -231,7 +237,7 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
                 return
             }
 
-            val downloader = Downloader.getDownloader(this@DownloadService, info, request)
+            val downloader = Downloader.getDownloader(this@DownloadService, okHttpClient, info, request)
             this.downloader = downloader
 
             downloader.downloadListener = this

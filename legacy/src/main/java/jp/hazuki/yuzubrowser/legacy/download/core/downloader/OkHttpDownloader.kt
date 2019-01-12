@@ -22,80 +22,72 @@ import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
-import jp.hazuki.yuzubrowser.legacy.download.core.downloader.client.HttpClient
-import jp.hazuki.yuzubrowser.legacy.download.core.utils.checkFlag
-import jp.hazuki.yuzubrowser.legacy.download.core.utils.contentLength
-import jp.hazuki.yuzubrowser.legacy.download.core.utils.isResumable
+import jp.hazuki.yuzubrowser.legacy.download.core.utils.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.BufferedOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 
-class HttpDownloader(private val context: Context, private val info: DownloadFileInfo, private val request: DownloadRequest) : Downloader {
+class OkHttpDownloader(private val context: Context, private val okHttpClient: OkHttpClient, private val info: DownloadFileInfo, private val downloadRequest: DownloadRequest) : Downloader {
     override var downloadListener: Downloader.DownloadListener? = null
 
     private var abort = false
 
     override fun download(): Boolean {
-        val httpClient: HttpClient
-        try {
-            httpClient = HttpClient.create(info.url)
-        } catch (e: MalformedURLException) {
-            downloadListener?.onFileDownloadFailed(info, "unknown url:${info.url}")
-            return false
-        }
-
-        httpClient.instanceFollowRedirects = true
-
-        httpClient.setHeader("Connection", "close")
-
-        httpClient.setCookie(CookieManager.getInstance().getCookie(info.url))
-        httpClient.setReferrer(request.referrer)
-        httpClient.setUserAgent(context, request.userAgent)
+        val requestBuilder = Request.Builder()
+                .url(info.url)
+                .get()
+                .setCookie(CookieManager.getInstance().getCookie(info.url))
+                .setReferrer(downloadRequest.referrer)
+                .setUserAgent(context, downloadRequest.userAgent)
 
         val existTmp = info.root.findFile("${info.name}${Constants.download.TMP_FILE_SUFFIX}")
 
         if (info.resumable && info.checkFlag(DownloadFileInfo.STATE_PAUSED) && existTmp != null) {
             info.currentSize = existTmp.length()
-            httpClient.setRange("bytes=${info.currentSize}-${info.size}")
+            requestBuilder.header("Range", "bytes=${info.currentSize}-${info.size}")
         }
 
-        val tmp = existTmp ?: info.root.createFile(info.mimeType, "${info.name}${Constants.download.TMP_FILE_SUFFIX}")
-        ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
+        val tmp = existTmp
+                ?: info.root.createFile(info.mimeType, "${info.name}${Constants.download.TMP_FILE_SUFFIX}")
+                ?: throw DownloadException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
 
+        val call = okHttpClient.newCall(requestBuilder.build())
         try {
-            httpClient.connect()
-            val mode = when (httpClient.responseCode) {
+            val response = call.execute()
+
+            val mode = when (response.code()) {
                 HttpURLConnection.HTTP_OK -> "w"
                 HttpURLConnection.HTTP_PARTIAL -> "wa"
                 else -> {
                     info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
-                    downloadListener?.onFileDownloadFailed(info, "failed connect response:${httpClient.responseCode}\nat:${info.url}")
+                    downloadListener?.onFileDownloadFailed(info, "failed connect response:${response.code()}\nat:${info.url}")
                     return false
                 }
             }
-
             if (info.size < 0) {
-                info.size = httpClient.contentLength
+                info.size = response.contentLength
             }
             if (!info.resumable) {
-                info.resumable = httpClient.isResumable
+                info.resumable = response.isResumable
             }
+            val os = context.contentResolver.openOutputStream(tmp.uri, mode)
+                    ?: throw DownloadException("Can not open file. mimetype:${info.mimeType}, filename:${info.name}${Constants.download.TMP_FILE_SUFFIX}, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
 
-            context.contentResolver.openOutputStream(tmp.uri, mode).use { output ->
-                if (output == null) throw IllegalStateException()
-                httpClient.inputStream.use { input ->
+            BufferedOutputStream(os).use { out ->
+                response.body()!!.source().use { source ->
                     downloadListener?.onStartDownload(info)
-
                     var len: Int
                     var progress = info.currentSize
                     val buffer = ByteArray(BUFFER_SIZE)
                     var oldSize: Long
                     var oldSec = System.currentTimeMillis()
 
-                    while (input.read(buffer, 0, BUFFER_SIZE).also { len = it } >= 0) {
+                    while (source.read(buffer, 0, BUFFER_SIZE).also { len = it } >= 0) {
                         if (abort) break
 
-                        output.write(buffer, 0, len)
+                        out.write(buffer, 0, len)
                         progress += len
 
                         if (System.currentTimeMillis() > oldSec + NOTIFICATION_INTERVAL) {
@@ -109,6 +101,7 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
                             oldSec = time
                         }
                     }
+                    out.flush()
                 }
             }
 
@@ -133,6 +126,7 @@ class HttpDownloader(private val context: Context, private val info: DownloadFil
             info.state = DownloadFileInfo.STATE_DOWNLOADED
             downloadListener?.onFileDownloaded(info, downloadedFile)
             return true
+
         } catch (e: IOException) {
             ErrorReport.printAndWriteLog(e)
             if (info.resumable) {

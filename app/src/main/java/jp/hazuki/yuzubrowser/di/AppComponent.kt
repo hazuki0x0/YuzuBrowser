@@ -22,6 +22,7 @@ import dagger.android.AndroidInjector
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.legacy.di.ActivityModule
 import jp.hazuki.yuzubrowser.legacy.di.WebViewModule
+import jp.hazuki.yuzubrowser.legacy.download.DownloadModule
 import jp.hazuki.yuzubrowser.legacy.search.SearchModule
 import jp.hazuki.yuzubrowser.legacy.settings.di.SettingsModule
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentModule
@@ -38,7 +39,8 @@ import javax.inject.Singleton
     SettingsModule::class,
     SearchModule::class,
     WebEncodeModule::class,
-    UserAgentModule::class
+    UserAgentModule::class,
+    DownloadModule::class
 ])
 interface AppComponent : AndroidInjector<YuzuBrowserApplication> {
 

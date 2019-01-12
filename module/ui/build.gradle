@@ -47,6 +47,7 @@ dependencies {
 
     implementation Libs.support_appcompat_v7
     implementation Libs.support_fix_preference
+    implementation Libs.support_constraint_layout
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

@@ -29,13 +29,18 @@ import jp.hazuki.yuzubrowser.legacy.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import javax.inject.Inject
 
-class FastDownloadActivity : ThemeActivity() {
+class FastDownloadActivity : DaggerThemeActivity() {
+
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +93,7 @@ class FastDownloadActivity : ThemeActivity() {
         val file = DownloadFile(url, null, DownloadRequest(referrer, null, defExt))
         val meta = MetaData(applicationContext, root, file.url, file.request)
         val info = DownloadFileInfo(root, file, meta)
-        val downloader = Downloader.getDownloader(applicationContext, info, file.request)
+        val downloader = Downloader.getDownloader(applicationContext, okHttpClient, info, file.request)
 
         val result = downloader.download()
 
