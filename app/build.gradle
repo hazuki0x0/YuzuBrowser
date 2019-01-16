@@ -70,17 +70,12 @@ android {
     applicationVariants.all { variant ->
         if (variant.buildType.name == "release") {
             variant.outputs.each { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                if (output.outputFileName.endsWith('.apk')) {
                     // Rename APK
                     def applicationId = defaultConfig.applicationId
                     def versionCode = defaultConfig.versionCode
                     def versionName = defaultConfig.versionName
-                    def newName = "${applicationId}_v${versionName}_${versionCode}.apk"
-                    if (output.hasProperty('outputFileName')) {
-                        output.outputFileName = newName
-                    } else {
-                        output.outputFile = new File(output.outputFile.parent, newName)
-                    }
+                    output.outputFileName = "${applicationId}_v${versionName}_${versionCode}.apk"
                 }
             }
         }
