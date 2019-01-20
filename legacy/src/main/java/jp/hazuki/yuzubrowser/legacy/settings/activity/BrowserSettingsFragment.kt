@@ -23,11 +23,11 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreference
+import jp.hazuki.yuzubrowser.core.utility.extensions.canResolvePath
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.isAlwaysConvertible
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
 import org.jetbrains.anko.longToast
 
@@ -96,7 +96,7 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
                 AppData.download_folder.set(uri.toString())
                 AppData.commit(activity, AppData.download_folder)
 
-                if (!uri.isAlwaysConvertible()) {
+                if (!uri.canResolvePath(activity)) {
                     activity.longToast(R.string.pref_storage_location_warn)
                 }
             }

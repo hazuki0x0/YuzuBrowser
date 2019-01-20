@@ -16,12 +16,15 @@
 
 package jp.hazuki.yuzubrowser.legacy.debug
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import jp.hazuki.yuzubrowser.core.utility.extensions.resolveDirectoryPath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.storage.getStorageList
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
-import jp.hazuki.yuzubrowser.legacy.utils.getExternalStorageDirectories
 import kotlinx.android.synthetic.main.environment_activity.*
 import java.io.IOException
 
@@ -49,10 +52,15 @@ class EnvironmentActivity : ThemeActivity() {
             ErrorReport.printAndWriteLog(e)
         }
 
-        for (str in getExternalStorageDirectories()) {
-            estimatedExternalFilesDirTextView.append(str)
+        getStorageList().forEach {
+            estimatedExternalFilesDirTextView.append(it.path)
             estimatedExternalFilesDirTextView.append("\n")
         }
+
+        val dlUri = Uri.parse(AppData.download_folder.get())
+        downloadUriTextView.text = dlUri.toString()
+
+        downloadPathTextView.text = dlUri.resolveDirectoryPath(this)
     }
 
 }

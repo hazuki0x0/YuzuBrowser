@@ -28,6 +28,7 @@ import android.os.*
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import dagger.android.DaggerService
+import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -45,7 +46,6 @@ import jp.hazuki.yuzubrowser.legacy.download.service.connection.ServiceCommand
 import jp.hazuki.yuzubrowser.legacy.download.service.connection.ServiceSocket
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.browserApplicationContext
-import jp.hazuki.yuzubrowser.legacy.utils.getPathFromUri
 import okhttp3.OkHttpClient
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
@@ -284,8 +284,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                 notificationManager.notify(info.id.toInt(), build())
             }
             updateInfo(ServiceSocket.UPDATE, info)
-            info.root.findFile(info.name)
-                    ?.let { getPathFromUri(it.uri) }
+            info.root.findFile(info.name)?.uri?.resolvePath(this@DownloadService)
                     ?.let { registerMediaScanner(it) }
         }
 

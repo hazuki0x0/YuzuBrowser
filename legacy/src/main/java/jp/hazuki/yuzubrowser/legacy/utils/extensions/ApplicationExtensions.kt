@@ -22,11 +22,11 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
+import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.getMimeType
-import jp.hazuki.yuzubrowser.legacy.utils.getPathFromUri
 
 inline val Context.browserApplicationContext: BrowserApplication
     get() = applicationContext as BrowserApplication
@@ -47,7 +47,7 @@ fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: Str
         if (uri.scheme == "file") {
             uri
         } else {
-            val path = context.getPathFromUri(uri)
+            val path = uri.resolvePath(context)
             if (path != null) Uri.parse("file://$path") else uri
         }
     }
