@@ -372,8 +372,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override val isLoadThemeData = true
 
-    override fun lightThemeResource() = R.style.BrowserMinThemeLight_NoTitle
-
     private fun setFullscreenIfEnable() {
         if (isFullscreenMode) {
             window.decorView.systemUiVisibility = DisplayUtils.getFullScreenVisibility()

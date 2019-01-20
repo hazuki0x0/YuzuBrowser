@@ -384,10 +384,6 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
         return super.onTouchEvent(event)
     }
 
-    override fun lightThemeResource(): Int {
-        return R.style.BrowserMinThemeLight_Transparent
-    }
-
     companion object {
         const val EXTRA_URI = "jp.hazuki.yuzubrowser.legacy.search.SearchActivity.extra.uri"
         const val EXTRA_QUERY = "jp.hazuki.yuzubrowser.legacy.search.SearchActivity.extra.query"

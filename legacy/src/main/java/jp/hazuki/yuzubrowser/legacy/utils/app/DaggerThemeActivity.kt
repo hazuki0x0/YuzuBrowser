@@ -16,40 +16,33 @@
 
 package jp.hazuki.yuzubrowser.legacy.utils.app
 
-import android.content.Context
 import android.os.Bundle
-import androidx.annotation.StyleRes
-import dagger.android.support.DaggerAppCompatActivity
-import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.utils.createLanguageContext
+import androidx.fragment.app.Fragment
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasFragmentInjector
+import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
-open class DaggerThemeActivity : DaggerAppCompatActivity() {
+@Suppress("DEPRECATION")
+open class DaggerThemeActivity : ThemeActivity(), HasFragmentInjector, HasSupportFragmentInjector {
 
-    protected open val isLoadThemeData: Boolean
-        get() = false
+    @Inject
+    internal lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    internal lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (isLoadThemeData) {
-            ThemeData.createInstance(applicationContext, AppData.theme_setting.get())
-        }
-
-        if (!useDarkTheme() && useLightTheme() || ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
-            setTheme(lightThemeResource())
-        }
-
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
     }
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(newBase.createLanguageContext(AppData.language.get()))
+    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
+        return supportFragmentInjector
     }
 
-    @StyleRes
-    protected open fun lightThemeResource(): Int = R.style.CustomThemeLight
-
-    protected open fun useLightTheme(): Boolean = false
-
-    protected open fun useDarkTheme(): Boolean = false
+    override fun fragmentInjector(): AndroidInjector<android.app.Fragment> {
+        return frameworkFragmentInjector
+    }
 }

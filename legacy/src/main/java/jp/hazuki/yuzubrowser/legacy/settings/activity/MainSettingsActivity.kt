@@ -75,8 +75,4 @@ class MainSettingsActivity : ThemeActivity(), PreferenceFragmentCompat.OnPrefere
                 .addToBackStack(key)
                 .commit()
     }
-
-    override fun lightThemeResource(): Int {
-        return R.style.CustomThemeLight_Pref
-    }
 }

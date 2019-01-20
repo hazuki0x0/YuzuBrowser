@@ -17,56 +17,34 @@
 package jp.hazuki.yuzubrowser.legacy.utils.app
 
 import android.annotation.SuppressLint
-import android.os.Handler
-import android.view.KeyEvent
-import android.view.ViewConfiguration
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasFragmentInjector
+import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 @SuppressLint("Registered")
-open class DaggerLongPressFixActivity : DaggerThemeActivity() {
-    private val longPressTimeout = ViewConfiguration.getLongPressTimeout()
-    private val handler = Handler()
+open class DaggerLongPressFixActivity : LongPressFixActivity(), HasFragmentInjector, HasSupportFragmentInjector {
 
-    private var time: Long = 0
-    private var waiting: Boolean = false
+    @Inject
+    internal lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    internal lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
 
-    private val longPress = Runnable { onBackKeyLongPressed() }
-
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_BACK) {
-            when (event.action) {
-                KeyEvent.ACTION_DOWN -> if (!waiting) {
-                    waiting = true
-                    time = System.currentTimeMillis()
-                    handler.postDelayed(longPress, longPressTimeout.toLong())
-                }
-                KeyEvent.ACTION_UP -> {
-                    handler.removeCallbacks(longPress)
-                    waiting = false
-                    if (System.currentTimeMillis() - time < longPressTimeout) {
-                        onBackKeyPressed()
-                    }
-                    return true
-                }
-                else -> {
-                    handler.removeCallbacks(longPress)
-                    waiting = false
-                }
-            }
-        }
-        return super.dispatchKeyEvent(event)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
     }
 
-    fun onDestroyActionMode() {
-        handler.removeCallbacks(longPress)
+    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
+        return supportFragmentInjector
     }
 
-    override fun onBackPressed() {}
-
-    open fun onBackKeyPressed() {
-        super.onBackPressed()
-    }
-
-    open fun onBackKeyLongPressed() {
-
+    override fun fragmentInjector(): AndroidInjector<android.app.Fragment> {
+        return frameworkFragmentInjector
     }
 }

@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.reader
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -27,6 +28,12 @@ import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 class ReaderActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val themeMode = AppData.reader_theme.get()
+        if (themeMode >= 0) {
+            delegate.setLocalNightMode(
+                    if (themeMode == 0) AppCompatDelegate.MODE_NIGHT_YES
+                    else AppCompatDelegate.MODE_NIGHT_NO)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
 
@@ -75,17 +82,5 @@ class ReaderActivity : ThemeActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun useDarkTheme(): Boolean {
-        return AppData.reader_theme.get() == 0
-    }
-
-    override fun useLightTheme(): Boolean {
-        return AppData.reader_theme.get() == 1
-    }
-
-    override fun lightThemeResource(): Int {
-        return R.style.BrowserMinThemeLight_NoTitle
     }
 }

@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser
 
 import android.content.Context
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
@@ -86,5 +87,9 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         private const val TAG = "YuzuBrowserApplication"
         const val PERMISSION_MYAPP_SIGNATURE = BuildConfig.APPLICATION_ID + ".permission.myapp.signature"
         lateinit var instance: YuzuBrowserApplication
+
+        init {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 }

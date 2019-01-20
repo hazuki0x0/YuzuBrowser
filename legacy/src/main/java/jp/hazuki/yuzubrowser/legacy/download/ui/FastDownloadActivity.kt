@@ -84,10 +84,6 @@ class FastDownloadActivity : DaggerThemeActivity() {
         }
     }
 
-    override fun lightThemeResource(): Int {
-        return R.style.BrowserMinThemeLight_Transparent
-    }
-
     private fun download(url: String, referrer: String?, defExt: String): Uri? {
         val root = Uri.parse(AppData.download_folder.get()).toDocumentFile(applicationContext)
         val file = DownloadFile(url, null, DownloadRequest(referrer, null, defExt))

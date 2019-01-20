@@ -40,14 +40,14 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/CustomThemeBlack"
+        android:theme="@style/BrowserThemeDayNight"
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".legacy.BrowserActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
-            android:theme="@style/BrowserMinThemeBlack.NoTitle">
+            android:theme="@style/BrowserThemeDayNight.NoTitle">
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -62,7 +62,7 @@
         </activity>
         <activity
             android:name=".HandleIntentActivity"
-            android:theme="@style/BrowserMinThemeBlack.Transparent">
+            android:theme="@style/BrowserThemeDayNight.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -113,7 +113,7 @@
         <activity-alias
             android:label="@string/open_in_browser"
             android:name=".ShareActivity"
-            android:theme="@style/BrowserMinThemeBlack.Transparent"
+            android:theme="@style/BrowserThemeDayNight.Transparent"
             android:targetActivity=".HandleIntentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -128,7 +128,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:label="@string/pref_settings"
-            android:theme="@style/CustomThemeBlack.Pref" />
+            android:theme="@style/BrowserThemeDayNight.Pref"/>
         <activity-alias
             android:name=".CreateSettingsShortCut"
             android:targetActivity="jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity"
@@ -151,7 +151,7 @@
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.search.SearchActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/BrowserMinThemeBlack.Transparent" />
+            android:theme="@style/BrowserThemeDayNight.Transparent"/>
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -192,7 +192,7 @@
             android:name="jp.hazuki.yuzubrowser.legacy.download.ui.FastDownloadActivity"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/BrowserMinThemeBlack.Transparent"/>
+            android:theme="@style/BrowserThemeDayNight.Transparent"/>
         <activity android:name="jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity"/>
 
         <provider
@@ -237,12 +237,12 @@
             android:name="jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenSize"
             android:label="@string/action_useragent_setting"
-            android:theme="@style/BrowserMinThemeBlack.Transparent" />
+            android:theme="@style/BrowserThemeDayNight.Transparent"/>
         <activity
             android:name=".legacy.webencode.WebTextEncodeListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_web_encode_setting"
-            android:theme="@style/BrowserMinThemeBlack.Transparent" />
+            android:theme="@style/BrowserThemeDayNight.Transparent"/>
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -290,7 +290,7 @@
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.theme.ThemeImportActivity"
             android:label="@string/theme_importer"
-            android:theme="@style/BrowserMinThemeBlack.Transparent"
+            android:theme="@style/BrowserThemeDayNight.Transparent"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -305,11 +305,11 @@
         </activity>
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity"
-            android:theme="@style/CustomThemeBlack.Pref"
+            android:theme="@style/BrowserThemeDayNight.Pref"
             android:label="@string/pref_ad_block" />
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.reader.ReaderActivity"
-            android:theme="@style/BrowserMinThemeBlack.NoTitle"/>
+            android:theme="@style/BrowserThemeDayNight.NoTitle"/>
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterActivity"
             android:label="@string/read_it_later"/>
@@ -327,7 +327,7 @@
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity"
             android:label="@string/pref_download_folder"
-            android:theme="@style/BrowserMinThemeBlack.Transparent"/>
+            android:theme="@style/BrowserThemeDayNight.Transparent"/>
     </application>
 
 </manifest>

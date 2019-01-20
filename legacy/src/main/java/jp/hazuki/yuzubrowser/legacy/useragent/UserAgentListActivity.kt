@@ -18,8 +18,6 @@ package jp.hazuki.yuzubrowser.legacy.useragent
 
 import android.content.Intent
 import android.os.Bundle
-
-import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 
 class UserAgentListActivity : ThemeActivity() {
@@ -29,9 +27,5 @@ class UserAgentListActivity : ThemeActivity() {
         UserAgentListDialog
                 .newInstance(intent.getStringExtra(Intent.EXTRA_TEXT))
                 .show(supportFragmentManager, "ua")
-    }
-
-    override fun lightThemeResource(): Int {
-        return R.style.BrowserMinThemeLight_Transparent
     }
 }

@@ -19,10 +19,8 @@ package jp.hazuki.yuzubrowser.legacy.utils.app
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
-
-import jp.hazuki.yuzubrowser.legacy.R
+import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.createLanguageContext
@@ -38,8 +36,15 @@ open class ThemeActivity : AppCompatActivity() {
             ThemeData.createInstance(applicationContext, AppData.theme_setting.get())
         }
 
-        if (!useDarkTheme() && useLightTheme() || ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
-            setTheme(lightThemeResource())
+        val nightMode = AppCompatDelegate.getDefaultNightMode()
+        if (isLightMode()) {
+            if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        } else {
+            if (nightMode != AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
         }
 
         super.onCreate(savedInstanceState)
@@ -49,10 +54,7 @@ open class ThemeActivity : AppCompatActivity() {
         super.attachBaseContext(newBase.createLanguageContext(AppData.language.get()))
     }
 
-    @StyleRes
-    protected open fun lightThemeResource(): Int = R.style.CustomThemeLight
-
-    protected open fun useLightTheme(): Boolean = false
-
-    protected open fun useDarkTheme(): Boolean = false
+    private fun isLightMode(): Boolean {
+        return ThemeData.isEnabled() && ThemeData.getInstance().lightTheme
+    }
 }
