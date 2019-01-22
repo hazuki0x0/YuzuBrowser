@@ -16,7 +16,7 @@
 
 include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':core', ':languages', ':webview'
 
-def modulesRepoDir = new File('module')
-project(':ui').projectDir = new File(modulesRepoDir, 'ui')
-project(':core').projectDir = new File(modulesRepoDir, 'core')
-project(':webview').projectDir = new File(modulesRepoDir, 'webview')
+file('module').eachDir { dir ->
+    include dir.name
+    project(":${dir.name}").projectDir = dir
+}
