@@ -32,10 +32,10 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerFabFragment
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
 class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {
 

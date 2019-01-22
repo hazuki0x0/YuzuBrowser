@@ -51,8 +51,8 @@ import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OutSideClickableRecyclerView
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OutSideClickableRecyclerView
 import kotlinx.android.synthetic.main.tab_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

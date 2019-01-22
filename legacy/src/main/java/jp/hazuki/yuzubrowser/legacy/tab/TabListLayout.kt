@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
@@ -34,8 +33,8 @@ import jp.hazuki.yuzubrowser.legacy.tab.adapter.TabListRecyclerAdapterFactory
 import jp.hazuki.yuzubrowser.legacy.tab.adapter.TabListRecyclerBaseAdapter
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.legacy.utils.view.templatepreserving.TemplatePreservingSnackBar
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 
 class TabListLayout @SuppressLint("RtlHardcoded")
 constructor(context: Context, attrs: AttributeSet?, mode: Int, left: Boolean, val lastTabMode: Int) : LinearLayout(context, attrs) {

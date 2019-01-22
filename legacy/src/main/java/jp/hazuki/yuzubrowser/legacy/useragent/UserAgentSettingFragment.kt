@@ -27,8 +27,8 @@ import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.DELETE
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.EDIT
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 import javax.inject.Inject
 

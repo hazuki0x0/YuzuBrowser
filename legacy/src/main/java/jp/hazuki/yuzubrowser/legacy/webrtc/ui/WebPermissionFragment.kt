@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDatabase
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebPermissions
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.synthetic.main.recycler_with_fab.*

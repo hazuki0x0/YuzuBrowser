@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
+package jp.hazuki.yuzubrowser.ui.widget.recycler
 
 import android.content.Context
 import android.graphics.Canvas
@@ -23,9 +23,10 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 
-class DividerItemDecoration : androidx.recyclerview.widget.RecyclerView.ItemDecoration {
+class DividerItemDecoration : RecyclerView.ItemDecoration {
 
     private val mDivider: Drawable
 

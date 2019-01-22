@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
+package jp.hazuki.yuzubrowser.ui.widget.recycler
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewConfiguration
+import androidx.recyclerview.widget.RecyclerView
 
-class OutSideClickableRecyclerView(context: Context, attrs: AttributeSet) : androidx.recyclerview.widget.RecyclerView(context, attrs) {
+class OutSideClickableRecyclerView(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs) {
 
     private var click = false
     private var clickTime = 0L

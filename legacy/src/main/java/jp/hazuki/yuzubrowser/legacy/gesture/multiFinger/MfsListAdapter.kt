@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import android.widget.TextView
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureItem
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
 class MfsListAdapter(context: Context, list: MutableList<MultiFingerGestureItem>, private val nameList: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<MultiFingerGestureItem, MfsListAdapter.ViewHolder>(context, list, listener) {
 

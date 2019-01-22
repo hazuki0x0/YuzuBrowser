@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import kotlinx.android.synthetic.main.recycler_with_fab.*
 
-abstract class RecyclerFabFragment : androidx.fragment.app.Fragment() {
+abstract class RecyclerFabFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.recycler_with_fab, container, false)

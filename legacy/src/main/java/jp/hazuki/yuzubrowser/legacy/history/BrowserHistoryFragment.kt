@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.LoadMoreListener
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerTouchLocationDetector
+import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 

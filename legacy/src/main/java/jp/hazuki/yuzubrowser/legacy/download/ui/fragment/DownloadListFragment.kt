@@ -35,8 +35,8 @@ import jp.hazuki.yuzubrowser.legacy.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.legacy.download.service.connection.ActivityClient
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadCommandController
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.createFileOpenIntent
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.LoadMoreListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import org.jetbrains.anko.longToast
 
 class DownloadListFragment : androidx.fragment.app.Fragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener {

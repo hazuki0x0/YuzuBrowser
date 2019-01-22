@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerFabFragment
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.SimpleViewHolder
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.SimpleViewHolder
 
 class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {
 

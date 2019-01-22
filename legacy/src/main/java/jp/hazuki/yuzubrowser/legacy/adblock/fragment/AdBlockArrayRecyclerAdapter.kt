@@ -28,8 +28,8 @@ import android.widget.TextView
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlock
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import java.util.*
 
 class AdBlockArrayRecyclerAdapter(context: Context, list: MutableList<AdBlock>, listener: OnRecyclerListener) : ArrayRecyclerAdapter<AdBlock, AdBlockArrayRecyclerAdapter.ItemHolder>(context, list, listener) {

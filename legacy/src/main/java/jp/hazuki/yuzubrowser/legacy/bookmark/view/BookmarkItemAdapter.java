@@ -39,8 +39,8 @@ import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.FontUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter;
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener;
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter;
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener;
 
 public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder> {
     private static final int TYPE_SITE = 1;

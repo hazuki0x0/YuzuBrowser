@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import androidx.appcompat.view.ActionMode
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlock
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockManager
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.dialog.ConfirmDialog
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.fragment_ad_block_list.*
 import java.io.IOException
 import java.io.PrintWriter

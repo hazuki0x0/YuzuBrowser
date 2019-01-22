@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestHistory
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestItem
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.search_activity_list_history_item.*
 import kotlinx.android.synthetic.main.search_activity_list_item.*

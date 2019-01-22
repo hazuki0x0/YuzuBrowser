@@ -28,11 +28,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.moshi.Moshi
 import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerMenu
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
 class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedListener, OnRecyclerListener, RecyclerMenu.OnRecyclerMoveListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete {

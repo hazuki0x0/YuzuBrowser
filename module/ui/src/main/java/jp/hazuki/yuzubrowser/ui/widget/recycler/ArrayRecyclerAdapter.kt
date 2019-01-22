@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
+package jp.hazuki.yuzubrowser.ui.widget.recycler
 
 import android.content.Context
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 
-abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder<T>>(context: Context, val items: MutableList<T>, listener: OnRecyclerListener?) : androidx.recyclerview.widget.RecyclerView.Adapter<VH>() {
-    private var listener: OnRecyclerListener? = listener
+abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder<T>>(
+        context: Context,
+        val items: MutableList<T>,
+        private var listener: OnRecyclerListener?
+) : RecyclerView.Adapter<VH>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var sortMode: Boolean = false
 

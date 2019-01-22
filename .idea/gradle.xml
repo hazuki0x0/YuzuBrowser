@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/libraries/colorpicker" />
             <option value="$PROJECT_DIR$/libraries/floatingactionbutton" />
             <option value="$PROJECT_DIR$/module/core" />
+            <option value="$PROJECT_DIR$/module/speeddial" />
             <option value="$PROJECT_DIR$/module/ui" />
             <option value="$PROJECT_DIR$/module/webview" />
           </set>

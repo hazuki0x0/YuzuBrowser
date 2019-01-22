@@ -25,8 +25,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter;
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener;
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter;
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener;
 
 public class UserAgentRecyclerAdapter extends ArrayRecyclerAdapter<UserAgent, UserAgentRecyclerAdapter.ViewHolder> {
 

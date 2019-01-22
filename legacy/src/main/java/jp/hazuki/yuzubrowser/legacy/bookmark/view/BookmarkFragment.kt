@@ -41,7 +41,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerTouchLocationDetector
+import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 

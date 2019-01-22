@@ -31,10 +31,10 @@ import jp.hazuki.yuzubrowser.legacy.search.settings.SearchSimpleIconView
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrl
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
 class SearchUrlPreferenceDialog : YuzuPreferenceDialog(), OnRecyclerListener {
 

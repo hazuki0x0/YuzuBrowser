@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDial
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import java.util.*
 
 internal class SpeedDialRecyclerAdapter(context: Context, private val data: ArrayList<SpeedDial>, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SpeedDial, SpeedDialRecyclerAdapter.ViewHolder>(context, data, listener) {

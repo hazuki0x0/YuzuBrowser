@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
+package jp.hazuki.yuzubrowser.ui.widget.recycler
 
 import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.MotionEvent
+import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerTouchLocationDetector : androidx.recyclerview.widget.RecyclerView.OnItemTouchListener {
+class RecyclerTouchLocationDetector : RecyclerView.OnItemTouchListener {
     private var location: RecyclerTouchLocation = RecyclerTouchLocation.NONE
 
     val gravity: Int

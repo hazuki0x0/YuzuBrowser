@@ -34,10 +34,10 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.ArrayRecyclerAdapter
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.DividerItemDecoration
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
+import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_user_script_list.*
 import kotlinx.android.synthetic.main.fragment_userjs_item.*

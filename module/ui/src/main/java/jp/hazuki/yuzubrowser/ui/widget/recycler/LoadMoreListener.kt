@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.recycler
+package jp.hazuki.yuzubrowser.ui.widget.recycler
 
-abstract class LoadMoreListener(private val linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager) : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+import androidx.recyclerview.widget.RecyclerView
+
+abstract class LoadMoreListener(private val linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager) : RecyclerView.OnScrollListener() {
 
     private var previousTotal = 0
     private var loading = true

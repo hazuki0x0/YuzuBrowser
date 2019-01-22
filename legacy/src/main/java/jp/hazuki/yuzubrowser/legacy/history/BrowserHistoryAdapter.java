@@ -47,7 +47,7 @@ import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.FontUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.OnRecyclerListener;
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener;
 
 public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>
         implements StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
