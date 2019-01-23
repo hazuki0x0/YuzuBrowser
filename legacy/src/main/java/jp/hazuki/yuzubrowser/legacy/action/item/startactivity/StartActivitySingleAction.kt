@@ -36,8 +36,8 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.legacy.utils.graphics.LauncherIconDrawable
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.net.URISyntaxException
@@ -144,7 +144,8 @@ class StartActivitySingleAction : SingleAction, Parcelable {
 
                 }
             }
-            val sIntent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT) ?: return@StartActivityInfo
+            val sIntent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)
+                    ?: return@StartActivityInfo
             mName = name
             mIcon?.recycle()
             mIcon = icon

@@ -26,7 +26,7 @@ import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.IOException
 
 class CustomSingleAction : SingleAction {

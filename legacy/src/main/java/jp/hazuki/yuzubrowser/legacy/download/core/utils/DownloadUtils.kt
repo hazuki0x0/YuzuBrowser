@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import android.net.Uri
 import android.text.format.Formatter
 import android.util.Base64
 import android.webkit.MimeTypeMap
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
-import jp.hazuki.yuzubrowser.legacy.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.createFileOpenIntent
 import java.io.File
 import java.io.IOException

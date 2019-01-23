@@ -34,7 +34,7 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import java.io.IOException
 

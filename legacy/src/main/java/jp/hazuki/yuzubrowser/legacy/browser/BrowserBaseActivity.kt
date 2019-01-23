@@ -17,7 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy.browser
 
 import android.annotation.SuppressLint
-import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerLongPressFixActivity
+import jp.hazuki.yuzubrowser.ui.app.DaggerLongPressFixActivity
 import java.util.*
 
 @SuppressLint("Registered")

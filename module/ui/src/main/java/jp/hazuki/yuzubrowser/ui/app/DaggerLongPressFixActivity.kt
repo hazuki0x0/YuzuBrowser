@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.app
+package jp.hazuki.yuzubrowser.ui.app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
@@ -26,7 +27,8 @@ import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 @Suppress("DEPRECATION")
-open class DaggerThemeActivity : ThemeActivity(), HasFragmentInjector, HasSupportFragmentInjector {
+@SuppressLint("Registered")
+open class DaggerLongPressFixActivity : LongPressFixActivity(), HasFragmentInjector, HasSupportFragmentInjector {
 
     @Inject
     internal lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>

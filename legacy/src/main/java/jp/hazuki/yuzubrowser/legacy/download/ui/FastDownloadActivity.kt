@@ -29,8 +29,8 @@ import jp.hazuki.yuzubrowser.legacy.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
+import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

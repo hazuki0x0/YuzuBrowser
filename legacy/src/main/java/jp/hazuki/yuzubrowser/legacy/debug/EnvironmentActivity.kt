@@ -24,7 +24,7 @@ import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.storage.getStorageList
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import kotlinx.android.synthetic.main.environment_activity.*
 import java.io.IOException
 

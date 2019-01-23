@@ -26,10 +26,10 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getBitmap
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.AppInfo
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ApplicationListFragment
 import jp.hazuki.yuzubrowser.legacy.utils.appinfo.ShortCutListFragment
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import java.net.URISyntaxException
 
 class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreferenceFragment.OnActionListener, ApplicationListFragment.OnAppSelectListener, ShortCutListFragment.OnShortCutSelectListener {

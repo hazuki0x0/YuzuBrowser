@@ -66,7 +66,6 @@ import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.OnWebViewCreatedListener
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManagerFactory
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialog
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialogFactory
@@ -85,6 +84,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.PointerView
 import jp.hazuki.yuzubrowser.webview.CustomWebHistoryItem
 import jp.hazuki.yuzubrowser.webview.CustomWebView

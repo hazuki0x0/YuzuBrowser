@@ -22,7 +22,7 @@ import android.webkit.WebStorage;
 
 import java.io.File;
 
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 
 public class BrowserManager {
     public static final String EXTRA_OPENABLE = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_OPENABLE";

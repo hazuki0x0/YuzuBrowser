@@ -28,7 +28,7 @@ import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEach
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 open class AbstractToolbar(context: Context) : LinearLayout(context) {
 

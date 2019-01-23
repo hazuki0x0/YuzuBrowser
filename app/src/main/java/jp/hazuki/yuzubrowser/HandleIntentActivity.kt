@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,11 @@ import android.speech.RecognizerResultsIntent
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageContext
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.createLanguageContext
 
 class HandleIntentActivity : AppCompatActivity() {
     companion object;

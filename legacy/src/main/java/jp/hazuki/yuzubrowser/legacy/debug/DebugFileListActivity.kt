@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListFragment
 import java.io.File

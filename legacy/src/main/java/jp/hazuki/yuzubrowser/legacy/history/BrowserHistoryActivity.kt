@@ -24,7 +24,7 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
 class BrowserHistoryActivity : ThemeActivity() {
 

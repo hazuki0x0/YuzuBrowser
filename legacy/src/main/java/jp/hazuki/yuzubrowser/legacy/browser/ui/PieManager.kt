@@ -26,9 +26,9 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.QuickControlActionManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.view.pie.PieItem
 import jp.hazuki.yuzubrowser.legacy.utils.view.pie.PieMenu
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 class PieManager(private val context: Context, private val actionController: ActionController, private val iconManager: ActionIconManager) : PieMenu.PieController {
 

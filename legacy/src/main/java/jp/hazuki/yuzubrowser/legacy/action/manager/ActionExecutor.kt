@@ -33,6 +33,7 @@ import android.widget.Toast
 import androidx.print.PrintHelper
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication

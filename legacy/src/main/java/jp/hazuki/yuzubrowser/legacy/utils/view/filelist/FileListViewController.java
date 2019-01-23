@@ -31,9 +31,9 @@ import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.Predicate;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 
 public class FileListViewController {
     private final Context mContext;

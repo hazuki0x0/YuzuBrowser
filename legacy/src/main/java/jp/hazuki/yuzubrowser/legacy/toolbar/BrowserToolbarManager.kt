@@ -33,7 +33,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarVisibilityContainer
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_BOTTOM
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_BOTTOM_ALWAYS
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_BOTTOM_OVERLAY_ALWAYS
@@ -47,6 +46,7 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_UN
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_WEB
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.*
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.browser_activity.*

@@ -66,7 +66,6 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialAsyncManager
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialHtml
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.GeolocationPermissionToolbar
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScript
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptDatabase
@@ -79,6 +78,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.CustomWebViewClient

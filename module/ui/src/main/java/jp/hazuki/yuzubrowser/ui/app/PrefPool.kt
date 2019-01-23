@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.app
+package jp.hazuki.yuzubrowser.ui.app
 
 import android.content.Context
-import android.content.Intent
+import android.content.SharedPreferences
 
-typealias OnActivityResultListener = (context: Context, resultCode: Int, intent: Intent?) -> Unit
+internal object PrefPool {
+    private var pref: SharedPreferences? = null
+
+    private const val PREFERENCE_NAME = "main_preference"
+
+    fun getSharedPref(context: Context): SharedPreferences {
+        if (pref == null) {
+            pref = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+        }
+        return pref!!
+    }
+}

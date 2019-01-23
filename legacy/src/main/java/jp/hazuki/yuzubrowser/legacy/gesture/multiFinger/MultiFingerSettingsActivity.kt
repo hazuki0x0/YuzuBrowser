@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger
 import android.os.Bundle
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureItem
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
 class MultiFingerSettingsActivity : ThemeActivity(), MfsFragment.OnMfsFragmentListener, MfsListFragment.OnMfsListListener, MfsEditFragment.OnMfsEditFragmentListener {
 

@@ -34,9 +34,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.ListFragment;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.Predicate;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 
 public class FileListFragment extends ListFragment {
     private static final String EXTRA_FILE = "file";

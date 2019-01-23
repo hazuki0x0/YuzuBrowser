@@ -32,7 +32,7 @@ import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData;
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
 public class MainTabData extends TabData {

@@ -26,7 +26,7 @@ import android.view.View
 import android.webkit.WebView
 import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.find_onpage.*

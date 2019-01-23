@@ -20,9 +20,10 @@ import android.content.Context
 import android.net.Uri
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEach
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
-import jp.hazuki.yuzubrowser.legacy.utils.externalUserDirectory
+import jp.hazuki.yuzubrowser.ui.theme.ThemeManifest
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

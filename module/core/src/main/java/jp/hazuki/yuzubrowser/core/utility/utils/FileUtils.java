@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils;
+package jp.hazuki.yuzubrowser.core.utility.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

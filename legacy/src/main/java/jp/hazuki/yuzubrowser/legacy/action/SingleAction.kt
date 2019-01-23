@@ -24,7 +24,7 @@ import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.action.item.*
 import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivitySingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.IOException
 
 open class SingleAction : Parcelable {

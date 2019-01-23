@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.theme;
+package jp.hazuki.yuzubrowser.ui.theme;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -44,9 +44,10 @@ import java.io.StringWriter;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtilsKt;
+import jp.hazuki.yuzubrowser.ui.R;
 import okio.Okio;
+
+import static jp.hazuki.yuzubrowser.core.utility.utils.FileUtilsKt.getExternalUserDirectory;
 
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
@@ -190,7 +191,7 @@ public class ThemeData {
                 }
                 if ("toolbarButtonBackgroundPress".equalsIgnoreCase(field)) {
                     try {
-                        int padding = context.getResources().getDimensionPixelOffset(R.dimen.swipebtn_bg_padding);
+                        int padding = context.getResources().getDimensionPixelOffset(R.dimen.dimen_theme_padding);
                         Rect paddingRect = new Rect(padding, padding, padding, padding);
                         Rect textPaddingRect = new Rect(padding, 0, padding, 0);
                         int color = Long.decode(reader.nextString().trim()).intValue();
@@ -372,7 +373,7 @@ public class ThemeData {
     }
 
     public static ThemeData createInstance(Context context) {
-        File file = new File(FileUtilsKt.getExternalUserDirectory(), "theme");
+        File file = new File(getExternalUserDirectory(), "theme");
         if (!file.exists() || !file.isDirectory())
             sInstance = null;
         else
@@ -392,7 +393,7 @@ public class ThemeData {
         } else if (THEME_LIGHT.equals(folder)) {
             sInstance = createLightTheme(context);
         } else {
-            File file = new File(FileUtilsKt.getExternalUserDirectory(), "theme" + File.separator + folder);
+            File file = new File(getExternalUserDirectory(), "theme" + File.separator + folder);
             if (!file.exists() || !file.isDirectory())
                 sInstance = null;
             else
@@ -456,7 +457,7 @@ public class ThemeData {
 
         data.statusBarColor = 0xFFAAAAAA;
 
-        int padding = context.getResources().getDimensionPixelOffset(R.dimen.swipebtn_bg_padding);
+        int padding = context.getResources().getDimensionPixelOffset(R.dimen.dimen_theme_padding);
         Rect paddingRect = new Rect(padding, padding, padding, padding);
 
         data.toolbarButtonBackgroundPress = new ShapeDrawable(new RectShape());

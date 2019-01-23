@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,9 @@ import android.view.View
 import android.webkit.GeolocationPermissions
 import android.widget.CheckBox
 import android.widget.TextView
-
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.SubToolbar
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 open class GeolocationPermissionToolbar(context: Context) : SubToolbar(context), View.OnClickListener {
     private var mOrigin: String? = null

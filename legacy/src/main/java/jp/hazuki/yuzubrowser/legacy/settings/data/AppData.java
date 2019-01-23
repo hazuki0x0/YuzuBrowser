@@ -60,7 +60,6 @@ import jp.hazuki.yuzubrowser.legacy.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.custom.FontSizeContainer;
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData;
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgent;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentList;
@@ -68,6 +67,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList;
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 
 public class AppData {
     private static final String TAG = "AppData";

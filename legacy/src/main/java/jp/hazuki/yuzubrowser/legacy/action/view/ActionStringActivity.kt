@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.util.JsonConvertable
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import kotlinx.android.synthetic.main.scroll_edittext.*
 
 class ActionStringActivity : ThemeActivity() {

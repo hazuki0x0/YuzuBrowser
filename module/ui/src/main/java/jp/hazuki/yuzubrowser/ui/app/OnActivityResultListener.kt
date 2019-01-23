@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.webencode;
+package jp.hazuki.yuzubrowser.ui.app
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.content.Context
+import android.content.Intent
 
-import jp.hazuki.yuzubrowser.ui.app.ThemeActivity;
-
-public class WebTextEncodeListActivity extends ThemeActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        WebTextEncodeListDialog.Companion
-                .newInstance(getIntent().getStringExtra(Intent.EXTRA_TEXT))
-                .show(getSupportFragmentManager(), "list");
-    }
-
-}
+typealias OnActivityResultListener = (context: Context, resultCode: Int, intent: Intent?) -> Unit

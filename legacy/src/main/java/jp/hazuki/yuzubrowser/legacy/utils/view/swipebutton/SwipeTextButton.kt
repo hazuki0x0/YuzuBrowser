@@ -26,7 +26,7 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : AppCompatButton(context, attrs), SwipeController.OnChangeListener {
     private val mController = SwipeSoftButtonController(getContext().applicationContext)

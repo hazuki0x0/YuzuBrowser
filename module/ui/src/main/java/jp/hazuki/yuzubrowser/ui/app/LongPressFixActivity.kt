@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.app
+package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
 import android.os.Handler

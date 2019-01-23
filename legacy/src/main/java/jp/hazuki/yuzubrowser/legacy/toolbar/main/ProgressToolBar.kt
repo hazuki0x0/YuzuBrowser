@@ -23,9 +23,9 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import kotlinx.android.synthetic.main.toolbar_progress.view.*
 
 class ProgressToolBar(context: Context, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_progress, R.layout.toolbar_progress, request_callback) {

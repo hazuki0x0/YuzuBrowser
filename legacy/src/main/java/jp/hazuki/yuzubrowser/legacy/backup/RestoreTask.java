@@ -30,7 +30,7 @@ import java.util.zip.ZipInputStream;
 
 import androidx.loader.content.AsyncTaskLoader;
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 
 public class RestoreTask extends AsyncTaskLoader<Boolean> {
 

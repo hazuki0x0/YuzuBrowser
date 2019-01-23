@@ -16,6 +16,8 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion Build.compile_sdk_version
@@ -48,6 +50,16 @@ dependencies {
     implementation Libs.support_appcompat_v7
     implementation Libs.support_fix_preference
     implementation Libs.support_constraint_layout
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    implementation Libs.dagger_android
+    implementation Libs.dagger_android_support
+    kapt Libs.dagger_android_processor
+
+    implementation Libs.kotshi
+    kapt Libs.kotshi_compiler
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

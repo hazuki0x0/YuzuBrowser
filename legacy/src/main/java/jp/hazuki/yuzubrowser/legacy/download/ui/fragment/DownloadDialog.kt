@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
@@ -35,7 +36,6 @@ import jp.hazuki.yuzubrowser.legacy.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.download
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

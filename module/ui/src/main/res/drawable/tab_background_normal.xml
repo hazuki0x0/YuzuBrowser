@@ -15,7 +15,9 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <dimen name="dimen_cursor">25dp</dimen>
-    <dimen name="dimen_theme_padding">7dp</dimen>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <padding
+        android:left="3dp"
+        android:right="3dp"
+        android:bottom="5dp" />
+</shape>

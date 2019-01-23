@@ -47,10 +47,10 @@ import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestHistory
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestItem
 import jp.hazuki.yuzubrowser.legacy.search.suggest.Suggestion
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.legacy.utils.ui
+import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OutSideClickableRecyclerView
 import kotlinx.android.synthetic.main.tab_list.*

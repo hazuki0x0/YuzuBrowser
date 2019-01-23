@@ -24,12 +24,12 @@ import android.widget.CheckBox
 import android.widget.EditText
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
+import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
-import jp.hazuki.yuzubrowser.legacy.utils.externalUserDirectory
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.File
 import java.io.IOException
 

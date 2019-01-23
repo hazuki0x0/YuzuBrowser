@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.theme
+package jp.hazuki.yuzubrowser.ui.theme
 
 import com.squareup.moshi.JsonReader
 import okio.Okio
@@ -46,14 +46,14 @@ private constructor(val version: String, val name: String, val id: String) {
             return null
         }
 
-        @Throws(ThemeManifest.IllegalManifestException::class)
+        @Throws(IllegalManifestException::class)
         fun decodeManifest(manifestFile: File): ThemeManifest? {
             if (manifestFile.exists() && manifestFile.isFile) {
                 try {
                     JsonReader.of(Okio.buffer(Okio.source(manifestFile))).use { return decode(it) }
                 } catch (e: IOException) {
                     e.printStackTrace()
-                    throw ThemeManifest.IllegalManifestException("unknown error", 0)
+                    throw IllegalManifestException("unknown error", 0)
                 }
 
             } else {

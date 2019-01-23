@@ -32,7 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 
 public class DownloadFileProvider extends ContentProvider {
     private static final String[] COLUMNS = {

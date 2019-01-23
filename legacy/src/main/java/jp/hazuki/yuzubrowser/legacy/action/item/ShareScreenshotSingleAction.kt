@@ -27,7 +27,7 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.IOException
 
 class ShareScreenshotSingleAction : SingleAction, Parcelable {

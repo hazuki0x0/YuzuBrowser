@@ -28,12 +28,12 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.FullTabLayout
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.ScrollableTabLayout
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import kotlinx.android.synthetic.main.toolbar_tab.view.*
 
 class TabBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_tab, R.layout.toolbar_tab, request_callback) {

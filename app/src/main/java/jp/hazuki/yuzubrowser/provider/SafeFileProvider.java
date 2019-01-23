@@ -33,7 +33,7 @@ import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.BuildConfig;
 import jp.hazuki.yuzubrowser.ErrorReportServer;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 
 public class SafeFileProvider extends ContentProvider {
     private static final String TAG = "SafeFileProvider";

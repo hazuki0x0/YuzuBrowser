@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.legacy.download.core.utils
 
+import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.download.core.downloader.client.HttpClient
-import jp.hazuki.yuzubrowser.legacy.utils.createUniqueFileName
 
 fun HttpClient.getFileName(root: androidx.documentfile.provider.DocumentFile, url: String, mimeType: String?, defaultExt: String?): String {
     headerFields["Content-Disposition"]?.let { contents ->

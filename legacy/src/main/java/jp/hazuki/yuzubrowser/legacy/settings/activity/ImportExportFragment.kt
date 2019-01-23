@@ -24,6 +24,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.backup.BackupTask
 import jp.hazuki.yuzubrowser.legacy.backup.RestoreTask
@@ -38,8 +40,6 @@ import jp.hazuki.yuzubrowser.legacy.browser.requestStoragePermission
 import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialBackupTask
 import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialRestoreTask
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
-import jp.hazuki.yuzubrowser.legacy.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListDialog
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListViewController

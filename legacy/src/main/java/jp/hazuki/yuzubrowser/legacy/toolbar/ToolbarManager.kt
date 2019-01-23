@@ -22,12 +22,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.CustomToolbar
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.ProgressToolBar
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.TabBar
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.UrlBarBase
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 interface ToolbarManager {

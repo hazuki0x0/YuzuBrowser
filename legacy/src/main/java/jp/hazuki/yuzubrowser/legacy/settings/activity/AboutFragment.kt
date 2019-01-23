@@ -24,12 +24,12 @@ import android.webkit.WebView
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.core.utility.extensions.getVersionName
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.licenses.LicensesActivity
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import java.io.File
 

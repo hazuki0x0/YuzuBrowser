@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference
 import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.ListPreference
+import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeManifest
-import jp.hazuki.yuzubrowser.legacy.utils.externalUserDirectory
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.theme.ThemeManifest
 import java.io.File
 import java.io.IOException
 import java.util.*

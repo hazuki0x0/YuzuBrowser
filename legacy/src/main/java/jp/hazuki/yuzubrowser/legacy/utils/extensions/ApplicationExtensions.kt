@@ -23,10 +23,10 @@ import android.os.Build
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
+import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.getMimeType
 
 inline val Context.browserApplicationContext: BrowserApplication
     get() = applicationContext as BrowserApplication

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.app
+package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
-import jp.hazuki.yuzubrowser.legacy.utils.createLanguageContext
+import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageContext
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 @SuppressLint("Registered")
 open class ThemeActivity : AppCompatActivity() {
@@ -33,7 +32,7 @@ open class ThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (isLoadThemeData) {
-            ThemeData.createInstance(applicationContext, AppData.theme_setting.get())
+            ThemeData.createInstance(applicationContext, PrefPool.getSharedPref(this).getString(theme_setting, ThemeData.THEME_LIGHT))
         }
 
         val nightMode = AppCompatDelegate.getDefaultNightMode()
@@ -51,10 +50,15 @@ open class ThemeActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(newBase.createLanguageContext(AppData.language.get()))
+        super.attachBaseContext(newBase.createLanguageContext(PrefPool.getSharedPref(newBase).getString(language, "")!!))
     }
 
     private fun isLightMode(): Boolean {
         return ThemeData.isEnabled() && ThemeData.getInstance().lightTheme
+    }
+
+    companion object {
+        private const val theme_setting = "theme_setting"
+        private const val language = "language"
     }
 }

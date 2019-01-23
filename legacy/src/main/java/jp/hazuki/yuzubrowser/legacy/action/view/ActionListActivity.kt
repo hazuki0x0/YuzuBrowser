@@ -25,9 +25,9 @@ import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
-import jp.hazuki.yuzubrowser.legacy.utils.app.OnActivityResultListener
-import jp.hazuki.yuzubrowser.legacy.utils.app.StartActivityInfo
-import jp.hazuki.yuzubrowser.legacy.utils.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
+import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
 open class ActionListActivity : ThemeActivity() {
 

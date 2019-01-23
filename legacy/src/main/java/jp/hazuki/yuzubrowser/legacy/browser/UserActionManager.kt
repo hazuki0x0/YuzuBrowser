@@ -36,9 +36,9 @@ import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGest
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureInfo
 import jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.theme.ThemeData
 import jp.hazuki.yuzubrowser.legacy.utils.MathUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webview.CustomOnCreateContextMenuListener
 import jp.hazuki.yuzubrowser.webview.CustomWebView

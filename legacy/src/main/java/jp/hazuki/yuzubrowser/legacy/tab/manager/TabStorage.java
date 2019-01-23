@@ -41,9 +41,9 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
-import jp.hazuki.yuzubrowser.legacy.utils.FileUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 import jp.hazuki.yuzubrowser.webview.WebViewFactory;
