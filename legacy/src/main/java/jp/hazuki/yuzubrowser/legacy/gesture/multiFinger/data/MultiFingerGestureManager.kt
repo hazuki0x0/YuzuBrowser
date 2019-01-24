@@ -22,6 +22,9 @@ import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.IOException
 import java.util.*
 
@@ -72,7 +75,7 @@ class MultiFingerGestureManager(context: Context) {
         gestureItems.clear()
         if (jsonFile == null || !jsonFile.exists() || jsonFile.isDirectory) return
         try {
-            JsonReader.of(Okio.buffer(Okio.source(jsonFile))).use { reader ->
+            JsonReader.of(jsonFile.source().buffer()).use { reader ->
                 if (reader.peek() == JsonReader.Token.BEGIN_ARRAY) {
                     reader.beginArray()
                     while (reader.hasNext()) {
@@ -117,7 +120,7 @@ class MultiFingerGestureManager(context: Context) {
 
     fun save() {
         try {
-            JsonWriter.of(Okio.buffer(Okio.sink(jsonFile))).use { writer ->
+            JsonWriter.of(jsonFile.sink().buffer()).use { writer ->
                 writer.beginArray()
                 gestureItems.forEach { item ->
                     writer.beginObject()

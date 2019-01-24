@@ -21,6 +21,9 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.IOException
 import java.util.*
 
@@ -34,7 +37,7 @@ class UserAgentList : ArrayList<UserAgent>() {
         if (file == null || !file.exists() || file.isDirectory) return true
 
         try {
-            val userAgents = Okio.buffer(Okio.source(file)).use {
+            val userAgents = file.source().buffer().use {
                 val type = Types.newParameterizedType(List::class.java, UserAgent::class.java)
                 val adapter = moshi.adapter<List<UserAgent>>(type)
                 adapter.fromJson(it)
@@ -54,7 +57,7 @@ class UserAgentList : ArrayList<UserAgent>() {
         val file = context.getFileStreamPath(FILENAME)
 
         try {
-            Okio.buffer(Okio.sink(file)).use {
+            file.sink().buffer().use {
                 val type = Types.newParameterizedType(List::class.java, UserAgent::class.java)
                 val adapter = moshi.adapter<List<UserAgent>>(type)
                 adapter.toJson(it, this)

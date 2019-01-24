@@ -19,6 +19,9 @@ package jp.hazuki.yuzubrowser.legacy.search.settings
 import android.content.Context
 import com.squareup.moshi.Moshi
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.File
 import java.io.IOException
 
@@ -40,7 +43,7 @@ class SearchUrlManager(context: Context, private val moshi: Moshi) : ArrayList<S
     fun load() {
         clear()
         try {
-            val items = Okio.buffer(Okio.source(file)).use {
+            val items = file.source().buffer().use {
                 val adapter = moshi.adapter(SearchSettings::class.java)
                 adapter.fromJson(it)
             }
@@ -56,7 +59,7 @@ class SearchUrlManager(context: Context, private val moshi: Moshi) : ArrayList<S
 
     fun save() {
         try {
-            Okio.buffer(Okio.sink(file)).use {
+            file.sink().buffer().use {
                 val adapter = moshi.adapter(SearchSettings::class.java)
                 adapter.toJson(it, SearchSettings(selectedId, idCount, this))
             }

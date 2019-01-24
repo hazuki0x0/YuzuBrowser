@@ -21,6 +21,9 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.File
 import java.io.IOException
 import java.io.Serializable
@@ -55,7 +58,7 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         if (!file.exists() || file.isDirectory) return true
 
         try {
-            JsonReader.of(Okio.buffer(Okio.source(file))).use {
+            JsonReader.of(file.source().buffer()).use {
                 root.readForRoot(it)
                 createIndex()
 
@@ -73,7 +76,7 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         }
 
         try {
-            JsonWriter.of(Okio.buffer(Okio.sink(file))).use {
+            JsonWriter.of(file.sink().buffer()).use {
                 root.writeForRoot(it)
                 return true
             }

@@ -22,6 +22,9 @@ import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.File
 import java.io.IOException
 import java.io.Serializable
@@ -39,7 +42,7 @@ abstract class ActionFile : Serializable {
         if (!file.exists() || file.isDirectory) return true
 
         try {
-            JsonReader.of(Okio.buffer(Okio.source(file))).use {
+            JsonReader.of(file.source().buffer()).use {
                 if (!load(it)) {
                     Logger.e(TAG, "loadMain error (return false)")
                     return false
@@ -60,7 +63,7 @@ abstract class ActionFile : Serializable {
         val file = getFile(context)
 
         try {
-            JsonWriter.of(Okio.buffer(Okio.sink(file))).use {
+            JsonWriter.of(file.sink().buffer()).use {
                 if (!write(it)) {
                     Logger.e(TAG, "writeMain error (return false)")
                     return false

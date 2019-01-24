@@ -78,6 +78,7 @@ dependencies {
     kapt Libs.dagger_android_processor
 
     implementation Libs.okhttp
+    implementation Libs.okio
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 

@@ -19,6 +19,9 @@ package jp.hazuki.yuzubrowser.legacy.readitlater
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.File
 import java.io.IOException
 
@@ -33,7 +36,7 @@ class ReadItLaterIndex(private val moshi: Moshi, root: File) : ArrayList<ReadIte
     fun load() {
         clear()
         try {
-            val items = Okio.buffer(Okio.source(indexFile)).use {
+            val items = indexFile.source().buffer().use {
                 val type = Types.newParameterizedType(List::class.java, ReadItem::class.java)
                 val adapter = moshi.adapter<List<ReadItem>>(type)
                 adapter.fromJson(it)
@@ -46,7 +49,7 @@ class ReadItLaterIndex(private val moshi: Moshi, root: File) : ArrayList<ReadIte
 
     fun save() {
         try {
-            Okio.buffer(Okio.sink(indexFile)).use {
+            indexFile.sink().buffer().use {
                 val type = Types.newParameterizedType(List::class.java, ReadItem::class.java)
                 val adapter = moshi.adapter<List<ReadItem>>(type)
                 adapter.toJson(it, this)

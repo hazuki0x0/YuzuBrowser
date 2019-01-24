@@ -33,6 +33,7 @@ object Versions {
     const val dagger = "2.20"
     const val kotshi = "1.0.6"
     const val okhttp = "3.12.1"
+    const val okio = "2.2.1"
     const val kvs_schema = "5.1.0"
     const val kotlin = "1.3.20"
     const val kotlin_coroutines = "1.1.1"
@@ -55,6 +56,7 @@ object Libs {
     val kotshi = "se.ansman.kotshi:api:${Versions.kotshi}"
     val kotshi_compiler = "se.ansman.kotshi:compiler:${Versions.kotshi}"
     val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
+    val okio = "com.squareup.okio:okio:${Versions.okio}"
 
     //Kotlin
     val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"

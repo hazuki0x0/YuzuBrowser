@@ -21,6 +21,9 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.IOException
 import java.util.*
 
@@ -34,7 +37,7 @@ class WebTextEncodeList : ArrayList<WebTextEncode>() {
         if (file == null || !file.exists() || file.isDirectory) return true
 
         try {
-            val encodes = Okio.buffer(Okio.source(file)).use {
+            val encodes = file.source().buffer().use {
                 val type = Types.newParameterizedType(List::class.java, WebTextEncode::class.java)
                 val adapter = moshi.adapter<List<WebTextEncode>>(type)
                 adapter.fromJson(it)
@@ -54,7 +57,7 @@ class WebTextEncodeList : ArrayList<WebTextEncode>() {
         val file = context.getFileStreamPath(FILENAME)
 
         try {
-            Okio.buffer(Okio.sink(file)).use {
+            file.sink().buffer().use {
                 val type = Types.newParameterizedType(List::class.java, WebTextEncode::class.java)
                 val adapter = moshi.adapter<List<WebTextEncode>>(type)
                 adapter.toJson(it, this)
