@@ -28,9 +28,10 @@ object AppVersions {
 
 object Versions {
     const val androidX = "1.0.0"
+    const val appCompat = "1.0.2"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
-    const val dagger = "2.20"
+    const val dagger = "2.21"
     const val kotshi = "1.0.6"
     const val okhttp = "3.12.1"
     const val okio = "2.2.1"
@@ -39,14 +40,14 @@ object Versions {
     const val kotlin_coroutines = "1.1.1"
     const val kotlin_anko = "0.10.8"
     const val junit = "4.12"
-    const val espresso = "3.1.0"
+    const val espresso = "3.1.1"
     const val runner = "1.1.0"
 }
 
 object Libs {
     //androidx libraries
     val support_annotations = "androidx.annotation:annotation:${Versions.androidX}"
-    val support_appcompat_v7 = "androidx.appcompat:appcompat:${Versions.androidX}"
+    val support_appcompat_v7 = "androidx.appcompat:appcompat:${Versions.appCompat}"
     val support_design = "com.google.android.material:material:${Versions.androidX}"
     val support_recyclerview = "androidx.recyclerview:recyclerview:${Versions.androidX}"
     val support_constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.support_constraint_lib}"
