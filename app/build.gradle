@@ -113,7 +113,7 @@ dependencies {
 
     implementation Libs.support_appcompat_v7
     implementation Libs.support_fix_preference
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
     implementation project(':ui')
