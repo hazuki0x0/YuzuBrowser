@@ -127,7 +127,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
     }
     private val paddingReset = Runnable {
-        adjustBrowserPadding(tabManagerIn.currentTabData)
+        tabManagerIn.currentTabData?.let {
+            adjustBrowserPadding(it)
+        }
     }
     private var scrollableChangeListener = object : OnScrollableChangeListener {
         override fun onScrollableChanged(scrollable: Boolean) {

@@ -86,10 +86,10 @@ private class CheckName(root: androidx.documentfile.provider.DocumentFile) {
     private var index = 0
 
     fun exists(name: String): Boolean {
-        do {
+        while (length > index) {
             if (files[index] == name) return true
             index++
-        } while (length > index)
+        }
         return false
     }
 }

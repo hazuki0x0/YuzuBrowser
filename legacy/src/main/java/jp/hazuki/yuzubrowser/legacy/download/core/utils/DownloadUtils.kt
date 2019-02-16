@@ -142,7 +142,7 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
         if (!decodedUrl.endsWith("/")) {
             val index = decodedUrl.lastIndexOf('/') + 1
             if (index > 0) {
-                fileName = decodedUrl.substring(index)
+                fileName = FileUtils.replaceProhibitionWord(decodedUrl.substring(index))
             }
         }
     }
@@ -197,6 +197,10 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
         extension = ".html"
     }
 
+    if (fileName.length + extension.length > 127) {
+        fileName = fileName.substring(0, 127 - extension.length)
+    }
+
     return fileName + extension
 }
 
@@ -221,19 +225,23 @@ fun guessFileNameFromContentDisposition(contentDisposition: String): String? {
 
     val normal = NAME_NORMAL.toRegex().find(contentDisposition)
     if (normal != null) {
-        return try {
-            URLDecoder.decode(normal.groupValues[1], "UTF-8")
-        } catch (e: IllegalArgumentException) {
-            FileUtils.replaceProhibitionWord(normal.groupValues[1])
-        }
+        return FileUtils.replaceProhibitionWord(
+                try {
+                    URLDecoder.decode(normal.groupValues[1], "UTF-8")
+                } catch (e: IllegalArgumentException) {
+                    normal.groupValues[1]
+                }
+        )
     }
     val noQuot = NAME_NO_QUOT.toRegex().find(contentDisposition)
     if (noQuot != null) {
-        return try {
-            URLDecoder.decode(noQuot.groupValues[1], "UTF-8")
-        } catch (e: IllegalArgumentException) {
-            FileUtils.replaceProhibitionWord(noQuot.groupValues[1])
-        }
+        return FileUtils.replaceProhibitionWord(
+                try {
+                    URLDecoder.decode(noQuot.groupValues[1], "UTF-8")
+                } catch (e: IllegalArgumentException) {
+                    noQuot.groupValues[1]
+                }
+        )
     }
 
     return null
