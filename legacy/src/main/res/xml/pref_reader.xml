@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:title="@string/pref_reader_settings">
+
+    <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
+        android:entries="@array/pref_reader_theme_list"
+        android:entryValues="@array/pref_reader_theme_values"
+        android:key="reader_theme"
+        android:title="@string/pref_reader_theme"/>
+
+    <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
+        android:key="reader_text_size"
+        android:title="@string/pref_reader_text_size"
+        app:seekMax="30"
+        app:seekMin="10"/>
+
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.FontListPreference
+        android:key="reader_text_font"
+        android:title="@string/pref_reader_text_font"/>
+
+</PreferenceScreen>

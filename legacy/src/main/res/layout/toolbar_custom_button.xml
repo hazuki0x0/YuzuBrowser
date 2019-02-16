@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+                                                                      android:id="@+id/button"
+                                                                      style="@style/ToolbarImageButton"
+                                                                      android:layout_width="wrap_content"
+                                                                      android:layout_height="match_parent"
+                                                                      android:scaleType="fitCenter"
+                                                                      android:src="@null"/>

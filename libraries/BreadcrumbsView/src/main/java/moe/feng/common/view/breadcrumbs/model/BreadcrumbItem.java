@@ -1,9 +1,9 @@
 package moe.feng.common.view.breadcrumbs.model;
 
-import android.support.annotation.NonNull;
-
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class BreadcrumbItem {
 

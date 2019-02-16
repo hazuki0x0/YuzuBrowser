@@ -21,12 +21,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.PermissionChecker
-import android.support.v7.app.AppCompatActivity
-import kotlinx.coroutines.experimental.CancellableContinuation
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.PermissionChecker
+import kotlinx.coroutines.CancellableContinuation
+import kotlin.coroutines.resume
 
-class AsyncPermissionsFragment : Fragment() {
+class AsyncPermissionsFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var queue: PermissionsContinuationQueue
 

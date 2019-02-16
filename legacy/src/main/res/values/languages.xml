@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources translatable="false">
+    <string-array name="language_list">
+        <item>Default</item>
+        <item>English</item>
+        <item>German</item>
+        <item>Hungarian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Portuguese (Brazil)</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+    </string-array>
+
+    <string-array name="language_value">
+        <item/>
+        <item>en</item>
+        <item>de</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>pt-BR</item>
+        <item>ru</item>
+        <item>uk</item>
+    </string-array>
+</resources>

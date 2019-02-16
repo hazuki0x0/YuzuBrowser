@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package jp.hazuki.asyncpermissions
 
-import android.support.v7.app.AppCompatActivity
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resumeWithException
 
 class AsyncPermissions(activity: AppCompatActivity) {
 
@@ -26,6 +27,10 @@ class AsyncPermissions(activity: AppCompatActivity) {
 
     suspend fun request(vararg others: String): PermissionResult =
             suspendCancellableCoroutine { cont ->
-                asyncPermissionsFragment.request(*others, cont = cont)
+                try {
+                    asyncPermissionsFragment.request(*others, cont = cont)
+                } catch (e: Exception) {
+                    cont.resumeWithException(e)
+                }
             }
 }

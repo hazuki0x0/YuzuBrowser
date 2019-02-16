@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/pref_import_export">
+    <PreferenceCategory android:title="@string/bookmark">
+        <Preference
+            android:key="import_sd_bookmark"
+            android:title="@string/pref_import_bookmark" />
+        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:dialogMessage="@string/pref_export_bookmark_confirm"
+            android:dialogTitle="@string/pref_export_bookmark"
+            android:key="export_sd_bookmark"
+            android:title="@string/pref_export_bookmark" />
+        <Preference
+            android:key="import_html_bookmark"
+            android:title="@string/pref_import_html_bookmark" />
+        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:dialogMessage="@string/pref_export_html_bookmark_confirm"
+            android:dialogTitle="@string/pref_export_html_bookmark"
+            android:key="export_html_bookmark"
+            android:title="@string/pref_export_html_bookmark" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_speed_dial">
+        <Preference
+            android:key="restore_speed_dial"
+            android:title="@string/pref_restore_speed_dial" />
+        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:dialogMessage="@string/pref_backup_speed_dial_confirm"
+            android:dialogTitle="@string/pref_backup_speed_dial"
+            android:key="backup_speed_dial"
+            android:title="@string/pref_backup_speed_dial" />
+
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_settings">
+        <Preference
+            android:key="restore_settings"
+            android:title="@string/restore_settings" />
+        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:dialogMessage="@string/pref_backup_settings_confirm"
+            android:dialogTitle="@string/backup_settings"
+            android:key="backup_settings"
+            android:title="@string/backup_settings" />
+    </PreferenceCategory>
+</PreferenceScreen>

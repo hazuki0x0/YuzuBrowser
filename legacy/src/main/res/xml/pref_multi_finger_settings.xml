@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:title="@string/pref_multi_finger_gesture_settings">
+
+    <SwitchPreference
+        android:key="multi_finger_gesture"
+        android:title="@string/pref_multi_finger_gesture_enable" />
+
+    <SwitchPreference
+        android:dependency="multi_finger_gesture"
+        android:key="multi_finger_gesture_show_name"
+        android:title="@string/pref_multi_finger_gesture_name_enable" />
+
+    <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
+        android:key="multi_finger_gesture_sensitivity"
+        android:title="@string/pref_sensitivity"
+        app:seekMax="100"
+        app:seekMin="0" />
+
+    <Preference
+        android:key="multi_finger_gesture_list"
+        android:title="@string/pref_gesture_settings" />
+</PreferenceScreen>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,28 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 def gitHash = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX")
 
 android {
-    compileSdkVersion Integer.parseInt(project.android_compile_sdk_version)
-    buildToolsVersion project.android_build_tools_version
+    compileSdkVersion Build.compile_sdk_version
+    buildToolsVersion Build.build_tools_version
     defaultConfig {
         applicationId "jp.hazuki.yuzubrowser"
-        minSdkVersion Integer.parseInt(project.android_min_sdk_version)
-        targetSdkVersion Integer.parseInt(project.android_target_sdk_version)
-        versionCode Integer.parseInt(project.VERSION_CODE)
-        versionName project.VERSION_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion Build.min_sdk_version
+        targetSdkVersion Build.target_sdk_version
+        versionCode AppVersions.version_code
+        versionName AppVersions.version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "GIT_HASH", "\"${gitHash}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
         resValue "string", "package_name", applicationId
+        resValue "string", "package_build", gitHash
+        resValue "string", "package_build_time", buildTime
     }
 
     compileOptions {
@@ -55,6 +58,7 @@ android {
         debug {
             ext.enableCrashlytics = false
             ext.alwaysUpdateBuildId = false
+            applicationIdSuffix ".debug"
         }
     }
     packagingOptions {
@@ -66,17 +70,12 @@ android {
     applicationVariants.all { variant ->
         if (variant.buildType.name == "release") {
             variant.outputs.each { output ->
-                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                if (output.outputFileName.endsWith('.apk')) {
                     // Rename APK
                     def applicationId = defaultConfig.applicationId
                     def versionCode = defaultConfig.versionCode
                     def versionName = defaultConfig.versionName
-                    def newName = "${applicationId}_v${versionName}_${versionCode}.apk"
-                    if (output.hasProperty('outputFileName')) {
-                        output.outputFileName = newName
-                    } else {
-                        output.outputFile = new File(output.outputFile.parent, newName)
-                    }
+                    output.outputFileName = "${applicationId}_v${versionName}_${versionCode}.apk"
                 }
             }
         }
@@ -105,31 +104,32 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation "com.android.support:appcompat-v7:${android_support_lib_version}"
-    implementation "com.android.support:design:${android_support_lib_version}"
-    implementation "com.android.support:recyclerview-v7:${android_support_lib_version}"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation "com.takisoft.fix:preference-v7:${android_support_fix_lib_version}"
-    testImplementation 'junit:junit:4.12'
+    testImplementation Libs.junit
+    androidTestImplementation Libs.espressoCore
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
-    implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
-    implementation 'org.jsoup:jsoup:1.11.3'
-    implementation project(':libraries:floatingactionbutton')
-    implementation project(':libraries:colorpicker')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+    implementation Libs.kotshi
+    kapt Libs.kotshi_compiler
+    implementation Libs.okhttp
+
+    implementation Libs.support_appcompat_v7
+    implementation Libs.support_fix_preference
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.2.3'
-    implementation project(':libraries:asyncpermissions')
-    implementation project(':libraries:BreadcrumbsView')
+    implementation project(':ui')
+    implementation project(':legacy')
+    implementation project(':core')
+    implementation project(':webview')
+    implementation project(':languages')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation "org.jetbrains.anko:anko-commons:$anko_version"
-    implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
+    implementation Libs.kotlin_stdlib
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    implementation Libs.dagger_android
+    implementation Libs.dagger_android_support
+    kapt Libs.dagger_android_processor
+
+    implementation Libs.kvs_schema
 }

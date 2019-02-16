@@ -1,0 +1,33 @@
+<resources>
+    <string name="add">Hozzáad</string>
+    <string name="cancel">Mégsem</string>
+    <string name="reset">Visszaállítás</string>
+    <string name="pattern_edittext_hint">URL</string>
+    <string name="pattern_block">Blokkolási beállítások</string>
+    <string name="useragent">UserAgent</string>
+    <string name="javascript">JavaScript</string>
+    <string name="confirm">Megerősítés</string>
+    <string name="delete_history">Előzmény törlése</string>
+    <string name="delete_all_favicon">Összes favicon törlése</string>
+    <string name="delete_bookmark">Könyvjelző törlése</string>
+    <string name="delete_speedDial">Parancsikon törlése</string>
+    <string name="now_loading">Betöltés</string>
+    <string name="now_downloading">Letöltés alatt…</string>
+    <string name="minimize">Minimizálás</string>
+    <string name="open">Megnyitás</string>
+    <string name="open_new">Megnyitás új lapon</string>
+    <string name="open_bg">Megnyitás a háttérben</string>
+    <string name="open_new_right">Megnyitás új lapon jobbra</string>
+    <string name="share">Megosztás</string>
+    <string name="copy_url">URL másolása</string>
+    <string name="share_link">Link megosztása</string>
+    <string name="copy_link_url">Link URL másolása</string>
+    <string name="copy_link_text">Link szöveg másolása</string>
+    <string name="save_link">Link mentése</string>
+    <string name="save_link_as">Link mentése mint …</string>
+    <string name="open_image">Kép megnyitása</string>
+    <string name="open_image_new">Kép megnyitása új lapon</string>
+    <string name="open_image_bg">Kép megnyitása a  háttérben</string>
+    <string name="share_image">Share image</string>
+    <string name="share_image_url">Kép megosztása</string>
+</resources>

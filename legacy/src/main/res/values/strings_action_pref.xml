@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="action_web_scroll_type_values">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="action_open_menu_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+</resources>

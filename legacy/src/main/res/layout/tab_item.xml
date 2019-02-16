@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tab_background_normal"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <jp.hazuki.yuzubrowser.ui.widget.FullFillTextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:drawablePadding="2dp"
+        android:textColor="@color/tab_text_color_normal" />
+
+</LinearLayout>

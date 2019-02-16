@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/divider"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/tab_list_background" />
+
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/tab_list_background"
+        android:clickable="true"
+        android:gravity="right"
+        android:orientation="horizontal"
+        tools:ignore="KeyboardInaccessibleWidget,RtlHardcoded">
+
+        <ImageButton
+            android:id="@+id/newTabButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/new_tab"
+            android:paddingEnd="30dp"
+            android:paddingStart="30dp"
+            android:src="@drawable/ic_add_box_white_24dp" />
+    </LinearLayout>
+</LinearLayout>

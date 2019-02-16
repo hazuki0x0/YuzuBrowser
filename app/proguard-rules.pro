@@ -16,7 +16,7 @@
 #   public *;
 #}
 
--keep class jp.hazuki.yuzubrowser.utils.view.behavior.** { *; }
+-keep class jp.hazuki.yuzubrowser.legacy.utils.view.behavior.** { *; }
 
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keep @com.fasterxml.jackson.annotation.JsonIgnoreProperties class * { *; }
@@ -35,6 +35,8 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 -keepclassmembers class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator CREATOR;
 }
@@ -44,3 +46,16 @@
 -keepclasseswithmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# Moshi
+-keepclassmembers class ** {
+  @com.squareup.moshi.FromJson *;
+  @com.squareup.moshi.ToJson *;
+}
+-dontwarn okio.**
+# JSR 305 annotations
+-dontwarn javax.annotation.**
+
+#Okhttp3
+-dontwarn com.squareup.okhttp3.**
+-dontwarn okhttp3.**

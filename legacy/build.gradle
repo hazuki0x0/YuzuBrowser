@@ -1,0 +1,107 @@
+/*
+ * Copyright (C) 2017-2019 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion Build.compile_sdk_version
+
+    defaultConfig {
+        minSdkVersion Build.min_sdk_version
+        targetSdkVersion Build.target_sdk_version
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation Libs.junit
+    androidTestImplementation Libs.espressoCore
+    androidTestImplementation Libs.androidRunner
+
+    implementation Libs.support_appcompat_v7
+    implementation Libs.support_design
+    implementation Libs.support_recyclerview
+    implementation Libs.support_constraint_layout
+    implementation Libs.support_fix_preference
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    implementation Libs.dagger_android
+    implementation Libs.dagger_android_support
+    kapt Libs.dagger_android_processor
+
+    implementation Libs.okhttp
+    implementation Libs.okio
+    implementation Libs.kotshi
+    kapt Libs.kotshi_compiler
+
+    implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation project(':libraries:floatingactionbutton')
+    implementation project(':libraries:colorpicker')
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+        transitive = true
+    }
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.2'
+    implementation project(':libraries:asyncpermissions')
+    implementation project(':libraries:BreadcrumbsView')
+    implementation project(':ui')
+    implementation project(':core')
+    implementation project(':languages')
+    implementation project(':webview')
+
+    implementation Libs.kotlin_stdlib
+    implementation Libs.kotlin_coroutines
+    implementation Libs.kotlin_coroutines_android
+    implementation Libs.kotlin_anko_commons
+    implementation Libs.kotlin_anko_sql
+
+    implementation Libs.kvs_schema
+}

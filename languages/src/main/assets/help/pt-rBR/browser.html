@@ -1,0 +1,142 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+    <script type="text/javascript" src="../link.js"></script>
+</head>
+<body>
+<h1 class="head">Configurações de navegador</h1>
+<details id="pattern">
+    <summary>Correspondência de padrão</summary>
+    <p class="details_info">
+        URL permite você abrir com outros apps, alterar script do Java e agente do usuário, definir
+        bloqueio<br>
+        Para escrever, consulte <a href="regex.html">Especificação de padrão</a>.
+    </p>
+</details>
+<details>
+    <summary>Configurações de script do usuário</summary>
+    <p class="details_info">Pode gerenciar script do usuário</p>
+</details>
+<details id="ad_block">
+    <summary>Configurações de bloqueio de anúncio</summary>
+    <p class="details_info">
+        Você pode configurar bloqueios de anúncio.<br>
+        Para informações sobre como escrever cada lista, consulte <a href="regex.html">Especificação
+        de padrão</a>.
+    </p>
+</details>
+<details id="res_interrupt">
+    <summary>Configurações de interrupção de recurso</summary>
+    <p class="details_info">Verifique URL, bloqueie imagens, scripts externos, etc.<br>Isto também
+        pode ser
+        usado para bloqueio de anúncio</p>
+</details>
+<details>
+    <summary>Página inicial</summary>
+    <p class="details_info">Abra URL especificado ao abrir uma nova guia etc.<br>
+        O padrão é acesso rápido(yuzu:speeddial)</p>
+</details>
+<details>
+    <summary>Ação de download</summary>
+    <p class="details_info">Você pode alterar o comportamento ao baixar arquivos etc. <br><br>
+        <b>Fazer nada</b><br>
+        Ignorar solicitação de download.<br>
+        <b>Automático</b><br>
+        No caso de um pedido de reprodução de vídeo ou algo semelhante, o URL é aberto por outro
+        app, e caso contrário, um diálogo de download é mostrado.<br>
+        <b>Sempre download</b><br>
+        Sempre mostrar diálogo de download.<br>
+        <b>Sempre abrir</b><br>
+        Sempre abrir URL com outro app.<br>
+        <b>Compartilhar</b><br>
+        Sempre compartilhar URLs.<br>
+        <b>Selecionar</b><br>
+        Toda vez que você receber uma solicitação de download, selecionar qual comportamento como
+        abrir, baixar, e
+        compartilhar.</p>
+</details>
+<details>
+    <summary>Configurações de proxy</summary>
+    <p class="details_info">Pode definir proxy</p>
+</details>
+<details>
+    <summary>Configurações de pesquisa</summary>
+    <div class="details_info">
+        <dl>
+            <dt>Configurações de motor de pesquisa</dt>
+            <dd>Selecione motor de pesquisa que você configurou.</dd>
+            <dt>Configurações de URL do motor de pesquisa</dt>
+            <dd>Você pode definir o título do motor de pesquisa, URL e cor.<br>Coloque a parte da
+                palavra de pesquisa como
+                &#39;%s&#39;
+            </dd>
+            <dt>Mostrar ícone de alternância na barra de pesquisa</dt>
+            <dd>Você pode definir se deseja mostrar o ícone de alternância do motor de pesquisa na
+                barra de pesquisa.
+            </dd>
+            <dt>Tipo de sugestão de pesquisa</dt>
+            <dd>Sugestão de pesquisa pode ser definida da rede, consultas anteriores e ambos.</dd>
+            <dt>Mostrar histórico</dt>
+            <dd>Mostra histórico na sugestão de pesquisa.</dd>
+            <dt>Mostrar marcador</dt>
+            <dd>Mostra marcador na sugestão de pesquisa.</dd>
+        </dl>
+    </div>
+</details>
+<details>
+    <summary>Salvar guia na saída</summary>
+    <p class="details_info">Você pode definir se deseja salvar ao usar ação de [sair]</p>
+</details>
+<details>
+    <summary>Salvar guia fixada na saída</summary>
+    <p class="details_info">Salve guia fixada ao usar ação de [sair]</p>
+</details>
+<details>
+    <summary>Salvar guia fechada</summary>
+    <p class="details_info">Ative ao usar ação [Restaurar guia]<br>Se [Restaurar guia] não é
+        usada, é melhor desativá-la para poupar memória</p>
+</details>
+<details>
+    <summary>Configurações de nova guia</summary>
+    <p class="details_info">Pode definir configurações ao abrir uma nova guia</p>
+</details>
+<details>
+    <summary>Número de guias no cache</summary>
+    <p class="details_info">Configure limite máximo do número de guias mantidas na memória</p>
+</details>
+<details>
+    <summary>Pausar web ao alterar guia</summary>
+    <p class="details_info">Guias param processamento quando as guias entram em plano de fundo</p>
+</details>
+<details>
+    <summary>Pausar web em plano de fundo</summary>
+    <p class="details_info">Todas guias param processamento quando app entra em plano de fundo</p>
+</details>
+<details>
+    <summary>Compartilhar esquema desconhecido</summary>
+    <p class="details_info">Tente abrir url com outro app que não é suportado por um esquema
+        (como intent: // ou twitter: //)</p>
+</details>
+<details>
+    <summary>Diretório de download</summary>
+    <p class="details_info">Especifique pasta de destino<br>Cartão SD é apenas
+        /storage/sdcard1/Android/data/jp.hazuki.yuzubrowser/files</p>
+</details>
+<details>
+    <summary>Intervalo de autossalvamento (seg.)</summary>
+    <p class="details_info">Defina intervalo de autossalvamento (seg.)<br>Salvamento automático não
+        é executado se
+        é 0 seg.</p>
+</details>
+<details>
+    <summary>Renderização lenta</summary>
+    <p>
+        Esta é uma configuração para tirar uma completa captura de tela.<br>
+        Não é recomendável ativar configurações diferentes da completa captura de tela por causa da
+        probabilidade de frequentes congelamentos.
+    </p>
+</details>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jp.hazuki.yuzubrowser.ui.widget.RootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                                            xmlns:tools="http://schemas.android.com/tools"
+                                            android:id="@+id/superFrameLayout"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <jp.hazuki.yuzubrowser.ui.widget.CustomCoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                                 android:id="@+id/coordinator"
+                                                                 android:layout_width="match_parent"
+                                                                 android:layout_height="0dp"
+                                                                 android:layout_above="@+id/bottomAlwaysToolbarLayout"
+                                                                 android:layout_alignParentTop="true"
+                                                                 android:layout_toLeftOf="@+id/rightToolbarLayout"
+                                                                 android:layout_toRightOf="@+id/leftToolbarLayout"
+                                                                 tools:ignore="RtlHardcoded">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/topToolbarLayout"
+                    style="@style/ToolbarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:orientation="vertical"
+                    app:layout_scrollFlags="scroll|enterAlways"/>
+
+                <LinearLayout
+                    android:id="@+id/topAlwaysToolbarLayout"
+                    style="@style/ToolbarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                <include
+                    android:id="@+id/find"
+                    layout="@layout/find_onpage"
+                    android:visibility="gone"/>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout
+                android:id="@+id/webGestureOverlayView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_behavior="jp.hazuki.yuzubrowser.legacy.utils.view.behavior.WebViewBehavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/webFrameLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <FrameLayout
+                        android:id="@+id/paddingFrame"
+                        android:layout_width="match_parent"
+                        android:layout_height="0px"
+                        android:visibility="gone"
+                        android:layout_weight="0"/>
+
+                    <jp.hazuki.yuzubrowser.ui.widget.PaddingFrameLayout
+                        android:id="@+id/overlayToolbarScrollPadding"
+                        android:layout_width="match_parent"
+                        android:layout_height="0px"
+                        android:visibility="gone"
+                        android:layout_weight="0"/>
+                </LinearLayout>
+
+                <jp.hazuki.yuzubrowser.legacy.utils.view.fastscroll.WebViewFastScroller
+                    android:id="@+id/webViewFastScroller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    app:fs_hideDelay="1200"
+                    app:fs_barColor="@color/deep_gray"
+                    app:fs_handleNormalColor="@color/scroll_bar"/>
+
+                <jp.hazuki.yuzubrowser.legacy.gesture.view.CustomGestureOverlayView
+                    android:id="@+id/webGestureOverlayViewInner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:eventsInterceptionEnabled="false"
+                    android:fadeOffset="1"
+                    android:fadingEdgeLength="1dp"
+                    android:gestureColor="@color/web_gesture_color"
+                    android:gestureStrokeType="single"
+                    android:gestureStrokeWidth="8.0"
+                    android:uncertainGestureColor="@color/web_gesture_color"/>
+
+            </jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout>
+
+            <LinearLayout
+                android:id="@+id/bottomOverlayLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                app:layout_behavior="jp.hazuki.yuzubrowser.legacy.utils.view.behavior.BottomBarBehavior">
+
+                <LinearLayout
+                    android:id="@+id/bottomOverlayItemLayout"
+                    style="@style/ToolbarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                <LinearLayout
+                    android:id="@+id/bottomToolbarLayout"
+                    style="@style/ToolbarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
+
+
+        </jp.hazuki.yuzubrowser.ui.widget.CustomCoordinatorLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomAlwaysToolbarLayout"
+            style="@style/ToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_toLeftOf="@+id/rightToolbarLayout"
+            android:layout_toRightOf="@+id/leftToolbarLayout"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded"/>
+
+
+        <LinearLayout
+            android:id="@+id/leftToolbarLayout"
+            style="@style/ToolbarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded"/>
+
+        <LinearLayout
+            android:id="@+id/rightToolbarLayout"
+            style="@style/ToolbarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded"/>
+
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fullscreenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/actionNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#AA000000"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+</jp.hazuki.yuzubrowser.ui.widget.RootLayout>
