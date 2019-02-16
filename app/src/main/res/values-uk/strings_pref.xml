@@ -593,7 +593,6 @@
     <string name="pref_backup_settings_confirm">Ви впевнені, що хочете зробити резервну копію налаштувань?</string>
     <string name="pref_restore_settings_confirm">Всі поточні налаштування будуть втрачені, ви впевнені, що хочете відновити??\nА також, додаток автоматично перезапуститься після завершення відновлення.</string>
 
-    <string name="copyright" translatable="false">©2017-2018 Hazuki</string>
     <string name="version">Версія</string>
     <string name="build">Збірка</string>
     <string name="build_time">Час збірки</string>

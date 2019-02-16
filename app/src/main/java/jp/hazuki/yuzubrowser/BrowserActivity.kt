@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,7 +114,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         }
     }
     private val paddingReset = Runnable {
-        adjustBrowserPadding(tabManagerIn.currentTabData)
+        tabManagerIn.currentTabData?.let {
+            adjustBrowserPadding(it)
+        }
     }
     private var scrollableChangeListener = object : OnScrollableChangeListener {
         override fun onScrollableChanged(scrollable: Boolean) {
@@ -1333,7 +1335,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, WebViewProvide
         }
 
     override val pagePaddingHeight: Int
-        get() = topToolbarLayout.height + bottomOverlayLayout.height + paddingFrame.height
+        get() = topToolbarLayout.height + bottomOverlayLayout.height
 
     override var isFullscreenMode: Boolean = false
         set(enable) {

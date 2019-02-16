@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,10 +93,10 @@ private class CheckName(root: DocumentFile) {
     private var index = 0
 
     fun exists(name: String): Boolean {
-        do {
+        while (length > index) {
             if (files[index] == name) return true
             index++
-        } while (length > index)
+        }
         return false
     }
 }
