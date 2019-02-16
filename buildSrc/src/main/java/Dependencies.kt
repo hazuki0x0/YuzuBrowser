@@ -40,6 +40,7 @@ object Versions {
     const val kotlin_coroutines = "1.1.1"
     const val kotlin_anko = "0.10.8"
     const val junit = "4.12"
+    const val assertk = "0.13"
     const val espresso = "3.1.1"
     const val runner = "1.1.0"
 }
@@ -81,6 +82,7 @@ object Libs {
     val junit = "junit:junit:${Versions.junit}"
     val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso}"
     val androidRunner = "androidx.test.ext:junit:${Versions.runner}"
+    val assertk = "com.willowtreeapps.assertk:assertk-jvm:${Versions.assertk}"
 }
 
 object Dependencies {

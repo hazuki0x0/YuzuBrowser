@@ -43,8 +43,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation Libs.junit
+    testImplementation Libs.assertk
     androidTestImplementation Libs.espressoCore
     androidTestImplementation Libs.androidRunner
+    androidTestImplementation Libs.assertk
 
     implementation Libs.support_appcompat_v7
 

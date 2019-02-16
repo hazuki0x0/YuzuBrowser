@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import jp.hazuki.yuzubrowser.core.android.utils.BitmapUtilsKt;
+import jp.hazuki.yuzubrowser.core.utility.hash.HashUtilsKt;
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.image.DiskLruCache;
-import jp.hazuki.yuzubrowser.legacy.utils.image.Gochiusearch;
 
 public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener, DiskLruCache.OnTrimCacheListener {
 
@@ -94,8 +95,8 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
         url = getNormalUrl(url);
 
-        Long vec = Gochiusearch.getVectorHash(icon);
-        String hash = Gochiusearch.getHashString(vec);
+        Long vec = BitmapUtilsKt.calcImageHash(icon);
+        String hash = HashUtilsKt.formatHashString(vec);
         if (!ramCache.containsKey(vec)) {
             ramCache.put(vec, icon);
             addToDiskCache(hash, icon);
@@ -122,7 +123,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
         FaviconCacheIndex.Result result = diskCacheIndex.get(url);
         if (result.exists) {
-            Bitmap icon = getFromDiskCache(Gochiusearch.getHashString(result.hash));
+            Bitmap icon = getFromDiskCache(HashUtilsKt.formatHashString(result.hash));
             if (icon != null) {
                 ramCache.put(result.hash, icon);
                 synchronized (ramCacheIndex) {
@@ -157,7 +158,7 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
         FaviconCacheIndex.Result result = diskCacheIndex.get(url);
         if (result.exists) {
-            return getFromDiskCacheBytes(Gochiusearch.getHashString(result.hash));
+            return getFromDiskCacheBytes(HashUtilsKt.formatHashString(result.hash));
         }
 
         return null;
@@ -292,6 +293,6 @@ public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener,
 
     @Override
     public void onTrim(String key) {
-        diskCacheIndex.remove(Gochiusearch.parseHashString(key));
+        diskCacheIndex.remove(HashUtilsKt.parseHashString(key));
     }
 }

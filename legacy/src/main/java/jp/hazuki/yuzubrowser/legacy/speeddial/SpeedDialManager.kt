@@ -21,9 +21,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
+import jp.hazuki.yuzubrowser.core.android.utils.calcImageHash
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.image.Gochiusearch
 import java.util.*
 
 class SpeedDialManager(val context: Context) {
@@ -130,7 +130,7 @@ class SpeedDialManager(val context: Context) {
         db.query(TABLE_NAME, null, COLUMN_FAVICON + " = 1 AND " + COLUMN_URL + " = ? AND " +
                 COLUMN_LAST_UPDATE + " <= ?", arrayOf(url, time.toString()), null, null, null).use { c ->
             if (c.moveToFirst()) {
-                val hash = Gochiusearch.getVectorHash(icon)
+                val hash = icon.calcImageHash()
                 do {
                     if (c.getLong(COLUMN_FAVICON_HASH_INDEX) != hash) {
                         val values = ContentValues().apply {
