@@ -17,7 +17,7 @@
 package jp.hazuki.yuzubrowser.core.utility.hash
 
 /**
-ARGB image bytes to vector hash
+ * Calculate vector hash from ARGB image bytes
  */
 fun ByteArray.getVectorHash(): Long {
     val mono = IntArray(size / 4)

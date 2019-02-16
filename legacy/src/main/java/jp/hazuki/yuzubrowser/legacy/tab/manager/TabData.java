@@ -169,7 +169,7 @@ public class TabData {
     public void shotThumbnail(Bitmap thumbnail) {
         mIndexData.setThumbnail(thumbnail);
         mIndexData.setShotThumbnail(true);
-        thumbnailHash = BitmapUtilsKt.calcImageHash(thumbnail);
+        thumbnailHash = BitmapUtilsKt.calcImageVectorHash(thumbnail);
         canRetry = true;
     }
 

@@ -17,8 +17,10 @@
 package jp.hazuki.yuzubrowser.core.android.utils
 
 import android.graphics.Bitmap
+import jp.hazuki.yuzubrowser.core.utility.hash.getVectorHash
 import jp.hazuki.yuzubrowser.core.utility.hash.murmur3Hash64
 import java.nio.ByteBuffer
+
 
 fun Bitmap.calcImageHash(): Long {
     val longSide = Math.max(height, width)
@@ -30,4 +32,21 @@ fun Bitmap.calcImageHash(): Long {
     val buffer = ByteBuffer.allocate(byteCount)
     copyPixelsToBuffer(buffer)
     return buffer.array().murmur3Hash64()
+}
+
+fun Bitmap.calcImageVectorHash(): Long {
+    val bmpVector: Bitmap
+    if (config === Bitmap.Config.ARGB_8888 || config === Bitmap.Config.RGB_565) {
+        bmpVector = Bitmap.createScaledBitmap(this, 9, 8, true)
+    } else {
+        val cache = copy(Bitmap.Config.ARGB_8888, false)
+        bmpVector = Bitmap.createScaledBitmap(cache, 9, 8, true)
+        cache.recycle()
+    }
+
+    val buffer = ByteBuffer.allocate(byteCount)
+    copyPixelsToBuffer(buffer)
+
+    bmpVector.recycle()
+    return buffer.array().getVectorHash()
 }
