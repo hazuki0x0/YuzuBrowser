@@ -2,6 +2,8 @@
 [![license](https://img.shields.io/github/license/hazuki0x0/YuzuBrowser.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![GitHub release](https://img.shields.io/github/release/hazuki0x0/YuzuBrowser.svg)](https://play.google.com/store/apps/details?id=jp.hazuki.yuzubrowser)
 
+<img src="app/src/main/ic_launcher-web.png" width="192" height="192">
+
 Yuzu browser is an open source power full web browser.
 
 You can create your own browser using custom UI and custom buttons.
