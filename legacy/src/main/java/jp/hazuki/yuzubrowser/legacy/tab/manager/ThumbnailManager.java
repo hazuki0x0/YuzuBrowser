@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.tab.manager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Region;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.utils.image.ImageCache;
@@ -95,7 +94,7 @@ class ThumbnailManager {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         Canvas localCanvas = new Canvas(bitmap);
         localCanvas.translate(-scrollX, -scrollY);
-        localCanvas.clipRect(scrollX, scrollY, width + scrollX, height + scrollY, Region.Op.REPLACE);
+        localCanvas.clipRect(scrollX, scrollY, width + scrollX, height + scrollY);
         localCanvas.scale(scale, scale, 0.0f, 0.0f);
 
         webView.getWebView().draw(localCanvas);
