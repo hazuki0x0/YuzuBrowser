@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.behavior
+package jp.hazuki.yuzubrowser.browser.behavior
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import com.google.android.material.appbar.AppBarLayout
-import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.browser.R
 
 
 class BottomBarBehavior(context: Context, attrs: AttributeSet) : androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {

@@ -24,20 +24,20 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.utils.image.ImageCache;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
-class ThumbnailManager {
+public class ThumbnailManager {
     private final int height;
     private final int width;
 
     private ImageCache cache;
 
-    ThumbnailManager(Context context) {
+    public ThumbnailManager(Context context) {
         float density = ContextExtensionsKt.getDensity(context);
         height = (int) (density * 82 + 0.5f);
         width = (int) (density * 104 + 0.5f);
         cache = new ImageCache(0x200000);
     }
 
-    void takeThumbnailIfNeeded(MainTabData data) {
+    public void takeThumbnailIfNeeded(MainTabData data) {
         if (data != null && data.isFinished()) {
             if (data.isNeedShotThumbnail()) {
                 createWithCache(data);
@@ -50,7 +50,7 @@ class ThumbnailManager {
         }
     }
 
-    void removeThumbnailCache(String url) {
+    public void removeThumbnailCache(String url) {
         cache.remove(url);
     }
 
@@ -75,7 +75,7 @@ class ThumbnailManager {
         }, 100);
     }
 
-    void forceTakeThumbnail(MainTabData data) {
+    public void forceTakeThumbnail(MainTabData data) {
         createWithCache(data);
     }
 

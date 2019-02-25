@@ -27,7 +27,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.ToolbarActionManager
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeImageButton
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData

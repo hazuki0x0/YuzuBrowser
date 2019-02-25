@@ -25,7 +25,6 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.core.utility.extensions.getVersionName
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.licenses.LicensesActivity
@@ -58,7 +57,7 @@ class AboutFragment : YuzuPreferenceFragment() {
         }
 
         findPreference("privacy_policy").setOnPreferenceClickListener {
-            startActivity(intentFor<BrowserActivity>().apply {
+            startActivity(intentFor(Constants.activity.MAIN_BROWSER).apply {
                 action = Constants.intent.ACTION_OPEN_DEFAULT
                 data = Uri.parse("https://github.com/hazuki0x0/YuzuBrowser/wiki/Privacy-policy")
             })

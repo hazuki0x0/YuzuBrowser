@@ -43,7 +43,7 @@
         android:theme="@style/BrowserThemeDayNight"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name=".legacy.BrowserActivity"
+            android:name="jp.hazuki.yuzubrowser.browser.BrowserActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"

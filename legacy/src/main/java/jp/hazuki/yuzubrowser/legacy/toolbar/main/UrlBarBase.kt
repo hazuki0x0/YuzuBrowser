@@ -27,12 +27,11 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeTextButton
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
-abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: BrowserToolbarManager.RequestCallback) : ToolbarBase(context, AppData.toolbar_url, layout, request_callback) {
+abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_url, layout, request_callback) {
     private val mLeftButtonController: ButtonToolbarController
     private val mRightButtonController: ButtonToolbarController
     protected val centerUrlButton: SwipeTextButton

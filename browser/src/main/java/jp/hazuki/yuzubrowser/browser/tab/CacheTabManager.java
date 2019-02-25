@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.tab.manager;
+package jp.hazuki.yuzubrowser.browser.tab;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -30,16 +30,24 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.core.content.res.ResourcesCompat;
+import jp.hazuki.yuzubrowser.browser.BrowserActivity;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.OnWebViewCreatedListener;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.TabCache;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.TabFaviconManager;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.TabIndexData;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.TabStorage;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.ThumbnailManager;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 import jp.hazuki.yuzubrowser.webview.WebViewFactory;
 
-class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<MainTabData> {
+public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowListener<MainTabData> {
     private int mCurrentNo = -1;
     private long currentId = 0;
     private boolean cleared = false;

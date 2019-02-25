@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.toolbar
+package jp.hazuki.yuzubrowser.browser.manager
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -30,9 +30,10 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarVisibilityContainer
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
+import jp.hazuki.yuzubrowser.legacy.toolbar.SubToolbar
+import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_BOTTOM
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_BOTTOM_ALWAYS
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_BOTTOM_OVERLAY_ALWAYS
@@ -340,9 +341,5 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
             animator.duration = duration.toLong()
             animator.start()
         }
-    }
-
-    interface RequestCallback {
-        fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration? = null): Boolean
     }
 }

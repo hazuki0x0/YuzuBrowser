@@ -20,7 +20,7 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
-import jp.hazuki.yuzubrowser.legacy.di.ActivityModule
+import jp.hazuki.yuzubrowser.browser.di.ActivityModule
 import jp.hazuki.yuzubrowser.legacy.di.WebViewModule
 import jp.hazuki.yuzubrowser.legacy.download.DownloadModule
 import jp.hazuki.yuzubrowser.legacy.search.SearchModule

@@ -28,7 +28,6 @@ import android.view.View;
 import java.util.Arrays;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.Constants;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
@@ -39,10 +38,11 @@ public class AppUtils {
     }
 
     public static void restartApp(Context context, boolean forceDestroy) {
-        Intent start = new Intent(context, BrowserActivity.class);
-        start.setAction(BrowserActivity.ACTION_FINISH);
+        Intent start = new Intent();
+        start.setClassName(context, Constants.activity.MAIN_BROWSER);
+        start.setAction(Constants.intent.ACTION_FINISH);
         start.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        start.putExtra(BrowserActivity.EXTRA_FORCE_DESTROY, forceDestroy);
+        start.putExtra(Constants.intent.EXTRA_FORCE_DESTROY, forceDestroy);
         context.startActivity(start);
     }
 

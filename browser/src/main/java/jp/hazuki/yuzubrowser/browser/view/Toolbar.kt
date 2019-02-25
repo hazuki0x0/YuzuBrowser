@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.browser.ui
+package jp.hazuki.yuzubrowser.browser.view
 
 import android.content.Context
 import android.content.res.Configuration
 import android.view.MotionEvent
 import android.view.View
+import jp.hazuki.yuzubrowser.browser.manager.BrowserToolbarManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.TabActionManager
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarVisibilityContainer
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager
+import jp.hazuki.yuzubrowser.legacy.toolbar.main.RequestCallback
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
 
-class Toolbar(context: Context, root: View, private val controller: BrowserController, private val actionController: ActionController, iconManager: ActionIconManager) : BrowserToolbarManager(context, root, actionController, iconManager, object : BrowserToolbarManager.RequestCallback {
+class Toolbar(context: Context, root: View, private val controller: BrowserController, private val actionController: ActionController, iconManager: ActionIconManager) : BrowserToolbarManager(context, root, actionController, iconManager, object : RequestCallback {
     override fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration?): Boolean {
         if (!visibility.isVisible)
             return false

@@ -119,6 +119,7 @@ dependencies {
     implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
+    implementation project(':browser')
     implementation project(':ui')
     implementation project(':legacy')
     implementation project(':core')

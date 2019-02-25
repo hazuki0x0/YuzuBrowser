@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,24 +29,24 @@ import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 
-class TabFaviconManager {
+public class TabFaviconManager {
 
     private FaviconManager manager;
     private Context context;
     private boolean iconMode;
 
-    TabFaviconManager(Context context) {
+    public TabFaviconManager(Context context) {
         this.context = context;
         manager = FaviconManager.getInstance(context);
     }
 
-    void onPreferenceReset(List<View> tabViews, List<TabIndexData> indexDataList) {
+    public void onPreferenceReset(List<View> tabViews, List<TabIndexData> indexDataList) {
         if (iconMode != AppData.toolbar_show_favicon.get()) {
             iconMode = AppData.toolbar_show_favicon.get();
 
             int length = Math.min(tabViews.size(), indexDataList.size());
 
-            if (length == 0 || length > 0 && tabViews.get(0).getHeight() == 0) {
+            if (length == 0 || tabViews.get(0).getHeight() == 0) {
                 iconMode = !iconMode;
                 return;
             }
@@ -57,7 +57,7 @@ class TabFaviconManager {
         }
     }
 
-    void setFavicon(View view, TabIndexData indexData) {
+    public void setFavicon(View view, TabIndexData indexData) {
         setFavicon(view, indexData, iconMode);
     }
 

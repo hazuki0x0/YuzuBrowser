@@ -43,7 +43,6 @@ import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 import jp.hazuki.yuzubrowser.webview.WebViewFactory;
@@ -149,10 +148,10 @@ public class TabStorage {
         saveThumbnails();
     }
 
-    public MainTabData loadWebView(BrowserActivity webBrowser, TabIndexData data, View tabView) {
+    public MainTabData loadWebView(WebViewProvider provider, TabIndexData data, View tabView) {
         if (data == null) return null;
         Bundle bundle = loadBundle(new File(tabPath, Long.toString(data.getId())));
-        CustomWebView webView = webBrowser.makeWebView(webViewFactory.getMode(bundle));
+        CustomWebView webView = provider.makeWebView(webViewFactory.getMode(bundle));
         webView.setIdentityId(data.getId());
         MainTabData tab = data.getMainTabData(webView, tabView);
         if (listener != null) {
@@ -207,7 +206,7 @@ public class TabStorage {
         }
     }
 
-    public byte[] getThumbnail(long id) {
+    private byte[] getThumbnail(long id) {
         File file = new File(tabPath, Long.toString(id) + FILE_TAB_THUMBNAIL_SUFFIX);
 
         if (!file.exists()) return null;

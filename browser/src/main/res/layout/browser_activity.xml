@@ -67,12 +67,12 @@
             </com.google.android.material.appbar.AppBarLayout>
 
 
-            <jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout
+            <jp.hazuki.yuzubrowser.browser.view.GestureFrameLayout
                 android:id="@+id/webGestureOverlayView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_behavior="jp.hazuki.yuzubrowser.legacy.utils.view.behavior.WebViewBehavior">
+                app:layout_behavior="jp.hazuki.yuzubrowser.browser.behavior.WebViewBehavior">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                     app:fs_barColor="@color/deep_gray"
                     app:fs_handleNormalColor="@color/scroll_bar"/>
 
-                <jp.hazuki.yuzubrowser.legacy.gesture.view.CustomGestureOverlayView
+                <jp.hazuki.yuzubrowser.browser.view.CustomGestureOverlayView
                     android:id="@+id/webGestureOverlayViewInner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -121,7 +121,7 @@
                     android:gestureStrokeWidth="8.0"
                     android:uncertainGestureColor="@color/web_gesture_color"/>
 
-            </jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout>
+            </jp.hazuki.yuzubrowser.browser.view.GestureFrameLayout>
 
             <LinearLayout
                 android:id="@+id/bottomOverlayLayout"
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
-                app:layout_behavior="jp.hazuki.yuzubrowser.legacy.utils.view.behavior.BottomBarBehavior">
+                app:layout_behavior="jp.hazuki.yuzubrowser.browser.behavior.BottomBarBehavior">
 
                 <LinearLayout
                     android:id="@+id/bottomAlwaysOverlayToolbar"

@@ -25,7 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity
+import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.checkFlag
@@ -122,7 +122,7 @@ class DownloadListFragment : androidx.fragment.app.Fragment(), ActivityClient.Ac
         }
 
         menu.add(R.string.open_url).setOnMenuItemClickListener {
-            startActivity(intentFor<BrowserActivity>(Intent.EXTRA_TEXT to info.url)
+            startActivity(intentFor(Constants.activity.MAIN_BROWSER, Intent.EXTRA_TEXT to info.url)
                     .apply { action = Intent.ACTION_VIEW })
             activity.finish()
             false

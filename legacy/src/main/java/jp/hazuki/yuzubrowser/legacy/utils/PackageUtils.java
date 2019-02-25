@@ -40,8 +40,8 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication;
+import jp.hazuki.yuzubrowser.legacy.Constants;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.provider.ISafeFileProvider;
 
@@ -107,7 +107,8 @@ public class PackageUtils {
 
     public static void createShortcut(Context context, String title, String url, Bitmap favicon) {
         if (url != null && !TextUtils.isEmpty(title) && ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
-            Intent target = new Intent(context, BrowserActivity.class);
+            Intent target = new Intent();
+            target.setClassName(context, Constants.activity.MAIN_BROWSER);
             target.setAction(Intent.ACTION_VIEW);
             if (URLUtil.isFileUrl(url)) {
                 ISafeFileProvider provider = ((BrowserApplication)context.getApplicationContext()).getProviderManager().getSafeFileProvider();

@@ -20,7 +20,6 @@ import android.content.Context
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager.RequestCallback
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 class UrlBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : UrlBarBase(context, controller, iconManager, R.layout.toolbar_url, request_callback) {

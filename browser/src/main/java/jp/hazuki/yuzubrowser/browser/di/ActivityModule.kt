@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser'
+package jp.hazuki.yuzubrowser.browser.di
 
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+import jp.hazuki.yuzubrowser.browser.BrowserActivity
+
+@Module
+abstract class ActivityModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeBrowserActivity(): BrowserActivity
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy
 
 class Constants {
+    object activity {
+        const val MAIN_BROWSER = "jp.hazuki.yuzubrowser.browser.BrowserActivity"
+    }
+
     object intent {
         private const val PREFIX_ACTION = "jp.hazuki.yuzubrowser.action"
         private const val PREFIX_EXTRA = "jp.hazuki.yuzubrowser.extra"
@@ -33,10 +37,13 @@ class Constants {
         const val ACTION_RESTART_DOWNLOAD   = "$PREFIX_ACTION.download.restart"
         const val ACTION_CANCEL_DOWNLOAD    = "$PREFIX_ACTION.cancel.download"
         const val ACTION_PAUSE_DOWNLOAD     = "$PREFIX_ACTION.pause.download"
+        const val ACTION_FINISH = "$PREFIX_ACTION.finish"
+        const val ACTION_NEW_TAB = "$PREFIX_ACTION.newTab"
         const val EXTRA_ROOT_URI            = "$PREFIX_EXTRA.root"
         const val EXTRA_REQUEST_DOWNLOAD    = "$PREFIX_EXTRA.request.download"
         const val EXTRA_METADATA            = "$PREFIX_EXTRA.metadata"
         const val EXTRA_ID                  = "$PREFIX_EXTRA.id"
+        const val EXTRA_FORCE_DESTROY = "$PREFIX_EXTRA.force_destroy"
 
         /** res block */
         const val ACTION_BLOCK_IMAGE        = "$PREFIX_ACTION.action_block_image"

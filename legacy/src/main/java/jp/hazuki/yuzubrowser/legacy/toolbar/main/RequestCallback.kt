@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.di
+package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity
+import android.content.res.Configuration
+import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarVisibilityContainer
+import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 
-@Module
-abstract class ActivityModule {
-
-    @ContributesAndroidInjector
-    abstract fun contributeBrowserActivity(): BrowserActivity
+interface RequestCallback {
+    fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration? = null): Boolean
 }

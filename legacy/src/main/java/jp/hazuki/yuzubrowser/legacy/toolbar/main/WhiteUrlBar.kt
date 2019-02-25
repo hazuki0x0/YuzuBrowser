@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,9 @@ import android.util.AttributeSet
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeTextButton
 
-class WhiteUrlBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: BrowserToolbarManager.RequestCallback) : UrlBarBase(context, controller, iconManager, R.layout.toolbar_url_white, request_callback)
+class WhiteUrlBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : UrlBarBase(context, controller, iconManager, R.layout.toolbar_url_white, request_callback)
 
 class WhiteSwipeTextButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : SwipeTextButton(context, attrs) {
     override fun onSetNormalBackground() {}

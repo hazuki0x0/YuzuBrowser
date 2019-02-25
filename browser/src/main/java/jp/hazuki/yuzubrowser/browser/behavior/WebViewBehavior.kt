@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.view.behavior
+package jp.hazuki.yuzubrowser.browser.behavior
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.google.android.material.appbar.AppBarLayout
-import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.browser.R
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.ui.widget.PaddingFrameLayout

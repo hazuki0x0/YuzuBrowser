@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,9 @@ import android.view.View
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.AbstractToolbar
-import jp.hazuki.yuzubrowser.legacy.toolbar.BrowserToolbarManager.RequestCallback
 
 abstract class ToolbarBase(context: Context, preference: ToolbarContainer, layout_id: Int, request_callback: RequestCallback) : AbstractToolbar(context) {
-    internal val toolbarPreferences: ToolbarContainer = preference
+    val toolbarPreferences: ToolbarContainer = preference
     protected val mRequestCallback: RequestCallback = request_callback
 
     open fun onPreferenceReset() {

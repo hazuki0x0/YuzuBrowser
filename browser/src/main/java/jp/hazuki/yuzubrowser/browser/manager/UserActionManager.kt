@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.browser
+package jp.hazuki.yuzubrowser.browser.manager
 
 import android.content.Context
 import android.content.Intent
@@ -26,15 +26,16 @@ import android.view.ContextMenu
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.webkit.WebView
+import jp.hazuki.yuzubrowser.browser.view.GestureFrameLayout
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.*
+import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import jp.hazuki.yuzubrowser.legacy.browser.ui.PieManager
 import jp.hazuki.yuzubrowser.legacy.gesture.GestureManager
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureManager
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureDetector
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureInfo
-import jp.hazuki.yuzubrowser.legacy.gesture.view.GestureFrameLayout
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.MathUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast

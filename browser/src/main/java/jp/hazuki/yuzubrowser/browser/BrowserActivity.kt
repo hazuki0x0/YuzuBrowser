@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy
+package jp.hazuki.yuzubrowser.browser
 
 import android.app.AlertDialog
 import android.content.Context
@@ -32,9 +32,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.yuzubrowser.browser.behavior.BottomBarBehavior
+import jp.hazuki.yuzubrowser.browser.behavior.WebViewBehavior
+import jp.hazuki.yuzubrowser.browser.manager.UserActionManager
+import jp.hazuki.yuzubrowser.browser.tab.TabManagerFactory
+import jp.hazuki.yuzubrowser.browser.view.Toolbar
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.legacy.BrowserApplication
+import jp.hazuki.yuzubrowser.legacy.BrowserState
+import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
@@ -48,7 +56,6 @@ import jp.hazuki.yuzubrowser.legacy.adblock.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.browser.openable.BrowserOpenable
-import jp.hazuki.yuzubrowser.legacy.browser.ui.Toolbar
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.SaveWebArchiveDialog
@@ -65,7 +72,7 @@ import jp.hazuki.yuzubrowser.legacy.tab.UiTabManager
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.OnWebViewCreatedListener
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager
-import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManagerFactory
+import jp.hazuki.yuzubrowser.legacy.tab.manager.WebViewProvider
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialog
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialogFactory
@@ -76,8 +83,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.legacy.utils.network.ConnectionStateMonitor
 import jp.hazuki.yuzubrowser.legacy.utils.ui
-import jp.hazuki.yuzubrowser.legacy.utils.view.behavior.BottomBarBehavior
-import jp.hazuki.yuzubrowser.legacy.utils.view.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebCustomViewHandler
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager
@@ -96,7 +101,7 @@ import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
 import javax.inject.Inject
 
-class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener {
+class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener, WebViewProvider {
 
     private val asyncPermissions by lazy { AsyncPermissions(this) }
     private val handler = Handler(Looper.getMainLooper())
@@ -607,8 +612,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         val action = intent.action
         setIntent(Intent())
         if (action == null) return false
-        if (ACTION_FINISH == action) {
-            forceDestroy = intent.getBooleanExtra(EXTRA_FORCE_DESTROY, false)
+        if (Constants.intent.ACTION_FINISH == action) {
+            forceDestroy = intent.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
             browserState.isNeedLoad = true
             if (parent == null) {
                 recreate()
@@ -619,7 +624,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
             return false
         }
-        if (ACTION_NEW_TAB == action) {
+        if (Constants.intent.ACTION_NEW_TAB == action) {
             tabListView?.close()
             openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
             return false
@@ -1110,7 +1115,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         return true
     }
 
-    fun makeWebView(@WebViewType cacheType: Int): CustomWebView {
+    override fun makeWebView(@WebViewType cacheType: Int): CustomWebView {
         val web = webViewFactory.create(this, cacheType)
         web.view.id = View.generateViewId()
         web.webView.isFocusableInTouchMode = true
@@ -1539,9 +1544,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         private const val TAG = "BrowserActivity"
         private const val TAB_TYPE = "tabType"
         private const val EXTRA_DATA_TARGET = "BrowserActivity.target"
-        const val ACTION_FINISH = "jp.hazuki.yuzubrowser.legacy.BrowserActivity.finish"
-        const val ACTION_NEW_TAB = "jp.hazuki.yuzubrowser.legacy.BrowserActivity.newTab"
-        const val EXTRA_FORCE_DESTROY = "force_destroy"
         const val EXTRA_WINDOW_MODE = "window_mode"
         const val EXTRA_SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
     }

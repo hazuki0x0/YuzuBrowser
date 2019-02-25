@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser'
+package jp.hazuki.yuzubrowser.browser.tab;
 
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
+import jp.hazuki.yuzubrowser.browser.BrowserActivity;
+import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.webview.WebViewFactory;
+
+public class TabManagerFactory {
+    public static TabManager newInstance(BrowserActivity activity, WebViewFactory factory) {
+        return new CacheTabManager(activity, factory);
+    }
 }

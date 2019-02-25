@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.tab.manager;
+package jp.hazuki.yuzubrowser.legacy.tab.manager
 
-import jp.hazuki.yuzubrowser.legacy.BrowserActivity;
-import jp.hazuki.yuzubrowser.webview.WebViewFactory;
+import jp.hazuki.yuzubrowser.webview.CustomWebView
+import jp.hazuki.yuzubrowser.webview.WebViewType
 
-public class TabManagerFactory {
-    public static TabManager newInstance(BrowserActivity activity, WebViewFactory factory) {
-        return new CacheTabManager(activity, factory);
-    }
+interface WebViewProvider {
+    fun makeWebView(@WebViewType cacheType: Int): CustomWebView
 }

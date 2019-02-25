@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.browser
+package jp.hazuki.yuzubrowser.browser
 
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
@@ -46,6 +46,7 @@ import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockController
 import jp.hazuki.yuzubrowser.legacy.adblock.mining.MiningProtector
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
+import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
