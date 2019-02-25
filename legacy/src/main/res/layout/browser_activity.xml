@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <jp.hazuki.yuzubrowser.ui.widget.RootLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                             xmlns:app="http://schemas.android.com/apk/res-auto"
                                             xmlns:tools="http://schemas.android.com/tools"
@@ -16,10 +32,10 @@
                                                                  android:id="@+id/coordinator"
                                                                  android:layout_width="match_parent"
                                                                  android:layout_height="0dp"
-                                                                 android:layout_above="@+id/bottomAlwaysToolbarLayout"
+                                                                 android:layout_above="@+id/bottomAlwaysToolbar"
                                                                  android:layout_alignParentTop="true"
-                                                                 android:layout_toLeftOf="@+id/rightToolbarLayout"
-                                                                 android:layout_toRightOf="@+id/leftToolbarLayout"
+                                                                 android:layout_toLeftOf="@+id/rightToolbar"
+                                                                 android:layout_toRightOf="@+id/leftToolbar"
                                                                  tools:ignore="RtlHardcoded">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -28,7 +44,7 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/topToolbarLayout"
+                    android:id="@+id/topToolbar"
                     style="@style/ToolbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -37,7 +53,7 @@
                     app:layout_scrollFlags="scroll|enterAlways"/>
 
                 <LinearLayout
-                    android:id="@+id/topAlwaysToolbarLayout"
+                    android:id="@+id/topAlwaysToolbar"
                     style="@style/ToolbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -70,14 +86,14 @@
                         android:layout_weight="1"/>
 
                     <FrameLayout
-                        android:id="@+id/paddingFrame"
+                        android:id="@+id/toolbarPadding"
                         android:layout_width="match_parent"
                         android:layout_height="0px"
                         android:visibility="gone"
                         android:layout_weight="0"/>
 
                     <jp.hazuki.yuzubrowser.ui.widget.PaddingFrameLayout
-                        android:id="@+id/overlayToolbarScrollPadding"
+                        android:id="@+id/bottomAlwaysOverlayToolbarPadding"
                         android:layout_width="match_parent"
                         android:layout_height="0px"
                         android:visibility="gone"
@@ -116,14 +132,14 @@
                 app:layout_behavior="jp.hazuki.yuzubrowser.legacy.utils.view.behavior.BottomBarBehavior">
 
                 <LinearLayout
-                    android:id="@+id/bottomOverlayItemLayout"
+                    android:id="@+id/bottomAlwaysOverlayToolbar"
                     style="@style/ToolbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"/>
 
                 <LinearLayout
-                    android:id="@+id/bottomToolbarLayout"
+                    android:id="@+id/bottomOverlayToolbar"
                     style="@style/ToolbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -135,20 +151,20 @@
         </jp.hazuki.yuzubrowser.ui.widget.CustomCoordinatorLayout>
 
         <LinearLayout
-            android:id="@+id/bottomAlwaysToolbarLayout"
+            android:id="@+id/bottomAlwaysToolbar"
             style="@style/ToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:layout_toLeftOf="@+id/rightToolbarLayout"
-            android:layout_toRightOf="@+id/leftToolbarLayout"
+            android:layout_toLeftOf="@+id/rightToolbar"
+            android:layout_toRightOf="@+id/leftToolbar"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded"/>
 
 
         <LinearLayout
-            android:id="@+id/leftToolbarLayout"
+            android:id="@+id/leftToolbar"
             style="@style/ToolbarStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -157,7 +173,7 @@
             tools:ignore="RtlHardcoded"/>
 
         <LinearLayout
-            android:id="@+id/rightToolbarLayout"
+            android:id="@+id/rightToolbar"
             style="@style/ToolbarStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

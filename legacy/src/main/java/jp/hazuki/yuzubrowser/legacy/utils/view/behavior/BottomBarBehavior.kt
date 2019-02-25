@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ class BottomBarBehavior(context: Context, attrs: AttributeSet) : androidx.coordi
     override fun layoutDependsOn(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, bottomBar: LinearLayout, dependency: View): Boolean {
         if (dependency is AppBarLayout) {
             this.bottomBar = bottomBar
-            topToolbar = dependency.findViewById(R.id.topToolbarLayout)
-            bottomToolbar = bottomBar.findViewById(R.id.bottomToolbarLayout)
+            topToolbar = dependency.findViewById(R.id.topToolbar)
+            bottomToolbar = bottomBar.findViewById(R.id.bottomOverlayToolbar)
             isInitialized = true
             return true
         }

@@ -41,10 +41,10 @@ class WebViewBehavior(context: Context, attrs: AttributeSet) : AppBarLayout.Scro
 
     override fun layoutDependsOn(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: View, dependency: View): Boolean {
         if (dependency is AppBarLayout) {
-            topToolBar = parent.findViewById(R.id.topToolbarLayout)
+            topToolBar = parent.findViewById(R.id.topToolbar)
             bottomBar = parent.findViewById(R.id.bottomOverlayLayout)
-            paddingFrame = child.findViewById(R.id.paddingFrame)
-            overlayPaddingFrame = child.findViewById(R.id.overlayToolbarScrollPadding)
+            paddingFrame = child.findViewById(R.id.toolbarPadding)
+            overlayPaddingFrame = child.findViewById(R.id.bottomAlwaysOverlayToolbarPadding)
             isInitialized = true
             return true
         }

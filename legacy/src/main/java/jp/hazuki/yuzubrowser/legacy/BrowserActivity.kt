@@ -212,12 +212,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 }
             }
         }
-        topToolbarLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        topToolbar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                topToolbarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                coordinator.setToolbarHeight(topToolbarLayout.height)
+                topToolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                coordinator.setToolbarHeight(topToolbar.height)
                 tabManager.onLayoutCreated()
-                overlayToolbarScrollPadding.height = bottomOverlayItemLayout.height
+                bottomAlwaysOverlayToolbarPadding.height = bottomAlwaysOverlayToolbar.height
             }
         })
 
@@ -598,7 +598,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     override fun adjustBrowserPadding(tab: MainTabData) {
-        webViewBehavior.adjustWebView(tab, topToolbarLayout.height + bottomOverlayLayout.height)
+        webViewBehavior.adjustWebView(tab, topToolbar.height + bottomOverlayLayout.height)
     }
 
     private fun handleIntent(intent: Intent?): Boolean {
@@ -1333,8 +1333,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
     override val pagePaddingHeight: Int
-        get() = topAlwaysToolbarLayout.height + bottomOverlayItemLayout.height +
-                (if (paddingFrame.visibility == View.VISIBLE) paddingFrame.height else 0)
+        get() = topAlwaysToolbar.height + bottomAlwaysToolbar.height +
+                (if (toolbarPadding.visibility == View.VISIBLE) toolbarPadding.height else 0)
 
     override var isFullscreenMode: Boolean = false
         set(enable) {
