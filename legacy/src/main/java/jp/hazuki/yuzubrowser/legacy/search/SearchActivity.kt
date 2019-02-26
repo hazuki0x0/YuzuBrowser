@@ -27,7 +27,6 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
@@ -266,7 +265,6 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
     private fun getSearchQuery(query: String): List<SuggestItem> {
         val uri = mContentUri.buildUpon().appendQueryParameter("q", query).build()
 
-        Log.d("uri", uri.toString())
         val suggestions = ArrayList<SuggestItem>()
 
         contentResolver.query(uri, null, null, null, null)?.use { c ->
@@ -276,7 +274,6 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
                 suggestions.add(Suggestion(c.getString(colQuery), c.getInt(colHistory) == 1))
             }
         }
-        Log.d("suggert", suggestions.toString())
         return suggestions
     }
 
