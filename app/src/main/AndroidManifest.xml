@@ -19,11 +19,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="jp.hazuki.yuzubrowser">
 
-    <!--suppress AndroidElementNotAllowed -->
-    <meta-data
-        android:name="android.webkit.WebView.EnableSafeBrowsing"
-        android:value="true"/>
-
     <supports-screens
         android:smallScreens="true"
         android:normalScreens="true"
@@ -42,6 +37,11 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/BrowserThemeDayNight"
         tools:ignore="UnusedAttribute">
+
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true"/>
+
         <activity
             android:name="jp.hazuki.yuzubrowser.browser.BrowserActivity"
             android:alwaysRetainTaskState="true"
