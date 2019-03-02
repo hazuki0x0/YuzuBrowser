@@ -291,6 +291,8 @@ class SpeedDialManager(val context: Context) {
                 }
                 return instance!!
             }
+
+            internal fun getInstance() = instance
         }
     }
 
@@ -321,5 +323,9 @@ class SpeedDialManager(val context: Context) {
         private const val COLUMN_FAVICON_INDEX = 5
         private const val COLUMN_LAST_UPDATE_INDEX = 6
         private const val COLUMN_FAVICON_HASH_INDEX = 7
+
+        fun closeAll() {
+            MyOpenHelper.getInstance()?.close()
+        }
     }
 }

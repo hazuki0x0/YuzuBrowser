@@ -60,6 +60,8 @@ public class SpeedDialRestoreTask extends AsyncTaskLoader<Boolean> {
                 }
             }
             SpeedDialHtml.clearCache(getContext());
+            SpeedDialManager.Companion.closeAll();
+            SpeedDialManager.Companion.closeAll();
             return Boolean.TRUE;
         } catch (IOException e) {
             e.printStackTrace();
