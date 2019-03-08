@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,22 +45,24 @@ class NetscapeBookmarkParser(context: Context, val parent: BookmarkFolder) {
             throw NetscapeBookmarkException()
         }
 
-        val itemRoot = document.getElementsByTag("body").first() ?: throw NetscapeBookmarkException()
+        val itemRoot = document.body() ?: throw NetscapeBookmarkException()
 
         parseItem(itemRoot.children().firstOrNull { it.tagName() == "dl" } ?: throw NetscapeBookmarkException(), parent)
     }
 
     private fun parseItem(element: Element, parent: BookmarkFolder) {
-        element.children().forEach {
-            if (it.tagName() == "dt") {
-                val folderNode = it.children().firstOrNull { it.tagName() == "h3" }
+        element.children().forEach { child ->
+            if (child.tagName() == "dt") {
+                val children = child.children()
+                val folderNode = children.firstOrNull { it.tagName() == "h3" }
                 if (folderNode != null) {
                     val folder = BookmarkFolder(folderNode.text(), parent, BookmarkIdGenerator.getNewId())
                     parent.add(folder)
-                    parseItem(it.children().firstOrNull { it.tagName() == "dl" } ?: throw NetscapeBookmarkException(), folder)
+                    parseItem(children.firstOrNull { it.tagName() == "dl" }
+                            ?: throw NetscapeBookmarkException(), folder)
                     return@forEach
                 }
-                val item = it.children().firstOrNull { it.tagName() == "a" }
+                val item = children.firstOrNull { it.tagName() == "a" }
                 if (item != null) {
                     val url = item.attr("href")
                     if (url.isNotEmpty()) {
@@ -84,6 +86,6 @@ class NetscapeBookmarkParser(context: Context, val parent: BookmarkFolder) {
     }
 
     private fun checkDocType(doc: Document): Boolean {
-        return "<!doctype netscape-bookmark-file-1>" == doc.childNodes().firstOrNull { it is DocumentType }?.toString()
+        return "<!DOCTYPE netscape-bookmark-file-1>".equals(doc.childNodes().firstOrNull { it is DocumentType }?.toString(), true)
     }
 }
