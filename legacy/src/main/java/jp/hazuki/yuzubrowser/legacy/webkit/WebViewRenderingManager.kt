@@ -20,9 +20,8 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.view.View
-
+import jp.hazuki.yuzubrowser.core.utility.utils.ColorFilterUtils
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.ColorFilterUtils
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class WebViewRenderingManager {

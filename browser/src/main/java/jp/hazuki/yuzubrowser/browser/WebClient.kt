@@ -38,6 +38,7 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -71,7 +72,6 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.sub.GeolocationPermissionToolbar
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScript
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptDatabase
 import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
-import jp.hazuki.yuzubrowser.legacy.utils.HttpUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebDownloadUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast

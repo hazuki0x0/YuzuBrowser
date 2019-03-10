@@ -24,13 +24,13 @@ import android.view.View
 import android.widget.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
+import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.FontUtils
 
 typealias OnMenuCloseListener = () -> Unit
 

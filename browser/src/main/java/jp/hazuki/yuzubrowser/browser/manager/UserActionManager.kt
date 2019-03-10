@@ -28,6 +28,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import jp.hazuki.yuzubrowser.browser.view.GestureFrameLayout
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.utils.MathUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.*
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
@@ -37,7 +38,6 @@ import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureM
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureDetector
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureInfo
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.MathUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector

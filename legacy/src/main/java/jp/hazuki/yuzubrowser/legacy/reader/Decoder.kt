@@ -25,9 +25,9 @@ import android.text.Spanned
 import android.text.TextUtils
 import android.webkit.WebSettings
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.reader.snacktory.HtmlFetcher
-import jp.hazuki.yuzubrowser.legacy.utils.HttpUtils
 import java.util.*
 
 fun decodeToReaderData(context: Context, url: String, userAgent: String?): ReaderData? {

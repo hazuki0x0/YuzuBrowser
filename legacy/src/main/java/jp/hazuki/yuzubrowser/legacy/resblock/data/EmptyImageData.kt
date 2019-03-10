@@ -21,8 +21,8 @@ import android.webkit.WebResourceResponse
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.resblock.ResourceData
-import jp.hazuki.yuzubrowser.legacy.utils.IOUtils
 import java.io.ByteArrayInputStream
 import java.io.IOException
 

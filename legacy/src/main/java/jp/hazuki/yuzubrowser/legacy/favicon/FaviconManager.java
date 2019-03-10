@@ -33,9 +33,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import jp.hazuki.yuzubrowser.core.android.utils.BitmapUtilsKt;
+import jp.hazuki.yuzubrowser.core.cache.DiskLruCache;
 import jp.hazuki.yuzubrowser.core.utility.hash.HashUtilsKt;
-import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
-import jp.hazuki.yuzubrowser.legacy.utils.image.DiskLruCache;
+import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils;
 
 public class FaviconManager implements FaviconCache.OnIconCacheOverFlowListener, DiskLruCache.OnTrimCacheListener {
 

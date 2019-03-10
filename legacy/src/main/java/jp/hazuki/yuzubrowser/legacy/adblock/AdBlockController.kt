@@ -20,11 +20,11 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
 import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
+import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.faster.Filter
 import jp.hazuki.yuzubrowser.legacy.adblock.faster.core.AdBlocker
 import jp.hazuki.yuzubrowser.legacy.adblock.faster.core.FilterMatcher
-import jp.hazuki.yuzubrowser.legacy.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherList
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

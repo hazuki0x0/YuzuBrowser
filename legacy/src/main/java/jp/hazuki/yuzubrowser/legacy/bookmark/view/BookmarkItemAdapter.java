@@ -31,13 +31,13 @@ import android.widget.TextView;
 import java.util.List;
 
 import androidx.core.content.res.ResourcesCompat;
+import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkSite;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.utils.FontUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter;
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener;

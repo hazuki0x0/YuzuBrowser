@@ -33,9 +33,7 @@ import android.widget.Toast
 import androidx.print.PrintHelper
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
-import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.*
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -73,7 +71,9 @@ import jp.hazuki.yuzubrowser.legacy.speeddial.view.SpeedDialSettingActivity
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity
-import jp.hazuki.yuzubrowser.legacy.utils.*
+import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
+import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils
+import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType

@@ -21,6 +21,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
@@ -29,7 +30,6 @@ import jp.hazuki.yuzubrowser.legacy.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.Dispatchers

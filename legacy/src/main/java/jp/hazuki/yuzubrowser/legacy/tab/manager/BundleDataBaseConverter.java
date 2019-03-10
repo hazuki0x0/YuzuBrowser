@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
-import jp.hazuki.yuzubrowser.legacy.utils.IOUtils;
+import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils;
 import jp.hazuki.yuzubrowser.webview.WebViewFactory;
 
 public class BundleDataBaseConverter {

@@ -27,6 +27,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadRequest
@@ -36,7 +37,6 @@ import jp.hazuki.yuzubrowser.legacy.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.download
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

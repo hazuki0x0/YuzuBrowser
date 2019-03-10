@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.browser.view.Toolbar
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.BrowserState
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -82,7 +83,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.legacy.utils.network.ConnectionStateMonitor
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebCustomViewHandler
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager

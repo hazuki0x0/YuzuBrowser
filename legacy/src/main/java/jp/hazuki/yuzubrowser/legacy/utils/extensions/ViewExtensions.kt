@@ -20,6 +20,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.download.core.data.DownloadFileInfo
@@ -27,7 +28,6 @@ import jp.hazuki.yuzubrowser.legacy.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.createFileOpenIntent
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -59,14 +59,14 @@ fun CustomWebView.saveArchive(root: androidx.documentfile.provider.DocumentFile,
                 return@ui
             }
             withContext(Dispatchers.Default) {
-            tmpFile.inputStream().use { input ->
-                context.contentResolver.openOutputStream(saveTo.uri, "w").use { out ->
-                    checkNotNull(out)
-                    input.copyTo(out)
+                tmpFile.inputStream().use { input ->
+                    context.contentResolver.openOutputStream(saveTo.uri, "w").use { out ->
+                        checkNotNull(out)
+                        input.copyTo(out)
+                    }
                 }
+                tmpFile.delete()
             }
-            tmpFile.delete()
-        }
 
             success = saveTo.exists()
 

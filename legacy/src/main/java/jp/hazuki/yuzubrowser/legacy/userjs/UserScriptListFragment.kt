@@ -31,8 +31,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter

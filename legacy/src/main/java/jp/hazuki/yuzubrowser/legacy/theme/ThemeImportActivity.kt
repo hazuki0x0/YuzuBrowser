@@ -19,9 +19,9 @@ package jp.hazuki.yuzubrowser.legacy.theme
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.Dispatchers

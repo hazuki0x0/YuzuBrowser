@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.utils.image;
-
-import com.crashlytics.android.Crashlytics;
+package jp.hazuki.yuzubrowser.core.cache;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -700,7 +698,6 @@ public final class DiskLruCache implements Closeable {
             try {
                 rebuildJournal();
             } catch (IOException e) {
-                Crashlytics.logException(e);
                 e.printStackTrace();
             }
         }

@@ -41,11 +41,11 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
+import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.utils.FontUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener;
 

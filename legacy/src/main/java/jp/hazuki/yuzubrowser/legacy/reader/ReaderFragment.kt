@@ -29,9 +29,9 @@ import android.widget.Toast
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.licenses
+package jp.hazuki.yuzubrowser.core.utility.utils;
 
-import android.content.Context
-import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
-import java.io.BufferedInputStream
-import java.util.zip.GZIPInputStream
-
-class LicenseFileExtractor(context: Context) {
-    private val assetManager = context.resources.assets
-
-    fun extract(): String {
-        val input = assetManager.open(FILE)
-        GZIPInputStream(BufferedInputStream(input)).use {
-            return IOUtils.readString(it)
-        }
+public class MathUtils {
+    private MathUtils() {
+        throw new UnsupportedOperationException();
     }
 
-    companion object {
-        private const val FILE = "licenses.compressed"
+    public static boolean equalsSign(int a, int b) {
+        return Integer.signum(a) == Integer.signum(b);
+    }
+
+    public static boolean equalsSign(long a, long b) {
+        return Long.signum(a) == Long.signum(b);
+    }
+
+    public static boolean equalsSign(float a, float b) {
+        return Math.signum(a) == Math.signum(b);
+    }
+
+    public static boolean equalsSign(double a, double b) {
+        return Math.signum(a) == Math.signum(b);
     }
 }

@@ -23,10 +23,10 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.core.utility.extensions.startActivity
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.legacy.browser.requestLocationPermission
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity
 
 class PrivacyFragment : YuzuPreferenceFragment() {

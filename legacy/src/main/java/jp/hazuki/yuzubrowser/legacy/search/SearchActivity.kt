@@ -35,6 +35,7 @@ import com.squareup.moshi.Moshi
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
@@ -46,7 +47,6 @@ import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestItem
 import jp.hazuki.yuzubrowser.legacy.search.suggest.Suggestion
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.ui
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
