@@ -28,8 +28,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingResetAction;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
@@ -114,7 +114,7 @@ public class MainTabData extends TabData {
                 removeIcon();
             } else {
                 setIcon(new BitmapDrawable(context.getResources(),
-                        FaviconManager.getInstance(context).get(originalUrl)));
+                        FaviconManager.Companion.getInstance(context).get(originalUrl)));
             }
         }
     }

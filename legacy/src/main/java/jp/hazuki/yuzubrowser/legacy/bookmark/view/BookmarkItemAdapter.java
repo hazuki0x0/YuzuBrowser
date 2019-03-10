@@ -32,11 +32,11 @@ import java.util.List;
 
 import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem;
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkSite;
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter;
@@ -63,7 +63,7 @@ public class BookmarkItemAdapter extends ArrayRecyclerAdapter<BookmarkItem, Book
         foregroundOverlay = new ColorDrawable(ResourcesCompat.getColor(
                 context.getResources(), R.color.selected_overlay, context.getTheme()));
 
-        faviconManager = FaviconManager.getInstance(context);
+        faviconManager = FaviconManager.Companion.getInstance(context);
         defaultColorFilter = new PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP);
 
         setRecyclerListener(new OnRecyclerListener() {

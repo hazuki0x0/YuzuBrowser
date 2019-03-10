@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon'
+package jp.hazuki.yuzubrowser.ui.di
 
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
-}
+import javax.inject.Scope
+
+@Scope
+@Retention
+annotation class ViewModelScope

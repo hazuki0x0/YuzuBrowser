@@ -19,10 +19,10 @@ package jp.hazuki.yuzubrowser.legacy.bookmark.netscape
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Base64
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkSite
 import jp.hazuki.yuzubrowser.legacy.bookmark.util.BookmarkIdGenerator
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.DocumentType
@@ -73,7 +73,7 @@ class NetscapeBookmarkParser(context: Context, val parent: BookmarkFolder) {
                             try {
                                 val byte = Base64.decode(icon.substring(index), Base64.DEFAULT)
                                 val bitmap = BitmapFactory.decodeByteArray(byte, 0, byte.size)
-                                favicon.update(url, bitmap)
+                                favicon[url] = bitmap
                             } catch (e: OutOfMemoryError) {
                                 System.gc()
                             }

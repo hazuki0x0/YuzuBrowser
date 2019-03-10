@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon'
+package jp.hazuki.yuzubrowser.favicon
 
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see [Testing documentation](http://d.android.com/tools/testing)
+ */
+class ExampleUnitTest {
+    @Test
+    fun addition_isCorrect() {
+        assertEquals(4, (2 + 2).toLong())
+    }
 }

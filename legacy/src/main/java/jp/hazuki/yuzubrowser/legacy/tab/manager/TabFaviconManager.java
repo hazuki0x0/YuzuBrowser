@@ -25,8 +25,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 
 public class TabFaviconManager {
@@ -37,7 +37,7 @@ public class TabFaviconManager {
 
     public TabFaviconManager(Context context) {
         this.context = context;
-        manager = FaviconManager.getInstance(context);
+        manager = FaviconManager.Companion.getInstance(context);
     }
 
     public void onPreferenceReset(List<View> tabViews, List<TabIndexData> indexDataList) {

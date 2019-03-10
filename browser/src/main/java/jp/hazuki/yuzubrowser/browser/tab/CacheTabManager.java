@@ -32,8 +32,8 @@ import javax.inject.Inject;
 import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.yuzubrowser.browser.BrowserActivity;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.OnWebViewCreatedListener;
@@ -388,7 +388,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
             return;
         }
 
-        Bitmap icon = FaviconManager.getInstance(view.getContext()).get(indexData.getOriginalUrl());
+        Bitmap icon = FaviconManager.Companion.getInstance(view.getContext()).get(indexData.getOriginalUrl());
         Drawable drawable;
         if (icon != null) {
             drawable = new BitmapDrawable(view.getResources(), icon);

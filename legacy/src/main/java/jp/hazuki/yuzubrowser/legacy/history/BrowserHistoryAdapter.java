@@ -43,8 +43,8 @@ import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils;
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils;
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener;
@@ -77,7 +77,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
         dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         timeFormat = new SimpleDateFormat("kk:mm");
         mManager = manager;
-        faviconManager = FaviconManager.getInstance(context.getApplicationContext());
+        faviconManager = FaviconManager.Companion.getInstance(context.getApplicationContext());
         mListener = listener;
         histories = mManager.getList(0, 100);
         mQuery = null;

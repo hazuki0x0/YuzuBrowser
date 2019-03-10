@@ -81,6 +81,7 @@ object Libs {
     //Test
     val junit = "junit:junit:${Versions.junit}"
     val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+    val androidTestCore = "androidx.test:core:${Versions.runner}"
     val androidRunner = "androidx.test.ext:junit:${Versions.runner}"
     val assertk = "com.willowtreeapps.assertk:assertk-jvm:${Versions.assertk}"
 }

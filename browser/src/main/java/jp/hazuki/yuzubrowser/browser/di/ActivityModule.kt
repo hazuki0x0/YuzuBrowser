@@ -19,10 +19,11 @@ package jp.hazuki.yuzubrowser.browser.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import jp.hazuki.yuzubrowser.browser.BrowserActivity
+import jp.hazuki.yuzubrowser.legacy.di.WebViewModule
 
 @Module
 abstract class ActivityModule {
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [WebViewModule::class])
     abstract fun contributeBrowserActivity(): BrowserActivity
 }

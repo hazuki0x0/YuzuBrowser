@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.favicon
+package jp.hazuki.yuzubrowser.favicon
 
 import android.graphics.Bitmap
 import java.util.*
@@ -59,6 +59,6 @@ internal class FaviconCache(
     }
 
     internal interface OnIconCacheOverFlowListener {
-        fun onCacheOverflow(hash: Long?)
+        fun onCacheOverflow(hash: Long)
     }
 }

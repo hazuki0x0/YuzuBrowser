@@ -27,12 +27,12 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager
 import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrl
 import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrlList
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
@@ -179,7 +179,8 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_TITLE, history.title)
         intent.putExtra(Intent.EXTRA_TEXT, history.url)
-        intent.putExtra(Intent.EXTRA_STREAM, FaviconManager.getInstance(activity).getFaviconBytes(history.url))
+        intent.putExtra(Intent.EXTRA_STREAM,
+                history.url?.let { FaviconManager.getInstance(activity).getFaviconBytes(it) })
         activity.setResult(RESULT_OK, intent)
         activity.finish()
     }
@@ -220,6 +221,8 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val activity = activity ?: return false
+
         when (item.itemId) {
             R.id.delete_all_favicon -> {
                 AlertDialog.Builder(activity)

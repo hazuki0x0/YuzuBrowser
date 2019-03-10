@@ -15,12 +15,13 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion Build.compile_sdk_version
+    compileSdkVersion 28
+
 
     defaultConfig {
         minSdkVersion Build.min_sdk_version
@@ -28,12 +29,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -42,49 +39,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-}
 
-androidExtensions {
-    experimental = true
-}
-
-repositories {
-    maven { url 'https://jitpack.io' }
-    mavenCentral()
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     testImplementation Libs.junit
     androidTestImplementation Libs.espressoCore
+    androidTestImplementation Libs.androidTestCore
     androidTestImplementation Libs.androidRunner
-
-    implementation Libs.support_appcompat_v7
-    implementation Libs.support_design
-    implementation Libs.support_recyclerview
-    implementation Libs.support_constraint_layout
-    implementation Libs.support_fix_preference
-
-    implementation Libs.kotshi
-    kapt Libs.kotshi_compiler
-
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.2'
-    implementation project(':libraries:asyncpermissions')
-    implementation project(':ui')
-    implementation project(':legacy')
-    implementation project(':core')
-    implementation project(':webview')
-    implementation project(':languages')
-    implementation project(':favicon')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
-        transitive = true
-    }
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation Libs.kotlin_anko_commons
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
@@ -92,4 +59,9 @@ dependencies {
     implementation Libs.dagger_android
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
+
+    implementation project(':core')
+}
+repositories {
+    mavenCentral()
 }

@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.ItemTouchHelper
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem
@@ -35,7 +36,6 @@ import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkSite
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager
 import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrl
 import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrlList
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
@@ -299,7 +299,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
             R.id.copyUrl -> activity.setClipboardWithToast((item as BookmarkSite).url)
             R.id.addToHome -> {
                 val url = (item as BookmarkSite).url
-                val bitmap = FaviconManager.getInstance(activity).get(url)
+                val bitmap = FaviconManager.getInstance(activity)[url]
                 PackageUtils.createShortcut(activity, item.title, url, bitmap)
             }
             R.id.editBookmark -> if (item is BookmarkSite) {

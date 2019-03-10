@@ -34,6 +34,7 @@ import androidx.print.PrintHelper
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.*
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -56,7 +57,6 @@ import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.SaveWebArchiveDialog
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity
 import jp.hazuki.yuzubrowser.legacy.reader.ReaderActivity
@@ -1021,11 +1021,11 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
 
     private fun createShortCut(tab: MainTabData, iconUrl: String) = ui {
         val bitmap = if (iconUrl.isEmpty() || iconUrl == "null") {
-            FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
+            FaviconManager.getInstance(controller.applicationContextInfo)[tab.originalUrl]
         } else {
             val userAgent = tab.mWebView.getUserAgent()
             withContext(Dispatchers.Default) { HttpUtils.getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url)) }
-                    ?: FaviconManager.getInstance(controller.applicationContextInfo).get(tab.originalUrl)
+                    ?: FaviconManager.getInstance(controller.applicationContextInfo)[tab.originalUrl]
         }
 
         PackageUtils.createShortcut(controller.activity, tab.title, tab.url, bitmap)

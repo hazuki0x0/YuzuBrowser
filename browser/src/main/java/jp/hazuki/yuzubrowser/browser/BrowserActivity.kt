@@ -41,6 +41,7 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.BrowserState
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -60,7 +61,6 @@ import jp.hazuki.yuzubrowser.legacy.browser.openable.BrowserOpenable
 import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.SaveWebArchiveDialog
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.gesture.GestureManager
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.legacy.menuwindow.MenuWindow

@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
+import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -51,7 +52,6 @@ import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
-import jp.hazuki.yuzubrowser.legacy.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryAsyncManager
 import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction

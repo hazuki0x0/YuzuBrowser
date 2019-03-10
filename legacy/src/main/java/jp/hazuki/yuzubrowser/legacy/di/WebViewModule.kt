@@ -22,20 +22,17 @@ import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.core.settings.WebViewPrefs
 import jp.hazuki.yuzubrowser.webview.WebViewFactory
-import javax.inject.Singleton
 
 @Module
 object WebViewModule {
 
     @Provides
-    @Singleton
     @JvmStatic
     fun provideWebViewFactory(moshi: Moshi, webViewPrefs: WebViewPrefs): WebViewFactory {
         return WebViewFactory(moshi, webViewPrefs)
     }
 
     @Provides
-    @Singleton
     @JvmStatic
     fun provideWebViewPrefs(prefs: SharedPreferences): WebViewPrefs {
         return WebViewPrefs(prefs)
