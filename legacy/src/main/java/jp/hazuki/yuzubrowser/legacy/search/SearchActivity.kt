@@ -35,7 +35,6 @@ import com.squareup.moshi.Moshi
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
@@ -69,7 +68,8 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
     private lateinit var adapter: SearchRecyclerAdapter
     private lateinit var searchUrlSpinner: Spinner
     private lateinit var manager: SearchUrlManager
-    private lateinit var suggestProvider: ISuggestProvider
+    @Inject
+    lateinit var suggestProvider: ISuggestProvider
 
     private var initQuery: String? = null
     private var initDecodedQuery = ""
@@ -93,7 +93,6 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
         val searchButton = findViewById<SearchButton>(R.id.searchButton)
         val recyclerView = findViewById<OutSideClickableRecyclerView>(R.id.recyclerView)
 
-        suggestProvider = (applicationContext as BrowserApplication).providerManager.suggestProvider
         searchUrlSpinner = findViewById(R.id.searchUrlSpinner)
         manager = SearchUrlManager(this, moshi)
         searchUrlSpinner.adapter = SearchUrlSpinnerAdapter(this, manager)

@@ -25,6 +25,8 @@ import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
 import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.kotshi.LegacyJsonAdapterFactory
+import jp.hazuki.yuzubrowser.legacy.provider.ISuggestProvider
+import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
 import jp.hazuki.yuzubrowser.webview.kotshi.WebViewJsonAdapterFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -73,5 +75,11 @@ object AppModule {
     @JvmStatic
     fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @JvmStatic
+    fun provideSuggestProvider(): ISuggestProvider {
+        return SuggestProviderBridge()
     }
 }
