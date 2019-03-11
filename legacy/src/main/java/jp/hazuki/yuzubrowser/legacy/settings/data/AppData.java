@@ -212,6 +212,7 @@ public class AppData {
     public static final StringContainer reader_text_font = new StringContainer("reader_text_font", "");
     public static final FontSizeContainer font_size = new FontSizeContainer();
     public static final BooleanContainer search_url_show_icon = new BooleanContainer("search_url_show_icon", true);
+    public static final BooleanContainer search_url_save_switching = new BooleanContainer("search_url_save_switching", false);
     public static final BooleanContainer slow_rendering = new BooleanContainer("slow_rendering", false);
     public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
     public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);

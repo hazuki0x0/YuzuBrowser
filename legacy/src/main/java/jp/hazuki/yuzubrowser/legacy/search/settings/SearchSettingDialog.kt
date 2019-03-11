@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.FrameLayout
 import com.android.colorpicker.ColorPickerDialog
@@ -55,14 +56,16 @@ class SearchSettingDialog : androidx.fragment.app.DialogFragment(), ColorPickerS
 
         val searchUrl = arguments.getSerializable(ARG_URL) as SearchUrl?
         val view = View.inflate(activity, R.layout.search_url_edit, null)
-        val titleEditText = view.findViewById<EditText>(R.id.titleEditText)
-        val urlEditText = view.findViewById<EditText>(R.id.urlEditText)
+        val titleEditText: EditText = view.findViewById(R.id.titleEditText)
+        val urlEditText: EditText = view.findViewById(R.id.urlEditText)
+        val isUseFavicon: CheckBox = view.findViewById(R.id.isUseFaviconCheckBox)
         iconColorButton = view.findViewById(R.id.iconColorButton)
 
         val id: Int
         if (searchUrl != null) {
             titleEditText.setText(searchUrl.title)
             urlEditText.setText(searchUrl.url)
+            isUseFavicon.isChecked = searchUrl.isUseFavicon
             color = searchUrl.color
             id = searchUrl.id
         } else {
@@ -119,7 +122,7 @@ class SearchSettingDialog : androidx.fragment.app.DialogFragment(), ColorPickerS
                     }
 
                     if (target != null) {
-                        val newUrl = SearchUrl(id, titleEditText.text.toString(), urlEditText.text.toString(), color)
+                        val newUrl = SearchUrl(id, titleEditText.text.toString(), urlEditText.text.toString(), color, isUseFavicon.isChecked)
                         target.onUrlEdited(arguments.getInt(ARG_INDEX), newUrl)
                     }
                     dialog.dismiss()

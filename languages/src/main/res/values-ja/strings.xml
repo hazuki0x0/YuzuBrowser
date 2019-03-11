@@ -1,3 +1,19 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="add">追加</string>
     <string name="cancel">キャンセル</string>
@@ -16,7 +32,7 @@
     <string name="confirm_delete_history">この履歴を削除しますか？</string>
     <string name="confirm_delete_all_history">履歴を全て削除しますか？</string>
     <string name="confirm_delete_all_displayed_item">表示中の履歴を全て削除しますか？</string>
-    <string name="confirm_delete_all_favicon">Faviconを全て削除しますか？</string>
+    <string name="confirm_delete_all_favicon">ファビコンを全て削除しますか？</string>
     <string name="confirm_delete_bookmark">このブックマークを削除しますか？</string>
     <string name="confirm_delete_button">このボタンを削除しますか？</string>
     <string name="confirm_delete_speedDial">このスピードダイアルを削除しますか？</string>
@@ -25,7 +41,7 @@
     <string name="delete_history">履歴の削除</string>
     <string name="delete_all_history">履歴の全削除</string>
     <string name="delete_all_displayed_item">表示中の履歴を全削除</string>
-    <string name="delete_all_favicon">Faviconの全削除</string>
+    <string name="delete_all_favicon">ファビコンの全削除</string>
     <string name="delete_bookmark">ブックマークの削除</string>
     <string name="delete_speedDial">スピードダイアルの削除</string>
     <string name="delete_search_query">検索履歴の削除</string>
@@ -98,7 +114,7 @@
     <string name="clear_database">HTML5データベースの削除</string>
     <string name="clear_password">パスワードの削除</string>
     <string name="clear_formdata">フォームデータの削除</string>
-    <string name="clear_favicon">faviconキャッシュの削除</string>
+    <string name="clear_favicon">ファビコンキャッシュの削除</string>
     <string name="close_all_tabs">タブをすべて閉じる</string>
     <string name="search">検索</string>
     <string name="previous">前</string>
@@ -227,7 +243,7 @@
     <string name="print_not_support">この端末では印刷をサポートしていません</string>
 
     <string name="new_speed_dial">新しいスピードダイアル</string>
-    <string name="use_favicon">faviconを使用</string>
+    <string name="use_favicon">アイコンにファビコンを使用する</string>
 
     <string name="deleted">削除しました</string>
 
@@ -270,7 +286,7 @@
     <string name="html5Database">HTML5 データベース</string>
     <string name="geolocation_permissions">位置情報の許可</string>
     <string name="recent_search_queries">検索クエリの履歴</string>
-    <string name="favicon_cache">faviconキャッシュ</string>
+    <string name="favicon_cache">ファビコンキャッシュ</string>
     <string name="untitled">無題</string>
     <string name="loading_failed">ページから何も読み込めませんでした。</string>
     <string name="font_not_found">フォントファイルが見つかりません</string>

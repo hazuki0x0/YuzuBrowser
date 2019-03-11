@@ -60,6 +60,7 @@ android {
             ext.enableCrashlytics = false
             ext.alwaysUpdateBuildId = false
             applicationIdSuffix ".debug"
+            resValue "string", "package_name", "${defaultConfig.applicationId}.debug"
         }
     }
     packagingOptions {

@@ -28,6 +28,7 @@ import androidx.preference.DialogPreference
 import androidx.preference.Preference
 import com.squareup.moshi.Moshi
 import dagger.android.support.AndroidSupportInjection
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchSimpleIconView
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrl
@@ -69,7 +70,7 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
             recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             recyclerView.addItemDecoration(DividerItemDecoration(activity))
 
-            recyclerView.adapter = Adapter(activity, manager, this)
+            recyclerView.adapter = Adapter(activity, manager, FaviconManager.getInstance(activity), this)
 
             return view
         }
@@ -90,7 +91,7 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
 
         override fun onDialogClosed(positiveResult: Boolean) = Unit
 
-        private class Adapter(context: Context, val list: SearchUrlManager, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SearchUrl, Adapter.UrlHolder>(context, list, listener) {
+        private class Adapter(context: Context, val list: SearchUrlManager, val faviconManager: FaviconManager, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SearchUrl, Adapter.UrlHolder>(context, list, listener) {
             val backgroundRes: Int
 
             init {
@@ -111,13 +112,18 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
                 }
             }
 
-            class UrlHolder(view: View, adapter: Adapter) : ArrayRecyclerAdapter.ArrayViewHolder<SearchUrl>(view, adapter) {
+            class UrlHolder(view: View, val adapter: Adapter) : ArrayRecyclerAdapter.ArrayViewHolder<SearchUrl>(view, adapter) {
                 val icon = view.findViewById<SearchSimpleIconView>(R.id.iconColorView)!!
                 val textView = view.findViewById<TextView>(R.id.titleTextView)!!
 
                 override fun setUp(item: SearchUrl) {
                     super.setUp(item)
-                    icon.setSearchUrl(item)
+                    val favicon = if (item.isUseFavicon) adapter.faviconManager[item.url] else null
+                    if (favicon != null) {
+                        icon.setFavicon(favicon)
+                    } else {
+                        icon.setSearchUrl(item)
+                    }
                     textView.text = item.title
                 }
             }

@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.moshi.Moshi
 import dagger.android.support.DaggerFragment
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerMenu
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
@@ -58,7 +59,7 @@ class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedL
         recyclerView.addItemDecoration(touchHelper)
 
         manager = SearchUrlManager(activity, moshi)
-        adapter = UrlAdapter(activity, manager, this, this)
+        adapter = UrlAdapter(activity, manager, this, FaviconManager.getInstance(activity), this)
 
         recyclerView.adapter = adapter
 
@@ -126,7 +127,7 @@ class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedL
         }
     }
 
-    private class UrlAdapter(val context: Context, list: MutableList<SearchUrl>, val fragment: SearchUrlListFragment, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SearchUrl, UrlAdapter.UrlHolder>(context, list, listener) {
+    private class UrlAdapter(val context: Context, list: MutableList<SearchUrl>, val fragment: SearchUrlListFragment, val faviconManager: FaviconManager, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SearchUrl, UrlAdapter.UrlHolder>(context, list, listener) {
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): UrlHolder {
             return UrlHolder(inflater.inflate(R.layout.search_url_list_edit_item, parent, false), this)
@@ -138,15 +139,20 @@ class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedL
             }
         }
 
-        class UrlHolder(view: View, adapter: UrlAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<SearchUrl>(view, adapter) {
-            val icon = view.findViewById<SearchSimpleIconView>(R.id.iconColorView)!!
-            val textView = view.findViewById<TextView>(R.id.titleTextView)!!
-            val url = view.findViewById<TextView>(R.id.urlTextView)!!
-            val menu = view.findViewById<ImageButton>(R.id.menuImageButton)!!
+        class UrlHolder(view: View, val adapter: UrlAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<SearchUrl>(view, adapter) {
+            val icon: SearchSimpleIconView = view.findViewById(R.id.iconColorView)
+            val textView: TextView = view.findViewById(R.id.titleTextView)
+            val url: TextView = view.findViewById(R.id.urlTextView)
+            val menu: ImageButton = view.findViewById(R.id.menuImageButton)
 
             override fun setUp(item: SearchUrl) {
                 super.setUp(item)
-                icon.setSearchUrl(item)
+                val favicon = if (item.isUseFavicon) adapter.faviconManager[item.url] else null
+                if (favicon != null) {
+                    icon.setFavicon(favicon)
+                } else {
+                    icon.setSearchUrl(item)
+                }
                 textView.text = item.title
                 url.text = item.url
             }

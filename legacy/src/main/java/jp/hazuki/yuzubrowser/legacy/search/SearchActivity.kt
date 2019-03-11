@@ -28,6 +28,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
+import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
@@ -36,6 +37,7 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
@@ -95,11 +97,22 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
 
         searchUrlSpinner = findViewById(R.id.searchUrlSpinner)
         manager = SearchUrlManager(this, moshi)
-        searchUrlSpinner.adapter = SearchUrlSpinnerAdapter(this, manager)
+        searchUrlSpinner.adapter = SearchUrlSpinnerAdapter(this, manager, FaviconManager.getInstance(applicationContext))
         searchUrlSpinner.setSelection(manager.getSelectedIndex())
 
         if (!AppData.search_url_show_icon.get()) {
             searchUrlSpinner.visibility = View.GONE
+        } else if (AppData.search_url_save_switching.get()) {
+            searchUrlSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (manager.getSelectedIndex() != position) {
+                        manager.selectedId = manager[position].id
+                        manager.save()
+                    }
+                }
+            }
         }
 
         recyclerView.setOnOutSideClickListener { finish() }
