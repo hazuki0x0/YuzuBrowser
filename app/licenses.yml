@@ -1,4 +1,5 @@
-- artifact: dummy:yuzubrowser:+
+# Mikan Browser is NYSL license but NYSL is not defined, so we use a dummy license.
+- artifact: dummy:mikanbrowser:+
   name: Mikan Browser
   copyrightHolder: Cynthia Project
   license: bsd_3_clauses
