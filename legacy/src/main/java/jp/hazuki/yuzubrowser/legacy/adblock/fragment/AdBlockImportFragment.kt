@@ -22,14 +22,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlock
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockDecoder
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
 import kotlinx.android.synthetic.main.fragment_ad_block_import.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayInputStream
 import java.io.IOException
+import java.nio.charset.StandardCharsets
+import java.util.*
 
 @ContainerOptions(CacheImplementation.NO_CACHE)
 class AdBlockImportFragment : androidx.fragment.app.Fragment() {
@@ -44,16 +49,38 @@ class AdBlockImportFragment : androidx.fragment.app.Fragment() {
         val fragmentManager = fragmentManager ?: return
         val uri = arguments?.getParcelable<Uri>(ARG_URI) ?: throw IllegalArgumentException()
 
+        var input: ByteArray? = null
         try {
-            activity.contentResolver.openInputStream(uri)?.use { editText.setText(IOUtils.readString(it)) }
+            input = activity.contentResolver.openInputStream(uri)?.use { it.readBytes() }
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        okButton.setOnClickListener {
-            val adBlocks = AdBlockDecoder.decode(editText.text.toString(), excludeCheckBox.isChecked)
-            listener!!.onImport(adBlocks)
-            fragmentManager.popBackStack()
+        if (input != null && input.size > EDITABLE_SIZE) {
+            editText.setText(R.string.adblock_file_large_mes)
+            editText.keyListener = null
+            excludeCheckBox.isEnabled = false
+
+            okButton.setOnClickListener {
+                ui {
+                    editText.setText(R.string.now_loading)
+                    okButton.isEnabled = false
+                    cancelButton.isEnabled = false
+                    val adBlocks = withContext(Dispatchers.Default) {
+                        AdBlockDecoder.decode(Scanner(ByteArrayInputStream(input)), true)
+                    }
+                    listener!!.onImport(adBlocks)
+                    fragmentManager.popBackStack()
+                }
+            }
+        } else {
+            editText.setText(input?.toString(StandardCharsets.UTF_8))
+
+            okButton.setOnClickListener {
+                val adBlocks = AdBlockDecoder.decode(editText.text.toString(), excludeCheckBox.isChecked)
+                listener!!.onImport(adBlocks)
+                fragmentManager.popBackStack()
+            }
         }
 
         cancelButton.setOnClickListener { fragmentManager.popBackStack() }
@@ -75,6 +102,8 @@ class AdBlockImportFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         private const val ARG_URI = "uri"
+
+        private const val EDITABLE_SIZE = 1024 * 1024
 
         operator fun invoke(uri: Uri): AdBlockImportFragment {
             return AdBlockImportFragment().apply {

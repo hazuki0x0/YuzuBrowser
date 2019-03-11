@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ public class AdBlockDecoder {
 
                 if (line.startsWith("127.0.0.1"))
                     line = line.replace("127.0.0.1", "h");
+                else if (line.startsWith("0.0.0.0"))
+                    line = line.replace("0.0.0.0", "h");
 
                 adBlocks.add(new AdBlock(line));
             }
