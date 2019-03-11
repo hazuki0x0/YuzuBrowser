@@ -16,9 +16,14 @@
 
 package jp.hazuki.yuzubrowser.legacy.licenses
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import jp.hazuki.yuzubrowser.legacy.Constants
 
 class LicensesActivity : AppCompatActivity() {
 
@@ -28,6 +33,25 @@ class LicensesActivity : AppCompatActivity() {
         setContentView(webView)
 
         val extractor = LicenseFileExtractor(this)
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
+                open(request.url)
+                return true
+            }
+
+            @Suppress("OverridingDeprecatedMember")
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
+                open(Uri.parse(url))
+                return true
+            }
+
+            private fun open(url: Uri) {
+                val intent = Intent(Constants.intent.ACTION_OPEN_DEFAULT)
+                intent.setClassName(this@LicensesActivity, Constants.activity.MAIN_BROWSER)
+                intent.data = url
+                startActivity(intent)
+            }
+        }
         webView.loadDataWithBaseURL("file:///android_asset/", extractor.extract(), "text/html", "utf−8", null)
     }
 }
