@@ -30,7 +30,7 @@ import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.IOException
 
 class FinishSingleAction : SingleAction, Parcelable {
-    var isShowAlert = true
+    var isShowAlert = false
         private set
     var isCloseTab = false
         private set
