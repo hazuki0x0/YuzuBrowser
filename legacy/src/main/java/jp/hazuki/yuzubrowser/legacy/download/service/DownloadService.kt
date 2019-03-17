@@ -198,7 +198,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
     private inner class FirstDownloadThread(private val root: DocumentFile, private val file: DownloadFile, private val metadata: MetaData?) : DownloadThread(file.request) {
         override val info: DownloadFileInfo by lazy {
             DownloadFileInfo(root, file, metadata
-                    ?: MetaData(this@DownloadService, root, file.url, file.request, file.name))
+                    ?: MetaData(this@DownloadService, okHttpClient, root, file.url, file.request, file.name))
         }
     }
 

@@ -87,7 +87,7 @@ class FastDownloadActivity : DaggerThemeActivity() {
     private fun download(url: String, referrer: String?, defExt: String): Uri? {
         val root = Uri.parse(AppData.download_folder.get()).toDocumentFile(applicationContext)
         val file = DownloadFile(url, null, DownloadRequest(referrer, null, defExt))
-        val meta = MetaData(applicationContext, root, file.url, file.request)
+        val meta = MetaData(applicationContext, okHttpClient, root, file.url, file.request)
         val info = DownloadFileInfo(root, file, meta)
         val downloader = Downloader.getDownloader(applicationContext, okHttpClient, info, file.request)
 

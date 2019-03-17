@@ -46,7 +46,7 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
         builder.append(suffix)
         tmpName = builder.toString()
         builder.delete(0, builder.length)
-    } while (checkName.exists(newName) || !children.contains { it.name == tmpName })
+    } while (checkName.exists(newName) || children.contains { it.name == tmpName })
 
     return newName
 }

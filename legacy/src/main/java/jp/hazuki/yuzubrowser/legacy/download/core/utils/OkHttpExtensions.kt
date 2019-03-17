@@ -18,6 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.download.core.utils
 
 import android.content.Context
 import android.webkit.WebSettings
+import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
+import jp.hazuki.yuzubrowser.legacy.Constants
 import okhttp3.Request
 import okhttp3.Response
 
@@ -57,3 +59,27 @@ val Response.isResumable: Boolean
         val range = header("Accept-Ranges")
         return range == "bytes"
     }
+
+val Response.mimeType: String
+    get() {
+        var mimeType = header("Content-Type")
+        if (!mimeType.isNullOrEmpty()) {
+            val index = mimeType.indexOf(';')
+            if (index > -1) {
+                mimeType = mimeType.substring(0, index)
+            }
+            return mimeType
+        }
+        return "application/octet-stream"
+    }
+
+fun Response.getFileName(root: androidx.documentfile.provider.DocumentFile, url: String, mimeType: String?, defaultExt: String?): String {
+    headers("Content-Disposition").forEach { raw ->
+        val name = guessFileNameFromContentDisposition(raw)
+        if (name != null) {
+            return createUniqueFileName(root, name, Constants.download.TMP_FILE_SUFFIX)
+        }
+    }
+
+    return guessDownloadFileName(root, url, null, mimeType, defaultExt)
+}

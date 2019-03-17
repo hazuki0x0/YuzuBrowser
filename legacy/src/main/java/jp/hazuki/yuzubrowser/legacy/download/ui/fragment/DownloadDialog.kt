@@ -27,7 +27,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.DialogFragment
+import dagger.android.support.DaggerAppCompatDialogFragment
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -41,11 +41,16 @@ import jp.hazuki.yuzubrowser.legacy.download.service.DownloadFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import javax.inject.Inject
 
-class DownloadDialog : DialogFragment() {
+class DownloadDialog : DaggerAppCompatDialogFragment() {
 
     private lateinit var root: DocumentFile
     private lateinit var folderButton: Button
+
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()
@@ -120,7 +125,7 @@ class DownloadDialog : DialogFragment() {
     }
 
     private fun getMetaData(context: Context, root: DocumentFile, file: DownloadFile): MetaData {
-        return MetaData(context, root, file.url, file.request)
+        return MetaData(context, okHttpClient, root, file.url, file.request)
     }
 
     companion object {

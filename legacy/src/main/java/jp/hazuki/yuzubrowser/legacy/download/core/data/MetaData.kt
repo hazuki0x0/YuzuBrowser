@@ -21,10 +21,12 @@ import android.content.Context
 import android.os.Parcelable
 import android.webkit.CookieManager
 import androidx.documentfile.provider.DocumentFile
-import jp.hazuki.yuzubrowser.legacy.download.core.downloader.client.HttpClient
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.*
 import kotlinx.android.parcel.Parcelize
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 @SuppressLint("ParcelCreator")
 @Parcelize
@@ -32,20 +34,28 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
 
     companion object {
 
-        operator fun invoke(context: Context, root: DocumentFile, url: String, request: DownloadRequest, resolvedName: String? = null): MetaData {
+        operator fun invoke(context: Context, okHttpClient: OkHttpClient, root: DocumentFile, url: String, request: DownloadRequest, resolvedName: String? = null): MetaData {
             if (url.startsWith("http")) {
                 try {
-                    val client = HttpClient.create(url, "HEAD")
-                    client.connectTimeout = 1000
-                    client.setCookie(CookieManager.getInstance().getCookie(url))
-                    client.setReferrer(request.referrer)
-                    client.setUserAgent(context, request.userAgent)
-                    client.connect()
+                    val httpRequest = Request.Builder()
+                            .url(url)
+                            .head()
+                            .setCookie(CookieManager.getInstance().getCookie(url))
+                            .setReferrer(request.referrer)
+                            .setUserAgent(context, request.userAgent)
+                            .build()
 
-                    val mimeType = client.mimeType
+                    val client = okHttpClient.newBuilder()
+                            .connectTimeout(1, TimeUnit.SECONDS)
+                            .build()
+
+                    val newCall = client.newCall(httpRequest)
+                    val response = newCall.execute()
+
+                    val mimeType = response.mimeType
                     val name = resolvedName
-                            ?: client.getFileName(root, url, mimeType, request.defaultExt)
-                    return MetaData(name, mimeType, client.contentLength, client.isResumable)
+                            ?: response.getFileName(root, url, mimeType, request.defaultExt)
+                    return MetaData(name, mimeType, response.contentLength, response.isResumable)
                 } catch (e: IOException) {
                     // Connection error
                 }

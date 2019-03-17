@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.browser.di
+package jp.hazuki.yuzubrowser.legacy.download
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import jp.hazuki.yuzubrowser.browser.BrowserActivity
-import jp.hazuki.yuzubrowser.legacy.di.WebViewModule
-import jp.hazuki.yuzubrowser.legacy.download.DownloadDialogModule
+import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
 
 @Module
-abstract class ActivityModule {
+abstract class DownloadDialogModule {
 
-    @ContributesAndroidInjector(modules = [WebViewModule::class, DownloadDialogModule::class])
-    abstract fun contributeBrowserActivity(): BrowserActivity
+    @ContributesAndroidInjector
+    abstract fun contributeDownloadDialogFragment(): DownloadDialog
 }
