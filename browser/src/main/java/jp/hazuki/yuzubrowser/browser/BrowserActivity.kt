@@ -184,6 +184,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.browser_activity)
+        //Crash workaround for pagePaddingHeight...
+        toolbarPadding.visibility = View.GONE
 
         browserState = (applicationContext as BrowserApplication).browserState
 
