@@ -313,4 +313,5 @@
     <string name="download_failed_root_not_writable">ダウンロード先フォルダが書き込めないためダウンロードできません</string>
     <string name="reset_all_counts">カウントをリセット</string>
     <string name="reset_all_counts_mes">すべての要素のカウントをリセットしますか？</string>
+    <string name="js_download_cross_origin">クロスドメイン制約のため、このブラウザではダウンロードできません</string>
 </resources>

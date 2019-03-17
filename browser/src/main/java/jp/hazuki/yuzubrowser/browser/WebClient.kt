@@ -90,6 +90,7 @@ import org.jetbrains.anko.longToast
 import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread
+import kotlin.random.Random
 
 class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) : WebViewUtility {
     private val patternManager = PatternUrlManager(activity.applicationContext)
@@ -105,6 +106,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
+    private val secretKey = Random.nextInt().toString(36)
     private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
 
     var renderingMode
@@ -578,21 +580,13 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
     private fun onDownloadStart(web: CustomWebView, url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
         if (url.startsWith("blob")) {
-            web.evaluateJavascript("var xhr = new XMLHttpRequest();" +
-                    "xhr.open('GET', '$url', true);" +
-                    "xhr.responseType = 'blob';" +
-                    "xhr.onload = function() {" +
-                    "    if (this.status == 200) {" +
-                    "        var blobPdf = this.response;" +
-                    "        var reader = new FileReader();" +
-                    "        reader.onloadend = function() {" +
-                    "            base64data = reader.result;" +
-                    "            window.location.href = 'yuzu:download-file/' + encodeURIComponent(base64data);" +
-                    "        };" +
-                    "        reader.readAsDataURL(blobPdf);" +
-                    "    }" +
-                    "};" +
-                    "xhr.send();", null)
+            web.evaluateJavascript("var xhr=new XMLHttpRequest;xhr.open('GET','$url',!0),xhr." +
+                    "responseType='blob',xhr.onload=function(){if(200==this.status){var e=this.re" +
+                    "sponse,n=new FileReader;n.onloadend=function(){base64data=n.result,window.lo" +
+                    "cation.href='yuzu:download-file/$secretKey&'+encodeURIComponent(base64data)}" +
+                    ",n.readAsDataURL(e)}},xhr.onerror=function(){alert('" +
+                    "${getString(R.string.js_download_cross_origin)}')},xhr.send();", null)
+
             return
         }
 
@@ -892,8 +886,12 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                         "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
                         "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
                         "download-file" -> {
-                            val download = uri.schemeSpecificPart.substring(action.length + 1)
-                            onDownloadStart(data.mWebView, download, "", "", "", -1)
+                            val keyData = uri.schemeSpecificPart.substring(action.length + 1)
+
+                            val items = keyData.split('&', limit = 2)
+                            if (items.size == 2 && items[0] == secretKey) {
+                                onDownloadStart(data.mWebView, items[1], "", "", "", -1)
+                            }
                             return true
                         }
                         else -> return false

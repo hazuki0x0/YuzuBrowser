@@ -317,4 +317,5 @@
     <string name="download_failed_root_not_writable">Unable to download because the download destination folder cannot be written</string>
     <string name="reset_all_counts">Reset all counts</string>
     <string name="reset_all_counts_mes">Are you sure you want to reset all counts?</string>
+    <string name="js_download_cross_origin">Unable to download with this browser due to same-origin policy.</string>
 </resources>
