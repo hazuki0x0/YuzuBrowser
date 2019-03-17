@@ -64,8 +64,7 @@ class DownloadDialog : androidx.fragment.app.DialogFragment() {
 
         val name = file.name
         if (name != null) {
-            val resolvedName = createUniqueFileName(root, name, Constants.download.TMP_FILE_SUFFIX)
-            filenameEditText.setText(resolvedName)
+            filenameEditText.setText(name)
             view.visibility = View.VISIBLE
         } else {
             ui {

@@ -131,18 +131,22 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
 
     if (fileName != null) return fileName
 
-    // If all the other http-related approaches failed, use the plain uri
-    var decodedUrl: String? = Uri.decode(url)
-    if (decodedUrl != null) {
-        val queryIndex = decodedUrl.indexOf('?')
-        // If there is a query string strip it, same as desktop browsers
-        if (queryIndex > 0) {
-            decodedUrl = decodedUrl.substring(0, queryIndex)
-        }
-        if (!decodedUrl.endsWith("/")) {
-            val index = decodedUrl.lastIndexOf('/') + 1
-            if (index > 0) {
-                fileName = FileUtils.replaceProhibitionWord(decodedUrl.substring(index))
+    if (url.startsWith("data:")) {
+        fileName = System.currentTimeMillis().toString()
+    } else {
+        // If all the other http-related approaches failed, use the plain uri
+        var decodedUrl: String? = Uri.decode(url)
+        if (decodedUrl != null) {
+            val queryIndex = decodedUrl.indexOf('?')
+            // If there is a query string strip it, same as desktop browsers
+            if (queryIndex > 0) {
+                decodedUrl = decodedUrl.substring(0, queryIndex)
+            }
+            if (!decodedUrl.endsWith("/")) {
+                val index = decodedUrl.lastIndexOf('/') + 1
+                if (index > 0) {
+                    fileName = FileUtils.replaceProhibitionWord(decodedUrl.substring(index))
+                }
             }
         }
     }

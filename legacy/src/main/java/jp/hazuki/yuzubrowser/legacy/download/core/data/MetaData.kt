@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,20 +32,23 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
     companion object {
 
         operator fun invoke(context: Context, root: androidx.documentfile.provider.DocumentFile, url: String, request: DownloadRequest): MetaData {
-            return try {
-                val client = HttpClient.create(url, "HEAD")
-                client.connectTimeout = 1000
-                client.setCookie(CookieManager.getInstance().getCookie(url))
-                client.setReferrer(request.referrer)
-                client.setUserAgent(context, request.userAgent)
-                client.connect()
+            if (url.startsWith("http")) {
+                try {
+                    val client = HttpClient.create(url, "HEAD")
+                    client.connectTimeout = 1000
+                    client.setCookie(CookieManager.getInstance().getCookie(url))
+                    client.setReferrer(request.referrer)
+                    client.setUserAgent(context, request.userAgent)
+                    client.connect()
 
-                val mimeType = client.mimeType
-                val name = client.getFileName(root, url, mimeType, request.defaultExt)
-                MetaData(name, mimeType, client.contentLength, client.isResumable)
-            } catch (e: IOException) {
-                MetaData(guessDownloadFileName(root, url, null, null, request.defaultExt), "application/octet-stream", -1, false)
+                    val mimeType = client.mimeType
+                    val name = client.getFileName(root, url, mimeType, request.defaultExt)
+                    return MetaData(name, mimeType, client.contentLength, client.isResumable)
+                } catch (e: IOException) {
+                    // Connection error
+                }
             }
+            return MetaData(guessDownloadFileName(root, url, null, null, request.defaultExt), "application/octet-stream", -1, false)
         }
 
         operator fun invoke(info: DownloadFileInfo): MetaData {

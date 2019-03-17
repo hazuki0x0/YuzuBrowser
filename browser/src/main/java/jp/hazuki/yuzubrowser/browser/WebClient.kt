@@ -234,57 +234,8 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         web.setMyWebChromeClient(MyWebChromeClient())
         web.setMyWebViewClient(mWebViewClient)
 
-        web.setDownloadListener(object : DownloadListener {
-            override fun onDownloadStart(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-                when (AppData.download_action.get()) {
-                    PreferenceConstants.DOWNLOAD_DO_NOTHING -> {
-                    }
-                    PreferenceConstants.DOWNLOAD_AUTO -> if (WebDownloadUtils.shouldOpen(contentDisposition)) {
-                        actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
-                    } else {
-                        actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
-                    }
-                    PreferenceConstants.DOWNLOAD_DOWNLOAD -> actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
-                    PreferenceConstants.DOWNLOAD_OPEN -> actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
-                    PreferenceConstants.DOWNLOAD_SHARE -> actionShare(url)
-                    PreferenceConstants.DOWNLOAD_SELECT -> {
-
-                        AlertDialog.Builder(activity)
-                                .setTitle(R.string.download)
-                                .setItems(
-                                        arrayOf(getString(R.string.download), getString(R.string.open), getString(R.string.share))
-                                ) { _, which ->
-                                    when (which) {
-                                        0 -> actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
-                                        1 -> actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
-                                        2 -> actionShare(url)
-                                    }
-                                }
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .show()
-                    }
-                }
-
-                if (web.isBackForwardListEmpty) {
-                    controller.removeTab(controller.indexOf(web.identityId))
-                }
-            }
-
-            private fun actionDownload(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-                activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null), "download")
-            }
-
-            private fun actionOpen(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-                if (!WebDownloadUtils.openFile(activity, url, mimetype)) {
-                    //application not found
-                    Toast.makeText(activity.applicationContext, R.string.app_notfound, Toast.LENGTH_SHORT).show()
-                    actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
-                }
-            }
-
-            private fun actionShare(url: String) {
-                WebUtils.shareWeb(activity, url, null)
-            }
+        web.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+            onDownloadStart(web, url, userAgent, contentDisposition, mimetype, contentLength)
         })
 
         val setting = web.webSettings
@@ -625,6 +576,76 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         return -1
     }
 
+    private fun onDownloadStart(web: CustomWebView, url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
+        if (url.startsWith("blob")) {
+            web.evaluateJavascript("var xhr = new XMLHttpRequest();" +
+                    "xhr.open('GET', '$url', true);" +
+                    "xhr.responseType = 'blob';" +
+                    "xhr.onload = function() {" +
+                    "    if (this.status == 200) {" +
+                    "        var blobPdf = this.response;" +
+                    "        var reader = new FileReader();" +
+                    "        reader.onloadend = function() {" +
+                    "            base64data = reader.result;" +
+                    "            window.location.href = 'yuzu:download-file/' + encodeURIComponent(base64data);" +
+                    "        };" +
+                    "        reader.readAsDataURL(blobPdf);" +
+                    "    }" +
+                    "};" +
+                    "xhr.send();", null)
+            return
+        }
+
+        when (AppData.download_action.get()) {
+            PreferenceConstants.DOWNLOAD_DO_NOTHING -> {
+            }
+            PreferenceConstants.DOWNLOAD_AUTO -> if (WebDownloadUtils.shouldOpen(contentDisposition)) {
+                actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
+            } else {
+                actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
+            }
+            PreferenceConstants.DOWNLOAD_DOWNLOAD -> actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
+            PreferenceConstants.DOWNLOAD_OPEN -> actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
+            PreferenceConstants.DOWNLOAD_SHARE -> actionShare(url)
+            PreferenceConstants.DOWNLOAD_SELECT -> {
+
+                AlertDialog.Builder(activity)
+                        .setTitle(R.string.download)
+                        .setItems(
+                                arrayOf(getString(R.string.download), getString(R.string.open), getString(R.string.share))
+                        ) { _, which ->
+                            when (which) {
+                                0 -> actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
+                                1 -> actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
+                                2 -> actionShare(url)
+                            }
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+            }
+        }
+
+        if (web.isBackForwardListEmpty) {
+            controller.removeTab(controller.indexOf(web.identityId))
+        }
+    }
+
+    private fun actionDownload(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
+        activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null), "download")
+    }
+
+    private fun actionOpen(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
+        if (!WebDownloadUtils.openFile(activity, url, mimetype)) {
+            //application not found
+            Toast.makeText(activity.applicationContext, R.string.app_notfound, Toast.LENGTH_SHORT).show()
+            actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
+        }
+    }
+
+    private fun actionShare(url: String) {
+        WebUtils.shareWeb(activity, url, null)
+    }
+
     private inner class MyWebChromeClient : CustomWebChromeClient() {
         private var geoView: GeolocationPermissionToolbar? = null
 
@@ -821,12 +842,15 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 }
             }
             "yuzu" -> {
-                val action = uri.schemeSpecificPart
+                var action = uri.schemeSpecificPart
 
                 val intent: Intent
                 if (action.isNullOrEmpty()) {
                     return false
                 } else
+                    if (action.indexOf('/') > -1) {
+                        action = action.substring(0, action.indexOf('/'))
+                    }
                     when (action.toLowerCase()) {
                         "settings", "setting" -> intent = Intent(activity, MainSettingsActivity::class.java)
                         "histories", "history" -> {
@@ -867,6 +891,11 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                         "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
                         "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
                         "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
+                        "download-file" -> {
+                            val download = uri.schemeSpecificPart.substring(action.length + 1)
+                            onDownloadStart(data.mWebView, download, "", "", "", -1)
+                            return true
+                        }
                         else -> return false
                     }
                 activity.startActivity(intent)
