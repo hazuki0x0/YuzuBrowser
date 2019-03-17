@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.*
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import androidx.documentfile.provider.DocumentFile
 import dagger.android.DaggerService
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
@@ -194,9 +195,10 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
         }
     }
 
-    private inner class FirstDownloadThread(private val root: androidx.documentfile.provider.DocumentFile, private val file: DownloadFile, private val metadata: MetaData?) : DownloadThread(file.request) {
+    private inner class FirstDownloadThread(private val root: DocumentFile, private val file: DownloadFile, private val metadata: MetaData?) : DownloadThread(file.request) {
         override val info: DownloadFileInfo by lazy {
-            DownloadFileInfo(root, file, metadata ?: MetaData(this@DownloadService, root, file.url, file.request))
+            DownloadFileInfo(root, file, metadata
+                    ?: MetaData(this@DownloadService, root, file.url, file.request, file.name))
         }
     }
 
@@ -270,7 +272,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
             updateInfo(ServiceSocket.UPDATE, info)
         }
 
-        override fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: androidx.documentfile.provider.DocumentFile) {
+        override fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: DocumentFile) {
             database.update(info)
             NotificationCompat.Builder(this@DownloadService, Constants.notification.CHANNEL_DOWNLOAD_NOTIFY).run {
                 setOngoing(false)

@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Parcelable
 import android.webkit.CookieManager
+import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.legacy.download.core.downloader.client.HttpClient
 import jp.hazuki.yuzubrowser.legacy.download.core.utils.*
 import kotlinx.android.parcel.Parcelize
@@ -31,7 +32,7 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
 
     companion object {
 
-        operator fun invoke(context: Context, root: androidx.documentfile.provider.DocumentFile, url: String, request: DownloadRequest): MetaData {
+        operator fun invoke(context: Context, root: DocumentFile, url: String, request: DownloadRequest, resolvedName: String? = null): MetaData {
             if (url.startsWith("http")) {
                 try {
                     val client = HttpClient.create(url, "HEAD")
@@ -42,13 +43,15 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
                     client.connect()
 
                     val mimeType = client.mimeType
-                    val name = client.getFileName(root, url, mimeType, request.defaultExt)
+                    val name = resolvedName
+                            ?: client.getFileName(root, url, mimeType, request.defaultExt)
                     return MetaData(name, mimeType, client.contentLength, client.isResumable)
                 } catch (e: IOException) {
                     // Connection error
                 }
             }
-            return MetaData(guessDownloadFileName(root, url, null, null, request.defaultExt), "application/octet-stream", -1, false)
+            return MetaData(resolvedName
+                    ?: guessDownloadFileName(root, url, null, null, request.defaultExt), "application/octet-stream", -1, false)
         }
 
         operator fun invoke(info: DownloadFileInfo): MetaData {

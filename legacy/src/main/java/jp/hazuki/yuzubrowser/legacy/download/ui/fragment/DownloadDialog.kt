@@ -26,6 +26,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.DialogFragment
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -40,9 +42,9 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class DownloadDialog : androidx.fragment.app.DialogFragment() {
+class DownloadDialog : DialogFragment() {
 
-    private lateinit var root: androidx.documentfile.provider.DocumentFile
+    private lateinit var root: DocumentFile
     private lateinit var folderButton: Button
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -80,7 +82,7 @@ class DownloadDialog : androidx.fragment.app.DialogFragment() {
             startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
         }
 
-        val dialog = AlertDialog.Builder(activity)
+        return AlertDialog.Builder(activity)
                 .setTitle(R.string.download)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
@@ -88,29 +90,18 @@ class DownloadDialog : androidx.fragment.app.DialogFragment() {
                     val input = filenameEditText.text.toString()
                     if (input.isEmpty()) return@setPositiveButton
 
-                    val newFileName = createUniqueFileName(root, input, Constants.download.TMP_FILE_SUFFIX)
+                    val newFileName = if (meta?.name == input || file.name == input) {
+                        input
+                    } else {
+                        createUniqueFileName(root, input, Constants.download.TMP_FILE_SUFFIX)
+                    }
 
                     file.name = newFileName
                     context.download(root.uri, file, meta)
-                    dialog.dismiss()
+                    this.dialog.dismiss()
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                val context = getActivity() ?: return@setOnClickListener
-                val input = filenameEditText.text.toString()
-                if (input.isEmpty()) return@setOnClickListener
-
-                val newFileName = createUniqueFileName(root, input, Constants.download.TMP_FILE_SUFFIX)
-
-                file.name = newFileName
-                context.download(root.uri, file, meta)
-                dialog.dismiss()
-            }
-        }
-        return dialog
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -128,7 +119,7 @@ class DownloadDialog : androidx.fragment.app.DialogFragment() {
         }
     }
 
-    private fun getMetaData(context: Context, root: androidx.documentfile.provider.DocumentFile, file: DownloadFile): MetaData {
+    private fun getMetaData(context: Context, root: DocumentFile, file: DownloadFile): MetaData {
         return MetaData(context, root, file.url, file.request)
     }
 

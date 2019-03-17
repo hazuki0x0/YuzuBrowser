@@ -29,3 +29,13 @@ fun StringBuilder.replace(oldValue: String, newValue: String): StringBuilder {
     }
     return this
 }
+
+inline fun <T> List<T>.contains(predicate: (T) -> Boolean): Boolean {
+    for (element in this) if (predicate(element)) return true
+    return false
+}
+
+inline fun <T> Array<T>.contains(predicate: (T) -> Boolean): Boolean {
+    for (element in this) if (predicate(element)) return true
+    return false
+}

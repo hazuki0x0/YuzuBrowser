@@ -19,37 +19,19 @@ package jp.hazuki.yuzubrowser.core.utility.utils
 import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.utility.extensions.contains
 import java.io.File
 
 val externalUserDirectory: File
     get() = File(Environment.getExternalStorageDirectory().toString() + File.separator + "YuzuBrowser" + File.separator)
 
-fun createUniqueFileName(root: DocumentFile, fileName: String): String {
-    if (root.findFile(fileName) == null) return fileName
-
-    val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
-    var i = 1
-    val builder = StringBuilder()
-    val isSuffix = parsedName.suffix != null
-    var newName: String
-    do {
-        builder.append(parsedName.prefix).append('-').append(i++)
-        if (isSuffix) {
-            builder.append('.').append(parsedName.suffix)
-        }
-        newName = builder.toString()
-        builder.delete(0, builder.length)
-    } while (root.findFile(newName) != null)
-
-    return newName
-}
-
 fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): String {
-    if (root.canUseName(fileName, suffix)) return fileName
-
-    val checkName = CheckName(root)
-    val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
     val children = root.listFiles()
+    if (canUseName(children, fileName, suffix)) return fileName
+
+    val checkName = CheckName(children)
+    val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
+
     var i = 1
     val builder = StringBuilder()
     val isSuffix = parsedName.suffix != null
@@ -64,26 +46,25 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
         builder.append(suffix)
         tmpName = builder.toString()
         builder.delete(0, builder.length)
-    } while (checkName.exists(newName) || children.firstOrNull { it.name == tmpName } != null)
+    } while (checkName.exists(newName) || !children.contains { it.name == tmpName })
 
     return newName
 }
 
-private fun DocumentFile.canUseName(fileName: String, suffix: String?): Boolean {
+private fun canUseName(fileList: Array<DocumentFile>, fileName: String, suffix: String?): Boolean {
     if (suffix.isNullOrEmpty()) {
-        return findFile(fileName) == null
+        return !fileList.contains { it.name == fileName }
     }
     val tmpName = fileName + suffix
-    listFiles().forEach {
+    fileList.forEach {
         val name = it.name
         if (name == fileName || name == tmpName) return false
     }
     return true
 }
 
-private fun DocumentFile.sortedFileName(): List<String> {
-    val files = listFiles()
-    return files.map { it.name ?: "" }
+private fun Array<DocumentFile>.sortedFileName(): List<String> {
+    return map { it.name ?: "" }
             .sortedWith(Comparator { s1, s2 ->
                 val compared = compareLength(s1, s2)
                 if (compared == 0) {
@@ -94,8 +75,8 @@ private fun DocumentFile.sortedFileName(): List<String> {
             })
 }
 
-private class CheckName(root: androidx.documentfile.provider.DocumentFile) {
-    private val files = root.sortedFileName()
+private class CheckName(items: Array<DocumentFile>) {
+    private val files = items.sortedFileName()
     private val length = files.size
     private var index = 0
 
