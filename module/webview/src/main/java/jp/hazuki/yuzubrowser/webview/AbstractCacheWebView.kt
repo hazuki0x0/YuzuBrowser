@@ -450,6 +450,9 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         from.setMyOnScrollChangedListener(null)
         to.setMyOnScrollChangedListener(onScrollChangedListener)
 
+        val progress = to.progress
+        webViewClientWrapper.onPageChanged(this, toData.url ?: "", toData.originalUrl
+                ?: "", progress, progress != 100)
         to.requestWebFocus()
         if (from.isScrollable != to.isScrollable) {
             scrollableChangeListener?.onScrollableChanged(to.isScrollable)

@@ -129,6 +129,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
         if (currentUrl != null) {
             additionalHttpHeaders["Referer"] = currentUrl
         }
+        to.url = url
         to.webView.loadUrl(url, sHeaderMap)
         ++current
         move(from, to)
