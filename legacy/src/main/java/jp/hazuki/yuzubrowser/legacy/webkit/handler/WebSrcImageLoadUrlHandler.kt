@@ -19,10 +19,10 @@ package jp.hazuki.yuzubrowser.legacy.webkit.handler
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import java.lang.ref.WeakReference
 
-class WebSrcImageLoadUrlHandler(web: CustomWebView) : WebSrcImageHandler() {
+class WebSrcImageLoadUrlHandler(web: CustomWebView, val header: MutableMap<String, String>?) : WebSrcImageHandler() {
     private val mReference: WeakReference<CustomWebView> = WeakReference(web)
 
     override fun handleUrl(url: String) {
-        mReference.get()?.loadUrl(url)
+        mReference.get()?.loadUrl(url, header)
     }
 }

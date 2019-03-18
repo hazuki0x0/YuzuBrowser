@@ -120,11 +120,8 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi, pri
         val from = currentPage
         val to = makeWebView()
         val currentUrl = from.url
-        if (currentUrl != null) {
-            additionalHttpHeaders["Referer"] = currentUrl
-        }
         to.url = url
-        to.webView.loadUrl(url, sHeaderMap)
+        to.webView.loadUrl(url, additionalHttpHeaders.getHeaderMap(currentUrl))
 
         for (i in tabIndexList.size - 1 downTo current + 1) {
             removeWebView(i)

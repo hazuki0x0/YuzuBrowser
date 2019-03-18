@@ -460,4 +460,6 @@
     <string name="pref_translation">Translation</string>
     <string name="pref_translators">Hazuki</string>
     <string name="adblock_file_large_mes">It can not be previewed or edited because the file size is larger than 1MB.\nDo you want to import?</string>
+    <string name="pref_do_not_track">Send a \"Do Not Track\" request</string>
+    <string name="pref_remove_identifying_headers">Remove identifying headers</string>
 </resources>

@@ -463,4 +463,6 @@
     <string name="pref_translation">翻訳</string>
     <string name="pref_translators">Hazuki</string>
     <string name="adblock_file_large_mes">ファイルサイズが1MBを超えるためプレビューおよび編集はできません。\nインポートしますか？</string>
+    <string name="pref_do_not_track">\"Do Not Track\"リクエストを送信する</string>
+    <string name="pref_remove_identifying_headers">ブラウザ識別ヘッダを削除する</string>
 </resources>

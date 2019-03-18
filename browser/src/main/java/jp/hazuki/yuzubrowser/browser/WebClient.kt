@@ -308,7 +308,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             url
         if (!checkUrl(tab, newUrl, Uri.parse(newUrl))) {
             if (checkPatternMatch(tab, newUrl, shouldOpenInNewTab) <= 0)
-                tab.mWebView.loadUrl(newUrl)
+                tab.mWebView.loadUrl(newUrl, controller.additionalHeaders)
         }
     }
 
@@ -335,7 +335,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
             val patternResult = checkPatternMatch(data, url, false)
             if (patternResult == 0) {
-                web.loadUrl(url)
+                web.loadUrl(url, controller.additionalHeaders)
                 return true
             }
 

@@ -93,6 +93,7 @@ interface BrowserController : BrowserInfo {
     val pagePaddingHeight: Int
     val actionNameArray: ActionNameArray
     val webRtcRequest: WebRtcRequest
+    val additionalHeaders: MutableMap<String, String>
 
     var requestedOrientationByCtrl: Int
     var renderingMode: Int

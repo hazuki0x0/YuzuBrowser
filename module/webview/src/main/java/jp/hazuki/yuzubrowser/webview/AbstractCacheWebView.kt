@@ -29,13 +29,14 @@ import android.webkit.DownloadListener
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
+import androidx.collection.ArrayMap
+import androidx.collection.SimpleArrayMap
 import jp.hazuki.yuzubrowser.core.utility.common.listener.OnTouchEventListener
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 import jp.hazuki.yuzubrowser.webview.page.WebViewPage
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
-import java.util.*
 
 internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(context), CustomWebView, WebViewUtility {
     protected var id = System.currentTimeMillis()
@@ -581,8 +582,25 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
 
     override fun onPreferenceReset() {}
 
+    protected fun MutableMap<String, String>.getHeaderMap(referrer: String?): ArrayMap<String, String> {
+        cachedMap.clear()
+        if (this is ArrayMap<String, String>) {
+            cachedMap.putAllItems(this)
+        } else {
+            cachedMap.putAll(this)
+        }
+
+        if (referrer != null) cachedMap["Referer"] = referrer
+        return cachedMap
+    }
+
+    private fun <K, V> ArrayMap<K, V>.putAllItems(map: ArrayMap<K, V>) {
+        putAll(map as SimpleArrayMap<out K, out V>)
+    }
+
     companion object {
-        internal val sHeaderMap = TreeMap<String, String>()
+        private val sHeaderMap = ArrayMap<String, String>()
+        private val cachedMap = ArrayMap<String, String>()
 
         internal const val CAN_NOT_MOVE = 0
         internal const val CAN_EXTERNAL_MOVE = 1

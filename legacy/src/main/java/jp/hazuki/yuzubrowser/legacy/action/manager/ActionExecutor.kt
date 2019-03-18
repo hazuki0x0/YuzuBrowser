@@ -97,7 +97,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                 when (action.id) {
                     SingleAction.LPRESS_OPEN -> {
-                        target.webView.loadUrl(result.extra)
+                        target.webView.loadUrl(result.extra, controller.additionalHeaders)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_NEW -> {
@@ -164,7 +164,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             WebView.HitTestResult.IMAGE_TYPE -> {
                 when (action.id) {
                     SingleAction.LPRESS_OPEN_IMAGE -> {
-                        target.webView.loadUrl(url)
+                        target.webView.loadUrl(url, controller.additionalHeaders)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_NEW -> {
@@ -247,7 +247,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
                 when (action.id) {
                     SingleAction.LPRESS_OPEN -> {
-                        target.webView.requestFocusNodeHref(WebSrcImageLoadUrlHandler(target.webView).obtainMessage())
+                        target.webView.requestFocusNodeHref(WebSrcImageLoadUrlHandler(target.webView, controller.additionalHeaders).obtainMessage())
                         return true
                     }
                     SingleAction.LPRESS_OPEN_NEW -> {
@@ -285,7 +285,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE -> {
-                        target.webView.loadUrl(url)
+                        target.webView.loadUrl(url, controller.additionalHeaders)
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE_NEW -> {
@@ -924,7 +924,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.VIEW_SOURCE -> {
                 val webView = controller.getTab(actionTarget).mWebView
-                webView.loadUrl("view-source:" + webView.url)
+                webView.loadUrl("view-source:" + webView.url, controller.additionalHeaders)
             }
             SingleAction.PRINT -> if (PrintHelper.systemSupportsPrint()) {
                 val tab = controller.getTab(actionTarget)
