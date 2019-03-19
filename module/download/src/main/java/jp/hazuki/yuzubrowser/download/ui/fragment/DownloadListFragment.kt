@@ -194,7 +194,8 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                         .setMessage(R.string.confirm_delete_bookmark)
                         .setPositiveButton(android.R.string.ok) { _, _ ->
                             val roots = ArrayMap<String, HashMap<String, DocumentFile>>()
-                            adapter.getSelectedItems().forEach {
+                            val selectedItems = adapter.getSelectedItems()
+                            selectedItems.forEach {
                                 var items = roots[it.root.uri.toString()]
                                 if (items == null) {
                                     val files = it.root.listFiles()
@@ -202,11 +203,11 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                                     files.forEach { file -> file.name?.also { name -> items[name] = file } }
                                     roots[it.root.uri.toString()] = items
                                 }
-                                if (items[it.name]?.delete() == true) {
-                                    database.delete(it.id)
-                                    adapter.remove(it)
-                                }
+                                items[it.name]?.delete()
                             }
+                            database.delete(selectedItems)
+                            adapter.reload()
+
                             adapter.notifyDataSetChanged()
 
                             mode.finish()
