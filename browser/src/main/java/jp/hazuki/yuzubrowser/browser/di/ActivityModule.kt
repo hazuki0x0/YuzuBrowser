@@ -19,8 +19,8 @@ package jp.hazuki.yuzubrowser.browser.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import jp.hazuki.yuzubrowser.browser.BrowserActivity
+import jp.hazuki.yuzubrowser.download.DownloadDialogModule
 import jp.hazuki.yuzubrowser.legacy.di.WebViewModule
-import jp.hazuki.yuzubrowser.legacy.download.DownloadDialogModule
 
 @Module
 abstract class ActivityModule {

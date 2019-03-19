@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreference
 import jp.hazuki.yuzubrowser.core.utility.extensions.canResolvePath
+import jp.hazuki.yuzubrowser.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
-import jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
 import org.jetbrains.anko.longToast

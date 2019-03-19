@@ -127,6 +127,7 @@ dependencies {
     implementation project(':webview')
     implementation project(':languages')
     implementation project(':favicon')
+    implementation project(':download')
 
     implementation Libs.kotlin_stdlib
 

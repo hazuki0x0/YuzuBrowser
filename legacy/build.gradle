@@ -82,7 +82,7 @@ dependencies {
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
-    implementation 'ca.barrenechea.header-decor:header-decor:0.2.8'
+    implementation Libs.header_decor
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation project(':libraries:floatingactionbutton')
     implementation project(':libraries:colorpicker')
@@ -97,6 +97,7 @@ dependencies {
     implementation project(':languages')
     implementation project(':webview')
     implementation project(':favicon')
+    implementation project(':download')
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
@@ -105,4 +106,12 @@ dependencies {
     implementation Libs.kotlin_anko_sql
 
     implementation Libs.kvs_schema
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    kaptTest Libs.dagger2_compiler
+    implementation Libs.dagger_android
+    implementation Libs.dagger_android_support
+    kapt Libs.dagger_android_processor
 }

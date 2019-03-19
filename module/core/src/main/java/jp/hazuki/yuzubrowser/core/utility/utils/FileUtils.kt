@@ -19,17 +19,17 @@ package jp.hazuki.yuzubrowser.core.utility.utils
 import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
-import jp.hazuki.yuzubrowser.core.utility.extensions.contains
 import java.io.File
+import java.util.*
 
 val externalUserDirectory: File
     get() = File(Environment.getExternalStorageDirectory().toString() + File.separator + "YuzuBrowser" + File.separator)
 
 fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): String {
-    val children = root.listFiles()
-    if (canUseName(children, fileName, suffix)) return fileName
+    val checkName = CheckName(root.listFiles())
 
-    val checkName = CheckName(children)
+    if (!checkName.exists(fileName) && !checkName.exists(fileName)) return fileName
+
     val parsedName = getParsedFileName(FileUtils.replaceProhibitionWord(fileName))
 
     var i = 1
@@ -46,21 +46,9 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
         builder.append(suffix)
         tmpName = builder.toString()
         builder.delete(0, builder.length)
-    } while (checkName.exists(newName) || children.contains { it.name == tmpName })
+    } while (checkName.exists(newName) || checkName.exists(tmpName))
 
     return newName
-}
-
-private fun canUseName(fileList: Array<DocumentFile>, fileName: String, suffix: String?): Boolean {
-    if (suffix.isNullOrEmpty()) {
-        return !fileList.contains { it.name == fileName }
-    }
-    val tmpName = fileName + suffix
-    fileList.forEach {
-        val name = it.name
-        if (name == fileName || name == tmpName) return false
-    }
-    return true
 }
 
 private fun Array<DocumentFile>.sortedFileName(): List<String> {
@@ -77,13 +65,37 @@ private fun Array<DocumentFile>.sortedFileName(): List<String> {
 
 private class CheckName(items: Array<DocumentFile>) {
     private val files = items.sortedFileName()
-    private val length = files.size
-    private var index = 0
 
     fun exists(name: String): Boolean {
-        while (length > index) {
-            if (files[index] == name) return true
-            index++
+        var low = 0
+        var high = files.size - 1
+        val length = name.length
+        while (low <= high) {
+            val mid = (low + high) ushr 1
+            val item = files[mid]
+            val diff = item.length - length
+            when {
+                diff == 0 -> {
+                    val strDiff = item.compareTo(name)
+                    when {
+                        strDiff == 0 -> {
+                            return true
+                        }
+                        strDiff < 0 -> {
+                            low = mid + 1
+                        }
+                        else -> {
+                            high = mid - 1
+                        }
+                    }
+                }
+                diff < 0 -> {
+                    low = mid + 1
+                }
+                else -> {
+                    high = mid - 1
+                }
+            }
         }
         return false
     }

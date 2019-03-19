@@ -16,20 +16,14 @@
 
 package jp.hazuki.yuzubrowser.legacy.utils;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.view.View;
 
-import java.util.Arrays;
-
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.Constants;
-import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 
 public class AppUtils {
@@ -65,29 +59,6 @@ public class AppUtils {
             }
         }
         return "N";
-    }
-
-    public static void registNotification(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manager = (NotificationManager)
-                    context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            NotificationChannel service = new NotificationChannel(
-                    Constants.notification.CHANNEL_DOWNLOAD_SERVICE,
-                    context.getString(R.string.download_service),
-                    NotificationManager.IMPORTANCE_MIN);
-
-            service.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
-            NotificationChannel notify = new NotificationChannel(
-                    Constants.notification.CHANNEL_DOWNLOAD_NOTIFY,
-                    context.getString(R.string.download_notify),
-                    NotificationManager.IMPORTANCE_LOW);
-
-            notify.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
-            manager.createNotificationChannels(Arrays.asList(service, notify));
-        }
     }
 
     public static boolean isRTL(Context context) {

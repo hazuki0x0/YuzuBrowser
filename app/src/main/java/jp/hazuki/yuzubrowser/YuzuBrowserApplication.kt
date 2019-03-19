@@ -31,11 +31,11 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
+import jp.hazuki.yuzubrowser.download.registerDownloadNotification
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
 import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.provider.ProviderManager
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import javax.inject.Inject
 
 
@@ -60,7 +60,7 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         Fabric.with(this, crashlytics, Answers())
         CrashlyticsUtils.setChromeVersion(this)
         CrashlyticsUtils.setWebViewMode()
-        AppUtils.registNotification(this)
+        registerDownloadNotification()
 
         Logger.d(TAG, "onCreate()")
         browserState.isNeedLoad = false

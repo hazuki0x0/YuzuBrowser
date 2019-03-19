@@ -40,10 +40,10 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication;
 import jp.hazuki.yuzubrowser.legacy.Constants;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.provider.ISafeFileProvider;
+import jp.hazuki.yuzubrowser.ui.BrowserApplication;
+import jp.hazuki.yuzubrowser.ui.provider.ISafeFileProvider;
 
 public class PackageUtils {
     private PackageUtils() {

@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/libraries/colorpicker" />
             <option value="$PROJECT_DIR$/libraries/floatingactionbutton" />
             <option value="$PROJECT_DIR$/module/core" />
+            <option value="$PROJECT_DIR$/module/download" />
             <option value="$PROJECT_DIR$/module/favicon" />
             <option value="$PROJECT_DIR$/module/ui" />
             <option value="$PROJECT_DIR$/module/webview" />

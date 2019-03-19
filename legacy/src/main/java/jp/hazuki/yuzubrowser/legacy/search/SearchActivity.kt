@@ -42,7 +42,6 @@ import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager
-import jp.hazuki.yuzubrowser.legacy.provider.ISuggestProvider
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlManager
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestHistory
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestItem
@@ -50,6 +49,7 @@ import jp.hazuki.yuzubrowser.legacy.search.suggest.Suggestion
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OutSideClickableRecyclerView

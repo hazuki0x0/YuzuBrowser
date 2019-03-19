@@ -28,9 +28,9 @@ import android.provider.OpenableColumns
 import com.squareup.moshi.Moshi
 import dagger.android.DaggerContentProvider
 import jp.hazuki.yuzubrowser.BuildConfig
-import jp.hazuki.yuzubrowser.legacy.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterIndex
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItem
+import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
 import java.io.File
 import javax.inject.Inject
 

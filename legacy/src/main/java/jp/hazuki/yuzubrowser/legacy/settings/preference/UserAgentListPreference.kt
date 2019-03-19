@@ -18,12 +18,11 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference
 
 import android.content.Context
 import android.util.AttributeSet
-
 import androidx.preference.ListPreference
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgent
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentList
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
 
 class UserAgentListPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
 

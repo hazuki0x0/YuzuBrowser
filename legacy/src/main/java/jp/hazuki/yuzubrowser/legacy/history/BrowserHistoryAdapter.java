@@ -188,7 +188,7 @@ public class BrowserHistoryAdapter extends RecyclerView.Adapter<BrowserHistoryAd
 
     @Override
     public HeaderHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        return new HeaderHolder(inflater.inflate(R.layout.history_header, parent, false));
+        return new HeaderHolder(inflater.inflate(R.layout.recycler_view_header, parent, false));
     }
 
     @Override

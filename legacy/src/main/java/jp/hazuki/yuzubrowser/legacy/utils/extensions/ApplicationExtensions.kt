@@ -21,12 +21,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
-import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
 
 inline val Context.browserApplicationContext: BrowserApplication
     get() = applicationContext as BrowserApplication
@@ -53,7 +53,7 @@ fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: Str
     }
 
     var resolvedMineType = getMimeType(name)
-    if (resolvedMineType == Constants.mimeType.UNKNOWN) {
+    if (resolvedMineType == MIME_TYPE_UNKNOWN) {
         resolvedMineType = mimeType
     }
 

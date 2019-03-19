@@ -21,7 +21,7 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.browser.di.ActivityModule
-import jp.hazuki.yuzubrowser.legacy.download.DownloadModule
+import jp.hazuki.yuzubrowser.download.DownloadModule
 import jp.hazuki.yuzubrowser.legacy.search.SearchModule
 import jp.hazuki.yuzubrowser.legacy.settings.di.SettingsModule
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentModule

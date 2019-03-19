@@ -21,8 +21,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.browserApplicationContext
+import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 fun readItLater(context: Context, resolver: ContentResolver, url: String?, webView: CustomWebView) {

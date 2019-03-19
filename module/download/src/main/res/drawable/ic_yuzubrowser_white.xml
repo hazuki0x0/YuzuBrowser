@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <path
+        android:pathData="m11.648,20.995c-3.453,-0.085 -6.93,-2.19 -8.166,-5.539 -1.051,-2.692 -0.33,-5.913 1.653,-7.971 1.237,-1.329 2.888,-2.242 4.645,-2.635 1.162,1.592 2.744,2.837 4.519,3.66 1.906,0.897 3.918,1.611 5.985,1.995 0.672,-0.195 0.471,0.916 0.649,1.334 0.416,2.97 -1.148,5.987 -3.613,7.577 -1.665,1.119 -3.683,1.645 -5.673,1.58zM20.276,9.672c-2.69,-0.623 -5.379,-1.531 -7.669,-3.127 -0.881,-0.694 -1.756,-1.484 -2.297,-2.486 -0.155,-1.06 1.288,-1.113 2.02,-1.036 1.752,0.101 3.456,0.714 4.86,1.783 1.069,0.727 1.762,1.864 2.461,2.93 0.283,0.542 0.796,1.402 0.624,1.936v-0z"
+        android:fillColor="#fff" />
+</vector>

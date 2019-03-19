@@ -25,11 +25,11 @@ import android.widget.TextView
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener

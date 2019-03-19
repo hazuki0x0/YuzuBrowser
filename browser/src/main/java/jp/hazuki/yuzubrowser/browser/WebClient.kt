@@ -40,8 +40,9 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
+import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
+import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
@@ -50,8 +51,6 @@ import jp.hazuki.yuzubrowser.legacy.adblock.mining.MiningProtector
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
-import jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity
-import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryAsyncManager
 import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
@@ -79,6 +78,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView

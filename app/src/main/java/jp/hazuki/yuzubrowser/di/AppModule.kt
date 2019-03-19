@@ -23,10 +23,11 @@ import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.kotshi.LegacyJsonAdapterFactory
-import jp.hazuki.yuzubrowser.legacy.provider.ISuggestProvider
 import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
+import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
 import jp.hazuki.yuzubrowser.webview.kotshi.WebViewJsonAdapterFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -81,5 +82,11 @@ object AppModule {
     @JvmStatic
     fun provideSuggestProvider(): ISuggestProvider {
         return SuggestProviderBridge()
+    }
+
+    @Provides
+    @JvmStatic
+    fun provideUiPrefs(context: Context): UiPrefs {
+        return UiPrefs.get(context)
     }
 }

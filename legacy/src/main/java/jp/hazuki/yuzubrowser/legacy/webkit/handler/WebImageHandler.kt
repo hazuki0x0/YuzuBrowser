@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy.webkit.handler
 
 import androidx.appcompat.app.AppCompatActivity
-import jp.hazuki.yuzubrowser.legacy.download.ui.fragment.DownloadDialog
+import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import java.lang.ref.WeakReference
 
 class WebImageHandler(activity: AppCompatActivity, val userAgent: String) : WebSrcImageHandler() {

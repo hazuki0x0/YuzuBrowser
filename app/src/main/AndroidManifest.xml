@@ -185,15 +185,17 @@
             android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
 
         <service
-            android:name="jp.hazuki.yuzubrowser.legacy.download.service.DownloadService"
+            android:name="jp.hazuki.yuzubrowser.download.service.DownloadService"
             android:exported="false" />
 
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.download.ui.FastDownloadActivity"
+            android:name="jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserThemeDayNight.Transparent"/>
-        <activity android:name="jp.hazuki.yuzubrowser.legacy.download.ui.DownloadListActivity"/>
+        <activity
+            android:name="jp.hazuki.yuzubrowser.download.ui.DownloadListActivity"
+            android:label="@string/download"/>
 
         <provider
             android:name=".provider.SafeFileProvider"
@@ -325,7 +327,7 @@
             android:name="jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity"
             android:label="@string/pref_content_settings"/>
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.download.ui.FallbackFolderSelectActivity"
+            android:name="jp.hazuki.yuzubrowser.download.ui.FallbackFolderSelectActivity"
             android:label="@string/pref_download_folder"
             android:theme="@style/BrowserThemeDayNight.Transparent"/>
     </application>

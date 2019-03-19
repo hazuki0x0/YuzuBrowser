@@ -18,10 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference
 
 import android.content.Context
 import android.util.AttributeSet
-
 import androidx.preference.ListPreference
-import jp.hazuki.yuzubrowser.legacy.BrowserApplication
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
 
 class WebTextEncodeListPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
 
