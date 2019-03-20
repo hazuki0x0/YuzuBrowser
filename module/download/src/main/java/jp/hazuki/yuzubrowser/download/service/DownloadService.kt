@@ -45,7 +45,6 @@ import jp.hazuki.yuzubrowser.download.service.connection.ServiceClient
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceCommand
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceSocket
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
-import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import okhttp3.OkHttpClient
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
@@ -85,8 +84,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
         val filter = IntentFilter(INTENT_ACTION_CANCEL_DOWNLOAD)
         filter.addAction(INTENT_ACTION_PAUSE_DOWNLOAD)
 
-        val signature = (applicationContext as BrowserApplication).permissionAppSignature
-        registerReceiver(notificationControl, filter, signature, null)
+        registerReceiver(notificationControl, filter)
 
         startForeground(Int.MIN_VALUE, notify)
     }
@@ -324,9 +322,12 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                     setSmallIcon(R.drawable.ic_pause_white_24dp)
                     setContentIntent(PendingIntent.getActivity(applicationContext, 0, intentFor<DownloadListActivity>(), 0))
 
-                    val resume = Intent(INTENT_ACTION_RESTART_DOWNLOAD).apply { putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id) }
+                    val resume = Intent(this@DownloadService, DownloadService::class.java).apply {
+                        action = INTENT_ACTION_RESTART_DOWNLOAD
+                        putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id)
+                    }
                     addAction(R.drawable.ic_start_white_24dp, getText(R.string.resume_download),
-                            PendingIntent.getService(this@DownloadService, 0, resume, 0))
+                            PendingIntent.getService(this@DownloadService, info.id.toInt(), resume, 0))
                     notificationManager.notify(info.id.toInt(), build())
                 }
             } else {
@@ -356,12 +357,12 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                     if (info.resumable) {
                         val pause = Intent(INTENT_ACTION_PAUSE_DOWNLOAD).apply { putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id) }
                         addAction(R.drawable.ic_pause_white_24dp, getText(R.string.pause_download),
-                                PendingIntent.getBroadcast(this@DownloadService, 0, pause, PendingIntent.FLAG_UPDATE_CURRENT))
+                                PendingIntent.getBroadcast(this@DownloadService, info.id.toInt(), pause, PendingIntent.FLAG_UPDATE_CURRENT))
                     }
 
                     val cancel = Intent(INTENT_ACTION_CANCEL_DOWNLOAD).apply { putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id) }
                     addAction(R.drawable.ic_cancel_white_24dp, getText(android.R.string.cancel),
-                            PendingIntent.getBroadcast(this@DownloadService, 0, cancel, PendingIntent.FLAG_UPDATE_CURRENT))
+                            PendingIntent.getBroadcast(this@DownloadService, info.id.toInt(), cancel, PendingIntent.FLAG_UPDATE_CURRENT))
                 }
             }
         }

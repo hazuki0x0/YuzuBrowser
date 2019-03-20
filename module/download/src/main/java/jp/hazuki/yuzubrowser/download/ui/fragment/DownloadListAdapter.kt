@@ -32,6 +32,7 @@ import androidx.core.util.forEach
 import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
+import jp.hazuki.yuzubrowser.core.utility.extensions.binarySearchLong
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
@@ -77,10 +78,13 @@ class DownloadListAdapter(
         return InfoHolder(inflater.inflate(R.layout.fragment_download_list_item, parent, false))
     }
 
+    override fun onBindViewHolder(holder: InfoHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.size > 0) update(holder, position, payloads)
+        else onBindViewHolder(holder, position)
+    }
+
     override fun onBindViewHolder(holder: InfoHolder, position: Int) {
         val item = items[position]
-        item.root.exists()
-
 
         holder.filenameTextView.text = item.name
         holder.urlTextView.text = item.url
@@ -98,49 +102,7 @@ class DownloadListAdapter(
             Uri.parse(item.url).host
         }
 
-        when (item.state) {
-            DownloadFileInfo.STATE_DOWNLOADED -> {
-                holder.statusTextView.setText(R.string.download_success)
-                if (item.size < 0) {
-                    holder.sizeTextView.setText(R.string.unknown)
-                } else {
-                    holder.sizeTextView.text = Formatter.formatFileSize(context, item.size)
-                }
-                holder.sizeTextView.visibility = View.VISIBLE
-                holder.splitTextView.visibility = View.VISIBLE
-                holder.progressBar.visibility = View.GONE
-            }
-            DownloadFileInfo.STATE_CANCELED -> {
-                holder.statusTextView.setText(R.string.download_cancel)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-                holder.progressBar.visibility = View.GONE
-            }
-            DownloadFileInfo.STATE_DOWNLOADING -> {
-                holder.statusTextView.text = item.getNotificationString(context)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-
-                holder.progressBar.run {
-                    visibility = View.VISIBLE
-                    progress = item.currentSize.toInt()
-                    max = item.size.toInt()
-                    isIndeterminate = item.size <= 0
-                }
-            }
-            DownloadFileInfo.STATE_PAUSED, DownloadFileInfo.STATE_UNKNOWN_ERROR or DownloadFileInfo.STATE_PAUSED -> {
-                holder.statusTextView.setText(R.string.download_paused)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-                holder.progressBar.visibility = View.GONE
-            }
-            else -> {
-                holder.statusTextView.setText(R.string.download_fail)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-                holder.progressBar.visibility = View.GONE
-            }
-        }
+        updateState(holder, item)
 
         holder.itemView.setOnClickListener {
             if (isMultiSelectMode) {
@@ -160,11 +122,66 @@ class DownloadListAdapter(
         }
     }
 
+    private fun update(holder: InfoHolder, position: Int, payloads: MutableList<Any>) {
+        val payload = payloads[0] as? String
+        when (payload) {
+            PAYLOAD_UPDATE_STATE -> {
+                updateState(holder, items[position])
+            }
+        }
+    }
+
+    private fun updateState(holder: InfoHolder, info: DownloadFileInfo) {
+        when (info.state) {
+            DownloadFileInfo.STATE_DOWNLOADED -> {
+                holder.statusTextView.setText(R.string.download_success)
+                if (info.size < 0) {
+                    holder.sizeTextView.setText(R.string.unknown)
+                } else {
+                    holder.sizeTextView.text = Formatter.formatFileSize(context, info.size)
+                }
+                holder.sizeTextView.visibility = View.VISIBLE
+                holder.splitTextView.visibility = View.VISIBLE
+                holder.progressBar.visibility = View.GONE
+            }
+            DownloadFileInfo.STATE_CANCELED -> {
+                holder.statusTextView.setText(R.string.download_cancel)
+                holder.sizeTextView.visibility = View.GONE
+                holder.splitTextView.visibility = View.GONE
+                holder.progressBar.visibility = View.GONE
+            }
+            DownloadFileInfo.STATE_DOWNLOADING -> {
+                holder.statusTextView.text = info.getNotificationString(context)
+                holder.sizeTextView.visibility = View.GONE
+                holder.splitTextView.visibility = View.GONE
+
+                holder.progressBar.run {
+                    visibility = View.VISIBLE
+                    progress = info.currentSize.toInt()
+                    max = info.size.toInt()
+                    isIndeterminate = info.size <= 0
+                }
+            }
+            DownloadFileInfo.STATE_PAUSED, DownloadFileInfo.STATE_UNKNOWN_ERROR or DownloadFileInfo.STATE_PAUSED -> {
+                holder.statusTextView.setText(R.string.download_paused)
+                holder.sizeTextView.visibility = View.GONE
+                holder.splitTextView.visibility = View.GONE
+                holder.progressBar.visibility = View.GONE
+            }
+            else -> {
+                holder.statusTextView.setText(R.string.download_fail)
+                holder.sizeTextView.visibility = View.GONE
+                holder.splitTextView.visibility = View.GONE
+                holder.progressBar.visibility = View.GONE
+            }
+        }
+    }
+
     fun update(info: DownloadFileInfo) {
         val index = indexOf(info)
         if (index >= 0) {
             items[index] = info
-            notifyItemChanged(index)
+            notifyItemChanged(index, PAYLOAD_UPDATE_STATE)
         }
     }
 
@@ -180,10 +197,7 @@ class DownloadListAdapter(
     fun remove(info: DownloadFileInfo) = remove(indexOf(info))
 
     fun indexOf(info: DownloadFileInfo): Int {
-        items.forEachIndexed { index, item ->
-            if (item.id == info.id) return index
-        }
-        return -1
+        return items.binarySearchLong { info.id - it.id }
     }
 
     fun reload() {
@@ -247,5 +261,9 @@ class DownloadListAdapter(
 
     class HeaderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var header: TextView = itemView as TextView
+    }
+
+    companion object {
+        const val PAYLOAD_UPDATE_STATE = "update_state"
     }
 }

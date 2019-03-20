@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.download.R
@@ -58,8 +60,8 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
 
-        val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
-        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val layoutManager = LinearLayoutManager(activity)
         recyclerView.addOnScrollListener(object : LoadMoreListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {
                 adapter.loadMore()

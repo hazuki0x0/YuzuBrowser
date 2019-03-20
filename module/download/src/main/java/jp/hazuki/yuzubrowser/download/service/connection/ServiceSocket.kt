@@ -16,8 +16,8 @@
 
 package jp.hazuki.yuzubrowser.download.service.connection
 
-//import jp.hazuki.yuzubrowser.legacy.download.service.DownloadService
 import android.content.Context
+import android.content.Intent
 import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
@@ -25,6 +25,7 @@ import android.os.RemoteException
 import jp.hazuki.yuzubrowser.core.service.ServiceBindHelper
 import jp.hazuki.yuzubrowser.core.service.ServiceConnectionHelper
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.download.service.DownloadService
 
 class ServiceSocket(private val context: Context, listener: ActivityClient.ActivityClientListener) : ServiceConnectionHelper<Messenger> {
     private val messenger = Messenger(ActivityClient(listener))
@@ -43,7 +44,7 @@ class ServiceSocket(private val context: Context, listener: ActivityClient.Activ
     }
 
     fun bindService() {
-        //serviceHelper.bindService(Intent(context, DownloadService::class.java))
+        serviceHelper.bindService(Intent(context, DownloadService::class.java))
     }
 
     fun unbindService() {
