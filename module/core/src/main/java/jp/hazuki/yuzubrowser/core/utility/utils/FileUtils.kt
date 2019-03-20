@@ -19,8 +19,9 @@ package jp.hazuki.yuzubrowser.core.utility.utils
 import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.utility.extensions.binarySearch
+import jp.hazuki.yuzubrowser.core.utility.extensions.toSortedList
 import java.io.File
-import java.util.*
 
 val externalUserDirectory: File
     get() = File(Environment.getExternalStorageDirectory().toString() + File.separator + "YuzuBrowser" + File.separator)
@@ -52,60 +53,17 @@ fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): 
 }
 
 private fun Array<DocumentFile>.sortedFileName(): List<String> {
-    return map { it.name ?: "" }
-            .sortedWith(Comparator { s1, s2 ->
-                val compared = compareLength(s1, s2)
-                if (compared == 0) {
-                    s1.compareTo(s2)
-                } else {
-                    compared
-                }
-            })
+    return asSequence()
+            .map { it.name }
+            .filterNotNull()
+            .toSortedList()
 }
 
 private class CheckName(items: Array<DocumentFile>) {
     private val files = items.sortedFileName()
 
     fun exists(name: String): Boolean {
-        var low = 0
-        var high = files.size - 1
-        val length = name.length
-        while (low <= high) {
-            val mid = (low + high) ushr 1
-            val item = files[mid]
-            val diff = item.length - length
-            when {
-                diff == 0 -> {
-                    val strDiff = item.compareTo(name)
-                    when {
-                        strDiff == 0 -> {
-                            return true
-                        }
-                        strDiff < 0 -> {
-                            low = mid + 1
-                        }
-                        else -> {
-                            high = mid - 1
-                        }
-                    }
-                }
-                diff < 0 -> {
-                    low = mid + 1
-                }
-                else -> {
-                    high = mid - 1
-                }
-            }
-        }
-        return false
-    }
-}
-
-private fun compareLength(s1: String, s2: String): Int {
-    return when {
-        s1.length > s2.length -> 1
-        s1.length < s2.length -> -1
-        else -> 0
+        return files.binarySearch { it.compareTo(name) } >= 0
     }
 }
 

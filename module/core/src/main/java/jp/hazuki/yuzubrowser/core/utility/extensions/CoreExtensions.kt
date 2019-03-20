@@ -91,3 +91,9 @@ fun rangeCheck(size: Int, fromIndex: Int, toIndex: Int) {
         toIndex > size -> throw IndexOutOfBoundsException("toIndex ($toIndex) is greater than size ($size).")
     }
 }
+
+fun <T : Comparable<T>> Sequence<T>.toSortedList(): List<T> {
+    val sortedList = toMutableList()
+    sortedList.sort()
+    return sortedList
+}
