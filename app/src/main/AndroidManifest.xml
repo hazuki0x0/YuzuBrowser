@@ -45,7 +45,7 @@
         <activity
             android:name="jp.hazuki.yuzubrowser.browser.BrowserActivity"
             android:alwaysRetainTaskState="true"
-            android:configChanges="screenLayout|smallestScreenSize|uiMode|keyboardHidden|orientation|screenSize"
+            android:configChanges="screenLayout|smallestScreenSize|keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
             android:theme="@style/BrowserThemeDayNight.NoTitle">
             <meta-data
