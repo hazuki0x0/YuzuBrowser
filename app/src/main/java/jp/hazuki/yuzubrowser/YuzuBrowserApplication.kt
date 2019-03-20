@@ -89,7 +89,7 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         lateinit var instance: YuzuBrowserApplication
 
         init {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
 }

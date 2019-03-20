@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment
 
-class ConfirmDialog : androidx.fragment.app.DialogFragment() {
+class ConfirmDialog : DialogFragment() {
 
     private var listener: OnConfirmedListener? = null
 
@@ -37,7 +38,7 @@ class ConfirmDialog : androidx.fragment.app.DialogFragment() {
                 .create()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = parentFragment as OnConfirmedListener
     }

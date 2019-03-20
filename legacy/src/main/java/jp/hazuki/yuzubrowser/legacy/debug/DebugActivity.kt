@@ -49,7 +49,7 @@ class DebugActivity : ThemeActivity() {
             listAdapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, list)
         }
 
-        override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
             super.onListItemClick(l, v, position, id)
             when (position) {
                 0 -> startActivity(Intent(activity, DebugFileListActivity::class.java))

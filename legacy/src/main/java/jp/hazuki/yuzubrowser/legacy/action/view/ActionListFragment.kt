@@ -138,7 +138,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
         startActivityForResult(intent, RESULT_REQUEST_ADD_EASY)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.action_list, menu)
     }
 

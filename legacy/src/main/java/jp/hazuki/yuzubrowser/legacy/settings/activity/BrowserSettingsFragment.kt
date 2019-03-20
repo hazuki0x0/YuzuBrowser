@@ -103,7 +103,7 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         replaceFragment = activity as ReplaceFragmentListener

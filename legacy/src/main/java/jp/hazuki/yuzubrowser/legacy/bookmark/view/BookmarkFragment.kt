@@ -187,7 +187,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         if (!pickMode) inflater.inflate(R.menu.bookmark, menu)
     }
 

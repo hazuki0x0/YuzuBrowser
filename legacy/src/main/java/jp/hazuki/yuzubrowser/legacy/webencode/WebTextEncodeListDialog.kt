@@ -71,7 +71,7 @@ class WebTextEncodeListDialog : DialogFragment() {
         return builder.create()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         val activity = activity
         activity?.finish()

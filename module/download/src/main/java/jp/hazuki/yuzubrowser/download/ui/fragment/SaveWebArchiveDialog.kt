@@ -97,7 +97,7 @@ class SaveWebArchiveDialog : DialogFragment() {
                         act.download(root.uri, file, null)
                     }
 
-                    this.dialog.dismiss()
+                    dismiss()
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
@@ -117,7 +117,7 @@ class SaveWebArchiveDialog : DialogFragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = activity as? OnSaveWebViewListener
     }

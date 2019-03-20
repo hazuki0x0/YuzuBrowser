@@ -247,7 +247,7 @@ class AdBlockFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, Ad
 
     private fun getItemFromId(id: Int) = adapter.items.firstOrNull { it.id == id }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.ad_block_menu, menu)
     }
 
@@ -311,7 +311,7 @@ class AdBlockFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, Ad
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = activity as AdBlockFragmentListener
     }

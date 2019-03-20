@@ -103,7 +103,7 @@ class CloseAutoSelectActivity : ThemeActivity() {
             }
         }
 
-        override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
             val builder = ActionActivity.Builder(activity ?: return)
             when (position) {
                 0 -> startActivityForResult(builder.setDefaultAction(defaultAction)

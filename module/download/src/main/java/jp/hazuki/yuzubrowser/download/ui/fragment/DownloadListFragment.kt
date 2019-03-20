@@ -252,7 +252,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         list.forEach(adapter::update)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         commandController = activity as? DownloadCommandController
     }

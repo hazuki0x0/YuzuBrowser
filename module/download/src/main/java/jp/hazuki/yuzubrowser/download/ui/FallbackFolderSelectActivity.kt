@@ -101,7 +101,7 @@ class FallbackFolderSelectActivity : AppCompatActivity() {
         }
 
         private fun moveTo(root: String, path: String) {
-            FolderSelectFragment(root, path).show(fragmentManager, TAG)
+            fragmentManager?.let { FolderSelectFragment(root, path).show(it, TAG) }
         }
 
         companion object {

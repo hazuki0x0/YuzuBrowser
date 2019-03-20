@@ -71,7 +71,7 @@ class SpeedDialSettingActivityFragment : androidx.fragment.app.Fragment(), OnRec
         retainInstance = true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort, menu)
     }
 
@@ -190,7 +190,7 @@ class SpeedDialSettingActivityFragment : androidx.fragment.app.Fragment(), OnRec
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             mListener = activity as OnSpeedDialAddListener

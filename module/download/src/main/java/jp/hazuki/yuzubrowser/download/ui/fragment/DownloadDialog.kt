@@ -103,7 +103,7 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
 
                     file.name = newFileName
                     context.download(root.uri, file, meta)
-                    this.dialog.dismiss()
+                    dismiss()
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()

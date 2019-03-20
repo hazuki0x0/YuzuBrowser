@@ -29,6 +29,7 @@ import android.view.*
 import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
@@ -183,6 +184,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
+            delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
         setContentView(R.layout.browser_activity)
         //Crash workaround for pagePaddingHeight...
@@ -392,7 +398,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         handleIntent(intent)
     }
 
-    override fun onSaveInstanceState(bundle: Bundle?) {
+    override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
         saveWebState()
     }

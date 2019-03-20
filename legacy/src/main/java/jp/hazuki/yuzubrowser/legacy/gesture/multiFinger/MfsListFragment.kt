@@ -88,7 +88,7 @@ class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, De
         adapter.notifyDataSetChanged()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (activity is OnMfsListListener)
             listener = activity as OnMfsListListener
@@ -99,7 +99,7 @@ class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, De
         listener = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort, menu)
     }
 

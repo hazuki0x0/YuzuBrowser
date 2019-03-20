@@ -86,7 +86,7 @@ class AdBlockImportFragment : androidx.fragment.app.Fragment() {
         cancelButton.setOnClickListener { fragmentManager.popBackStack() }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = activity as OnImportListener
     }

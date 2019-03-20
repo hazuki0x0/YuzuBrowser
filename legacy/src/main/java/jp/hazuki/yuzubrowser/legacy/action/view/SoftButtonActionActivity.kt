@@ -68,7 +68,7 @@ class SoftButtonActionActivity : ThemeActivity() {
             }
         }
 
-        override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
             val activity = activity ?: return
             val arguments = arguments ?: throw IllegalArgumentException()
 
@@ -80,7 +80,7 @@ class SoftButtonActionActivity : ThemeActivity() {
                 3 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_DOWN
                 4 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_LEFT
                 5 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_RIGHT
-                else -> throw IllegalArgumentException("Unknown position:" + position)
+                else -> throw IllegalArgumentException("Unknown position:$position")
             }
 
             ActionActivity.Builder(activity)

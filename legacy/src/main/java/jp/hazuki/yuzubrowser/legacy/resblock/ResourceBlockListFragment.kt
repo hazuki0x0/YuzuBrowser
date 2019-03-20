@@ -118,12 +118,12 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
         manager.save(context!!.applicationContext)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.sort -> {
                 val next = !adapter.isSortMode
                 adapter.isSortMode = next

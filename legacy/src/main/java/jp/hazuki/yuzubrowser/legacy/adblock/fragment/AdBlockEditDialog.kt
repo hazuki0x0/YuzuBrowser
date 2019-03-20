@@ -64,7 +64,7 @@ class AdBlockEditDialog : androidx.fragment.app.DialogFragment() {
                 .create()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = if (parentFragment is AdBlockEditDialogListener) {
             parentFragment as AdBlockEditDialogListener

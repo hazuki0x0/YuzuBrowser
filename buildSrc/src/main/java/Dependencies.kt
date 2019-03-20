@@ -28,7 +28,7 @@ object AppVersions {
 
 object Versions {
     const val androidX = "1.0.0"
-    const val appCompat = "1.0.2"
+    const val appCompat = "1.1.0-alpha03"
     const val androidKTX = "1.0.1"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"

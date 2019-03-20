@@ -64,7 +64,7 @@ class AddAdBlockDialog : androidx.fragment.app.DialogFragment() {
         return builder.create()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = activity as OnAdBlockListUpdateListener
     }

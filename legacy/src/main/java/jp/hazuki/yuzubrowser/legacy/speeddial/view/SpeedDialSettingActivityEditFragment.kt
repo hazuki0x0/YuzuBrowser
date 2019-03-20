@@ -128,7 +128,7 @@ class SpeedDialSettingActivityEditFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             mCallBack = activity as SpeedDialEditCallBack

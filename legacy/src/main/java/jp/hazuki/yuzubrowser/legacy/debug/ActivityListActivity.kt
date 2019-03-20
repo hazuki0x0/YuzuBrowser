@@ -67,10 +67,10 @@ class ActivityListActivity : ThemeActivity() {
 
         }
 
-        override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
             super.onListItemClick(l, v, position, id)
             val intent = Intent()
-            intent.setClassName(activity, (l!!.adapter.getItem(position) as ActivityInfo).name)
+            intent.setClassName(activity, (l.adapter.getItem(position) as ActivityInfo).name)
             try {
                 startActivity(intent)
             } catch (e: ActivityNotFoundException) {
