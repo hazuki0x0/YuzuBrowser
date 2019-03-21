@@ -25,8 +25,6 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
-import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -35,7 +33,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.regex.Pattern;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -133,16 +130,6 @@ public class ImageUtils {
         return buffer.array();
     }
 
-
-    public static Bitmap getBitmap(VectorDrawable vectorDrawable) {
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-        return bitmap;
-    }
-
     public static Drawable getDrawable(Context context, Bitmap bitmap) {
         if (bitmap == null) return null;
 
@@ -150,16 +137,6 @@ public class ImageUtils {
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
         return drawable;
-    }
-
-
-    public static byte[] getBase64Image(String data) {
-        if (!data.startsWith("data:")) return null;
-        String[] strings = data.split(Pattern.quote(","));
-        if (strings.length > 2) {
-            return Base64.decode(strings[1], Base64.DEFAULT);
-        }
-        return null;
     }
 
     public static Bitmap trimSquare(Bitmap icon, int maxSize) {

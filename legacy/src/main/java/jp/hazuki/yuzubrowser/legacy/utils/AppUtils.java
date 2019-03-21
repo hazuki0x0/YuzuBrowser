@@ -18,9 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
-import android.view.View;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.Constants;
@@ -59,10 +57,5 @@ public class AppUtils {
             }
         }
         return "N";
-    }
-
-    public static boolean isRTL(Context context) {
-        Configuration config = context.getResources().getConfiguration();
-        return config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
     }
 }

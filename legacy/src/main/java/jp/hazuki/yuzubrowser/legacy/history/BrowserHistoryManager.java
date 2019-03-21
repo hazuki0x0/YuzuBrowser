@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,8 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
-import jp.hazuki.yuzubrowser.legacy.utils.database.CursorLoadable;
 
-public class BrowserHistoryManager implements CursorLoadable {
+public class BrowserHistoryManager {
     private static final String DB_NAME = "webhistory1.db";
     private static final int DB_VERSION = 3;
     private static final String TABLE_NAME = "main_table1";
@@ -167,12 +166,6 @@ public class BrowserHistoryManager implements CursorLoadable {
 
     private static boolean checkUrl(String url) {
         return (!TextUtils.isEmpty(url) && !url.regionMatches(true, 0, "about:", 0, 6) && !url.regionMatches(true, 0, "yuzu:", 0, 5) && !url.regionMatches(true, 0, "data:", 0, 5));
-    }
-
-    @Override
-    public Cursor getLoadableCursor() {
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        return db.query(TABLE_NAME, null, null, null, null, null, COLUMN_TIME + " DESC");
     }
 
     private static final class MyOpenHelper extends SQLiteOpenHelper {

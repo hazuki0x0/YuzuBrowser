@@ -128,11 +128,6 @@ public class WebUtils {
         return intent;
     }
 
-    public static Intent createShareWebIntent(Intent intent, String url) {
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        return intent;
-    }
-
     public static void shareWeb(Context context, String url, String title) {
         if (url == null) return;
 

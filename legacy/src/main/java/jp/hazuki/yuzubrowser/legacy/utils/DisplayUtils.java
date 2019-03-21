@@ -16,11 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.utils;
 
-import android.content.Context;
-import android.graphics.Point;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
@@ -28,13 +24,6 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 public class DisplayUtils {
     private DisplayUtils() {
         throw new UnsupportedOperationException();
-    }
-
-    public static int getDisplayHeight(Context context) {
-        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-        return point.y;
     }
 
     public static int getFullScreenVisibility() {

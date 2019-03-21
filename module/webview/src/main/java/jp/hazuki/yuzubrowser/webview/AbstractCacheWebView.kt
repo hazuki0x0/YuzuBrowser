@@ -517,11 +517,6 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         toSetting.geolocationEnabled = fromSetting.geolocationEnabled
     }
 
-    @Deprecated("now!!!", ReplaceWith("from.copySettingsTo(to)"))
-    protected fun settingWebView(from: CustomWebView, to: CustomWebView) {
-        from.copySettingsTo(to)
-    }
-
     override fun setMyOnScrollChangedListener(l: OnScrollChangedListener?) {
         onScrollChangedListener = l
         currentPage.webView.setMyOnScrollChangedListener(l)

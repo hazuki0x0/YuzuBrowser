@@ -26,38 +26,6 @@ public class ArrayUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static long[] toLongArray(Collection<Long> collection) {
-        Object[] boxedArray = collection.toArray();
-        int size = boxedArray.length;
-        long[] array = new long[size];
-        for (int i = 0; i < size; i++) {
-            array[i] = (Long) boxedArray[i];
-        }
-        return array;
-    }
-
-    public static int[] toIntArray(List<Integer> integers) {
-        int[] array = new int[integers.size()];
-        for (int i = 0; i < integers.size(); i++) {
-            array[i] = integers.get(i);
-        }
-        return array;
-    }
-
-    public interface StringConverter<T> {
-        String toString(T object);
-    }
-
-    public static <T> String[] toStringArray(Collection<T> collection, StringConverter<T> converter) {
-        String strs[] = new String[collection.size()];
-        int i = 0;
-        for (T object : collection) {
-            strs[i] = converter.toString(object);
-            ++i;
-        }
-        return strs;
-    }
-
     public static <T> int findIndexOfValue(T value, T[] intarray) {
         if (value == null)
             return -1;
@@ -99,7 +67,6 @@ public class ArrayUtils {
     public static <T> void move(List<T> list, int positionFrom, int positionTo) {
         T item = list.remove(positionFrom);
         list.add(positionTo, item);
-        //Collections.swap(mCurrentFolder.list, positionFrom, positionTo);
     }
 
     public static <T> String join(Collection<T> list, String c) {
@@ -132,12 +99,5 @@ public class ArrayUtils {
         final Object[] result = new Object[newLength];
         System.arraycopy(original, 0, result, 0, newLength);
         return result;
-    }
-
-    public static <S, T> Collection<S> transform(Collection<T> from, Transformer<S, T> trans) {
-        ArrayList<S> list = new ArrayList<>(from.size());
-        for (T item : from)
-            list.add(trans.transform(item));
-        return list;
     }
 }
