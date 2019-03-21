@@ -255,7 +255,7 @@ public class FileUtils {
                 return -1;
             if (!lhs.isDirectory() && rhs.isDirectory())
                 return 1;
-            return lhs.getName().compareTo(rhs.getName());
+            return lhs.getName().compareToIgnoreCase(rhs.getName());
         }
     }
 }
