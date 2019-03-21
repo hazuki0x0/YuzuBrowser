@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.theme
 
 import android.content.Context
 import android.net.Uri
+import jp.hazuki.yuzubrowser.core.utility.extensions.forEach
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
