@@ -59,6 +59,7 @@ public class MainTabData extends TabData {
         finished = false;
         startDocument = true;
         iconReceived = false;
+        alertMode = ALERT_ALLOWED;
         if (AppData.toolbar_show_favicon.get()) {
             if (url.startsWith("yuzu:")) {
                 removeIcon();
@@ -205,6 +206,7 @@ public class MainTabData extends TabData {
     private boolean bgTab;
     private boolean startDocument;
     private boolean iconReceived;
+    private int alertMode;
     private int cookieMode = COOKIE_UNDEFINED;
 
     public WebSettingResetAction getResetAction() {
@@ -252,7 +254,23 @@ public class MainTabData extends TabData {
         cookieMode = mode;
     }
 
+    public boolean isAlertAllowed() {
+        return alertMode >= 0;
+    }
+
+    public int getAlertMode() {
+        return alertMode;
+    }
+
+    public void setAlertMode(int alertMode) {
+        this.alertMode = alertMode;
+    }
+
     public static final int COOKIE_ENABLE = 1;
     public static final int COOKIE_DISABLE = 0;
     public static final int COOKIE_UNDEFINED = -1;
+
+    public static final int ALERT_ALLOWED = 0;
+    public static final int ALERT_MULTIPULE = 1;
+    public static final int ALERT_BLOCKED = -1;
 }

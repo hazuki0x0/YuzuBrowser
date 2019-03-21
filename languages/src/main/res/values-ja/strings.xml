@@ -314,4 +314,7 @@
     <string name="reset_all_counts">カウントをリセット</string>
     <string name="reset_all_counts_mes">すべての要素のカウントをリセットしますか？</string>
     <string name="js_download_cross_origin">クロスドメイン制約のため、このブラウザではダウンロードできません</string>
+    <string name="this_page_says">このページの内容</string>
+    <string name="host_page_says">%1$s の内容</string>
+    <string name="prevent_additional_dialogues">このページでこれ以上ダイアログボックスを生成しない</string>
 </resources>

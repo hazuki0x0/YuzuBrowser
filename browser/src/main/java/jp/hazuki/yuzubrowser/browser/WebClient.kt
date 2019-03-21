@@ -29,7 +29,6 @@ import android.os.Message
 import android.text.TextUtils
 import android.view.View
 import android.webkit.*
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
@@ -79,6 +78,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
@@ -714,40 +714,50 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
 
         override fun onJsAlert(view: CustomWebView, url: String, message: String, result: JsResult): Boolean {
-            if (!activity.isFinishing) {
-                AlertDialog.Builder(activity)
-                        .setTitle(url)
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.yes) { _, _ -> result.confirm() }
-                        .setOnCancelListener { result.cancel() }
+            val tab = controller.getTabOrNull(view) ?: return true
+            if (tab.isAlertAllowed && !activity.isFinishing) {
+                JsAlertDialog(activity)
+                        .setAlertMode(url, message, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
+                            if (dialogResult) result.confirm() else result.cancel()
+                            if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
+                        }
                         .show()
+                tab.alertMode = MainTabData.ALERT_MULTIPULE
+            } else {
+                result.cancel()
             }
             return true
         }
 
         override fun onJsConfirm(view: CustomWebView, url: String, message: String, result: JsResult): Boolean {
-            if (!activity.isFinishing)
-                AlertDialog.Builder(activity)
-                        .setTitle(url)
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.yes) { _, _ -> result.confirm() }
-                        .setNegativeButton(android.R.string.no) { _, _ -> result.cancel() }
-                        .setOnCancelListener { result.cancel() }
+            val tab = controller.getTabOrNull(view) ?: return true
+            if (tab.isAlertAllowed && !activity.isFinishing) {
+                JsAlertDialog(activity)
+                        .setConfirmMode(url, message, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
+                            if (dialogResult) result.confirm() else result.cancel()
+                            if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
+                        }
                         .show()
+                tab.alertMode = MainTabData.ALERT_MULTIPULE
+            } else {
+                result.cancel()
+            }
             return true
         }
 
         override fun onJsPrompt(view: CustomWebView, url: String, message: String, defaultValue: String, result: JsPromptResult): Boolean {
-            val editText = EditText(activity)
-            editText.setText(defaultValue)
-            AlertDialog.Builder(activity)
-                    .setTitle(url)
-                    .setMessage(message)
-                    .setView(editText)
-                    .setPositiveButton(android.R.string.ok) { _, _ -> result.confirm(editText.text.toString()) }
-                    .setNegativeButton(android.R.string.cancel) { _, _ -> result.cancel() }
-                    .setOnCancelListener { result.cancel() }
-                    .show()
+            val tab = controller.getTabOrNull(view) ?: return true
+            if (tab.isAlertAllowed && !activity.isFinishing) {
+                JsAlertDialog(activity)
+                        .setPromptMode(url, message, defaultValue, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
+                            if (dialogResult != null) result.confirm(dialogResult) else result.cancel()
+                            if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
+                        }
+                        .show()
+                tab.alertMode = MainTabData.ALERT_MULTIPULE
+            } else {
+                result.cancel()
+            }
             return true
         }
 

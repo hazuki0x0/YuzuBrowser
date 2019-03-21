@@ -1,3 +1,19 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
     <string name="app_name" translatable="false">Yuzu Browser</string>
     <string name="add">Додати</string>
@@ -299,5 +315,8 @@
     <string name="breadcrumb">Залишки</string>
     <string name="download_failed_root_not_exists">Неможливо завантажити, оскільки папка завантаження не знайдена</string>
     <string name="download_failed_root_not_writable">Неможливо завантажити, оскільки папка завантаження не може бути записана</string>
+    <string name="this_page_says">Повідомлення з цієї сторінки</string>
+    <string name="host_page_says">Повідомлення із сайту %1$s</string>
+    <string name="prevent_additional_dialogues">Заборонити створення додаткових діалогових вікон цією сторінкою.</string>
 </resources>
 
