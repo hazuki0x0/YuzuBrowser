@@ -57,13 +57,6 @@ class BrowserHistoryActivity : ThemeActivity() {
                 .commit()
     }
 
-    override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.container)
-        if (fragment !is BrowserHistoryFragment || !fragment.onBackPressed()) {
-            finish()
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {

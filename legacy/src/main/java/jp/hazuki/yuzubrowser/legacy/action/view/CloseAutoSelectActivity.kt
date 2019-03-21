@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.action.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,8 +25,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.fragment.app.ListFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
+import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
@@ -46,20 +49,15 @@ class CloseAutoSelectActivity : ThemeActivity() {
         }
         fragment.arguments = bundle
 
+        addOnBackPressedCallback(this) {
+            setResult(RESULT_CANCELED)
+            finish()
+            true
+        }
+
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit()
-    }
-
-    override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.container)
-        if (fragment is InnerFragment) {
-            val intent = fragment.returnData
-            setResult(RESULT_OK, intent)
-        } else {
-            setResult(RESULT_CANCELED)
-        }
-        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -72,20 +70,11 @@ class CloseAutoSelectActivity : ThemeActivity() {
         }
     }
 
-    class InnerFragment : androidx.fragment.app.ListFragment() {
+    class InnerFragment : ListFragment() {
 
         private lateinit var defaultAction: Action
         private lateinit var intentAction: Action
         private lateinit var windowAction: Action
-
-        internal val returnData: Intent
-            get() {
-                val intent = Intent()
-                intent.putExtra(DEFAULT, defaultAction as Parcelable?)
-                intent.putExtra(INTENT, intentAction as Parcelable?)
-                intent.putExtra(WINDOW, windowAction as Parcelable?)
-                return intent
-            }
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
@@ -100,6 +89,16 @@ class CloseAutoSelectActivity : ThemeActivity() {
                 add(getString(R.string.pref_close_default))
                 add(getString(R.string.pref_close_intent))
                 add(getString(R.string.pref_close_window))
+            }
+
+            activity.addOnBackPressedCallback(this) {
+                val intent = Intent()
+                intent.putExtra(DEFAULT, defaultAction as Parcelable?)
+                intent.putExtra(INTENT, intentAction as Parcelable?)
+                intent.putExtra(WINDOW, windowAction as Parcelable?)
+                activity.setResult(Activity.RESULT_OK, intent)
+                activity.finish()
+                true
             }
         }
 

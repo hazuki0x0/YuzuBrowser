@@ -41,6 +41,7 @@ import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.download.service.connection.ActivityClient
 import jp.hazuki.yuzubrowser.download.ui.DownloadCommandController
 import jp.hazuki.yuzubrowser.ui.ACTIVITY_MAIN_BROWSER
+import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import org.jetbrains.anko.longToast
@@ -78,12 +79,16 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         recyclerView.adapter = adapter
     }
 
-    fun onBack(): Boolean {
-        return if (adapter.isMultiSelectMode) {
-            adapter.isMultiSelectMode = false
-            false
-        } else {
-            true
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        activity?.addOnBackPressedCallback(this) {
+            return@addOnBackPressedCallback if (adapter.isMultiSelectMode) {
+                adapter.isMultiSelectMode = false
+                true
+            } else {
+                false
+            }
         }
     }
 

@@ -51,10 +51,11 @@ dependencies {
     androidTestImplementation Libs.espressoCore
     androidTestImplementation Libs.androidRunner
 
-    implementation Libs.support_appcompat_v7
-    implementation Libs.support_recyclerview
-    implementation Libs.support_constraint_layout
-    implementation Libs.androidKTX
+    implementation AndroidX.appcompat
+    implementation AndroidX.recyclerView
+    implementation AndroidX.constraintLayout
+    implementation AndroidX.KTX
+    implementation AndroidX.activty
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

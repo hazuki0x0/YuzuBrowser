@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
@@ -96,6 +97,27 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
         recyclerView.addOnItemTouchListener(locationDetector)
 
         setList(root)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        activity?.addOnBackPressedCallback(this) {
+            if (adapter.isSortMode) {
+                adapter.isSortMode = false
+                Toast.makeText(activity, R.string.end_sort, Toast.LENGTH_SHORT).show()
+                return@addOnBackPressedCallback true
+            } else if (adapter.isMultiSelectMode) {
+                adapter.isMultiSelectMode = false
+                return@addOnBackPressedCallback true
+            }
+            val parent = mCurrentFolder.parent
+            return@addOnBackPressedCallback if (parent != null) {
+                setList(parent)
+                true
+            } else {
+                false
+            }
+        }
     }
 
     private fun setList(folder: BookmarkFolder) {

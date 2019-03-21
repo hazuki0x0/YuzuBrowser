@@ -94,17 +94,6 @@ class DownloadListActivity : DaggerThemeActivity(), ActivityClient.ActivityClien
         downloadService.pauseDownload(id)
     }
 
-    override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentByTag(TAG)
-        if (fragment is DownloadListFragment) {
-            if (fragment.onBack()) {
-                super.onBackPressed()
-            }
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()

@@ -29,6 +29,7 @@ object AppVersions {
 object Versions {
     const val androidX = "1.0.0"
     const val appCompat = "1.1.0-alpha03"
+    const val activityX = "1.0.0-alpha05"
     const val androidKTX = "1.0.1"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
@@ -47,15 +48,26 @@ object Versions {
     const val header_decor = "0.2.8"
 }
 
+object AndroidX {
+    const val annotations = "androidx.annotation:annotation:${Versions.androidX}"
+    const val appcompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
+    const val design = "com.google.android.material:material:${Versions.androidX}"
+    const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.androidX}"
+    const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.support_constraint_lib}"
+    const val fix_preference = "com.takisoft.preferencex:preferencex:${Versions.support_fix_lib}"
+    const val KTX = "androidx.core:core-ktx:${Versions.androidKTX}"
+    const val activty = "androidx.activity:activity:${Versions.activityX}"
+}
+
 object Libs {
     //androidx libraries
-    const val support_annotations = "androidx.annotation:annotation:${Versions.androidX}"
-    const val support_appcompat_v7 = "androidx.appcompat:appcompat:${Versions.appCompat}"
-    const val support_design = "com.google.android.material:material:${Versions.androidX}"
-    const val support_recyclerview = "androidx.recyclerview:recyclerview:${Versions.androidX}"
-    const val support_constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.support_constraint_lib}"
-    const val support_fix_preference = "com.takisoft.preferencex:preferencex:${Versions.support_fix_lib}"
-    const val androidKTX = "androidx.core:core-ktx:${Versions.androidKTX}"
+    const val support_annotations = AndroidX.annotations
+    const val support_appcompat_v7 = AndroidX.appcompat
+    const val support_design = AndroidX.design
+    const val support_recyclerview = AndroidX.recyclerView
+    const val support_constraint_layout = AndroidX.constraintLayout
+    const val support_fix_preference = AndroidX.fix_preference
+    const val androidKTX = AndroidX.KTX
 
     //JSON
     const val kotshi = "se.ansman.kotshi:api:${Versions.kotshi}"

@@ -36,6 +36,7 @@ import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
@@ -82,6 +83,19 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
         recyclerView.adapter = adapter
 
         recyclerView.addOnItemTouchListener(locationDetector)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        activity?.addOnBackPressedCallback(this) {
+            val searchView = searchView
+            return@addOnBackPressedCallback if (searchView != null && !searchView.isIconified) {
+                searchView.isIconified = true
+                true
+            } else {
+                false
+            }
+        }
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
@@ -183,14 +197,6 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
                 history.url?.let { FaviconManager.getInstance(activity).getFaviconBytes(it) })
         activity.setResult(RESULT_OK, intent)
         activity.finish()
-    }
-
-    fun onBackPressed(): Boolean {
-        if (searchView != null && !searchView!!.isIconified) {
-            searchView!!.isIconified = true
-            return true
-        }
-        return false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

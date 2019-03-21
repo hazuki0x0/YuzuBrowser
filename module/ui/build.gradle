@@ -47,9 +47,10 @@ dependencies {
     androidTestImplementation Libs.espressoCore
     androidTestImplementation Libs.androidRunner
 
-    implementation Libs.support_appcompat_v7
-    implementation Libs.support_fix_preference
-    implementation Libs.support_constraint_layout
+    implementation AndroidX.appcompat
+    implementation AndroidX.fix_preference
+    implementation AndroidX.constraintLayout
+    implementation AndroidX.activty
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
