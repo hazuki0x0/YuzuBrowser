@@ -230,6 +230,7 @@
   copyrightHolder: Square, Inc.
   year: 2015
   license: The Apache Software License, Version 2.0
+  url: https://github.com/square/moshi
 - artifact: androidx.collection:collection:+
   name: Android Support Library collections
   copyrightHolder: The Android Open Source Project
@@ -326,6 +327,7 @@
   copyrightHolder: Square, Inc.
   year: 2016
   license: The Apache Software License, Version 2.0
+  url: https://square.github.io/okhttp/
 - artifact: org.jetbrains.kotlin:kotlin-stdlib-jdk7:+
   name: org.jetbrains.kotlin:kotlin-stdlib-jdk7
   copyrightHolder: JetBrains s.r.o.
@@ -374,6 +376,7 @@
   copyrightHolder: Kentaro Takiguchi
   year: 2014
   license: The Apache Software License, Version 2.0
+  url: https://github.com/rejasupotaro/kvs-schema
 - artifact: androidx.lifecycle:lifecycle-viewmodel:+
   name: Android Lifecycle ViewModel
   copyrightHolder: The Android Open Source Project
@@ -461,6 +464,41 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.concurrent:concurrent-futures:+
+  name: AndroidX Futures
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+- artifact: androidx.appcompat:appcompat-resources:+
+  name: Android Resources Library
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.savedstate:savedstate:+
+  name: Activity
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.core:core-ktx:+
+  name: Core Kotlin Extensions
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.activity:activity:+
+  name: Activity
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.google.guava:listenablefuture:+
+  name: Guava ListenableFuture only
+  copyrightHolder: The Guava Authors
+  license: The Apache Software License, Version 2.0
+  url: https://github.com/google/guava
 - artifact: androidx.drawerlayout:drawerlayout:+
   name: Android Support Library Drawer Layout
   copyrightHolder: The Android Open Source Project
@@ -496,6 +534,7 @@
   copyrightHolder: Turing Technologies, an unincorporated orginisation of Wynne Plaga
   year: 2016-2017
   license: The Apache Software License, Version 2.0
+  url: https://github.com/turing-tech/MaterialScrollBar
 - artifact: com.takisoft.preferencex:preferencex:+
   name: Preference X
   copyrightHolder: takisoft
