@@ -36,7 +36,7 @@ import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
+import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*

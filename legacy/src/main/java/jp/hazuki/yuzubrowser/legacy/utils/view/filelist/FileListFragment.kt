@@ -26,7 +26,7 @@ import androidx.fragment.app.ListFragment
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
+import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
 import java.io.File
 import java.util.*
 

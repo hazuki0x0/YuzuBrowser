@@ -41,7 +41,7 @@ import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.download.service.connection.ActivityClient
 import jp.hazuki.yuzubrowser.download.ui.DownloadCommandController
 import jp.hazuki.yuzubrowser.ui.ACTIVITY_MAIN_BROWSER
-import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
+import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import org.jetbrains.anko.longToast

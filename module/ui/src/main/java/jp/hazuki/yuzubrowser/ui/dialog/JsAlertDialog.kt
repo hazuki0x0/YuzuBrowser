@@ -23,8 +23,8 @@ import android.net.Uri
 import android.view.ViewGroup
 import android.widget.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
-import jp.hazuki.yuzubrowser.core.utility.extensions.setTextAppearanceCompat
 import jp.hazuki.yuzubrowser.ui.R
+import jp.hazuki.yuzubrowser.ui.extensions.setTextAppearanceCompat
 
 class JsAlertDialog(private val context: Context) {
     private val builder = AlertDialog.Builder(context)

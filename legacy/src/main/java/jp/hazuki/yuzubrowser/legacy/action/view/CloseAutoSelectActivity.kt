@@ -28,10 +28,10 @@ import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
-import jp.hazuki.yuzubrowser.ui.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
 
 class CloseAutoSelectActivity : ThemeActivity() {
 

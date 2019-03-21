@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.core.utility.extensions
+package jp.hazuki.yuzubrowser.ui.extensions
 
-import android.os.Build
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.StyleRes
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.LifecycleOwner
 
-inline fun ViewGroup.forEach(action: (View) -> Unit) {
-    for (i in 0 until childCount) action(getChildAt(i))
-}
-
-fun TextView.setTextAppearanceCompat(@StyleRes resId: Int) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        setTextAppearance(resId)
-    else
-        @Suppress("DEPRECATION")
-        setTextAppearance(context, resId)
+inline fun ComponentActivity.addOnBackPressedCallback(owner: LifecycleOwner, crossinline callback: () -> Boolean) {
+    addOnBackPressedCallback(owner, OnBackPressedCallback { callback() })
 }
