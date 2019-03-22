@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +59,7 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    asyncPermissions.request(*requests).let {
-        handleResult(asyncPermissions, it, true, true)
-    }
+    handleResult(asyncPermissions, asyncPermissions.request(*requests), true, true)
 }
 
 fun Activity.checkStoragePermission(): Boolean {

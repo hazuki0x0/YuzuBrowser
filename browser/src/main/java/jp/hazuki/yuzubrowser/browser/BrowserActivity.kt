@@ -29,7 +29,6 @@ import android.view.*
 import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArrayMap
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
@@ -104,7 +103,7 @@ import javax.inject.Inject
 
 class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener, WebViewProvider {
 
-    private val asyncPermissions by lazy { AsyncPermissions(this) }
+    private lateinit var asyncPermissions: AsyncPermissions
     private val handler = Handler(Looper.getMainLooper())
     private val actionController = ActionExecutor(this)
     private val iconManager = ActionIconManager(this)
@@ -184,15 +183,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (ThemeData.isEnabled() && ThemeData.getInstance().lightTheme) {
-            delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        } else {
-            delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
 
         setContentView(R.layout.browser_activity)
         //Crash workaround for pagePaddingHeight...
         toolbarPadding.visibility = View.GONE
+
+        asyncPermissions = AsyncPermissions(this)
 
         browserState = (applicationContext as BrowserApplication).browserState
 
@@ -395,6 +391,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         handleIntent(intent)
     }
 
