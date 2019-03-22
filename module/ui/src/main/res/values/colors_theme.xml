@@ -28,4 +28,5 @@
     <color name="iconColor">@color/white_gray</color>
     <color name="urlBarBoxColor">@color/dark_box</color>
     <color name="urlBarBoxBorderColor">@color/dark_border</color>
+    <color name="progressBarBackground">#47bfbfbf</color>
 </resources>

@@ -124,4 +124,45 @@
 
     <attr name="urlBarBoxColor" format="color"/>
     <attr name="urlBarBoxBorderColor" format="color"/>
+
+
+    <declare-styleable name="MaterialProgressBar">
+
+        <attr name="mpb_progressTint" format="color|reference"/>
+        <attr name="mpb_progressTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+        <attr name="mpb_secondaryProgressTint" format="color|reference"/>
+        <attr name="mpb_secondaryProgressTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+        <attr name="mpb_progressBackgroundTint" format="color|reference"/>
+        <attr name="mpb_progressBackgroundTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+        <attr name="mpb_indeterminateTint" format="color|reference"/>
+        <attr name="mpb_indeterminateTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+    </declare-styleable>
 </resources>

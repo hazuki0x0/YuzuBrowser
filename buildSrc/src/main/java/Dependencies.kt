@@ -46,6 +46,7 @@ object Versions {
     const val espresso = "3.1.1"
     const val runner = "1.1.0"
     const val header_decor = "0.2.8"
+    const val materialprogressbar = "1.6.1"
 }
 
 object AndroidX {
@@ -102,6 +103,7 @@ object Libs {
     //Other
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
     const val header_decor = "ca.barrenechea.header-decor:header-decor:${Versions.header_decor}"
+    const val materialProgressBar = "me.zhanghai.android.materialprogressbar:library:${Versions.materialprogressbar}"
 }
 
 object Dependencies {

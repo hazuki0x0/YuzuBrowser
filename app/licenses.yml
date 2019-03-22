@@ -535,6 +535,14 @@
   year: 2016-2017
   license: The Apache Software License, Version 2.0
   url: https://github.com/turing-tech/MaterialScrollBar
+- artifact: dummy:MaterialProgressBar:+
+  name: MaterialProgressBar
+  copyrightHolder: Hai Zhang
+  year: 2015
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/DreaminginCodeZH/MaterialProgressBar
+  forceGenerate: true
 - artifact: com.takisoft.preferencex:preferencex:+
   name: Preference X
   copyrightHolder: takisoft
