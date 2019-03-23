@@ -49,4 +49,5 @@
     <string name="this_page_says">Az oldal közlendője</string>
     <string name="host_page_says">A(z) %1$s közlendője</string>
     <string name="prevent_additional_dialogues">Ez az oldal ne nyisson meg további párbeszédablakokat.</string>
+    <string name="accessibility_toolbar_multi_select">%1$d elem kijelölve</string>
 </resources>

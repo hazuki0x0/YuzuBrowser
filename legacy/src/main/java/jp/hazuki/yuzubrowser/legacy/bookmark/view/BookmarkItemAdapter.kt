@@ -127,7 +127,11 @@ class BookmarkItemAdapter(
 
     override fun setSelect(position: Int, isSelect: Boolean) {
         super.setSelect(position, isSelect)
-        if (selectedItemCount == 0) bookmarkItemListener.onCancelMultiSelectMode()
+        if (selectedItemCount == 0) {
+            bookmarkItemListener.onCancelMultiSelectMode()
+        } else {
+            bookmarkItemListener.onSelectionStateChange(selectedItemCount)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -190,6 +194,8 @@ class BookmarkItemAdapter(
         fun onIconClick(v: View, position: Int)
 
         fun onShowMenu(v: View, position: Int)
+
+        fun onSelectionStateChange(items: Int)
 
         fun onCancelMultiSelectMode()
     }

@@ -322,4 +322,5 @@
     <string name="host_page_says">%1$s says</string>
     <string name="prevent_additional_dialogues">Prevent this page from creating additional dialogues.</string>
     <string name="bookmarklet">Bookmarklet</string>
+    <string name="accessibility_toolbar_multi_select">%1$d selected</string>
 </resources>

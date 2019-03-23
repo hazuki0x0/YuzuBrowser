@@ -318,5 +318,6 @@
     <string name="this_page_says">Повідомлення з цієї сторінки</string>
     <string name="host_page_says">Повідомлення із сайту %1$s</string>
     <string name="prevent_additional_dialogues">Заборонити створення додаткових діалогових вікон цією сторінкою.</string>
+    <string name="accessibility_toolbar_multi_select">Вибрано %1$d</string>
 </resources>
 

@@ -301,6 +301,10 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         actionMode?.finish()
     }
 
+    override fun onSelectionStateChange(items: Int) {
+        actionMode?.title = getString(R.string.accessibility_toolbar_multi_select, items)
+    }
+
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         actionMode = mode
         mode.menuInflater.inflate(R.menu.history_action_mode, menu)

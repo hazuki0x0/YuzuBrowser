@@ -426,6 +426,10 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         }
     }
 
+    override fun onSelectionStateChange(items: Int) {
+        actionMode?.title = getString(R.string.accessibility_toolbar_multi_select, items)
+    }
+
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.bookmark_action_mode, menu)
         actionMode = mode

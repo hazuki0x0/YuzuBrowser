@@ -313,4 +313,5 @@
     <string name="this_page_says">Questa pagina dice</string>
     <string name="host_page_says">%1$s dice</string>
     <string name="prevent_additional_dialogues">Impedisci alla pagina di creare altre finestre di dialogo.</string>
+    <string name="accessibility_toolbar_multi_select">%1$d elementi selezionati</string>
 </resources>

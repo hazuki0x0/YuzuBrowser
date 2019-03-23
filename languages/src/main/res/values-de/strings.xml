@@ -317,4 +317,5 @@
     <string name="this_page_says">Auf dieser Seite wird Folgendes angezeigt</string>
     <string name="host_page_says">Unter %1$s wird Folgendes angezeigt</string>
     <string name="prevent_additional_dialogues">Diese Seite am Erstellen zusätzlicher Dialoge hindern</string>
+    <string name="accessibility_toolbar_multi_select">%1$d ausgewählt</string>
 </resources>

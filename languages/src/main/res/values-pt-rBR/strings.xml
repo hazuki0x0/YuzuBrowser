@@ -317,4 +317,5 @@
     <string name="this_page_says">Essa página diz</string>
     <string name="host_page_says">%1$s diz</string>
     <string name="prevent_additional_dialogues">Impedir que esta página crie caixas de diálogo adicionais.</string>
+    <string name="accessibility_toolbar_multi_select">%1$d selecionados</string>
 </resources>

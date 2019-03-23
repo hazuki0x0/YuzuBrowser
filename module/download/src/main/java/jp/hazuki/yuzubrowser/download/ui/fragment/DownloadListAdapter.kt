@@ -231,7 +231,11 @@ class DownloadListAdapter(
         if (old != isSelect) {
             notifyItemChanged(position)
             if (isSelect) selectedItemCount++ else selectedItemCount--
-            if (selectedItemCount == 0) listener.onCancelMultiSelectMode()
+            if (selectedItemCount == 0) {
+                listener.onCancelMultiSelectMode()
+            } else {
+                listener.onSelectionStateChange(selectedItemCount)
+            }
         }
     }
 

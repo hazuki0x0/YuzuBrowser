@@ -215,7 +215,11 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         if (old != isSelect) {
             notifyItemChanged(position)
             if (isSelect) selectedItemCount++ else selectedItemCount--
-            if (selectedItemCount == 0) listener.onCancelMultiSelectMode()
+            if (selectedItemCount == 0) {
+                listener.onCancelMultiSelectMode()
+            } else {
+                listener.onSelectionStateChange(selectedItemCount)
+            }
         }
     }
 
@@ -260,6 +264,8 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         fun onIconClicked(v: View, position: Int)
 
         fun onShowMenu(v: View, position: Int)
+
+        fun onSelectionStateChange(items: Int)
 
         fun onCancelMultiSelectMode()
     }
