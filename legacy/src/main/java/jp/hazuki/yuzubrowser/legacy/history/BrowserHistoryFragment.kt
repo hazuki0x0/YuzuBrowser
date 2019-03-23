@@ -26,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
@@ -43,7 +45,7 @@ import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 
 
-class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
+class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
 
     private var pickMode: Boolean = false
     private lateinit var adapter: BrowserHistoryAdapter
@@ -60,11 +62,12 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = activity ?: throw IllegalStateException()
         val arguments = arguments ?: throw IllegalArgumentException()
 
         pickMode = arguments.getBoolean(PICK_MODE)
 
-        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         val listener = object : LoadMoreListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {
@@ -99,16 +102,34 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
-        sendUrl(adapter.getItem(position), AppData.newtab_history.get())
+        if (adapter.isMultiSelectMode) {
+            adapter.toggle(position)
+        } else {
+            sendUrl(adapter.getItem(position), AppData.newtab_history.get())
+        }
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
-        val activity = activity ?: return false
+        if (!pickMode) {
+            if (adapter.isMultiSelectMode) {
+                adapter.toggle(position)
+            } else {
+                val activity = activity ?: return false
+                (activity as AppCompatActivity).startSupportActionMode(this)
+                adapter.isMultiSelectMode = true
+                adapter.setSelect(position, true)
+            }
+        }
+        return true
+    }
+
+    override fun onShowMenu(v: View, position: Int) {
+        val activity = activity ?: return
 
         if (!pickMode) {
             val history = adapter.getItem(position)
-            val url = history.url ?: return false
-            val title = history.title ?: return false
+            val url = history.url ?: return
+            val title = history.title ?: return
 
             val popupMenu = PopupMenu(activity, v, locationDetector.gravity)
             val menu = popupMenu.menu
@@ -161,7 +182,6 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
 
             popupMenu.show()
         }
-        return true
     }
 
     override fun onIconClicked(v: View, position: Int) {
@@ -273,17 +293,12 @@ class BrowserHistoryFragment : androidx.fragment.app.Fragment(), BrowserHistoryA
                         .show()
                 return true
             }
-            R.id.multiSelect -> {
-                val next = !adapter.isMultiSelectMode
-                adapter.isMultiSelectMode = next
-                actionMode = (activity as AppCompatActivity).startSupportActionMode(this)
-                if (!next && actionMode != null) {
-                    actionMode!!.finish()
-                }
-                return true
-            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCancelMultiSelectMode() {
+        actionMode?.finish()
     }
 
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
