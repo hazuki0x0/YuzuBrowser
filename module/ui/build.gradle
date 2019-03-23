@@ -51,6 +51,7 @@ dependencies {
     implementation AndroidX.fix_preference
     implementation AndroidX.constraintLayout
     implementation AndroidX.activty
+    implementation AndroidX.KTX
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler

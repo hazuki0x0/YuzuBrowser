@@ -21,11 +21,11 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatButton
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
+import jp.hazuki.yuzubrowser.ui.extensions.ellipsizeUrl
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : AppCompatButton(context, attrs), SwipeController.OnChangeListener {
@@ -110,7 +110,7 @@ open class SwipeTextButton @JvmOverloads constructor(context: Context, attrs: At
 
     private fun getTruncatedText(availWidth: Int): CharSequence {
         return if (typeUrl) {
-            UrlUtils.ellipsizeUrl(content, paint, availWidth.toFloat())
+            content.ellipsizeUrl(paint, availWidth.toFloat())
         } else {
             TextUtils.ellipsize(content, paint, availWidth.toFloat(), TextUtils.TruncateAt.END)
         }

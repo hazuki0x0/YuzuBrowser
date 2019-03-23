@@ -22,10 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.ui.extensions.UrlExtensionsKt;
 
 class HorizontalTabListAdapter extends TabListRecyclerBaseAdapter {
     HorizontalTabListAdapter(Context context, TabManager list, OnRecyclerListener listener) {
@@ -40,7 +40,7 @@ class HorizontalTabListAdapter extends TabListRecyclerBaseAdapter {
     @Override
     void onBindViewHolder(ViewHolder holder, TabIndexData indexData) {
         if (TextUtils.isEmpty(indexData.getTitle()))
-            holder.title.setText(UrlUtils.decodeUrl(indexData.getUrl()));
+            holder.title.setText(UrlExtensionsKt.decodePunyCodeUrl(indexData.getUrl()));
 
         if (holder.getAdapterPosition() == getTabManager().getCurrentTabNo())
             holder.disable.setVisibility(View.GONE);

@@ -24,11 +24,11 @@ import android.view.*
 import android.widget.TextView
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
@@ -162,7 +162,7 @@ class ReadItLaterFragment : androidx.fragment.app.Fragment(), OnRecyclerListener
             override fun setUp(item: ReadItem) {
                 super.setUp(item)
                 title.text = item.title
-                url.text = UrlUtils.decodeUrlHost(item.url)
+                url.text = item.url.decodePunyCodeUrlHost()
             }
         }
     }

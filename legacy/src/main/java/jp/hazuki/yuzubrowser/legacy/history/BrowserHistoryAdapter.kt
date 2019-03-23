@@ -33,11 +33,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
+import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import java.text.SimpleDateFormat
 import java.util.*
@@ -96,7 +96,7 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
 
     override fun onBindViewHolder(holder: HistoryHolder, position: Int) {
         val item = histories[holder.adapterPosition]
-        val url = UrlUtils.decodeUrlHost(item.url)
+        val url = item.url?.decodePunyCodeUrlHost()
         val image = faviconManager[item.url!!]
 
         if (image == null) {

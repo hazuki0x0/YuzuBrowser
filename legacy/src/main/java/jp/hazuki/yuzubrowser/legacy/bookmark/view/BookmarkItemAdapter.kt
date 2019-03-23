@@ -26,7 +26,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.net.toUri
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
@@ -35,10 +34,15 @@ import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkSite
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
+import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
-class BookmarkItemAdapter(private val context: Context, list: MutableList<BookmarkItem>, private val pickMode: Boolean, private val openNewTab: Boolean, private val bookmarkItemListener: OnBookmarkRecyclerListener) : ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder>(context, list, null) {
+class BookmarkItemAdapter(
+        private val context: Context, list: MutableList<BookmarkItem>,
+        private val pickMode: Boolean, private val openNewTab: Boolean,
+        private val bookmarkItemListener: OnBookmarkRecyclerListener
+) : ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder>(context, list, null) {
 
     private val defaultColorFilter: PorterDuffColorFilter =
             PorterDuffColorFilter(ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP)
@@ -68,7 +72,7 @@ class BookmarkItemAdapter(private val context: Context, list: MutableList<Bookma
             var host: String? = if (item.url.startsWith("javascript:"))
                 context.getString(R.string.bookmarklet)
             else
-                item.url.toUri().host
+                item.url.decodePunyCodeUrlHost()
 
             if (host.isNullOrEmpty()) host = item.url
             (holder as BookmarkSiteHolder).url.text = host

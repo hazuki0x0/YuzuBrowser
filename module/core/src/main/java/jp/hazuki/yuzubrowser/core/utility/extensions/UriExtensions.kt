@@ -23,8 +23,10 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.text.TextUtils
 import jp.hazuki.yuzubrowser.core.utility.storage.getStorageList
 import java.io.File
+import java.net.IDN
 
 fun Uri.resolvePath(context: Context): String? {
 
@@ -183,3 +185,107 @@ private fun Uri.isContentUri(): Boolean {
 private fun Uri.isFileUri(): Boolean {
     return "file" == scheme
 }
+
+fun Uri.decodeUrl(): String {
+    if (isOpaque) {
+        val builder = StringBuilder(scheme!!).append(":")
+        if (isValid(schemeSpecificPart)) {
+            builder.append(schemeSpecificPart)
+        } else {
+            builder.append(encodedSchemeSpecificPart)
+        }
+        val fragment = fragment
+        if (!TextUtils.isEmpty(fragment)) {
+            builder.append("#")
+            if (isValid(fragment)) {
+                builder.append(fragment)
+            } else {
+                builder.append(encodedFragment)
+            }
+        }
+        return builder.toString()
+    } else {
+        val decode = buildUpon()
+        if (isValid(query))
+            decode.encodedQuery(query)
+        if (isValid(fragment))
+            decode.encodedFragment(fragment)
+        if (isValid(path))
+            decode.encodedPath(path)
+        decode.encodedAuthority(decodeAuthority())
+        return decode.build().toString()
+    }
+}
+
+
+private fun Uri.decodeAuthority(): String? {
+    var host = host
+    if (TextUtils.isEmpty(host)) {
+        return encodedAuthority
+    } else {
+        host = IDN.toUnicode(host)
+    }
+
+    val userInfo = userInfo
+    val noUserInfo = TextUtils.isEmpty(userInfo)
+    val port = port
+
+    if (noUserInfo && port == -1)
+        return host
+
+    val builder = StringBuilder()
+
+    if (!noUserInfo) {
+        if (isValid(userInfo)) {
+            builder.append(userInfo).append('@')
+        } else {
+            builder.append(encodedUserInfo).append('@')
+        }
+    }
+
+    builder.append(host)
+
+    if (port > -1) {
+        builder.append(":").append(port)
+    }
+
+    return builder.toString()
+}
+
+fun Uri.toEncodePunyCodeUri(): Uri {
+    return host?.let { buildUpon().authority(encodeAuthority()).build() } ?: this
+}
+
+fun Uri.encodeAuthority(): String {
+    if (host.isNullOrEmpty()) return encodeAuthority()
+
+    val host = IDN.toASCII(host)
+
+    val userInfo = userInfo
+    val port = port
+
+    if (userInfo.isNullOrEmpty() && port < 0) return host
+
+    val builder = StringBuilder()
+
+    if (!userInfo.isNullOrEmpty()) {
+        if (isValid(userInfo)) {
+            builder.append(userInfo).append('@')
+        } else {
+            builder.append(encodedUserInfo).append('@')
+        }
+    }
+
+    builder.append(host)
+
+    if (port > -1) {
+        builder.append(":").append(port)
+    }
+    return authority ?: ""
+}
+
+private fun isValid(str: String?): Boolean {
+    return str != null && str.indexOf(INVALID_CHAR) <= -1
+}
+
+private const val INVALID_CHAR = '\uFFFD'

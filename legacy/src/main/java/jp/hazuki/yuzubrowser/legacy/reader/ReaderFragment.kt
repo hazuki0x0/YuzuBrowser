@@ -28,11 +28,11 @@ import android.widget.TextView
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.isInstanceOf
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
+import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -84,7 +84,7 @@ class ReaderFragment : androidx.fragment.app.Fragment() {
             return
         }
 
-        activity.title = UrlUtils.decodeUrlHost(url)
+        activity.title = url.decodePunyCodeUrlHost()
 
         fragmentManager?.findFragmentByTag("loading").isInstanceOf<androidx.fragment.app.DialogFragment> {
             it.dismiss()

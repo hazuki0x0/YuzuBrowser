@@ -33,7 +33,10 @@ import android.widget.Toast
 import androidx.print.PrintHelper
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
-import jp.hazuki.yuzubrowser.core.utility.utils.*
+import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.download
@@ -80,6 +83,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.handler.*
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
+import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
@@ -512,7 +516,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
 
                 titleTextView.text = tab.title
                 val url = tab.url
-                urlTextView.text = UrlUtils.decodeUrl(url)
+                urlTextView.text = url.decodePunyCodeUrl()
                 urlTextView.setOnLongClickListener {
                     controller.applicationContextInfo.setClipboardWithToast(url)
                     true

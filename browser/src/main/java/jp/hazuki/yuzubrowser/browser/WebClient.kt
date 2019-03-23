@@ -38,7 +38,6 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
@@ -999,7 +998,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     }
 
     private fun getNewTabPerformType(tab: MainTabData): Int {
-        return if (UrlUtils.isSpeedDial(tab.originalUrl)) {
+        return if (tab.originalUrl.isSpeedDial()) {
             AppData.newtab_speeddial.get()
         } else {
             AppData.newtab_link.get()
@@ -1067,6 +1066,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private fun StringBuilder.appendErrorInfo(sequence: CharSequence, info: CharSequence): StringBuilder {
         append("   ").append(sequence).append(info).append('\n')
         return this
+    }
+
+    fun String.isSpeedDialUrl(): Boolean {
+        return "yuzu:speeddial".equals(this, ignoreCase = true)
     }
 
     companion object {

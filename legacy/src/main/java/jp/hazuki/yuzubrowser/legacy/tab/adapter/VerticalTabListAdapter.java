@@ -20,10 +20,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
+import jp.hazuki.yuzubrowser.ui.extensions.UrlExtensionsKt;
 
 class VerticalTabListAdapter extends TabListRecyclerBaseAdapter {
     VerticalTabListAdapter(Context context, TabManager list, OnRecyclerListener listener) {
@@ -37,7 +37,7 @@ class VerticalTabListAdapter extends TabListRecyclerBaseAdapter {
 
     @Override
     void onBindViewHolder(ViewHolder holder, TabIndexData indexData) {
-        holder.url.setText(UrlUtils.decodeUrl(indexData.getUrl()));
+        holder.url.setText(UrlExtensionsKt.decodePunyCodeUrl(indexData.getUrl()));
 
         if (holder.getAdapterPosition() == getTabManager().getCurrentTabNo())
             holder.itemView.setBackgroundResource(R.drawable.tab_list_item_background_selected);

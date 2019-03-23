@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.toolbar.main
 import android.content.Context
 import android.view.Gravity
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
-import jp.hazuki.yuzubrowser.core.utility.utils.UrlUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
@@ -29,6 +28,7 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeTextButton
+import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_url, layout, request_callback) {
@@ -101,7 +101,7 @@ abstract class UrlBarBase(context: Context, controller: ActionController, iconMa
             } else {
                 centerUrlButton.run {
                     setTypeUrl(true)
-                    text = UrlUtils.decodeUrl(data.url)
+                    text = data.url.decodePunyCodeUrl()
                     gravity = Gravity.START or Gravity.CENTER_VERTICAL
                 }
             }
