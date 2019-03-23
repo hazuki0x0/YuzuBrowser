@@ -47,6 +47,9 @@ abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder
         }
     private val itemSelected: SparseBooleanArray = SparseBooleanArray()
 
+    var selectedItemCount: Int = 0
+        private set
+
     var isSortMode: Boolean
         get() = sortMode
         set(sort) {
@@ -146,7 +149,7 @@ abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder
         }
     }
 
-    private fun onItemClick(v: View, position: Int, item: T?) {
+    protected open fun onItemClick(v: View, position: Int, item: T?) {
         var calPosition = position
         calPosition = searchPosition(calPosition, item)
         if (calPosition < 0) return
@@ -176,16 +179,17 @@ abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder
         return calPosition
     }
 
-    fun toggle(position: Int) {
+    open fun toggle(position: Int) {
         setSelect(position, !itemSelected.get(position, false))
     }
 
-    fun setSelect(position: Int, isSelect: Boolean) {
+    open fun setSelect(position: Int, isSelect: Boolean) {
         val old = itemSelected.get(position, false)
         itemSelected.put(position, isSelect)
 
         if (old != isSelect) {
             notifyItemChanged(position)
+            if (isSelect) selectedItemCount++ else selectedItemCount--
         }
     }
 

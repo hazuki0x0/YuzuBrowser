@@ -30,7 +30,7 @@ class BookmarkFolder : BookmarkItem, Serializable {
     var parent: BookmarkFolder? = null
     internal val list: ArrayList<BookmarkItem>
 
-    val itemList: List<BookmarkItem>
+    val itemList: MutableList<BookmarkItem>
         get() = list
 
     override val type: Int

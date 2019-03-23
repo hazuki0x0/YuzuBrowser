@@ -110,7 +110,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
 
     override fun onRecyclerItemLongClicked(v: View, position: Int) {
         if (adapter.isMultiSelectMode) {
-            actionMode?.finish()
+            adapter.toggle(position)
         } else {
             (activity as AppCompatActivity).startSupportActionMode(this)
             adapter.isMultiSelectMode = true
@@ -185,6 +185,10 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                 false
             }
         }
+    }
+
+    override fun onCancelMultiSelectMode() {
+        actionMode?.finish()
     }
 
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {

@@ -317,4 +317,5 @@
     <string name="this_page_says">このページの内容</string>
     <string name="host_page_says">%1$s の内容</string>
     <string name="prevent_additional_dialogues">このページでこれ以上ダイアログボックスを生成しない</string>
+    <string name="bookmarklet">ブックマークレット</string>
 </resources>

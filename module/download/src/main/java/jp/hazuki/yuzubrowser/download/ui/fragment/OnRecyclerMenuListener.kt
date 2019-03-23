@@ -25,4 +25,6 @@ interface OnRecyclerMenuListener {
     fun onCreateContextMenu(menu: Menu, position: Int)
 
     fun onRecyclerItemLongClicked(v: View, position: Int)
+
+    fun onCancelMultiSelectMode()
 }

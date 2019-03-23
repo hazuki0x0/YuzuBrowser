@@ -21,7 +21,7 @@
     <color name="primary_light">#515658</color>
     <color name="accent">#33b5e5</color>
     <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#bfbfbf</color>
+    <color name="secondary_text">#B3FFFFFF</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="content_normal">#bfbfbf</color>

@@ -59,6 +59,9 @@ class DownloadListAdapter(
 
     var decoration: StickyHeaderDecoration? = null
 
+    var selectedItemCount: Int = 0
+        private set
+
     private val itemSelected = SparseBooleanArray()
     private val foregroundOverlay = ColorDrawable(context.getResColor(R.color.selected_overlay))
     var isMultiSelectMode = false
@@ -112,9 +115,13 @@ class DownloadListAdapter(
             }
         }
         holder.overflowButton.setOnClickListener {
-            val popupMenu = PopupMenu(context, it)
-            listener.onCreateContextMenu(popupMenu.menu, holder.adapterPosition)
-            popupMenu.show()
+            if (isMultiSelectMode) {
+                toggle(holder.adapterPosition)
+            } else {
+                val popupMenu = PopupMenu(context, it)
+                listener.onCreateContextMenu(popupMenu.menu, holder.adapterPosition)
+                popupMenu.show()
+            }
         }
         holder.itemView.setOnLongClickListener {
             listener.onRecyclerItemLongClicked(it, holder.adapterPosition)
@@ -222,7 +229,9 @@ class DownloadListAdapter(
         itemSelected.put(position, isSelect)
 
         if (old != isSelect) {
-            notifyDataSetChanged()
+            notifyItemChanged(position)
+            if (isSelect) selectedItemCount++ else selectedItemCount--
+            if (selectedItemCount == 0) listener.onCancelMultiSelectMode()
         }
     }
 

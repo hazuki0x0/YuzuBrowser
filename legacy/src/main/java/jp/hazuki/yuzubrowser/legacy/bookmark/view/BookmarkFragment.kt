@@ -26,7 +26,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder
@@ -47,7 +50,7 @@ import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
 import java.util.*
 
 
-class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback {
+class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback {
 
     private var pickMode: Boolean = false
 
@@ -56,6 +59,8 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
     private lateinit var mCurrentFolder: BookmarkFolder
 
     private lateinit var locationDetector: RecyclerTouchLocationDetector
+
+    private var actionMode: ActionMode? = null
 
     private val root: BookmarkFolder
         get() {
@@ -83,7 +88,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
         val activity = activity ?: return
         val arguments = arguments ?: throw IllegalArgumentException()
 
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         val helper = ItemTouchHelper(Touch())
         helper.attachToRecyclerView(recyclerView)
         recyclerView.addItemDecoration(helper)
@@ -121,6 +126,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
     }
 
     private fun setList(folder: BookmarkFolder) {
+        val activity = activity ?: return
         mCurrentFolder = folder
         if (folder.title.isNullOrEmpty()) {
             (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.bookmark)
@@ -149,8 +155,14 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
-        return if (!adapter.isSortMode) {
-            showContextMenu(v, position)
+        return if (!adapter.isSortMode && !pickMode) {
+            if (adapter.isMultiSelectMode) {
+                adapter.toggle(position)
+            } else {
+                (activity as AppCompatActivity).startSupportActionMode(this)
+                adapter.isMultiSelectMode = true
+                adapter.setSelect(position, true)
+            }
             true
         } else {
             false
@@ -162,6 +174,14 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
         if (item is BookmarkSite) {
             sendUrl(item.url, AppData.open_bookmark_icon_action.get())
         }
+    }
+
+    override fun onShowMenu(v: View, position: Int) {
+        showContextMenu(v, position)
+    }
+
+    override fun onCancelMultiSelectMode() {
+        actionMode?.finish()
     }
 
     private fun sendUrl(url: String?, target: Int) {
@@ -230,12 +250,6 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                 Toast.makeText(activity, if (next) R.string.start_sort else R.string.end_sort, Toast.LENGTH_SHORT).show()
                 return true
             }
-            R.id.multiSelect -> {
-                val next = !adapter.isMultiSelectMode
-                adapter.isMultiSelectMode = next
-                (activity as AppCompatActivity).startSupportActionMode(this)
-                return true
-            }
         }
         return false
     }
@@ -256,7 +270,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
                     pickBookmark(bookmarkItem)
                 } else {
                     val sender = Intent(activity, BookmarkActivity::class.java)
-                    sender.putExtra("id", bookmarkItem!!.id)
+                    sender.putExtra("id", bookmarkItem.id)
 
                     val intent = Intent()
                     intent.putExtra(Intent.EXTRA_TITLE, bookmarkItem.title)
@@ -414,6 +428,7 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
 
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.bookmark_action_mode, menu)
+        actionMode = mode
         return true
     }
 
@@ -489,17 +504,17 @@ class BookmarkFragment : androidx.fragment.app.Fragment(), BookmarkItemAdapter.O
 
     private inner class Touch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
             return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
-        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             mManager.save()
             return true
         }
 
-        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {}
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
         override fun isLongPressDragEnabled(): Boolean {
             return adapter.isSortMode
