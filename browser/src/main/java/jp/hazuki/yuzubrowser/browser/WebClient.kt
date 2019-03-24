@@ -255,8 +255,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         setting.allowContentAccess = AppData.allow_content_access.get()
         setting.allowFileAccess = AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_ENABLE
         setting.defaultTextEncodingName = AppData.default_encoding.get()
-        if (AppData.fake_chrome.get() && AppData.user_agent.get() == "") {
-            setting.userAgentString = activity.getFakeChromeUserAgent()
+        if (AppData.user_agent.get().isNullOrEmpty()) {
+            if (AppData.fake_chrome.get()) {
+                setting.userAgentString = activity.getFakeChromeUserAgent()
+            }
         } else {
             setting.userAgentString = AppData.user_agent.get()
         }
@@ -948,7 +950,14 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
         }
         data.url = url
-        return false
+
+        val header = controller.additionalHeaders
+        return if (header.isNotEmpty()) {
+            data.mWebView.loadUrl(url, header)
+            true
+        } else {
+            false
+        }
     }
 
     fun resetUserScript(enable: Boolean) {

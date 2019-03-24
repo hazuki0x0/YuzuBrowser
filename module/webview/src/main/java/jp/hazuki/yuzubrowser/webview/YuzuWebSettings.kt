@@ -66,8 +66,10 @@ class YuzuWebSettings(private val origin: WebSettings) {
         }
 
     var savePassword: Boolean
+        @Suppress("DEPRECATION")
         @Deprecated("")
         get() = origin.savePassword
+        @Suppress("DEPRECATION")
         @Deprecated("")
         set(save) {
             origin.savePassword = save
@@ -80,8 +82,10 @@ class YuzuWebSettings(private val origin: WebSettings) {
         }
 
     var lightTouchEnabled: Boolean
+        @Suppress("DEPRECATION")
         @Deprecated("")
         get() = origin.lightTouchEnabled
+        @Suppress("DEPRECATION")
         @Deprecated("")
         set(enabled) {
             origin.lightTouchEnabled = enabled
@@ -184,8 +188,10 @@ class YuzuWebSettings(private val origin: WebSettings) {
         }
 
     var databasePath: String
+        @Suppress("DEPRECATION")
         @Deprecated("")
         get() = origin.databasePath
+        @Suppress("DEPRECATION")
         @Deprecated("")
         set(databasePath) {
             origin.databasePath = databasePath
@@ -285,6 +291,7 @@ class YuzuWebSettings(private val origin: WebSettings) {
         return origin.supportZoom()
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("")
     fun setEnableSmoothTransition(enable: Boolean) {
         origin.setEnableSmoothTransition(enable)
@@ -298,6 +305,7 @@ class YuzuWebSettings(private val origin: WebSettings) {
         return origin.supportMultipleWindows()
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("")
     fun setGeolocationDatabasePath(databasePath: String) {
         origin.setGeolocationDatabasePath(databasePath)
@@ -307,6 +315,7 @@ class YuzuWebSettings(private val origin: WebSettings) {
         origin.setAppCachePath(appCachePath)
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("")
     fun setAppCacheMaxSize(appCacheMaxSize: Long) {
         origin.setAppCacheMaxSize(appCacheMaxSize)
