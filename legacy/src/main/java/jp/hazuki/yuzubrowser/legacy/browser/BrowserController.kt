@@ -58,6 +58,7 @@ interface BrowserController : BrowserInfo {
     fun finishAlert(clearTabNo: Int)
     fun finishQuick(clearTabNo: Int, finish_clear: Int = AppData.finish_alert_default.get())
     fun moveTaskToBack(root: Boolean): Boolean
+    fun openInCurrentTab(url: String)
     fun openInNewTab(tab: MainTabData)
     fun openInNewTab(url: String, @TabType type: Int, shouldOpenInNewTab: Boolean = false)
     fun openInBackground(url: String, @TabType type: Int)
@@ -93,7 +94,6 @@ interface BrowserController : BrowserInfo {
     val pagePaddingHeight: Int
     val actionNameArray: ActionNameArray
     val webRtcRequest: WebRtcRequest
-    val additionalHeaders: MutableMap<String, String>
 
     var requestedOrientationByCtrl: Int
     var renderingMode: Int

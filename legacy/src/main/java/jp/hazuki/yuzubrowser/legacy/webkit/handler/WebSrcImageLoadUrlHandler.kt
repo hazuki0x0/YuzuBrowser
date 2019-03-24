@@ -16,13 +16,13 @@
 
 package jp.hazuki.yuzubrowser.legacy.webkit.handler
 
-import jp.hazuki.yuzubrowser.webview.CustomWebView
+import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import java.lang.ref.WeakReference
 
-class WebSrcImageLoadUrlHandler(web: CustomWebView, val header: MutableMap<String, String>?) : WebSrcImageHandler() {
-    private val mReference: WeakReference<CustomWebView> = WeakReference(web)
+class WebSrcImageLoadUrlHandler(controller: BrowserController) : WebSrcImageHandler() {
+    private val mReference: WeakReference<BrowserController> = WeakReference(controller)
 
     override fun handleUrl(url: String) {
-        mReference.get()?.loadUrl(url, header)
+        mReference.get()?.openInCurrentTab(url)
     }
 }

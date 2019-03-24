@@ -29,7 +29,6 @@ import android.view.*
 import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.ArrayMap
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
@@ -174,7 +173,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private var mouseCursorView: PointerView? = null
     private var findOnPage: WebViewFindDialog? = null
     private var delayAction: Action? = null
-    override val additionalHeaders = ArrayMap<String, String>()
 
     @Inject
     internal lateinit var webViewFactory: WebViewFactory
@@ -710,20 +708,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             webViewFastScroller.setScrollEnabled(false)
         }
 
-        if (AppData.do_not_track.get()) {
-            additionalHeaders[HEADER_DO_NOT_TRACK] = "1"
-        } else {
-            additionalHeaders.remove(HEADER_DO_NOT_TRACK)
-        }
-
-        if (AppData.remove_identifying_headers.get()) {
-            additionalHeaders[HEADER_REQUESTED_WITH] = ""
-            additionalHeaders[HEADER_WAP_PROFILE] = ""
-        } else {
-            additionalHeaders.remove(HEADER_REQUESTED_WITH)
-            additionalHeaders.remove(HEADER_WAP_PROFILE)
-        }
-
         ErrorReport.setDetailedLog(AppData.detailed_log.get())
     }
 
@@ -1154,6 +1138,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         return web
     }
 
+    override fun openInCurrentTab(url: String) {
+        loadUrl(tabManagerIn.currentTabData, url, BrowserManager.LOAD_URL_TAB_CURRENT_FORCE)
+    }
+
     private fun openInNewTab(webTransport: WebView.WebViewTransport) {
         webTransport.webView = openNewTab(TabType.WINDOW).mWebView.webView
     }
@@ -1566,9 +1554,5 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         private const val EXTRA_DATA_TARGET = "BrowserActivity.target"
         const val EXTRA_WINDOW_MODE = "window_mode"
         const val EXTRA_SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
-
-        private const val HEADER_DO_NOT_TRACK = "DNT"
-        private const val HEADER_REQUESTED_WITH = "X-Requested-With"
-        private const val HEADER_WAP_PROFILE = "X-Wap-Profile"
     }
 }

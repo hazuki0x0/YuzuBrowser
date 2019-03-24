@@ -33,6 +33,7 @@ public class BrowserManager {
     public static final int LOAD_URL_TAB_BG = 2;
     public static final int LOAD_URL_TAB_NEW_RIGHT = 3;
     public static final int LOAD_URL_TAB_BG_RIGHT = 4;
+    public static final int LOAD_URL_TAB_CURRENT_FORCE = 5;
 
     @Deprecated
     public static File getAppCacheFile(Context context) {

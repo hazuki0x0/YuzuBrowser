@@ -31,6 +31,7 @@ import android.view.View
 import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
+import androidx.collection.ArrayMap
 import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
@@ -107,6 +108,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var webUploadHandler: WebUploadHandler? = null
     private val secretKey = Random.nextInt().toString(36)
     private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
+    private val additionalHeaders = ArrayMap<String, String>()
 
     var renderingMode
         get() = webViewRenderingManager.mode
@@ -222,6 +224,20 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             it.mWebView.setAcceptThirdPartyCookies(cookieManager, thirdCookie)
         }
 
+        if (AppData.do_not_track.get()) {
+            additionalHeaders[HEADER_DO_NOT_TRACK] = "1"
+        } else {
+            additionalHeaders.remove(HEADER_DO_NOT_TRACK)
+        }
+
+        if (AppData.remove_identifying_headers.get()) {
+            additionalHeaders[HEADER_REQUESTED_WITH] = ""
+            additionalHeaders[HEADER_WAP_PROFILE] = ""
+        } else {
+            additionalHeaders.remove(HEADER_REQUESTED_WITH)
+            additionalHeaders.remove(HEADER_WAP_PROFILE)
+        }
+
         resetUserScript(AppData.userjs_enable.get())
     }
 
@@ -298,7 +314,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         //if add to this, should also add to AbstractCacheWebView#settingWebView
     }
 
-    fun loadUrl(tab: MainTabData, url: String, shouldOpenInNewTab: Boolean) {
+    fun loadUrl(tab: MainTabData, url: String, handleOpenInBrowser: Boolean) {
         if (tab.isNavLock && !url.shouldLoadSameTabUser()) {
             controller.performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW)
             return
@@ -308,22 +324,24 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         else
             url
         if (!checkUrl(tab, newUrl, Uri.parse(newUrl))) {
-            if (checkPatternMatch(tab, newUrl, shouldOpenInNewTab) <= 0)
-                tab.mWebView.loadUrl(newUrl, controller.additionalHeaders)
+            if (checkPatternMatch(tab, newUrl, handleOpenInBrowser) <= 0)
+                tab.mWebView.loadUrl(newUrl, additionalHeaders)
         }
     }
 
     fun loadUrl(tab: MainTabData, url: String, target: Int, type: Int) {
         if (!checkNewTabLinkUser(target, tab, url, type))
-            loadUrl(tab, url, false)
+            loadUrl(tab, url, target == BrowserManager.LOAD_URL_TAB_CURRENT_FORCE)
     }
 
     private fun checkNewTabLinkUser(perform: Int, tab: MainTabData, url: String, @TabType type: Int): Boolean {
         if (perform < 0)
             return false
 
-        return if (perform == BrowserManager.LOAD_URL_TAB_CURRENT) false
-        else !url.shouldLoadSameTabUser() && controller.performNewTabLink(perform, tab, url, type)
+        return when (perform) {
+            BrowserManager.LOAD_URL_TAB_CURRENT, BrowserManager.LOAD_URL_TAB_CURRENT_FORCE -> false
+            else -> !url.shouldLoadSameTabUser() && controller.performNewTabLink(perform, tab, url, type)
+        }
     }
 
     private val mWebViewClient = object : CustomWebViewClient() {
@@ -336,7 +354,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
             val patternResult = checkPatternMatch(data, url, false)
             if (patternResult == 0) {
-                web.loadUrl(url, controller.additionalHeaders)
+                web.loadUrl(url, additionalHeaders)
                 return true
             }
 
@@ -538,7 +556,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
     }
 
-    fun checkPatternMatch(tab: MainTabData, url: String?, shouldOpenInNewTab: Boolean): Int {
+    fun checkPatternMatch(tab: MainTabData, url: String?, handleOpenInBrowser: Boolean): Int {
         if (url == null) return -1
         var normalSettings = true
         var changeSetting = false
@@ -559,7 +577,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                         /* change web settings */
                         it.action.run(activity, tab, url)
                         changeSetting = true
-                    } else if (shouldOpenInNewTab && it.action is OpenOthersPatternAction) {
+                    } else if (handleOpenInBrowser && it.action is OpenOthersPatternAction) {
                         return@forEach
                     } else if (it.action.run(activity, tab, url))
                         return 1
@@ -951,7 +969,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
         data.url = url
 
-        val header = controller.additionalHeaders
+        val header = additionalHeaders
         return if (header.isNotEmpty()) {
             data.mWebView.loadUrl(url, header)
             true
@@ -1007,7 +1025,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     }
 
     private fun getNewTabPerformType(tab: MainTabData): Int {
-        return if (tab.originalUrl.isSpeedDial()) {
+        return if ((tab.originalUrl ?: tab.url ?: "").isSpeedDial()) {
             AppData.newtab_speeddial.get()
         } else {
             AppData.newtab_link.get()
@@ -1083,5 +1101,9 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
     companion object {
         private const val TAG = "WebClient"
+
+        private const val HEADER_DO_NOT_TRACK = "DNT"
+        private const val HEADER_REQUESTED_WITH = "X-Requested-With"
+        private const val HEADER_WAP_PROFILE = "X-Wap-Profile"
     }
 }
