@@ -16,6 +16,9 @@
 
 package jp.hazuki.yuzubrowser.ui.widget.progress
 
+import androidx.annotation.Keep
+
+@Keep
 internal class RectTransformX(var translateX: Float, var scaleX: Float) {
 
     constructor(that: RectTransformX) : this(that.translateX, that.scaleX)

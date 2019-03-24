@@ -66,14 +66,6 @@
         android:key="webRtc"
         android:title="@string/pref_enable_web_rtc"/>
 
-    <SwitchPreference
-        android:key="do_not_track"
-        android:title="@string/pref_do_not_track"/>
-
-    <SwitchPreference
-        android:key="remove_identifying_headers"
-        android:title="@string/pref_remove_identifying_headers"/>
-
     <PreferenceScreen
         android:key="contentSettings"
         android:title="@string/pref_content_settings"/>

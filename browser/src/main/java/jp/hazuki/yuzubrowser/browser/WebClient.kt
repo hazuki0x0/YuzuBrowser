@@ -31,7 +31,6 @@ import android.view.View
 import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
-import androidx.collection.ArrayMap
 import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
@@ -108,7 +107,6 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var webUploadHandler: WebUploadHandler? = null
     private val secretKey = Random.nextInt().toString(36)
     private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
-    private val additionalHeaders = ArrayMap<String, String>()
 
     var renderingMode
         get() = webViewRenderingManager.mode
@@ -224,20 +222,6 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             it.mWebView.setAcceptThirdPartyCookies(cookieManager, thirdCookie)
         }
 
-        if (AppData.do_not_track.get()) {
-            additionalHeaders[HEADER_DO_NOT_TRACK] = "1"
-        } else {
-            additionalHeaders.remove(HEADER_DO_NOT_TRACK)
-        }
-
-        if (AppData.remove_identifying_headers.get()) {
-            additionalHeaders[HEADER_REQUESTED_WITH] = ""
-            additionalHeaders[HEADER_WAP_PROFILE] = ""
-        } else {
-            additionalHeaders.remove(HEADER_REQUESTED_WITH)
-            additionalHeaders.remove(HEADER_WAP_PROFILE)
-        }
-
         resetUserScript(AppData.userjs_enable.get())
     }
 
@@ -325,7 +309,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             url
         if (!checkUrl(tab, newUrl, Uri.parse(newUrl))) {
             if (checkPatternMatch(tab, newUrl, handleOpenInBrowser) <= 0)
-                tab.mWebView.loadUrl(newUrl, additionalHeaders)
+                tab.mWebView.loadUrl(newUrl)
         }
     }
 
@@ -354,7 +338,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
             val patternResult = checkPatternMatch(data, url, false)
             if (patternResult == 0) {
-                web.loadUrl(url, additionalHeaders)
+                web.loadUrl(url)
                 return true
             }
 
@@ -969,13 +953,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
         data.url = url
 
-        val header = additionalHeaders
-        return if (header.isNotEmpty()) {
-            data.mWebView.loadUrl(url, header)
-            true
-        } else {
-            false
-        }
+        return false
     }
 
     fun resetUserScript(enable: Boolean) {
@@ -1101,9 +1079,5 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
     companion object {
         private const val TAG = "WebClient"
-
-        private const val HEADER_DO_NOT_TRACK = "DNT"
-        private const val HEADER_REQUESTED_WITH = "X-Requested-With"
-        private const val HEADER_WAP_PROFILE = "X-Wap-Profile"
     }
 }
