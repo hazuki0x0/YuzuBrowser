@@ -142,8 +142,8 @@
     <string name="open_file">Apri il file</string>
     <string name="open_url">Apri URL</string>
     <string name="pause">Pausa</string>
-+   <string name="pause_download">Metti in pausa il download</string>
-+   <string name="resume_download">Riprendi download</string>
+    <string name="pause_download">Metti in pausa il download</string>
+    <string name="resume_download">Riprendi download</string>
     <string name="cancel_download">Annulla download</string>
     <string name="clear_download">Rimuovere dalla lista</string>
     <string name="delete_download">Elimina il file</string>
@@ -162,7 +162,6 @@
     <string name="login">Accesso</string>
     <string name="edit_action">Modifica azione</string>
     <string name="action_cant_empty">L\'azione non può essere vuota.</string>
-    <!-- <string name="gesture_exists">Gesture already exists.</string> -->
     <string name="action_empty">Azione vuota</string>
     <string name="gesture_test">Test di gestualità</string>
     <string name="move_up">Sposta su</string>
@@ -192,7 +191,7 @@
     <string name="userjs_info_description">Descrizione</string>
     <string name="userjs_info_include">Includi</string>
     <string name="userjs_info_exclude">Escludi</string>
-    <string name="userjs_add_file_confirm">Aggiungi file "%s"?</string>
+    <string name="userjs_add_file_confirm">Aggiungi file \"%s\"?</string>
     <string name="save">Salva</string>
     <string name="not_save">Non salvare</string>
     <string name="pattern_syntax_error">Errore di sintassi del modello</string>

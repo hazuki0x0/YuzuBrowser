@@ -166,7 +166,6 @@
     <string name="login">ログイン</string>
     <string name="edit_action">アクションの編集</string>
     <string name="action_cant_empty">アクションを空にすることはできません</string>
-    <!-- <string name="gesture_exists">そのジェスチャーは既に存在します</string> -->
     <string name="action_empty">空のアクション</string>
     <string name="gesture_test">ジェスチャーのテスト</string>
     <string name="move_up">上へ移動</string>
@@ -196,7 +195,7 @@
     <string name="userjs_info_description">説明</string>
     <string name="userjs_info_include">Include</string>
     <string name="userjs_info_exclude">Exclude</string>
-    <string name="userjs_add_file_confirm">ファイル "%s" を追加しますか？</string>
+    <string name="userjs_add_file_confirm">ファイル \"%s\" を追加しますか？</string>
     <string name="save">保存する</string>
     <string name="not_save">保存しない</string>
     <string name="pattern_syntax_error">パターンの文法が違います</string>
@@ -308,6 +307,9 @@
     <string name="permission_ask">確認</string>
     <string name="allow">許可</string>
     <string name="block">拒否</string>
+    <string name="ad_block">広告ブロック</string>
+    <string name="ad_block_blocked_page">広告ブロックがこのページをブロックしました</string>
+    <string name="ad_block_blocked_filter">以下のフィルターがブロックしました</string>
     <string name="breadcrumb">パンくずリスト</string>
     <string name="download_failed_root_not_exists">ダウンロード先フォルダが見つからないためダウンロードできません</string>
     <string name="download_failed_root_not_writable">ダウンロード先フォルダが書き込めないためダウンロードできません</string>

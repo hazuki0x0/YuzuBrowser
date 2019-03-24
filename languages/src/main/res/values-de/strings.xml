@@ -166,7 +166,6 @@
     <string name="login">Login</string>
     <string name="edit_action">Aktion bearbeiten</string>
     <string name="action_cant_empty">Die Aktion darf nicht leer sein.</string>
-    <!-- <string name="gesture_exists">Die Geste existiert bereits.</string> -->
     <string name="action_empty">Leere Aktion</string>
     <string name="gesture_test">Gestenprüfung</string>
     <string name="move_up">Nach oben bewegen</string>
@@ -196,7 +195,7 @@
     <string name="userjs_info_description">Beschreibung</string>
     <string name="userjs_info_include">\@include-Regeln</string>
     <string name="userjs_info_exclude">\@exclude-Regeln</string>
-    <string name="userjs_add_file_confirm">Datei hinzufügen "%s"?</string>
+    <string name="userjs_add_file_confirm">Datei hinzufügen \"%s\"?</string>
     <string name="save">Speichern</string>
     <string name="not_save">Nicht speichern</string>
     <string name="pattern_syntax_error">Syntaxfehler im Mustervergleich (pattern string)</string>

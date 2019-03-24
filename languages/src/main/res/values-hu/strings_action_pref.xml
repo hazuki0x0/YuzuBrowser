@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <string name="action_settings">Beállítások</string>
+    <string name="action_tab_loop">Lap ciklus</string>
+    <string name="action_action_cant_back">Művelet előzmények nélkül</string>
+    <string name="action_finish_alert">Értesítés megjelenítése</string>
+    <string name="action_finish_close_tab">Lap bezárása befejezéskor</string>
+    <string name="action_action_cant_close_tab">Művelet az utolsó lapon</string>
+    <string name="action_select_menu">Menü kiválasztása</string>
+    <string name="action_target_tab">Cél lap</string>
+
+    <string-array name="action_start_activity_template">
+        <item>Alkalmazás</item>
+        <item>Parancsikon</item>
+        <item>Oldal megosztása</item>
+        <item>Megnyitás másik alkalmazásban</item>
+    </string-array>
+
+    <string name="action_start_activity_edit_intent">Feladat szerkesztése</string>
+    <string name="action_start_activity_edit_url">URL kérés szerkesztése</string>
+    <string name="action_screenshot_all">Összes elfogása</string>
+    <string name="action_screenshot_path">Mappa mentése</string>
+    <string name="action_screenshot_full_error">A lassú renderelést engedélyezni kell, ha az \"Összes elfogása\" funkciót akarja használni.</string>
+    <string name="action_mousepointer_backfinish">Befejezés a vissza gomb megnyomásakor</string>
+    <string name="action_translate_from">Innen</string>
+    <string name="action_translate_to">Ide</string>
+    <string name="action_translate_auto_select">Automatikus kijelölés</string>
+    <string name="action_translate_select_each">Kijelölés minden alkalommal</string>
+    <string name="action_web_scroll_x_coordinate">X-koordináta</string>
+    <string name="action_web_scroll_y_coordinate">Y-koordináta</string>
+    <string name="action_web_scroll_x_y_zero">Hiba : X vagy Y nem lehet 0</string>
+
+    <string-array name="action_web_scroll_type_list">
+        <item>Gyors görgetés</item>
+        <item>Görgetés pöccintéssel</item>
+    </string-array>
+
+    <string name="action_custom_name">Művelet neve</string>
+    <string name="action_useragent_setting">UserAgent beállítások</string>
+    <string name="action_custom_setting">Egyedi műveletek beállítása</string>
+    <string name="action_start_activity_setting">Esemény beállításai</string>
+    <string name="action_web_encode_setting">Karakterkódoláai beállítások</string>
+    <string name="action_vibration_setting">Időintervallum (milliszek.)</string>
+    <string name="action_auto_scroll_speed">Automatikus görgetés sebessége</string>
+    <string name="action_auto_scroll_speed_zero">Hiba : A sebesség nem lehet 0</string>
+
+    <string name="action_tab_list">Lapok listázási módja</string>
+    <string-array name="action_tab_list">
+        <item>Függőleges lista</item>
+        <item>Fordított függőleges lista</item>
+        <item>Vízszintes lista</item>
+    </string-array>
+    <string name="action_tab_list_button">Új lap gomb pozíciója</string>
+    <string-array name="action_tab_list_button">
+        <item>Jobb</item>
+        <item>Bal</item>
+    </string-array>
+    <string name="action_tab_list_last_tab">Művelet az utolsó lap bezárásakor</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>Semmi</item>
+        <item>Új lap</item>
+        <item>Befejezés</item>
+        <item>Befejezés értesítéssel</item>
+    </string-array>
+
+    <string name="action_open_menu">A menü megjelenési helye</string>
+    <string-array name="action_open_menu_list">
+        <item>Bal</item>
+        <item>Középen</item>
+        <item>Jobb</item>
+    </string-array>
+
+    <string name="action_bottom_search_bar">Keresési sáv megjelenítése alul</string>
+    <string name="show_toast">\"Toast értesítés\" megjelenítése</string>
+</resources>

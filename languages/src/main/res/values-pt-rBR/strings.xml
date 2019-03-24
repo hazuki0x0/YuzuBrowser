@@ -166,7 +166,6 @@
     <string name="login">Conectar</string>
     <string name="edit_action">Editar ação</string>
     <string name="action_cant_empty">Ação não pode ser vazia.</string>
-    <!-- <string name="gesture_exists">Gesto já existe.</string> -->
     <string name="action_empty">Ação vazia</string>
     <string name="gesture_test">Teste de gesto</string>
     <string name="move_up">Mover para cima</string>
@@ -196,7 +195,7 @@
     <string name="userjs_info_description">Descrição</string>
     <string name="userjs_info_include">Incluir</string>
     <string name="userjs_info_exclude">Excluir</string>
-    <string name="userjs_add_file_confirm">Adicionar arquivo "%s"?</string>
+    <string name="userjs_add_file_confirm">Adicionar arquivo \"%s\"?</string>
     <string name="save">Salvar</string>
     <string name="not_save">Não salvar</string>
     <string name="pattern_syntax_error">Erro de sintaxe de padrão</string>

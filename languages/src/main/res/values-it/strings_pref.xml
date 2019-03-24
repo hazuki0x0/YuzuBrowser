@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
 
     <string name="pref_settings">Impostazioni</string>
@@ -30,7 +46,6 @@
     <string name="pref_toolbar_location_web_fix">Barra web (fissa)</string>
     <string name="pref_toolbar_location_left">Barra di sinistra</string>
     <string name="pref_toolbar_location_right">Barra di destra</string>
-
     <string name="pref_allow_content_access">Consenti l\'accesso al contenuto</string>
     <string name="pref_default_encoding">Codifica del testo predefinita</string>
     <string name="pref_text_encoding">Codifica del testo</string>
@@ -79,14 +94,12 @@
     <string name="pref_oritentation_portrait">Verticale</string>
     <string name="pref_oritentation_sensor">Sensore</string>
     <string name="pref_oritentation_no_sensor">Nessun sensore</string>
-
     <string name="pref_search_url">Impostazioni URL del motore di ricerca</string>
     <string name="pref_search_url_error">%s non trovato</string>
     <string name="pref_lpress_settings">Impostazioni pressione lunga</string>
     <string name="pref_lpress_link">Link</string>
     <string name="pref_lpress_image">Immagine</string>
     <string name="pref_lpress_linkimage">Link immagine</string>
-
     <string name="pref_tab_size_x">Visualizza la larghezza della scheda</string>
     <string name="pref_tab_font_size">Dimensione carattere della scheda</string>
     <string name="pref_action_settings">Impostazioni delle azioni</string>
@@ -152,7 +165,7 @@
     <string name="pref_newtab_link">Link</string>
     <string name="pref_newtab_bookmark">Segnalibro</string>
     <string name="pref_newtab_history">Cronologia</string>
-    <string name="pref_newtab_blank">target="_blank"</string>
+    <string name="pref_newtab_blank">target=\"_blank\"</string>
     <string name="pref_proxy_settings">Impostazioni Proxy</string>
     <string name="pref_ssl_error_alert">Mostra avvisi di sicurezza</string>
     <string name="pref_gesture_settings">Impostazioni gestualità</string>
@@ -299,7 +312,6 @@
     <string name="pref_speeddial_column_landscape">Numero di colonne in modalità orizzontale</string>
     <string name="pref_speeddial_column_max_width">Massima larghezza della colonna</string>
     <string name="pref_speeddial_dark_theme">Usa il tema scuro</string>
-
 
     <string name="pref_double_tap_flick_settings">Tocca due volte con le impostazioni di sfioramento</string>
     <string name="pref_double_tap_flick_enable">Attiva il doppio tocco con sfioramento</string>

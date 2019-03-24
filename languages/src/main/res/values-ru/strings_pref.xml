@@ -281,7 +281,7 @@
     <string name="backup_settings">Резервирование настроек</string>
     <string name="restore_settings">Восстановление настроек</string>
     <string name="pref_backup_settings_confirm">Вы действительно хотите сделать резервную копию настроек?</string>
-    <string name="pref_restore_settings_confirm">"Все текущие настройки будут потеряны. Вы уверены, что хотите их восстановить?\nКроме того, приложение будет автоматически перезапущено после завершения восстановления."</string>
+    <string name="pref_restore_settings_confirm">\"Все текущие настройки будут потеряны. Вы уверены, что хотите их восстановить?\nКроме того, приложение будет автоматически перезапущено после завершения восстановления.\"</string>
 
     <string name="version">Версия</string>
     <string name="build">Сборка</string>
@@ -312,7 +312,6 @@
     <string name="pref_speeddial_column_landscape">Количество столбцов в альбомном режиме</string>
     <string name="pref_speeddial_column_max_width">Максимальная ширина столбца</string>
     <string name="pref_speeddial_dark_theme">Использовать тёмную тему</string>
-
 
     <string name="pref_double_tap_flick_settings">Настройки двойного перелистывания</string>
     <string name="pref_double_tap_flick_enable">Включить двойное перелистывание</string>
@@ -395,6 +394,7 @@
     <string name="pref_required_android_O">Для отключения требуется Android 8.0 или выше</string>
     <string name="pref_always_show_url">Всегда показывать адрес</string>
     <string name="pref_show_favicon">Показывать значок сайта</string>
+    <string name="pref_save_tab_for_crash">Сохранять часто открываемые вкладки</string>
 
     <string name="pref_touch_scrollbar">Настройки прокрутки</string>
     <string name="pref_display_position">Место отображения</string>
@@ -437,7 +437,7 @@
         <item>Скрыть обе панели</item>
     </string-array>
     <string name="pref_slow_rendering">Медленная визуализация</string>
-    <string name="pref_slow_rendering_alert">"Внимание!\nМожет часто возникать замораживание, если эта функция включена.\nКроме того, для переключения этого параметра необходимо удалить браузер списка из последних приложений.\nМы НЕ рекомендуем использовать эту функцию, кроме использования захвата всех скриншотов."</string>
+    <string name="pref_slow_rendering_alert">\"Внимание!\nМожет часто возникать замораживание, если эта функция включена.\nКроме того, для переключения этого параметра необходимо удалить браузер списка из последних приложений.\nМы НЕ рекомендуем использовать эту функцию, кроме использования захвата всех скриншотов.\"</string>
     <string name="browser_settings">Настройки обозревателя</string>
     <string name="pref_basic_settings">Основные настройки</string>
     <string name="pref_white_url_box">Показывать поле адреса</string>

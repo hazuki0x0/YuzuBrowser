@@ -165,7 +165,7 @@
     <string name="pref_newtab_link">リンク</string>
     <string name="pref_newtab_bookmark">ブックマーク</string>
     <string name="pref_newtab_history">履歴</string>
-    <string name="pref_newtab_blank">target="_blank"</string>
+    <string name="pref_newtab_blank">target=\"_blank\"</string>
     <string name="pref_proxy_settings">Proxy設定</string>
     <string name="pref_ssl_error_alert">セキュリティ警告の表示</string>
     <string name="pref_gesture_settings">ジェスチャー設定</string>
@@ -452,9 +452,6 @@
     <string name="pref_privacy_policy">プライバシーポリシー</string>
     <string name="mining_protect">No Coin</string>
     <string name="mining_protect_summary">仮想通貨のマイニング保護</string>
-    <string name="ad_block">広告ブロック</string>
-    <string name="ad_block_blocked_page">広告ブロックがこのページをブロックしました</string>
-    <string name="ad_block_blocked_filter">以下のフィルターがブロックしました</string>
     <string name="pref_storage_location_warn">この保存場所は、他のアプリでは正しく連携しない場合があります。</string>
     <string name="pref_fake_chrome">Chromeに偽装する</string>
     <string name="pref_fake_chrome_summary">デフォルトのUserAgentをChromeに偽装する</string>

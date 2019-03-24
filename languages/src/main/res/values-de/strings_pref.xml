@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
 
     <string name="pref_settings">Einstellungen</string>
@@ -30,7 +46,6 @@
     <string name="pref_toolbar_location_web_fix">Web Leiste (fixiert)</string>
     <string name="pref_toolbar_location_left">Linke Leiste</string>
     <string name="pref_toolbar_location_right">Rechte Leiste</string>
-
     <string name="pref_allow_content_access">Zugriff auf Inhalte erlauben</string>
     <string name="pref_default_encoding">Standard-Textkodierung</string>
     <string name="pref_text_encoding">Textkodierung</string>
@@ -79,14 +94,12 @@
     <string name="pref_oritentation_portrait">Hochformat</string>
     <string name="pref_oritentation_sensor">Sensor</string>
     <string name="pref_oritentation_no_sensor">Kein Sensor</string>
-
     <string name="pref_search_url">URL-Einstellungen der Suchmaschine</string>
     <string name="pref_search_url_error">%s nicht gefunden</string>
     <string name="pref_lpress_settings">Einstellungen bei langem Drücken</string>
     <string name="pref_lpress_link">Verknüpfung</string>
     <string name="pref_lpress_image">Bild</string>
     <string name="pref_lpress_linkimage">Bildverknüpfung</string>
-
     <string name="pref_tab_size_x">Breite der Reiter anzeigen</string>
     <string name="pref_tab_font_size">Reiter Schriftgrüße</string>
     <string name="pref_action_settings">Einstellungen für Aktionen</string>
@@ -152,7 +165,7 @@
     <string name="pref_newtab_link">Verknüpfung</string>
     <string name="pref_newtab_bookmark">Lesezeichen</string>
     <string name="pref_newtab_history">Verlauf</string>
-    <string name="pref_newtab_blank">Ziel="_leer"</string>
+    <string name="pref_newtab_blank">Ziel=\"_leer\"</string>
     <string name="pref_proxy_settings">Proxy Einstellungen</string>
     <string name="pref_ssl_error_alert">Sicherheitswarnungen anzeigen</string>
     <string name="pref_gesture_settings">Einstellungen für Gesten</string>
@@ -299,7 +312,6 @@
     <string name="pref_speeddial_column_landscape">Anzahl der Spalten im Querformat</string>
     <string name="pref_speeddial_column_max_width">Maximale Spaltenbreite</string>
     <string name="pref_speeddial_dark_theme">Dunkles Design verwenden</string>
-
 
     <string name="pref_double_tap_flick_settings">Einstellungen für Doppeltippen beim schnellen Bewegen</string>
     <string name="pref_double_tap_flick_enable">Doppeltippen beim schnellen Bewegen aktivieren</string>

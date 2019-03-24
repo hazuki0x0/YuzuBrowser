@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
 
     <string name="pref_settings">Beállítások</string>
@@ -9,9 +25,104 @@
     <string name="pref_progress_bar">Betöltési sáv</string>
     <string name="pref_tab_type">Lap típusa</string>
 
+    <string-array name="pref_tab_type_list">
+        <item>Görgethető</item>
+        <item>Teljes</item>
+    </string-array>
+
     <string name="pref_page_settings">Oldalbeállítások</string>
     <string name="pref_toolbar_location">Tájolás (álló)</string>
+    <string name="pref_toolbar_location_landscape">Tájolás (fekvő)</string>
+    <string name="pref_toolbar_location_priority">Priorizált tájolás (álló)</string>
+    <string name="pref_toolbar_location_priority_landscape">Priorizált tájolás (fekvő)</string>
+    <string name="pref_toolbar_location_undefine">Nem definiált</string>
     <string name="pref_toolbar_location_top">Felső sáv</string>
+    <string name="pref_toolbar_location_top_always">Felső sáv(Mindig látszik)</string>
     <string name="pref_toolbar_location_bottom">Alsó sáv</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">Alsó lebegő sáv (Mindig látható)</string>
+    <string name="pref_toolbar_location_bottom_always">Alsó sáv (Mindig látható)</string>
+    <string name="pref_toolbar_location_web">Webes sáv</string>
+    <string name="pref_toolbar_location_web_fix">Webes sáv (fix)</string>
+    <string name="pref_toolbar_location_left">Baloldali sáv</string>
+    <string name="pref_toolbar_location_right">Jobboldali sáv</string>
+    <string name="pref_allow_content_access">Tartalom hozzáférés engedélyezése</string>
+    <string name="pref_default_encoding">Alapértelmezett karakterkódolás</string>
+    <string name="pref_text_encoding">Karakterkódolás</string>
+    <string name="pref_softbtn_settings">Eszköztár gombjainak beállítása</string>
+    <string name="pref_btn_tab_left">Lapsáv baloldali gomb</string>
+    <string name="pref_btn_tab_right">Lapsáv jobboldali gomb</string>
+    <string name="pref_btn_url_left">URL sáv baloldali gomb</string>
+    <string name="pref_btn_url_right">URL sáv jobb gomb</string>
+    <string name="pref_btn_url_center">URL sáv középső gomb (URL doboz)</string>
+    <string name="pref_btn_action_press">Megnyomás</string>
+    <string name="pref_btn_action_lpress">Hosszú nyomás</string>
+    <string name="pref_btn_action_up">Húzás felfelé</string>
+    <string name="pref_btn_action_down">Húzás lefelé</string>
+    <string name="pref_btn_action_left">Húzás balra</string>
+    <string name="pref_btn_action_right">Húzás jobbra</string>
+    <string name="pref_toolbar_size">Sáv szélessége</string>
+    <string name="pref_toolbar_text_size">Szöveg mérete</string>
+    <string name="pref_text_size">Szöveg mérete</string>
+
+    <string name="pref_private_mode">Privát mód</string>
+    <string name="pref_javascript">JavaScript engedélyezése</string>
+    <string name="pref_web_db">Adatbázis engedélyezése</string>
+    <string name="pref_web_dom_db">DOM tároló engedélyezése</string>
+    <string name="pref_menu_settings">Menü megjelenési beállításai</string>
+    <string name="pref_user_agent">UserAgent</string>
+
+    <string name="pref_sensitivity_distance">Érzékenység (távolság)</string>
+    <string name="pref_browser_settings">Böngésző beállításai</string>
+    <string name="pref_pattern_match">Minta megfeleltetés</string>
+    <string name="pref_home_page">Kezdőlap</string>
+    <string name="pref_hardbtn_settings">Hardver gomb beállítások</string>
+    <string name="pref_btn_back_press">Vissza gomb megnyomása</string>
+    <string name="pref_btn_back_lpress">Vissza gomb hosszú megnyomása</string>
+    <string name="pref_btn_serach_press">Keresés megnyomása</string>
+    <string name="pref_btn_volume_up">Hangerő fel</string>
+    <string name="pref_btn_volume_down">Hangerő le</string>
+    <string name="pref_fullscreen">Teljes képernyős</string>
+    <string name="pref_keep_screen_on">Képernyő ébrentartása</string>
+    <string name="pref_accept_cookie">Sütik elfogadása</string>
+    <string name="pref_accept_third_cookie">Harmadik féltől származó sütik elfogadása</string>
+    <string name="pref_accept_cookie_private">Sütik elfogadása Privát módban</string>
+    <string name="pref_web_cache">gyorsítótár módja</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>Alapértelmezett</item>
+        <item>Nincs gyorsítótár</item>
+        <item>Gyorsítótár preferálása</item>
+        <item>Csak a gyorsítótár betöltése</item>
+    </string-array>
+
+    <string name="pref_web_popup">Felugró ablakok engedélyezése</string>
+    <string name="pref_download_action">Letöltési művelet</string>
+
+    <string-array name="pref_download_action_list">
+        <item>Ne tegyen semmit</item>
+        <item>Automatikus</item>
+        <item>Letöltés mindig</item>
+        <item>Megnyitás mindig</item>
+        <item>Megosztás</item>
+        <item>Kiválasztás</item>
+    </string-array>
+
+    <string name="pref_download_folder">Letöltési mappa</string>
+    <string name="pref_pause_web_background">Web szüneteltetése a háttérben</string>
+    <string name="pref_pause_web_tab_change">Web szüneteltetése lapváltáskor</string>
+    <string name="pref_pause_web_tab_change_disable_summary">Egy WebView-es bug miatt kikapcsolva</string>
+    <string name="pref_btn_custom">Egyedi sáv gomb</string>
+    <string name="pref_custom_bar">Egyedi sáv</string>
+    <string name="pref_save_formdata">Űrlapadatok mentése</string>
+
+    <string name="pref_gesture_enable">Kézműveletek engedélyezése</string>
+    <string name="pref_gesture_line">Gesztus vonal mutatása</string>
+    <string name="pref_gesture_score">Gesztus érték</string>
+    <string name="pref_lpress_others">Egyebek</string>
+
+    <string name="pref_help_url">file:///android_asset/help/hu/index.html</string>
+
+    <string name="pref_save_tab_for_crash">Lapok nagy gyakoriságú mentése</string>
+
     <string name="pref_translators">windanesz</string>
 </resources>

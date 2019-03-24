@@ -148,7 +148,7 @@
     <string name="clear_download">Удалить из списка</string>
     <string name="delete_download">Удалить файл</string>
     <string name="ssl_error_title">Угроза безопасности</string>
-    <string name="ssl_error_mes">"Есть проблемы с сертификатом безопасности этого сайта:\n%1$s\nПродолжить?"</string>
+    <string name="ssl_error_mes">\"Есть проблемы с сертификатом безопасности этого сайта:\n%1$s\nПродолжить?\"</string>
     <string name="ssl_error_certificate_date_invalid">Дата сертификата недействительна</string>
     <string name="ssl_error_certificate_expired">Срок действия сертификата истёк</string>
     <string name="ssl_error_certificate_expired_info">Окончание срока действия=</string>
@@ -285,7 +285,6 @@
     <string name="geolocation_permissions">Разрешения на геолокацию</string>
     <string name="recent_search_queries">Последние поисковые запросы</string>
     <string name="favicon_cache">Кеш значков</string>
-    <string name="pref_save_tab_for_crash">Сохранять часто открываемые вкладки</string>
     <string name="untitled">Без названия</string>
     <string name="loading_failed">Не удалось загрузить что-либо со страницы.</string>
     <string name="font_not_found">Файл шрифта не найден</string>
@@ -298,7 +297,7 @@
     <string name="suggest_bookmarks">Показывать закладки</string>
     <string name="search_engine_error">Поисковая система не найдена</string>
     <string name="permission_request">Запрос прав доступа</string>
-    <string name="permission_request_mes">"%1$s\n\nхочет использовать:\n\n%2$s"</string>
+    <string name="permission_request_mes">\"%1$s\n\nхочет использовать:\n\n%2$s\"</string>
     <string name="camera">Камера</string>
     <string name="mic">Микрофон</string>
     <string name="midi_device">MIDI-устройство</string>
