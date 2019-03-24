@@ -188,8 +188,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         //Crash workaround for pagePaddingHeight...
         toolbarPadding.visibility = View.GONE
 
-        asyncPermissions = AsyncPermissions(this)
-
         browserState = (applicationContext as BrowserApplication).browserState
 
         if (browserState.isNeedLoad) {
@@ -271,6 +269,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
             userActionManager.onTouchEvent(event)
         }
+
+        asyncPermissions = AsyncPermissions(this)
     }
 
     override fun onStart() {
