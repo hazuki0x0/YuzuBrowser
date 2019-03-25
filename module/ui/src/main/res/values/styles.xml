@@ -104,6 +104,11 @@
 
     <style name="TextAppearance" parent="android:TextAppearance" tools:ignore="UnusedResources"/>
 
+    <style name="TextAppearance.SingleTitle">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="TextAppearance.ListTitle">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>

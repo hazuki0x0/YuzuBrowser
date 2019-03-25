@@ -16,126 +16,28 @@
 
 package jp.hazuki.yuzubrowser.legacy.action.view
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.MenuItem
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import androidx.fragment.app.ListFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
-import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
 
 class CloseAutoSelectActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val fragment = InnerFragment()
-        val bundle = Bundle()
-        intent?.run {
-            bundle.putParcelable(DEFAULT, getParcelableExtra(DEFAULT))
-            bundle.putParcelable(INTENT, getParcelableExtra(INTENT))
-            bundle.putParcelable(WINDOW, getParcelableExtra(WINDOW))
-        }
-        fragment.arguments = bundle
-
-        addOnBackPressedCallback(this) {
-            setResult(RESULT_CANCELED)
-            finish()
-            true
-        }
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, CloseAutoSelectFragment(
+                        intent?.getParcelableExtra(DEFAULT),
+                        intent?.getParcelableExtra(INTENT),
+                        intent?.getParcelableExtra(WINDOW)))
                 .commit()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    class InnerFragment : ListFragment() {
-
-        private lateinit var defaultAction: Action
-        private lateinit var intentAction: Action
-        private lateinit var windowAction: Action
-
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            val activity = activity ?: throw IllegalStateException()
-            val arguments = arguments ?: throw IllegalArgumentException()
-
-            defaultAction = arguments.getParcelable(DEFAULT) ?: Action()
-            intentAction = arguments.getParcelable(INTENT) ?: Action()
-            windowAction = arguments.getParcelable(WINDOW) ?: Action()
-
-            listAdapter = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1).apply {
-                add(getString(R.string.pref_close_default))
-                add(getString(R.string.pref_close_intent))
-                add(getString(R.string.pref_close_window))
-            }
-
-            activity.addOnBackPressedCallback(this) {
-                val intent = Intent()
-                intent.putExtra(DEFAULT, defaultAction as Parcelable?)
-                intent.putExtra(INTENT, intentAction as Parcelable?)
-                intent.putExtra(WINDOW, windowAction as Parcelable?)
-                activity.setResult(Activity.RESULT_OK, intent)
-                activity.finish()
-                true
-            }
-        }
-
-        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-            val builder = ActionActivity.Builder(activity ?: return)
-            when (position) {
-                0 -> startActivityForResult(builder.setDefaultAction(defaultAction)
-                        .setTitle(R.string.pref_close_default)
-                        .create(),
-                        REQUEST_DEFAULT)
-                1 -> startActivityForResult(builder.setDefaultAction(intentAction)
-                        .setTitle(R.string.pref_close_intent)
-                        .create(),
-                        REQUEST_INTENT)
-                2 -> startActivityForResult(builder.setDefaultAction(windowAction)
-                        .setTitle(R.string.pref_close_window)
-                        .create(),
-                        REQUEST_WINDOW)
-                else -> throw IllegalArgumentException("Unknown position:$position")
-            }
-        }
-
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            if (resultCode == RESULT_OK) {
-                when (requestCode) {
-                    REQUEST_DEFAULT -> defaultAction = data!!.getParcelableExtra(ActionActivity.EXTRA_ACTION)
-                    REQUEST_INTENT -> intentAction = data!!.getParcelableExtra(ActionActivity.EXTRA_ACTION)
-                    REQUEST_WINDOW -> windowAction = data!!.getParcelableExtra(ActionActivity.EXTRA_ACTION)
-                }
-            }
-        }
-
-        companion object {
-            private const val REQUEST_DEFAULT = 0
-            private const val REQUEST_INTENT = 1
-            private const val REQUEST_WINDOW = 2
-        }
     }
 
     class Builder(private val con: Context) {
@@ -147,7 +49,7 @@ class CloseAutoSelectActivity : ThemeActivity() {
                     val defaultAction = intent.getParcelableExtra<Action>(DEFAULT)
                     val intentAction = intent.getParcelableExtra<Action>(INTENT)
                     val windowAction = intent.getParcelableExtra<Action>(WINDOW)
-                    callback.invoke(defaultAction, intentAction, windowAction)
+                    callback(defaultAction, intentAction, windowAction)
                 }
             }
             return this
@@ -165,8 +67,8 @@ class CloseAutoSelectActivity : ThemeActivity() {
     }
 
     companion object {
-        private const val DEFAULT = "0"
-        private const val INTENT = "1"
-        private const val WINDOW = "2"
+        const val DEFAULT = "0"
+        const val INTENT = "1"
+        const val WINDOW = "2"
     }
 }

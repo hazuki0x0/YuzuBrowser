@@ -22,7 +22,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
+import android.view.View
 import android.view.WindowManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
@@ -31,9 +33,10 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.action_activity.*
 
-class ActionActivity : ThemeActivity() {
+class ActionActivity : ThemeActivity(), OnRecyclerListener {
 
     private var mActionManager: ActionManager? = null
     private var mOnActivityResultListener: OnActivityResultListener? = null
@@ -60,8 +63,9 @@ class ActionActivity : ThemeActivity() {
 
         actionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA) ?: ActionNameArray(applicationContext)
 
-        adapter = ActionNameArrayAdapter(this, actionNameArray)
-        listView.adapter = adapter
+        adapter = ActionNameArrayAdapter(this, actionNameArray, this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         val mActionType = intent.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, 0)
         mActionId = intent.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_ID, 0)
@@ -96,33 +100,7 @@ class ActionActivity : ThemeActivity() {
         adapter.notifyDataSetChanged()
 
         if (initialPosition != -1)
-            listView.setSelection(initialPosition)
-
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val value = adapter.getItemValue(position)
-
-            if (adapter.toggleCheck(position)) {
-                val action = SingleAction.makeInstance(value)
-                mAction.add(action)
-                showPreference(action.showMainPreference(this@ActionActivity))
-            } else {
-                for (i in mAction.indices) {
-                    if (mAction[i].id == value) {
-                        mAction.removeAt(i)
-                        break
-                    }
-                }
-            }
-
-        }
-
-        listView.setOnItemLongClickListener { _, view, position, id ->
-            if (!adapter.isChecked(position))
-                listView.performItemClick(view, position, id)
-
-            showSubPreference(position)
-            true
-        }
+            recyclerView.scrollToPosition(initialPosition)
 
         okButton.setOnClickListener {
             when (mActionManager) {
@@ -161,6 +139,39 @@ class ActionActivity : ThemeActivity() {
         cancelButton.setOnClickListener { finish() }
 
         adapter.setListener(this::showSubPreference)
+    }
+
+    override fun onRecyclerItemClicked(v: View, position: Int) {
+        itemClicked(position, false)
+    }
+
+    override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
+        if (!adapter.isChecked(position))
+            itemClicked(position, true)
+
+        showSubPreference(position)
+        return true
+    }
+
+    private fun itemClicked(position: Int, forceShowPref: Boolean) {
+        val value = adapter.getItemValue(position)
+
+        if (adapter.toggleCheck(position)) {
+            val action = SingleAction.makeInstance(value)
+            mAction.add(action)
+            showPreference(if (forceShowPref) {
+                action.showSubPreference(this)
+            } else {
+                action.showMainPreference(this)
+            })
+        } else {
+            for (i in mAction.indices) {
+                if (mAction[i].id == value) {
+                    mAction.removeAt(i)
+                    break
+                }
+            }
+        }
     }
 
     private fun showSubPreference(position: Int) {
@@ -210,7 +221,7 @@ class ActionActivity : ThemeActivity() {
                 }
                 adapter.notifyDataSetChanged()
                 if (initialPosition != -1)
-                    listView.setSelection(initialPosition)
+                    recyclerView.scrollToPosition(initialPosition)
             }
         }
     }

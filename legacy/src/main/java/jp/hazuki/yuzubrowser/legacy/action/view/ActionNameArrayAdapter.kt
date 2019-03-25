@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,25 +21,29 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-
+import android.widget.CheckBox
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
+import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
-class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) : BaseAdapter() {
-    private val checked = BooleanArray(count)
+class ActionNameArrayAdapter(
+        context: Context,
+        val nameArray: ActionNameArray,
+        private val listener: OnRecyclerListener
+) : RecyclerView.Adapter<ActionNameArrayAdapter.ViewHolder>() {
+    private val checked = BooleanArray(itemCount)
     private val inflater = LayoutInflater.from(context)
     private val iconPosDB = context.resources.getIntArray(R.array.action_values)
     private val icons = context.resources.obtainTypedArray(R.array.action_icons)
     private var mListener: OnSettingButtonListener? = null
 
-    override fun getCount(): Int {
+    override fun getItemCount(): Int {
         return nameArray.actionList.size
-    }
-
-    override fun getItem(position: Int): Any {
-        return nameArray.actionList[position]!!
     }
 
     override fun getItemId(position: Int): Long {
@@ -71,18 +75,11 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
         notifyDataSetChanged()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view: View
-        val holder: ViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(inflater.inflate(R.layout.select_action_item, parent, false))
+    }
 
-        if (convertView == null) {
-            view = inflater.inflate(R.layout.select_action_item, parent, false)
-            holder = ViewHolder(view)
-        } else {
-            view = convertView
-            holder = view.tag as ViewHolder
-        }
-
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.icon.setImageDrawable(getIcon(position))
         holder.text.text = getName(position)
 
@@ -99,13 +96,15 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
             holder.setting.visibility = View.GONE
         }
 
-        return view
+        holder.itemView.setOnClickListener { listener.onRecyclerItemClicked(it, holder.adapterPosition) }
+        holder.itemView.setOnLongClickListener { listener.onRecyclerItemLongClicked(it, holder.adapterPosition) }
     }
 
     fun toggleCheck(position: Int): Boolean {
-        checked[position] = !checked[position]
-        notifyDataSetChanged()
-        return checked[position]
+        val newState = !checked[position]
+        checked[position] = newState
+        notifyItemChanged(position)
+        return newState
     }
 
     fun setChecked(position: Int, value: Boolean) {
@@ -116,14 +115,10 @@ class ActionNameArrayAdapter(context: Context, val nameArray: ActionNameArray) :
         this.mListener = mListener
     }
 
-    internal class ViewHolder(view: View) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val icon: ImageView = view.findViewById(R.id.iconImageView)
         val text: TextView = view.findViewById(R.id.nameTextView)
         val setting: ImageButton = view.findViewById(R.id.settingsButton)
         val checkBox: CheckBox = view.findViewById(R.id.checkBox)
-
-        init {
-            view.tag = this
-        }
     }
 }
