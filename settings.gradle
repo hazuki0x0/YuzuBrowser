@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':libraries:BreadcrumbsView', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon', ':download'
+include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon', ':download'
 
 file('module').eachDir { dir ->
     include dir.name

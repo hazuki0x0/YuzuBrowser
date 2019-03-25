@@ -47,6 +47,7 @@ object Versions {
     const val runner = "1.1.0"
     const val header_decor = "0.2.8"
     const val materialprogressbar = "1.6.1"
+    const val krumbsview = "1.1.2"
 }
 
 object AndroidX {
@@ -104,6 +105,7 @@ object Libs {
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
     const val header_decor = "ca.barrenechea.header-decor:header-decor:${Versions.header_decor}"
     const val materialProgressBar = "me.zhanghai.android.materialprogressbar:library:${Versions.materialprogressbar}"
+    const val krumbsview = "com.github.adrielcafe:krumbsview:${Versions.krumbsview}"
 }
 
 object Dependencies {

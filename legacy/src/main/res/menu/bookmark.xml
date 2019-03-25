@@ -30,4 +30,10 @@
         android:icon="@drawable/ic_sort_white_24dp"
         app:showAsAction="always|withText" />
 
+    <item
+        android:id="@+id/breadcrumbs"
+        android:title="@string/breadcrumb"
+        android:checkable="true"
+        app:showAsAction="never"/>
+
 </menu>

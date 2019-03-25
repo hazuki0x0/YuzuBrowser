@@ -84,6 +84,7 @@ dependencies {
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
+    implementation Libs.krumbsview
     implementation Libs.header_decor
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation project(':libraries:floatingactionbutton')
@@ -93,7 +94,6 @@ dependencies {
     }
     implementation 'com.github.turing-tech:MaterialScrollBar:13.3.2'
     implementation project(':libraries:asyncpermissions')
-    implementation project(':libraries:BreadcrumbsView')
     implementation project(':ui')
     implementation project(':core')
     implementation project(':languages')

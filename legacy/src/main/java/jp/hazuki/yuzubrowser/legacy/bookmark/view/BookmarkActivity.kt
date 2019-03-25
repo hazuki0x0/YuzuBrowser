@@ -30,10 +30,6 @@ class BookmarkActivity : LongPressFixActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
-        supportActionBar?.run {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
-        }
 
         val intent = intent
         var pickMode = false
@@ -52,18 +48,14 @@ class BookmarkActivity : LongPressFixActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         requestedOrientation = orientation
 
+        addOnBackPressedCallback {
+            finish()
+            true
+        }
+
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, BookmarkFragment(pickMode, itemId))
                 .commit()
-    }
-
-    override fun onBackKeyPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.container)
-        if (fragment is BookmarkFragment) {
-            if (fragment.onBack()) {
-                finish()
-            }
-        }
     }
 
     override fun onBackKeyLongPressed() {
