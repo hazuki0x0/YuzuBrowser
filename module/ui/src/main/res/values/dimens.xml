@@ -18,4 +18,6 @@
 <resources>
     <dimen name="dimen_cursor">25dp</dimen>
     <dimen name="dimen_theme_padding">7dp</dimen>
+    <dimen name="dialog_padding">24dp</dimen>
+    <dimen name="dialog_padding_top">20dp</dimen>
 </resources>
