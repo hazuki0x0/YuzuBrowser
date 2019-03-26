@@ -26,13 +26,13 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkFoldersDialog.OnFolderSelectedListener
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
+import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.extensions.toPunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.widget.SpinnerButton
 
@@ -73,7 +73,7 @@ abstract class AddBookmarkDialog<S : BookmarkItem, T>(protected val context: Con
 
     protected open fun initView(view: View, title: String?, url: T) {
         if (mItem == null) {
-            val root = mManager.root
+            val root = getRootPosition()
             mParent = root
             folderButton.text = root.title
             folderButton.setOnClickListener { v ->
@@ -88,6 +88,17 @@ abstract class AddBookmarkDialog<S : BookmarkItem, T>(protected val context: Con
             folderButton.visibility = View.GONE
             addToTopCheckBox.visibility = View.GONE
         }
+    }
+
+    private fun getRootPosition(): BookmarkFolder {
+        if (AppData.save_bookmark_folder.get()) {
+            val id = AppData.save_bookmark_folder_id.get()
+            val item = mManager[id]
+            if (item is BookmarkFolder) {
+                return item
+            }
+        }
+        return mManager.root
     }
 
     fun show() {
