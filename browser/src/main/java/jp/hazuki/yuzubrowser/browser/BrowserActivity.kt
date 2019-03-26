@@ -288,7 +288,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
 
-        WebViewProxy.setProxy(applicationContext, AppData.proxy_set.get(), AppData.proxy_address.get())
+        WebViewProxy.setProxy(applicationContext, AppData.proxy_set.get(), AppData.proxy_address.get(),
+                AppData.proxy_https_set.get(), AppData.proxy_https_address.get())
 
         connectionStateMonitor.enable(this)
 

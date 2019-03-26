@@ -38,15 +38,15 @@ public class WebViewProxy {
     private static boolean setProxy = false;
 
     public static boolean resetProxy(Context context) {
-        return setProxy(context, "", 0);
+        return setProxy(context, "", 0, "", 0);
     }
 
     @SuppressLint("PrivateApi")
-    public static boolean setProxy(Context context, String host, int port) {
+    public static boolean setProxy(Context context, String host, int port, String httpsHost, int httpsPort) {
         System.setProperty("http.proxyHost", host);
         System.setProperty("http.proxyPort", Integer.toString(port));
-        System.setProperty("https.proxyHost", host);
-        System.setProperty("https.proxyPort", Integer.toString(port));
+        System.setProperty("https.proxyHost", httpsHost);
+        System.setProperty("https.proxyPort", Integer.toString(httpsPort));
         try {
             Class applicationClass = Class.forName("android.app.Application");
             Field mLoadedApkField = applicationClass.getDeclaredField("mLoadedApk");
@@ -74,7 +74,7 @@ public class WebViewProxy {
         return false;
     }
 
-    public static boolean setProxy(Context context, boolean enable, String proxy_address) {
+    public static boolean setProxy(Context context, boolean enable, String proxy_address, boolean httpsEnable, String httpsProxyAdress) {
         if (setProxy && !WebViewProxy.resetProxy(context.getApplicationContext()))
             return false;
 
@@ -83,8 +83,22 @@ public class WebViewProxy {
         if (enable) {
             Matcher matcher = pattern.matcher(proxy_address);
             if (matcher.find()) {
+                String httpHost = matcher.group(1);
+                int httpPort = Integer.parseInt(matcher.group(2), 10);
+                String httpsHost = httpHost;
+                int httpsPort = httpPort;
+                if (httpsEnable) {
+                    Matcher httpsMatcher = pattern.matcher(httpsProxyAdress);
+                    if (httpsMatcher.find()) {
+                        httpsHost = httpsMatcher.group(1);
+                        httpsPort = Integer.parseInt(httpsMatcher.group(2), 10);
+                    } else {
+                        httpsHost = "";
+                        httpsPort = 0;
+                    }
+                }
                 setProxy = true;
-                return WebViewProxy.setProxy(context.getApplicationContext(), matcher.group(1), Integer.parseInt(matcher.group(2), 10));
+                return WebViewProxy.setProxy(context.getApplicationContext(), httpHost, httpPort, httpsHost, httpsPort);
             } else {
                 Toast.makeText(context, R.string.proxy_address_error, Toast.LENGTH_LONG).show();
                 return false;

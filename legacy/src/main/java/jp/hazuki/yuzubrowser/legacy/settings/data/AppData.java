@@ -131,6 +131,8 @@ public class AppData {
     public static final IntContainer newtab_blank = new IntContainer("newtab_blank", BrowserManager.LOAD_URL_TAB_NEW_RIGHT);
     public static final StringContainer proxy_address = new StringContainer("proxy_address", "");
     public static final BooleanContainer proxy_set = new BooleanContainer("proxy_set", false);
+    public static final BooleanContainer proxy_https_set = new BooleanContainer("proxy_https_set", false);
+    public static final StringContainer proxy_https_address = new StringContainer("proxy_https_address", "");
     public static final BooleanContainer ssl_error_alert = new BooleanContainer("ssl_error_alert", true);
     public static final BooleanContainer gesture_enable_web = new BooleanContainer("gesture_enable_web", false);
     public static final BooleanContainer gesture_line_web = new BooleanContainer("gesture_line_web", true);
