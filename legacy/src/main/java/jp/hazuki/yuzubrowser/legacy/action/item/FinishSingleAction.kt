@@ -35,6 +35,11 @@ class FinishSingleAction : SingleAction, Parcelable {
     var isCloseTab = false
         private set
 
+    constructor(id: Int, isShowAlert: Boolean, isCloseTab: Boolean) : super(id) {
+        this.isShowAlert = isShowAlert
+        this.isCloseTab = isCloseTab
+    }
+
     @Throws(IOException::class)
     constructor(id: Int, reader: JsonReader?) : super(id) {
         if (reader != null) {

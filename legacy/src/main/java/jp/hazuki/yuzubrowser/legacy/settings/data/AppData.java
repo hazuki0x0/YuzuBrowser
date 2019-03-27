@@ -39,6 +39,7 @@ import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.action.ActionList;
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction;
 import jp.hazuki.yuzubrowser.legacy.action.item.CustomMenuSingleAction;
+import jp.hazuki.yuzubrowser.legacy.action.item.FinishSingleAction;
 import jp.hazuki.yuzubrowser.legacy.action.manager.HardButtonActionManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.LongPressActionManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.MenuActionManager;
@@ -264,19 +265,22 @@ public class AppData {
             tabManager.save(context);
 
             MenuActionManager menuManager = MenuActionManager.getInstance(context);
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.GO_HOME));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_DOWNLOADS));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.READ_IT_LATER));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.READ_IT_LATER_LIST));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.READER_MODE));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.ALL_ACTION));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.SHOW_SETTINGS));
-            menuManager.browser_activity.getList().add(SingleAction.makeInstance(SingleAction.FINISH));
-            menuManager.save(context);
+            {
+                ActionList list = menuManager.browser_activity.getList();
+                list.add(SingleAction.makeInstance(SingleAction.GO_HOME));
+                list.add(SingleAction.makeInstance(SingleAction.SHOW_BOOKMARK));
+                list.add(SingleAction.makeInstance(SingleAction.SHOW_HISTORY));
+                list.add(SingleAction.makeInstance(SingleAction.SHOW_DOWNLOADS));
+                list.add(SingleAction.makeInstance(SingleAction.SHARE_WEB));
+                list.add(SingleAction.makeInstance(SingleAction.FIND_ON_PAGE));
+                list.add(SingleAction.makeInstance(SingleAction.READ_IT_LATER));
+                list.add(SingleAction.makeInstance(SingleAction.READ_IT_LATER_LIST));
+                list.add(SingleAction.makeInstance(SingleAction.READER_MODE));
+                list.add(SingleAction.makeInstance(SingleAction.ALL_ACTION));
+                list.add(SingleAction.makeInstance(SingleAction.SHOW_SETTINGS));
+                list.add(new FinishSingleAction(SingleAction.FINISH, true, false));
+                menuManager.save(context);
+            }
 
             LongPressActionManager manager = LongPressActionManager.getInstance(context);
             {
@@ -302,6 +306,7 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_NEW));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_BG));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_IMAGE_URL));
@@ -328,6 +333,7 @@ public class AppData {
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_NEW));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_BG));
+                list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_SHARE_IMAGE_URL));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_OPEN_IMAGE_OTHERS));
                 list.add(SingleAction.makeInstance(SingleAction.LPRESS_COPY_IMAGE_URL));
