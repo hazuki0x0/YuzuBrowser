@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.download
+import jp.hazuki.yuzubrowser.download.getBlobDownloadJavaScript
 import jp.hazuki.yuzubrowser.download.getDownloadFolderUri
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
@@ -134,13 +135,21 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
-                        DownloadDialog(url, target.webView.webSettings.userAgentString)//TODO referer
-                                .show(controller.activity.supportFragmentManager, "download")
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 1), null)
+                        } else {
+                            DownloadDialog(url, target.webView.webSettings.userAgentString)//TODO referer
+                                    .show(controller.activity.supportFragmentManager, "download")
+                        }
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE -> {
-                        val file = DownloadFile(url, null, DownloadRequest(null, target.webView.webSettings.userAgentString, null))
-                        controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 2), null)
+                        } else {
+                            val file = DownloadFile(url, null, DownloadRequest(null, target.webView.webSettings.userAgentString, null))
+                            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                        }
                         return true
                     }
                     SingleAction.LPRESS_PATTERN_MATCH -> {
@@ -201,8 +210,12 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
-                                .show(controller.activity.supportFragmentManager, "download")
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 1), null)
+                        } else {
+                            DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
+                                    .show(controller.activity.supportFragmentManager, "download")
+                        }
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
@@ -223,17 +236,25 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SHARE_IMAGE -> {
-                        val intent = Intent(controller.activity, FastDownloadActivity::class.java)
-                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
-                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
-                        intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
-                        controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 3), null)
+                        } else {
+                            val intent = Intent(controller.activity, FastDownloadActivity::class.java)
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
+                            intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
+                            controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
+                        }
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
-                        val file = DownloadFile(url, null,
-                                DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
-                        controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 2), null)
+                        } else {
+                            val file = DownloadFile(url, null,
+                                    DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
+                            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                        }
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
@@ -322,8 +343,12 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
-                        DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
-                                .show(controller.activity.supportFragmentManager, "download")
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 1), null)
+                        } else {
+                            DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
+                                    .show(controller.activity.supportFragmentManager, "download")
+                        }
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
@@ -344,17 +369,25 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_SHARE_IMAGE -> {
-                        val intent = Intent(controller.activity, FastDownloadActivity::class.java)
-                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
-                        intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
-                        intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
-                        controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 3), null)
+                        } else {
+                            val intent = Intent(controller.activity, FastDownloadActivity::class.java)
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
+                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
+                            intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
+                            controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
+                        }
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
-                        val file = DownloadFile(url, null,
-                                DownloadRequest(target.webView.url, target.webView.webSettings.userAgentString, ".jpg"))
-                        controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                        if (url.startsWith("blob:")) {
+                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 2), null)
+                        } else {
+                            val file = DownloadFile(url, null,
+                                    DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
+                            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                        }
                         return true
                     }
                     SingleAction.LPRESS_ADD_BLACK_LIST -> {

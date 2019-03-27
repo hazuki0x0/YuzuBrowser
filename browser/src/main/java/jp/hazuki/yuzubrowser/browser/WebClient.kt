@@ -38,7 +38,13 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
+import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
+import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
+import jp.hazuki.yuzubrowser.download.download
+import jp.hazuki.yuzubrowser.download.getBlobDownloadJavaScript
+import jp.hazuki.yuzubrowser.download.getDownloadFolderUri
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
+import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -89,7 +95,6 @@ import org.jetbrains.anko.longToast
 import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread
-import kotlin.random.Random
 
 class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) : WebViewUtility {
     private val patternManager = PatternUrlManager(activity.applicationContext)
@@ -105,7 +110,6 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
-    private val secretKey = Random.nextInt().toString(36)
     private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
 
     var renderingMode
@@ -583,13 +587,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
     private fun onDownloadStart(web: CustomWebView, url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
         if (url.startsWith("blob")) {
-            web.evaluateJavascript("var xhr=new XMLHttpRequest;xhr.open('GET','$url',!0),xhr." +
-                    "responseType='blob',xhr.onload=function(){if(200==this.status){var e=this.re" +
-                    "sponse,n=new FileReader;n.onloadend=function(){base64data=n.result,window.lo" +
-                    "cation.href='yuzu:download-file/$secretKey&'+encodeURIComponent(base64data)}" +
-                    ",n.readAsDataURL(e)}},xhr.onerror=function(){alert('" +
-                    "${getString(R.string.js_download_cross_origin)}')},xhr.send();", null)
-
+            web.evaluateJavascript(activity.getBlobDownloadJavaScript(url, controller.secretKey), null)
             return
         }
 
@@ -901,9 +899,25 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                         "download-file" -> {
                             val keyData = uri.schemeSpecificPart.substring(action.length + 1)
 
-                            val items = keyData.split('&', limit = 2)
-                            if (items.size == 2 && items[0] == secretKey) {
-                                onDownloadStart(data.mWebView, items[1], "", "", "", -1)
+                            val items = keyData.split('&', limit = 3)
+                            if (items.size == 3 && items[0] == controller.secretKey) {
+                                when (items[2]) {
+                                    "0" -> onDownloadStart(data.mWebView, items[1], "", "", "", -1)
+                                    "1" -> DownloadDialog(url, data.mWebView.webSettings.userAgentString)//TODO referer
+                                            .show(controller.activity.supportFragmentManager, "download")
+                                    "2" -> {
+                                        val file = DownloadFile(url, null, DownloadRequest(null, data.mWebView.webSettings.userAgentString, null))
+                                        controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                                    }
+                                    "3" -> {
+                                        val downloader = Intent(controller.activity, FastDownloadActivity::class.java)
+                                        downloader.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
+                                        downloader.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, data.mWebView.url)
+                                        downloader.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
+                                        controller.startActivity(downloader, BrowserController.REQUEST_SHARE_IMAGE)
+                                    }
+                                }
+
                             }
                             return true
                         }

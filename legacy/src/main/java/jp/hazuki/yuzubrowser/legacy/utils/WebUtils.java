@@ -71,6 +71,7 @@ public class WebUtils {
             case "content":
             case "javascript":
             case "view-source":
+            case "blob":
                 return false;
             default:
                 return true;

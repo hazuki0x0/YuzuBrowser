@@ -85,3 +85,12 @@ fun Context.registerDownloadNotification() {
 }
 
 fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: DocumentFile) = createFileOpenIntent(context, downloadedFile.uri, mimeType, name)
+
+fun Context.getBlobDownloadJavaScript(url: String, secretKey: String, type: Int = 0): String {
+    return "var xhr=new XMLHttpRequest;xhr.open('GET','$url',!0),xhr." +
+            "responseType='blob',xhr.onload=function(){if(200==this.status){var e=this.re" +
+            "sponse,n=new FileReader;n.onloadend=function(){base64data=n.result,window.lo" +
+            "cation.href='yuzu:download-file/$secretKey&'+encodeURIComponent(base64data)+'&$type'}" +
+            ",n.readAsDataURL(e)}},xhr.onerror=function(){alert('" +
+            "${getString(R.string.js_download_cross_origin)}')},xhr.send();"
+}

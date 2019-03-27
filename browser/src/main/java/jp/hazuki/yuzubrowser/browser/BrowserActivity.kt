@@ -99,6 +99,7 @@ import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 import kotlinx.android.synthetic.main.browser_activity.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener, WebViewProvider {
 
@@ -173,6 +174,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private var mouseCursorView: PointerView? = null
     private var findOnPage: WebViewFindDialog? = null
     private var delayAction: Action? = null
+    override val secretKey = Random.nextInt().toString(36)
 
     @Inject
     internal lateinit var webViewFactory: WebViewFactory

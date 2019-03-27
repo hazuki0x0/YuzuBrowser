@@ -80,6 +80,7 @@ interface BrowserController : BrowserInfo {
     fun expandToolbar()
     fun adjustBrowserPadding(tab: MainTabData)
 
+    val secretKey: String
     val tabManager: TabManager
     val superFrameLayoutInfo: androidx.coordinatorlayout.widget.CoordinatorLayout
     val activity: AppCompatActivity
