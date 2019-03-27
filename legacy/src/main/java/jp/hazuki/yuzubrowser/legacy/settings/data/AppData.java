@@ -61,8 +61,8 @@ import jp.hazuki.yuzubrowser.legacy.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.custom.FontSizeContainer;
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager;
-import jp.hazuki.yuzubrowser.legacy.useragent.UserAgent;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentList;
+import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentUpdaterKt;
 import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
@@ -354,11 +354,7 @@ public class AppData {
             toolbar_tab.visibility.setVisible(false);
 
             UserAgentList uaList = new UserAgentList();
-            uaList.add(new UserAgent("android", "Mozilla/5.0 (Linux; Android 8.1.0; Nexus 5X Build/OPM1.171019.011) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.111 Mobile Safari/537.36"));
-            uaList.add(new UserAgent("android Tablet", "Mozilla/5.0 (Linux; Android 7.1.1; Nexus 9 Build/N4F26M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.111 Safari/537.36"));
-            uaList.add(new UserAgent("iPhone", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"));
-            uaList.add(new UserAgent("iPad", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"));
-            uaList.add(new UserAgent("PC", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36"));
+            UserAgentUpdaterKt.init(uaList);
             uaList.write(context, moshi);
 
             WebTextEncodeList encodes = new WebTextEncodeList();
@@ -459,6 +455,13 @@ public class AppData {
                     from.deleteDatabase(context);
                     download_folder.set("file://" + download_folder.get());
                 }
+            }
+
+            {
+                UserAgentList list = new UserAgentList();
+                list.read(context, moshi);
+                UserAgentUpdaterKt.upgrade(list);
+                list.write(context, moshi);
             }
 
             lastLaunchVersion.set(versionCode);
