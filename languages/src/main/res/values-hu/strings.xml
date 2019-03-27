@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Yuzu Böngésző</string>
+    <string name="browser_app_name">Yuzu Böngésző</string>
     <string name="add">Hozzáad</string>
     <string name="cancel">Mégsem</string>
     <string name="reset">Visszaállítás</string>

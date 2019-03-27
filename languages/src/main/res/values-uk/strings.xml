@@ -15,7 +15,6 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">Yuzu Browser</string>
     <string name="add">Додати</string>
     <string name="cancel">Скасувати</string>
     <string name="reset">Скинути</string>

@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Yuzu Browser</string>
+    <string name="browser_app_name">Yuzu Browser</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
     <string name="reset">Reset</string>
