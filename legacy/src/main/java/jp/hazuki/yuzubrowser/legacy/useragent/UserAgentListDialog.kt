@@ -70,7 +70,7 @@ class UserAgentListDialog : DialogFragment() {
         builder.setTitle(R.string.useragent)
                 .setSingleChoiceItems(entries, pos) { _, which ->
                     val intent = Intent()
-                    intent.putExtra(Intent.EXTRA_TEXT, entryValues[which])
+                    intent.putExtra(Intent.EXTRA_TEXT, if (which == 0) "" else entryValues[which])
                     activity.setResult(RESULT_OK, intent)
                     dismiss()
                 }
