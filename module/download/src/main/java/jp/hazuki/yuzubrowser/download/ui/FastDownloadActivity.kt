@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.download.ui
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -60,7 +61,12 @@ class FastDownloadActivity : DaggerThemeActivity() {
         ui {
             val dialog = ProgressDialog(getString(R.string.now_downloading))
             dialog.show(supportFragmentManager, "dialog")
-            val uri = withContext(Dispatchers.Default) { download(url, intent.getStringExtra(EXTRA_FILE_REFERER), intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)) }
+            val uri = withContext(Dispatchers.Default) {
+                download(url,
+                        intent.getStringExtra(EXTRA_FILE_REFERER),
+                        intent.getStringExtra(EXTRA_USER_AGENT),
+                        intent.getStringExtra(EXTRA_DEFAULT_EXTENSION))
+            }
             dialog.dismiss()
             if (uri != null) {
                 val result = Intent()
@@ -84,9 +90,9 @@ class FastDownloadActivity : DaggerThemeActivity() {
         }
     }
 
-    private fun download(url: String, referrer: String?, defExt: String): Uri? {
+    private fun download(url: String, referrer: String?, ua: String, defExt: String): Uri? {
         val root = Uri.parse(DownloadPrefs.get(this).downloadFolder).toDocumentFile(applicationContext)
-        val file = DownloadFile(url, null, DownloadRequest(referrer, null, defExt))
+        val file = DownloadFile(url, null, DownloadRequest(referrer, ua, defExt))
         val meta = MetaData(applicationContext, okHttpClient, root, file.url, file.request)
         val info = DownloadFileInfo(root, file, meta)
         val downloader = Downloader.getDownloader(applicationContext, okHttpClient, info, file.request)
@@ -97,9 +103,19 @@ class FastDownloadActivity : DaggerThemeActivity() {
     }
 
     companion object {
-        const val EXTRA_FILE_URL = "fileURL"
-        const val EXTRA_FILE_REFERER = "fileReferer"
-        const val EXTRA_DEFAULT_EXTENSION = "defExt"
+        private const val EXTRA_FILE_URL = "fileURL"
+        private const val EXTRA_FILE_REFERER = "fileReferer"
+        private const val EXTRA_DEFAULT_EXTENSION = "defExt"
+        private const val EXTRA_USER_AGENT = "ua"
         const val EXTRA_MINE_TYPE = "mineType"
+
+        fun intent(context: Context, url: String, referrer: String?, ua: String, defExt: String): Intent {
+            return Intent(context, FastDownloadActivity::class.java).apply {
+                putExtra(EXTRA_FILE_URL, url)
+                putExtra(EXTRA_FILE_REFERER, referrer)
+                putExtra(EXTRA_USER_AGENT, ua)
+                putExtra(EXTRA_DEFAULT_EXTENSION, defExt)
+            }
+        }
     }
 }

@@ -239,10 +239,11 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         if (url.startsWith("blob:")) {
                             target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 3), null)
                         } else {
-                            val intent = Intent(controller.activity, FastDownloadActivity::class.java)
-                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
-                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
-                            intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
+                            val intent = FastDownloadActivity.intent(
+                                    controller.activity,
+                                    url, target.webView.url,
+                                    target.webView.getUserAgent(),
+                                    ".jpg")
                             controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
                         }
                         return true
@@ -372,10 +373,13 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         if (url.startsWith("blob:")) {
                             target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 3), null)
                         } else {
-                            val intent = Intent(controller.activity, FastDownloadActivity::class.java)
-                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
-                            intent.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, target.webView.url)
-                            intent.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
+                            val webView = target.webView
+                            val intent = FastDownloadActivity.intent(
+                                    controller.activity,
+                                    url,
+                                    webView.url,
+                                    webView.getUserAgent(),
+                                    ".jpg")
                             controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
                         }
                         return true

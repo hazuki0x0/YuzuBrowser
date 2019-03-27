@@ -901,23 +901,24 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
                             val items = keyData.split('&', limit = 3)
                             if (items.size == 3 && items[0] == controller.secretKey) {
-                                when (items[2]) {
-                                    "0" -> onDownloadStart(data.mWebView, items[1], "", "", "", -1)
-                                    "1" -> DownloadDialog(url, data.mWebView.webSettings.userAgentString)//TODO referer
+                                when (items[1]) {
+                                    "0" -> onDownloadStart(data.mWebView, items[2], "", "", "", -1)
+                                    "1" -> DownloadDialog(items[2], data.mWebView.webSettings.userAgentString)//TODO referer
                                             .show(controller.activity.supportFragmentManager, "download")
                                     "2" -> {
-                                        val file = DownloadFile(url, null, DownloadRequest(null, data.mWebView.webSettings.userAgentString, null))
+                                        val file = DownloadFile(items[2], null, DownloadRequest(null, data.mWebView.webSettings.userAgentString, null))
                                         controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
                                     }
                                     "3" -> {
-                                        val downloader = Intent(controller.activity, FastDownloadActivity::class.java)
-                                        downloader.putExtra(FastDownloadActivity.EXTRA_FILE_URL, url)
-                                        downloader.putExtra(FastDownloadActivity.EXTRA_FILE_REFERER, data.mWebView.url)
-                                        downloader.putExtra(FastDownloadActivity.EXTRA_DEFAULT_EXTENSION, ".jpg")
+                                        val downloader = FastDownloadActivity
+                                                .intent(controller.activity,
+                                                        items[2],
+                                                        data.mWebView.url,
+                                                        data.mWebView.getUserAgent(),
+                                                        ".jpg")
                                         controller.startActivity(downloader, BrowserController.REQUEST_SHARE_IMAGE)
                                     }
                                 }
-
                             }
                             return true
                         }
