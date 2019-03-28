@@ -62,7 +62,6 @@
                 app:krumbsCurrentItemTextColor="?android:attr/textColorPrimary"
                 app:krumbsPreviousItemTextColor="?android:attr/textColorSecondary"
                 app:krumbsSeparatorTintColor="?android:attr/textColorPrimary"
-                app:krumbsTextSize="16dp"
                 app:layout_scrollFlags="scroll|enterAlways"/>
         </com.google.android.material.appbar.AppBarLayout>
 
