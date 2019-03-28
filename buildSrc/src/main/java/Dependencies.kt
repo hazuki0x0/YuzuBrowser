@@ -48,6 +48,8 @@ object Versions {
     const val header_decor = "0.2.8"
     const val materialprogressbar = "1.6.1"
     const val krumbsview = "1.1.2"
+    const val mockito = "2.+"
+    const val powermock = "2.0.0"
 }
 
 object AndroidX {
@@ -100,6 +102,9 @@ object Libs {
     const val androidTestCore = "androidx.test:core:${Versions.runner}"
     const val androidRunner = "androidx.test.ext:junit:${Versions.runner}"
     const val assertk = "com.willowtreeapps.assertk:assertk-jvm:${Versions.assertk}"
+    const val mockito = "org.mockito:mockito-core:${Versions.mockito}"
+    const val powerMockJunit = "org.powermock:powermock-module-junit4:${Versions.powermock}"
+    const val powerMockMockito = "org.powermock:powermock-api-mockito2:${Versions.powermock}"
 
     //Other
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"

@@ -61,6 +61,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation Libs.junit
+    testImplementation Libs.assertk
+    testImplementation Libs.mockito
+    testImplementation Libs.powerMockJunit
+    testImplementation Libs.powerMockMockito
     androidTestImplementation Libs.espressoCore
     androidTestImplementation Libs.androidRunner
 
