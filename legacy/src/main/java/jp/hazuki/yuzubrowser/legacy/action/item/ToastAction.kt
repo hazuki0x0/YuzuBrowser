@@ -43,8 +43,12 @@ class ToastAction : SingleAction, Parcelable {
                 if (reader.peek() != JsonReader.Token.NAME) return
                 when (reader.nextName()) {
                     FIELD_TEXT -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        text = reader.nextString()
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.nextNull<String>()
+                        } else {
+                            if (reader.peek() != JsonReader.Token.STRING) return
+                            text = reader.nextString()
+                        }
                     }
                     else -> reader.skipValue()
                 }

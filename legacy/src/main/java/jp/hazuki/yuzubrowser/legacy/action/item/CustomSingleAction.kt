@@ -47,8 +47,12 @@ class CustomSingleAction : SingleAction {
                         action.loadAction(reader)
                     }
                     FIELD_NAME_ACTION_NAME -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        mName = reader.nextString()
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.nextNull<String>()
+                        } else {
+                            if (reader.peek() != JsonReader.Token.STRING) return
+                            mName = reader.nextString()
+                        }
                     }
                     else -> reader.skipValue()
                 }

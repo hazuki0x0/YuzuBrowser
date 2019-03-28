@@ -45,12 +45,20 @@ class TranslatePageSingleAction : SingleAction, Parcelable {
                 if (reader.peek() != JsonReader.Token.NAME) return
                 when (reader.nextName()) {
                     FIELD_NAME_FROM -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        translateFrom = reader.nextString()
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.nextNull<String>()
+                        } else {
+                            if (reader.peek() != JsonReader.Token.STRING) return
+                            translateFrom = reader.nextString()
+                        }
                     }
                     FIELD_NAME_TO -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        translateTo = reader.nextString()
+                        if (reader.peek() == JsonReader.Token.NULL) {
+                            reader.nextNull<String>()
+                        } else {
+                            if (reader.peek() != JsonReader.Token.STRING) return
+                            translateTo = reader.nextString()
+                        }
                     }
                     else -> reader.skipValue()
                 }

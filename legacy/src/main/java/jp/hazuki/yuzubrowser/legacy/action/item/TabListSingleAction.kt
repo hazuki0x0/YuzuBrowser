@@ -53,6 +53,10 @@ class TabListSingleAction : SingleAction, Parcelable {
                         if (reader.peek() != JsonReader.Token.NUMBER) return
                         mode = reader.nextInt()
                     }
+                    FIELD_NAME_LEFT_BUTTON -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        isLeftButton = reader.nextBoolean()
+                    }
                     FIELD_NAME_LAST_TAB_MODE -> {
                         if (reader.peek() != JsonReader.Token.NUMBER) return
                         lastTabMode = reader.nextInt()
