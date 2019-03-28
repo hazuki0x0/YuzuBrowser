@@ -270,8 +270,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
             userActionManager.onTouchEvent(event)
         }
-
-        asyncPermissions = AsyncPermissions(this)
     }
 
     override fun onStart() {
@@ -316,6 +314,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         super.onPostResume()
         setFullscreenIfEnable()
         toolbar.resetToolBar()
+        asyncPermissions = AsyncPermissions(this)
         if (!checkBrowserPermission()) {
             ui { requestBrowserPermissions(asyncPermissions) }
         }
