@@ -29,6 +29,7 @@ import android.view.*
 import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
@@ -624,7 +625,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             forceDestroy = intent.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
             browserState.isNeedLoad = true
             if (parent == null) {
-                recreate()
+                ActivityCompat.recreate(this)
             } else {
                 val restart = Intent(this, BrowserActivity::class.java)
                 finish()
