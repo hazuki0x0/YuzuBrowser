@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageContext
@@ -32,24 +33,46 @@ open class ThemeActivity : AppCompatActivity() {
             ThemeData.createInstance(application, PrefPool.getSharedPref(application).getString(theme_setting, ThemeData.THEME_LIGHT))
         }
 
-        val nightMode = AppCompatDelegate.getDefaultNightMode()
-        if (isLightMode()) {
-            if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
+        val defaultMode = AppCompatDelegate.getDefaultNightMode()
+        val isLightMode = isLightMode()
+        if (isLightMode) {
+            if (defaultMode != AppCompatDelegate.MODE_NIGHT_NO) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         } else {
-            if (nightMode != AppCompatDelegate.MODE_NIGHT_YES) {
+            if (defaultMode != AppCompatDelegate.MODE_NIGHT_YES) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
+        if (updateTheme(!isLightMode)) {
+            onNightModeChanged(if (isLightMode) AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
-        val langContext = application.createLanguageContext(PrefPool.getSharedPref(application).getString(language, "")!!)
+        val langContext = newBase.createLanguageContext(PrefPool.getSharedPref(application).getString(language, "")!!)
 
         super.attachBaseContext(langContext)
     }
 
     private fun isLightMode(): Boolean {
         return ThemeData.isEnabled() && ThemeData.getInstance().lightTheme
+    }
+
+    private fun updateTheme(nightMode: Boolean): Boolean {
+        val newNightMode = if (nightMode) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
+
+        // If we're here then we can try and apply an override configuration on the Context.
+        val conf = Configuration()
+        conf.uiMode = newNightMode or (conf.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv())
+
+        try {
+            applyOverrideConfiguration(conf)
+        } catch (e: IllegalStateException) {
+            // applyOverrideConfiguration throws an IllegalStateException if it's resources
+            // have already been created. Since there's no way to check this beforehand we
+            // just have to try it and catch the exception
+            return false
+        }
+        return true
     }
 
     companion object {

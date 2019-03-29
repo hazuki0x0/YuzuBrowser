@@ -23,13 +23,13 @@ import android.os.Build
 import java.util.*
 
 fun Context.createLanguageContext(lang: String): Context {
-    val config = resources.configuration
+    val config = applicationContext.resources.configuration
     val sysLocale = config.getSystemLocale()
 
     if (lang.isNotEmpty() && sysLocale.language != lang) {
         val locale = Locale(lang)
         config.setLocale(locale)
-        return ContextWrapper(createConfigurationContext(config))
+        return ContextWrapper(applicationContext.createConfigurationContext(config))
     }
     return this
 }
