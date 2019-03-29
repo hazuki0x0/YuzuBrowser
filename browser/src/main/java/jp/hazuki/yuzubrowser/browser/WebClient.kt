@@ -360,7 +360,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             val data = controller.getTabOrNull(web) ?: return
 
             if (AppData.toolbar_auto_open.get()) {
-                controller.appBarLayout.setExpanded(true, false)
+                controller.expandToolbar()
                 data.mWebView.isNestedScrollingEnabledMethod = false
             }
 

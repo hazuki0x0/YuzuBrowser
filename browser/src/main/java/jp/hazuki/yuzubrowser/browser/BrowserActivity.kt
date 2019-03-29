@@ -1113,6 +1113,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             tab.onMoveTabToBackground(resources, theme)
 
         toolbar.notifyChangeWebState()
+        if (AppData.toolbar_auto_open.get()) expandToolbar()
         return tab
     }
 
