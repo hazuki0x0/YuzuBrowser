@@ -37,12 +37,16 @@ public class WebViewProxy {
 
     private static boolean setProxy = false;
 
-    public static boolean resetProxy(Context context) {
+    public static void resetProxy(Context context) {
+        if (setProxy) setProxy(context, "", 0, "", 0);
+    }
+
+    private static boolean resetProxyInternal(Context context) {
         return setProxy(context, "", 0, "", 0);
     }
 
     @SuppressLint("PrivateApi")
-    public static boolean setProxy(Context context, String host, int port, String httpsHost, int httpsPort) {
+    private static boolean setProxy(Context context, String host, int port, String httpsHost, int httpsPort) {
         System.setProperty("http.proxyHost", host);
         System.setProperty("http.proxyPort", Integer.toString(port));
         System.setProperty("https.proxyHost", httpsHost);
@@ -75,7 +79,7 @@ public class WebViewProxy {
     }
 
     public static boolean setProxy(Context context, boolean enable, String proxy_address, boolean httpsEnable, String httpsProxyAdress) {
-        if (setProxy && !WebViewProxy.resetProxy(context.getApplicationContext()))
+        if (setProxy && !WebViewProxy.resetProxyInternal(context.getApplicationContext()))
             return false;
 
         setProxy = false;
