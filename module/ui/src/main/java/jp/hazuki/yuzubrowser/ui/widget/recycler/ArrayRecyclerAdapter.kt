@@ -40,6 +40,7 @@ abstract class ArrayRecyclerAdapter<T, VH : ArrayRecyclerAdapter.ArrayViewHolder
 
                 if (!multiSelect) {
                     itemSelected.clear()
+                    selectedItemCount = 0
                 }
 
                 notifyDataSetChanged()

@@ -65,6 +65,7 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
 
                 if (!multiSelect) {
                     itemSelected.clear()
+                    selectedItemCount = 0
                 }
 
                 notifyDataSetChanged()

@@ -71,6 +71,7 @@ class DownloadListAdapter(
 
                 if (!value) {
                     itemSelected.clear()
+                    selectedItemCount = 0
                 }
 
                 notifyDataSetChanged()
