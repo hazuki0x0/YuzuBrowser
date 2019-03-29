@@ -384,8 +384,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             setFullscreenIfEnable()
     }
 
-    override val isLoadThemeData = true
-
     private fun setFullscreenIfEnable() {
         if (isFullscreenMode) {
             window.decorView.systemUiVisibility = DisplayUtils.getFullScreenVisibility()

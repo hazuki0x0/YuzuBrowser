@@ -373,6 +373,7 @@ public class ThemeData {
     }
 
     public static ThemeData createInstance(Context context) {
+        isLoaded = true;
         File file = new File(getExternalUserDirectory(), "theme");
         if (!file.exists() || !file.isDirectory())
             sInstance = null;
@@ -387,7 +388,7 @@ public class ThemeData {
     }
 
     public static ThemeData createInstance(Context context, String folder) {
-
+        isLoaded = true;
         if (TextUtils.isEmpty(folder)) {
             sInstance = null;
         } else if (THEME_LIGHT.equals(folder)) {
@@ -408,6 +409,12 @@ public class ThemeData {
     }
 
     private static ThemeData sInstance;
+
+    private static boolean isLoaded = false;
+
+    public static boolean isLoaded() {
+        return isLoaded;
+    }
 
     private static boolean getBoolean(JsonReader reader) throws IOException {
         if (reader.peek() == JsonReader.Token.BOOLEAN) {

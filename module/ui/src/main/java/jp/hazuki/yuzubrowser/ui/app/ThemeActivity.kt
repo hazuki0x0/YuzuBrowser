@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageContext
@@ -27,12 +26,10 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 @SuppressLint("Registered")
 open class ThemeActivity : AppCompatActivity() {
 
-    protected open val isLoadThemeData: Boolean
-        get() = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        if (isLoadThemeData) {
-            ThemeData.createInstance(applicationContext, PrefPool.getSharedPref(this).getString(theme_setting, ThemeData.THEME_LIGHT))
+    override fun attachBaseContext(newBase: Context) {
+        val application = newBase.applicationContext
+        if (!ThemeData.isLoaded()) {
+            ThemeData.createInstance(application, PrefPool.getSharedPref(application).getString(theme_setting, ThemeData.THEME_LIGHT))
         }
 
         val nightMode = AppCompatDelegate.getDefaultNightMode()
@@ -46,11 +43,9 @@ open class ThemeActivity : AppCompatActivity() {
             }
         }
 
-        super.onCreate(savedInstanceState)
-    }
+        val langContext = application.createLanguageContext(PrefPool.getSharedPref(application).getString(language, "")!!)
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(newBase.createLanguageContext(PrefPool.getSharedPref(newBase).getString(language, "")!!))
+        super.attachBaseContext(langContext)
     }
 
     private fun isLightMode(): Boolean {
