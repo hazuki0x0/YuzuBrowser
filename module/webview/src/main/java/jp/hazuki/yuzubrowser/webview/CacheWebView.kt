@@ -127,9 +127,14 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
         from.webView.copySettingsTo(to.webView)
         val currentUrl = from.url
         to.url = url
-        to.webView.loadUrl(url, additionalHttpHeaders.getHeaderMap(currentUrl))
         ++current
         move(from, to)
+
+        if (sHeaderMap == additionalHttpHeaders || additionalHttpHeaders.isEmpty()) {
+            to.webView.loadUrl(url)
+        } else {
+            to.webView.loadUrl(url, additionalHttpHeaders.getHeaderMap(currentUrl))
+        }
     }
 
     @Synchronized override fun clearHistory() {

@@ -167,7 +167,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
             }
             url != null && url.shouldLoadSameTabUser() -> currentPage.webView.loadUrl(url, additionalHttpHeaders)
             url != null && additionalHttpHeaders != null -> newTab(url, additionalHttpHeaders)
-            url != null -> newTab(url)
+            url != null -> newTab(url, additionalHttpHeaders ?: sHeaderMap)
         }
     }
 
@@ -483,7 +483,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         toSetting.minimumFontSize = fromSetting.minimumFontSize
         toSetting.minimumLogicalFontSize = fromSetting.minimumLogicalFontSize
 
-        toSetting.setNeedInitialFocus(false)
+        toSetting.setNeedInitialFocus(true)
         toSetting.setSupportMultipleWindows(fromSetting.supportMultipleWindows())
         toSetting.defaultFontSize = fromSetting.defaultFontSize
         toSetting.defaultFixedFontSize = fromSetting.defaultFixedFontSize
@@ -594,7 +594,8 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
     }
 
     companion object {
-        private val sHeaderMap = ArrayMap<String, String>()
+        @JvmStatic
+        protected val sHeaderMap = ArrayMap<String, String>()
         private val cachedMap = ArrayMap<String, String>()
 
         internal const val CAN_NOT_MOVE = 0
