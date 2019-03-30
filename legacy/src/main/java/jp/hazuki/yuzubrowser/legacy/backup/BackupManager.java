@@ -88,6 +88,7 @@ public class BackupManager {
             case "searchsuggest.db":
             case "downloadinfolist1.db":
             case "speeddial1.db":
+            case "download.db":
                 return false;
             default:
                 return true;
