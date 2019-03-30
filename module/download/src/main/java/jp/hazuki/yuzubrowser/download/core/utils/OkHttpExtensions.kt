@@ -25,13 +25,13 @@ import okhttp3.Response
 
 fun Request.Builder.setCookie(cookie: String?): Request.Builder {
     if (!cookie.isNullOrEmpty())
-        header("Cookie", cookie)
+        header("Cookie", cookie.removeUnexpectedChar())
     return this
 }
 
 fun Request.Builder.setReferrer(referrer: String?): Request.Builder {
     if (!referrer.isNullOrEmpty())
-        header("Referer", referrer)
+        header("Referer", referrer.removeUnexpectedChar())
     return this
 }
 
@@ -39,9 +39,28 @@ fun Request.Builder.setUserAgent(context: Context, userAgent: String?): Request.
     if (userAgent.isNullOrEmpty()) {
         header("User-Agent", WebSettings.getDefaultUserAgent(context))
     } else {
-        header("User-Agent", userAgent)
+        header("User-Agent", userAgent.removeUnexpectedChar())
     }
     return this
+}
+
+private fun String.removeUnexpectedChar(): String {
+    var index = checkUnexpectedChar(0)
+    if (index < 0) return this
+    val builder = StringBuilder(this)
+    while (index >= 0) {
+        builder.deleteCharAt(index)
+        index = builder.checkUnexpectedChar(index)
+    }
+    return builder.toString()
+}
+
+private fun CharSequence.checkUnexpectedChar(startIndex: Int): Int {
+    for (i in startIndex until length) {
+        val c = this[i]
+        if ((c <= '\u001f' && c != '\t') || c >= '\u007f') return i
+    }
+    return -1
 }
 
 val Response.contentLength: Long
