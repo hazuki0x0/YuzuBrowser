@@ -54,6 +54,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="BrowserThemeDayNight.CustomToolbar" parent="BrowserThemeDayNight.NoTitle">
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
     <style name="BrowserThemeDayNight.Transparent" parent="@style/BrowserThemeDayNight.NoTitle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>

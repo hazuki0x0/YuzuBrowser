@@ -55,7 +55,7 @@ abstract class BookmarkItem(var title: String?, val id: Long) : Serializable {
                     id = reader.nextInt()
                 }
                 COLUMN_NAME_ID -> {
-                    if (reader.peek() == JsonReader.Token.NUMBER) return null
+                    if (reader.peek() != JsonReader.Token.NUMBER) return null
                     itemId = reader.nextLong()
                 }
                 COLUMN_NAME_TITLE -> {
@@ -67,7 +67,6 @@ abstract class BookmarkItem(var title: String?, val id: Long) : Serializable {
                 }
                 else -> {
                     lastName = name
-                    reader.skipValue()
                     break@loop
                 }
             }

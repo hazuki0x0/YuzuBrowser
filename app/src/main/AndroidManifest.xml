@@ -219,7 +219,7 @@
             android:name="jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/bookmark"
-            android:theme="@style/BrowserThemeDayNight.NoTitle"/>
+            android:theme="@style/BrowserThemeDayNight.CustomToolbar"/>
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.gesture.AddGestureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />

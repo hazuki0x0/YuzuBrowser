@@ -20,7 +20,6 @@ import android.content.Context
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
-import okio.Okio
 import okio.buffer
 import okio.sink
 import okio.source
@@ -71,7 +70,7 @@ class BookmarkManager private constructor(context: Context) : Serializable {
     }
 
     fun save(): Boolean {
-        if (!file.exists()) {
+        if (!file.parentFile.exists()) {
             file.parentFile.mkdirs()
         }
 
