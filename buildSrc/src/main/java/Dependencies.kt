@@ -22,8 +22,8 @@ object Build {
 }
 
 object AppVersions {
-    const val version_name = "5.0.0-beta3"
-    const val version_code = 410002
+    const val version_name = "5.0.0-beta4"
+    const val version_code = 410003
 }
 
 object Versions {
