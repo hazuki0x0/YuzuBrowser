@@ -46,12 +46,17 @@
         <item name="editTextStyle">@style/EditTextStyle</item>
         <item name="urlBarBoxColor">@color/urlBarBoxColor</item>
         <item name="urlBarBoxBorderColor">@color/urlBarBoxBorderColor</item>
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
     </style>
 
     <style name="BrowserThemeDayNight.NoTitle" parent="@style/BrowserThemeDayNight">
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="BrowserThemeDayNight.Browser" parent="BrowserThemeDayNight.NoTitle">
+        <item name="colorPrimaryDark">@color/browser_primary_dark</item>
     </style>
 
     <style name="BrowserThemeDayNight.CustomToolbar" parent="BrowserThemeDayNight.NoTitle">
@@ -121,5 +126,9 @@
     <style name="TextAppearance.ListBody">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/action_mode_background</item>
     </style>
 </resources>

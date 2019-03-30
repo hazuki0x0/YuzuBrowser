@@ -28,6 +28,8 @@
     <color name="bookmark_multi_selected">#E02A96BC</color>
     <color name="float_bottom_background">#FFBBBBBB</color>
     <color name="yuzu_orange">#FFF6BC1E</color>
+    <color name="action_mode_background">#0d87c6</color>
+    <color name="browser_primary_dark">#101010</color>
 
     <color name="deep_gray">#222222</color>
     <color name="white">#FFFFFF</color>
@@ -35,7 +37,7 @@
     <color name="tab_list_background">#f5222222</color>
     <color name="white_gray">#e6e6e6</color>
     <color name="scroll_bar">#aa646464</color>
-    <color name="selected_overlay">#8033b5e5</color>
+    <color name="selected_overlay">#800d87c6</color>
     <color name="light_border">#bfbfbf</color>
     <color name="dark_border">#000000</color>
     <color name="dark_box">#626262</color>

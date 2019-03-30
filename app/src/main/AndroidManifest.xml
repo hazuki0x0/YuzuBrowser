@@ -48,7 +48,7 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="screenLayout|smallestScreenSize|keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
-            android:theme="@style/BrowserThemeDayNight.NoTitle">
+            android:theme="@style/BrowserThemeDayNight.Browser">
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
