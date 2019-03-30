@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
+import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.utils.checkFlag
@@ -41,6 +42,7 @@ import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
 import jp.hazuki.yuzubrowser.download.service.connection.ActivityClient
 import jp.hazuki.yuzubrowser.download.ui.DownloadCommandController
 import jp.hazuki.yuzubrowser.ui.ACTIVITY_MAIN_BROWSER
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
@@ -99,7 +101,14 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED) {
             info.getFile()?.let {
                 try {
-                    startActivity(createFileOpenIntent(activity, it.uri, info.mimeType, info.name))
+                    val filePath = it.uri.resolvePath(activity)
+                    val uri = if (filePath != null) {
+                        (activity.application as BrowserApplication).providerManager
+                                .downloadFileProvider.getUriFromPath(filePath)
+                    } else {
+                        it.uri
+                    }
+                    startActivity(createFileOpenIntent(activity, uri, info.mimeType, info.name))
                 } catch (e: ActivityNotFoundException) {
                     activity.longToast(R.string.app_notfound)
                 }
@@ -128,7 +137,14 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
             DownloadFileInfo.STATE_DOWNLOADED -> if (file != null) {
                 menu.add(R.string.open_file).setOnMenuItemClickListener {
                     try {
-                        startActivity(createFileOpenIntent(activity, file.uri, info.mimeType, info.name))
+                        val filePath = file.uri.resolvePath(activity)
+                        val uri = if (filePath != null) {
+                            (activity.application as BrowserApplication).providerManager
+                                    .downloadFileProvider.getUriFromPath(filePath)
+                        } else {
+                            file.uri
+                        }
+                        startActivity(createFileOpenIntent(activity, uri, info.mimeType, info.name))
                     } catch (e: ActivityNotFoundException) {
                         activity.longToast(R.string.app_notfound)
                     }

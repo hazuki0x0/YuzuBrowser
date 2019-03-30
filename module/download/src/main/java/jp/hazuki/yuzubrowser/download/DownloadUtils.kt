@@ -84,7 +84,14 @@ fun Context.registerDownloadNotification() {
     }
 }
 
-fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: DocumentFile) = createFileOpenIntent(context, downloadedFile.uri, mimeType, name)
+fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: DocumentFile): Intent {
+    val uri = if (downloadedFile.uri.scheme == "file") {
+        downloadedFile.uri
+    } else {
+        Uri.parse("file://${downloadedFile.uri.resolvePath(context)}") ?: downloadedFile.uri
+    }
+    return createFileOpenIntent(context, uri, mimeType, name)
+}
 
 fun Context.getBlobDownloadJavaScript(url: String, secretKey: String, type: Int = 0): String {
     return "var xhr=new XMLHttpRequest;xhr.open('GET','$url',!0),xhr." +
