@@ -43,8 +43,11 @@ class NormalChecker : ResourceChecker {
         while (reader.hasNext()) {
             when (reader.nextName()) {
                 FIELD_URL -> {
-                    if (reader.peek() != JsonReader.Token.STRING) return
-                    url = reader.nextString()
+                    if (reader.peek() == JsonReader.Token.STRING) {
+                        url = reader.nextString()
+                    } else {
+                        reader.skipValue()
+                    }
                 }
                 FIELD_WHITE -> isWhite = reader.nextBoolean()
                 else -> reader.skipValue()

@@ -294,10 +294,18 @@ public class TabStorage {
                                     tabIndexData.setId(reader.nextLong());
                                     break;
                                 case JSON_NAME_URL:
-                                    tabIndexData.setUrl(reader.nextString());
+                                    if (reader.peek() == JsonReader.Token.NULL) {
+                                        reader.nextNull();
+                                    } else {
+                                        tabIndexData.setUrl(reader.nextString());
+                                    }
                                     break;
                                 case JSON_NAME_TITLE:
-                                    tabIndexData.setTitle(reader.nextString());
+                                    if (reader.peek() == JsonReader.Token.NULL) {
+                                        reader.nextNull();
+                                    } else {
+                                        tabIndexData.setTitle(reader.nextString());
+                                    }
                                     break;
                                 case JSON_NAME_TAB_TYPE:
                                     tabIndexData.setTabType(reader.nextInt());

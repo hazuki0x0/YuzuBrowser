@@ -50,8 +50,11 @@ class CustomSingleAction : SingleAction {
                         if (reader.peek() == JsonReader.Token.NULL) {
                             reader.nextNull<String>()
                         } else {
-                            if (reader.peek() != JsonReader.Token.STRING) return
-                            mName = reader.nextString()
+                            if (reader.peek() == JsonReader.Token.STRING) {
+                                mName = reader.nextString()
+                            } else {
+                                reader.skipValue()
+                            }
                         }
                     }
                     else -> reader.skipValue()

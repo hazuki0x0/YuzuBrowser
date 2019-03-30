@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.ui.theme
 
+import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import okio.Okio
 import java.io.File
@@ -76,23 +77,39 @@ private constructor(val version: String, val name: String, val id: String) {
 
                 val field = reader.nextName()
                 if (FIELD_FORMAT_VERSION.equals(field, ignoreCase = true)) {
-                    if (reader.nextInt() > FORMAT_VERSION)
-                        throw IllegalManifestException("unknown version of format", 2)
+                    try {
+                        if (reader.nextInt() > FORMAT_VERSION)
+                            throw IllegalManifestException("unknown version of format", 2)
+                    } catch (e: JsonDataException) {
+                        throw IllegalManifestException("broken manifest file", 1)
+                    }
                     continue
                 }
 
                 if (FIELD_VERSION.equals(field, ignoreCase = true)) {
-                    version = reader.nextString().trim { it <= ' ' }
+                    try {
+                        version = reader.nextString().trim { it <= ' ' }
+                    } catch (e: JsonDataException) {
+                        throw IllegalManifestException("broken manifest file", 1)
+                    }
                     continue
                 }
 
                 if (FIELD_NAME.equals(field, ignoreCase = true)) {
-                    name = reader.nextString().trim { it <= ' ' }
+                    try {
+                        name = reader.nextString().trim { it <= ' ' }
+                    } catch (e: JsonDataException) {
+                        throw IllegalManifestException("broken manifest file", 1)
+                    }
                     continue
                 }
 
                 if (FIELD_ID.equals(field, ignoreCase = true)) {
-                    id = reader.nextString().trim { it <= ' ' }
+                    try {
+                        id = reader.nextString().trim { it <= ' ' }
+                    } catch (e: JsonDataException) {
+                        throw IllegalManifestException("broken manifest file", 1)
+                    }
                     continue
                 }
                 reader.skipValue()

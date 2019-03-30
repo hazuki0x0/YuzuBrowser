@@ -47,8 +47,11 @@ class PatternUrlChecker : PatternChecker {
         while (reader.hasNext()) {
             when (reader.nextName()) {
                 FIELD_PATTERN_URL -> {
-                    if (reader.peek() != JsonReader.Token.STRING) return
-                    setPatternUrlWithThrow(factory, reader.nextString())
+                    if (reader.peek() == JsonReader.Token.STRING) {
+                        setPatternUrlWithThrow(factory, reader.nextString())
+                    } else {
+                        reader.skipValue()
+                    }
                 }
                 FIELD_PATTERN_ENABLE -> {
                     enable = reader.nextBoolean()

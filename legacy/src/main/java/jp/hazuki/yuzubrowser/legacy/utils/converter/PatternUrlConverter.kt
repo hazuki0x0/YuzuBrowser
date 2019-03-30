@@ -56,8 +56,11 @@ class PatternUrlConverter {
             while (reader.hasNext()) {
                 when (reader.nextName()) {
                     "0" -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        setConvertedString(reader.nextString())
+                        if (reader.peek() == JsonReader.Token.STRING) {
+                            setConvertedString(reader.nextString())
+                        } else {
+                            reader.skipValue()
+                        }
                     }
                     else -> reader.skipValue()
                 }

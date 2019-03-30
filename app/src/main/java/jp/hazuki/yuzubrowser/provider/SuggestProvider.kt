@@ -27,6 +27,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.provider.BaseColumns
 import android.text.TextUtils
+import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import dagger.android.DaggerContentProvider
 import jp.hazuki.yuzubrowser.BuildConfig
@@ -165,8 +166,13 @@ class SuggestProvider : DaggerContentProvider() {
                     }
                 }
             }
-        } catch (e: IOException) {
-            ErrorReportServer.printAndWriteLog(e)
+        } catch (e: Exception) {
+            when (e) {
+                is IOException, is JsonDataException -> {
+                    ErrorReportServer.printAndWriteLog(e)
+                }
+                else -> throw e
+            }
         }
         return null
     }

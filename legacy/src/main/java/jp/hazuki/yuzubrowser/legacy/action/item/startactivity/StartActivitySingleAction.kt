@@ -68,12 +68,18 @@ class StartActivitySingleAction : SingleAction, Parcelable {
                         }
                     }
                     FIELD_NAME_ACTION_NAME -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        mName = reader.nextString()
+                        if (reader.peek() == JsonReader.Token.STRING) {
+                            mName = reader.nextString()
+                        } else {
+                            reader.skipValue()
+                        }
                     }
                     FIELD_NAME_ACTION_ICON -> {
-                        if (reader.peek() != JsonReader.Token.STRING) return
-                        mIcon = ImageUtils.convertToBitmap(Base64.decode(reader.nextString(), Base64.DEFAULT))
+                        if (reader.peek() == JsonReader.Token.STRING) {
+                            mIcon = ImageUtils.convertToBitmap(Base64.decode(reader.nextString(), Base64.DEFAULT))
+                        } else {
+                            reader.skipValue()
+                        }
                     }
                     else -> reader.skipValue()
                 }
