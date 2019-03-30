@@ -108,13 +108,6 @@
   licenseUrl: https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/LICENSE
   url: https://github.com/hoshsadiq/adblock-nocoin-list
   forceGenerate: true
-- artifact: com.github.adrielcafe:krumbsview:+
-  name: adrielcafe/KrumbsView
-  copyrightHolder: adrielcafe
-  year: 2019
-  license: MIT License
-  licenseUrl: https://api.github.com/licenses/mit
-  url: https://github.com/adrielcafe/KrumbsView
 - artifact: dummy:Greasemonkey:+
   name: Greasemonkey
   copyrightHolder: Anthony Lieuallen

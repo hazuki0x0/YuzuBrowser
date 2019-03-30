@@ -88,7 +88,6 @@ dependencies {
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
-    implementation Libs.krumbsview
     implementation Libs.header_decor
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation project(':libraries:floatingactionbutton')

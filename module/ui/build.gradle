@@ -48,6 +48,7 @@ dependencies {
     androidTestImplementation Libs.androidRunner
 
     implementation AndroidX.appcompat
+    implementation AndroidX.design
     implementation AndroidX.fix_preference
     implementation AndroidX.constraintLayout
     implementation AndroidX.activty
