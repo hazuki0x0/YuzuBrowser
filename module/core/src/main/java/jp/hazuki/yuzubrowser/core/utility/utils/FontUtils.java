@@ -17,10 +17,10 @@
 package jp.hazuki.yuzubrowser.core.utility.utils;
 
 public final class FontUtils {
-    private static final int SIZE_XXLARGE = 30;
-    private static final int SIZE_XLARGE = 26;
-    private static final int SIZE_LARGE = 22;
-    private static final int SIZE_MEDIUM = 18;
+    private static final int SIZE_XXLARGE = 28;
+    private static final int SIZE_XLARGE = 22;
+    private static final int SIZE_LARGE = 20;
+    private static final int SIZE_MEDIUM = 16;
     private static final int SIZE_SMALL = 14;
     private static final int SIZE_XSMALL = 10;
     private static final int SIZE_XXSMALL = 8;

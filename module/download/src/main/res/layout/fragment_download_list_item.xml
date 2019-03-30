@@ -33,7 +33,7 @@
         android:layout_marginEnd="8dp"
         android:layout_toStartOf="@+id/overflowButton"
         android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="@style/TextAppearance.ListTitle"
         app:layout_constraintEnd_toStartOf="@+id/overflowButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -43,6 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.ListBody"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filenameTextView"/>
 
@@ -52,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="-"
+        android:textAppearance="@style/TextAppearance.ListBody"
         app:layout_constraintStart_toEndOf="@+id/sizeTextView"
         app:layout_constraintTop_toBottomOf="@+id/filenameTextView"
         tools:ignore="HardcodedText"/>
@@ -63,7 +65,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="@style/TextAppearance.ListBody"
         app:layout_constraintEnd_toStartOf="@+id/overflowButton"
         app:layout_constraintStart_toEndOf="@+id/splitTextView"
         app:layout_constraintTop_toBottomOf="@+id/filenameTextView"/>
@@ -74,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="@style/TextAppearance.ListBody"
         app:layout_constraintEnd_toStartOf="@+id/timeTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/urlTextView"/>
@@ -84,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:textAppearance="@style/TextAppearance.ListBody"
         app:layout_constraintEnd_toStartOf="@+id/overflowButton"
         app:layout_constraintTop_toBottomOf="@+id/urlTextView"/>
 
@@ -94,6 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:textAppearance="@style/TextAppearance.ListBody"
         app:layout_constraintEnd_toStartOf="@+id/overflowButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statusTextView"/>
