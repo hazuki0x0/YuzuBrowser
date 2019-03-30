@@ -257,7 +257,6 @@
     <string name="pref_resblock_manage">Gerenciar interrupção de recurso</string>
     <string name="pref_minimum_font">Tamanho mínimo da fonte</string>
 
-    <string name="pref_kill_process">Matar processo na saída (não recomendado)</string>
     <string name="pref_app_settings">Configurações do app</string>
     <string name="pref_search_suggest">Tipo de sugestão de pesquisa</string>
 

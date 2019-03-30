@@ -257,7 +257,6 @@
     <string name="pref_resblock_manage">リソース割り込みの管理</string>
     <string name="pref_minimum_font">最小フォントサイズ</string>
 
-    <string name="pref_kill_process">終了時にプロセスをキルする (非推奨)</string>
     <string name="pref_app_settings">アプリケーション設定</string>
     <string name="pref_search_suggest">検索サジェストのタイプ</string>
 

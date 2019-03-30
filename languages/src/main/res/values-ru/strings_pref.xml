@@ -257,7 +257,6 @@
     <string name="pref_resblock_manage">Управление блокировкой ресурсов</string>
     <string name="pref_minimum_font">Минимальный размер шрифта</string>
 
-    <string name="pref_kill_process">Уничтожить процесс при выходе (не рекомендуется)</string>
     <string name="pref_app_settings">Настройки</string>
     <string name="pref_search_suggest">Тип поисковых предложений</string>
 

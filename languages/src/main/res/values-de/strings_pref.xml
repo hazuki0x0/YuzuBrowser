@@ -257,7 +257,6 @@
     <string name="pref_resblock_manage">Ressourcen-Interrupt verwalten</string>
     <string name="pref_minimum_font">Mindestschriftgröße</string>
 
-    <string name="pref_kill_process">Prozess beim Verlassen beenden (nicht empfohlen)</string>
     <string name="pref_app_settings">Anwendungseinstellungen</string>
     <string name="pref_search_suggest">Suchvorschlag Typ</string>
 

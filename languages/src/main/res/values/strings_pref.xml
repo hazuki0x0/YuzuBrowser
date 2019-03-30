@@ -257,7 +257,6 @@
     <string name="pref_resblock_manage">Manage resource interrupt</string>
     <string name="pref_minimum_font">Minimum font size</string>
 
-    <string name="pref_kill_process">Kill process on exit (not recommended)</string>
     <string name="pref_app_settings">Application settings</string>
     <string name="pref_search_suggest">Search suggest type</string>
 

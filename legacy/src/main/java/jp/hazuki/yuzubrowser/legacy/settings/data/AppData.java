@@ -161,7 +161,6 @@ public class AppData {
     public static final IntContainer webswipe_sensitivity_distance = new IntContainer("webswipe_sensitivity_distance", 15);
     public static final IntContainer auto_tab_save_delay = new IntContainer("auto_tab_save_delay", 0);
     public static final IntContainer minimum_font = new IntContainer("minimum_font", 8);
-    public static final BooleanContainer kill_process = new BooleanContainer("kill_process", false);
     public static final IntContainer search_suggest = new IntContainer("search_suggest", 0);
     public static final BooleanContainer search_suggest_histories = new BooleanContainer("search_suggest_histories", true);
     public static final BooleanContainer search_suggest_bookmarks = new BooleanContainer("search_suggest_bookmarks", true);

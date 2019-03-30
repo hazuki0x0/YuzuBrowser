@@ -257,7 +257,6 @@
     <string name="pref_resblock_manage">Gestisci interruzione risorse</string>
     <string name="pref_minimum_font">Dimensione minima del carattere</string>
 
-    <string name="pref_kill_process">Killa processi all\'uscita (deprecato)</string>
     <string name="pref_app_settings">Impostazioni dell\'applicazione</string>
     <string name="pref_search_suggest">Cerca generi suggeriti</string>
 

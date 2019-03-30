@@ -359,7 +359,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         Logger.d(TAG, "onDestroy()")
         super.onDestroy()
         destroy()
-        if (AppData.kill_process.get() || forceDestroy)
+        if (forceDestroy)
             Process.killProcess(Process.myPid())
     }
 
