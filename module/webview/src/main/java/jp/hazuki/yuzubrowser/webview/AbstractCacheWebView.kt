@@ -474,8 +474,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         to.setLayerType(webLayerType, webLayerPaint)
         to.setAcceptThirdPartyCookies(CookieManager.getInstance(), acceptThirdPartyCookies)
 
-        setScrollableHeight(null)
-        setScrollableHeight(scrollableHeight)
+        to.setScrollableHeight(scrollableHeight)
 
         val fromSetting = webSettings
         val toSetting = to.webSettings
@@ -572,7 +571,9 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
 
     override fun setScrollableHeight(listener: (() -> Int)?) {
         scrollableHeight = listener
-        currentPage.webView.setScrollableHeight(listener)
+        for (web in tabs) {
+            web.webView.setScrollableHeight(listener)
+        }
     }
 
     override fun onPreferenceReset() {}
