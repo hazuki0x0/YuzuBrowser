@@ -28,6 +28,40 @@ import jp.hazuki.yuzubrowser.core.utility.storage.getStorageList
 import java.io.File
 import java.net.IDN
 
+fun Uri.getWritableFileOrNull(): File? {
+    if (scheme == "file") return File(toString())
+
+    when {
+        isExternalStorageDocument() -> {
+            val docId = DocumentsContract.getDocumentId(this)
+            val split = docId.split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
+
+            if (split.size >= 2 && split[0] == "primary") {
+                return File(buildExternalStoragePath(split[1]))
+            }
+        }
+        isContentUri() && isTreeUri() -> {
+            val split = pathSegments[1].split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
+
+            if (split.size >= 2 && split[0] == "primary") {
+                return File(buildExternalStoragePath(split[1]))
+            }
+        }
+    }
+
+    return null
+}
+
+private fun buildExternalStoragePath(extPath: String): String {
+    val builder = StringBuilder(Environment.getExternalStorageDirectory().path)
+    if (builder.endsWith('/')) {
+        builder.append(extPath)
+    } else {
+        builder.append('/').append(extPath)
+    }
+    return builder.toString()
+}
+
 fun Uri.resolvePath(context: Context): String? {
 
     if (DocumentsContract.isDocumentUri(context, this)) { // DocumentProvider
