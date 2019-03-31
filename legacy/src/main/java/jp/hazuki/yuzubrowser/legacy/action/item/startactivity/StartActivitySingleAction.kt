@@ -210,8 +210,8 @@ class StartActivitySingleAction : SingleAction, Parcelable {
         private const val FIELD_NAME_INTENT = "0"
         private const val FIELD_NAME_ACTION_NAME = "1"
         private const val FIELD_NAME_ACTION_ICON = "2"
-        const val REPLACE_URI = "http://jp.hazuki.yuzubrowser.legacy.REPLACE_URI"
-        const val REPLACE_TITLE = "http://jp.hazuki.yuzubrowser.legacy.REPLACE_TITLE"
+        const val REPLACE_URI = "http://jp.hazuki.yuzubrowser/REPLACE_URI"
+        const val REPLACE_TITLE = "http://jp.hazuki.yuzubrowser/REPLACE_TITLE"
 
         @JvmField
         val CREATOR: Parcelable.Creator<StartActivitySingleAction> = object : Parcelable.Creator<StartActivitySingleAction> {
