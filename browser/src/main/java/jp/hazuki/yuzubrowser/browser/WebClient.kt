@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
@@ -810,6 +811,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                     request.deny()
                 }
             }
+        }
+
+        override fun getDefaultVideoPoster(): Bitmap? {
+            return BitmapFactory.decodeResource(controller.resourcesByInfo, R.drawable.ic_movie_play_white)
         }
     }
 
