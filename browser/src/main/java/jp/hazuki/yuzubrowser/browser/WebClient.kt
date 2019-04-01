@@ -660,7 +660,8 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
 
             if (data.isStartDocument && newProgress > 35) {
-                applyUserScript(web, data.url, true)
+                val url = data.url
+                if (url != null) applyUserScript(web, url, true)
                 data.isStartDocument = false
             }
         }
