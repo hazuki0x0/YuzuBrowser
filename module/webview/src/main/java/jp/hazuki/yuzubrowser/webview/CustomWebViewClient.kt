@@ -158,4 +158,12 @@ open class CustomWebViewClient : WebViewClient() {
         else
             false
     }
+
+    open fun onPageCommitVisible(web: CustomWebView, url: String) {}
+
+    override fun onPageCommitVisible(view: WebView?, url: String?) {
+        if (view is CustomWebView && url != null) {
+            onPageCommitVisible(view as CustomWebView, url)
+        }
+    }
 }

@@ -387,13 +387,15 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             controller.tabManager.removeThumbnailCache(url)
         }
 
+        override fun onPageCommitVisible(web: CustomWebView, url: String) {
+            applyJavascriptInjection(web, url)
+        }
+
         override fun onPageFinished(web: CustomWebView, url: String) {
             val data = controller.getTabOrNull(web) ?: return
 
-            applyUserScript(web, url, false)
-
-            if (webViewRenderingManager.isInvertMode) {
-                web.evaluateJavascript(invertJs.replace("%s", "true"), null)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                applyJavascriptInjection(web, url)
             }
 
             if (controller.isActivityPaused) {
@@ -430,6 +432,14 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                     }
                 }
             }
+        }
+
+        private fun applyJavascriptInjection(web: CustomWebView, url: String) {
+            if (webViewRenderingManager.isInvertMode) {
+                web.evaluateJavascript(invertJs.replace("%s", "true"), null)
+            }
+
+            applyUserScript(web, url, false)
         }
 
         override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {

@@ -107,6 +107,11 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi, pri
                 return true
             }
         }
+
+        override fun onPageCommitVisible(web: CustomWebView, url: String) {
+            if (web != currentPage.webView) return
+            super.onPageCommitVisible(web, url)
+        }
     }
 
     override fun removeCurrentTab(tab: WebViewPage) {

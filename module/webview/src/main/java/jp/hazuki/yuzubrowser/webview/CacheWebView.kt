@@ -103,6 +103,11 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
                 return true
             }
         }
+
+        override fun onPageCommitVisible(web: CustomWebView, url: String) {
+            if (web != mList[current].webView) return
+            super.onPageCommitVisible(web, url)
+        }
     }
 
     init {
