@@ -37,6 +37,7 @@ import androidx.core.view.ViewCompat
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.AppBarLayoutFixed
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -54,7 +55,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
 
     internal var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
     internal var coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout? = null
-    internal var appBarLayout: AppBarLayout? = null
+    internal var appBarLayout: AppBarLayoutFixed? = null
 
     internal var animator: AnimatorSet? = null
     internal var animatingIn: Boolean = false
@@ -332,7 +333,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
         this.adapter = adapter
     }
 
-    fun attachAppBarLayout(coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout, appBarLayout: AppBarLayout) {
+    fun attachAppBarLayout(coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout, appBarLayout: AppBarLayoutFixed) {
         this.coordinatorLayout = coordinatorLayout
         this.appBarLayout = appBarLayout
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
@@ -405,7 +406,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(context: Context, attrs
         super.onLayout(changed, left, top, right, bottom)
         val recyclerView = recyclerView ?: return
 
-        val appBarScrollRange = appBarLayout?.totalScrollRange ?: 0
+        val appBarScrollRange = appBarLayout?.totalScrollRangeFixed ?: 0
         val scrollOffset = recyclerView.computeVerticalScrollOffset() + appBarLayoutOffset
         val verticalScrollRange = recyclerView.computeVerticalScrollRange() + appBarScrollRange
 
