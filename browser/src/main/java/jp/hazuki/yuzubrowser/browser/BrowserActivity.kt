@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.browser
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.gesture.GestureOverlayView
@@ -1551,6 +1552,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         set(enable) {
             webGestureOverlayView.isEnabled = enable
         }
+
+    //** Workaround for M */
+    override fun getAssets(): AssetManager {
+        return resources.assets
+    }
 
     companion object {
         private const val TAG = "BrowserActivity"
