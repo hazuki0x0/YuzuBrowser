@@ -365,7 +365,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 data.mWebView.isNestedScrollingEnabledMethod = false
             }
 
-            applyUserScript(web, url, true)
+            applyUserScript(web, url, UserScript.RunAt.START)
 
             data.onPageStarted(url, favicon)
 
@@ -397,6 +397,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 applyJavascriptInjection(web, url)
             }
+            applyUserScript(web, url, UserScript.RunAt.IDLE)
 
             if (controller.isActivityPaused) {
                 pauseWebViewTimers(data)
@@ -422,7 +423,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                     val iconUrl = if (it.startsWith('"') && it.endsWith('"')) it.substring(1, it.length - 1) else it
 
                     if (iconUrl.isEmpty() || iconUrl == "null") {
-                        speedDialManager.updateAsync(data.originalUrl, faviconManager.get(data.originalUrl))
+                        speedDialManager.updateAsync(data.originalUrl, faviconManager[data.originalUrl])
                     } else {
                         val userAgent = data.mWebView.getUserAgent()
                         thread {
@@ -439,7 +440,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 web.evaluateJavascript(invertJs.replace("%s", "true"), null)
             }
 
-            applyUserScript(web, url, false)
+            applyUserScript(web, url, UserScript.RunAt.END)
         }
 
         override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {
@@ -672,7 +673,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
             if (data.isStartDocument && newProgress > 35) {
                 val url = data.url
-                if (url != null) applyUserScript(web, url, true)
+                if (url != null) applyUserScript(web, url, UserScript.RunAt.START)
                 data.isStartDocument = false
             }
         }
@@ -996,10 +997,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
     }
 
-    private fun applyUserScript(web: CustomWebView, url: String, isStart: Boolean) {
+    private fun applyUserScript(web: CustomWebView, url: String, runAt: UserScript.RunAt) {
         userScriptList?.let {
             SCRIPT_LOOP@ for (script in it) {
-                if (isStart != script.isRunStart)
+                if (runAt != script.runAt)
                     continue
 
                 for (pattern in script.exclude) {

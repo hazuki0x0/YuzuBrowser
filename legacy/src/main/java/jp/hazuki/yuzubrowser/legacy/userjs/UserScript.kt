@@ -38,7 +38,7 @@ class UserScript : Parcelable {
     val exclude = ArrayList<Pattern>(0)
     var isUnwrap: Boolean = false
         private set
-    var isRunStart: Boolean = false
+    var runAt: RunAt = RunAt.END
 
     var id: Long
         get() = info.id
@@ -157,17 +157,27 @@ class UserScript : Parcelable {
         } else if ("unwrap".equals(field, ignoreCase = true)) {
             isUnwrap = true
         } else if ("run-at".equals(field, ignoreCase = true)) {
-            isRunStart = "document-start".equals(value, ignoreCase = true)
+            runAt = when (value) {
+                "document-start" -> RunAt.START
+                "document-idle" -> RunAt.IDLE
+                else -> RunAt.END
+            }
         } else if ("match".equals(field, ignoreCase = true) && value != null) {
-            val patternUrl = "?^" + value.replace("?", "\\?").replace(".", "\\.")
+            val patternUrl = "^" + value.replace("?", "\\?").replace(".", "\\.")
                     .replace("*", ".*").replace("+", ".+")
                     .replace("://.*\\.", "://((?![\\./]).)*\\.").replace("^\\.\\*://".toRegex(), "https?://")
-            makeUrlPattern(patternUrl)?.let {
+            makeUrlPatternParsed(patternUrl)?.let {
                 include.add(it)
             }
         } else {
             Logger.w(TAG, "Unknown header : $line")
         }
+    }
+
+    enum class RunAt {
+        START,
+        END,
+        IDLE
     }
 
     companion object {

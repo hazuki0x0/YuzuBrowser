@@ -45,3 +45,18 @@ fun makeUrlPattern(patternUrl: String?): Pattern? {
 
     return null
 }
+
+fun makeUrlPatternParsed(patternUrl: String): Pattern? {
+    try {
+        val converted = if (patternUrl.contains(".tld", true)) {
+            TLD_REGEX.replaceFirst(patternUrl, "$1(.[a-z]{1,6}){1,3}$2")
+        } else {
+            patternUrl
+        }
+        return Pattern.compile(converted)
+    } catch (e: PatternSyntaxException) {
+        ErrorReport.printAndWriteLog(e)
+    }
+
+    return null
+}
