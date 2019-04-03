@@ -201,7 +201,12 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
     }
 
     if (fileName.length + extension.length > 127) {
-        fileName = fileName.substring(0, 127 - extension.length)
+        val size = 127 - extension.length
+        fileName = if (size > 0) {
+            fileName.substring(0, 127 - extension.length)
+        } else {
+            ""
+        }
     }
 
     return fileName + extension
