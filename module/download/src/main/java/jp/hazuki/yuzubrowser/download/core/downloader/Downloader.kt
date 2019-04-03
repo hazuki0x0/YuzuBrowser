@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.Context
+import jp.hazuki.yuzubrowser.download.DOWNLOAD_TMP_TYPE
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import okhttp3.OkHttpClient
@@ -35,7 +36,13 @@ interface Downloader {
     companion object {
         fun getDownloader(context: Context, okHttpClient: OkHttpClient, info: DownloadFileInfo, request: DownloadRequest): Downloader {
             return if (info.url.startsWith("data:")) {
-                Base64Downloader(context.contentResolver, info)
+                val semicolon = info.url.indexOf(';')
+                if (info.url.startsWith(DOWNLOAD_TMP_TYPE, semicolon)) {
+                    Base64TmpDownloader(context, info)
+                } else {
+                    Base64Downloader(context.contentResolver, info)
+                }
+
             } else if (info.url.startsWith("http:", true) || info.url.startsWith("https:", true)) {
                 OkHttpDownloader(context, okHttpClient, info, request)
             } else {

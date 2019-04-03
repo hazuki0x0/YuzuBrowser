@@ -32,15 +32,13 @@ import java.io.File
 import java.io.IOException
 import java.net.URLDecoder
 import java.util.*
-import java.util.regex.Pattern
 
 internal fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): DocumentFile? {
     if (imageData.isValid) {
         try {
             val image = Base64.decode(imageData.getData(), Base64.DEFAULT)
 
-            openOutputStream(info.root.createFile(imageData.mimeType, info.name)!!.uri).use { outputStream ->
-                checkNotNull(outputStream)
+            openOutputStream(info.root.createFile(imageData.mimeType, info.name)!!.uri)!!.use { outputStream ->
                 outputStream.write(image)
                 outputStream.flush()
             }
@@ -68,7 +66,7 @@ internal class Base64Image(url: String) {
         get() = data[0]
 
     val mimeType: String
-        get() = data[0].split(':')[1]
+        get() = data[0].split(':')[1].split(';').first()
 
     fun getData(): String {
         return data[1]
@@ -80,7 +78,7 @@ internal fun guessDownloadFileName(root: DocumentFile, url: String, contentDispo
     if (url.startsWith("data:")) {
         val data = url.split(',').dropLastWhile { it.isEmpty() }.toTypedArray()
         if (data.size > 1) {
-            guessType = data[0].split(Pattern.quote(";").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].substring(5)
+            guessType = data[0].split(';').dropLastWhile { it.isEmpty() }.toTypedArray()[0].substring(5)
         }
     }
 

@@ -19,11 +19,42 @@ package jp.hazuki.yuzubrowser.download
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
+import jp.hazuki.yuzubrowser.download.core.utils.guessDownloadFileName
+import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.service.DownloadService
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import java.io.File
+import java.io.IOException
 
 fun Context.download(root: Uri, file: DownloadFile, meta: MetaData?) {
+    if (file.url.length > ONE_MB - ONE_KB) {
+        ui {
+            val tmp = File(cacheDir, DOWNLOAD_TMP_FILENAME)
+            try {
+                val save = async(Dispatchers.IO) { tmp.outputStream().use { it.write(file.url.toByteArray()) } }
+                var name: Deferred<String>? = null
+                if (file.name == null) {
+                    name = async(Dispatchers.IO) { guessDownloadFileName(root.toDocumentFile(this@download), file.url, null, null, null) }
+                }
+                save.await()
+                val intent = Intent(this@download, DownloadService::class.java).apply {
+                    action = INTENT_ACTION_START_DOWNLOAD
+                    putExtra(INTENT_EXTRA_DOWNLOAD_ROOT_URI, root)
+                    putExtra(INTENT_EXTRA_DOWNLOAD_REQUEST, DownloadFile(file.url.convertToTmpDownloadUrl(), name?.await()
+                            ?: file.name, file.request))
+                    putExtra(INTENT_EXTRA_DOWNLOAD_METADATA, meta)
+                }
+                startService(intent)
+            } catch (e: IOException) {
+            }
+        }
+        return
+    }
     val intent = Intent(this, DownloadService::class.java).apply {
         action = INTENT_ACTION_START_DOWNLOAD
         putExtra(INTENT_EXTRA_DOWNLOAD_ROOT_URI, root)
@@ -40,3 +71,17 @@ fun Context.reDownload(id: Long) {
     }
     startService(intent)
 }
+
+fun String.convertToTmpDownloadUrl(): String {
+    var last = indexOf(';')
+    if (last < 0) last = indexOf(',')
+    return substring(0, last) + DOWNLOAD_TMP_TYPE
+}
+
+private const val ONE_MB = 1024 * 1024
+
+private const val ONE_KB = 1024
+
+internal const val DOWNLOAD_TMP_TYPE = ";yuzu_tmp_download"
+
+internal const val DOWNLOAD_TMP_FILENAME = "tmp_download"
