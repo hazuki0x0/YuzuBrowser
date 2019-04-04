@@ -1,0 +1,47 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1,minimum-scale=1" name="viewport">
+    <link href="../help.css" media="all" rel="stylesheet" type="text/css">
+    <script src="../link.js" type="text/javascript"></script>
+</head>
+<body>
+<h1 class="head">安全设置</h1>
+<details>
+    <summary>允许访问内容</summary>
+    <p class="details_info">允许访问以“content://”开头的地址</p>
+</details>
+<details>
+    <summary>本地文件访问设置</summary>
+    <p class="details_info">
+        允许访问以“file://”开头的地址<br><b>禁用</b><br>访问将被完全禁止。<br><b>在沙箱中启用</b><br>仅允许访问外部存储和
+        /data/data/jp.hazuki.yuzubrowser/app_public_html。<br><b>启用</b><br>允许访问所有可用路径。</p>
+</details>
+<details id="insecure_content">
+    <summary>https 中的不安全内容设置</summary>
+    <p class="details_info">
+        允许在 https 页面中通过 http 加载脚本、图像等等。<br><b>从不允许</b><br>不进行加载<br><b>兼容模式</b><br>在加载时自动决定<br>判断结果可能会根据
+        WebView 和 Chrome 的更新而发生改变<br><b>始终允许</b><br>加载所有内容</p>
+</details>
+<details>
+    <summary>显示安全警告</summary>
+    <p class="details_info">当 SSL 证书存在问题时，显示一个警告并询问是否继续加载。<br>若不可用，则会自动取消加载。</p>
+</details>
+</body>
+</html>
