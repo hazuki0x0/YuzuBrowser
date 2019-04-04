@@ -51,7 +51,6 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_bookmark.*
 import java.util.*
 
-
 class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback, BreadcrumbsView.OnBreadcrumbsViewClickListener {
 
     private var pickMode: Boolean = false
@@ -133,6 +132,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
             return@addOnBackPressedCallback if (parent != null) {
                 setList(parent)
                 breadcrumbAdapter.select(breadcrumbAdapter.selectedIndex - 1)
+                subBar.setExpanded(true, false)
                 true
             } else {
                 false
@@ -177,6 +177,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
             is BookmarkFolder -> {
                 setList(item)
                 breadcrumbAdapter.addItem(getCrumb(item))
+                subBar.setExpanded(true, false)
             }
             else -> throw IllegalStateException("Unknown BookmarkItem type")
         }
@@ -550,7 +551,15 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     }
 
     private fun showBreadCrumbs(show: Boolean) {
-        breadCrumbsView.visibility = if (show) View.VISIBLE else View.GONE
+        if (show) {
+            if (subBar.childCount == 0) {
+                subBar.addView(breadCrumbsView)
+            }
+        } else {
+            if (subBar.childCount == 1) {
+                subBar.removeView(breadCrumbsView)
+            }
+        }
         showBreadCrumb = show
         setTitle(mCurrentFolder)
         if (show) {

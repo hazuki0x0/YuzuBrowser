@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_appbar">
 
-        <com.google.android.material.appbar.AppBarLayoutFixed
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/subBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -56,11 +56,12 @@
                 android:id="@+id/breadCrumbsView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:crumbsCurrentItemTextColor="?android:attr/textColorPrimary"
                 app:crumbsOtherItemTextColor="?android:attr/textColorSecondary"
                 app:crumbsArrowColor="?android:attr/textColorSecondary"
                 app:layout_scrollFlags="scroll|enterAlways"/>
-        </com.google.android.material.appbar.AppBarLayoutFixed>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
