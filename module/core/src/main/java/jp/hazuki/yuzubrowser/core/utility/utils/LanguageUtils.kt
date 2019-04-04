@@ -25,9 +25,19 @@ import java.util.*
 fun Context.createLanguageContext(lang: String): Context {
     val config = applicationContext.resources.configuration
     val sysLocale = config.getSystemLocale()
+    val split = lang.split('-')
+    val language: String
+    val country: String
+    if (split.size == 2) {
+        language = split[0]
+        country = split[1]
+    } else {
+        language = split[0]
+        country = ""
+    }
 
-    if (lang.isNotEmpty() && sysLocale.language != lang) {
-        val locale = Locale(lang)
+    if (lang.isNotEmpty() && (sysLocale.language != language || sysLocale.country != country)) {
+        val locale = Locale(language, country)
         config.setLocale(locale)
         return ContextWrapper(applicationContext.createConfigurationContext(config))
     }
