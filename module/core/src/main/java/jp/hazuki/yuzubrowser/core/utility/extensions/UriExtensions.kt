@@ -40,6 +40,12 @@ fun Uri.getWritableFileOrNull(): File? {
                 return File(buildExternalStoragePath(split[1]))
             }
         }
+        isDownloadsDocument() -> {
+            val folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (folder.canWrite()) {
+                return folder
+            }
+        }
         isContentUri() && isTreeUri() -> {
             val split = pathSegments[1].split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
 
@@ -78,7 +84,7 @@ fun Uri.resolvePath(context: Context): String? {
                 }
             }
 
-        } else if (isContentUri() && isTreeUri()) { // Tree Uri
+        } else if (isExternalStorageDocument()) { // Tree Uri
             val split = pathSegments[1].split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
 
             if (split.size >= 2) {
@@ -110,6 +116,16 @@ fun Uri.resolvePath(context: Context): String? {
 
             if (contentUri != null) {
                 return context.getDataColumn(contentUri, "_id=?", arrayOf(split[1]))
+            }
+        } else if (isContentUri() && isTreeUri()) { // Fallback
+            val split = pathSegments[1].split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
+
+            if (split.size >= 2) {
+                val type = split[0]
+                val result = context.resolveFilePath(type, split[1])
+                if (result != null && result.isNotEmpty()) {
+                    return result
+                }
             }
         }
     } else if ("content".equals(scheme, ignoreCase = true)) { // MediaStore (and general)
