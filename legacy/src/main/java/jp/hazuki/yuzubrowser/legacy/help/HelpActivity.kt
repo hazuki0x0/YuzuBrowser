@@ -19,8 +19,9 @@ package jp.hazuki.yuzubrowser.legacy.help
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 import android.webkit.WebViewClient
-
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import kotlinx.android.synthetic.main.activity_help.*
@@ -36,7 +37,20 @@ class HelpActivity : ThemeActivity() {
 
         webView.run {
             settings.javaScriptEnabled = true
-            webViewClient = WebViewClient()
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                    val path = request.url.path!!
+                    val lastIndex = path.lastIndexOf('/')
+                    val folder = path.substring(15, lastIndex)
+                    val file = path.substring(lastIndex + 1)
+                    return if (assets.list(folder)?.contains(file) == true) {
+                        false
+                    } else {
+                        view.loadUrl("file:///android_asset/help/en/$file")
+                        true
+                    }
+                }
+            }
 
             loadUrl(getString(R.string.pref_help_url))
         }
