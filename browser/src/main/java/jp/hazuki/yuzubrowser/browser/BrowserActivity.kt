@@ -159,7 +159,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private lateinit var bottomBarBehavior: BottomBarBehavior
     private lateinit var webClient: WebClient
     private lateinit var menuWindow: MenuWindow
-    private var isFirstMenuInit = true
 
     private var isActivityDestroyed = false
     private var isResumed = false
