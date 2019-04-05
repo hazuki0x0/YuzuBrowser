@@ -46,7 +46,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
 
         val arguments = arguments ?: return
 
-        mActionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA)
+        mActionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA)!!
 
         val actions = arguments.getParcelable<ActionList>(EXTRA_ACTION_LIST)
         setActionList(actions)
@@ -65,8 +65,10 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     }
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
-        DeleteDialogCompat.newInstance(activity, R.string.confirm, R.string.confirm_delete_action, position)
-                .show(childFragmentManager, "delete")
+        if (childFragmentManager.findFragmentByTag(TAG_DELETE_FRAGMENT) == null) {
+            DeleteDialogCompat.newInstance(activity, R.string.confirm, R.string.confirm_delete_action, position)
+                    .show(childFragmentManager, TAG_DELETE_FRAGMENT)
+        }
         return true
     }
 
@@ -213,6 +215,8 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
         private const val RESULT_REQUEST_EDIT = 2
         private const val RESULT_REQUEST_ADD_EASY = 3
         private const val RESULT_REQUEST_JSON = 4
+
+        private const val TAG_DELETE_FRAGMENT = "delete"
 
         fun newInstance(actionList: ActionList, nameArray: ActionNameArray): androidx.fragment.app.Fragment {
             return ActionListFragment().apply {
