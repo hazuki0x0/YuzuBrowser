@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.webview.utility;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Region;
 import android.os.Build;
 import android.webkit.WebView;
 import android.webkit.WebViewDatabase;
@@ -72,7 +71,7 @@ public class WebViewUtils {
         Canvas canvas = new Canvas(bitmap);
         canvas.translate(-scrollX, -scrollY);
 
-        canvas.clipRect(scrollX, scrollY, width + scrollX, height + scrollY, Region.Op.REPLACE);
+        canvas.clipRect(scrollX, scrollY, width + scrollX, height + scrollY);
         web.draw(canvas);
         return bitmap;
     }
