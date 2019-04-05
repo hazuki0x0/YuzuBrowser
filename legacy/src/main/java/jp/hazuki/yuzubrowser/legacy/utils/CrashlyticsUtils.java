@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.utils;
 
 import android.content.Context;
-import android.util.AndroidRuntimeException;
 import android.webkit.WebSettings;
 
 import com.crashlytics.android.Crashlytics;
@@ -56,7 +55,7 @@ public final class CrashlyticsUtils {
             if (chrome.find()) {
                 return chrome.group(1);
             }
-        } catch (AndroidRuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         return "unknown";
