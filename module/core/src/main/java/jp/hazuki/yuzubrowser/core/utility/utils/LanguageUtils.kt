@@ -22,9 +22,27 @@ import android.content.res.Configuration
 import android.os.Build
 import java.util.*
 
-fun Context.createLanguageContext(lang: String): Context {
+fun Context.createLanguageContext(lang: String?): Context {
     val config = applicationContext.resources.configuration
-    val sysLocale = config.getSystemLocale()
+    config.getLocaleIfNeed(lang)?.let {
+        config.setLocale(it)
+        return ContextWrapper(createConfigurationContext(config))
+    }
+    return this
+}
+
+fun Context.createLanguageConfig(lang: String?): Configuration {
+    val config = applicationContext.resources.configuration
+    config.getLocaleIfNeed(lang)?.let {
+        config.setLocale(it)
+    }
+    return config
+}
+
+private fun Configuration.getLocaleIfNeed(lang: String?): Locale? {
+    if (lang.isNullOrEmpty()) return null
+
+    val sysLocale = getSystemLocale()
     val split = lang.split('-')
     val language: String
     val country: String
@@ -36,12 +54,11 @@ fun Context.createLanguageContext(lang: String): Context {
         country = ""
     }
 
-    if (lang.isNotEmpty() && (sysLocale.language != language || sysLocale.country != country)) {
-        val locale = Locale(language, country)
-        config.setLocale(locale)
-        return ContextWrapper(applicationContext.createConfigurationContext(config))
+    return if (sysLocale.language != language || sysLocale.country != country) {
+        Locale(language, country)
+    } else {
+        null
     }
-    return this
 }
 
 @Suppress("DEPRECATION")

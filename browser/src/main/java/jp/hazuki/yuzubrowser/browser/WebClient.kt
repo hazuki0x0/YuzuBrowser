@@ -291,8 +291,8 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         setting.setAppCachePath(activity.appCacheFilePath)
 
         var webViewTheme: CustomWebView.WebViewTheme? = null
-        if (ThemeData.isEnabled() && ThemeData.getInstance().progressColor != 0) {
-            val theme = ThemeData.getInstance()
+        val theme = ThemeData.getInstance()
+        if (theme != null && theme.progressColor != 0) {
             val color = theme.progressColor
             val isDark = if (theme.refreshUseDark) activity.getResColor(R.color.deep_gray) else 0
             webViewTheme = CustomWebView.WebViewTheme(color, isDark)

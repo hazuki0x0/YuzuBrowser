@@ -131,21 +131,21 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
 
         recyclerView.setOnClickListener { finish() }
 
-        if (ThemeData.isEnabled()) {
-            if (ThemeData.getInstance().toolbarBackgroundColor != 0)
-                findViewById<View>(R.id.search_bar_container).setBackgroundColor(ThemeData.getInstance().toolbarBackgroundColor)
-            val textColor = ThemeData.getInstance().toolbarTextColor
+        ThemeData.getInstance()?.let { themeData ->
+            if (themeData.toolbarBackgroundColor != 0)
+                findViewById<View>(R.id.search_bar_container).setBackgroundColor(themeData.toolbarBackgroundColor)
+            val textColor = themeData.toolbarTextColor
             if (textColor != 0) {
                 editText.setTextColor(textColor)
                 editText.setHintTextColor(textColor and 0xffffff or 0x55000000)
             }
-            if (ThemeData.getInstance().toolbarImageColor != 0)
-                searchButton.setColorFilter(ThemeData.getInstance().toolbarImageColor)
-            if (ThemeData.getInstance().statusBarColor != 0) {
+            if (themeData.toolbarImageColor != 0)
+                searchButton.setColorFilter(themeData.toolbarImageColor)
+            if (themeData.statusBarColor != 0) {
                 window.run {
                     clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                     addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    statusBarColor = ThemeData.getInstance().statusBarColor
+                    statusBarColor = themeData.statusBarColor
                     decorView.systemUiVisibility = ThemeData.getSystemUiVisibilityFlag()
                 }
             }

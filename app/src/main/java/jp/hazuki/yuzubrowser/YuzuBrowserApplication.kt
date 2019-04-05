@@ -36,7 +36,6 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.provider.ProviderManager
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
-import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import javax.inject.Inject
 
 
@@ -72,13 +71,6 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
             WebView.enableSlowWholeDocumentDraw()
         }
         Logger.isDebug = BuildConfig.DEBUG
-
-        AppCompatDelegate.setDefaultNightMode(
-                if (ThemeData.createInstance(this)?.lightTheme == true) {
-                    AppCompatDelegate.MODE_NIGHT_NO
-                } else {
-                    AppCompatDelegate.MODE_NIGHT_YES
-                })
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {

@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.legacy.menuwindow
 
-import android.content.Context
 import android.os.Handler
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -31,10 +30,11 @@ import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
 typealias OnMenuCloseListener = () -> Unit
 
-class MenuWindow(context: Context, actionList: ActionList, controller: ActionController, iconManager: ActionIconManager) : PopupWindow.OnDismissListener {
+class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: ActionController, iconManager: ActionIconManager) : PopupWindow.OnDismissListener {
 
     private val windowMargin = context.convertDpToPx(4)
     private val window = PopupWindow(context)

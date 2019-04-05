@@ -85,10 +85,12 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     override fun onEventActionDown(): Boolean {
-        if (ThemeData.isEnabled() && ThemeData.getInstance().toolbarButtonBackgroundPress != null)
-            background = ThemeData.getInstance().toolbarButtonBackgroundPress
-        else
+        val themeData = ThemeData.getInstance()
+        if (themeData?.toolbarButtonBackgroundPress != null) {
+            background = themeData.toolbarButtonBackgroundPress
+        } else {
             setBackgroundResource(R.drawable.swipebtn_image_background_pressed)
+        }
         return false
     }
 

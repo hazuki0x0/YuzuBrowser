@@ -41,7 +41,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.ui.R;
@@ -368,42 +371,44 @@ public class ThemeData {
     }
 
     //maybe null (disable theme)
+    @Nullable
     public static ThemeData getInstance() {
         return sInstance;
     }
 
-    public static ThemeData createInstance(Context context) {
-        isLoaded = true;
-        File file = new File(getExternalUserDirectory(), "theme");
-        if (!file.exists() || !file.isDirectory())
-            sInstance = null;
-        else
-            try {
-                sInstance = new ThemeData(context, file);
-            } catch (IOException e) {
-                e.printStackTrace();
-                sInstance = null;
-            }
-        return sInstance;
+    @Nullable
+    public static ThemeData createInstanceIfNeed(@NonNull Context context, @Nullable String folder) {
+        if (!isLoaded || !Objects.equals(folder, loadedTheme)) {
+            return createInstance(context, folder);
+        } else {
+            return sInstance;
+        }
     }
 
-    public static ThemeData createInstance(Context context, String folder) {
+    @Nullable
+    public static ThemeData createInstance(@NonNull Context context, @Nullable String folder) {
         isLoaded = true;
         if (TextUtils.isEmpty(folder)) {
             sInstance = null;
+            loadedTheme = null;
         } else if (THEME_LIGHT.equals(folder)) {
             sInstance = createLightTheme(context);
+            loadedTheme = folder;
         } else {
             File file = new File(getExternalUserDirectory(), "theme" + File.separator + folder);
-            if (!file.exists() || !file.isDirectory())
+            if (!file.exists() || !file.isDirectory()) {
                 sInstance = null;
-            else
+                loadedTheme = null;
+            } else {
                 try {
                     sInstance = new ThemeData(context, file);
+                    loadedTheme = folder;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return createInstance(context);
+                    sInstance = null;
+                    loadedTheme = null;
                 }
+            }
         }
         return sInstance;
     }
@@ -414,6 +419,13 @@ public class ThemeData {
 
     public static boolean isLoaded() {
         return isLoaded;
+    }
+
+    private static String loadedTheme = null;
+
+    @Nullable
+    public static String getLoadedTheme() {
+        return loadedTheme;
     }
 
     private static boolean getBoolean(JsonReader reader) throws IOException {

@@ -159,6 +159,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private lateinit var bottomBarBehavior: BottomBarBehavior
     private lateinit var webClient: WebClient
     private lateinit var menuWindow: MenuWindow
+    private var isFirstMenuInit = true
 
     private var isActivityDestroyed = false
     private var isResumed = false
@@ -260,9 +261,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
         webViewBehavior.setController(this)
-
-        val menuAction = MenuActionManager.getInstance(applicationContext)
-        menuWindow = MenuWindow(this, menuAction.browser_activity.list, actionController, iconManager).apply { setListener { setFullscreenIfEnable() } }
 
         window.decorView.setOnSystemUiVisibilityChangeListener { setFullscreenIfEnable() }
 
@@ -667,9 +665,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         userActionManager.onPreferenceReset()
         CrashlyticsUtils.setWebViewMode()
 
-        if (ThemeData.createInstance(applicationContext, AppData.theme_setting.get()) != null) {
-            val themeData = ThemeData.getInstance()
-
+        ThemeData.createInstanceIfNeed(applicationContext, AppData.theme_setting.get())?.let { themeData ->
             toolbar.onThemeChanged(themeData)
             userActionManager.onThemeChanged(themeData)
             toolbar.notifyChangeWebState()

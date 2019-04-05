@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.toolbar.sub
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.SystemClock
@@ -42,17 +43,16 @@ object WebViewFindDialogFactory {
         override val isVisible: Boolean
             get() = containerView.visibility == View.VISIBLE
 
+        @SuppressLint("SetTextI18n")
         private val findListener = WebView.FindListener { activeMatchOrdinal, numberOfMatches, _ ->
-            howMatchTextView.text = (if (numberOfMatches > 0) activeMatchOrdinal + 1 else 0).toString() + "/" + numberOfMatches
+            howMatchTextView.text = "${if (numberOfMatches > 0) activeMatchOrdinal + 1 else 0}/$numberOfMatches"
         }
 
         override fun show(web: CustomWebView) {
             mCurrentWeb = web
             web.setFindListener(findListener)
 
-            if (ThemeData.isEnabled()) {
-                val data = ThemeData.getInstance()
-
+            ThemeData.getInstance()?.let { data ->
                 if (data.toolbarBackgroundColor != 0)
                     containerView.setBackgroundColor(data.toolbarBackgroundColor)
                 else
