@@ -1,0 +1,327 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="browser_app_name">柚子浏览器</string>
+    <string name="add">添加</string>
+    <string name="cancel">取消</string>
+    <string name="reset">重置</string>
+    <string name="app_notfound">未找到可接受的应用程序</string>
+    <string name="form_resubmit">此页面仅能在发送已提交的数据后刷新。是否要重新发送已提交的数据？</string>
+    <string name="pattern_edittext_info">可使用通配符。查看帮助文档获取更多信息。</string>
+    <string name="pattern_edittext_hint">地址</string>
+    <string name="pattern_open_others">在其他应用中打开</string>
+    <string name="pattern_change_websettings">更改网页设置</string>
+    <string name="pattern_block">拦截</string>
+    <string name="useragent">UserAgent</string>
+    <string name="javascript">JavaScript</string>
+    <string name="confirm">确定</string>
+    <string name="confirm_delete_action">删除此行为？</string>
+    <string name="confirm_delete_history">删除此历史记录？</string>
+    <string name="confirm_delete_all_history">删除所有历史记录？</string>
+    <string name="confirm_delete_all_displayed_item">删除所有显示的项目？</string>
+    <string name="confirm_delete_all_favicon">删除所有网站图标？</string>
+    <string name="confirm_delete_bookmark">删除此书签？</string>
+    <string name="confirm_delete_button">删除此按钮？</string>
+    <string name="confirm_delete_speedDial">删除此快捷访问？</string>
+    <string name="confirm_delete_gesture">删除此手势？</string>
+    <string name="confirm_delete_search_url">删除此搜索地址？</string>
+    <string name="delete_history">删除此历史记录？</string>
+    <string name="delete_all_history">删除所有历史记录？</string>
+    <string name="delete_all_displayed_item">删除所有显示的项目？</string>
+    <string name="delete_all_favicon">删除所有网站图标</string>
+    <string name="delete_bookmark">删除书签</string>
+    <string name="delete_speedDial">删除快捷访问</string>
+    <string name="delete_search_query">删除搜索历史</string>
+    <string name="remove_geo_permission">移除所有地理位置权限</string>
+    <string name="pattern_open_app_list">显示应用列表</string>
+    <string name="pattern_open_app_chooser">显示应用选择界面</string>
+    <string name="now_loading">正在加载</string>
+    <string name="now_downloading">正在下载...</string>
+    <string name="finish_mes">要离开此应用吗？</string>
+    <string name="minimize">最小化</string>
+    <string name="open">打开</string>
+    <string name="open_new">在新标签页中打开</string>
+    <string name="open_bg">在后台标签页中打开</string>
+    <string name="open_new_right">在新标签页（右侧）中打开</string>
+    <string name="open_bg_right">在后台标签页（右侧）中打开</string>
+    <string name="share">分享</string>
+    <string name="open_other_app">在其他应用中打开</string>
+    <string name="copy_url">复制地址</string>
+    <string name="share_link">分享链接</string>
+    <string name="open_link_other_app">在其他应用中打开链接</string>
+    <string name="copy_link_url">复制链接地址</string>
+    <string name="copy_link_text">复制链接文本</string>
+    <string name="save_link">保存链接</string>
+    <string name="save_link_as">链接另存为...</string>
+    <string name="open_image">打开图像</string>
+    <string name="open_image_new">在新标签页中打开图像</string>
+    <string name="open_image_bg">在后台标签页中打开图像</string>
+    <string name="open_image_new_right">在新标签页（右侧）中打开图像</string>
+    <string name="open_image_bg_right">在后台标签页（右侧）中打开图像</string>
+    <string name="share_image">分享图像</string>
+    <string name="share_image_url">分享图像地址</string>
+    <string name="open_image_other_app">在其他应用中打开图像</string>
+    <string name="copy_image_url">复制图像地址</string>
+    <string name="save_image">保存图像</string>
+    <string name="save_image_as">图像另存为...</string>
+    <string name="search_image">以图搜图</string>
+    <string name="block_image">添加至资源拦截</string>
+    <string name="add_image_pattern">添加图像至执行模式匹配</string>
+    <string name="add_url_pattern">添加链接至执行模式匹配</string>
+    <string name="add_image_black_list">添加图像至黑名单</string>
+    <string name="add_image_white_list">添加图像至白名单</string>
+    <string name="add_link_black_list">添加链接至黑名单</string>
+    <string name="add_link_white_list">添加链接至白名单</string>
+    <string name="open_all_new">在新标签页中打开所有</string>
+    <string name="open_all_bg">在后台标签页中打开所有</string>
+    <string name="copy_clipboard_mes_before">已复制：</string>
+    <string name="dial">呼叫</string>
+    <string name="add_contact">添加联系人</string>
+    <string name="copy_phone_num">复制电话号码</string>
+    <string name="email">发送电子邮件</string>
+    <string name="copy_email_address">复制电子邮箱地址</string>
+    <string name="open_map">打开地图</string>
+    <string name="copy_map_address">复制地图地址</string>
+    <string name="download_success">下载完成。</string>
+    <string name="download_paused">下载暂停。</string>
+    <string name="download_fail">下载失败。</string>
+    <string name="download_cancel">下载取消。</string>
+    <string name="download">下载</string>
+    <string name="filename">文件名</string>
+    <string name="download_file_overwrite">文件已存在。是否要覆盖？</string>
+    <string name="search_editText_hint">搜索或输入地址</string>
+    <string name="history">历史记录</string>
+    <string name="bookmark">书签</string>
+    <string name="agree">同意</string>
+    <string name="disagree">拒绝</string>
+    <string name="location_mes">允许网站请求访问你的位置</string>
+    <string name="remember">记住</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="clear_cookie">清除 Cookie</string>
+    <string name="clear_database">清除 HTML5 数据库</string>
+    <string name="clear_password">清除密码</string>
+    <string name="clear_formdata">清除表单数据</string>
+    <string name="clear_favicon">清除网站图标缓存</string>
+    <string name="close_all_tabs">关闭所有标签页</string>
+    <string name="search">搜索</string>
+    <string name="previous">上一个</string>
+    <string name="next">下一个</string>
+    <string name="title">标题</string>
+    <string name="url">地址</string>
+    <string name="title_empty_mes">标题不能为空。</string>
+    <string name="url_empty_mes">地址不能为空。</string>
+    <string name="succeed">成功！</string>
+    <string name="failed">由于未知错误失败</string>
+    <string name="add_bookmark">添加书签</string>
+    <string name="add_folder">添加文件夹</string>
+    <string name="new_folder_name">新文件夹</string>
+    <string name="folder">文件夹</string>
+    <string name="sort">排序</string>
+    <string name="end_sort_label">结束排序</string>
+    <string name="start_sort">来排序吧♪</string>
+    <string name="end_sort">排序完成！</string>
+    <string name="edit_bookmark">编辑书签</string>
+    <string name="move_bookmark">移动至...</string>
+    <string name="proxy_enable">启用代理</string>
+    <string name="proxy_mes">代理地址</string>
+    <string name="proxy_edittext_hint">127.0.0.1:8000</string>
+    <string name="proxy_address_error">代理地址格式错误</string>
+    <string name="open_file">打开文件</string>
+    <string name="open_url">打开地址</string>
+    <string name="pause">暂停</string>
+    <string name="pause_download">暂停下载</string>
+    <string name="resume_download">继续下载</string>
+    <string name="cancel_download">取消下载</string>
+    <string name="clear_download">从列表中移除</string>
+    <string name="delete_download">删除文件</string>
+    <string name="ssl_error_title">安全警告</string>
+    <string name="ssl_error_mes">此网站的安全证书存在问题。\n%1$s\n是否要继续？</string>
+    <string name="ssl_error_certificate_date_invalid">证书日期无效</string>
+    <string name="ssl_error_certificate_expired">证书已过期</string>
+    <string name="ssl_error_certificate_expired_info">有效期结束=</string>
+    <string name="ssl_error_certificate_domain_mismatch">主机名不匹配</string>
+    <string name="ssl_error_certificate_domain_mismatch_info">CN=</string>
+    <string name="ssl_error_certificate_invalid">发生一般性错误</string>
+    <string name="ssl_error_certificate_not_yet_valid">证书尚不可用</string>
+    <string name="ssl_error_certificate_not_yet_valid_info">有效期开始=</string>
+    <string name="ssl_error_certificate_untrusted">证书授权中心不受信任</string>
+    <string name="ssl_error_certificate_untrusted_info">CA：</string>
+    <string name="ssl_error_dont_ask_again">此次浏览中不再询问。</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="show_password">显示密码</string>
+    <string name="login">登录</string>
+    <string name="edit_action">编辑行为</string>
+    <string name="action_cant_empty">行为不能为空。</string>
+    <string name="action_empty">空行为</string>
+    <string name="gesture_test">手势测试</string>
+    <string name="move_up">向上移动</string>
+    <string name="move_down">向下移动</string>
+    <string name="page_info">页面信息</string>
+    <string name="tab_history">标签页历史记录</string>
+    <string name="tab_restored_succeed">标签页已恢复！</string>
+    <string name="tab_restored_failed">没有关闭的标签页</string>
+    <string name="tab_restored_setting_error">请启用 [浏览器设置]-[保存关闭的标签页]</string>
+    <string name="toggle_enable">已启用！</string>
+    <string name="toggle_disable">已禁用！</string>
+    <string name="name">名称</string>
+    <string name="delete_ua">删除 UserAgent</string>
+    <string name="delete_ua_confirm">删除此 UserAgent？</string>
+    <string name="delete_web_encode">删除此项目</string>
+    <string name="delete_web_encode_confirm">删除此项目？</string>
+    <string name="web_encode">字符编码</string>
+    <string name="userjs_save">保存 UserScript</string>
+    <string name="userjs_save_confirm">保存此 UserScript？</string>
+    <string name="userjs_edit">编辑 UserScript</string>
+    <string name="userjs_delete">删除 UserScript</string>
+    <string name="userjs_delete_confirm">删除此 UserScript？</string>
+    <string name="userjs_info">UserScript 信息</string>
+    <string name="userjs_info_name">名称</string>
+    <string name="userjs_info_version">版本</string>
+    <string name="userjs_info_author">作者</string>
+    <string name="userjs_info_description">描述</string>
+    <string name="userjs_info_include">包含</string>
+    <string name="userjs_info_exclude">排除</string>
+    <string name="userjs_add_file_confirm">添加文件“%s”？</string>
+    <string name="save">保存</string>
+    <string name="not_save">不保存</string>
+    <string name="pattern_syntax_error">执行模式语法错误</string>
+    <string name="cannot_access_folder">访问被拒绝</string>
+    <string name="add_by_edit">通过直接输入添加</string>
+    <string name="add_from_file">通过文件添加</string>
+    <string name="set_folder_path">设定当前路径</string>
+    <string name="go_data_folder">前往 data 目录</string>
+    <string name="go_sd_folder">前往外部存储</string>
+    <string name="quit">退出</string>
+    <string name="clipboard_empty">剪贴板是空的</string>
+    <string name="action_to_json">显示 JSON 字符串</string>
+    <string name="json_to_action">转换为行为</string>
+    <string name="invalid_json_format">无效的 JSON 格式</string>
+    <string name="multi_select">多选</string>
+    <string name="select_this_item">选择此项目</string>
+    <string name="save_to">保存至</string>
+    <string name="saved_file">已保存：</string>
+    <string name="savepage_save_archive">保存为网页归档 HTML</string>
+    <string name="action_easy_add">简易加法</string>
+    <string name="resblock_is_white">不要拦截</string>
+    <string name="resblock_edit">编辑</string>
+    <string name="resblock_confirm_delete">删除此项目？</string>
+    <string name="resblock_res_type">备选类型</string>
+
+    <string name="go_forward">前进</string>
+    <string name="go_back">返回</string>
+    <string name="refresh">刷新</string>
+
+    <string name="default_text">默认</string>
+    <string name="delete">删除</string>
+
+    <string name="find_on_page">在页面中查找</string>
+
+    <string name="undo">撤销</string>
+
+    <string name="restoring">正在恢复</string>
+    <string name="backing_up">正在备份</string>
+    <string name="importing">正在导入</string>
+    <string name="exporting">正在导出</string>
+
+    <string name="new_tab">新建标签页</string>
+
+    <string name="print_not_support">此设备不支持打印</string>
+
+    <string name="new_speed_dial">新建快捷访问</string>
+    <string name="use_favicon">使用网站图标作为图标</string>
+
+    <string name="deleted">已删除</string>
+
+    <string name="download_service">下载服务</string>
+    <string name="download_notify">下载状态</string>
+
+    <string name="permission_probrem">权限不足</string>
+    <string name="request_permission_storage_setting">请点击 [访问权限] 并启用存储空间权限</string>
+    <string name="confirm_permission_storage">需要存储空间权限以使用此功能</string>
+    <string name="confirm_permission_storage_app">需要存储空间权限以使用此应用</string>
+
+    <string name="not_bookmark_file">此文件不是书签 html 文件。</string>
+
+    <string name="open_in_browser">在柚子浏览器中打开</string>
+    <string name="enable_share">允许从其他应用中分享</string>
+
+    <string name="closed_tab">已关闭 %1$s</string>
+    <string name="unknown">未知</string>
+    <string name="delete_mf_gesture">删除多点触控手势</string>
+    <string name="confirm_delete_mf_gesture">删除此手势？</string>
+    <string name="theme_importer">柚子浏览器主题导入界面</string>
+    <string name="theme_imported">%1$s 已导入。</string>
+    <string name="theme_installed_version">已经安装过此版本的主题。</string>
+    <string name="theme_unknown_error">未知错误</string>
+    <string name="theme_manifest_not_found">未找到 manifest</string>
+    <string name="cant_create_folder">无法创建文件夹</string>
+    <string name="theme_broken_manifest">Manifest 文件损坏</string>
+    <string name="theme_same_name">已存在名为“%1$s”的主题</string>
+    <string name="theme_unknown_version">不支持此格式版本的主题。</string>
+    <string name="page_not_found">未找到页面</string>
+    <string name="pinned_tab_warning">此标签页已锁定。</string>
+    <string name="select_file">选择文件</string>
+    <string name="action_list">行为列表</string>
+    <string name="add_to_home">添加至主屏幕</string>
+
+    <string name="caches">缓存</string>
+    <string name="cookies">Cookie</string>
+    <string name="passwords">密码</string>
+    <string name="formData">表单数据</string>
+    <string name="html5Database">HTML5 数据库</string>
+    <string name="geolocation_permissions">地理位置信息权限</string>
+    <string name="recent_search_queries">最近搜索记录</string>
+    <string name="favicon_cache">网站图标缓存</string>
+    <string name="untitled">无标题</string>
+    <string name="loading_failed">无法从页面中加载任何内容。</string>
+    <string name="font_not_found">未找到字体文件</string>
+    <string name="font_error">此文件不是字体文件</string>
+    <string name="read_it_later">稍后阅读</string>
+    <string name="navigate_lock">导航锁定</string>
+    <string name="add_to_top">添加至顶部</string>
+    <string name="load_image">加载图像</string>
+    <string name="suggest_histories">显示历史记录</string>
+    <string name="suggest_bookmarks">显示书签</string>
+    <string name="search_engine_error">未找到搜索引擎</string>
+    <string name="permission_request">权限请求</string>
+    <string name="permission_request_mes">%1$s\n\n想要使用：\n\n%2$s</string>
+    <string name="camera">相机</string>
+    <string name="mic">麦克风</string>
+    <string name="midi_device">MIDI 设备</string>
+    <string name="protected_media_id">受保护的内容</string>
+    <string name="permission_request_toast">请点击 [访问权限] 并启用 %1$s</string>
+    <string name="permission_ask">询问</string>
+    <string name="allow">允许</string>
+    <string name="block">拦截</string>
+    <string name="ad_block">广告拦截</string>
+    <string name="ad_block_blocked_page">广告拦截功能屏蔽了以下页面：</string>
+    <string name="ad_block_blocked_filter">由于以下过滤规则：</string>
+    <string name="breadcrumb">面包屑导航</string>
+    <string name="download_failed_root_not_exists">未找到目标文件夹，因此无法下载</string>
+    <string name="download_failed_root_not_writable">不能写入目标文件夹，因此无法下载</string>
+    <string name="reset_all_counts">重置所有计数</string>
+    <string name="reset_all_counts_mes">确定要重置所有计数吗？</string>
+    <string name="js_download_cross_origin">由于同源策略限制，无法通过此浏览器进行下载。</string>
+    <string name="this_page_says">此页面说</string>
+    <string name="host_page_says">%1$s 说</string>
+    <string name="prevent_additional_dialogues">阻止此页面创建更多对话。</string>
+    <string name="bookmarklet">书签小程序</string>
+    <string name="accessibility_toolbar_multi_select">%1$d 已选择</string>
+    <string name="proxy_use_https_address">为 https 使用其他代理</string>
+    <string name="proxy_https_mes">Https 代理地址（空白则不使用代理）</string>
+</resources>

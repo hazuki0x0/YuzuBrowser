@@ -94,7 +94,7 @@
         <item>切换地址栏可见性</item>
         <item>切换进度栏可见性</item>
         <item>切换常用栏可见性</item>
-        <item>Combine web titlebar</item>
+        <item>融合式网页标题栏</item>
         <item>切换网页手势</item>
         <item>切换轻滑行为</item>
         <item>切换快捷控制</item>
@@ -111,12 +111,12 @@
         <item>打开选项菜单</item>
         <item>显示自定义菜单</item>
         <item>结束</item>
-        <item>移动任务至后台</item>
+        <item>任务移至后台</item>
         <item>自定义行为</item>
         <item>振动</item>
         <item>显示提示框</item>
         <item>隐私模式</item>
-        <item>区分标签页结束方式</item>
+        <item>根据标签页结束</item>
         <item>显示页面源代码</item>
         <item>打印</item>
         <item>固定标签页</item>
