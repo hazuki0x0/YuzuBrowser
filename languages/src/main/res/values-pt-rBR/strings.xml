@@ -1,0 +1,320 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="add">Adicionar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="reset">Redefinir</string>
+    <string name="app_notfound">App aceitável não encontrado</string>
+    <string name="form_resubmit">Esta página não pode ser recarregada a menos que os dados de postagem(postdata) seja reenviados. Gostaria de reenviar os POSTDATA?</string>
+    <string name="pattern_edittext_info">Você pode usar curingas. Consulte Ajuda para mais informações.</string>
+    <string name="pattern_edittext_hint">URL</string>
+    <string name="pattern_open_others">Abrir com outro app</string>
+    <string name="pattern_change_websettings">Alterar configurações de web</string>
+    <string name="pattern_block">Bloqueio</string>
+    <string name="useragent">Agente do usuário</string>
+    <string name="javascript">Script do Java</string>
+    <string name="confirm">Confirmar</string>
+    <string name="confirm_delete_action">Excluir esta ação?</string>
+    <string name="confirm_delete_history">Excluir este histórico?</string>
+    <string name="confirm_delete_all_history">Excluir todo histórico?</string>
+    <string name="confirm_delete_all_displayed_item">Excluir todos itens mostrados?</string>
+    <string name="confirm_delete_all_favicon">Excluir todos ícones de favoritos?</string>
+    <string name="confirm_delete_bookmark">Excluir este marcador?</string>
+    <string name="confirm_delete_button">Excluir este botão?</string>
+    <string name="confirm_delete_speedDial">Excluir este acesso rápido?</string>
+    <string name="confirm_delete_gesture">Excluir este gesto?</string>
+    <string name="confirm_delete_search_url">Excluir este URL de pesquisa?</string>
+    <string name="delete_history">Excluir histórico</string>
+    <string name="delete_all_history">Excluir todo histórico</string>
+    <string name="delete_all_displayed_item">Excluir todos itens mostrados</string>
+    <string name="delete_all_favicon">Excluir todos ícones de favoritos</string>
+    <string name="delete_bookmark">Excluir marcador</string>
+    <string name="delete_speedDial">Excluir acesso rápido</string>
+    <string name="delete_search_query">Excluir consultas de pesquisas</string>
+    <string name="remove_geo_permission">Remover todas permissões de geolocalização</string>
+    <string name="pattern_open_app_list">Mostrar lista de apps</string>
+    <string name="pattern_open_app_chooser">Mostrar seletor de app</string>
+    <string name="now_loading">Carregando agora</string>
+    <string name="now_downloading">Baixando agora…</string>
+    <string name="finish_mes">Abandonar este app?</string>
+    <string name="minimize">Minimizar</string>
+    <string name="open">Abrir</string>
+    <string name="open_new">Abrir em nova guia</string>
+    <string name="open_bg">Abrir em guia em plano de fundo</string>
+    <string name="open_new_right">Abrir em nova guia da direita</string>
+    <string name="open_bg_right">Abrir em guia da direita em plano de fundo</string>
+    <string name="share">Compartilhar</string>
+    <string name="open_other_app">Abrir com outro app</string>
+    <string name="copy_url">Copiar URL</string>
+    <string name="share_link">Compartilhar link</string>
+    <string name="open_link_other_app">Abrir link com outro app</string>
+    <string name="copy_link_url">Copiar URL do link</string>
+    <string name="copy_link_text">Copiar texto do link</string>
+    <string name="save_link">Salvar link</string>
+    <string name="save_link_as">Salvar link como…</string>
+    <string name="open_image">Abrir imagem</string>
+    <string name="open_image_new">Abrir imagem em uma nova guia</string>
+    <string name="open_image_bg">Abrir imagem em guia em plano de fundo</string>
+    <string name="open_image_new_right">Abrir imagem em nova guia da direita</string>
+    <string name="open_image_bg_right">Abrir imagem em guia da direita em plano de fundo</string>
+    <string name="share_image">Compartilhar imagem</string>
+    <string name="share_image_url">Compartilhar URL da imagem</string>
+    <string name="open_image_other_app">Abrir imagem com outro app</string>
+    <string name="copy_image_url">Copiar URL da imagem</string>
+    <string name="save_image">Salvar imagem</string>
+    <string name="save_image_as">Salvar imagem como…</string>
+    <string name="search_image">Pesquisar imagem</string>
+    <string name="block_image">Adicionar no bloqueio de recursos</string>
+    <string name="add_image_pattern">Adicionar imagem na correspondência de padrão</string>
+    <string name="add_url_pattern">Adicionar link na correspondência de padrão</string>
+    <string name="add_image_black_list">Adicionar imagem na lista negra</string>
+    <string name="add_image_white_list">Adicionar imagem na lista branca</string>
+    <string name="add_link_black_list">Adicionar link na lista negra</string>
+    <string name="add_link_white_list">Adicionar link na lista branca</string>
+    <string name="open_all_new">Abra tudo em nova guia</string>
+    <string name="open_all_bg">Abrir tudo em guia em plano de fundo</string>
+    <string name="copy_clipboard_mes_before">Copiado : </string>
+    <string name="dial">Discador</string>
+    <string name="add_contact">Adicionar contato</string>
+    <string name="copy_phone_num">Copiar número de telefone</string>
+    <string name="email">Enviar e-mail</string>
+    <string name="copy_email_address">Copiar endereço de e-mail</string>
+    <string name="open_map">Abrir no mapa</string>
+    <string name="copy_map_address">Copiar endereço do mapa</string>
+    <string name="download_success">Download bem-sucedido.</string>
+    <string name="download_paused">Download pausado.</string>
+    <string name="download_fail">Download falhou.</string>
+    <string name="download_cancel">Download cancelado.</string>
+    <string name="download">Download</string>
+    <string name="filename">Nome do arquivo</string>
+    <string name="download_file_overwrite">O arquivo já existe. Substituir?</string>
+    <string name="search_editText_hint">Pesquisar ou digitar URL</string>
+    <string name="history">Histórico</string>
+    <string name="bookmark">Marcador</string>
+    <string name="agree">Concordo</string>
+    <string name="disagree">Discordo</string>
+    <string name="location_mes">Permitir que sites solicitem acesso a sua localização</string>
+    <string name="remember">Lembrar</string>
+    <string name="clear_cache">Limpar caches</string>
+    <string name="clear_cookie">Limpar cookies</string>
+    <string name="clear_database">Limpar banco de dados HTML5</string>
+    <string name="clear_password">Limpar senhas</string>
+    <string name="clear_formdata">Limpar dados de formulário</string>
+    <string name="clear_favicon">Limpar cache de ícone favorito</string>
+    <string name="close_all_tabs">Fechar todas guias</string>
+    <string name="search">Pesquisar</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Próxima</string>
+    <string name="title">Título</string>
+    <string name="url">URL</string>
+    <string name="title_empty_mes">Título não pode ser vazio.</string>
+    <string name="url_empty_mes">URL não pode ser vazio.</string>
+    <string name="succeed">Sucesso!</string>
+    <string name="failed">Falhou por erro desconhecido</string>
+    <string name="add_bookmark">Adicionar marcador</string>
+    <string name="add_folder">Adicionar pasta</string>
+    <string name="new_folder_name">Nova pasta</string>
+    <string name="folder">Pasta</string>
+    <string name="sort">Ordenar</string>
+    <string name="end_sort_label">Terminar ordenação</string>
+    <string name="start_sort">Vamos ordenar!</string>
+    <string name="end_sort">Ordenação completa!</string>
+    <string name="edit_bookmark">Editar marcador</string>
+    <string name="move_bookmark">Mover para…</string>
+    <string name="proxy_enable">Ativar proxy</string>
+    <string name="proxy_mes">Endereço do proxy</string>
+    <string name="proxy_edittext_hint">127.0.0.1:8000</string>
+    <string name="proxy_address_error">Formato de endereço do proxy está errado</string>
+    <string name="open_file">Abrir arquivo</string>
+    <string name="open_url">Abrir URL</string>
+    <string name="pause">Pausar</string>
+    <string name="pause_download">Pausar download</string>
+    <string name="resume_download">Retomar download</string>
+    <string name="cancel_download">Cancelar download</string>
+    <string name="clear_download">Remover da lista</string>
+    <string name="delete_download">Excluir arquivo</string>
+    <string name="ssl_error_title">Aviso de segurança</string>
+    <string name="ssl_error_mes">Existem problemas com o certificado de segurança deste site.\n%1$s\nContinuar?</string>
+    <string name="ssl_error_certificate_date_invalid">A data do certificado é inválida</string>
+    <string name="ssl_error_certificate_expired">O certificado expirou</string>
+    <string name="ssl_error_certificate_expired_info">Fim do período de validade=</string>
+    <string name="ssl_error_certificate_domain_mismatch">Incompatibilidade do nome do host</string>
+    <string name="ssl_error_certificate_domain_mismatch_info">CN=</string>
+    <string name="ssl_error_certificate_invalid">Ocorreu um erro genérico</string>
+    <string name="ssl_error_certificate_not_yet_valid">O certificado ainda não é válido</string>
+    <string name="ssl_error_certificate_not_yet_valid_info">Início do período de validade=</string>
+    <string name="ssl_error_certificate_untrusted">A autoridade de certificação não é confiável</string>
+    <string name="ssl_error_certificate_untrusted_info">CA:</string>
+    <string name="ssl_error_dont_ask_again">Não perguntar novamente para esta sessão de navegação.</string>
+    <string name="username">Nome do usuário</string>
+    <string name="password">Senha</string>
+    <string name="show_password">Mostrar senha</string>
+    <string name="login">Conectar</string>
+    <string name="edit_action">Editar ação</string>
+    <string name="action_cant_empty">Ação não pode ser vazia.</string>
+    <string name="action_empty">Ação vazia</string>
+    <string name="gesture_test">Teste de gesto</string>
+    <string name="move_up">Mover para cima</string>
+    <string name="move_down">Mover para baixo</string>
+    <string name="page_info">Informações da página</string>
+    <string name="tab_history">Histórico da guia</string>
+    <string name="tab_restored_succeed">Guia restaurada!</string>
+    <string name="tab_restored_failed">Nenhuma guia fechada</string>
+    <string name="tab_restored_setting_error">Ligue [Configurações de navegador]-[Salvar guias fechadas]</string>
+    <string name="toggle_enable">Ativado!</string>
+    <string name="toggle_disable">Desativado!</string>
+    <string name="name">Nome</string>
+    <string name="delete_ua">Excluir agente do usuário</string>
+    <string name="delete_ua_confirm">Excluir este agente do usuário?</string>
+    <string name="delete_web_encode">Excluir este item</string>
+    <string name="delete_web_encode_confirm">Excluir este item?</string>
+    <string name="web_encode">Codificação de texto</string>
+    <string name="userjs_save">Salvar script do usuário</string>
+    <string name="userjs_save_confirm">Salvar este script do usuário?</string>
+    <string name="userjs_edit">Editar script do usuário</string>
+    <string name="userjs_delete">Excluir script do usuário</string>
+    <string name="userjs_delete_confirm">Excluir este script do usuário?</string>
+    <string name="userjs_info">Informações do script do usuário</string>
+    <string name="userjs_info_name">Nome</string>
+    <string name="userjs_info_version">Versão</string>
+    <string name="userjs_info_author">Autor</string>
+    <string name="userjs_info_description">Descrição</string>
+    <string name="userjs_info_include">Incluir</string>
+    <string name="userjs_info_exclude">Excluir</string>
+    <string name="userjs_add_file_confirm">Adicionar arquivo \"%s\"?</string>
+    <string name="save">Salvar</string>
+    <string name="not_save">Não salvar</string>
+    <string name="pattern_syntax_error">Erro de sintaxe de padrão</string>
+    <string name="cannot_access_folder">Acesso negado</string>
+    <string name="add_by_edit">Adicionar por entrada direta</string>
+    <string name="add_from_file">Adicionar do arquivo</string>
+    <string name="set_folder_path">Definir caminho atual</string>
+    <string name="go_data_folder">Ir para diretório de dados</string>
+    <string name="go_sd_folder">Ir para armazenamento externo</string>
+    <string name="quit">Sair</string>
+    <string name="clipboard_empty">Área de transferência está vazia</string>
+    <string name="action_to_json">Mostrar cadeia JSON</string>
+    <string name="json_to_action">Converter para ação</string>
+    <string name="invalid_json_format">Formato JSON inválido</string>
+    <string name="multi_select">Multisselecionar</string>
+    <string name="select_this_item">Selecionar este item</string>
+    <string name="save_to">Salvar em</string>
+    <string name="saved_file">Salvo :</string>
+    <string name="savepage_save_archive">Salvar como arquivo da web MHTML</string>
+    <string name="action_easy_add">Adição fácil</string>
+    <string name="resblock_is_white">Não bloquear</string>
+    <string name="resblock_edit">Editar</string>
+    <string name="resblock_confirm_delete">Excluir este item?</string>
+    <string name="resblock_res_type">Tipo alternativo</string>
+
+    <string name="go_forward">Avançar</string>
+    <string name="go_back">Voltar</string>
+    <string name="refresh">Recarregar</string>
+
+    <string name="default_text">Padrão</string>
+    <string name="delete">Excluir</string>
+
+    <string name="find_on_page">Localizar na página</string>
+
+    <string name="undo">Desfazer</string>
+
+    <string name="restoring">Restaurando</string>
+    <string name="backing_up">Fazendo backup</string>
+    <string name="importing">Importando</string>
+    <string name="exporting">Exportando</string>
+
+    <string name="new_tab">Nova guia</string>
+
+    <string name="print_not_support">Este dispositivo não suporta impressão</string>
+
+    <string name="new_speed_dial">Novo acesso rápido</string>
+    <string name="use_favicon">Usar ícone de favorito</string>
+
+    <string name="deleted">Excluído</string>
+
+    <string name="download_service">Serviço de download</string>
+    <string name="download_notify">Estado do download</string>
+
+    <string name="permission_probrem">Permissão insuficiente</string>
+    <string name="request_permission_storage_setting">Toque em [direito de acesso] e ative o armazenamento</string>
+    <string name="confirm_permission_storage">Você precisa de acesso de armazenamento para usar esta função</string>
+    <string name="confirm_permission_storage_app">Você precisa de acesso de armazenamento para usar este app</string>
+
+    <string name="not_bookmark_file">Este arquivo não é um arquivo html de marcador.</string>
+
+    <string name="open_in_browser">Abrir com Yuzu Browser</string>
+    <string name="enable_share">Ativar compartilhamento desde outro app</string>
+
+    <string name="closed_tab">Fechada %1$s</string>
+    <string name="unknown">Desconhecido</string>
+    <string name="delete_mf_gesture">Excluir gesto multitoque</string>
+    <string name="confirm_delete_mf_gesture">Excluir este gesto?</string>
+    <string name="theme_importer">Importador de tema do Yuzu Browser</string>
+    <string name="theme_imported">%1$s foi importado.</string>
+    <string name="theme_installed_version">Esta versão do tema já está instalada.</string>
+    <string name="theme_unknown_error">Erro desconhecido</string>
+    <string name="theme_manifest_not_found">Manifesto não encontrado</string>
+    <string name="cant_create_folder">Não foi possível criar pasta</string>
+    <string name="theme_broken_manifest">Arquivo de manifesto danificado</string>
+    <string name="theme_same_name">Já existe um tema com o mesmo nome que \"%1$s\"</string>
+    <string name="theme_unknown_version">Não é suportado tema do formato desta versão.</string>
+    <string name="page_not_found">Página não encontrada</string>
+    <string name="pinned_tab_warning">Esta guia está fixada.</string>
+    <string name="select_file">Selecionar arquivo</string>
+    <string name="action_list">Lista de ação</string>
+    <string name="add_to_home">Adicionar na tela inicial</string>
+
+    <string name="caches">Caches</string>
+    <string name="cookies">Cookies</string>
+    <string name="passwords">Senhas</string>
+    <string name="formData">Dados de formulário</string>
+    <string name="html5Database">Banco de dados HTML5</string>
+    <string name="geolocation_permissions">Permissões de geolocalização</string>
+    <string name="recent_search_queries">Consultas de pesquisas recentes</string>
+    <string name="favicon_cache">Caches de ícones de favoritos</string>
+    <string name="untitled">Sem título</string>
+    <string name="loading_failed">Não foi possível carregar nada da página.</string>
+    <string name="font_not_found">Arquivo de fonte não encontrado</string>
+    <string name="font_error">Este arquivo não é uma fonte</string>
+    <string name="read_it_later">Ler mais tarde</string>
+    <string name="navigate_lock">Bloqueio de navegação</string>
+    <string name="add_to_top">Adicionar no topo</string>
+    <string name="load_image">Carregar imagem</string>
+    <string name="suggest_histories">Mostrar histórico</string>
+    <string name="suggest_bookmarks">Mostrar marcador</string>
+    <string name="search_engine_error">Motor de pesquisa não encontrado</string>
+    <string name="permission_request">Pedido de permissão</string>
+    <string name="permission_request_mes">%1$s\n\ngostaria de usar:\n\n%2$s</string>
+    <string name="camera">Câmera</string>
+    <string name="mic">Microfone</string>
+    <string name="midi_device">Dispositivo MIDI</string>
+    <string name="protected_media_id">Conteúdos protegidos</string>
+    <string name="permission_request_toast">Toque em [direito de acesso] e ative %1$s</string>
+    <string name="permission_ask">Perguntar</string>
+    <string name="allow">Permitir</string>
+    <string name="block">Bloquear</string>
+    <string name="ad_block">Bloqueio de anúncio</string>
+    <string name="ad_block_blocked_page">Bloqueio de anúncios bloqueou a seguinte página:</string>
+    <string name="ad_block_blocked_filter">Por causa do seguinte filtro:</string>
+    <string name="breadcrumb">Migalhas</string>
+    <string name="download_failed_root_not_exists">Não foi possível fazer o download porque a pasta de destino do download não foi encontrada</string>
+    <string name="download_failed_root_not_writable">Não foi possível fazer o download porque a pasta de destino do download não pode ser escrita</string>
+    <string name="this_page_says">Essa página diz</string>
+    <string name="host_page_says">%1$s diz</string>
+    <string name="prevent_additional_dialogues">Impedir que esta página crie caixas de diálogo adicionais.</string>
+    <string name="accessibility_toolbar_multi_select">%1$d selecionados</string>
+</resources>

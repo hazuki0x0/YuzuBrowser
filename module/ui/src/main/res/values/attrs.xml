@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <declare-styleable name="IntentPreference">
+        <attr name="intent" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="StrToIntListPreference">
+        <attr name="android:entries"/>
+        <attr name="android:entryValues"/>
+    </declare-styleable>
+    <declare-styleable name="SeekbarPreference">
+        <attr name="seekMax" format="integer"/>
+        <attr name="seekMin" format="integer"/>
+        <attr name="comment" format="string"/>
+    </declare-styleable>
+    <attr name="iconColor" format="color"/>
+    <declare-styleable name="FloatSeekbarPreference" parent="SeekbarPreference">
+        <attr name="denominator" format="integer"/>
+    </declare-styleable>
+    <attr name="spinnerButtonStyle" format="reference"/>
+    <declare-styleable name="IntListPreference">
+        <attr name="android:entryValues"/>
+    </declare-styleable>
+    <declare-styleable name="MultiListIntPreference">
+        <attr name="android:entries"/>
+        <attr name="android:max"/>
+    </declare-styleable>
+
+    <declare-styleable name="GestureListPreference">
+        <attr name="gestureId">
+            <enum name="web" value="0"/>
+            <enum name="sub" value="1"/>
+        </attr>
+        <attr name="intentTitle" format="string"/>
+    </declare-styleable>
+
+    <attr name="actionGroup" format="integer">
+        <enum name="s_btn" value="1"/>
+        <enum name="menu" value="2"/>
+        <enum name="h_btn" value="3"/>
+        <enum name="tab" value="4"/>
+        <enum name="s_btn_custombar" value="5"/>
+        <enum name="longpress" value="6"/>
+        <enum name="flick" value="7"/>
+        <enum name="qc" value="8"/>
+        <enum name="web_swipe" value="9"/>
+        <enum name="s_btn_array" value="10"/>
+        <enum name="double_tap_flick" value="11"/>
+    </attr>
+    <attr name="actionId" format="integer">
+        <flag name="btnCenter" value="0x0040"/>
+        <flag name="swipePress" value="0x0001"/>
+        <flag name="swipeLPress" value="0x0002"/>
+        <flag name="swipeUp" value="0x0003"/>
+        <flag name="swipeDown" value="0x0004"/>
+        <flag name="swipeLeft" value="0x0005"/>
+        <flag name="swipeRight" value="0x0006"/>
+        <flag name="menuBrowserActivity" value="0x01000000"/>
+        <flag name="btnBackPress" value="0x01000000"/>
+        <flag name="btnBackLpress" value="0x02000000"/>
+        <flag name="btnSearchPress" value="0x03000000"/>
+        <flag name="btnVolumeUp" value="0x04000000"/>
+        <flag name="btnVolumeDown" value="0x05000000"/>
+        <flag name="btnCameraPress" value="0x06000000"/>
+        <flag name="tabUp" value="0x0001"/>
+        <flag name="tabDown" value="0x0002"/>
+        <flag name="tabPress" value="0x0003"/>
+        <flag name="tabLPress" value="0x0004"/>
+        <flag name="lpOthers" value="0x0001"/>
+        <flag name="lpLink" value="0x0002"/>
+        <flag name="lpImage" value="0x0003"/>
+        <flag name="lpImageLink" value="0x0004"/>
+        <flag name="flickLeft" value="0x01"/>
+        <flag name="flickRight" value="0x02"/>
+        <flag name="flickUp" value="0x03"/>
+        <flag name="flickDown" value="0x04"/>
+        <flag name="qcLevel1" value="0x11"/>
+        <flag name="qcLevel2" value="0x12"/>
+        <flag name="qcLevel3" value="0x13"/>
+        <flag name="custombar1" value="0x01000000"/>
+        <flag name="btnTabLeft" value="0x00010000"/>
+        <flag name="btnTabRight" value="0x00020000"/>
+        <flag name="btnUrlLeft" value="0x00030000"/>
+        <flag name="btnUrlRight" value="0x00040000"/>
+    </attr>
+
+    <declare-styleable name="ToolbarActionListPrerence">
+        <attr name="android:title"/>
+        <attr name="actionGroup"/>
+        <attr name="actionId"/>
+    </declare-styleable>
+    <declare-styleable name="ActionListPreference">
+        <attr name="android:entries"/>
+        <attr name="android:entryValues"/>
+        <attr name="android:title"/>
+        <attr name="actionGroup"/>
+        <attr name="actionId"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="WebViewFastScroller">
+        <attr name="fs_barColor" format="color"/>
+        <attr name="fs_handleNormalColor" format="color"/>
+        <attr name="fs_handlePressedColor" format="color"/>
+        <attr name="fs_touchTargetWidth" format="dimension"/>
+        <attr name="fs_hideDelay" format="integer"/>
+        <attr name="fs_hidingEnabled" format="boolean"/>
+    </declare-styleable>
+
+    <attr name="urlBarBoxColor" format="color"/>
+    <attr name="urlBarBoxBorderColor" format="color"/>
+
+
+    <declare-styleable name="MaterialProgressBar">
+
+        <attr name="mpb_progressTint" format="color|reference"/>
+        <attr name="mpb_progressTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+        <attr name="mpb_secondaryProgressTint" format="color|reference"/>
+        <attr name="mpb_secondaryProgressTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+        <attr name="mpb_progressBackgroundTint" format="color|reference"/>
+        <attr name="mpb_progressBackgroundTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+        <attr name="mpb_indeterminateTint" format="color|reference"/>
+        <attr name="mpb_indeterminateTintMode" format="enum">
+            <enum name="src_over" value="3"/>
+            <enum name="src_in" value="5"/>
+            <enum name="src_atop" value="9"/>
+            <enum name="multiply" value="14"/>
+            <enum name="screen" value="15"/>
+            <enum name="add" value="16"/>
+        </attr>
+    </declare-styleable>
+</resources>

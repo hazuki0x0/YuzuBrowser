@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="translate_language_list">
+        <item>Africano</item>
+        <item>Albanês</item>
+        <item>Árabe</item>
+        <item>Azerbaijanês</item>
+        <item>Basco</item>
+        <item>Bengali</item>
+        <item>Bielorrusso</item>
+        <item>Búlgaro</item>
+        <item>Catalão</item>
+        <item>Chinês Simplificado</item>
+        <item>Chinês Tradicional</item>
+        <item>Croata</item>
+        <item>Checo</item>
+        <item>Dinamarquês</item>
+        <item>Holandês</item>
+        <item>Inglês</item>
+        <item>Esperanto</item>
+        <item>Estoniano</item>
+        <item>Filipino</item>
+        <item>Finlandês</item>
+        <item>Francês</item>
+        <item>Galego</item>
+        <item>Georgiano</item>
+        <item>Alemão</item>
+        <item>Grego</item>
+        <item>Gujarati</item>
+        <item>Haitiano Creole</item>
+        <item>Hebraico</item>
+        <item>Hindi</item>
+        <item>Húngaro</item>
+        <item>Islandês</item>
+        <item>Indonésio</item>
+        <item>Irlandês</item>
+        <item>Italiano</item>
+        <item>Japonês</item>
+        <item>Canará</item>
+        <item>Coreano</item>
+        <item>Latim</item>
+        <item>Letão</item>
+        <item>Lituano</item>
+        <item>Macedônio</item>
+        <item>Malaio</item>
+        <item>Maltês</item>
+        <item>Norueguês</item>
+        <item>Persa</item>
+        <item>Polonês</item>
+        <item>Português</item>
+        <item>Romênio</item>
+        <item>Russo</item>
+        <item>Sérvio</item>
+        <item>Eslovaco</item>
+        <item>Esloveno</item>
+        <item>Espanhol</item>
+        <item>Suaíli</item>
+        <item>Sueco</item>
+        <item>Tâmil</item>
+        <item>Télugo</item>
+        <item>Tailandês</item>
+        <item>Turco</item>
+        <item>Ucraniano</item>
+        <item>Urdu</item>
+        <item>Vietnamita</item>
+        <item>Galês</item>
+        <item>Ídiche</item>
+    </string-array>
+</resources>

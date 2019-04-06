@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="clear_browser_data" translatable="false" tools:ignore="InconsistentArrays">
+        <item>@string/caches</item>
+        <item>@string/cookies</item>
+        <item>@string/passwords</item>
+        <item>@string/html5Database</item>
+        <item>@string/geolocation_permissions</item>
+        <item>@string/history</item>
+        <item>@string/recent_search_queries</item>
+        <item>@string/favicon_cache</item>
+    </string-array>
+    <integer-array name="clear_browser_data_id" tools:ignore="InconsistentArrays">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </integer-array>
+</resources>

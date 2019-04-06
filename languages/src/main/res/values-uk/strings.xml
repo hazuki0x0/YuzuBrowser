@@ -1,0 +1,322 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="add">Додати</string>
+    <string name="cancel">Скасувати</string>
+    <string name="reset">Скинути</string>
+    <string name="app_notfound">Задовільний додаток не знайдено</string>
+    <string name="form_resubmit">Ця сторінка не може бути оновлена без відправки post-даних. Ви хочете відправити post-дані?</string>
+    <string name="pattern_edittext_info">Ви можете використовувати підстановки. Додаткову інформацію дивіться у довідці.</string>
+    <string name="pattern_edittext_hint">URL-адреса</string>
+    <string name="pattern_open_others">Відкрити в іншому додатку</string>
+    <string name="pattern_change_websettings">Змінити веб-налаштування</string>
+    <string name="pattern_block">Блокувати</string>
+    <string name="useragent">Агент користувача</string>
+    <string name="javascript">JavaScript</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="confirm_delete_action">Видалити цю дію?</string>
+    <string name="confirm_delete_history">Видалити цю історію?</string>
+    <string name="confirm_delete_all_history">Видалити всю історію?</string>
+    <string name="confirm_delete_all_displayed_item">Видалити всі відображені елементи?</string>
+    <string name="confirm_delete_all_favicon">Видалити всі піктограми обраного?</string>
+    <string name="confirm_delete_bookmark">Видалити цю закладку?</string>
+    <string name="confirm_delete_button">Видалити цю кнопку?</string>
+    <string name="confirm_delete_speedDial">Видалити цей швидкий набір?</string>
+    <string name="confirm_delete_gesture">Видалити цей жест?</string>
+    <string name="confirm_delete_search_url">Видалити цю пошукову адресу?</string>
+    <string name="delete_history">Видалити історію</string>
+    <string name="delete_all_history">Видалити всю історію</string>
+    <string name="delete_all_displayed_item">Видалити всі відображені елементи</string>
+    <string name="delete_all_favicon">Видалити всі піктограми обраного</string>
+    <string name="delete_bookmark">Видалити закладку</string>
+    <string name="delete_speedDial">Видалити швидкий набір</string>
+    <string name="delete_search_query">Видалити пошукові запити</string>
+    <string name="remove_geo_permission">Видалити всі дозволи геолокації</string>
+    <string name="pattern_open_app_list">Показати список додатків</string>
+    <string name="pattern_open_app_chooser">Показати програму вибору</string>
+    <string name="now_loading">Завантаження</string>
+    <string name="now_downloading">Завантаження…</string>
+    <string name="finish_mes">Ви дійсно хочете вийти з додатка?</string>
+    <string name="minimize">Згорнути</string>
+    <string name="open">Відкрити</string>
+    <string name="open_new">Відкрити в новій вкладці</string>
+    <string name="open_bg">Відкрити у фонововій вкладці</string>
+    <string name="open_new_right">Відкрити у новій вкладці справа</string>
+    <string name="open_bg_right">Відкрити у фоновій вкладці справа</string>
+    <string name="share">Поділитися</string>
+    <string name="open_other_app">Відкрити в іншому додатку</string>
+    <string name="copy_url">Копіювати адресу</string>
+    <string name="share_link">Поділитися посиланням</string>
+    <string name="open_link_other_app">Відкрити посилання в іншому додатку</string>
+    <string name="copy_link_url">Копіювати адресу посилання</string>
+    <string name="copy_link_text">Копіювати текст посилання</string>
+    <string name="save_link">Зберегти посилання</string>
+    <string name="save_link_as">Зберегти посилання як…</string>
+    <string name="open_image">Відкрити зображення</string>
+    <string name="open_image_new">Відкрити зображення в новій вкладці</string>
+    <string name="open_image_bg">Відкрити зображення у фоновій вкладці</string>
+    <string name="open_image_new_right">Відкрити зображення у новій вкладці справа</string>
+    <string name="open_image_bg_right">Відкрити зображення у новій фоновій вкладці справа</string>
+    <string name="share_image">Поділитися зображенням</string>
+    <string name="share_image_url">Поділитися адресою зображення</string>
+    <string name="open_image_other_app">Відкрити зображення в іншому додатку</string>
+    <string name="copy_image_url">Копіювати адресу зображення</string>
+    <string name="save_image">Зберегти зображення</string>
+    <string name="save_image_as">Зберегти зображення як…</string>
+    <string name="search_image">Пошук зображення</string>
+    <string name="block_image">Додати до блокування ресурсів</string>
+    <string name="add_image_pattern">Додати зображення до шаблону веб-серфінгу</string>
+    <string name="add_url_pattern">Додати посилання до шаблону веб-серфінгу</string>
+    <string name="add_image_black_list">Додати зображення в чорний список</string>
+    <string name="add_image_white_list">Додати зображення в білий список</string>
+    <string name="add_link_black_list">Додати посилання в чорний список</string>
+    <string name="add_link_white_list">Додати посилання в білий список</string>
+    <string name="open_all_new">Відкрити все в новій вкладці</string>
+    <string name="open_all_bg">Відкрити все в фоновій вкладці</string>
+    <string name="copy_clipboard_mes_before">Скопійовано: </string>
+    <string name="dial">Набір</string>
+    <string name="add_contact">Додати контакт</string>
+    <string name="copy_phone_num">Копіювати номер телефону</string>
+    <string name="email">Відправити електронного листа</string>
+    <string name="copy_email_address">Копіювати адресу електронної пошти</string>
+    <string name="open_map">Відкрити карту</string>
+    <string name="copy_map_address">Копіювати адресу карти</string>
+    <string name="download_success">Завантаження виконано успішно.</string>
+    <string name="download_paused">Завантаження призупинено.</string>
+    <string name="download_fail">Помилка завантаження.</string>
+    <string name="download_cancel">Завантаження скасовано.</string>
+    <string name="download">Завантаження</string>
+    <string name="filename">Назва файлу</string>
+    <string name="download_file_overwrite">Файл вже існує. Перезаписати?</string>
+    <string name="search_editText_hint">Шукати або ввести URL-адресу</string>
+    <string name="history">Історія</string>
+    <string name="bookmark">Закладки</string>
+    <string name="agree">Дозволити</string>
+    <string name="disagree">Блокувати</string>
+    <string name="location_mes">Дозволити сайтам запитувати доступ до вашого місцезнаходження</string>
+    <string name="remember">Запам\'ятати</string>
+    <string name="clear_cache">Очистити кеш</string>
+    <string name="clear_cookie">Очистити куки</string>
+    <string name="clear_database">Очистити базу даних HTML5</string>
+    <string name="clear_password">Очистити паролі</string>
+    <string name="clear_formdata">Очистити дані форм</string>
+    <string name="clear_favicon">Очистити кеш піктограм</string>
+    <string name="close_all_tabs">Закрити всі вкладки</string>
+    <string name="search">Пошук</string>
+    <string name="previous">Попередній</string>
+    <string name="next">Наступний</string>
+    <string name="title">Назва</string>
+    <string name="url">URL-адреса</string>
+    <string name="title_empty_mes">Назва не може бути порожньою.</string>
+    <string name="url_empty_mes">URL-адреса не може бути порожньою.</string>
+    <string name="succeed">Виконано!</string>
+    <string name="failed">Не вдалося через невідому помилку</string>
+    <string name="add_bookmark">Додати закладку</string>
+    <string name="add_folder">Додати папку</string>
+    <string name="new_folder_name">Нова папка</string>
+    <string name="folder">Папка</string>
+    <string name="sort">Сортувати</string>
+    <string name="end_sort_label">Кінець сортування</string>
+    <string name="start_sort">Сортування\u266a</string>
+    <string name="end_sort">Сортування завершено!</string>
+    <string name="edit_bookmark">Редагувати закладку</string>
+    <string name="move_bookmark">Перемістити в\u2026</string>
+    <string name="proxy_enable">Увімкнути проксі-сервер</string>
+    <string name="proxy_mes">Адреса проксі-сервера</string>
+    <string name="proxy_edittext_hint">127.0.0.1:8000</string>
+    <string name="proxy_address_error">Формат адреси проксі-сервера неправильний</string>
+    <string name="open_file">Відкрити файл</string>
+    <string name="open_url">Відкрити URL-адресу</string>
+    <string name="pause">Пауза</string>
+    <string name="pause_download">Призупинити завантаження</string>
+    <string name="resume_download">Відновити завантаження</string>
+    <string name="cancel_download">Скасувати завантаження</string>
+    <string name="clear_download">Видалити зі списку</string>
+    <string name="delete_download">Видалити файл</string>
+    <string name="ssl_error_title">Попередження системи безпеки</string>
+    <string name="ssl_error_mes">Є проблеми з сертифікатом безпеки для цього сайту.\n%1$s\nПродовжити?</string>
+    <string name="ssl_error_certificate_date_invalid">Дата сертифіката недійсна</string>
+    <string name="ssl_error_certificate_expired">Термін дії сертифіката минув</string>
+    <string name="ssl_error_certificate_expired_info">Кінець терміну дії=</string>
+    <string name="ssl_error_certificate_domain_mismatch">Невідповідність імені хоста</string>
+    <string name="ssl_error_certificate_domain_mismatch_info">CN=</string>
+    <string name="ssl_error_certificate_invalid">Виникла загальна помилка</string>
+    <string name="ssl_error_certificate_not_yet_valid">Сертифікат ще не дійсний</string>
+    <string name="ssl_error_certificate_not_yet_valid_info">Початок терміну дії=</string>
+    <string name="ssl_error_certificate_untrusted">Сертифікат не є довіреним</string>
+    <string name="ssl_error_certificate_untrusted_info">CA:</string>
+    <string name="ssl_error_dont_ask_again">Не питати для цього сеансу.</string>
+    <string name="username">Ім\'я користувача</string>
+    <string name="password">Пароль</string>
+    <string name="show_password">Показати пароль</string>
+    <string name="login">Увійти</string>
+    <string name="edit_action">Редагувати дію</string>
+    <string name="action_cant_empty">Дія не може бути порожньою.</string>
+    <!-- <string name="gesture_exists">Жест вже існує.</string> -->
+    <string name="action_empty">Порожня дія</string>
+    <string name="gesture_test">Тест жесту</string>
+    <string name="move_up">Перемістити вгору</string>
+    <string name="move_down">Перемістити вниз</string>
+    <string name="page_info">Інформація про сторінку</string>
+    <string name="tab_history">Історія вкладки</string>
+    <string name="tab_restored_succeed">Вкладка відновлена!</string>
+    <string name="tab_restored_failed">Немає закритої вкладки</string>
+    <string name="tab_restored_setting_error">Увімкніть [Налаштування браузера]-[Зберегти закриті вкладки]</string>
+    <string name="toggle_enable">Увімкнено!</string>
+    <string name="toggle_disable">Вимкнено!</string>
+    <string name="name">Назва</string>
+    <string name="delete_ua">Видалити агента користувача</string>
+    <string name="delete_ua_confirm">Видалити цього агента користувача?</string>
+    <string name="delete_web_encode">Видалити цей елемент</string>
+    <string name="delete_web_encode_confirm">Видалити цей елемент?</string>
+    <string name="web_encode">Кодування тексту</string>
+    <string name="userjs_save">Зберегти сценарій користувача</string>
+    <string name="userjs_save_confirm">Зберегти цей сценарій користувача?</string>
+    <string name="userjs_edit">Редагувати сценарій користувача</string>
+    <string name="userjs_delete">Видалити сценарій користувача</string>
+    <string name="userjs_delete_confirm">Видалити цей сценарій користувача?</string>
+    <string name="userjs_info">Інформація про сценарій користувача</string>
+    <string name="userjs_info_name">Назва</string>
+    <string name="userjs_info_version">Версія</string>
+    <string name="userjs_info_author">Автор</string>
+    <string name="userjs_info_description">Опис</string>
+    <string name="userjs_info_include">Включати</string>
+    <string name="userjs_info_exclude">Виключати</string>
+    <string name="userjs_add_file_confirm">Додати файл "%s"?</string>
+    <string name="save">Зберегти</string>
+    <string name="not_save">Не зберігати</string>
+    <string name="pattern_syntax_error">Помилка синтаксису шаблону</string>
+    <string name="cannot_access_folder">Доступ заборонено</string>
+    <string name="add_by_edit">Додати за допомогою прямого вводу</string>
+    <string name="add_from_file">Додати з файлу</string>
+    <string name="set_folder_path">Встановити поточний шлях</string>
+    <string name="go_data_folder">Перейти до каталогу даних</string>
+    <string name="go_sd_folder">Перейти до зовнішнього сховища</string>
+    <string name="quit">Вихід</string>
+    <string name="clipboard_empty">Буфер обміну порожній</string>
+    <string name="action_to_json">Показати рядок JSON</string>
+    <string name="json_to_action">Перетворити в дію</string>
+    <string name="invalid_json_format">Некоректний формат JSON</string>
+    <string name="multi_select">Множинний вибір</string>
+    <string name="select_this_item">Вибрати цей елемент</string>
+    <string name="save_to">Зберегти в</string>
+    <string name="saved_file">Збережено: </string>
+    <string name="savepage_save_archive">Зберегти як веб-архів MHTML</string>
+    <string name="action_easy_add">Просте додавання</string>
+    <string name="resblock_is_white">Не блокувати</string>
+    <string name="resblock_edit">Редагувати</string>
+    <string name="resblock_confirm_delete">Видалити цей елемент?</string>
+    <string name="resblock_res_type">Альтернативний тип</string>
+
+    <string name="go_forward">Вперед</string>
+    <string name="go_back">Назад</string>
+    <string name="refresh">Оновити</string>
+
+    <string name="default_text">За замовчуванням</string>
+    <string name="delete">Видалити</string>
+
+    <string name="find_on_page">Знайти на сторінці</string>
+
+    <string name="undo">Скасувати</string>
+
+    <string name="restoring">Відновлення</string>
+    <string name="backing_up">Резервне копіювання</string>
+    <string name="importing">Імпорт</string>
+    <string name="exporting">Експорт</string>
+
+    <string name="new_tab">Нова вкладка</string>
+
+    <string name="print_not_support">Цей пристрій не підтримує друк</string>
+
+    <string name="new_speed_dial">Новий швидкий набір</string>
+    <string name="use_favicon">Використовувати піктограму обраного</string>
+
+    <string name="deleted">Вилучено</string>
+
+    <string name="download_service">менеджер завантажень</string>
+    <string name="download_notify">Статус завантаження</string>
+
+    <string name="permission_probrem">Недостатній дозвіл</string>
+    <string name="request_permission_storage_setting">Будь ласка, натисніть [право доступу] і увімкніть зберігання</string>
+    <string name="confirm_permission_storage">Для використання цієї функції потрібен доступ до зберігання</string>
+    <string name="confirm_permission_storage_app">Для використання цього додатка потрібен доступ до зберігання</string>
+
+    <string name="not_bookmark_file">Цей файл не є HTML-файлом закладок.</string>
+
+    <string name="open_in_browser">Відкрити в Yuzu Browser</string>
+    <string name="enable_share">Увімкнути спільний доступ</string>
+
+    <string name="closed_tab">Закрито %1$s</string>
+    <string name="unknown">Невідомий</string>
+    <string name="delete_mf_gesture">Видалити жест кількома дотиками</string>
+    <string name="confirm_delete_mf_gesture">Видалити цей жест?</string>
+    <string name="theme_importer">Імпорт тем Yuzu Browser</string>
+    <string name="theme_imported">Імпортується: %1$s</string>
+    <string name="theme_installed_version">Ця версія теми вже встановлена.</string>
+    <string name="theme_unknown_error">Невідома помилка</string>
+    <string name="theme_manifest_not_found">Маніфест не знайдено</string>
+    <string name="cant_create_folder">Неможливо створити папку</string>
+    <string name="theme_broken_manifest">Зламаний файл маніфесту</string>
+    <string name="theme_same_name">Тема з назвою \"%1$s\" вже існує</string>
+    <string name="theme_unknown_version">Формат цієї версії не підтримується.</string>
+    <string name="page_not_found">Сторінку не знайдено</string>
+    <string name="pinned_tab_warning">Ця вкладка прикріплена.</string>
+    <string name="select_file">Вибрати файл</string>
+    <string name="action_list">Список дій</string>
+    <string name="add_to_home">Додати на головний екран</string>
+
+    <string name="caches">Кеш-пам\'ять</string>
+    <string name="cookies">Куки</string>
+    <string name="passwords">Паролі</string>
+    <string name="formData">Дані форм</string>
+    <string name="html5Database">База даних HTML5</string>
+    <string name="geolocation_permissions">Дозволи геолокації</string>
+    <string name="recent_search_queries">Недавні пошукові запити</string>
+    <string name="favicon_cache">Кеш піктограм обраного</string>
+    <string name="untitled">Без назви</string>
+    <string name="loading_failed">Не вдалося завантажити жодного елемента з цієї сторінки.</string>
+    <string name="font_not_found">Файл шрифту не знайдено</string>
+    <string name="font_error">Цей файл не є шрифтом</string>
+    <string name="read_it_later">Читати пізніше</string>
+    <string name="navigate_lock">Блокування навігації</string>
+    <string name="add_to_top">Додати в початок</string>
+    <string name="load_image">Завантаження зображень</string>
+    <string name="suggest_histories">Показувати історію</string>
+    <string name="suggest_bookmarks">Показувати закладки</string>
+    <string name="search_engine_error">Пошукова система не знайдена</string>
+    <string name="permission_request">Запит на дозвіл</string>
+    <string name="permission_request_mes">%1$s\n\nхотів би скористатися:\n\n%2$s</string>
+    <string name="camera">Камера</string>
+    <string name="mic">Мікрофон</string>
+    <string name="midi_device">MIDI-пристрій</string>
+    <string name="protected_media_id">Захищений вміст</string>
+    <string name="permission_request_toast">Будь ласка торкніться [право доступу] і увімкніть захищений вміст %1$s</string>
+    <string name="permission_ask">Запитати</string>
+    <string name="allow">Дозволити</string>
+    <string name="block">Блокувати</string>
+    <string name="ad_block">Блокування реклами</string>
+    <string name="ad_block_blocked_page">Заблоковано наступну сторінку:</string>
+    <string name="ad_block_blocked_filter">Через такий фільтр:</string>
+    <string name="breadcrumb">Залишки</string>
+    <string name="download_failed_root_not_exists">Неможливо завантажити, оскільки папка завантаження не знайдена</string>
+    <string name="download_failed_root_not_writable">Неможливо завантажити, оскільки папка завантаження не може бути записана</string>
+    <string name="this_page_says">Повідомлення з цієї сторінки</string>
+    <string name="host_page_says">Повідомлення із сайту %1$s</string>
+    <string name="prevent_additional_dialogues">Заборонити створення додаткових діалогових вікон цією сторінкою.</string>
+    <string name="accessibility_toolbar_multi_select">Вибрано %1$d</string>
+</resources>
+

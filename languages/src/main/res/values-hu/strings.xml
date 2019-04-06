@@ -1,0 +1,319 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="browser_app_name">Yuzu Böngésző</string>
+    <string name="add">Hozzáad</string>
+    <string name="cancel">Mégsem</string>
+    <string name="reset">Visszaállítás</string>
+    <string name="app_notfound">Nem található megfelelő alkalmazás</string>
+    <string name="form_resubmit">Ez a lap nem frissíthető az adatok újraküldése nélkül. Szeretnéd újra elküldeni az adatokat (\'POSTDATA\' művelettel)?</string>
+    <string name="pattern_edittext_info">Használhatsz helyettesítő karakteteket. Lásd a Súgót további információkért.</string>
+    <string name="pattern_edittext_hint">URL</string>
+    <string name="pattern_open_others">Megnyitás másik alkalmazásban</string>
+    <string name="pattern_change_websettings">Webes beállítások módosítása</string>
+    <string name="pattern_block">Blokkolási beállítások</string>
+    <string name="useragent">UserAgent</string>
+    <string name="javascript">JavaScript</string>
+    <string name="confirm">Megerősítés</string>
+    <string name="confirm_delete_action">Törlöd ezt a műveletet?</string>
+    <string name="confirm_delete_history">Törlöd ezt az előzményt?</string>
+    <string name="confirm_delete_all_history">Törlöd az összes előzményt?</string>
+    <string name="confirm_delete_all_displayed_item">Törlöd az összes megjelenített elemet?</string>
+    <string name="confirm_delete_all_favicon">Törlöd az összes favicont?</string>
+    <string name="confirm_delete_bookmark">Biztosan törölni akarod ezt a könyvjelzőt?</string>
+    <string name="confirm_delete_button">Biztosan törölni akarod ezt a gombot?</string>
+    <string name="confirm_delete_speedDial">Biztosan törölni akarod ezt a parancsikont?</string>
+    <string name="confirm_delete_gesture">Biztosan törölni akarod ezt a mozdulatot?</string>
+    <string name="confirm_delete_search_url">Biztosan törölni akarod ezt az URL keresést?</string>
+    <string name="delete_history">Előzmény törlése</string>
+    <string name="delete_all_history">Összes előzmény törlése</string>
+    <string name="delete_all_displayed_item">Az összes megjelenített elem törlése</string>
+    <string name="delete_all_favicon">Összes favicon törlése</string>
+    <string name="delete_bookmark">Könyvjelző törlése</string>
+    <string name="delete_speedDial">Parancsikon törlése</string>
+    <string name="delete_search_query">Keresési bejegyzések törlése</string>
+    <string name="remove_geo_permission">Összes helymeghatározási engedély törlése</string>
+    <string name="pattern_open_app_list">Alkalmazások listájának mutatása</string>
+    <string name="pattern_open_app_chooser">Alkalmazásválasztó megjelenítése</string>
+    <string name="now_loading">Betöltés</string>
+    <string name="now_downloading">Letöltés alatt…</string>
+    <string name="finish_mes">Biztosam be szeretnéd zárni az alkalmazást?</string>
+    <string name="minimize">Minimizálás</string>
+    <string name="open">Megnyitás</string>
+    <string name="open_new">Megnyitás új lapon</string>
+    <string name="open_bg">Megnyitás a háttérben</string>
+    <string name="open_new_right">Megnyitás új lapon jobbra</string>
+    <string name="open_bg_right">Megnyitás a háttérben jobb oldali lapon</string>
+    <string name="share">Megosztás</string>
+    <string name="open_other_app">Megnyitás másik alkalmazással</string>
+    <string name="copy_url">URL másolása</string>
+    <string name="share_link">Link megosztása</string>
+    <string name="open_link_other_app">Link megnyitása másik alkalmazásban</string>
+    <string name="copy_link_url">Link URL másolása</string>
+    <string name="copy_link_text">Link szöveg másolása</string>
+    <string name="save_link">Link mentése</string>
+    <string name="save_link_as">Link mentése mint …</string>
+    <string name="open_image">Kép megnyitása</string>
+    <string name="open_image_new">Kép megnyitása új lapon</string>
+    <string name="open_image_bg">Kép megnyitása a  háttérben</string>
+    <string name="open_image_new_right">Kép megnyitása új lapon jobb oldalra</string>
+    <string name="open_image_bg_right">Kép megnyitása jobb oldalra a háttérben</string>
+    <string name="share_image">Share image</string>
+    <string name="share_image_url">Kép megosztása</string>
+    <string name="open_image_other_app">Kép megnyitása másik alkalmazásban</string>
+    <string name="copy_image_url">Kép URL másolása</string>
+    <string name="save_image">Kép mentése</string>
+    <string name="save_image_as">Kép mentése mint…</string>
+    <string name="search_image">Kép keresése</string>
+    <string name="block_image">Hozzáadás a blokkolt forrásokhoz</string>
+    <string name="add_image_pattern">Kép hozzáadása a megfeleltetési mintákhoz</string>
+    <string name="add_url_pattern">Link hizzáadása a megfeleltetési mintákhoz</string>
+    <string name="add_image_black_list">Kép hozzáadása a feketelistához</string>
+    <string name="add_image_white_list">Kép hozzáadása a fehérlistához</string>
+    <string name="add_link_black_list">Link hozzáadása a feketelistához</string>
+    <string name="add_link_white_list">Link hozzáadása a fehérlistához</string>
+    <string name="open_all_new">Összes megnyitása új lapon</string>
+    <string name="open_all_bg">Összes megnyitása a háttérben</string>
+    <string name="copy_clipboard_mes_before">Másolva : </string>
+    <string name="dial">Tárcsázás</string>
+    <string name="add_contact">Új Kapcsolat</string>
+    <string name="copy_phone_num">Telefonszám másolása</string>
+    <string name="email">Email küldése</string>
+    <string name="copy_email_address">Email cím másolása</string>
+    <string name="open_map">Térkép megnyitása</string>
+    <string name="copy_map_address">Térképbeli cím másolása</string>
+    <string name="download_success">Letöltés sikeres.</string>
+    <string name="download_paused">Letöltés szüneteltetve.</string>
+    <string name="download_fail">Letöltés sikertelen.</string>
+    <string name="download_cancel">Letöltés megszakítva.</string>
+    <string name="download">Letöltés</string>
+    <string name="filename">Fájlnév</string>
+    <string name="download_file_overwrite">Ez a fájlnév már létezik. Felülírja?</string>
+    <string name="search_editText_hint">url keresés vagy beírás</string>
+    <string name="history">Előzmények</string>
+    <string name="bookmark">Könyvjelzők</string>
+    <string name="agree">Elfogadás</string>
+    <string name="disagree">Elutasítás</string>
+    <string name="location_mes">A weboldalak helyadathoz való hozzáféréshez szükséges kéréseinek engedélyezése</string>
+    <string name="remember">Megjegyez</string>
+    <string name="clear_cache">Gyorsítótárak törlése</string>
+    <string name="clear_cookie">Sütik törlése</string>
+    <string name="clear_database">HTML5 adatbázisok törlése</string>
+    <string name="clear_password">Jelszavak törlése</string>
+    <string name="clear_formdata">Űrlapadatok törlése</string>
+    <string name="clear_favicon">Favicon gyorsítótár törlése</string>
+    <string name="close_all_tabs">Összes lap bezárása</string>
+    <string name="search">Keresés</string>
+    <string name="previous">Előző</string>
+    <string name="next">Következő</string>
+    <string name="title">Cím</string>
+    <string name="url">URL</string>
+    <string name="title_empty_mes">A cím nem lehet üres.</string>
+    <string name="url_empty_mes">Az URL nem lehet üres..</string>
+    <string name="succeed">Kész!</string>
+    <string name="failed">Ismeretlen hiba miatt sikertelen</string>
+    <string name="add_bookmark">Könyvjelző hozzáadása</string>
+    <string name="add_folder">Mappa hozzáadása</string>
+    <string name="new_folder_name">Új mappa</string>
+    <string name="folder">Mappa</string>
+    <string name="sort">Rendezés</string>
+    <string name="end_sort_label">Rendezés befejezése</string>
+    <string name="start_sort">Rendezés♪</string>
+    <string name="end_sort">Rendezés befejezve!</string>
+    <string name="edit_bookmark">Könyvjelző szerkesztése</string>
+    <string name="move_bookmark">Áthelyezés…</string>
+    <string name="proxy_enable">Proxy engedélyezése</string>
+    <string name="proxy_mes">Proxy címe</string>
+    <string name="proxy_edittext_hint">127.0.0.1:8000</string>
+    <string name="proxy_address_error">A proxy cím formátuma nem megfelelő</string>
+    <string name="open_file">Fájl megnyitása</string>
+    <string name="open_url">URL megnyitása</string>
+    <string name="pause">Szünet</string>
+    <string name="pause_download">Letöltés szüneteltetése</string>
+    <string name="resume_download">Letöltés folytatása</string>
+    <string name="cancel_download">Letöltés megszakítása</string>
+    <string name="clear_download">Eltávolítás a listáról</string>
+    <string name="delete_download">Fájl törlése</string>
+    <string name="ssl_error_title">Biztonsági figyelmeztetés</string>
+    <string name="ssl_error_mes">There are problems with the security certificate for this site.\n%1$s\nContinue?</string>
+    <string name="ssl_error_certificate_date_invalid">A tanúsítvány érvényességi dátuma érvénytelen</string>
+    <string name="ssl_error_certificate_expired">A tanúsítvány lejárt</string>
+    <string name="ssl_error_certificate_expired_info">Az érvényesség vége=</string>
+    <string name="ssl_error_certificate_domain_mismatch">Hosztnév eltérés</string>
+    <string name="ssl_error_certificate_domain_mismatch_info">CN=</string>
+    <string name="ssl_error_certificate_invalid">Általános hiba lépett fel</string>
+    <string name="ssl_error_certificate_not_yet_valid">A tanúsítvány még nem érvényes</string>
+    <string name="ssl_error_certificate_not_yet_valid_info">Az érvényesség kezdete=</string>
+    <string name="ssl_error_certificate_untrusted">A tanúsítvány kiállítója (CA) nem megbízható</string>
+    <string name="ssl_error_certificate_untrusted_info">CA:</string>
+    <string name="ssl_error_dont_ask_again">Ne kérdezzen rá újra ebben a munkamenetben.</string>
+    <string name="username">Felhasználónév</string>
+    <string name="password">Jelszó</string>
+    <string name="show_password">Jelszó megjelenítése</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="edit_action">Művelet szerkesztése</string>
+    <string name="action_cant_empty">A művelet nem lehet üres.</string>
+    <string name="action_empty">Üres művelet</string>
+    <string name="gesture_test">Gesztus tesztelése</string>
+    <string name="move_up">Mozgatás felfelé</string>
+    <string name="move_down">Mozgatás lefelé</string>
+    <string name="page_info">Oldal adatai</string>
+    <string name="tab_history">Lap előzményei</string>
+    <string name="tab_restored_succeed">Lap helyreállítva!</string>
+    <string name="tab_restored_failed">Nincs bezárt lap</string>
+    <string name="tab_restored_setting_error">Kérem kapcsolja be a [Böngésző beállításai]-[Bezárt lapok mentése] funkciót</string>
+    <string name="toggle_enable">Engedélyezve!</string>
+    <string name="toggle_disable">Letiltva!</string>
+    <string name="name">Név</string>
+    <string name="delete_ua">UserAgent törlése</string>
+    <string name="delete_ua_confirm">Törli ezt az UserAgent-et?</string>
+    <string name="delete_web_encode">Elem törlése</string>
+    <string name="delete_web_encode_confirm">Törli ezt az elemet?</string>
+    <string name="web_encode">Karatkerkódolás</string>
+    <string name="userjs_save">UserScript mentése</string>
+    <string name="userjs_save_confirm">Menti az UserScript-et?</string>
+    <string name="userjs_edit">UserScript szerkesztése</string>
+    <string name="userjs_delete">UserScript törlése</string>
+    <string name="userjs_delete_confirm">Törli az UserScript-et?</string>
+    <string name="userjs_info">UserScript info</string>
+    <string name="userjs_info_name">Név</string>
+    <string name="userjs_info_version">Verzió</string>
+    <string name="userjs_info_author">Szerző</string>
+    <string name="userjs_info_description">Leírás</string>
+    <string name="userjs_info_include">Tartalmazza</string>
+    <string name="userjs_info_exclude">Kivétel</string>
+    <string name="userjs_add_file_confirm">Hozzáadja a fájlt - \"%s\"?</string>
+    <string name="save">Mentés</string>
+    <string name="not_save">Ne mentse</string>
+    <string name="pattern_syntax_error">Minta szintaxis nem megfelelő</string>
+    <string name="cannot_access_folder">Hozzáférés megtagadva</string>
+    <string name="add_by_edit">Hozzáadás kézi szerkesztéssel</string>
+    <string name="add_from_file">Hozzáadás fájlból</string>
+    <string name="set_folder_path">Aktuális útvonal beállítása</string>
+    <string name="go_data_folder">Adat mappába navigálás</string>
+    <string name="go_sd_folder">Külső tárhelyhez navigálás</string>
+    <string name="quit">Kilépés</string>
+    <string name="clipboard_empty">A vágólap üres</string>
+    <string name="action_to_json">JSON string megjelenítése</string>
+    <string name="json_to_action">Átalakítás műveletté</string>
+    <string name="invalid_json_format">Érvénytelen JSON formátum</string>
+    <string name="multi_select">Több kijelölése</string>
+    <string name="select_this_item">Ennek az elemnek a kiválasztása</string>
+    <string name="save_to">Mentés ide</string>
+    <string name="saved_file">Mentve :</string>
+    <string name="savepage_save_archive">Mentés mint Archív MHTML</string>
+    <string name="action_easy_add">Egyszerű hozzáadás</string>
+    <string name="resblock_is_white">Ne blokkolja</string>
+    <string name="resblock_edit">Szerkesztés</string>
+    <string name="resblock_confirm_delete">Törli ezt az elemet?</string>
+    <string name="resblock_res_type">Alternatív típus</string>
+
+    <string name="go_forward">Előrelépés</string>
+    <string name="go_back">Visszalépés</string>
+    <string name="refresh">Frissítés</string>
+
+    <string name="default_text">Alapértelmezett</string>
+    <string name="delete">Törlés</string>
+
+    <string name="find_on_page">Keresés az oldalon</string>
+
+    <string name="undo">Visszavonás</string>
+
+    <string name="restoring">Helyreállítás</string>
+    <string name="backing_up">Biztonsági mentés</string>
+    <string name="importing">Importálás</string>
+    <string name="exporting">Exportálás</string>
+
+    <string name="new_tab">Új lap</string>
+
+    <string name="print_not_support">Ez az eszköz nem támogatja a nyomtatást</string>
+
+    <string name="new_speed_dial">Új GyorsIndító</string>
+    <string name="use_favicon">Favicon használata</string>
+
+    <string name="deleted">Törölve</string>
+
+    <string name="download_service">letöltési szolgáltatás</string>
+    <string name="download_notify">Letöltés állapota</string>
+
+    <string name="permission_probrem">Nincsenek meg a szükséges engedélyek </string>
+    <string name="request_permission_storage_setting">Kérem koppintson [hozzáférési jogra] és engedélyezze a tárhelyet</string>
+    <string name="confirm_permission_storage">Ehhez a funkcióhoz tárhely hozzáférési engedély szükséges</string>
+    <string name="confirm_permission_storage_app">Ennek az alkalmazásnak a használatához engedély szükséges a tárhelyhez</string>
+
+    <string name="not_bookmark_file">Ez a fájl nem egy html könyvjelző fájl.</string>
+
+    <string name="open_in_browser">Megnyitás Yuzu Böngészőben</string>
+    <string name="enable_share">Megosztás engedélyezése másik alkalmazásból</string>
+
+    <string name="closed_tab">%1$s bezárva</string>
+    <string name="unknown">Ismeretlen</string>
+    <string name="delete_mf_gesture">Többérintéses kézmozdulat törlése</string>
+    <string name="confirm_delete_mf_gesture">Törli ezt a kézmozdulatot?</string>
+    <string name="theme_importer">Yuzu Böngésző téma importáló</string>
+    <string name="theme_imported">%1$s importálva.</string>
+    <string name="theme_installed_version">A téma ezen verziója már telepítve van.</string>
+    <string name="theme_unknown_error">Ismeretlen hiba</string>
+    <string name="theme_manifest_not_found">Manifest nem található</string>
+    <string name="cant_create_folder">Nem sikerült létrehozni a mappát</string>
+    <string name="theme_broken_manifest">Sérült manifest fájl</string>
+    <string name="theme_same_name">Már létezik egy téma a következő névvel : \"%1$s\"</string>
+    <string name="theme_unknown_version">A téma ezen verziója nem támogatott.</string>
+    <string name="page_not_found">Az oldal nem található</string>
+    <string name="pinned_tab_warning">Ez a lap rögzített.</string>
+    <string name="select_file">Fájl kiválasztása</string>
+    <string name="action_list">Műveletek listája</string>
+    <string name="add_to_home">Hozzáadás a kezdőképernyőhöz</string>
+
+    <string name="caches">Gyorsítótárak</string>
+    <string name="cookies">Sütik</string>
+    <string name="passwords">Jelszavak</string>
+    <string name="formData">Űrlapadatok</string>
+    <string name="html5Database">HTML5 Adatbázisok</string>
+    <string name="geolocation_permissions">Helymeghatározási engedélyek</string>
+    <string name="recent_search_queries">Legutóbbi keresési kulcsszavak</string>
+    <string name="favicon_cache">Favicon gyorsítótárak</string>
+    <string name="untitled">Névtelen</string>
+    <string name="loading_failed">Semmit sem sikerült betölteni az oldalról.</string>
+    <string name="font_not_found">Betűtípus fájl nem található</string>
+    <string name="font_error">Ez a fájl nem egy betűtípus</string>
+    <string name="read_it_later">Elolvasás később</string>
+    <string name="navigate_lock">Navigáció zárolása</string>
+    <string name="add_to_top">Hozzáadás a tetejére</string>
+    <string name="load_image">Kép betöltése</string>
+    <string name="suggest_histories">Előzmények megjelenítése</string>
+    <string name="suggest_bookmarks">Könyvjelzők megjelenítése</string>
+    <string name="search_engine_error">A keresőmotor nem található</string>
+    <string name="permission_request">Hozzáférési engedély</string>
+    <string name="permission_request_mes">%1$s\n\nwould like to use:\n\n%2$s</string>
+    <string name="camera">Kamera</string>
+    <string name="mic">Mikrofon</string>
+    <string name="midi_device">MIDI eszköz</string>
+    <string name="protected_media_id">Védett tartalmak</string>
+    <string name="permission_request_toast">Kérem koppintson [hozzáférési engedélyre] és engedélyezze %1$s</string>
+    <string name="permission_ask">Kérdezzen rá</string>
+    <string name="allow">Engedélyezés</string>
+    <string name="block">Blokkolás</string>
+    <string name="ad_block">Reklámszűrő</string>
+    <string name="ad_block_blocked_page">A reklámszűrő blokkolta a következő oldalt:</string>
+    <string name="ad_block_blocked_filter">A következő szabály miatt:</string>
+    <string name="breadcrumb">Breadcrumbs</string>
+    <string name="download_failed_root_not_exists">A letöltés sikertelen volt, mert a célmappa nem található.</string>
+    <string name="download_failed_root_not_writable">A letöltés sikertelen volt, mert a célmappa nem írható.</string>
+    <string name="prevent_additional_dialogues">Ez az oldal ne nyisson meg további párbeszédablakokat.</string>
+    <string name="accessibility_toolbar_multi_select">%1$d elem kijelölve</string>
+</resources>

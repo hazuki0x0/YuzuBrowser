@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="copyright" translatable="false">©2017-2019 Hazuki</string>
+
+    <integer-array name="pref_tab_type_values">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_list">
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_overlay_always</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_values">
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>9</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_custom_list">
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_overlay_always</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+        <item>@string/pref_toolbar_location_left</item>
+        <item>@string/pref_toolbar_location_right</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_custom_values">
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>9</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>6</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_landscape_list">
+        <item>@string/pref_toolbar_location_undefine</item>
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_overlay_always</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_landscape_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>9</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_custom_landscape_list">
+        <item>@string/pref_toolbar_location_undefine</item>
+        <item>@string/pref_toolbar_location_top</item>
+        <item>@string/pref_toolbar_location_top_always</item>
+        <item>@string/pref_toolbar_location_bottom</item>
+        <item>@string/pref_toolbar_location_bottom_overlay_always</item>
+        <item>@string/pref_toolbar_location_bottom_always</item>
+        <item>@string/pref_toolbar_location_web</item>
+        <item>@string/pref_toolbar_location_web_fix</item>
+        <item>@string/pref_toolbar_location_left</item>
+        <item>@string/pref_toolbar_location_right</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_custom_landscape_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>7</item>
+        <item>1</item>
+        <item>9</item>
+        <item>8</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>6</item>
+    </integer-array>
+
+    <integer-array name="pref_toolbar_location_priority_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="pref_toolbar_location_landscape_priority_list" translatable="false">
+        <item>@string/pref_toolbar_location_undefine</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+    </string-array>
+
+    <integer-array name="pref_toolbar_location_landscape_priority_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="pref_oritentation_list">
+        <item>@string/pref_oritentation_unspecified</item>
+        <item>@string/pref_oritentation_landscape</item>
+        <item>@string/pref_oritentation_portrait</item>
+        <item>@string/pref_oritentation_sensor</item>
+        <item>@string/pref_oritentation_no_sensor</item>
+    </string-array>
+
+    <integer-array name="pref_oritentation_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
+
+    <string-array name="pref_lpress_link_list">
+        <item>@string/open</item>
+        <item>@string/open_new</item>
+        <item>@string/open_bg</item>
+        <item>@string/open_new_right</item>
+        <item>@string/open_bg_right</item>
+        <item>@string/share_link</item>
+        <item>@string/open_link_other_app</item>
+        <item>@string/copy_link_url</item>
+        <item>@string/copy_link_text</item>
+        <item>@string/save_link</item>
+        <item>@string/save_link_as</item>
+        <item>@string/add_url_pattern</item>
+        <item>@string/add_link_black_list</item>
+        <item>@string/add_link_white_list</item>
+    </string-array>
+
+    <integer-array name="pref_lpress_link_values">
+        <item>-10</item>
+        <item>-11</item>
+        <item>-12</item>
+        <item>-13</item>
+        <item>-14</item>
+        <item>-50</item>
+        <item>-51</item>
+        <item>-52</item>
+        <item>-157</item>
+        <item>-54</item>
+        <item>-53</item>
+        <item>-156</item>
+        <item>-160</item>
+        <item>-162</item>
+    </integer-array>
+
+    <string-array name="pref_lpress_image_list">
+        <item>@string/open_image</item>
+        <item>@string/open_image_new</item>
+        <item>@string/open_image_bg</item>
+        <item>@string/open_image_new_right</item>
+        <item>@string/open_image_bg_right</item>
+        <item>@string/share_image</item>
+        <item>@string/share_image_url</item>
+        <item>@string/open_image_other_app</item>
+        <item>@string/copy_image_url</item>
+        <item>@string/save_image</item>
+        <item>@string/save_image_as</item>
+        <item>@string/search_image</item>
+        <item>@string/block_image</item>
+        <item>@string/add_image_pattern</item>
+        <item>@string/add_image_black_list</item>
+        <item>@string/add_image_white_list</item>
+    </string-array>
+
+    <integer-array name="pref_lpress_image_values">
+        <item>-110</item>
+        <item>-111</item>
+        <item>-112</item>
+        <item>-113</item>
+        <item>-114</item>
+        <item>-158</item>
+        <item>-150</item>
+        <item>-151</item>
+        <item>-152</item>
+        <item>-159</item>
+        <item>-153</item>
+        <item>-154</item>
+        <item>-155</item>
+        <item>-156</item>
+        <item>-161</item>
+        <item>-163</item>
+    </integer-array>
+
+    <string-array name="pref_lpress_linkimage_list">
+        <item>@string/open</item>
+        <item>@string/open_new</item>
+        <item>@string/open_bg</item>
+        <item>@string/open_new_right</item>
+        <item>@string/open_bg_right</item>
+        <item>@string/share_link</item>
+        <item>@string/open_link_other_app</item>
+        <item>@string/copy_link_url</item>
+        <item>@string/save_link</item>
+        <item>@string/add_link_black_list</item>
+        <item>@string/add_link_white_list</item>
+        <item>@string/open_image</item>
+        <item>@string/open_image_new</item>
+        <item>@string/open_image_bg</item>
+        <item>@string/open_image_new_right</item>
+        <item>@string/open_image_bg_right</item>
+        <item>@string/share_image</item>
+        <item>@string/share_image_url</item>
+        <item>@string/open_image_other_app</item>
+        <item>@string/copy_image_url</item>
+        <item>@string/save_image</item>
+        <item>@string/save_image_as</item>
+        <item>@string/search_image</item>
+        <item>@string/block_image</item>
+        <item>@string/add_image_pattern</item>
+        <item>@string/add_image_black_list</item>
+        <item>@string/add_image_white_list</item>
+    </string-array>
+
+    <integer-array name="pref_lpress_linkimage_values">
+        <item>-10</item>
+        <item>-11</item>
+        <item>-12</item>
+        <item>-13</item>
+        <item>-14</item>
+        <item>-50</item>
+        <item>-51</item>
+        <item>-52</item>
+        <item>-53</item>
+        <item>-160</item>
+        <item>-162</item>
+        <item>-110</item>
+        <item>-111</item>
+        <item>-112</item>
+        <item>-113</item>
+        <item>-114</item>
+        <item>-158</item>
+        <item>-150</item>
+        <item>-151</item>
+        <item>-152</item>
+        <item>-159</item>
+        <item>-153</item>
+        <item>-154</item>
+        <item>-155</item>
+        <item>-156</item>
+        <item>-161</item>
+        <item>-163</item>
+    </integer-array>
+
+    <integer-array name="pref_web_cache_values">
+        <item>-1</item>
+        <item>2</item>
+        <item>1</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="pref_download_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="pref_layout_algorithm_values" translatable="false">
+        <item>NORMAL</item>
+        <item>TEXT_AUTOSIZING</item>
+        <item>SINGLE_COLUMN</item>
+        <item>NARROW_COLUMNS</item>
+    </string-array>
+
+    <integer-array name="pref_newtab_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="pref_file_access_list">
+        <item>Disable (safest)</item>
+        <item>Enable in sandbox (safer)</item>
+        <item>Enable (unsafe)</item>
+    </string-array>
+
+    <integer-array name="pref_file_access_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <integer-array name="pref_mixed_contents_values">
+        <item>1</item>
+        <item>2</item>
+        <item>0</item>
+    </integer-array>
+
+    <integer name="pref_toolbar_visibility_count">6</integer>
+
+    <integer-array name="pref_qc_r_pos_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <integer-array name="pref_search_suggest_values">
+        <item>1</item>
+        <item>2</item>
+        <item>0</item>
+        <item>3</item>
+    </integer-array>
+
+    <string-array name="pref_search_suggest_engine_list" translatable="false">
+        <item>Google</item>
+        <item>Bing</item>
+        <item>Duck Duck Go</item>
+    </string-array>
+
+    <integer-array name="pref_search_suggest_engine_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <integer-array name="pref_rendering_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+
+    <string-array name="pref_ad_block_menu">
+        <item>@string/pref_edit</item>
+        <item>@string/pref_delete</item>
+        <item>@string/pref_reset_count</item>
+        <item>@string/multi_select</item>
+    </string-array>
+
+    <integer-array name="pref_show_divider_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <integer-array name="pref_touch_scrollbar_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="pref_reader_theme_list" translatable="false">
+        <item>@string/pref_reader_theme_same_as</item>
+        <item>@string/pref_dark_theme</item>
+        <item>@string/pref_light_theme</item>
+    </string-array>
+    <integer-array name="pref_reader_theme_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="pref_text_size_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
+
+    <integer-array name="pref_fullscreen_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+    <integer-array name="pref_speeddial_layout_values">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+</resources>

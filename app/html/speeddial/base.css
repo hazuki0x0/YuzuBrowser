@@ -1,7 +1,10 @@
 body {
     position: relative;
     margin: 0;
-    min-height: calc(100vh - 20px);
+    background-color: #eeeeee;
+    text-size-adjust: 100%;
+    -webkit-touch-callout: none;
+    user-select: none;
 }
 .outer {
     width: 100%;
@@ -72,14 +75,6 @@ search:hover {
     margin: 0 auto;
     font-size: 75%;
     text-align: center;
-}
-
-body {
-    background-color: #eeeeee;
-    -webkit-text-size-adjust: 100%;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 img {

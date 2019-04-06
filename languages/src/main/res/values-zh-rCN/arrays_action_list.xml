@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="action_list">
+        <item>返回</item>
+        <item>前进</item>
+        <item>刷新/停止</item>
+        <item>刷新</item>
+        <item>停止加载</item>
+        <item>主页</item>
+        <item>放大</item>
+        <item>缩小</item>
+        <item>向上翻页</item>
+        <item>向下翻页</item>
+        <item>滚动至顶部</item>
+        <item>滚动至底部</item>
+        <item>自定义页面滚动</item>
+        <item>拖动条页面滚动</item>
+        <item>自动页面滚动</item>
+        <item>焦点向上</item>
+        <item>焦点向下</item>
+        <item>焦点向左</item>
+        <item>焦点向右</item>
+        <item>点击焦点选中内容</item>
+        <item>切换 JavaScript</item>
+        <item>切换加载图像</item>
+        <item>切换 Cookie</item>
+        <item>切换 UserScript</item>
+        <item>切换导航锁定</item>
+        <item>页面信息</item>
+        <item>复制页面地址</item>
+        <item>复制页面标题</item>
+        <item>复制地址和标题</item>
+        <item>标签页历史</item>
+        <item>鼠标指针</item>
+        <item>在页面中查找</item>
+        <item>保存截图</item>
+        <item>分享截图</item>
+        <item>保存页面</item>
+        <item>打开地址</item>
+        <item>翻译页面</item>
+        <item>新建标签页</item>
+        <item>关闭标签页</item>
+        <item>关闭所有标签页</item>
+        <item>关闭其他标签页</item>
+        <item>切换至左侧标签页</item>
+        <item>切换至右侧标签页</item>
+        <item>向左移动标签页</item>
+        <item>向右移动标签页</item>
+        <item>标签页列表</item>
+        <item>关闭左侧的所有标签页</item>
+        <item>关闭右侧的所有标签页</item>
+        <item>恢复标签页</item>
+        <item>复制标签页</item>
+        <item>显示搜索框</item>
+        <item>粘贴至搜索框</item>
+        <item>粘贴地址</item>
+        <item>书签</item>
+        <item>历史记录</item>
+        <item>下载内容列表</item>
+        <item>设置</item>
+        <item>打开快捷访问</item>
+        <item>添加书签</item>
+        <item>添加至快捷访问</item>
+        <item>添加执行模式匹配</item>
+        <item>添加至主屏幕</item>
+        <item>附加手势</item>
+        <item>清除数据</item>
+        <item>显示代理设置</item>
+        <item>显示方向设置</item>
+        <item>打开链接设置</item>
+        <item>UserAgent 设置</item>
+        <item>默认 UserAgent 设置</item>
+        <item>页面文字大小设置</item>
+        <item>UserScript 设置</item>
+        <item>字符编码设置</item>
+        <item>渲染模式</item>
+        <item>切换标签页栏可见性</item>
+        <item>切换地址栏可见性</item>
+        <item>切换进度栏可见性</item>
+        <item>切换常用栏可见性</item>
+        <item>融合式网页标题栏</item>
+        <item>切换网页手势</item>
+        <item>切换轻滑行为</item>
+        <item>切换快捷控制</item>
+        <item>切换多点触控手势</item>
+        <item>切换广告拦截</item>
+        <item>打开黑名单列表</item>
+        <item>打开白名单列表</item>
+        <item>打开页面白名单列表</item>
+        <item>添加至页面白名单</item>
+        <item>分享页面</item>
+        <item>在其他应用中打开</item>
+        <item>开始应用活动</item>
+        <item>切换全屏显示</item>
+        <item>打开选项菜单</item>
+        <item>显示自定义菜单</item>
+        <item>结束</item>
+        <item>任务移至后台</item>
+        <item>自定义行为</item>
+        <item>振动</item>
+        <item>显示提示框</item>
+        <item>隐私模式</item>
+        <item>根据标签页结束</item>
+        <item>显示页面源代码</item>
+        <item>打印</item>
+        <item>固定标签页</item>
+        <item>行为列表</item>
+        <item>阅读模式</item>
+        <item>稍后阅读</item>
+        <item>稍后阅读列表</item>
+    </string-array>
+</resources>

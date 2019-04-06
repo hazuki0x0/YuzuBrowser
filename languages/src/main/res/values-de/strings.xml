@@ -1,0 +1,320 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="add">Hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="reset">Reset</string>
+    <string name="app_notfound">Zulässige Anwendung nicht gefunden</string>
+    <string name="form_resubmit">Diese Seite kann nur aktualisiert werden, wenn die Postdaten gesendet werden. Möchten Sie die POSTDATA erneut versenden?</string>
+    <string name="pattern_edittext_info">Sie können Wildcards (Platzhalter) verwenden. Weitere Informationen finden Sie in der Hilfe.</string>
+    <string name="pattern_edittext_hint">URL</string>
+    <string name="pattern_open_others">In anderer Anwendung öffnen</string>
+    <string name="pattern_change_websettings">Webeinstellung ändern</string>
+    <string name="pattern_block">Blockieren</string>
+    <string name="useragent">UserAgent</string>
+    <string name="javascript">JavaScript</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="confirm_delete_action">Diese Aktion löschen?</string>
+    <string name="confirm_delete_history">Diesen Verlauf löschen?</string>
+    <string name="confirm_delete_all_history">Gesamten Verlauf löschen?</string>
+    <string name="confirm_delete_all_displayed_item">Alle angezeigten Elemente löschen?</string>
+    <string name="confirm_delete_all_favicon">Alle Logos der Internetseiten (FavIcons) löschen?</string>
+    <string name="confirm_delete_bookmark">Dieses Lesezeichen löschen?</string>
+    <string name="confirm_delete_button">Diesen Button löschen?</string>
+    <string name="confirm_delete_speedDial">Diese Schnellwahl löschen?</string>
+    <string name="confirm_delete_gesture">Diese Geste löschen?</string>
+    <string name="confirm_delete_search_url">Diese Such-URL löschen?</string>
+    <string name="delete_history">Verlauf löschen</string>
+    <string name="delete_all_history">Gesamten Verlauf löschen</string>
+    <string name="delete_all_displayed_item">Alle angezeigten Elemente löschen</string>
+    <string name="delete_all_favicon">Alle Seiten-Logos (FavIcons) löschen</string>
+    <string name="delete_bookmark">Lesezeichen löschen</string>
+    <string name="delete_speedDial">Schnellwahl löschenl</string>
+    <string name="delete_search_query">Suchabfragen löschen</string>
+    <string name="remove_geo_permission">Alle Geolokalisierungsberechtigungen entfernen</string>
+    <string name="pattern_open_app_list">Anwendungsliste anzeigen</string>
+    <string name="pattern_open_app_chooser">Anwendungsauswahl anzeigen</string>
+    <string name="now_loading">Jetzt laden</string>
+    <string name="now_downloading">Jetzt herunterladen......</string>
+    <string name="finish_mes">Möchten Sie diese Anwendung verlassen?</string>
+    <string name="minimize">Minimieren</string>
+    <string name="open">Öffnen</string>
+    <string name="open_new">In neuem Reiter öffnen</string>
+    <string name="open_bg">Im Hintergrund öffnen</string>
+    <string name="open_new_right">In neuem Reiter rechts öffnen</string>
+    <string name="open_bg_right">In neuem Reiter im Hintergrund öffnen</string>
+    <string name="share">Teilen</string>
+    <string name="open_other_app">In einer anderen Anwendung öffnen</string>
+    <string name="copy_url">URL kopieren</string>
+    <string name="share_link">Link teilen</string>
+    <string name="open_link_other_app">Link in einer anderen Anwendung öffnen</string>
+    <string name="copy_link_url">Link URL kopieren</string>
+    <string name="copy_link_text">Link-Text kopieren</string>
+    <string name="save_link">Link speichern</string>
+    <string name="save_link_as">Link speichern unter …</string>
+    <string name="open_image">Bild öffnen</string>
+    <string name="open_image_new">Bild in neuem Reiter öffnen</string>
+    <string name="open_image_bg">Bild im Hintergrund öffnen</string>
+    <string name="open_image_new_right">Bild im rechten neuen Reiter öffnen</string>
+    <string name="open_image_bg_right">Bild im rechten Hintergrund-Reiter öffnen</string>
+    <string name="share_image">Bild teilen</string>
+    <string name="share_image_url">Bild-URL teilen</string>
+    <string name="open_image_other_app">Bild in einer anderen Anwendung öffnen</string>
+    <string name="copy_image_url">Bild-URL kopieren</string>
+    <string name="save_image">Bild speichern</string>
+    <string name="save_image_as">Bild speichern als …</string>
+    <string name="search_image">Bild suchen</string>
+    <string name="block_image">Zur Ressourcensperre hinzufügen</string>
+    <string name="add_image_pattern">Bild zum Mustervergleich hinzufügen</string>
+    <string name="add_url_pattern">Link zum Mustervergleich hinzufügen</string>
+    <string name="add_image_black_list">Bild zur Black List hinzufügen</string>
+    <string name="add_image_white_list">Bild zur White List hinzufügen</string>
+    <string name="add_link_black_list">Link zur Black List hinzufügen</string>
+    <string name="add_link_white_list">Link zur White List hinzufügen</string>
+    <string name="open_all_new">Alle in neuen Reitern öffnen</string>
+    <string name="open_all_bg">Alle in Hintergrund-Reitern öffnen</string>
+    <string name="copy_clipboard_mes_before">Kopiert : </string>
+    <string name="dial">Wählen</string>
+    <string name="add_contact">Kontakt hinzufügen</string>
+    <string name="copy_phone_num">Telefonnummer kopieren</string>
+    <string name="email">e-Mail senden</string>
+    <string name="copy_email_address">e-Mail Adresse kopieren</string>
+    <string name="open_map">Karte öffnen</string>
+    <string name="copy_map_address">Kartenadresse kopieren</string>
+    <string name="download_success">Download erfolgreich.</string>
+    <string name="download_paused">Download pausiert.</string>
+    <string name="download_fail">Download fehlgeschlagen.</string>
+    <string name="download_cancel">Download abgebrochen.</string>
+    <string name="download">Download</string>
+    <string name="filename">Dateiname</string>
+    <string name="download_file_overwrite">Die Datei existiert bereits. Überschreiben?</string>
+    <string name="search_editText_hint">Suche oder Eingabe der URL</string>
+    <string name="history">Verlauf</string>
+    <string name="bookmark">Lesezeichen</string>
+    <string name="agree">Zustimmen</string>
+    <string name="disagree">Ablehnen</string>
+    <string name="location_mes">Webseiten ermöglichen Ihren Standort anzufragen.</string>
+    <string name="remember">Erinnern</string>
+    <string name="clear_cache">Zwischenspeicher löschen</string>
+    <string name="clear_cookie">Cookies löschen</string>
+    <string name="clear_database">HTML5 Datenbanken löschen</string>
+    <string name="clear_password">Passwörter löschen</string>
+    <string name="clear_formdata">Formulardaten löschen</string>
+    <string name="clear_favicon">Zwischenspeicher Seiten-Logos (FavIcons) löschen</string>
+    <string name="close_all_tabs">Alle Reiter schließen</string>
+    <string name="search">Suchen</string>
+    <string name="previous">Vorherige</string>
+    <string name="next">Nächste</string>
+    <string name="title">Titel</string>
+    <string name="url">URL</string>
+    <string name="title_empty_mes">Der Titel darf nicht leer sein.</string>
+    <string name="url_empty_mes">URL darf nicht leer sein.</string>
+    <string name="succeed">Erfolgreich! </string>
+    <string name="failed">Fehlgeschlagen wegen unbekanntem Fehler</string>
+    <string name="add_bookmark">Lesezeichen hinzufügen</string>
+    <string name="add_folder">Ordner hinzufügen</string>
+    <string name="new_folder_name">Neuer Ordner</string>
+    <string name="folder">Ordner</string>
+    <string name="sort">Sortierung</string>
+    <string name="end_sort_label">Sortierung beendet.</string>
+    <string name="start_sort">♪ sortiere … ♪</string>
+    <string name="end_sort">Sortierung abgeschlossen!</string>
+    <string name="edit_bookmark">Lesezeichen bearbeiten</string>
+    <string name="move_bookmark">Verschieben nach…</string>
+    <string name="proxy_enable">Proxy aktivieren</string>
+    <string name="proxy_mes">Proxy Adresse</string>
+    <string name="proxy_edittext_hint">127.0.0.1:8000</string>
+    <string name="proxy_address_error">Proxy-Adressformat ist falsch</string>
+    <string name="open_file">Datei öffnen</string>
+    <string name="open_url">URL öffnen</string>
+    <string name="pause">Pause</string>
+    <string name="pause_download">Download anhalten</string>
+    <string name="resume_download">Download fortsetzen</string>
+    <string name="cancel_download">Download abbrechen</string>
+    <string name="clear_download">Aus der Liste entfernen</string>
+    <string name="delete_download">Datei löschen</string>
+    <string name="ssl_error_title">Sicherheitswarnung</string>
+    <string name="ssl_error_mes">There are problems with the security certificate for this site.\n%1$s\nContinue?</string>
+    <string name="ssl_error_certificate_date_invalid">Das Datum des Zertifikats ist ungültig.</string>
+    <string name="ssl_error_certificate_expired">Das Zertifikat ist abgelaufen.</string>
+    <string name="ssl_error_certificate_expired_info">Ende der Gültigkeitsdauer=</string>
+    <string name="ssl_error_certificate_domain_mismatch">Hostname wurde nicht gefunden</string>
+    <string name="ssl_error_certificate_domain_mismatch_info">CN=</string>
+    <string name="ssl_error_certificate_invalid">Ein allgemeiner Fehler ist aufgetreten</string>
+    <string name="ssl_error_certificate_not_yet_valid">Das Zertifikat ist noch nicht gültig.</string>
+    <string name="ssl_error_certificate_not_yet_valid_info">Beginn der Gültigkeitsdauer=</string>
+    <string name="ssl_error_certificate_untrusted">Der Zertifizierungsstelle wird nicht vertraut.</string>
+    <string name="ssl_error_certificate_untrusted_info">CA:</string>
+    <string name="ssl_error_dont_ask_again">In dieser Browsersitzung nicht nochmal fragen.</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="show_password">Passwort anzeigen</string>
+    <string name="login">Login</string>
+    <string name="edit_action">Aktion bearbeiten</string>
+    <string name="action_cant_empty">Die Aktion darf nicht leer sein.</string>
+    <string name="action_empty">Leere Aktion</string>
+    <string name="gesture_test">Gestenprüfung</string>
+    <string name="move_up">Nach oben bewegen</string>
+    <string name="move_down">Nach unten bewegen </string>
+    <string name="page_info">Seiteninformation</string>
+    <string name="tab_history">Reiter Verlauf</string>
+    <string name="tab_restored_succeed">Reiter wiederhergestellt!</string>
+    <string name="tab_restored_failed">Keine geschlossenen Reiter</string>
+    <string name="tab_restored_setting_error">Bitte schalten Sie[Browsereinstellungen]-[Geschlossene Tabs speichern] ein.</string>
+    <string name="toggle_enable">Aktiviert!</string>
+    <string name="toggle_disable">Deaktiviert!</string>
+    <string name="name">Name</string>
+    <string name="delete_ua">UserAgent löschen</string>
+    <string name="delete_ua_confirm">Diesen UserAgent löschen?</string>
+    <string name="delete_web_encode">Dieses Element löschen</string>
+    <string name="delete_web_encode_confirm">Dieses Element löschen?</string>
+    <string name="web_encode">Textkodierung</string>
+    <string name="userjs_save">UserScript speichern</string>
+    <string name="userjs_save_confirm">Dieses UserScript speichern?</string>
+    <string name="userjs_edit">UserScript bearbeiten</string>
+    <string name="userjs_delete">UserScript löschen</string>
+    <string name="userjs_delete_confirm">Dieses UserScript löschen?</string>
+    <string name="userjs_info">UserScript Info</string>
+    <string name="userjs_info_name">Name</string>
+    <string name="userjs_info_version">Version</string>
+    <string name="userjs_info_author">Autor</string>
+    <string name="userjs_info_description">Beschreibung</string>
+    <string name="userjs_info_include">\@include-Regeln</string>
+    <string name="userjs_info_exclude">\@exclude-Regeln</string>
+    <string name="userjs_add_file_confirm">Datei hinzufügen \"%s\"?</string>
+    <string name="save">Speichern</string>
+    <string name="not_save">Nicht speichern</string>
+    <string name="pattern_syntax_error">Syntaxfehler im Mustervergleich (pattern string)</string>
+    <string name="cannot_access_folder">Zugriff verweigert</string>
+    <string name="add_by_edit">Durch Direkteingabe hinzufügen</string>
+    <string name="add_from_file">Aus Datei hinzufügen</string>
+    <string name="set_folder_path">Aktuellen Pfad festlegen</string>
+    <string name="go_data_folder">Zum Datenverzeichnis gehen</string>
+    <string name="go_sd_folder">Zum externen Speicher wechseln</string>
+    <string name="quit">Verlassen</string>
+    <string name="clipboard_empty">Die Zwischenablage ist leer</string>
+    <string name="action_to_json">JSON-String anzeigen</string>
+    <string name="json_to_action">In Aktion umwandeln</string>
+    <string name="invalid_json_format">Ungültiges JSON-Format</string>
+    <string name="multi_select">Mehrfachauswahl</string>
+    <string name="select_this_item">Dieses Element auswählen</string>
+    <string name="save_to">Speichern in</string>
+    <string name="saved_file">Gespeichert: </string>
+    <string name="savepage_save_archive">Speichern als Webarchiv MHTML</string>
+    <string name="action_easy_add">Einfaches Hinzufügen</string>
+    <string name="resblock_is_white">Nicht blockieren</string>
+    <string name="resblock_edit">Bearbeiten</string>
+    <string name="resblock_confirm_delete">Dieses Element löschen?</string>
+    <string name="resblock_res_type">Alternativer Typ</string>
+
+    <string name="go_forward">Vorwärts</string>
+    <string name="go_back">Zurück</string>
+    <string name="refresh">Aktualisieren</string>
+
+    <string name="default_text">Standard</string>
+    <string name="delete">Löschen</string>
+
+    <string name="find_on_page">Auf der Seite suchen</string>
+
+    <string name="undo">Undo</string>
+
+    <string name="restoring">Wiederherstellung</string>
+    <string name="backing_up">Sicherung</string>
+    <string name="importing">Importieren</string>
+    <string name="exporting">Exportieren</string>
+
+    <string name="new_tab">Neuer Reiter</string>
+
+    <string name="print_not_support">Dieses Gerät unterstützt das Drucken nicht.</string>
+
+    <string name="new_speed_dial">Neue Schnellwahl</string>
+    <string name="use_favicon">Seiten-Logo (FavIcon) verwenden</string>
+
+    <string name="deleted">Gelöscht</string>
+
+    <string name="download_service">Download-Service</string>
+    <string name="download_notify">Download Status</string>
+
+    <string name="permission_probrem">Unzureichende Berechtigung</string>
+    <string name="request_permission_storage_setting">Bitte tippen Sie auf [Zugriffsrecht] und aktivieren Sie die Speicherung.</string>
+    <string name="confirm_permission_storage">Sie benötigen Speicherzugriff, um diese Funktion nutzen zu können.</string>
+    <string name="confirm_permission_storage_app">Sie benötigen Speicherzugriff, um diese Anwendung nutzen zu können.</string>
+
+    <string name="not_bookmark_file">Diese Datei ist keine Lesezeichen-HTML-Datei.</string>
+
+    <string name="open_in_browser">Im Yuzu Browser öffnen</string>
+    <string name="enable_share">Teilen von anderen Anwendungen aktivieren</string>
+
+    <string name="closed_tab">%1$s geschlossen</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="delete_mf_gesture">Gesten mit mehreren Berührungen löschen</string>
+    <string name="confirm_delete_mf_gesture">Diese Geste löschen?</string>
+    <string name="theme_importer">Yuzu Browser Design-Importeur</string>
+    <string name="theme_imported">%1$s wurde importiert.</string>
+    <string name="theme_installed_version">Diese Design-Version ist bereits installiert.</string>
+    <string name="theme_unknown_error">Unbekannter Fehler</string>
+    <string name="theme_manifest_not_found">Manifest nicht gefunden</string>
+    <string name="cant_create_folder">Ordner kann nicht erstellt werden.</string>
+    <string name="theme_broken_manifest">Beschädigte Manifestdatei</string>
+    <string name="theme_same_name">Es gibt bereits ein Design mit dem gleichen Namen wie das von \"%1$s\"</string>
+    <string name="theme_unknown_version">Das Design unterstützt nicht das Formats dieser Version.</string>
+    <string name="page_not_found">Seite nicht gefunden</string>
+    <string name="pinned_tab_warning">Dieser Reiter ist angepinnt.</string>
+    <string name="select_file">Datei auswählen</string>
+    <string name="action_list">Aktionsliste</string>
+    <string name="add_to_home">Zum Startbildschirm hinzufügen</string>
+
+    <string name="caches">Zwischenspeicher</string>
+    <string name="cookies">Cookies</string>
+    <string name="passwords">Passwörter</string>
+    <string name="formData">Formulardaten</string>
+    <string name="html5Database">HTML5 Datenbanken</string>
+    <string name="geolocation_permissions">Geolokalisierungsberechtigungen</string>
+    <string name="recent_search_queries">Letzte Suchanfragen</string>
+    <string name="favicon_cache">Seiten-Logo-Zwischenspeicher (FavIcon)</string>
+    <string name="untitled">Unbenannt</string>
+    <string name="loading_failed">Es konnte nichts von der Seite geladen werden.</string>
+    <string name="font_not_found">Schriftartendatei nicht gefunden</string>
+    <string name="font_error">Diese Datei enthält keine Schriftart.</string>
+    <string name="read_it_later">Später lesen</string>
+    <string name="navigate_lock">Navigationssperre</string>
+    <string name="add_to_top">Zum Anfang hinzufügen</string>
+    <string name="load_image">Bild laden</string>
+    <string name="suggest_histories">Verlauf anzeigen</string>
+    <string name="suggest_bookmarks">Lesezeichen anzeigen</string>
+    <string name="search_engine_error">Suchmaschine nicht gefunden</string>
+    <string name="permission_request">Genehmigungsanfrage</string>
+    <string name="permission_request_mes">%1$s\n\nwould like to use:\n\n%2$s</string>
+    <string name="camera">Kamera</string>
+    <string name="mic">Mikrofon</string>
+    <string name="midi_device">MIDI (=Digitale Schnittstelle für Musikinstrumente)</string>
+    <string name="protected_media_id">Geschützte Inhalte</string>
+    <string name="permission_request_toast">Bitte tippen Sie auf [Zugriffsrecht] und aktivieren Sie %1$s</string>
+    <string name="permission_ask">Nachfragen</string>
+    <string name="allow">Erlauben</string>
+    <string name="block">Blockieren</string>
+    <string name="ad_block">Werbeblocker</string>
+    <string name="ad_block_blocked_page">Der Werbeblocker hat die folgende Seite blockiert:</string>
+    <string name="ad_block_blocked_filter">Aufgrund des folgenden Filters:</string>
+    <string name="breadcrumb">Brotkrumen</string>
+    <string name="download_failed_root_not_exists">Der Download ist nicht möglich, da der Zielordner für den Download nicht gefunden wurde.</string>
+    <string name="download_failed_root_not_writable">Der Download ist nicht möglich, da im Zielordner für den Download nicht gespeichert werden kann.</string>
+    <string name="this_page_says">Auf dieser Seite wird Folgendes angezeigt</string>
+    <string name="host_page_says">Unter %1$s wird Folgendes angezeigt</string>
+    <string name="prevent_additional_dialogues">Diese Seite am Erstellen zusätzlicher Dialoge hindern</string>
+    <string name="accessibility_toolbar_multi_select">%1$d ausgewählt</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="resblock_res_type_list">
+        <item>Порожній рядок</item>
+        <item>Порожнє PNG зображення</item>
+    </string-array>
+    <string-array name="edit_user_agent">
+        <item>Редагувати</item>
+        <item>Видалити</item>
+    </string-array>
+
+    <string-array name="new_speed_dial_mode">
+        <item>Прямий ввід</item>
+        <item>Закладки</item>
+        <item>Історія</item>
+        <item>Список додатків</item>
+        <item>Список ярликів</item>
+    </string-array>
+
+    <string-array name="add_bookmark_option">
+        <item>Додати закладку</item>
+        <item>Видалити закладку</item>
+    </string-array>
+</resources>
+

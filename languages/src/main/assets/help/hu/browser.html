@@ -1,0 +1,159 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+    <script type="text/javascript" src="../link.js"></script>
+</head>
+<body>
+<h1 class="head">Böngésző beállításai</h1>
+<details id="pattern">
+    <summary>Minta szerinti szabályok</summary>
+    <p class="details_info">
+        Az URL alapján lehetőséged van megnyitni más alkalmazásokat, megváltoztatni a JavaScriptet
+        és UserAgentet vagy blokkolást beállítani<br>Minta írásához nézd meg a <a href="regex.html">Minta
+        leírást</a>
+    </p>
+</details>
+<details>
+    <summary>UserScript beállítások</summary>
+    <p class="details_info">Lehetőséged van UserScripek használatára és kezelésére</p>
+</details>
+<details id="ad_block">
+    <summary>Reklámszűrő beállításai</summary>
+    <p class="details_info">
+        Beállíthatsz reklámszűrést.<br>
+        Hogy lásd, hogyan írj a listákba, nézd meg a <a href="regex.html">Minta
+        specifikációt</a>.
+    </p>
+</details>
+<details id="res_interrupt">
+    <summary>Forrás megszakítások beállításai</summary>
+    <p class="details_info">URL ellenőrzés vagy képek blokkolása, külső scriptek, stb.<br>Relámszűrőként
+        is használható</p>
+</details>
+<details>
+    <summary>Kezdőlap</summary>
+    <p class="details_info">megnyitja a beállított URL-t új lap nyitásakor, stb.<br>
+        Alapértelmezésként a gyorsindító(yuzu:speeddial)</p>
+</details>
+<details>
+    <summary>Letöltési művelet</summary>
+    <p class="details_info">Beállíthatod, hogy hogyan viselkedjen a program fájlok
+        letöltésekor<br><br>
+        <b>Ne csináljon semmit</b><br>
+        Ignorálja a letöltési kérést.<br>
+        <b>Automatikus</b><br>
+        Egy videó lejátszási kérelme vagy hasonló esetén, az URL egy másik alkalmazásban nyílik meg,
+        vagy megjelenik a letöltési dialógus.<br>
+        <b>Letöltési ablak megnyitása</b><br>
+        Mindig megjelenít a letöltési dialógust.<br>
+        <b>Letöltés másik alkalmazással</b><br>
+        Mindig megnyitja az URL-t másik alkalmazásban.<br>
+        <b>Megosztás</b><br>
+        Mindig megosztja az URL címet.<br>
+        <b>Manuális kiválasztás</b><br>
+        Minden alkalommal, amikor egy letöltési kérés történik, ki kell választani, hogy milyen
+        megnyitási, letöltési, megosztási stb. művelet történjen.</p>
+</details>
+<details>
+    <summary>Proxy beállítások</summary>
+    <p class="details_info">Lehetőséged van proxy konfigurálására ebben a menüben.</p>
+</details>
+<details>
+    <summary>Keresési beállítások</summary>
+    <div class="details_info">
+        <dl>
+            <dt>Keresőmotor választás</dt>
+            <dd>Válaszd ki itt a keresőmotort</dd>
+            <dt>Keresőmotorok kezelése</dt>
+            <dd>Beállíthatod a keresőmotor nevét, URL címét és színt hozzá.<br>A keresett szavat a
+                '%s' változó jelenti
+            </dd>
+            <dt>Ikon megjelenítése keresősávban</dt>
+            <dd>Beállíthatod, hogy a keresősávban megjelenjen-e a keresőmotor ikonja a gyors
+                keresőmotor váltáshoz
+            </dd>
+            <dt>Javasolt találatok konfigurálása</dt>
+            <dd>Keresési javaslatokat kaphatsz az internetről, vagy korábbi keresésekből, vagy
+                mindkettőből.
+            </dd>
+            <dt>Előzmények megjelenítése</dt>
+            <dd>Előzmények megjelenítése a keresési javaslatok között.</dd>
+            <dt>Könyvjelzők megjelenítése</dt>
+            <dd>Könyvjelzők megjelenítése a keresési javaslatok között.</dd>
+        </dl>
+    </div>
+</details>
+<details>
+    <summary>Lapok mentése kilépéskor</summary>
+    <p class="details_info">Beállíthatod, hogy mentésre kerüljenek a lapok a [kilépés] művelet
+        végrehajtásakor.</p>
+</details>
+<details>
+    <summary>Rögzített lapok mentése kilépéskor</summary>
+    <p class="details_info">Beállíthatod, hogy mentésre kerüljenek a rögzített lapok a [kilépés]
+        művelet végrehajtásakor.</p>
+</details>
+<details>
+    <summary>Bezárt lapok mentése</summary>
+    <p class="details_info">Akkor engedélyezd, ha használod a [Lap visszaállítása] műveletet<br>Ha a
+        [Lap visszaállításá]-t nem használod, célszerű kikapcsolni az opciót memóriatakarékosság
+        miatt.</p>
+</details>
+<details>
+    <summary>Új lap nyitásának beállításai</summary>
+    <p class="details_info">Beállíthatod, hogy mi történjen, ha egy új lapot nyitsz meg</p>
+</details>
+<details>
+    <summary>Gyorsítótárazott lapok száma</summary>
+    <p class="details_info">Beállít egy felső korlátot a memóriában tartandó lapok számának</p>
+</details>
+<details>
+    <summary>Web szüneteltetése lap váltáskor</summary>
+    <p class="details_info">A lapok feldolgozása megáll, ha egy lap háttérbe kerül</p>
+</details>
+<details>
+    <summary>Web szüneteltetése a háttérben</summary>
+    <p class="details_info">Minden lap feldolgozása szünetel, ha az alkalmazás nincs előtérben.</p>
+</details>
+<details>
+    <summary>Ismeretlen sémák megosztása</summary>
+    <p class="details_info">Megpróbálja az URL-t megnyitni más alkalmazással, ha nem egy támogatott
+        sémát tartalmaz (mint például intent:// vagy twitter://)</p>
+</details>
+<details>
+    <summary>Letöltések mappája</summary>
+    <p class="details_info">Megadható a letöltések célmappája<br>SD kártyán csak a
+        /storage/sdcard1/Android/data/jp.hazuki.yuzubrowser/files adható meg</p>
+</details>
+<details>
+    <summary>Automata mentés intervalluma (mp)</summary>
+    <p class="details_info">Beállítja az automatikus mentés intervallumát (mp)<br>Állítsd 0-ra, hogy
+        ne történjen mentés</p>
+</details>
+<details>
+    <summary>Lassú renderelés</summary>
+    <p>
+        Opció ahhoz, hogy teljes képernyős képet lessen készíteni.<br>
+        Csak emiatt, de egyébként nem ajánlott használni, mert gyakran lefagyhat.
+    </p>
+</details>
+</body>
+</html>

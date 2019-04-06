@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <string name="pref_settings">设置</string>
+    <string name="pref_about">关于</string>
+    <string name="pref_ui_settings">用户界面设置</string>
+    <string name="pref_toolbar_settings">工具栏设置</string>
+    <string name="pref_tab_bar">标签页栏</string>
+    <string name="pref_url_bar">地址栏</string>
+    <string name="pref_progress_bar">进度栏</string>
+    <string name="pref_tab_type">标签页类型</string>
+
+    <string-array name="pref_tab_type_list">
+        <item>可滚动</item>
+        <item>完整</item>
+    </string-array>
+
+    <string name="pref_page_settings">页面设置</string>
+    <string name="pref_toolbar_location">位置（竖屏）</string>
+    <string name="pref_toolbar_location_landscape">位置（横屏）</string>
+    <string name="pref_toolbar_location_priority">排序优先级（竖屏）</string>
+    <string name="pref_toolbar_location_priority_landscape">排序优先级（横屏）</string>
+    <string name="pref_toolbar_location_undefine">未指定</string>
+    <string name="pref_toolbar_location_top">顶栏</string>
+    <string name="pref_toolbar_location_top_always">顶栏（始终显示）</string>
+    <string name="pref_toolbar_location_bottom">底栏</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">底栏覆盖模式（始终显示）</string>
+    <string name="pref_toolbar_location_bottom_always">底栏（始终显示）</string>
+    <string name="pref_toolbar_location_web">网页标题栏</string>
+    <string name="pref_toolbar_location_web_fix">网页标题栏（固定）</string>
+    <string name="pref_toolbar_location_left">左栏</string>
+    <string name="pref_toolbar_location_right">右栏</string>
+    <string name="pref_allow_content_access">允许访问内容</string>
+    <string name="pref_default_encoding">默认字符编码</string>
+    <string name="pref_text_encoding">字符编码</string>
+    <string name="pref_softbtn_settings">工具栏按钮设置</string>
+    <string name="pref_btn_tab_left">标签页栏左按钮</string>
+    <string name="pref_btn_tab_right">标签页栏右按钮</string>
+    <string name="pref_btn_url_left">地址栏左按钮</string>
+    <string name="pref_btn_url_right">地址栏右按钮</string>
+    <string name="pref_btn_url_center">地址栏中央按钮（地址框）</string>
+    <string name="pref_btn_action_press">点击</string>
+    <string name="pref_btn_action_lpress">长按</string>
+    <string name="pref_btn_action_up">上滑</string>
+    <string name="pref_btn_action_down">下滑</string>
+    <string name="pref_btn_action_left">左滑</string>
+    <string name="pref_btn_action_right">右滑</string>
+    <string name="pref_toolbar_size">工具栏大小</string>
+    <string name="pref_toolbar_text_size">文字大小</string>
+    <string name="pref_text_size">文字大小</string>
+
+    <string name="pref_private_mode">隐私模式</string>
+    <string name="pref_javascript">启用 JavaScript</string>
+    <string name="pref_web_db">启用数据库</string>
+    <string name="pref_web_dom_db">启用 DOM 存储</string>
+    <string name="pref_menu_settings">选项菜单设置</string>
+    <string name="pref_user_agent">UserAgent</string>
+
+    <string name="pref_sensitivity_distance">灵敏度（距离）</string>
+    <string name="pref_browser_settings">浏览器设置</string>
+    <string name="pref_pattern_match">执行模式匹配</string>
+    <string name="pref_home_page">主页</string>
+    <string name="pref_hardbtn_settings">系统按键设置</string>
+    <string name="pref_btn_back_press">返回键点击</string>
+    <string name="pref_btn_back_lpress">返回键长按</string>
+    <string name="pref_btn_serach_press">搜索键点击</string>
+    <string name="pref_btn_volume_up">音量加</string>
+    <string name="pref_btn_volume_down">音量减</string>
+    <string name="pref_btn_volume_default_play">在播放视频时调节音量</string>
+    <string name="pref_btn_camera_press">相机键点击</string>
+    <string name="pref_btn_menu_press">菜单键点击</string>
+    <string name="pref_load_overview">以覆盖模式加载</string>
+    <string name="pref_web_wideview">使用宽可视区域</string>
+    <string name="pref_oritentation">显示方向</string>
+    <string name="pref_web_customview_oritentation">全屏视频显示方向</string>
+    <string name="pref_oritentation_unspecified">未指定</string>
+    <string name="pref_oritentation_landscape">横屏</string>
+    <string name="pref_oritentation_portrait">竖屏</string>
+    <string name="pref_oritentation_sensor">使用传感器</string>
+    <string name="pref_oritentation_no_sensor">忽略传感器</string>
+    <string name="pref_search_url">搜索引擎地址设置</string>
+    <string name="pref_search_url_error">未找到 %s</string>
+    <string name="pref_lpress_settings">长按设置</string>
+    <string name="pref_lpress_link">链接</string>
+    <string name="pref_lpress_image">图像</string>
+    <string name="pref_lpress_linkimage">图像链接</string>
+    <string name="pref_tab_size_x">标签页显示宽度</string>
+    <string name="pref_tab_font_size">标签页字体大小</string>
+    <string name="pref_action_settings">行为设置</string>
+    <string name="pref_tab_action">标签页行为</string>
+    <string name="pref_show_zoom_button">显示缩放按钮</string>
+    <string name="pref_fullscreen">全屏显示</string>
+    <string name="pref_keep_screen_on">保持亮屏</string>
+    <string name="pref_accept_cookie">接受 Cookie</string>
+    <string name="pref_accept_third_cookie">接受第三方 Cookie</string>
+    <string name="pref_accept_cookie_private">隐私模式中接受 Cookie</string>
+    <string name="pref_web_cache">缓存模式</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>默认</item>
+        <item>无缓存</item>
+        <item>优先加载缓存</item>
+        <item>仅加载缓存</item>
+    </string-array>
+
+    <string name="pref_web_popup">启用弹出式窗口</string>
+    <string name="pref_download_action">下载行为 </string>
+
+    <string-array name="pref_download_action_list">
+        <item>不进行操作</item>
+        <item>自动</item>
+        <item>始终下载</item>
+        <item>始终打开</item>
+        <item>分享</item>
+        <item>手动选择</item>
+    </string-array>
+
+    <string name="pref_download_folder">下载目录</string>
+    <string name="pref_pause_web_background">后台暂停网页</string>
+    <string name="pref_pause_web_tab_change">切换标签页暂停网页</string>
+    <string name="pref_pause_web_tab_change_disable_summary">由于 WebView 的程序错误已被禁用</string>
+    <string name="pref_btn_custom">常用栏按钮</string>
+    <string name="pref_custom_bar">常用栏</string>
+    <string name="pref_save_formdata">保存网页表单数据</string>
+    <string name="pref_web_app_cache">启用应用程序缓存</string>
+    <string name="pref_web_geolocation">启用地理位置信息</string>
+    <string name="pref_privacy_settings">隐私设置</string>
+    <string name="pref_clear_browser_data">清除数据</string>
+    <string name="pref_layout_algorithm">布局算法</string>
+
+    <string-array name="pref_layout_algorithm_list">
+        <item>正常</item>
+        <item>自动缩放文字</item>
+        <item>单列显示（不推荐）</item>
+        <item>窄列显示（不推荐）</item>
+    </string-array>
+
+    <string name="pref_save_history">保存历史记录</string>
+    <string name="pref_newtab_settings">新标签页设置</string>
+
+    <string-array name="pref_newtab_list">
+        <item>当前标签页</item>
+        <item>新建标签页</item>
+        <item>后台标签页</item>
+        <item>新标签页（右侧）</item>
+        <item>后台标签页（右侧）</item>
+    </string-array>
+
+    <string name="pref_newtab_link">链接</string>
+    <string name="pref_newtab_bookmark">书签</string>
+    <string name="pref_newtab_history">历史记录</string>
+    <string name="pref_newtab_blank">target=\"_blank\"</string>
+    <string name="pref_proxy_settings">代理设置</string>
+    <string name="pref_ssl_error_alert">显示安全警告</string>
+    <string name="pref_gesture_settings">手势设置</string>
+    <string name="pref_web_gesture_settings">网页手势设置</string>
+    <string name="pref_sub_gesture_settings">附加手势设置</string>
+    <string name="pref_gesture_enable">启用手势</string>
+    <string name="pref_gesture_line">显示手势轨迹</string>
+    <string name="pref_gesture_score">手势记录</string>
+    <string name="pref_lpress_others">其他</string>
+    <string name="pref_clear_data_at_finish">结束时清除数据</string>
+    <string name="pref_security_settings">安全设置</string>
+    <string name="pref_file_access">本地文件访问设置</string>
+
+    <string-array name="pref_file_access_list">
+        <item>禁用（最安全）</item>
+        <item>在沙箱中启用（较安全）</item>
+        <item>启用（不安全）</item>
+    </string-array>
+
+    <string name="pref_mixed_content">Https 中的不安全内容设置</string>
+
+    <string-array name="pref_mixed_content_list">
+        <item>永不允许（最安全）</item>
+        <item>兼容模式（默认）</item>
+        <item>始终允许（不安全）</item>
+    </string-array>
+
+    <string name="pref_toolbar_visibility">可见性</string>
+
+    <string-array name="pref_toolbar_visibility_list">
+        <item>可见</item>
+        <item>全屏显示时隐藏</item>
+        <item>加载完成后隐藏</item>
+        <item>竖屏显示时隐藏</item>
+        <item>横屏显示时隐藏</item>
+        <item>布局缩小时隐藏</item>
+    </string-array>
+
+    <string name="pref_web_swipe_settings">两指滑动设置</string>
+    <string name="pref_web_swipe_enable">启用两指滑动行为</string>
+    <string name="pref_flick_settings">轻滑设置</string>
+    <string name="pref_flick_left">向左轻滑行为</string>
+    <string name="pref_flick_right">向右轻滑行为</string>
+    <string name="pref_flick_up">向上轻滑行为</string>
+    <string name="pref_flick_down">向下轻滑行为</string>
+    <string name="pref_sensitivity_speed">灵敏度（速度）</string>
+    <string name="pref_flick_enable">启用轻滑行为</string>
+    <string name="pref_flick_disable_scrolling">水平滚动时禁用轻滑</string>
+    <string name="pref_qc_settings">快捷控制面板设置</string>
+    <string name="pref_qc_enable">启用快捷控制面板</string>
+    <string name="pref_qc_rad_start">半径</string>
+    <string name="pref_qc_rad_inc">面板半径增量</string>
+    <string name="pref_qc_slop">触发范围</string>
+    <string name="pref_qc_r_pos">触发位置</string>
+
+    <string-array name="pref_qc_r_pos_list">
+        <item>左侧和右侧</item>
+        <item>左侧</item>
+        <item>右侧</item>
+    </string-array>
+
+    <string name="pref_qc_level1">第一层</string>
+    <string name="pref_qc_level2">第二层</string>
+    <string name="pref_qc_level3">第三层</string>
+    <string name="pref_overlay_bottom_alpha">底部工具栏透明度</string>
+    <string name="pref_save_last_tabs">退出时保存标签页</string>
+    <string name="pref_save_pinned_tabs">退出时保存固定标签页</string>
+    <string name="pref_save_closed_tab">保存关闭的标签页</string>
+    <string name="pref_flick_edge">边缘检测</string>
+    <string name="pref_import_export">导入/导出</string>
+    <string name="pref_import_bookmark">恢复书签</string>
+    <string name="pref_import_bookmark_confirm">是否要恢复书签？</string>
+    <string name="pref_export_bookmark">备份书签</string>
+    <string name="pref_export_bookmark_confirm">是否要备份书签？</string>
+    <string name="pref_import_html_bookmark">导入 html 书签</string>
+    <string name="pref_import_html_bookmark_confirm">是否要导入书签？</string>
+    <string name="pref_export_html_bookmark">导出 html 书签</string>
+    <string name="pref_export_html_bookmark_confirm">是否要导出书签？</string>
+    <string name="pref_fast_back">快速返回</string>
+    <string name="pref_fast_back_cache_size">快速返回缓存大小</string>
+    <string name="pref_fast_back_cache_size_comment">0 = 无限制</string>
+    <string name="pref_userjs_settings">UserScript 设置</string>
+    <string name="pref_userjs_enable">启用 UserScript</string>
+    <string name="pref_userjs_manage">管理 UserScript</string>
+    <string name="pref_rendering">渲染模式</string>
+    <string name="pref_auto_tab_save_delay">自动保存间隔（秒）</string>
+    <string name="pref_resblock_settings">资源拦截设置</string>
+    <string name="pref_resblock_enable">启用资源拦截</string>
+    <string name="pref_resblock_manage">管理资源拦截</string>
+    <string name="pref_minimum_font">最小字体大小</string>
+
+    <string name="pref_app_settings">应用程序设置</string>
+    <string name="pref_search_suggest">搜索建议类型</string>
+
+    <string-array name="pref_search_suggest_list">
+        <item>网络来源</item>
+        <item>搜索记录</item>
+        <item>同时显示</item>
+        <item>无</item>
+    </string-array>
+
+    <string name="pref_history_settings">历史记录设置</string>
+    <string name="pref_history_max_day">历史记录保存时长（天）</string>
+    <string name="pref_history_max_count">历史记录数量上限</string>
+
+    <string name="open_source_license">开源许可协议</string>
+    <string name="pref_log">日志</string>
+    <string name="pref_detailed_log">输出详细日志</string>
+    <string name="pref_delete_all_logs">删除所有日志</string>
+    <string name="pref_delete_log_mes">要删除所有日志吗？</string>
+
+    <string name="backup_settings">备份设置</string>
+    <string name="restore_settings">恢复设置</string>
+    <string name="pref_backup_settings_confirm">要备份设置吗？</string>
+    <string name="pref_restore_settings_confirm">将会失去当前的所有设置，要进行恢复吗？\n恢复完成后应用会自动重启。</string>
+
+    <string name="version">版本</string>
+    <string name="build">编译版本</string>
+    <string name="build_time">编译时间</string>
+
+    <string name="theme_setting">主题设置</string>
+
+    <string name="reflect_setting">立即应用设置</string>
+    <string name="reflect_setting_mes">部分更改仅在重启应用后生效。</string>
+
+    <string name="pref_close_auto_select">根据标签页结束设置</string>
+    <string name="pref_close_default">默认</string>
+    <string name="pref_close_intent">来自 intent</string>
+    <string name="pref_close_window">新窗口（target=“_blank”）</string>
+
+    <string name="pref_pull_to_refresh"> 下拉刷新</string>
+
+    <string name="pref_share_unkown_scheme">分享未知的跳转协议</string>
+    <string name="pref_share_unkown_scheme_summary">通过其他应用打开未知的地址跳转协议</string>
+
+    <string name="pref_speed_dial_setting">快捷访问设置</string>
+    <string name="pref_edit_speeddial">编辑快捷访问</string>
+    <string name="pref_speeddial_ui_settings">快捷访问用户界面设置</string>
+    <string name="pref_speeddial_show_header">显示标题</string>
+    <string name="pref_speeddial_show_search_bar">显示搜索栏</string>
+    <string name="pref_speeddial_show_icon">显示图标</string>
+    <string name="pref_speeddial_column">竖屏显示列数</string>
+    <string name="pref_speeddial_column_landscape">横屏显示列数</string>
+    <string name="pref_speeddial_column_max_width">最大列宽</string>
+    <string name="pref_speeddial_dark_theme">使用暗色主题</string>
+
+    <string name="pref_double_tap_flick_settings">双击轻滑设置</string>
+    <string name="pref_double_tap_flick_enable">启用双击轻滑</string>
+
+    <string name="operation_settings">操作设置</string>
+    <string name="open_bookmark_new_tab">书签图标点击行为</string>
+    <string name="open_bookmark_new_tab_info">点击网站图标后在其他标签页中打开</string>
+    <string name="open_bookmark_new_tab_action">图标点击行为</string>
+    <string name="save_bookmark_folder">记住书签文件夹位置</string>
+
+    <string name="pref_search_suggest_engine">搜索建议引擎</string>
+
+    <string name="pref_number_of_tab_to_cache">标签页缓存数量</string>
+    <string name="pref_dark_theme">暗色主题</string>
+    <string name="pref_light_theme">亮色主题</string>
+
+    <string-array name="pref_rendering_list">
+        <item>正常</item>
+        <item>反色</item>
+        <item>灰度图像</item>
+        <item>灰度图像反色</item>
+        <item>夜间模式</item>
+    </string-array>
+
+    <string name="pref_night_mode_settings">夜间模式设置</string>
+    <string name="pref_color_temperature">色温</string>
+    <string name="pref_warm_color">暖色系</string>
+    <string name="pref_cool_color">冷色系</string>
+    <string name="pref_brightness">亮度</string>
+    <string name="pref_dark">暗</string>
+    <string name="pref_bright">亮</string>
+
+    <string name="pref_move_to_parent">标签页关闭后移动至来源标签页</string>
+    <string name="pref_move_to_left_tab">标签页关闭后移动至左侧标签页</string>
+    <string name="pref_multi_finger_gesture_settings">多点触控手势设置</string>
+    <string name="pref_multi_finger_gesture_enable">启用多点触控手势</string>
+    <string name="pref_multi_finger_gesture_name_enable">显示行为名称</string>
+    <string name="pref_number_of_fingers">手指数量</string>
+    <string name="pref_sensitivity">灵敏度</string>
+    <string name="pref_help">帮助</string>
+    <string name="pref_help_url">file:///android_asset/help/en/index.html</string>
+    <string name="pref_block_images">屏蔽图像</string>
+
+    <string name="pref_ad_block">广告拦截设置</string>
+    <string name="pref_ad_block_enable">启用广告拦截</string>
+    <string name="pref_ad_block_black">黑名单</string>
+    <string name="pref_ad_block_white">白名单</string>
+    <string name="pref_ad_block_white_page">网页白名单</string>
+    <string name="exclude_comment">排除注释行</string>
+    <string name="pref_edit">编辑</string>
+    <string name="pref_delete">删除</string>
+    <string name="pref_select_all">全选</string>
+    <string name="pref_reset_count">重置计数</string>
+    <string name="pref_ad_block_delete_confirm">要删除“%1$s”吗？</string>
+    <string name="pref_ad_block_delete_selected_confirm">要删除选中的项目吗？</string>
+    <string name="pref_ad_block_delete">“%1$s”已删除。</string>
+    <string name="pref_export">导出</string>
+    <string name="pref_exported">导出完成</string>
+    <string name="pref_delete_all">删除所有</string>
+    <string name="pref_delete_all_confirm">要删除所有项目吗？</string>
+    <string name="pref_sort">排序</string>
+    <string name="pref_sort_count">按计数</string>
+    <string name="pref_sort_date">按日期</string>
+    <string name="pref_sort_name">按名称</string>
+
+    <string name="pref_show_divider">分隔线显示</string>
+    <string-array name="pref_show_divider_list">
+        <item>自动</item>
+        <item>显示</item>
+        <item>隐藏</item>
+    </string-array>
+
+    <string name="pref_speed_dial">快捷访问</string>
+    <string name="pref_restore_speed_dial">恢复快捷访问</string>
+    <string name="pref_backup_speed_dial">备份快捷访问</string>
+    <string name="pref_backup_speed_dial_confirm">要备份快捷访问吗？</string>
+    <string name="pref_snap_toolbar">快速收放工具栏</string>
+    <string name="pref_toolbar_show_loading">加载时显示工具栏</string>
+    <string name="pref_enable_safe_browsing">启用安全浏览</string>
+    <string name="pref_required_android_O">需要 Android 8.0 (Oreo) 或更高版本才能关闭</string>
+    <string name="pref_always_show_url">始终显示地址</string>
+    <string name="pref_show_favicon">显示网站图标</string>
+    <string name="pref_save_tab_for_crash">定期保存标签页</string>
+
+    <string name="pref_touch_scrollbar">触摸滚动条设置</string>
+    <string name="pref_display_position">显示位置</string>
+    <string name="pref_touch_scrollbar_do_not_move_toolbar">不移动工具栏</string>
+    <string-array name="pref_touch_scrollbar_list">
+        <item>隐藏</item>
+        <item>右侧</item>
+        <item>左侧</item>
+    </string-array>
+
+    <string name="pref_reader_settings">阅读模式设置</string>
+    <string name="pref_reader_text_size">文字大小</string>
+    <string name="pref_reader_text_font">主体字体</string>
+    <string name="pref_reader_theme">阅读模式主题</string>
+    <string name="pref_reader_theme_same_as">与应用设置相同</string>
+
+    <string name="pref_font_size">字体大小设置</string>
+    <string name="pref_menu">选项菜单</string>
+    <string name="pref_history">历史记录</string>
+    <string name="pref_bookmark">书签</string>
+    <string name="pref_speeddial_item_text_size">项目文字大小</string>
+    <string-array name="pref_text_size_list">
+        <item>默认</item>
+        <item>极小</item>
+        <item>较小</item>
+        <item>中等</item>
+        <item>较大</item>
+        <item>极大</item>
+    </string-array>
+
+    <string name="pref_search_settings">搜索设置</string>
+    <string name="pref_search_url_settings">搜索引擎设置</string>
+    <string name="pref_search_url_show_icon">搜索栏显示切换图标</string>
+    <string name="pref_search_url_save_switching">保存搜索引擎切换状态</string>
+    <string name="pref_search_cat_search">搜索引擎</string>
+    <string name="pref_search_cat_suggest">搜索建议</string>
+    <string name="pref_fullscreen_mode">全屏显示模式</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>隐藏状态栏</item>
+        <item>隐藏导航栏</item>
+        <item>同时隐藏两者</item>
+    </string-array>
+    <string name="pref_slow_rendering">缓慢渲染</string>
+    <string name="pref_slow_rendering_alert">警告：\n启用此功能可能会导致频繁卡死。\n同时，必须从最近应用中重新打开浏览器才能切换设置。\n除非要进行全屏截图，否则不建议使用此功能。</string>
+    <string name="browser_settings">浏览器设置</string>
+    <string name="pref_basic_settings">基本设置</string>
+    <string name="pref_white_url_box">显示地址框</string>
+    <string name="pref_enable_web_rtc">启用 WebRTC</string>
+    <string name="pref_content_settings">网站内容设置</string>
+    <string name="pref_speeddial_layout">布局</string>
+    <string-array name="pref_speeddial_layout_list">
+        <item>大图标</item>
+        <item>小图标</item>
+    </string-array>
+    <string name="pref_privacy_policy">隐私政策</string>
+    <string name="mining_protect">拒绝挖币</string>
+    <string name="mining_protect_summary">加密币挖掘脚本保护</string>
+    <string name="pref_storage_location_warn">此存储位置可能无法在其他应用之间正常工作。</string>
+    <string name="pref_fake_chrome">伪装为 Chrome</string>
+    <string name="pref_fake_chrome_summary">将默认 UserAgent 伪装为 Chrome</string>
+    <string name="pref_toolbar_small_icon">显示长按图标</string>
+    <string name="pref_show_icon">显示图标</string>
+    <string name="pref_translation">翻译</string>
+    <string name="pref_translators">Tarlafic</string>
+    <string name="adblock_file_large_mes">由于文件大小超过 1 MB，无法进行预览和编辑。\n要导入吗？</string>
+</resources>

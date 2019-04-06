@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="action_list">
+        <item>Voltar</item>
+        <item>Avançar</item>
+        <item>Recarregar/Parar</item>
+        <item>Recarregar</item>
+        <item>Parar carregamento</item>
+        <item>Início</item>
+        <item>Ampliar</item>
+        <item>Reduzir</item>
+        <item>Página para cima</item>
+        <item>Página para baixo</item>
+        <item>Topo da página</item>
+        <item>Rodapé da página</item>
+        <item>Rolagem de página personalizada</item>
+        <item>Rolagem de página da barra de busca</item>
+        <item>Autorrolagem de página</item>
+        <item>Foco para cima</item>
+        <item>Foco para baixo</item>
+        <item>Foco para esquerda</item>
+        <item>Foco para direita</item>
+        <item>Toque de visualização focada</item>
+        <item>Alternar script do Java</item>
+        <item>Alternar carregamento de imagem</item>
+        <item>Alternar cookie</item>
+        <item>Alternar script do usuário</item>
+        <item>Alternar bloqueio de navegação</item>
+        <item>Informações da página</item>
+        <item>Copiar URL da página</item>
+        <item>Copiar título da página</item>
+        <item>Copiar URL e título</item>
+        <item>Histórico da guia</item>
+        <item>Ponteiro do mouse</item>
+        <item>Localizar na página</item>
+        <item>Salvar captura de tela</item>
+        <item>Compartilhar captura de tela</item>
+        <item>Salvar página</item>
+        <item>Abrir URL</item>
+        <item>Traduzir página</item>
+        <item>Nova guia</item>
+        <item>Fechar guia</item>
+        <item>Fechar todas</item>
+        <item>Fechar outras</item>
+        <item>Mover para guia da esquerda</item>
+        <item>Mover para guia da direita</item>
+        <item>Mover guia para esquerda</item>
+        <item>Mover guia para direita</item>
+        <item>Lista de guia</item>
+        <item>Fechar todas guias da esquerda</item>
+        <item>Fechar todas guias da direita</item>
+        <item>Restaurar guia</item>
+        <item>Replicar guia</item>
+        <item>Mostrar caixa de pesquisa</item>
+        <item>Colar na caixa de pesquisa</item>
+        <item>Colar URL</item>
+        <item>Marcador</item>
+        <item>Histórico</item>
+        <item>Lista de download</item>
+        <item>Configurações</item>
+        <item>Abrir acesso rápido</item>
+        <item>Adicionar marcador</item>
+        <item>Adicionar no acesso rápido</item>
+        <item>Adicionar correspondência de padrão</item>
+        <item>Adicionar na tela inicial</item>
+        <item>Subgesto</item>
+        <item>Limpar dados</item>
+        <item>Mostrar configurações de proxy</item>
+        <item>Configurações de orientação</item>
+        <item>Abrir configurações de link</item>
+        <item>Configurações de agente do usuário</item>
+        <item>Configurações de agente do usuário padrão</item>
+        <item>Configurações de tamanho de texto da página</item>
+        <item>Configurações de script do usuário</item>
+        <item>Configurações de codificação de texto</item>
+        <item>Modo de renderização</item>
+        <item>Alternar visibilidade da barra de guia</item>
+        <item>Alternar visibilidade da barra de URL</item>
+        <item>Alternar visibilidade da barra de progresso</item>
+        <item>Alternar visibilidade da barra personalizada</item>
+        <item>Combinar barra de título da web</item>
+        <item>Alternar gesto da web</item>
+        <item>Alternar ação de deslize de borda</item>
+        <item>Alternar controle rápido</item>
+        <item>Alternar gesto de multitoque</item>
+        <item>Alternar bloqueio de anúncio</item>
+        <item>Abrir lista negra</item>
+        <item>Abrir lista branca</item>
+        <item>Abrir lista de página branca</item>
+        <item>Adicionar na lista de página branca</item>
+        <item>Compartilhar página</item>
+        <item>Abrir com outro app</item>
+        <item>Iniciar atividade</item>
+        <item>Alternar tela cheia</item>
+        <item>Abrir menu de opções</item>
+        <item>Mostrar menu personalizado</item>
+        <item>Finalizar</item>
+        <item>Mover tarefa para fundo</item>
+        <item>Ação personalizada</item>
+        <item>Vibração</item>
+        <item>Mostrar toast</item>
+        <item>Modo privado</item>
+        <item>Distinção de finalização de guia</item>
+        <item>Mostrar código da página</item>
+        <item>Imprimir</item>
+        <item>Fixar guia</item>
+        <item>Lista de ação</item>
+        <item>Modo de leitura</item>
+        <item>Ler mais tarde</item>
+        <item>Lista de ler mais tarde</item>
+    </string-array>
+</resources>

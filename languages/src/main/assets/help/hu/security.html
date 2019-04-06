@@ -1,0 +1,61 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+    <script type="text/javascript" src="../link.js"></script>
+</head>
+<body>
+<h1 class="head">Biztonsági beállítások</h1>
+<details>
+    <summary>Tartalom hozzáférés engedélyezése</summary>
+    <p class="details_info">Engedélyezi a content:// előtaggal kezdődő URL-eket</p>
+</details>
+<details>
+    <summary>Helyi fájlok hozzáférésének beállítása</summary>
+    <p class="details_info">
+        Engedélyezi a file:// előtaggal kezdődő URL-eket<br>
+        <b>Letiltva</b><br>
+        A hozzáférés teljesen le van tiltva a fajlokhoz.<br>
+        <b>Sandbox mód</b><br>
+        Hozzáférés csak külső tárolóhoz és a /data/data/jp.hazuki.yuzubrowser/app_public_html
+        útvonalhoz.<br>
+        <b>Engedélyez</b><br>
+        Teljes hozzáférés minden elérhető útvonalhoz.</p>
+</details>
+<details id="insecure_content">
+    <summary>Nem biztonságos tartalmak https-en keresztül</summary>
+    <p class="details_info">
+        Engedélyezi scriptek és képek stb. betöltését http-vel https oldalakon<br>
+        <b>Sosem enged<b><br>
+            Nem tölt be<br>
+            <b>Kompatibilitási mód</b><br>
+            Automatikusan eldönti, hogy betöltsw-e<br>
+            Az elbírálás változhat WebView / Chrome frissítések szerint<br>
+            <b>Mindig engedélyez</b><br>
+            Minden tartalmat betölt</p>
+</details>
+<details>
+    <summary>Biztonsági figyelmeztetések mutatása</summary>
+    <p class="details_info">Display a warning if there is a problem with SSL certificate and confirm
+        whether to continue loading.<br>
+        If it is invalid, the load is automatically canceled.</p>
+</details>
+</body>
+</html>

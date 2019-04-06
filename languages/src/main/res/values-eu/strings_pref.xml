@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <string name="pref_settings">Ezarpenak</string>
+    <string name="pref_about">Honi buruz</string>
+    <string name="pref_ui_settings">Interfazearen ezarpenak</string>
+    <string name="pref_toolbar_settings">Tresna-barraren ezarpenak</string>
+    <string name="pref_tab_bar">Fitxa-barra</string>
+    <string name="pref_url_bar">URL-barra</string>
+    <string name="pref_progress_bar">Progresio-barra</string>
+    <string name="pref_tab_type">Fitxa mota</string>
+
+    <string-array name="pref_tab_type_list">
+        <item>Scrollable</item>
+        <item>Osoa</item>
+    </string-array>
+
+    <string name="pref_page_settings">Orri-ezarpenak</string>
+    <string name="pref_toolbar_location">Posizioa (bertikala)</string>
+    <string name="pref_toolbar_location_landscape">Posizioa (horizontala)</string>
+    <string name="pref_toolbar_location_priority">Posizionamenduaren lehentasuna (bertikala)</string>
+    <string name="pref_toolbar_location_priority_landscape">Posizionamenduaren lehentasuna (horizontala)</string>
+    <string name="pref_toolbar_location_undefine">Definitu gabea</string>
+    <string name="pref_toolbar_location_top">Goiko barra</string>
+    <string name="pref_toolbar_location_top_always">Goiko barra (Erakutsi beti)</string>
+    <string name="pref_toolbar_location_bottom">Beheko barra</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">Beheko gainjarritako barra (Erakutsi beti)</string>
+    <string name="pref_toolbar_location_bottom_always">Beheko barra (Erakutsi beti)</string>
+    <string name="pref_toolbar_location_web">Web-barra</string>
+    <string name="pref_toolbar_location_web_fix">Web-barra (finkoa)</string>
+    <string name="pref_toolbar_location_left">Ezkerreko barra</string>
+    <string name="pref_toolbar_location_right">Eskuineko barra</string>
+    <string name="pref_allow_content_access">Baimentu edukira sarbidea</string>
+    <string name="pref_default_encoding">Lehenetsitako testu-kodeketa</string>
+    <string name="pref_text_encoding">Testu-kodeketa</string>
+    <string name="pref_softbtn_settings">Tresna-barrako botoien ezarpenak</string>
+    <string name="pref_btn_tab_left">Fitxa-barrako ezkerreko botoia</string>
+    <string name="pref_btn_tab_right">Fitxa-barrako eskuineko botoia</string>
+    <string name="pref_btn_url_left">URL-barrako ezkerreko botoia</string>
+    <string name="pref_btn_url_right">URL-barrako eskuineko botoia</string>
+    <string name="pref_btn_url_center">URL-barrako erdiko botoia (URL kutxa)</string>
+    <string name="pref_btn_action_press">Sakatu</string>
+    <string name="pref_btn_action_lpress">Sakatu luze</string>
+    <string name="pref_btn_action_up">Pasatu hatza gora</string>
+    <string name="pref_btn_action_down">Pasatu hatza behera</string>
+    <string name="pref_btn_action_left">Pasatu hatza ezkerrera</string>
+    <string name="pref_btn_action_right">Pasatu hatza eskuinera</string>
+    <string name="pref_toolbar_size">Barraren tamaina</string>
+    <string name="pref_toolbar_text_size">Testuaren tamaina</string>
+    <string name="pref_text_size">Testuaren tamaina</string>
+
+    <string name="pref_private_mode">Modu pribatua</string>
+    <string name="pref_javascript">Gaitu JavaScript</string>
+    <string name="pref_web_db">Gaitu datu-basea</string>
+    <string name="pref_web_dom_db">Gaitu DOM biltegiratzea</string>
+    <string name="pref_menu_settings">Aukeren menuaren ezarpenak</string>
+    <string name="pref_user_agent">Erabiltzaile-agentea</string>
+
+    <string name="pref_sensitivity_distance">Sentikortasuna (distantzia)</string>
+    <string name="pref_browser_settings">Nabigatzailearen ezarpenak</string>
+    <string name="pref_pattern_match">Ereduen bat etortzea</string>
+    <string name="pref_home_page">Hasiera orria</string>
+    <string name="pref_hardbtn_settings">Hardware botoien ezarpenak</string>
+    <string name="pref_btn_back_press">Atzera sakatzea</string>
+    <string name="pref_btn_back_lpress">Atzera luze sakatzea</string>
+    <string name="pref_btn_serach_press">Bilatu sakatzea</string>
+    <string name="pref_btn_volume_up">Bolumena gora</string>
+    <string name="pref_btn_volume_down">Bolumena behera</string>
+    <string name="pref_btn_volume_default_play">Aldatu bolumena bideoa erreproduzitu bitartean</string>
+    <string name="pref_btn_camera_press">Kamera sakatzea</string>
+    <string name="pref_btn_menu_press">Menua sakatzea</string>
+    <string name="pref_load_overview">Kargatu aurrebista moduarekin</string>
+    <string name="pref_web_wideview">Erabili ikuspegi zabala</string>
+    <string name="pref_oritentation">Orientazioa</string>
+    <string name="pref_web_customview_oritentation">Pantaila osoko bideoaren orientazioa</string>
+    <string name="pref_oritentation_unspecified">Zehaztu gabea</string>
+    <string name="pref_oritentation_landscape">Horizontala</string>
+    <string name="pref_oritentation_portrait">Bertikala</string>
+    <string name="pref_oritentation_sensor">Sentsorea</string>
+    <string name="pref_oritentation_no_sensor">Sentsorerik ez</string>
+    <string name="pref_search_url">Bilaketa motorraren URL-ezarpenak</string>
+    <string name="pref_search_url_error">%s ez da aurkitu</string>
+    <string name="pref_lpress_settings">Luze sakatzearen ezarpenak</string>
+    <string name="pref_lpress_link">Lotura</string>
+    <string name="pref_lpress_image">Irudia</string>
+    <string name="pref_lpress_linkimage">Irudiaren lotura</string>
+    <string name="pref_tab_size_x">Erakutsi fitxaren zabalera</string>
+    <string name="pref_tab_font_size">Fitxaren letra-tamaina</string>
+    <string name="pref_action_settings">Ekintza-ezarpenak</string>
+    <string name="pref_tab_action">Fitxa-ekintza</string>
+    <string name="pref_show_zoom_button">Erakutsi zoom botoiak</string>
+    <string name="pref_fullscreen">Pantaila osoa</string>
+    <string name="pref_keep_screen_on">Mantendu pantaila piztuta</string>
+    <string name="pref_accept_cookie">Onartu cookie-a</string>
+    <string name="pref_accept_third_cookie">Onartu hirugarrengoen cookie-ak</string>
+    <string name="pref_accept_cookie_private">Onarko cookie-ak modu pribatuan</string>
+    <string name="pref_web_cache">Cache modua</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>Lehenetsia</item>
+        <item>Cache-rik eze</item>
+        <item>Hobetsi cachetik kargatzea</item>
+        <item>Kargatu cachetik besterik ez</item>
+    </string-array>
+
+    <string name="pref_web_popup">Gaitu laster-leihoa</string>
+    <string name="pref_download_action">Deskarga-ekintza</string>
+
+    <string-array name="pref_download_action_list">
+        <item>Ez egin ezer</item>
+        <item>Automatikoa</item>
+        <item>Deskargatu beti</item>
+        <item>Ireki beti</item>
+        <item>Partekatu</item>
+        <item>Hautatu</item>
+    </string-array>
+
+    <string name="pref_download_folder">Deskargarako direktorioa</string>
+    <string name="pref_pause_web_background">Pausatu weba bigarren planoan</string>
+    <string name="pref_pause_web_tab_change">Pausatu weba fitxa aldatzean</string>
+    <string name="pref_pause_web_tab_change_disable_summary">Desgaituta WebView-k akats bat duelako</string>
+    <string name="pref_btn_custom">Barrako botoi pertsonalizatua</string>
+    <string name="pref_custom_bar">Barra pertsonalizatua</string>
+    <string name="pref_save_formdata">Gorde web formularioetako datuak</string>
+    <string name="pref_web_app_cache">Gaitu aplikazio-cachea</string>
+    <string name="pref_web_geolocation">Gaitu geokokapena</string>
+    <string name="pref_privacy_settings">Pribatutasun ezarpenak</string>
+    <string name="pref_clear_browser_data">Garbitu datuak</string>
+    <string name="pref_layout_algorithm">Maketazio algoritmoa</string>
+
+    <string-array name="pref_layout_algorithm_list">
+        <item>Arrunta</item>
+        <item>Testuaren tamaina automatikoa</item>
+        <item>Zutabe bakarra (zaharkitua)</item>
+        <item>Zutabe eztuak (zaharkitua)</item>
+    </string-array>
+
+    <string name="pref_save_history">Gorde historiala</string>
+    <string name="pref_newtab_settings">Fitxa berriaren ezarpenak</string>
+
+    <string-array name="pref_newtab_list">
+        <item>Uneko fitxa</item>
+        <item>Fitxa berria</item>
+        <item>Bigarren planoko fitxa</item>
+        <item>Eskuineko fitxa berria</item>
+        <item>Eskuineko bigarren planoko fitxa</item>
+    </string-array>
+
+    <string name="pref_newtab_link">Lotura</string>
+    <string name="pref_newtab_bookmark">Gogokoa</string>
+    <string name="pref_newtab_history">Historiala</string>
+    <string name="pref_newtab_blank">target=\"_blank\"</string>
+    <string name="pref_proxy_settings">Proxy-ezarpenak</string>
+    <string name="pref_ssl_error_alert">Erakutsi segurtasun abisuak</string>
+    <string name="pref_gesture_settings">Keinu-ezarpenak</string>
+    <string name="pref_web_gesture_settings">Web-keinuen ezarpenak</string>
+    <string name="pref_sub_gesture_settings">Azpi-keinuen ezarpenak</string>
+    <string name="pref_gesture_enable">Gaitu keinua</string>
+    <string name="pref_gesture_line">Erakutsi keinuaren marra</string>
+    <string name="pref_gesture_score">Keinuaren balioa</string>
+    <string name="pref_lpress_others">Bestelakoak</string>
+    <string name="pref_clear_data_at_finish">Garbitu datuak amaitzean</string>
+    <string name="pref_security_settings">Segurtasun-ezarpenak</string>
+    <string name="pref_file_access">Fitxategi lokalak atzitzeko ezarpenak</string>
+
+    <string-array name="pref_file_access_list">
+        <item>Desgaitu (seguruena)</item>
+        <item>Enable in sandbox (safer)</item>
+        <item>Enable (unsafe)</item>
+    </string-array>
+
+    <string name="pref_mixed_content">Insecure content settings on https</string>
+
+    <string-array name="pref_mixed_content_list">
+        <item>Ez baimendu inoiz (seguruena)</item>
+        <item>Bateragarritasuna (lehenetsia)</item>
+        <item>Baimendu beti (ez segurua)</item>
+    </string-array>
+
+    <string name="pref_toolbar_visibility">Ikusgaitasuna</string>
+
+    <string-array name="pref_toolbar_visibility_list">
+        <item>Ikusgai</item>
+        <item>Ezkutatu pantaila osoan</item>
+        <item>Ezkutatu kargatzen bukatzean</item>
+        <item>Ezkutatu pantaila bertikalean</item>
+        <item>Ezkutatu pantaila horizontalean</item>
+        <item>Ezkutatu disposizioa txikitzean</item>
+    </string-array>
+
+    <string name="pref_qc_rad_start">Erradioa</string>
+
+    <string-array name="pref_qc_r_pos_list">
+        <item>Ezker eta eskuina</item>
+        <item>Ezkerra</item>
+        <item>Eskuina</item>
+    </string-array>
+
+    <string name="pref_import_bookmark_confirm">Ziur gogokoak berreskuratu nahi dituzula?</string>
+    <string name="pref_export_bookmark">Gogokoen babes-kopia</string>
+    <string name="pref_import_html_bookmark">Inportatu gogokoak</string>
+    <string name="pref_fast_back_cache_size_comment">0 = mugagabea</string>
+
+    <string-array name="pref_search_suggest_list">
+        <item>Sarea</item>
+        <item>Recent queries</item>
+        <item>Biak</item>
+        <item>Bat ere ez</item>
+    </string-array>
+
+    <string name="pref_history_settings">Historialaren ezarpenak</string>
+
+    <string name="version">Bertsioa</string>
+    <string name="build">Konpilazioa</string>
+    <string name="build_time">Konpilazio ordua</string>
+
+    <string name="pref_close_default">Lehenetsia</string>
+    <string name="pref_close_window">Leiho berria (target=_blank)</string>
+
+    <string name="pref_speeddial_show_header">Erakutsi goiburua</string>
+
+    <string name="pref_translators">osoitz</string>
+</resources>

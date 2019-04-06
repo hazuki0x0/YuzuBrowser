@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="action_list">
+        <item>Powrót</item>
+        <item>Do przodu</item>
+        <item>Odśwież/Zatrzymaj</item>
+        <item>Odśwież</item>
+        <item>Zatrzymaj ładowanie</item>
+        <item>Główna</item>
+        <item>Przybliżenie</item>
+        <item>Oddalenie</item>
+        <item>Strona w górę</item>
+        <item>Strona w dół</item>
+        <item>Góra strony</item>
+        <item>Dół strony</item>
+        <item>Przewijanie strony</item>
+        <item>Pasek-przewijanie strony</item>
+        <item>Automatyczne przewijanie</item>
+        <item>Focus góra</item>
+        <item>Focus dół</item>
+        <item>Focus lewo</item>
+        <item>Focus prawo</item>
+        <item>Skupiony widok</item>
+        <item>Przycisk JavaScript</item>
+        <item>Przycisk loading image</item>
+        <item>Przycisk Cookie</item>
+        <item>Przycisk UserScript</item>
+        <item>Przycisk navigate lock</item>
+        <item>Informacje o stronie</item>
+        <item>Skopuij URL strony</item>
+        <item>Skopuij tytuł strony</item>
+        <item>Skopuij URL i tytuł</item>
+        <item>Zakładka Historii</item>
+        <item>Wskaźnik myszy</item>
+        <item>Znajdź na stronie</item>
+        <item>Zapisz screenshot</item>
+        <item>Udostępnij screenshot</item>
+        <item>Zapisz stronę</item>
+        <item>Otwórz URL</item>
+        <item>Przetłumacz stronę</item>
+        <item>Nowa zakłądka</item>
+        <item>Zamknij zakładkę</item>
+        <item>Zamknij wszystkie</item>
+        <item>Zamknij pozostałe</item>
+        <item>Przesuń do lewej zakładki</item>
+        <item>Przesuń do prawej zakładki</item>
+        <item>Przejdź do lewej</item>
+        <item>Przejdź do prawej</item>
+        <item>Lista zakładek</item>
+        <item>Zamknij wszystkie lewe zakładki</item>
+        <item>zamknij wszystkie prawe zakładki</item>
+        <item>Przywróć zakładki</item>
+        <item>Replikuj zakładkę</item>
+        <item>Pokaż pole wyszukiwania</item>
+        <item>Wklej do pola wyszukiwania</item>
+        <item>Wklej URL</item>
+        <item>Bookmark</item>
+        <item>Historia</item>
+        <item>Pobierz listę</item>
+        <item>Ustawienia</item>
+        <item>Otwórz szybkie wybieranie</item>
+        <item>Dodaj zakładkę</item>
+        <item>Dodaj do szybkiego wybierania</item>
+        <item>Dodaj dopasowanie do wzorca</item>
+        <item>Dodaj do ekranu głównego</item>
+        <item>Podrzędny gest</item>
+        <item>Wyczyśc dane</item>
+        <item>Pokaż ustawienia proxy</item>
+        <item>Ustawienia orientacji</item>
+        <item>Otworzenie link ustawienia</item>
+        <item>UserAgent ustawienia</item>
+        <item>Domyślne ustawienia UserAgent</item>
+        <item>Rozmiar tekstu strony ustawienia</item>
+        <item>UserScript ustawienia</item>
+        <item>kodowanie tekstu ustawienia</item>
+        <item>Tryb renderowania</item>
+        <item>Toggle Tab bar visibility</item>
+        <item>Toggle Url bar visibility</item>
+        <item>Toggle Progress bar visibility</item>
+        <item>Toggle Custom bar visibility</item>
+        <item>Combine web titlebar</item>
+        <item>Toggle web gesture</item>
+        <item>Toggle flick action</item>
+        <item>Toggle quick control</item>
+        <item>Toggle multi touch gesture</item>
+        <item>Toggle ad block</item>
+        <item>Otwórz czarną listę</item>
+        <item>Otwórz białą listę</item>
+        <item>Open white page list</item>
+        <item>Dodaj do białej listy</item>
+        <item>Udostepnij stronę</item>
+        <item>Otwórz w innej aplikacji</item>
+        <item>Rozpocznij aktywność</item>
+        <item>Toggle fullscreen</item>
+        <item>Otwórz menu opcji</item>
+        <item>POkaż niestandardowe menu</item>
+        <item>Zakończ</item>
+        <item>Move task to back</item>
+        <item>Niestandardowa akcja</item>
+        <item>Wibracje</item>
+        <item>Show toast</item>
+        <item>Tryb prywatny</item>
+        <item>Distinction tab finish</item>
+        <item>Pokaż źródło strony</item>
+        <item>Drukuj</item>
+        <item>Przypnij tab</item>
+        <item>Lista akcji</item>
+        <item>Tryb czytnika</item>
+        <item>Przeczytaj później</item>
+        <item>Lista przeczytaj później</item>
+    </string-array>
+</resources>

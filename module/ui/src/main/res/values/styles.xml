@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="ToolbarImageButton" parent="@android:style/Widget.ImageButton">
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ToolbarTextButton" parent="@android:style/Widget.Button">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/toolbar_text_color</item>
+    </style>
+
+    <style name="ToolbarStyle">
+        <item name="android:background">@color/deep_gray</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="BrowserThemeDayNight" parent="@style/Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="android:colorControlNormal">@color/content_normal</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="spinnerButtonStyle">@style/Widget.Yuzu.SpinnerButton</item>
+        <item name="android:webViewStyle">@style/Widget.Yuzu.WebView</item>
+        <item name="iconColor">@color/iconColor</item>
+        <item name="editTextStyle">@style/EditTextStyle</item>
+        <item name="urlBarBoxColor">@color/urlBarBoxColor</item>
+        <item name="urlBarBoxBorderColor">@color/urlBarBoxBorderColor</item>
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
+    </style>
+
+    <style name="BrowserThemeDayNight.NoTitle" parent="@style/BrowserThemeDayNight">
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="BrowserThemeDayNight.Browser" parent="BrowserThemeDayNight.NoTitle">
+        <item name="colorPrimaryDark">@color/browser_primary_dark</item>
+    </style>
+
+    <style name="BrowserThemeDayNight.CustomToolbar" parent="BrowserThemeDayNight.NoTitle">
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="BrowserThemeDayNight.Transparent" parent="@style/BrowserThemeDayNight.NoTitle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="BrowserThemeDayNight.Pref" parent="BrowserThemeDayNight">
+        <item name="android:textColorPrimary">@color/pref_text_color</item>
+        <item name="android:textColorSecondary">@color/pref_text_secondary_color</item>
+    </style>
+
+    <style name="Widget.Yuzu.SpinnerButton" parent="Widget.AppCompat.Spinner">
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem
+        </item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textAlignment">inherit</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <style name="Widget.Yuzu.WebView" parent="@android:style/Widget.WebView">
+        <item name="android:scrollbarThumbVertical">@color/scroll_bar</item>
+        <item name="android:scrollbarThumbHorizontal">@color/scroll_bar</item>
+        <item name="android:scrollbarSize">4dp</item>
+    </style>
+
+    <style name="EditTextStyle" parent="@style/Widget.AppCompat.EditText"/>
+
+    <style name="Widget.MaterialProgressBar.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <!--
+        Disabled for correct behavior on Android 4.x, see
+        https://github.com/android/platform_frameworks_base/commit/911743652b597057a1bd7ef8a921e9ff8dce0f4a#diff-149f45c5ff2d3185bb79688ba17bc432L536
+        <item name="android:progressDrawable">@null</item>
+        -->
+        <item name="android:indeterminateDrawable">@null</item>
+        <item name="android:minHeight">4dp</item>
+        <item name="android:maxHeight">4dp</item>
+    </style>
+
+    <style name="TextAppearance" parent="android:TextAppearance" tools:ignore="UnusedResources"/>
+
+    <style name="TextAppearance.SingleTitle">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.ListTitle">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.ListBody">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/action_mode_background</item>
+    </style>
+</resources>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="action_list">
+        <item>戻る</item>
+        <item>進む</item>
+        <item>更新/停止</item>
+        <item>更新</item>
+        <item>停止</item>
+        <item>ホーム</item>
+        <item>ズームイン!!</item>
+        <item>ズームアウト</item>
+        <item>ページアップ</item>
+        <item>ページダウン</item>
+        <item>先頭へ移動</item>
+        <item>末尾へ移動</item>
+        <item>カスタムページスクロール</item>
+        <item>シークバーページスクロール</item>
+        <item>オートページスクロール</item>
+        <item>フォーカス上</item>
+        <item>フォーカス下</item>
+        <item>フォーカス左</item>
+        <item>フォーカス右</item>
+        <item>フォーカスビューをクリック</item>
+        <item>JavaScriptの切替</item>
+        <item>画像読み込みの切替</item>
+        <item>Cookieの切替</item>
+        <item>UserScriptの切替</item>
+        <item>ナビゲートロックの切替</item>
+        <item>ページ情報</item>
+        <item>URLのコピー</item>
+        <item>タイトルのコピー</item>
+        <item>URLとタイトルのコピー</item>
+        <item>タブ内履歴</item>
+        <item>マウスポインター</item>
+        <item>ページ内検索</item>
+        <item>スクリーンショットの保存</item>
+        <item>スクリーンショットの共有</item>
+        <item>ページの保存</item>
+        <item>URLを開く</item>
+        <item>ページの翻訳</item>
+        <item>新規タブ</item>
+        <item>タブを閉じる</item>
+        <item>すべてのタブを閉じる</item>
+        <item>他のタブをすべて閉じる</item>
+        <item>左のタブへ移動</item>
+        <item>右のタブへ移動</item>
+        <item>タブを左へ移動</item>
+        <item>タブを右へ移動</item>
+        <item>タブ一覧</item>
+        <item>左のタブをすべて閉じる</item>
+        <item>右のタブをすべて閉じる</item>
+        <item>タブの復元</item>
+        <item>タブの複製</item>
+        <item>検索バーの表示</item>
+        <item>検索バーへ貼り付け</item>
+        <item>クリップボードのテキストを開く</item>
+        <item>ブックマーク</item>
+        <item>履歴</item>
+        <item>ダウンロード一覧</item>
+        <item>設定</item>
+        <item>スピードダイアルを開く</item>
+        <item>ブックマークの追加</item>
+        <item>スピードダイアルに追加</item>
+        <item>パターンマッチに追加</item>
+        <item>ホーム画面へ追加</item>
+        <item>サブジェスチャー</item>
+        <item>データ消去</item>
+        <item>Proxy設定</item>
+        <item>画面の向きの設定</item>
+        <item>リンクを開くときの設定</item>
+        <item>UserAgentの変更</item>
+        <item>デフォルトUserAgentの変更</item>
+        <item>テキストサイズの設定</item>
+        <item>UserScriptの設定</item>
+        <item>テキストエンコードの設定</item>
+        <item>レンダリング モード</item>
+        <item>タブバー表示の切替</item>
+        <item>URLバー表示の切替</item>
+        <item>プログレスバー表示の切替</item>
+        <item>カスタムバー表示の切替</item>
+        <item>Webタイトルバーの結合</item>
+        <item>Webジェスチャーの切替</item>
+        <item>フリックアクションの切替</item>
+        <item>クイックコントロールの切替</item>
+        <item>マルチタッチジェスチャの切替</item>
+        <item>広告ブロックの切替</item>
+        <item>ブラックリストを開く</item>
+        <item>ホワイトリストを開く</item>
+        <item>ホワイトページリストを開く</item>
+        <item>ホワイトページリストに追加</item>
+        <item>ページの共有</item>
+        <item>他のアプリで開く</item>
+        <item>Activityを開く</item>
+        <item>フルスクリーン</item>
+        <item>メインメニューを開く</item>
+        <item>カスタムメニュー</item>
+        <item>終了</item>
+        <item>最小化</item>
+        <item>カスタムアクション</item>
+        <item>バイブレーション</item>
+        <item>トーストを表示</item>
+        <item>プライベートモード</item>
+        <item>判別タブ終了</item>
+        <item>ページのソースを表示</item>
+        <item>印刷</item>
+        <item>タブのピン留め</item>
+        <item>アクション一覧</item>
+        <item>リーダーモード</item>
+        <item>あとで読む</item>
+        <item>あとで読む一覧</item>
+    </string-array>
+</resources>

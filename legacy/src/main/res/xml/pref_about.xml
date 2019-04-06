@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/pref_about">
+    <Preference
+        android:title="@string/browser_app_name"
+        android:summary="@string/copyright" />
+    <Preference
+        android:key="version"
+        android:title="@string/version" />
+    <Preference
+        android:key="build"
+        android:title="@string/build" />
+    <Preference
+        android:key="build_time"
+        android:title="@string/build_time" />
+    <Preference
+        android:key="osl"
+        android:title="@string/open_source_license" />
+    <Preference
+        android:key="translation"
+        android:title="@string/pref_translation"
+        android:summary="@string/pref_translators"/>
+    <Preference
+        android:key="privacy_policy"
+        android:title="@string/pref_privacy_policy"/>
+    <PreferenceCategory android:title="@string/pref_log">
+        <SwitchPreference
+            android:key="detailed_log"
+            android:title="@string/pref_detailed_log" />
+        <Preference
+            android:key="delete_log"
+            android:title="@string/pref_delete_all_logs" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

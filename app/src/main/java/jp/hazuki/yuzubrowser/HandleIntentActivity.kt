@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,17 @@ import android.os.BadParcelableException
 import android.os.Bundle
 import android.provider.Browser
 import android.speech.RecognizerResultsIntent
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.widget.Toast
-import jp.hazuki.yuzubrowser.settings.data.AppData
-import jp.hazuki.yuzubrowser.utils.WebUtils
-import jp.hazuki.yuzubrowser.utils.createLanguageContext
+import androidx.appcompat.app.AppCompatActivity
+import jp.hazuki.yuzubrowser.browser.BrowserActivity
+import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageContext
+import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
+import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 
 class HandleIntentActivity : AppCompatActivity() {
-    companion object {
-        const val EXTRA_OPEN_FROM_YUZU = "jp.hazuki.yuzubrowser.extra.open.from.yuzu"
-    }
+    companion object;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

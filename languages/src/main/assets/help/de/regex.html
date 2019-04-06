@@ -1,0 +1,216 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="../help.css" media="all">
+</head>
+<body>
+<h1 class="head">Spezifikation Mustervergleich</h1>
+<details>
+    <summary>Grundlage</summary>
+    <div class="details_info">
+        Wildcard (Platzhalter)
+        <ul>
+            <li>'#'</li>
+            Entspricht einem einzelnen numerischen (0-9) Zeichen (interpretiert als'\d')
+            <li>'?'</li>
+            Entspricht einem beliebigen einzelnen Zeichen (interpretiert als '.')
+            <li>'*'</li>
+            Entspricht keinem oder mehreren Zeichen (interpretiert als '.*')
+            <li>'+'</li>
+            Entspricht einem oder mehreren Zeichen (interpretiert als '.+')
+        </ul>
+        Wenn Sie die Zeichen #,?,*,+ dagegen als normale Zeichen verwenden möchten, müssen
+        Sie einen Backslash ('\') vor das jeweilige Zeichen setzen (Maskierung): <br>
+        '\#', '\?', '\*', '\+'<br><br>
+        Sie können auch einen regulären Ausdruck verwenden, indem Sie ihn
+        mit<code>[]</code>.<br> umschließen.
+        Mustervergleiche unterscheiden immer zwischen Groß- und Kleinbuchstaben.
+    </div>
+</details>
+<details>
+    <summary>Wildcard (Platzhalter) Beschreibung</summary>
+    <div class="details_info">
+        <ul>
+            <li>Wildcard '#'</li>
+        </ul>
+        <div class="li_info">
+            '#' entspricht "einer der Zahlen 0-9". <br>
+            z.B.1) Pattern string = <code>IMG#.jpg</code><br>
+            Wenn eine URL <code>IMG0.jpg</code> oder <code>IMG1.jpg</code> oder ... oder <code>IMG8.jpg</code>
+            oder <code>IMG9.jpg</code> enthält, wird sie gefunden.<br>
+            Im Falle von <code>http://www.test.com/IMG.jpg</code> wird diese URL nicht gefunden,
+            weil keine Zahl nach "IMG" folgt.<br>
+            z.B.2) Pattern string = <code>IMG###.jpg</code><br>
+            Wenn eine URL <code>IMG000.jpg</code> oder <code>IMG001.jpg</code> oder ... oder <code>IMG998.jpg</code>
+            oder <code>IMG999.jpg</code> enthält, wird sie gefunden.<br>
+            Im Falle von <code>http://www.test.com/IMG0a1.jpg</code>, wird diese URL nicht gefunden,
+            da sie keine drei aufeinanderfolgenden Zahlenwerte enthält.
+        </div>
+        <ul>
+            <li>Wildcard '?'</li>
+        </ul>
+        <div class="li_info">
+            '?' entspricht einem beliebigen "Einzelzeichen".<br>
+            z.B.1) Pattern string = <code>IMG_?.jpg</code><br>
+            Wenn eine URL den Ausdruck 'ein beliebiges Einzelzeichen' zwischen
+            <code>IMG_</code> und <code>.jpg</code> enthält, wird sie gefunden.<br>
+            Im Falle von <code>http://www.test.com/IMG_l.jpg</code> stimmt diese URL
+            überein.<br>
+            Im Falle von <code>http://www.test.com/IMG_00.jpg</code> befinden
+            sich aber zwei Zeichen (<code>00</code>) zwischen <code>IMG_</code> und
+            <code>.jpg</code>, die URL stimmt also nicht überein.<br>
+            z.B.2) Pattern string = <code>IMG_???.jpg</code><br>
+            Dieser Mustervergleich findet alle URLs, die genau drei beliebige Zeichen zwischen
+            <code>IMG_</code> und <code>.jpg</code> enthalten.
+        </div>
+        <ul>
+            <li>Wildcard '*'</li>
+        </ul>
+        <div class="li_info">
+            '*' entspricht "keinem oder mehreren Zeichen".<br>
+            z.B.) Pattern string = <code>IMG_*.jpg</code><br>
+            Wenn eine URL den Ausdruck 'kein oder mehrere Zeichen' zwischen
+            <code>IMG_</code> und <code>.jpg</code> enthält, wird diese gefunden.<br>
+            Daher passt dieser Ausdruck sowohl auf <code>IMG_.jpg</code>, <code>IMG_000.jpg</code>
+            als auch auf <code>IMG_000abc.jpg</code>.
+        </div>
+        <ul>
+            <li>Wildcard'+'</li>
+        </ul>
+        <div class="li_info">
+            '+' entspricht "mindestens einem oder mehreren Zeichen".<br>
+            z.B.) Pattern string = <code>IMG_+.jpg</code><br>
+            Wenn eine URL den Ausdruck 'mindestens ein oder mehrere Zeichen' zwischen
+            <code>IMG_</code> and <code>.jpg</code> enthält, stimmt sie überein.<br>
+            Daher trifft dieser Ausdruck sowohl auf <code>IMG_.jpg</code>, <code>IMG_000.jpg</code>
+            als auch auf <code>IMG_000abc.jpg</code> zu.
+            <font color="red">Der Ausdruck trifft aber nicht zu, wenn nichts zwischen
+                <code>IMG_</code> und
+                <code>.jpg</code> steht.</font><br>
+            Daher wird <code>IMG_.jpg</code> ignoriert. Aber auch <code>IMG.jpg</code> wird
+            ignoriert, da es nicht dem ersten Suchstring 'IMG_' entspricht.
+        </div>
+        <ul>
+            <li>Regulärer Ausdruck</li>
+        </ul>
+        <div class="li_info">
+            Der in '[' und ']' eingeschlossene Mustervergleich wird als regulärer
+            Ausdruck behandelt.<br>
+            Reguläre Ausdrücke entsprechen den Java-Spezifikationen. <br>
+            z.B.) <code>[https?://wwww\.test\.com/IMG_*\.jpg]</code>
+        </div>
+    </div>
+</details>
+<details id="insecure_content">
+    <summary>Musterübereinstimmung</summary>
+    <div class="details_info">
+        Wenn Sie ein Schema wie <code>http://</code> nicht anwenden, wird es automatisch ergänzt
+        (es wird <code>^\w+://</code> hinzugefügt)<br>
+        Wenn Sie ein Muster wie <code>*test.com</code> erstellen, passt es also zu einer URL, wie
+        z.B. <code>http://other.com/?page=test.com</code>.
+        <ul>
+            <li>Wenn Sie eine Subdomain ersetzen möchten</li>
+        </ul>
+        <div class="li_info">
+            Beginnen Sie mit <code>*.</code> oder <code>http://*.</code>.
+            (<code>*.</code> wird intern durch
+            <code>(?![./]).)*</code> ersetzt)<br>>
+            z.B.) Pattern-String =<code>*.test.com</code><br>
+            Entspricht <code>mobile.test.com</code>, <code>doc.test.com</code><br> etc.
+            <code>mobile.doc.test.com</code> wird jedoch nicht gefunden, da die Subdomain einen
+            <code>.</code> enthält.
+        </div>
+        <ul>
+            <li>Wenn der Mustervergleich mit <code>http*://</code> beginnt.</li>
+        </ul>
+        <div class="li_info">
+            Dies ist nicht notwendig, da dieser Teil automatisch durch den Browser ergänzt
+            wird.<br>
+            Diese Beschreibung wird intern durch <code>https?://</code>ersetzt, um Fehltreffer zu
+            vermeiden.
+        </div>
+    </div>
+</details>
+<details>
+    <summary>Werbeblocker</summary>
+    <div class="details_info">
+        Wenn Sie keine Wildcard (Platzhalter) verwenden, wird es schneller gehen.<br>
+        Darüber hinaus ist die Performance schlechter, wenn es einen komplexen Mustervergleich
+        im regulären Ausdruck gibt.<br>
+        <ul>
+            <li>Wenn Sie keine Wildcard (Platzhalter) verwenden (<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            Wenn es eine spezifische Zeichenkette in der URL gibt, blockieren Sie diese.<br>
+            z.B.) Pattern string =<code>ad.jpg</code><br>
+            blockiert <code>http://test.com/ad/ad.jpg</code>,
+            <code>https://test.jp/ad/img/ad.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Wenn Sie keine Wildcard (Platzhalter) verwenden (<code>#?*+</code>)</li>
+        </ul>
+        <div class="li_info">
+            Weitere Informationen finden Sie in der Wildcardbeschreibung.<br>
+            z.B.) Pattern string =<code>/ad/+.jpg</code><br>
+            blockiert <code>http://test.com/ad/01.jpg</code>, <code>https://test.jp/ad/img/advertisement.jpg</code>
+            etc.
+        </div>
+        <ul>
+            <li>Host-Sperre</li>
+        </ul>
+        <div class="li_info">
+            Sperrt alle spezifizierten Hosts.<br>
+            <ul>
+                <li>Vollständige Übereinstimmung</li>
+            </ul>
+            <div class="li_info">
+                <code>h ad.test.com</code>Fügt ein nachfolgendes Leerzeichen ein, auf das sich
+                'h' als Bezug ('as') bezieht.<br>
+                Sinnvoll, um <code>http://ad.test.com</code> zu blockieren, ohne zugleich <code>http://test.com</code>
+                zu blockieren.<br>
+                Wildcards (Platzhalter) können verwendet werden. <br>
+                z.B.) <code>h ad.+.com</code>, <code>h ad.test.*</code><br>
+
+                <code>127.0.0.1 ad.com</code> Der Bezug ('as') kann auch im Host-Format
+                angegeben werden.
+            </div>
+            <ul>
+                <li>Teilweise Übereinstimmung</li>
+            </ul>
+            <div class="li_info">
+                <code>c ad.com</code>Fügt ein nachfolgendes Leerzeichen ein, auf das sich 'c'
+                als Bezug ('as') bezieht.<br>
+                Blockiert <code>http://ad.com</code>, <code>http://abc.ad.com</code>, <code>http://ad001.ad.com</code>
+                etc.<br>
+                <font color="red">Wildcards (Platzhalter) können NICHT verwendet werden.</font>
+            </div>
+            <ul>
+                <li>Verwendung regulärer Ausdrücke in der Host-Sperre</li>
+            </ul>
+            <div class="li_info">
+                <code>h [test\.com]</code> der Bezug ('as') kann auch als regulärer
+                Ausdruck angegeben werden.
+            </div>
+        </div>
+    </div>
+</details>
+</body>
+</html>

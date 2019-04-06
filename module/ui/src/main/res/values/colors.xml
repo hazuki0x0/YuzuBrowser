@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <color name="tab_text_color_normal">#FF999999</color>
+    <color name="tab_text_color_selected">#FFEEEEEE</color>
+    <color name="tab_text_color_locked">#FF57FF2D</color>
+    <color name="tab_text_color_pinning">#6ae1ff</color>
+    <color name="toolbar_text_color">#FFEEEEEE</color>
+    <color name="web_gesture_color">#48FFFF00</color>
+    <color name="add_gesture_color">#FFFFFF00</color>
+    <color name="qc_normal">#E02A96BC</color>
+    <color name="qc_selected">#F01A5B73</color>
+    <color name="bookmark_multi_selected">#E02A96BC</color>
+    <color name="float_bottom_background">#FFBBBBBB</color>
+    <color name="yuzu_orange">#FFF6BC1E</color>
+    <color name="action_mode_background">#0d87c6</color>
+    <color name="browser_primary_dark">#101010</color>
+
+    <color name="deep_gray">#222222</color>
+    <color name="white">#FFFFFF</color>
+    <color name="ripple">#42ffffff</color>
+    <color name="tab_list_background">#f5222222</color>
+    <color name="white_gray">#e6e6e6</color>
+    <color name="scroll_bar">#aa646464</color>
+    <color name="selected_overlay">#800d87c6</color>
+    <color name="light_border">#bfbfbf</color>
+    <color name="dark_border">#000000</color>
+    <color name="dark_box">#626262</color>
+</resources>

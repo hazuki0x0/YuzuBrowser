@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <string name="action_settings">Configurações</string>
+    <string name="action_tab_loop">Loop de guia</string>
+    <string name="action_action_cant_back">Ação sem históricos</string>
+    <string name="action_finish_alert">Mostrar alerta</string>
+    <string name="action_finish_close_tab">Fechar guia ao finalizar</string>
+    <string name="action_action_cant_close_tab">Ação na última guia</string>
+    <string name="action_select_menu">Selecionar menu</string>
+    <string name="action_target_tab">Guia alvo</string>
+
+    <string-array name="action_start_activity_template">
+        <item>App</item>
+        <item>Atalho</item>
+        <item>Compartilhar página</item>
+        <item>Abrir com outro app</item>
+    </string-array>
+
+    <string name="action_start_activity_edit_intent">Editar intenção</string>
+    <string name="action_start_activity_edit_url">Editar URL de consulta</string>
+    <string name="action_screenshot_all">Capturar todas</string>
+    <string name="action_screenshot_path">Salvar no diretório</string>
+    <string name="action_screenshot_full_error">Renderização lenta deve ser ativada se você quiser usar \"Capturar todas\".</string>
+    <string name="action_mousepointer_backfinish">Finalizar quando botão voltar for pressionado</string>
+    <string name="action_translate_from">De</string>
+    <string name="action_translate_to">Para</string>
+    <string name="action_translate_auto_select">Autosselecionar</string>
+    <string name="action_translate_select_each">Selecionar cada vez</string>
+    <string name="action_web_scroll_x_coordinate">Coordenada-X</string>
+    <string name="action_web_scroll_y_coordinate">Coordenada-Y</string>
+    <string name="action_web_scroll_x_y_zero">Erro : X ou Y não deve ser 0</string>
+
+    <string-array name="action_web_scroll_type_list">
+        <item>Rolagem rápida</item>
+        <item>Rolagem atirada</item>
+    </string-array>
+
+    <string name="action_custom_name">Nome da ação</string>
+    <string name="action_useragent_setting">Configurações de agente do usuário</string>
+    <string name="action_custom_setting">Configurações de ação personalizada</string>
+    <string name="action_start_activity_setting">Configurações de atividade</string>
+    <string name="action_web_encode_setting">Configurações de codificação de texto</string>
+    <string name="action_vibration_setting">Período de tempo (ms.)</string>
+    <string name="action_auto_scroll_speed">Velocidade de autorrolagem</string>
+    <string name="action_auto_scroll_speed_zero">Erro : A velocidade não deve ser 0</string>
+
+    <string name="action_tab_list">Modo de lista de guia</string>
+    <string-array name="action_tab_list">
+        <item>Lista vertical</item>
+        <item>Lista vertical reversa</item>
+        <item>Lista horizontal</item>
+    </string-array>
+    <string name="action_tab_list_button">Posição do botão de nova guia</string>
+    <string-array name="action_tab_list_button">
+        <item>Direita</item>
+        <item>Esquerda</item>
+    </string-array>
+    <string name="action_tab_list_last_tab">Comportamento ao fechar última guia</string>
+    <string-array name="action_tab_list_last_tab">
+        <item>Nenhum</item>
+        <item>Nova guia</item>
+        <item>Finalizar</item>
+        <item>Finalizar com alerta</item>
+    </string-array>
+
+    <string name="action_open_menu">Posição de exibição do menu</string>
+    <string-array name="action_open_menu_list">
+        <item>Esquerda</item>
+        <item>Centro</item>
+        <item>Direita</item>
+    </string-array>
+
+    <string name="action_bottom_search_bar">Mostrar barra de pesquisa no rodapé</string>
+    <string name="show_toast">Mostrar toast</string>
+</resources>

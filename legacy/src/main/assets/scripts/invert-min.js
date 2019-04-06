@@ -1,0 +1,1 @@
+(function(){var e=%s,t="yuzubrowser_invert_mode",n=document.getElementById(t);e&&null!=n||!e&&null==n||(e?(n=document.createElement("style"),n.type="text/css",n.id=t,n.innerHTML="img,video,canvas{-webkit-filter:invert(100%)}",document.getElementsByTagName("head")[0].appendChild(n)):n.parentNode.removeChild(n))}());

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="translate_language_list">
+        <item>アフリカーンス語</item>
+        <item>アルバニア語</item>
+        <item>アラビア語</item>
+        <item>アゼルバイジャン語</item>
+        <item>バスク語</item>
+        <item>ベンガル語</item>
+        <item>ベラルーシ語</item>
+        <item>ブルガリア語</item>
+        <item>カタルーニャ語</item>
+        <item>中国語(簡体字)</item>
+        <item>中国語(繁体字)</item>
+        <item>クロアチア語</item>
+        <item>チェコ語</item>
+        <item>デンマーク語</item>
+        <item>オランダ語</item>
+        <item>英語</item>
+        <item>エスペラント語</item>
+        <item>エストニア語</item>
+        <item>タガログ語</item>
+        <item>フィンランド語</item>
+        <item>フランス語</item>
+        <item>ガリシア語</item>
+        <item>グルジア語</item>
+        <item>ドイツ語</item>
+        <item>ギリシア語</item>
+        <item>グジャラート語</item>
+        <item>ハイチクレオール語</item>
+        <item>ヘブライ語</item>
+        <item>ヒンディー語</item>
+        <item>ハンガリー語</item>
+        <item>アイスランド語</item>
+        <item>インドネシア語</item>
+        <item>アイルランド語</item>
+        <item>イタリア語</item>
+        <item>日本語</item>
+        <item>カンナダ語</item>
+        <item>韓国語</item>
+        <item>ラテン語</item>
+        <item>ラトビア語</item>
+        <item>リトアニア語</item>
+        <item>マケドニア語</item>
+        <item>マレー語</item>
+        <item>マルタ語</item>
+        <item>ノルウェー語</item>
+        <item>ペルシア語</item>
+        <item>ポーランド語</item>
+        <item>ポルトガル語</item>
+        <item>ルーマニア語</item>
+        <item>ロシア語</item>
+        <item>セルビア語</item>
+        <item>スロバキア語</item>
+        <item>スロベニア語</item>
+        <item>スペイン語</item>
+        <item>スワヒリ語</item>
+        <item>スウェーデン語</item>
+        <item>タミル語</item>
+        <item>テルグ語</item>
+        <item>タイ語</item>
+        <item>トルコ語</item>
+        <item>ウクライナ語</item>
+        <item>ウルドゥー語</item>
+        <item>ベトナム語</item>
+        <item>ウェールズ語</item>
+        <item>イディッシュ語</item>
+    </string-array>
+</resources>
