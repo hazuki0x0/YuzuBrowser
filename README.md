@@ -55,6 +55,13 @@ You should use new theme pack if you are using version 2.3 or later
 
 [Theme material light](https://github.com/Hazuki0x0/YuzuBrowser/releases/download/v1.1.0/yuzu_theme_material_light.zip)
 
+## Contributing
+Contributions are always welcome
+
+- Create an issue (except for minor fixes and additional translations/translation fixes).
+- Create a branch for your patch.
+- Create a pull request on the dev branch.
+
 ## Build
 
     $ git clone https://github.com/Hazuki0x0/YuzuBrowser.git
