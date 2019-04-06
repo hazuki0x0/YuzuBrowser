@@ -101,5 +101,5 @@ Yuzu browser is created with the intention of providing a more efficient way of 
 
 ## Contact
 
-Contributions to this project are welcomed. Contributions, suggestions or bug reports and fixes can be made by opening an issue or creating pull requests. Read the contributor's guidelines [here]() to get started.
+Contributions to this project are welcomed. Contributions, suggestions or bug reports and fixes can be made by opening an issue or creating pull requests. Read the contributor's guidelines [here](https://github.com/hazuki0x0/YuzuBrowser/blob/dev/README.md#contributing) to get started.
 If you wish to contact the developer directly to share an idea, to request a feature or to make further inquiries about the functionalities and operations of the Yuzu Browser software or, you have any questions regarding this Privacy Policy or, the practices of this software, please contact the developer by opening an [issue](https://github.com/hazuki0x0/YuzuBrowser/issues/new) on Github.
