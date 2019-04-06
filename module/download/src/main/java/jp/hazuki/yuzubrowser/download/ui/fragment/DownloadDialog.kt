@@ -28,7 +28,9 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
 import dagger.android.support.DaggerAppCompatDialogFragment
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
+import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
@@ -149,8 +151,17 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
             val name = guessDownloadFileName(Uri.parse(DownloadPrefs.get(context).downloadFolder).toDocumentFile(context),
                     url, contentDisposition, mimeType, null)
 
+            if (mimeType.isNullOrEmpty()) {
+                val newType = getMimeType(name)
+                if (newType != MIME_TYPE_UNKNOWN) {
+                    return invoke(DownloadFile(url, name, DownloadRequest(referrer, userAgent, null)),
+                            MetaData(name, newType, contentLength, false))
+                }
+                return invoke(DownloadFile(url, name, DownloadRequest(referrer, userAgent, null)), null)
+            }
+
             return invoke(DownloadFile(url, name, DownloadRequest(referrer, userAgent, null)),
-                    if (mimeType != null) MetaData(name, mimeType, contentLength, false) else null)
+                    MetaData(name, mimeType, contentLength, false))
         }
 
         operator fun invoke(url: String, userAgent: String?, referrer: String? = null, defaultExt: String? = null): DownloadDialog {

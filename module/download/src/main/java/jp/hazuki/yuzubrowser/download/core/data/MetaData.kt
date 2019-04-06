@@ -21,6 +21,7 @@ import android.content.Context
 import android.os.Parcelable
 import android.webkit.CookieManager
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.download.core.utils.*
 import kotlinx.android.parcel.Parcelize
 import okhttp3.OkHttpClient
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class MetaData(val name: String, val mineType: String, val size: Long, val resumable: Boolean) : Parcelable {
+class MetaData constructor(val name: String, val mineType: String, val size: Long, val resumable: Boolean) : Parcelable {
 
     companion object {
 
@@ -52,7 +53,8 @@ class MetaData(val name: String, val mineType: String, val size: Long, val resum
                     val newCall = client.newCall(httpRequest)
                     val response = newCall.execute()
 
-                    val mimeType = response.mimeType
+                    var mimeType = response.mimeType
+                    if (mimeType.isEmpty()) mimeType = MIME_TYPE_UNKNOWN
                     val name = resolvedName
                             ?: response.getFileName(root, url, mimeType, request.defaultExt)
                     return MetaData(name, mimeType, response.contentLength, response.isResumable)

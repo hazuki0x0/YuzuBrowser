@@ -210,7 +210,7 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
     return fileName + extension
 }
 
-private fun getExtensionFromMimeType(mimeType: String): String? {
+internal fun getExtensionFromMimeType(mimeType: String): String? {
     return when (mimeType) {
         "multipart/related", "message/rfc822", "application/x-mimearchive" -> ".mhtml"
         "application/javascript", "application/x-javascript", "text/javascript" -> ".js"

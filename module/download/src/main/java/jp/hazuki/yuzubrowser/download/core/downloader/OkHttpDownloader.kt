@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.Context
 import android.webkit.CookieManager
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
@@ -49,8 +50,10 @@ class OkHttpDownloader(private val context: Context, private val okHttpClient: O
             requestBuilder.header("Range", "bytes=${info.currentSize}-${info.size}")
         }
 
+        val mimeType = if (info.mimeType.isNotEmpty()) info.mimeType else MIME_TYPE_UNKNOWN
+
         val tmp = existTmp
-                ?: info.root.createFile(info.mimeType, "${info.name}$TMP_FILE_SUFFIX")
+                ?: info.root.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX")
                 ?: throw DownloadException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
 
         val call = okHttpClient.newCall(requestBuilder.build())

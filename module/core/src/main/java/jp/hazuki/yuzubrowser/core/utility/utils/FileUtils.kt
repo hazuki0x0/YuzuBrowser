@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.core.utility.utils
 import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.extensions.binarySearch
 import jp.hazuki.yuzubrowser.core.utility.extensions.toSortedList
 import java.io.File
@@ -82,15 +83,22 @@ fun getMimeType(fileName: String): String {
     val lastDot = fileName.lastIndexOf('.')
     if (lastDot >= 0) {
         val extension = fileName.substring(lastDot + 1).toLowerCase()
-        val mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-        if (mime != null) {
-            return mime
-        }
-
-        when (extension) {
-            "mht", "mhtml" -> return "multipart/related"
-            "js" -> return "application/javascript"
-        }
+        return getMimeTypeFromExtension(extension)
     }
     return "application/octet-stream"
+}
+
+fun getMimeTypeFromExtension(extension: String): String {
+    return when (extension) {
+        "js" -> "application/javascript"
+        "mhtml", "mht" -> "multipart/related"
+        else -> {
+            val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+            if (type.isNullOrEmpty()) {
+                MIME_TYPE_UNKNOWN
+            } else {
+                type
+            }
+        }
+    }
 }
