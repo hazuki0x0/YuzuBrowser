@@ -96,6 +96,13 @@ fun Uri.resolvePath(context: Context): String? {
             }
 
         } else if (isDownloadsDocument()) { // DownloadsProvider
+            context.contentResolver.query(this, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME), null, null, null)?.use { c ->
+                if (c.moveToFirst()) {
+                    val fileName = c.getString(0)
+                    val path = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName).absolutePath
+                    if (path.isNotEmpty()) return path
+                }
+            }
             val id = DocumentsContract.getDocumentId(this)
             val contentUri = ContentUris.withAppendedId(
                     Uri.parse("content://downloads/public_downloads"), id.toLong())
