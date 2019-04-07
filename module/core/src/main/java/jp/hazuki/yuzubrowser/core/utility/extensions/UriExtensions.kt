@@ -96,6 +96,10 @@ fun Uri.resolvePath(context: Context): String? {
             }
 
         } else if (isDownloadsDocument()) { // DownloadsProvider
+            val id = DocumentsContract.getDocumentId(this)
+            if (id.startsWith("raw:")) {
+                return id.substring(4)
+            }
             context.contentResolver.query(this, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME), null, null, null)?.use { c ->
                 if (c.moveToFirst()) {
                     val fileName = c.getString(0)
@@ -103,7 +107,6 @@ fun Uri.resolvePath(context: Context): String? {
                     if (path.isNotEmpty()) return path
                 }
             }
-            val id = DocumentsContract.getDocumentId(this)
             val contentUri = ContentUris.withAppendedId(
                     Uri.parse("content://downloads/public_downloads"), id.toLong())
 
