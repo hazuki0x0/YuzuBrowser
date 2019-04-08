@@ -92,10 +92,8 @@ Sorry to hear about your troubles. I try to make the app free of bugs and errors
 So, if it's a new issue; please include the following:
 
  * Steps to reproduce and/or sample code to recreate the problem.
- * I'll also need to know what version of Yuzu browser you're using
- * The version of Android in the device in question 
- * 
- * Sometimes the manufacturer is helpful too. Since there can be variants of Android that may affect 
+ * I'll also need to know what version of Yuzu browser you're using and,
+ * The version of Android in the device in question. Sometimes the manufacturer is helpful too. Since there can be variants of Android that may affect 
    things (such as x86).
 
 Finally, please be patient. The developer has a lot of things to do. But, be assured that the bug report will receive adequate attention, and will consequently be fixed. If you are a
