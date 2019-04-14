@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:paddingStart="12dp"
+                android:paddingEnd="7dp"
+                android:clipToPadding="false"
+                android:descendantFocusability="blocksDescendants"
+                android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/matchTextView"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/checkBox"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/countTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_below="@+id/matchTextView"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/timeTextView"
+        android:layout_marginTop="4dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_alignTop="@+id/countTextView"
+        android:layout_toStartOf="@+id/checkBox"/>
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_marginStart="-12dp"
+        android:layout_marginEnd="-7dp"/>
+</RelativeLayout>

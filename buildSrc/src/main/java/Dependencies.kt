@@ -31,6 +31,7 @@ object Versions {
     const val appCompat = "1.1.0-alpha03"
     const val activityX = "1.0.0-alpha05"
     const val androidKTX = "1.0.1"
+    const val androidxRoom = "2.1.0-alpha06"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
     const val dagger = "2.21"
@@ -60,6 +61,9 @@ object AndroidX {
     const val fix_preference = "com.takisoft.preferencex:preferencex:${Versions.support_fix_lib}"
     const val KTX = "androidx.core:core-ktx:${Versions.androidKTX}"
     const val activty = "androidx.activity:activity:${Versions.activityX}"
+    const val room = "androidx.room:room-runtime:${Versions.androidxRoom}"
+    const val roomKtx = "androidx.room:room-ktx:${Versions.androidxRoom}"
+    const val roomCompiler = "androidx.room:room-compiler:${Versions.androidxRoom}"
 }
 
 object Libs {

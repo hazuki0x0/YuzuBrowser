@@ -323,4 +323,6 @@
     <string name="accessibility_toolbar_multi_select">%1$d 件のアイテムを選択済み</string>
     <string name="proxy_use_https_address">httpsに他のプロキシを使用する</string>
     <string name="proxy_https_mes">Https proxyアドレス(空欄の場合、プロキシを使用しません)</string>
+    <string name="last_update">最終更新: %1$s</string>
+    <string name="update_all">全て更新</string>
 </resources>

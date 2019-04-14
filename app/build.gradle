@@ -115,8 +115,9 @@ dependencies {
     kapt Libs.kotshi_compiler
     implementation Libs.okhttp
 
-    implementation Libs.support_appcompat_v7
-    implementation Libs.support_fix_preference
+    implementation AndroidX.appcompat
+    implementation AndroidX.fix_preference
+    implementation AndroidX.room
     implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
@@ -128,6 +129,7 @@ dependencies {
     implementation project(':languages')
     implementation project(':favicon')
     implementation project(':download')
+    implementation project(':adblock')
 
     implementation Libs.kotlin_stdlib
 

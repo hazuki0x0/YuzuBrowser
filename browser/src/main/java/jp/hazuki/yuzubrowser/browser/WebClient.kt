@@ -33,6 +33,10 @@ import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
+import jp.hazuki.yuzubrowser.adblock.AdBlockController
+import jp.hazuki.yuzubrowser.adblock.filter.mining.MiningProtector
+import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
+import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
@@ -50,9 +54,6 @@ import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
-import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockController
-import jp.hazuki.yuzubrowser.legacy.adblock.mining.MiningProtector
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
@@ -97,7 +98,7 @@ import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread
 
-class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController) : WebViewUtility {
+class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController, private val abpDatabase: AbpDatabase) : WebViewUtility {
     private val patternManager = PatternUrlManager(activity.applicationContext)
     private val speedDialManager = SpeedDialAsyncManager(activity.applicationContext)
     private val speedDialHtml = SpeedDialHtml(activity.applicationContext)
@@ -152,7 +153,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         set(value) {
             if (value == isEnableAdBlock) return
 
-            adBlockController = if (value) AdBlockController(activity) else null
+            adBlockController = if (value) AdBlockController(activity, abpDatabase.abpDao()) else null
         }
 
     fun updateAdBlockList() {
@@ -189,7 +190,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
 
         adBlockController = if (AppData.ad_block.get()) {
-            AdBlockController(activity.applicationContext)
+            AdBlockController(activity.applicationContext, abpDatabase.abpDao())
         } else {
             null
         }
@@ -524,7 +525,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
             adBlockController?.run {
                 try {
-                    val result = isBlock(uri, request.url)
+                    val result = isBlock(uri, request)
                     if (result != null) {
                         return if (request.isForMainFrame) {
                             createMainFrameDummy(activity, request.url, result.pattern)

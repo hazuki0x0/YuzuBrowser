@@ -31,6 +31,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory
 import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
@@ -40,7 +41,6 @@ import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingPatternAction
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherFactory
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.pattern_add_websetting.*
 import java.util.*

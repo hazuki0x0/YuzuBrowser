@@ -19,10 +19,10 @@ package jp.hazuki.yuzubrowser.legacy.pattern.url
 import android.content.Context
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternChecker
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherFactory
 import java.io.IOException
 import java.util.regex.Matcher
 import java.util.regex.Pattern

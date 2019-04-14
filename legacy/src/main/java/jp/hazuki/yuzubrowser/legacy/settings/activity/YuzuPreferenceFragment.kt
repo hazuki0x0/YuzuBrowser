@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,68 +16,15 @@
 
 package jp.hazuki.yuzubrowser.legacy.settings.activity
 
-import android.os.Bundle
-import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.preference.Preference
-import androidx.preference.PreferenceScreen
-import com.takisoft.preferencex.PreferenceFragmentCompat
-import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.settings.preference.NightModePreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.SearchUrlPreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.SlowRenderingPreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.WebTextSizePreference
 import jp.hazuki.yuzubrowser.ui.preference.*
+import jp.hazuki.yuzubrowser.ui.settings.fragment.YuzuBasePreferenceFragment
 
-abstract class YuzuPreferenceFragment : PreferenceFragmentCompat() {
-
-    var preferenceResId: Int = 0
-        private set
-
-    abstract fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?)
-
-    override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.sharedPreferencesName = AppData.PREFERENCE_NAME
-        onCreateYuzuPreferences(savedInstanceState, rootKey)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return try {
-            super.onCreateView(inflater, container, savedInstanceState)
-        } finally {
-            activity?.let {
-                preferenceManager.sharedPreferencesName = AppData.PREFERENCE_NAME
-                val a = it.theme.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
-                val divider = a.getDrawable(0)
-                a.recycle()
-                setDivider(divider)
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val activity = activity ?: return
-
-        preferenceScreen?.run {
-            val key: String? = arguments?.getString(ARG_PREFERENCE_ROOT)
-            val title = if (!TextUtils.isEmpty(key)) findPreference(key).title else title
-            activity.title = if (TextUtils.isEmpty(title)) getText(R.string.pref_settings) else title
-        }
-    }
-
-    override fun addPreferencesFromResource(preferencesResId: Int) {
-        super.addPreferencesFromResource(preferencesResId)
-        this.preferenceResId = preferencesResId
-    }
-
-    override fun setPreferencesFromResource(preferencesResId: Int, key: String?) {
-        super.setPreferencesFromResource(preferencesResId, key)
-        this.preferenceResId = preferencesResId
-    }
+abstract class YuzuPreferenceFragment : YuzuBasePreferenceFragment() {
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
         val fragmentManager = fragmentManager ?: return
@@ -110,8 +57,6 @@ abstract class YuzuPreferenceFragment : PreferenceFragmentCompat() {
             dialog.show(fragmentManager, preference.key)
         }
     }
-
-    open fun onPreferenceStartScreen(pref: PreferenceScreen): Boolean = false
 
     companion object {
         private const val FRAGMENT_DIALOG_TAG = "android.support.v7.preference.PreferenceFragment.DIALOG"

@@ -17,8 +17,10 @@
 package jp.hazuki.yuzubrowser.browser
 
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -31,9 +33,15 @@ import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
+import jp.hazuki.yuzubrowser.adblock.filter.abp.checkNeedUpdate
+import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
+import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
+import jp.hazuki.yuzubrowser.adblock.ui.original.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.browser.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.browser.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.browser.manager.UserActionManager
@@ -57,7 +65,6 @@ import jp.hazuki.yuzubrowser.legacy.action.item.TabListSingleAction
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.MenuActionManager
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.adblock.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.browser.openable.BrowserOpenable
@@ -183,6 +190,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     internal lateinit var webViewFactory: WebViewFactory
     @Inject
     internal lateinit var moshi: Moshi
+    @Inject
+    internal lateinit var abpDatabase: AbpDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -200,7 +209,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         userActionManager = UserActionManager(this, this, actionController, iconManager)
         tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory), this)
-        webClient = WebClient(this, this)
+        webClient = WebClient(this, this, abpDatabase)
 
         toolbar = Toolbar(this, superFrameLayoutInfo, this, actionController, iconManager)
         toolbar.addToolbarView(resources)
@@ -298,6 +307,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             setCurrentTab(tabManagerIn.currentTabNo)
         }
 
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(onAdBlockFilterUpdate, IntentFilter(BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA))
+
         delayAction?.let {
             actionController.run(it)
             delayAction = null
@@ -317,6 +329,13 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         if (!checkBrowserPermission()) {
             ui { requestBrowserPermissions(asyncPermissions) }
         }
+        if (AppData.ad_block.get()) {
+            ui {
+                if (abpDatabase.abpDao().getAll().checkNeedUpdate()) {
+                    AbpUpdateService.updateAll(this@BrowserActivity)
+                }
+            }
+        }
     }
 
     override fun onPause() {
@@ -332,6 +351,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         tabManagerIn.saveData()
         handler.removeCallbacks(saveTabsRunnable)
         FaviconManager.getInstance(applicationContext).save()
+
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(onAdBlockFilterUpdate)
 
         if (isActivityPaused) {
             Logger.w(TAG, "Activity is already stopped")
@@ -1551,6 +1573,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     //** Workaround for M */
     override fun getAssets(): AssetManager {
         return resources.assets
+    }
+
+    private val onAdBlockFilterUpdate = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            webClient.updateAdBlockList()
+        }
     }
 
     companion object {

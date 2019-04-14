@@ -30,6 +30,20 @@ fun StringBuilder.replace(oldValue: String, newValue: String): StringBuilder {
     return this
 }
 
+fun StringBuilder.replaceStart(oldValue: String, newValue: String): StringBuilder {
+    if (startsWith(oldValue)) {
+        replace(0, oldValue.length, newValue)
+    }
+    return this
+}
+
+fun StringBuilder.replaceEnd(oldValue: String, newValue: String): StringBuilder {
+    if (endsWith(oldValue)) {
+        replace(length - oldValue.length, length, newValue)
+    }
+    return this
+}
+
 inline fun <T> List<T>.contains(predicate: (T) -> Boolean): Boolean {
     for (element in this) if (predicate(element)) return true
     return false

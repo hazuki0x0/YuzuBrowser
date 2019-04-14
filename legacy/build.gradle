@@ -75,6 +75,7 @@ dependencies {
     implementation AndroidX.fix_preference
     implementation AndroidX.activty
     implementation AndroidX.KTX
+    implementation AndroidX.room
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
@@ -103,6 +104,7 @@ dependencies {
     implementation project(':webview')
     implementation project(':favicon')
     implementation project(':download')
+    implementation project(':adblock')
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

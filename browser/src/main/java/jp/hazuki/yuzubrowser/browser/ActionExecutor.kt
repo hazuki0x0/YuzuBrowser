@@ -31,6 +31,8 @@ import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.print.PrintHelper
+import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
+import jp.hazuki.yuzubrowser.adblock.ui.original.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
@@ -55,8 +57,6 @@ import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivitySingl
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionListViewAdapter
-import jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity
-import jp.hazuki.yuzubrowser.legacy.adblock.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager

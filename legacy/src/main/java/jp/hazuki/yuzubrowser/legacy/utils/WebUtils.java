@@ -27,8 +27,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherFactory;
 
 public class WebUtils {
     private WebUtils() {

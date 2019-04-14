@@ -20,6 +20,8 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
+import jp.hazuki.yuzubrowser.adblock.AdBlockModule
+import jp.hazuki.yuzubrowser.adblock.AdBlockUiModule
 import jp.hazuki.yuzubrowser.browser.di.ActivityModule
 import jp.hazuki.yuzubrowser.download.DownloadModule
 import jp.hazuki.yuzubrowser.legacy.search.SearchModule
@@ -38,7 +40,9 @@ import javax.inject.Singleton
     SearchModule::class,
     WebEncodeModule::class,
     UserAgentModule::class,
-    DownloadModule::class
+    DownloadModule::class,
+    AdBlockModule::class,
+    AdBlockUiModule::class
 ])
 interface AppComponent : AndroidInjector<YuzuBrowserApplication> {
 

@@ -308,7 +308,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.adblock.AdBlockActivity"
+            android:name=".adblock.ui.original.AdBlockActivity"
             android:theme="@style/BrowserThemeDayNight.Pref"
             android:label="@string/pref_ad_block" />
         <activity

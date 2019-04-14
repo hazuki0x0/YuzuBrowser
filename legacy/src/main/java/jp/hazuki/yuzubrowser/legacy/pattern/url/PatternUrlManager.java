@@ -22,8 +22,8 @@ import com.squareup.moshi.JsonReader;
 
 import java.io.IOException;
 
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory;
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternManager;
-import jp.hazuki.yuzubrowser.legacy.utils.fastmatch.FastMatcherFactory;
 
 public class PatternUrlManager extends PatternManager<PatternUrlChecker> {
 

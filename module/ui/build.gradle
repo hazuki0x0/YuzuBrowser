@@ -49,6 +49,7 @@ dependencies {
 
     implementation AndroidX.appcompat
     implementation AndroidX.design
+    implementation AndroidX.constraintLayout
     implementation AndroidX.fix_preference
     implementation AndroidX.constraintLayout
     implementation AndroidX.activty
@@ -72,4 +73,5 @@ dependencies {
     implementation Libs.kotlin_coroutines_android
     implementation project(':core')
     implementation project(':languages')
+    implementation project(':libraries:floatingactionbutton')
 }

@@ -1,0 +1,90 @@
+/*
+ * Copyright (C) 2017-2019 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation Libs.junit
+    testImplementation Libs.assertk
+    androidTestImplementation Libs.espressoCore
+    androidTestImplementation Libs.androidTestCore
+    androidTestImplementation Libs.androidRunner
+
+    implementation AndroidX.appcompat
+    implementation AndroidX.recyclerView
+    implementation AndroidX.design
+    implementation AndroidX.constraintLayout
+    implementation AndroidX.activty
+    implementation AndroidX.KTX
+    implementation AndroidX.room
+    implementation AndroidX.roomKtx
+    implementation AndroidX.fix_preference
+    kapt AndroidX.roomCompiler
+
+    implementation Libs.kotlin_stdlib
+    implementation Libs.kotlin_coroutines
+    implementation Libs.kotlin_coroutines_android
+    implementation Libs.kotlin_anko_commons
+
+    implementation Libs.dagger2
+    annotationProcessor Libs.dagger2_compiler
+    kapt Libs.dagger2_compiler
+    implementation Libs.dagger_android
+    implementation Libs.dagger_android_support
+    kapt Libs.dagger_android_processor
+
+    implementation Libs.kvs_schema
+    kapt Libs.kvs_schema_compiler
+
+    implementation project(':core')
+    implementation project(':ui')
+    implementation project(':languages')
+    implementation project(':libraries:floatingactionbutton')
+
+    implementation "com.google.re2j:re2j:1.2"
+    implementation Libs.okhttp
+}
