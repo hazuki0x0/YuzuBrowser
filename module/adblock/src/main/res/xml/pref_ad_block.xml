@@ -23,6 +23,11 @@
         android:title="@string/pref_ad_block_enable"/>
 
     <Preference
+        android:key="abp_list"
+        android:dependency="ad_block"
+        android:title="@string/pref_abp_filter"/>
+
+    <Preference
         android:key="black_list"
         android:dependency="ad_block"
         android:title="@string/pref_ad_block_black"/>
@@ -36,11 +41,6 @@
         android:key="white_page_list"
         android:dependency="ad_block"
         android:title="@string/pref_ad_block_white_page"/>
-
-    <Preference
-        android:key="abp_list"
-        android:dependency="ad_block"
-        android:title="@string/pref_abp_filter"/>
 
     <SwitchPreference
         android:key="mining_protect"
