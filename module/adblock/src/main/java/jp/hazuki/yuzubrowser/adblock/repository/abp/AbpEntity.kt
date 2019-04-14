@@ -41,6 +41,8 @@ class AbpEntity(
 
         var homePage: String? = null,
 
+        var lastModified: String? = null,
+
         var enabled: Boolean = true
 ) : Parcelable {
 

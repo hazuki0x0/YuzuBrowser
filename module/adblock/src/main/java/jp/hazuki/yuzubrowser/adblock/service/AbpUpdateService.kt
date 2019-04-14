@@ -113,13 +113,19 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         val request = Request.Builder()
                 .url(entity.url)
                 .get()
-                .build()
-        val call = okHttpClient.newCall(request)
+        entity.lastModified?.let { request.addHeader("If-Modified-Since", it) }
+        val call = okHttpClient.newCall(request.build())
         try {
             val response = call.execute()
 
+            if (response.code() == 304) {
+                entity.lastLocalUpdate = System.currentTimeMillis()
+                abpDatabase.abpDao().update(entity)
+                return false
+            }
             response.body()?.run {
                 source().inputStream().bufferedReader().use { reader ->
+                    entity.lastModified = response.header("Last-Modified")
                     return decode(reader, entity)
                 }
             }
