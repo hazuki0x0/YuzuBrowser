@@ -29,6 +29,11 @@ class AbpFilterDecoder {
 
     fun checkHeader(reader: BufferedReader): Boolean {
         reader.mark(1024)
+        if (reader.read() == 0xfeff) { // Skip BOM
+            reader.mark(1024)
+        } else {
+            reader.reset()
+        }
         val header = reader.readLine() ?: return false
         if (header.isNotEmpty()) {
             return if (header[0] == '!') {

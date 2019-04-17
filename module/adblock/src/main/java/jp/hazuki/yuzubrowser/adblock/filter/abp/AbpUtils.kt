@@ -73,6 +73,7 @@ private val REPLACE_WILDCARDS = Pattern.compile("""\*+""")
 internal fun String.convertToRegexText(): String {
     val text = REPLACE_WILDCARDS.matcher(this).replaceAll("*")
 
+    if (text == "*") return "*"
     val builder = StringBuilder(text)
     if (builder[0] == '*') builder.deleteCharAt(0)
     if (builder[builder.lastIndex] == '*') builder.deleteCharAt(builder.length - 1)
