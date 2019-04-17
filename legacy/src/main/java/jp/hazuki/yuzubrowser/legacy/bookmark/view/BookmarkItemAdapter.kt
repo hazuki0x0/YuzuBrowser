@@ -34,12 +34,11 @@ import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkItem
 import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkSite
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
-import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
-class BookmarkItemAdapter(
-        private val context: Context, list: MutableList<BookmarkItem>,
+open class BookmarkItemAdapter(
+    protected val context: Context, list: MutableList<BookmarkItem>,
         private val pickMode: Boolean, private val openNewTab: Boolean,
         private val bookmarkItemListener: OnBookmarkRecyclerListener
 ) : ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder>(context, list, null) {
@@ -69,13 +68,7 @@ class BookmarkItemAdapter(
 
     override fun onBindViewHolder(holder: BookmarkFolderHolder, item: BookmarkItem, position: Int) {
         if (item is BookmarkSite) {
-            var host: String? = if (item.url.startsWith("javascript:"))
-                context.getString(R.string.bookmarklet)
-            else
-                item.url.decodePunyCodeUrlHost()
-
-            if (host.isNullOrEmpty()) host = item.url
-            (holder as BookmarkSiteHolder).url.text = host
+            holder as SimpleBookmarkSiteHolder
             if (!openNewTab || pickMode || isMultiSelectMode) {
                 holder.imageButton.isEnabled = false
                 holder.imageButton.isClickable = false
@@ -101,13 +94,13 @@ class BookmarkItemAdapter(
         }
     }
 
-    private fun onIconClick(v: View, position: Int, item: BookmarkItem) {
+    protected fun onIconClick(v: View, position: Int, item: BookmarkItem) {
         val calPosition = searchPosition(position, item)
         if (calPosition < 0) return
         bookmarkItemListener.onIconClick(v, calPosition)
     }
 
-    private fun onOverflowButtonClick(v: View, position: Int, item: BookmarkItem) {
+    protected fun onOverflowButtonClick(v: View, position: Int, item: BookmarkItem) {
         val calPosition = searchPosition(position, item)
         if (calPosition < 0) return
         bookmarkItemListener.onShowMenu(v, calPosition)
@@ -115,7 +108,7 @@ class BookmarkItemAdapter(
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): BookmarkFolderHolder {
         return when (viewType) {
-            TYPE_SITE -> BookmarkSiteHolder(inflater.inflate(R.layout.bookmark_item_site, parent, false), this)
+            TYPE_SITE -> SimpleBookmarkSiteHolder(inflater.inflate(R.layout.bookmark_item_site, parent, false), this)
             TYPE_FOLDER -> BookmarkFolderHolder(inflater.inflate(R.layout.bookmark_item_folder, parent, false), this)
             else -> throw IllegalStateException("Unknown BookmarkItem type")
         }
@@ -170,9 +163,8 @@ class BookmarkItemAdapter(
         }
     }
 
-    class BookmarkSiteHolder(itemView: View, adapter: BookmarkItemAdapter) : BookmarkFolderHolder(itemView, adapter) {
+    open class SimpleBookmarkSiteHolder(itemView: View, adapter: BookmarkItemAdapter) : BookmarkFolderHolder(itemView, adapter) {
         val imageButton: ImageButton = itemView.findViewById(R.id.imageButton)
-        val url: TextView = itemView.findViewById(R.id.urlTextView)
 
         init {
             imageButton.setOnClickListener {
@@ -181,11 +173,6 @@ class BookmarkItemAdapter(
                 } else {
                     adapter.onIconClick(it, adapterPosition, item)
                 }
-            }
-
-            val fontSize = AppData.font_size.bookmark.get()
-            if (fontSize >= 0) {
-                url.textSize = FontUtils.getSmallerTextSize(fontSize).toFloat()
             }
         }
     }
@@ -201,7 +188,7 @@ class BookmarkItemAdapter(
     }
 
     companion object {
-        private const val TYPE_SITE = 1
-        private const val TYPE_FOLDER = 2
+        const val TYPE_SITE = 1
+        const val TYPE_FOLDER = 2
     }
 }

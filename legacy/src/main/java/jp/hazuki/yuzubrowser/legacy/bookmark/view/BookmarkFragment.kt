@@ -159,13 +159,17 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
         mCurrentFolder = folder
         setTitle(folder)
 
-        adapter = BookmarkItemAdapter(activity, folder.itemList, pickMode, AppData.open_bookmark_new_tab.get(), this)
+        adapter = if (AppData.bookmark_simpleDisplay.get()) {
+            BookmarkSingleLineAdapter(activity, folder.itemList, pickMode, AppData.open_bookmark_new_tab.get(), this)
+        } else {
+            BookmarkFullAdapter(activity, folder.itemList, pickMode, AppData.open_bookmark_new_tab.get(), this)
+        }
+
         recyclerView.adapter = adapter
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
-        val item = mCurrentFolder[position]
-        when (item) {
+        when (val item = mCurrentFolder[position]) {
             is BookmarkSite -> {
                 if (pickMode) {
                     pickBookmark(item)
@@ -243,9 +247,9 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         if (!pickMode) {
             inflater.inflate(R.menu.bookmark, menu)
-            val breadcrumbs = menu.findItem(R.id.breadcrumbs)
             val show = AppData.bookmark_breadcrumbs.get()
-            breadcrumbs.isChecked = show
+            menu.findItem(R.id.breadcrumbs).isChecked = show
+            menu.findItem(R.id.simpleDisplay).isChecked = AppData.bookmark_simpleDisplay.get()
             showBreadCrumbs(show)
         }
     }
@@ -273,6 +277,14 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
                 AppData.bookmark_breadcrumbs.set(checked)
                 AppData.commit(activity, AppData.bookmark_breadcrumbs)
                 showBreadCrumbs(checked)
+                return true
+            }
+            R.id.simpleDisplay -> {
+                val checked = !item.isChecked
+                item.isChecked = checked
+                AppData.bookmark_simpleDisplay.set(checked)
+                AppData.commit(activity, AppData.bookmark_simpleDisplay)
+                setList(mCurrentFolder)
                 return true
             }
         }
@@ -534,7 +546,7 @@ class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListe
     private inner class Touch : ItemTouchHelper.Callback() {
 
         override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
+            return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {

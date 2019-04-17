@@ -22,17 +22,23 @@
         android:id="@+id/addFolder"
         android:title="@string/add_folder"
         android:icon="@drawable/ic_create_new_folder_white_24dp"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/sort"
         android:title="@string/sort"
         android:icon="@drawable/ic_sort_white_24dp"
-        app:showAsAction="always|withText" />
+        app:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/breadcrumbs"
         android:title="@string/breadcrumb"
+        android:checkable="true"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/simpleDisplay"
+        android:title="@string/simple_display"
         android:checkable="true"
         app:showAsAction="never"/>
 
