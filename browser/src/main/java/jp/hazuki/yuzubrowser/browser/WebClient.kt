@@ -36,6 +36,7 @@ import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.adblock.AdBlockController
 import jp.hazuki.yuzubrowser.adblock.filter.mining.MiningProtector
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
+import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
@@ -960,6 +961,16 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                     controller.activity.longToast(R.string.app_notfound)
                 }
                 return true
+            }
+            "abp" -> {
+                if (uri.host == "subscribe") {
+                    val title = uri.getQueryParameter("title")
+                    val filterUrl = uri.getQueryParameter("location")
+                    if (title != null && filterUrl != null)
+                        AbpFilterSubscribeDialog.create(title, filterUrl)
+                            .show(controller.activity.supportFragmentManager, "subscribe")
+                    return true
+                }
             }
         }
 

@@ -125,8 +125,10 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
             }
             response.body()?.run {
                 source().inputStream().bufferedReader().use { reader ->
-                    entity.lastModified = response.header("Last-Modified")
-                    return decode(reader, entity)
+                    if (decode(reader, entity)) {
+                        entity.lastModified = response.header("Last-Modified")
+                        return true
+                    }
                 }
             }
         } catch (e: IOException) {

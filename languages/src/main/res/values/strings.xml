@@ -326,4 +326,5 @@
     <string name="proxy_https_mes">Https proxy address(Proxy is not used if blank)</string>
     <string name="last_update">Last update: %1$s</string>
     <string name="update_all">Update all</string>
+    <string name="add_filter">Add filter</string>
 </resources>

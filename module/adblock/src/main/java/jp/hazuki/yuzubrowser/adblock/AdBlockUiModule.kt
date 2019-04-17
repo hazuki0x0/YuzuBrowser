@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.adblock
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
+import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFragment
 
 @Module
@@ -29,4 +30,7 @@ abstract class AdBlockUiModule {
 
     @ContributesAndroidInjector
     abstract fun contributeAbpFragment(): AbpFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeAbpFilterSubscribeDalog(): AbpFilterSubscribeDialog
 }

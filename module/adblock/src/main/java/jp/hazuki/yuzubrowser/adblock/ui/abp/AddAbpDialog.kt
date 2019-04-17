@@ -50,7 +50,7 @@ class AddAbpDialog : DialogFragment() {
                         entity.url = editText.text.toString()
                         listener?.onAddEntity(entity)
                     } else {
-                        listener?.onAddEntity(AbpEntity().apply { url = editText.text.toString() })
+                        listener?.onAddEntity(AbpEntity(url = editText.text.toString()))
                     }
                 }
                 .setNegativeButton(android.R.string.cancel, null)

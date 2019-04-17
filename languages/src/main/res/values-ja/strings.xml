@@ -325,4 +325,5 @@
     <string name="proxy_https_mes">Https proxyアドレス(空欄の場合、プロキシを使用しません)</string>
     <string name="last_update">最終更新: %1$s</string>
     <string name="update_all">全て更新</string>
+    <string name="add_filter">フィルタの追加</string>
 </resources>
