@@ -36,6 +36,7 @@ import okhttp3.Request
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
+import java.nio.charset.Charset
 import javax.inject.Inject
 
 class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
@@ -124,8 +125,9 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 return false
             }
             response.body()?.run {
-                source().inputStream().bufferedReader().use { reader ->
-                    if (decode(reader, entity)) {
+                val charset = contentType()?.charset() ?: Charsets.UTF_8
+                source().inputStream().bufferedReader(charset).use { reader ->
+                    if (decode(reader, charset, entity)) {
                         entity.lastModified = response.header("Last-Modified")
                         return true
                     }
@@ -143,7 +145,7 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
 
         try {
             file.inputStream().bufferedReader().use { reader ->
-                return decode(reader, entity)
+                return decode(reader, Charsets.UTF_8, entity)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -155,13 +157,13 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         if (entity.version == "1") return false
 
         assets.open("adblock/yuzu_filter.txt").bufferedReader().use {
-            return decode(it, entity)
+            return decode(it, Charsets.UTF_8, entity)
         }
     }
 
-    private suspend fun decode(reader: BufferedReader, entity: AbpEntity): Boolean {
+    private suspend fun decode(reader: BufferedReader, charset: Charset, entity: AbpEntity): Boolean {
         val decoder = AbpFilterDecoder()
-        if (!decoder.checkHeader(reader)) return false
+        if (!decoder.checkHeader(reader, charset)) return false
 
         val set = decoder.decode(reader, entity.url)
 

@@ -21,18 +21,23 @@ import jp.hazuki.yuzubrowser.adblock.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
+import java.nio.charset.Charset
 import com.google.re2j.PatternSyntaxException as Re2PatternSyntaxException
 import java.util.regex.PatternSyntaxException as JvmPatternSyntaxException
 
 class AbpFilterDecoder {
     private val contentRegex = Pattern.compile(CONTENT_FILTER_REGEX)
 
-    fun checkHeader(reader: BufferedReader): Boolean {
+    fun checkHeader(reader: BufferedReader, charset: Charset): Boolean {
         reader.mark(1024)
-        if (reader.read() == 0xfeff) { // Skip BOM
-            reader.mark(1024)
-        } else {
-            reader.reset()
+        when (charset) {
+            Charsets.UTF_8, Charsets.UTF_16, Charsets.UTF_16LE, Charsets.UTF_16BE -> {
+                if (reader.read() == 0xfeff) { // Skip BOM
+                    reader.mark(1024)
+                } else {
+                    reader.reset()
+                }
+            }
         }
         val header = reader.readLine() ?: return false
         if (header.isNotEmpty()) {
