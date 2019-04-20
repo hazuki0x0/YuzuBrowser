@@ -17,7 +17,7 @@
 package jp.hazuki.yuzubrowser.adblock.core
 
 import jp.hazuki.yuzubrowser.adblock.filter.Filter
-import jp.hazuki.yuzubrowser.adblock.filter.abp.io.AbpFilterReader
+import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterReader
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import java.io.File
@@ -31,7 +31,7 @@ class AbpLoader(private val abpDir: File, private val entityList: List<AbpEntity
                 try {
                     val file = File(abpDir, prefix + it.entityId)
                     if (!file.exists()) return@forEach
-                    val reader = AbpFilterReader(file.inputStream().buffered())
+                    val reader = FilterReader(file.inputStream().buffered())
                     if (reader.checkHeader()) {
                         filterMatcher.addAll(reader.readAll())
                     }
@@ -50,7 +50,7 @@ class AbpLoader(private val abpDir: File, private val entityList: List<AbpEntity
                 try {
                     val file = File(abpDir, prefix + it.entityId)
                     if (!file.exists()) return@forEach
-                    val reader = AbpFilterReader(file.inputStream().buffered())
+                    val reader = FilterReader(file.inputStream().buffered())
                     if (reader.checkHeader()) {
                         list.addAll(reader.readAll())
                     }

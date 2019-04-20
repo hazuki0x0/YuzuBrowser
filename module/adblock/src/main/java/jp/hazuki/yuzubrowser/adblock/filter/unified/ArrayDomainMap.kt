@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.fastmatch
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import android.net.Uri
-import java.util.*
+import androidx.collection.SimpleArrayMap
 
-class FastMatcherList(
-        private val matcherList: ArrayList<FastMatcher> = arrayListOf(),
-        var dbTime: Long = -1
-) : Iterable<FastMatcher> {
+class ArrayDomainMap(size: Int) : SimpleArrayMap<String, Boolean>(size), DomainMap {
 
-    override fun iterator(): Iterator<FastMatcher> {
-        return matcherList.iterator()
+    override val size: Int
+        get() = size()
+
+    override fun get(domain: String): Boolean? {
+        return getOrDefault(domain, null)
     }
 
-    @Synchronized
-    fun match(uri: Uri): Boolean = matcherList.any { it.match(uri) }
+    operator fun set(domain: String, value: Boolean) {
+        put(domain, value)
+    }
 
-    @Synchronized
-    fun sort() {
-        Collections.sort(matcherList, FastMatcherSorter())
+    override var include: Boolean = true
+
+
+    override fun getKey(index: Int): String {
+        return keyAt(index)
+    }
+
+    override fun getValue(index: Int): Boolean {
+        return valueAt(index)
     }
 }

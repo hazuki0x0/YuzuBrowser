@@ -22,7 +22,11 @@ import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.adblock.R
-import jp.hazuki.yuzubrowser.adblock.filter.abp.*
+import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpBlackListFile
+import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpWhiteListFile
+import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpWhitePageListFile
+import jp.hazuki.yuzubrowser.adblock.filter.abp.isNeedUpdate
+import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
@@ -110,7 +114,7 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
     override fun onDelete(index: Int, entity: AbpEntity) {
         ui {
             abpDatabase.abpDao().delete(entity)
-            val dir = activity!!.getAbpDir()
+            val dir = activity!!.getFilterDir()
             dir.getAbpBlackListFile(entity).delete()
             dir.getAbpWhiteListFile(entity).delete()
             dir.getAbpWhitePageListFile(entity).delete()

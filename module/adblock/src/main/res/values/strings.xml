@@ -19,7 +19,6 @@
     <string-array name="pref_ad_block_menu">
         <item>@string/pref_edit</item>
         <item>@string/pref_delete</item>
-        <item>@string/pref_reset_count</item>
         <item>@string/multi_select</item>
     </string-array>
 

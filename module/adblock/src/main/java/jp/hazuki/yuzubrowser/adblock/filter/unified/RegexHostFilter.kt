@@ -14,13 +14,28 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.fastmatch
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
 import android.net.Uri
+import java.util.regex.Pattern
 
-internal class SimpleUrl(override val pattern: String) : SimpleCountMatcher() {
+class RegexHostFilter(
+    filter: String,
+    contentType: Int,
+    ignoreCase: Boolean,
+    domains: DomainMap?,
+    thirdParty: Int
+) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+    private val regex: Pattern = Pattern.compile("//$pattern")
+
     override val type: Int
-        get() = FastMatcher.TYPE_SIMPLE_URL
+        get() = FILTER_TYPE_JVM_REGEX_HOST
 
-    override fun matchItem(uri: Uri) = uri.toString().contains(pattern)
+    override fun check(url: Uri): Boolean {
+        val host = url.host
+        return if (host != null)
+            regex.matcher(host).find()
+        else
+            regex.matcher(url.toString()).find()
+    }
 }

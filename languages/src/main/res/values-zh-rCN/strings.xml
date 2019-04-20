@@ -314,8 +314,6 @@
     <string name="breadcrumb">面包屑导航</string>
     <string name="download_failed_root_not_exists">未找到目标文件夹，因此无法下载</string>
     <string name="download_failed_root_not_writable">不能写入目标文件夹，因此无法下载</string>
-    <string name="reset_all_counts">重置所有计数</string>
-    <string name="reset_all_counts_mes">确定要重置所有计数吗？</string>
     <string name="js_download_cross_origin">由于同源策略限制，无法通过此浏览器进行下载。</string>
     <string name="this_page_says">此页面说</string>
     <string name="host_page_says">%1$s 说</string>

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
 import android.net.Uri
 import jp.hazuki.yuzubrowser.adblock.filter.Filter
 import jp.hazuki.yuzubrowser.adblock.filter.SingleFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.DomainMap
+import jp.hazuki.yuzubrowser.adblock.filter.abp.AbpFilter
 
-abstract class AbpFilter(
+abstract class UnifiedFilter(
     override val pattern: String,
     val contentType: Int,
     val ignoreCase: Boolean,
@@ -30,11 +30,11 @@ abstract class AbpFilter(
 ) : SingleFilter() {
     abstract val type: Int
 
-    abstract fun check(url: Uri): Boolean
+    protected abstract fun check(url: Uri): Boolean
 
     override fun find(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
         if ((this.contentType or contentType) != 0 && checkThird(isThirdParty) && checkDomain(pageUrl.host!!.toLowerCase())) {
-            if (url.toString().contains(pattern, ignoreCase = !ignoreCase)) return this
+            if (check(url)) return this
         }
         return null
     }
@@ -60,7 +60,7 @@ abstract class AbpFilter(
     protected fun Char.checkSeparator(): Boolean {
         val it = this.toInt()
         return it in 0..0x24 || it in 0x26..0x2c || it == 0x2f || it in 0x3a..0x40 ||
-                it in 0x5b..0x5e || it == 0x60 || it in 0x7b..0x7f
+            it in 0x5b..0x5e || it == 0x60 || it in 0x7b..0x7f
     }
 
     override fun equals(other: Any?): Boolean {
@@ -88,6 +88,4 @@ abstract class AbpFilter(
         result = 31 * result + type
         return result
     }
-
-
 }

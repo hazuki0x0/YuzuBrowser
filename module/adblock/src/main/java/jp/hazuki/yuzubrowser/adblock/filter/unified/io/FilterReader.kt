@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp.io
+package jp.hazuki.yuzubrowser.adblock.filter.unified.io
 
 import com.google.re2j.Pattern
-import jp.hazuki.yuzubrowser.adblock.filter.abp.*
 import jp.hazuki.yuzubrowser.adblock.filter.toInt
 import jp.hazuki.yuzubrowser.adblock.filter.toShortInt
+import jp.hazuki.yuzubrowser.adblock.filter.unified.*
 import java.io.InputStream
 
-class AbpFilterReader(private val input: InputStream) {
+class FilterReader(private val input: InputStream) {
 
     fun checkHeader(): Boolean {
-        val header = ABP_CACHE_HEADER.toByteArray()
+        val header = FILTER_CACHE_HEADER.toByteArray()
         val data = ByteArray(header.size)
         input.read(data)
         return header contentEquals data
     }
 
-    fun readAll(): List<AbpFilter> {
+    fun readAll(): List<UnifiedFilter> {
         val intBuf = ByteArray(4)
         val shortBuf = ByteArray(2)
         input.read(intBuf)
         val size = intBuf.toInt()
-        val list = ArrayList<AbpFilter>(size)
+        val list = ArrayList<UnifiedFilter>(size)
         var patternBuffer = ByteArray(32)
 
         loop@ for (loop in 0 until size) {
@@ -109,14 +109,17 @@ class AbpFilterReader(private val input: InputStream) {
             }
 
             val filter = when (type) {
-                ABP_TYPE_CONTAINS -> AbpContainsFilter(pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_START -> AbpStartsWithFilter(pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_END -> AbpEndWithFilter(pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_START_END -> AbpStartEndFilter(pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_RE2_REGEX -> AbpRe2Filter(Pattern.compile(pattern), pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_JVM_REGEX -> AbpRegexFilter(pattern.toRegex(), pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_RE2_SSP_REGEX -> AbpRe2SspFilter(Pattern.compile("//$pattern"), pattern, contentType, ignoreCase, domains, thirdParty)
-                ABP_TYPE_JVM_SSP_REGEX -> AbpRegexSspFilter("//$pattern".toRegex(), pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_CONTAINS -> ContainsFilter(pattern, contentType, domains, thirdParty)
+                FILTER_TYPE_HOST -> HostFilter(pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_CONTAINS_HOST -> ContainsHostFilter(pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_START -> StartsWithFilter(pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_END -> EndWithFilter(pattern, contentType, domains, thirdParty)
+                FILTER_TYPE_START_END -> StartEndFilter(pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_RE2_REGEX -> Re2Filter(Pattern.compile(pattern), pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_RE2_REGEX_HOST -> Re2HostFilter(Pattern.compile(pattern), pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_JVM_REGEX -> RegexFilter(pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_JVM_REGEX_HOST -> RegexHostFilter(pattern, contentType, ignoreCase, domains, thirdParty)
+                FILTER_TYPE_PATTERN -> PatternMatchFilter(pattern, contentType, ignoreCase, domains, thirdParty)
                 else -> break@loop
             }
             list.add(filter)

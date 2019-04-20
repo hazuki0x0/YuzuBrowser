@@ -363,7 +363,6 @@
     <string name="pref_edit">Editar</string>
     <string name="pref_delete">Excluir</string>
     <string name="pref_select_all">Selecionar todos</string>
-    <string name="pref_reset_count">Redefinir contagem</string>
     <string name="pref_ad_block_delete_confirm">Excluir \"%1$s\"?</string>
     <string name="pref_ad_block_delete_selected_confirm">Excluir itens selecionados?</string>
     <string name="pref_ad_block_delete">\"%1$s\" excluído(s).</string>

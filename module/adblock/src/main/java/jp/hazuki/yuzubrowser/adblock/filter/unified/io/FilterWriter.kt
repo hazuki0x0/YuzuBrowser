@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp.io
+package jp.hazuki.yuzubrowser.adblock.filter.unified.io
 
-import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_CACHE_HEADER
-import jp.hazuki.yuzubrowser.adblock.filter.abp.AbpFilter
-import jp.hazuki.yuzubrowser.adblock.filter.abp.writeVariableInt
 import jp.hazuki.yuzubrowser.adblock.filter.toByteArray
 import jp.hazuki.yuzubrowser.adblock.filter.toShortByteArray
+import jp.hazuki.yuzubrowser.adblock.filter.unified.FILTER_CACHE_HEADER
+import jp.hazuki.yuzubrowser.adblock.filter.unified.UnifiedFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.writeVariableInt
 import java.io.OutputStream
 import kotlin.math.min
 
-class AbpFilterWriter {
+class FilterWriter {
     private val intBuf = ByteArray(4)
     private val shortBuf = ByteArray(2)
 
-    fun write(os: OutputStream, filters: List<AbpFilter>) {
+    fun write(os: OutputStream, filters: List<UnifiedFilter>) {
         writeHeader(os)
         writeAll(os, filters)
     }
 
     private fun writeHeader(os: OutputStream) {
-        os.write(ABP_CACHE_HEADER.toByteArray())
+        os.write(FILTER_CACHE_HEADER.toByteArray())
     }
 
-    private fun writeAll(os: OutputStream, filters: List<AbpFilter>) {
+    private fun writeAll(os: OutputStream, filters: List<UnifiedFilter>) {
         os.write(filters.size.toByteArray(intBuf))
 
         filters.forEach {

@@ -363,7 +363,6 @@
     <string name="pref_edit">Изменить</string>
     <string name="pref_delete">Удалить</string>
     <string name="pref_select_all">Выбрать все</string>
-    <string name="pref_reset_count">Сбросить счётчик</string>
     <string name="pref_ad_block_delete_confirm">Вы уверены, что хотите удалить \"%1$s\"?</string>
     <string name="pref_ad_block_delete_selected_confirm">Вы действительно хотите удалить выбранные элементы?</string>
     <string name="pref_ad_block_delete">\"%1$s\" удалено.</string>

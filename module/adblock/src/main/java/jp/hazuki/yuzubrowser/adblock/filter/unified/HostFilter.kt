@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import com.google.re2j.Pattern
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.RegexHost
+import android.net.Uri
 
-internal class NormalRegexHost(host: String) : RegexHost() {
-    override val regex: Pattern = Pattern.compile(host)
+internal class HostFilter(
+    filter: String,
+    contentType: Int,
+    ignoreCase: Boolean,
+    domains: DomainMap?,
+    thirdParty: Int
+) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+    override val type: Int
+        get() = FILTER_TYPE_HOST
+
+    override fun check(url: Uri): Boolean {
+        return pattern == url.host
+    }
 }

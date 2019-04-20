@@ -21,16 +21,27 @@ import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import jp.hazuki.yuzubrowser.adblock.core.FilterMatcher
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.*
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.AdBlockDecoder
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.LegacyDecoder
+import jp.hazuki.yuzubrowser.adblock.filter.unified.UnifiedFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
+import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterReader
+import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterWriter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.writeFilter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
+import java.io.File
 import java.io.IOException
 import java.util.*
 
-class AdBlockManager internal constructor(context: Context) {
+class AdBlockManager internal constructor(private val context: Context) {
 
     private val mOpenHelper = MyOpenHelper(context)
     private val appContext = context.applicationContext
+
+    private val updating = mutableMapOf<String, Boolean>()
 
     init {
         if (!context.getDatabasePath(DB_NAME).exists()) {
@@ -53,8 +64,6 @@ class AdBlockManager internal constructor(context: Context) {
         val values = ContentValues()
         values.put(COLUMN_MATCH, adBlock.match)
         values.put(COLUMN_ENABLE, if (adBlock.isEnable) 1 else 0)
-        values.put(COLUMN_COUNT, adBlock.count)
-        values.put(COLUMN_TIME, adBlock.time)
         return try {
             val id = db.insert(table, null, values)
             adBlock.id = id.toInt()
@@ -70,8 +79,6 @@ class AdBlockManager internal constructor(context: Context) {
         val values = ContentValues()
         values.put(COLUMN_MATCH, adBlock.match)
         values.put(COLUMN_ENABLE, if (adBlock.isEnable) 1 else 0)
-        values.put(COLUMN_COUNT, adBlock.count)
-        values.put(COLUMN_TIME, adBlock.time)
         return try {
             db.update(table, values, "$COLUMN_ID = ?", arrayOf(Integer.toString(adBlock.id)))
             true
@@ -111,15 +118,13 @@ class AdBlockManager internal constructor(context: Context) {
 
     private fun getAllItems(table: String): ArrayList<AdBlock> {
         val db = mOpenHelper.readableDatabase
-        db.query(table, null, null, null, null, null, "$COLUMN_COUNT DESC").use { c ->
+        db.query(table, null, null, null, null, null, null).use { c ->
             val id = c.getColumnIndex(COLUMN_ID)
             val match = c.getColumnIndex(COLUMN_MATCH)
             val enable = c.getColumnIndex(COLUMN_ENABLE)
-            val count = c.getColumnIndex(COLUMN_COUNT)
-            val time = c.getColumnIndex(COLUMN_TIME)
             val adBlocks = ArrayList<AdBlock>()
             while (c.moveToNext()) {
-                adBlocks.add(AdBlock(c.getInt(id), c.getString(match), c.getInt(enable) != 0, c.getInt(count), c.getLong(time)))
+                adBlocks.add(AdBlock(c.getInt(id), c.getString(match), c.getInt(enable) != 0))
             }
             return adBlocks
         }
@@ -127,15 +132,13 @@ class AdBlockManager internal constructor(context: Context) {
 
     private fun getEnableItems(table: String): ArrayList<AdBlock> {
         val db = mOpenHelper.readableDatabase
-        db.query(table, null, "$COLUMN_ENABLE = 1", null, null, null, "$COLUMN_COUNT DESC").use { c ->
+        db.query(table, null, "$COLUMN_ENABLE = 1", null, null, null, null).use { c ->
             val id = c.getColumnIndex(COLUMN_ID)
             val match = c.getColumnIndex(COLUMN_MATCH)
             val enable = c.getColumnIndex(COLUMN_ENABLE)
-            val count = c.getColumnIndex(COLUMN_COUNT)
-            val time = c.getColumnIndex(COLUMN_TIME)
             val adBlocks = ArrayList<AdBlock>()
             while (c.moveToNext()) {
-                adBlocks.add(AdBlock(c.getInt(id), c.getString(match), c.getInt(enable) != 0, c.getInt(count), c.getLong(time)))
+                adBlocks.add(AdBlock(c.getInt(id), c.getString(match), c.getInt(enable) != 0))
             }
             return adBlocks
         }
@@ -146,93 +149,36 @@ class AdBlockManager internal constructor(context: Context) {
         db.delete(table, null, null)
     }
 
-    internal fun updateOrder(table: String, list: FastMatcherList?) {
-        if (list == null) return
-        list.sort()
-        val db = mOpenHelper.writableDatabase
-        db.beginTransaction()
-        synchronized(list) {
+    fun getCachedMatcherList(table: String): List<UnifiedFilter> {
+        if (getListUpdateTime(table) <= getCacheUpdateTime(table)) {
             try {
-                for (matcher in list) {
-                    if (matcher.isUpdate) {
-                        val values = ContentValues()
-                        values.put(COLUMN_COUNT, matcher.frequency)
-                        values.put(COLUMN_TIME, matcher.time)
-                        db.update(table, values, COLUMN_ID + "=" + matcher.id, null)
-                        matcher.saved()
+                getFilterFile(table).inputStream().use {
+                    val reader = FilterReader(it)
+                    if (reader.checkHeader()) {
+                        return reader.readAll()
                     }
                 }
-                db.setTransactionSuccessful()
-            } finally {
-                db.endTransaction()
-            }
-            list.dbTime = System.currentTimeMillis()
-            list.save(appContext, table)
-        }
-    }
-
-    internal fun updateMatcher(table: String, list: FilterMatcher?) {
-        if (list == null) return
-        var updated = false
-        val db = mOpenHelper.writableDatabase
-        db.beginTransaction()
-        synchronized(list) {
-            try {
-                list.getFastMatchFilters()
-                        .asSequence()
-                        .filterIsInstance<FastMatcher>()
-                        .forEach { matcher ->
-                            if (matcher.isUpdate) {
-                                val values = ContentValues()
-                                values.put(COLUMN_COUNT, matcher.frequency)
-                                values.put(COLUMN_TIME, matcher.time)
-                                db.update(table, values, COLUMN_ID + "=" + matcher.id, null)
-                                matcher.saved()
-                                updated = true
-                            }
-                        }
-                db.setTransactionSuccessful()
-            } finally {
-                db.endTransaction()
-            }
-            if (updated || needSave(appContext, table)) {
-                save(appContext, table, list.getFastMatchFilters())
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
+        val list = getMatcherList(table)
+        GlobalScope.launch(Dispatchers.IO) { writeFilter(getFilterFile(table), list) }
+        return list
     }
 
-    fun resetCount(table: String) {
-        val db = mOpenHelper.writableDatabase
-        val count = ContentValues()
-        count.put(COLUMN_COUNT, 0)
-        db.update(table, count, null, null)
-    }
-
-    internal fun getFastMatcherCachedList(table: String): FastMatcherList {
-        val cache = FastMatcherCache(appContext, table)
-        return if (getListUpdateTime(table) > cache.getLastTime()) {
-            getFastMatcherList(table)
-        } else {
-            cache.load()
-        }
-    }
-
-    private fun getFastMatcherList(table: String): FastMatcherList {
-        val list = arrayListOf<FastMatcher>()
-        val dbTime = getListUpdateTime(table)
-        val decoder = ItemDecoder()
+    private fun getMatcherList(table: String): List<UnifiedFilter> {
+        val list = arrayListOf<UnifiedFilter>()
+        val decoder = LegacyDecoder()
         val db = mOpenHelper.readableDatabase
-        db.query(table, null, "$COLUMN_ENABLE = 1", null, null, null, "$COLUMN_COUNT DESC").use { c ->
-            val id = c.getColumnIndex(COLUMN_ID)
+        db.query(table, null, "$COLUMN_ENABLE = 1", null, null, null, null).use { c ->
             val match = c.getColumnIndex(COLUMN_MATCH)
-            val count = c.getColumnIndex(COLUMN_COUNT)
-            val time = c.getColumnIndex(COLUMN_TIME)
             while (c.moveToNext()) {
-                val matcher = decoder.singleDecode(c.getString(match), c.getInt(id), c.getInt(count), c.getLong(time))
+                val matcher = decoder.singleDecode(c.getString(match))
                 if (matcher != null)
                     list.add(matcher)
             }
-            return FastMatcherList(list, dbTime)
+            return list
         }
     }
 
@@ -253,11 +199,31 @@ class AdBlockManager internal constructor(context: Context) {
         db.update(INFO_TABLE_NAME, values, "$INFO_COLUMN_NAME = ?", arrayOf(table))
     }
 
+    fun getCacheUpdateTime(table: String): Long {
+        val db = mOpenHelper.readableDatabase
+        db.query(INFO_TABLE_NAME, null, "$INFO_COLUMN_NAME = ?", arrayOf("${table}_cache"), null, null, null, "1").use { c ->
+            var time: Long = -1
+            if (c.moveToFirst())
+                time = c.getLong(c.getColumnIndex(INFO_COLUMN_LAST_TIME))
+            return time
+        }
+    }
+
+    fun updateCacheTime(table: String) {
+        val db = mOpenHelper.writableDatabase
+        val values = ContentValues()
+        values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis())
+        db.update(INFO_TABLE_NAME, values, "$INFO_COLUMN_NAME = ?", arrayOf("${table}_cache"))
+    }
+
     private fun initList(context: Context) {
         try {
             BufferedInputStream(context.assets.open("adblock/whitelist.txt")).use {
                 val adBlocks = AdBlockDecoder.decode(Scanner(it), false)
                 addAll(WHITE_TABLE_NAME, adBlocks)
+            }
+            GlobalScope.launch(Dispatchers.IO) {
+                createCache(WHITE_TABLE_NAME)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -268,15 +234,44 @@ class AdBlockManager internal constructor(context: Context) {
                 val adBlocks = AdBlockDecoder.decode(Scanner(it), false)
                 addAll(WHITE_PAGE_TABLE_NAME, adBlocks)
             }
+            GlobalScope.launch(Dispatchers.IO) {
+                createCache(WHITE_PAGE_TABLE_NAME)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
 
+    private fun createCache(table: String) {
+        if (isUpdating(table)) return
+
+        updating[table] = true
+        try {
+            getFilterFile(table).outputStream().use {
+                val writer = FilterWriter()
+                writer.write(it, getMatcherList(table))
+            }
+            updateCacheTime(table)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            updating[table] = false
+        }
+    }
+
+    fun isUpdating(table: String): Boolean {
+        return updating[table] ?: false
+    }
+
+    private fun getFilterFile(table: String): File {
+        return File(context.getFilterDir(), "cache_$table")
     }
 
     class AdBlockItemProvider constructor(context: Context, private val table: String) {
 
         private val manager: AdBlockManager = AdBlockManager(context)
+
+        private val context = context.applicationContext
 
         val allItems: ArrayList<AdBlock>
             get() = manager.getAllItems(table)
@@ -298,8 +293,8 @@ class AdBlockManager internal constructor(context: Context) {
             manager.deleteAll(table)
         }
 
-        fun resetCount() {
-            manager.resetCount(table)
+        fun updateCache() {
+            manager.createCache(table)
         }
     }
 
@@ -317,22 +312,16 @@ class AdBlockManager internal constructor(context: Context) {
                         COLUMN_ID + " INTEGER PRIMARY KEY" +
                         ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
                         ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
-                        ", " + COLUMN_COUNT + " INTEGER DEFAULT 0" +
-                        ", " + COLUMN_TIME + " INTEGER DEFAULT 0" +
                         ")")
                 db.execSQL("CREATE TABLE " + WHITE_TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY" +
                         ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
                         ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
-                        ", " + COLUMN_COUNT + " INTEGER DEFAULT 0" +
-                        ", " + COLUMN_TIME + " INTEGER DEFAULT 0" +
                         ")")
                 db.execSQL("CREATE TABLE " + WHITE_PAGE_TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY" +
                         ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
                         ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
-                        ", " + COLUMN_COUNT + " INTEGER DEFAULT 0" +
-                        ", " + COLUMN_TIME + " INTEGER DEFAULT 0" +
                         ")")
 
                 // init info table
@@ -390,8 +379,6 @@ class AdBlockManager internal constructor(context: Context) {
         private const val COLUMN_ID = "_id"
         private const val COLUMN_MATCH = "match"
         private const val COLUMN_ENABLE = "enable"
-        private const val COLUMN_COUNT = "count"
-        private const val COLUMN_TIME = "time"
 
         private const val INFO_COLUMN_NAME = "name"
         private const val INFO_COLUMN_LAST_TIME = "time"

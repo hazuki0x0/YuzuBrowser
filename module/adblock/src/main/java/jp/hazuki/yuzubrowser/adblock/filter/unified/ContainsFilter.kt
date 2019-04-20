@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
 import android.net.Uri
 
-class AbpContainsFilter(
-        filter: String,
-        contentType: Int,
-        ignoreCase: Boolean,
-        domains: DomainMap?,
-        thirdParty: Int
-) : AbpFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+class ContainsFilter(
+    filter: String,
+    contentType: Int,
+    domains: DomainMap?,
+    thirdParty: Int
+) : UnifiedFilter(filter, contentType, false, domains, thirdParty) {
     override val type: Int
-        get() = ABP_TYPE_CONTAINS
+        get() = FILTER_TYPE_CONTAINS
 
     override fun check(url: Uri): Boolean {
-        return url.toString().contains(pattern, ignoreCase = ignoreCase)
+        return url.toString().contains(pattern)
     }
 }

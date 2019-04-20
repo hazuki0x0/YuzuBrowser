@@ -27,25 +27,29 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlock
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlockManager
-import jp.hazuki.yuzubrowser.ui.dialog.ConfirmDialog
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.fragment_ad_block_list.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.PrintWriter
 import java.util.*
 
-class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener, AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback, DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener, ConfirmDialog.OnConfirmedListener {
+class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBlockEditDialogListener, AdBlockMenuDialog.OnAdBlockMenuListener, AdBlockItemDeleteDialog.OnBlockItemDeleteListener, ActionMode.Callback, DeleteSelectedDialog.OnDeleteSelectedListener, AdBlockDeleteAllDialog.OnDeleteAllListener {
 
     private lateinit var provider: AdBlockManager.AdBlockItemProvider
     private lateinit var adapter: AdBlockArrayRecyclerAdapter
-    private lateinit var layoutManager: androidx.recyclerview.widget.LinearLayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
     private var listener: AdBlockFragmentListener? = null
     private var actionMode: ActionMode? = null
     private var type: Int = 0
+    private var isModified = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -59,7 +63,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         listener!!.setFragmentTitle(type)
         provider = AdBlockManager.getProvider(activity.applicationContext, type)
         adapter = AdBlockArrayRecyclerAdapter(activity, provider.allItems, this)
-        layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        layoutManager = LinearLayoutManager(activity)
 
         recyclerView.let {
             it.layoutManager = layoutManager
@@ -82,6 +86,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
+        isModified = true
         val adBlock = adapter[position]
         adBlock.isEnable = !adBlock.isEnable
         provider.update(adBlock)
@@ -97,6 +102,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     }
 
     override fun onEdited(index: Int, id: Int, text: String) {
+        isModified = true
         if (index >= 0 && index < adapter.itemCount) {
             val adBlock = adapter[index]
             adBlock.match = text
@@ -135,6 +141,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     }
 
     fun addAll(adBlocks: List<AdBlock>) {
+        isModified = true
         provider.addAll(adBlocks)
         adapter.clear()
         adapter.addAll(provider.allItems)
@@ -176,6 +183,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     override fun onDelete(index: Int, id: Int) {
         val adBlock = getItem(index, id)
         if (adBlock != null) {
+            isModified = true
             adapter.remove(adBlock)
             provider.delete(adBlock.id)
             adapter.notifyDataSetChanged()
@@ -187,15 +195,6 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         if (adBlock != null) {
             AdBlockEditDialog(getString(R.string.pref_edit), index, adBlock)
                     .show(childFragmentManager, "edit")
-        }
-    }
-
-    override fun onResetCount(index: Int, id: Int) {
-        val adBlock = getItem(index, id)
-        if (adBlock != null) {
-            adBlock.count = 0
-            provider.update(adBlock)
-            adapter.notifyDataSetChanged()
         }
     }
 
@@ -216,6 +215,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         val items = adapter.selectedItems
         Collections.sort(items, Collections.reverseOrder())
         for (index in items) {
+            isModified = true
             val (id) = adapter.remove(index)
             provider.delete(id)
         }
@@ -270,22 +270,6 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                 AdBlockDeleteAllDialog().show(childFragmentManager, "delete_all")
                 return true
             }
-            R.id.resetAllCount -> {
-                ConfirmDialog(CONFIRM_COUNT, getString(R.string.reset_all_counts), getString(R.string.reset_all_counts_mes))
-                        .show(childFragmentManager, "reset_all")
-            }
-            R.id.sort_count -> {
-                adapter.items.sortWith(Comparator { (_, _, _, c1), (_, _, _, c2) -> c2 - c1 })
-                adapter.notifyDataSetChanged()
-                layoutManager.scrollToPosition(0)
-                return true
-            }
-            R.id.sort_date -> {
-                adapter.items.sortWith(Comparator { (_, _, _, _, t1), (_, _, _, _, t2) -> t2.compareTo(t1) })
-                adapter.notifyDataSetChanged()
-                layoutManager.scrollToPosition(0)
-                return true
-            }
             R.id.sort_name -> {
                 adapter.items.sortWith(Comparator { (_, m1), (_, m2) -> m1.compareTo(m2) })
                 adapter.notifyDataSetChanged()
@@ -297,24 +281,22 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
     }
 
     override fun onDeleteAll() {
+        isModified = true
         provider.deleteAll()
         adapter.clear()
         adapter.notifyDataSetChanged()
     }
 
-    override fun onConfirmed(id: Int) {
-        when (id) {
-            CONFIRM_COUNT -> {
-                provider.resetCount()
-                adapter.items.forEach { it.count = 0 }
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = activity as AdBlockFragmentListener
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        GlobalScope.launch(Dispatchers.IO) {
+            provider.updateCache()
+        }
     }
 
     override fun onDetach() {
@@ -334,8 +316,6 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         private const val ARG_TYPE = "type"
         private const val REQUEST_SELECT_FILE = 1
         private const val REQUEST_SELECT_EXPORT = 2
-
-        private const val CONFIRM_COUNT = 1
 
         operator fun invoke(type: Int): AdBlockFragment {
             return AdBlockFragment().apply {

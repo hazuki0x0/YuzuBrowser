@@ -16,53 +16,35 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter.fastmatch
 
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex.NormalRegexUrl
-import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.adblock.filter.unified.*
 import java.util.regex.Pattern
-import java.util.regex.PatternSyntaxException
 
-class ItemDecoder {
+class LegacyDecoder {
 
     private val factory = FastMatcherFactory()
 
-    fun singleDecode(line: String, id: Int, count: Int, time: Long): FastMatcher? {
-        val matcher = singleDecode(line)
-        if (matcher != null) {
-            matcher.id = id
-            matcher.count = count
-            matcher.time = time
-        }
-        return matcher
-    }
-
-    private fun singleDecode(line: String): SimpleCountMatcher? {
+    fun singleDecode(line: String): UnifiedFilter? {
         if (line.length > 2) {
             if (line[0] == '[' && line[line.length - 1] == ']') {
-                return try {
-                    NormalRegexUrl(line.substring(1, line.length - 1))
-                } catch (e: PatternSyntaxException) {
-                    ErrorReport.printAndWriteLog(e)
-                    null
-                }
-
+                return createRegexFilter(line.substring(1, line.length - 1), 0xffff, false, null, -1)
             }
             val space = line.indexOf(' ')
             if (space > 0) {
                 val ip = line.substring(0, space)
                 if (IP_ADDRESS.matcher(ip).matches() && line.length > space + 1
                         || ip == "h" || ip == "host") {
-                    return factory.compileHost(line.substring(space + 1))
+                    return HostFilter(line.substring(space + 1), 0xffff, false, null, -1)
                 } else if (ip == "c") {
-                    return ContainsHost(line.substring(space + 1))
+                    return ContainsHostFilter(line.substring(space + 1), 0xffff, false, null, -1)
                 }
             }
             val matcher = HOST.matcher(line)
             if (matcher.matches()) {
                 val host = matcher.group()
-                return factory.compileHost(host)
+                return createRegexFilter(factory.fastCompile(host), 0xffff, false, null, -1)
             }
 
-            return factory.compileUrl(line)
+            return ContainsFilter(line, 0xffff, null, -1)
         }
         return null
     }

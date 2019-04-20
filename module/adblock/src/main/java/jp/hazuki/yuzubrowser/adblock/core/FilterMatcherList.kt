@@ -18,13 +18,11 @@ package jp.hazuki.yuzubrowser.adblock.core
 
 import android.net.Uri
 import jp.hazuki.yuzubrowser.adblock.filter.Filter
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherList
 
 class FilterMatcherList(
-        private val fastMatcherList: FastMatcherList,
         private val customData: List<Filter>
 ) {
 
     fun match(uri: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Boolean =
-            customData.any { it.match(uri, pageUrl, contentType, isThirdParty) } || fastMatcherList.any { it.match(uri) }
+        customData.any { it.match(uri, pageUrl, contentType, isThirdParty) }
 }

@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.fastmatch
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import java.util.*
+interface DomainMap {
+    val size: Int
 
-internal class FastMatcherSorter : Comparator<FastMatcher> {
-    override fun compare(o1: FastMatcher, o2: FastMatcher): Int {
-        return Integer.compare(o2.frequency, o1.frequency)
-    }
+    val include: Boolean
+
+    operator fun get(domain: String): Boolean?
+
+    fun getKey(index: Int): String
+
+    fun getValue(index: Int): Boolean
 }

@@ -36,7 +36,6 @@ class AdBlockMenuDialog : DialogFragment() {
             when (which) {
                 0 -> listener!!.onEdit(index, id)
                 1 -> listener!!.onAskDelete(index, id)
-                2 -> listener!!.onResetCount(index, id)
                 3 -> listener!!.startMultiSelect(index)
             }
         }
@@ -58,8 +57,6 @@ class AdBlockMenuDialog : DialogFragment() {
         fun onAskDelete(index: Int, id: Int)
 
         fun onEdit(index: Int, id: Int)
-
-        fun onResetCount(index: Int, id: Int)
 
         fun startMultiSelect(index: Int)
     }

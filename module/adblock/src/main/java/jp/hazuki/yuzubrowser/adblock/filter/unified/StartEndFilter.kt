@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
 import android.net.Uri
-import com.google.re2j.Pattern
 
-class AbpRe2Filter(
-        private val ptn: Pattern,
-        filter: String,
-        contentType: Int,
-        ignoreCase: Boolean,
-        domains: DomainMap?,
-        thirdParty: Int
-) : AbpFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+class StartEndFilter(
+    filter: String,
+    contentType: Int,
+    ignoreCase: Boolean,
+    domains: DomainMap?,
+    thirdParty: Int
+) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
     override val type: Int
-        get() = ABP_TYPE_RE2_REGEX
+        get() = FILTER_TYPE_START_END
 
     override fun check(url: Uri): Boolean {
-        return ptn.matches(url.toString())
+        val urlStr = url.schemeSpecificPart
+        if (urlStr.regionMatches(2, pattern, 0, pattern.length, ignoreCase)) {
+            return if (pattern.length + 2 == urlStr.length) {
+                true
+            } else {
+                urlStr[pattern.length + 2].checkSeparator()
+            }
+        }
+        return false
     }
 }

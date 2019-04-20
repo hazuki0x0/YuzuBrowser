@@ -16,60 +16,11 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter.fastmatch;
 
-import android.text.TextUtils;
-
 import java.nio.CharBuffer;
-
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex.LazyRegexHost;
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex.LazyRegexUrl;
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex.NormalRegexHost;
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex.NormalRegexUrl;
 
 public final class FastMatcherFactory {
 
     private CharBuffer mainBuffer;
-
-    SimpleCountMatcher compileHost(String match) {
-        if (TextUtils.isEmpty(match) || match.length() < 2) return null;
-        if (match.charAt(0) == '[' && match.charAt(match.length() - 1) == ']' && match.length() > 2) {
-            return new NormalRegexHost(fastCompile(match.substring(1, match.length() - 1)));
-        } else if (fastCheck(match)) {
-            return new LazyRegexHost(fastCompile(match));
-        } else {
-            return new SimpleHost(match);
-        }
-    }
-
-    SimpleCountMatcher compileUrl(String match) {
-        if (TextUtils.isEmpty(match) || match.length() < 2) return null;
-        if (match.charAt(0) == '[' && match.charAt(match.length() - 1) == ']' && match.length() > 2) {
-            return new NormalRegexUrl(fastCompile(match.substring(1, match.length() - 1)));
-        } else if (fastCheck(match)) {
-            return new LazyRegexUrl(fastCompile(match));
-        } else {
-            return new SimpleUrl(match);
-        }
-    }
-
-    private static boolean fastCheck(String item) {
-        boolean escape = false;
-        for (int i = 0; item.length() > i; i++) {
-            switch (item.charAt(i)) {
-                case '#':
-                case '?':
-                case '*':
-                case '+':
-                    if (!escape)
-                        return true;
-                    break;
-                case '\\':
-                    escape = true;
-                    continue;
-            }
-            escape = false;
-        }
-        return false;
-    }
 
     private CharBuffer getBuffer(int length) {
         if (mainBuffer == null || mainBuffer.capacity() < length * 2)

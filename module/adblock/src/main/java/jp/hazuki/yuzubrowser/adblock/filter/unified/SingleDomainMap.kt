@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.fastmatch.regex
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import com.google.re2j.Pattern
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.RegexHost
+class SingleDomainMap(override val include: Boolean, private val domain: String) : DomainMap {
+    override val size: Int
+        get() = 1
 
-internal class LazyRegexHost(host: String) : RegexHost() {
-    private val reg = lazy(LazyThreadSafetyMode.NONE) { Pattern.compile(host) }
-    override val regex: Pattern
-        get() = reg.value
+    override fun get(domain: String): Boolean? {
+        return if (this.domain == domain) include else null
+    }
 
+    override fun getKey(index: Int): String {
+        if (index != 0) throw IndexOutOfBoundsException()
+        return domain
+    }
+
+    override fun getValue(index: Int): Boolean {
+        if (index != 0) throw IndexOutOfBoundsException()
+        return include
+    }
 }

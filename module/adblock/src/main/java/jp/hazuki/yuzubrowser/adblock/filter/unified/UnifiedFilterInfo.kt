@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.fastmatch
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import android.net.Uri
-
-internal class SimpleHost(private val host: String) : SimpleCountMatcher() {
-    override val type: Int
-        get() = FastMatcher.TYPE_SIMPLE_HOST
-    override val pattern: String
-        get() = host
-
-    override fun matchItem(uri: Uri) = host == uri.host
-}
+open class UnifiedFilterInfo(
+        open val title: String?,
+        open val homePage: String?,
+        open val lastUpdate: String?,
+        open val expires: Int?,
+        open val version: String?
+)

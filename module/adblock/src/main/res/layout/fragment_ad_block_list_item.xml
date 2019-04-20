@@ -15,58 +15,56 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:paddingStart="12dp"
-                android:paddingEnd="7dp"
-                android:clipToPadding="false"
-                android:descendantFocusability="blocksDescendants"
-                android:background="?attr/selectableItemBackground">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="?android:attr/listPreferredItemHeight"
+                                                   android:clipToPadding="false"
+                                                   android:descendantFocusability="blocksDescendants"
+                                                   android:background="?attr/selectableItemBackground">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/matchTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/foreground"
+        android:layout_alignBottom="@+id/foreground"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toStartOf="@+id/checkBox"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/checkBox"
-        android:layout_marginTop="8dp"/>
-
-    <TextView
-        android:id="@+id/countTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_below="@+id/matchTextView"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/timeTextView"
-        android:layout_marginTop="4dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/checkBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:focusable="false"
-        android:clickable="false"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"/>
-
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_alignTop="@+id/countTextView"
-        android:layout_toStartOf="@+id/checkBox"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <View
         android:id="@+id/foreground"
-        android:layout_width="wrap_content"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_marginStart="-12dp"
-        android:layout_marginEnd="-7dp"/>
-</RelativeLayout>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

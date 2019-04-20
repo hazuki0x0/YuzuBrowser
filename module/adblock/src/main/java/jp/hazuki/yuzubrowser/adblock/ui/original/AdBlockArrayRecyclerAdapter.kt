@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.adblock.ui.original
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,19 +28,14 @@ import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlock
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import java.util.*
 
 class AdBlockArrayRecyclerAdapter(context: Context, list: MutableList<AdBlock>, listener: OnRecyclerListener) : ArrayRecyclerAdapter<AdBlock, AdBlockArrayRecyclerAdapter.ItemHolder>(context, list, listener) {
 
-    private val dateFormat = DateFormat.getMediumDateFormat(context)
     private val foregroundOverlay = ColorDrawable(context.getResColor(R.color.selected_overlay))
 
     override fun onBindViewHolder(holder: ItemHolder, item: AdBlock, position: Int) {
         holder.match.text = item.match
-        holder.count.text = item.count.toString()
         holder.checkBox.isChecked = item.isEnable
-
-        holder.time.text = if (item.time > 0) dateFormat.format(Date(item.time)) else ""
 
         holder.foreground.background = if (isMultiSelectMode && isSelected(position)) foregroundOverlay else null
     }
@@ -51,8 +45,6 @@ class AdBlockArrayRecyclerAdapter(context: Context, list: MutableList<AdBlock>, 
 
     class ItemHolder(itemView: View, adapter: AdBlockArrayRecyclerAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<AdBlock>(itemView, adapter) {
         val match: TextView = itemView.findViewById(R.id.matchTextView)
-        val count: TextView = itemView.findViewById(R.id.countTextView)
-        val time: TextView = itemView.findViewById(R.id.timeTextView)
         val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
         val foreground: View = itemView.findViewById(R.id.foreground)
     }

@@ -312,8 +312,6 @@
     <string name="breadcrumb">Фрагменты</string>
     <string name="download_failed_root_not_exists">Загрузка невозможна, так как папка назначения загрузки не найдена</string>
     <string name="download_failed_root_not_writable">Загрузка невозможна, поскольку папка назначения загрузки недоступна для записи</string>
-    <string name="reset_all_counts">Сбросить все счётчики</string>
-    <string name="reset_all_counts_mes">Вы уверены, что хотите сбросить все счётчики?</string>
     <string name="this_page_says">Подтвердите действие</string>
     <string name="host_page_says">Подтвердите действие на %1$s</string>
     <string name="prevent_additional_dialogues">Предотвратить создание дополнительных диалоговых окон на этой странице.</string>

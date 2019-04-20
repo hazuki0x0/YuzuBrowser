@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-class SingleDomainMap(override val include: Boolean, private val domain: String) : DomainMap {
-    override val size: Int
-        get() = 1
+import android.net.Uri
 
-    override fun get(domain: String): Boolean? {
-        return if (this.domain == domain) include else null
-    }
+internal class ContainsHostFilter(
+    filter: String,
+    contentType: Int,
+    ignoreCase: Boolean,
+    domains: DomainMap?,
+    thirdParty: Int
+) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+    override val type: Int
+        get() = FILTER_TYPE_CONTAINS_HOST
 
-    override fun getKey(index: Int): String {
-        if (index != 0) throw IndexOutOfBoundsException()
-        return domain
-    }
-
-    override fun getValue(index: Int): Boolean {
-        if (index != 0) throw IndexOutOfBoundsException()
-        return include
+    override fun check(url: Uri): Boolean {
+        return url.host?.contains(pattern) ?: url.toString().contains(pattern)
     }
 }

@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.adblock.repository.original
 
 import java.io.Serializable
 
-data class AdBlock(var id: Int, var match: String, var isEnable: Boolean, var count: Int, val time: Long) : Serializable {
+data class AdBlock(var id: Int, var match: String, var isEnable: Boolean) : Serializable {
 
-    constructor(match: String) : this(-1, match, true, 0, 0)
+    constructor(match: String) : this(-1, match, true)
 
     override fun equals(other: Any?): Boolean = this === other || other is AdBlock && id == other.id
 }

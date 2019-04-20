@@ -363,7 +363,6 @@
     <string name="pref_edit">Modifica</string>
     <string name="pref_delete">Elimina</string>
     <string name="pref_select_all">Seleziona tutto</string>
-    <string name="pref_reset_count">Resetta conteggio</string>
     <string name="pref_ad_block_delete_confirm">Sei sicuro di voler eliminare \"%1$s\"?</string>
     <string name="pref_ad_block_delete_selected_confirm">Sei sicuro di voler eliminare gli elementi selezionati?</string>
     <string name="pref_ad_block_delete">\"%1$s\" eliminati.</string>

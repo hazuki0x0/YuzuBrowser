@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.adblock.filter.abp
 
 import com.google.re2j.Pattern
 import jp.hazuki.yuzubrowser.adblock.*
+import jp.hazuki.yuzubrowser.adblock.filter.unified.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
@@ -52,11 +53,11 @@ class AbpFilterDecoder {
     }
 
     @Throws(OnRedirectException::class)
-    fun decode(reader: BufferedReader, url: String?): AbpFilterSet {
+    fun decode(reader: BufferedReader, url: String?): UnifiedFilterSet {
         val info = DecoderInfo()
-        val black = mutableListOf<AbpFilter>()
-        val white = mutableListOf<AbpFilter>()
-        val whitePage = mutableListOf<AbpFilter>()
+        val black = mutableListOf<UnifiedFilter>()
+        val white = mutableListOf<UnifiedFilter>()
+        val whitePage = mutableListOf<UnifiedFilter>()
         reader.forEachLine { line ->
             if (line.isEmpty()) return@forEachLine
             when {
@@ -70,10 +71,10 @@ class AbpFilterDecoder {
                 }
             }
         }
-        return AbpFilterSet(info, black, white, whitePage)
+        return UnifiedFilterSet(info, black, white, whitePage)
     }
 
-    private fun String.decodeFilter(blackList: MutableList<AbpFilter>, whiteList: MutableList<AbpFilter>, pageWhiteList: MutableList<AbpFilter>) {
+    private fun String.decodeFilter(blackList: MutableList<UnifiedFilter>, whiteList: MutableList<UnifiedFilter>, pageWhiteList: MutableList<UnifiedFilter>) {
         var contentType = 0
         var ignoreCase = false
         var domain: String? = null
@@ -164,19 +165,25 @@ class AbpFilterDecoder {
             val isLiteral = content.isLiteralFilter()
             if (isLiteral) {
                 when {
-                    isStartsWith && isEndWith -> AbpStartEndFilter(content, contentType, ignoreCase, domains, thirdParty)
-                    isStartsWith -> AbpStartsWithFilter(content, contentType, ignoreCase, domains, thirdParty)
-                    isEndWith -> AbpEndWithFilter(content, contentType, ignoreCase, domains, thirdParty)
-                    else -> AbpContainsFilter(content, contentType, ignoreCase, domains, thirdParty)
+                    isStartsWith && isEndWith -> StartEndFilter(content, contentType, ignoreCase, domains, thirdParty)
+                    isStartsWith -> StartsWithFilter(content, contentType, ignoreCase, domains, thirdParty)
+                    isEndWith -> {
+                        if (ignoreCase) {
+                            PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
+                        } else {
+                            EndWithFilter(content, contentType, domains, thirdParty)
+                        }
+                    }
+                    else -> {
+                        if (ignoreCase) {
+                            PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
+                        } else {
+                            ContainsFilter(content, contentType, domains, thirdParty)
+                        }
+                    }
                 }
             } else {
-                if (isStartsWith) {
-                    createSspRegexFilter(filter, contentType, ignoreCase, domains, thirdParty)
-                            ?: return
-                } else {
-                    createRegexFilter(filter, contentType, ignoreCase, domains, thirdParty)
-                            ?: return
-                }
+                PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
             }
         }
 
@@ -258,36 +265,9 @@ class AbpFilterDecoder {
         return -1
     }
 
-    private fun createSspRegexFilter(filter: String, contentType: Int, ignoreCase: Boolean, domains: DomainMap?, thirdParty: Int): AbpFilter? {
-        val pattern = filter.substring(2).convertToRegexText()
-        val escaped = "//$pattern"
-        try {
-            AbpRe2SspFilter(Pattern.compile(escaped), pattern, contentType, ignoreCase, domains, thirdParty)
-        } catch (e: Re2PatternSyntaxException) {
-            try {
-                AbpRegexSspFilter(escaped.toRegex(), pattern, contentType, ignoreCase, domains, thirdParty)
-            } catch (e: JvmPatternSyntaxException) {
-            }
-        }
-        return null
-    }
-
-    private fun createRegexFilter(filter: String, contentType: Int, ignoreCase: Boolean, domains: DomainMap?, thirdParty: Int): AbpFilter? {
-        val pattern = filter.convertToRegexText()
-        try {
-            AbpRe2Filter(Pattern.compile(pattern), pattern, contentType, ignoreCase, domains, thirdParty)
-        } catch (e: Re2PatternSyntaxException) {
-            try {
-                AbpRegexFilter(pattern.toRegex(), pattern, contentType, ignoreCase, domains, thirdParty)
-            } catch (e: JvmPatternSyntaxException) {
-            }
-        }
-        return null
-    }
-
     class OnRedirectException(val url: String) : IOException()
 
-    private class DecoderInfo : AbpFilterInfo(null, null, null, null, null) {
+    private class DecoderInfo : UnifiedFilterInfo(null, null, null, null, null) {
         override var expires: Int? = null
         override var homePage: String? = null
         override var lastUpdate: String? = null

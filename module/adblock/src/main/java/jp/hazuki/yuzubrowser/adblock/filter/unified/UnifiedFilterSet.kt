@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.abp
+package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-class AbpFilterSet(
-        val filterInfo: AbpFilterInfo,
-        val blackList: List<AbpFilter>,
-        val whiteList: List<AbpFilter>,
-        val whitePageList: List<AbpFilter>
+class UnifiedFilterSet(
+    val filterInfo: UnifiedFilterInfo,
+    val blackList: List<UnifiedFilter>,
+    val whiteList: List<UnifiedFilter>,
+    val whitePageList: List<UnifiedFilter>
 )

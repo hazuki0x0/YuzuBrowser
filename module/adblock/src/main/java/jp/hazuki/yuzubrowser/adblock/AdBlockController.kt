@@ -28,13 +28,11 @@ import jp.hazuki.yuzubrowser.adblock.filter.Filter
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_BLACK
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_WHITE
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_WHITE_PAGE
-import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpDir
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherList
+import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDao
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlockManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -47,7 +45,6 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
     private val dummy = WebResourceResponse("text/plain", "UTF-8", EmptyInputStream())
 
     private val manager: AdBlockManager = AdBlockManager(context)
-    private var whitePageList: FastMatcherList? = null
     private var adBlocker: AdBlocker? = null
     private var updating = false
 
@@ -58,21 +55,22 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
     fun update() {
         updating = true
         GlobalScope.launch {
-            val abpLoader = AbpLoader(context.getAbpDir(), abpDao.getAll())
+            val abpLoader = AbpLoader(context.getFilterDir(), abpDao.getAll())
             val black = async {
-                FilterMatcher(manager.getFastMatcherCachedList(AdBlockManager.BLACK_TABLE_NAME).iterator()).also {
+                FilterMatcher(manager.getCachedMatcherList(AdBlockManager.BLACK_TABLE_NAME).iterator()).also {
                     abpLoader.loadAll(ABP_PREFIX_BLACK, it)
                 }
             }
             val white = async {
-                FilterMatcher(manager.getFastMatcherCachedList(AdBlockManager.WHITE_TABLE_NAME).iterator()).also {
+                FilterMatcher(manager.getCachedMatcherList(AdBlockManager.WHITE_TABLE_NAME).iterator()).also {
                     abpLoader.loadAll(ABP_PREFIX_WHITE, it)
                 }
             }
             val whitePage = async {
-                val page = manager.getFastMatcherCachedList(AdBlockManager.WHITE_PAGE_TABLE_NAME)
-                whitePageList = page
-                FilterMatcherList(page, abpLoader.loadAllList(ABP_PREFIX_WHITE_PAGE))
+                val list = mutableListOf<Filter>()
+                list.addAll(manager.getCachedMatcherList(AdBlockManager.WHITE_PAGE_TABLE_NAME))
+                list.addAll(abpLoader.loadAllList(ABP_PREFIX_WHITE_PAGE))
+                FilterMatcherList(list)
             }
             adBlocker = AdBlocker(black.await(), white.await(), whitePage.await())
 
@@ -86,12 +84,6 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
 
     fun onResume() {
         if (updating) return
-
-        GlobalScope.launch(Dispatchers.IO) {
-            manager.updateMatcher(AdBlockManager.BLACK_TABLE_NAME, adBlocker?.blackList)
-            manager.updateMatcher(AdBlockManager.WHITE_TABLE_NAME, adBlocker?.whiteList)
-            manager.updateOrder(AdBlockManager.WHITE_PAGE_TABLE_NAME, whitePageList)
-        }
     }
 
     fun createDummy(uri: Uri): WebResourceResponse {

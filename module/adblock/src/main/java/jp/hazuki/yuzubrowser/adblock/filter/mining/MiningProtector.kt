@@ -18,9 +18,10 @@ package jp.hazuki.yuzubrowser.adblock.filter.mining
 
 import android.net.Uri
 import android.webkit.WebResourceResponse
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.ContainsHost
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.SimpleHost
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.SimpleUrl
+import jp.hazuki.yuzubrowser.adblock.filter.unified.ContainsFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.ContainsHostFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.HostFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.StartsWithFilter
 import java.io.IOException
 import java.io.InputStream
 
@@ -28,65 +29,65 @@ class MiningProtector {
     val dummy = WebResourceResponse("text/plain", "UTF-8", EmptyInputStream())
 
     private val blackList = arrayListOf(
-            // host block list
-            SimpleHost("cnhv.co"),
-            SimpleHost("coinhive.com"),
-            SimpleHost("coin-hive.com"),
-            SimpleHost("gus.host"),
-            ContainsHost("jsecoin.com"),
-            SimpleHost("static.reasedoper.pw"),
-            SimpleHost("mataharirama.xyz"),
-            SimpleHost("listat.biz"),
-            SimpleHost("lmodr.biz"),
-            ContainsHost("crypto-loot.com"),
-            ContainsHost("2giga.link"),
-            SimpleHost("coinerra.com"),
-            SimpleHost("coin-have.com"),
-            ContainsHost("afminer.com"),
-            ContainsHost("coinblind.com"),
-            SimpleUrl("monerominer.rocks"),
-            ContainsHost("cloudcoins.co"),
-            SimpleHost("coinlab.biz"),
-            SimpleHost("papoto.com"),
-            SimpleHost("rocks.io"),
-            ContainsHost("adminer.com"),
-            ContainsHost("ad-miner.com"),
-            SimpleHost("party-nngvitbizn.now.sh"),
-            ContainsHost("bitporno.com"),
-            SimpleHost("cryptoloot.pro"),
-            SimpleHost("load.jsecoin.com"),
-            SimpleHost("miner.pr0gramm.com"),
-            SimpleHost("minemytraffic.com"),
-            SimpleHost("ppoi.org"),
-            SimpleHost("projectpoi.com"),
-            SimpleHost("api.inwemo.com"),
-            SimpleHost("jsccnn.com"),
-            SimpleHost("jscdndel.com"),
-            SimpleHost("coinhiveproxy.com"),
-            SimpleHost("coinnebula.com"),
-            SimpleHost("cdn.cloudcoins.co"),
-            SimpleHost("go.megabanners.cf"),
-            SimpleHost(" cryptoloot.pro"),
-            SimpleHost("bjorksta.men"),
-            SimpleHost("crypto.csgocpu.com"),
-            SimpleHost("noblock.pro"),
-            SimpleHost("1q2w3.me"),
-            SimpleHost("minero.pw"),
-            SimpleHost("webmine.cz"),
+        // host block list
+        HostFilter("cnhv.co", 0xffff, false, null, 1),
+        HostFilter("coinhive.com", 0xffff, false, null, 1),
+        HostFilter("coin-hive.com", 0xffff, false, null, 1),
+        HostFilter("gus.host", 0xffff, false, null, 1),
+        ContainsHostFilter("jsecoin.com", 0xffff, false, null, 1),
+        HostFilter("static.reasedoper.pw", 0xffff, false, null, 1),
+        HostFilter("mataharirama.xyz", 0xffff, false, null, 1),
+        HostFilter("listat.biz", 0xffff, false, null, 1),
+        HostFilter("lmodr.biz", 0xffff, false, null, 1),
+        ContainsHostFilter("crypto-loot.com", 0xffff, false, null, 1),
+        ContainsHostFilter("2giga.link", 0xffff, false, null, 1),
+        HostFilter("coinerra.com", 0xffff, false, null, 1),
+        HostFilter("coin-have.com", 0xffff, false, null, 1),
+        ContainsHostFilter("afminer.com", 0xffff, false, null, 1),
+        ContainsHostFilter("coinblind.com", 0xffff, false, null, 1),
+        ContainsFilter("monerominer.rocks", 0xffff, null, 1),
+        ContainsHostFilter("cloudcoins.co", 0xffff, false, null, 1),
+        HostFilter("coinlab.biz", 0xffff, false, null, 1),
+        HostFilter("papoto.com", 0xffff, false, null, 1),
+        HostFilter("rocks.io", 0xffff, false, null, 1),
+        ContainsHostFilter("adminer.com", 0xffff, false, null, 1),
+        ContainsHostFilter("ad-miner.com", 0xffff, false, null, 1),
+        HostFilter("party-nngvitbizn.now.sh", 0xffff, false, null, 1),
+        ContainsHostFilter("bitporno.com", 0xffff, false, null, 1),
+        HostFilter("cryptoloot.pro", 0xffff, false, null, 1),
+        HostFilter("load.jsecoin.com", 0xffff, false, null, 1),
+        HostFilter("miner.pr0gramm.com", 0xffff, false, null, 1),
+        HostFilter("minemytraffic.com", 0xffff, false, null, 1),
+        HostFilter("ppoi.org", 0xffff, false, null, 1),
+        HostFilter("projectpoi.com", 0xffff, false, null, 1),
+        HostFilter("api.inwemo.com", 0xffff, false, null, 1),
+        HostFilter("jsccnn.com", 0xffff, false, null, 1),
+        HostFilter("jscdndel.com", 0xffff, false, null, 1),
+        HostFilter("coinhiveproxy.com", 0xffff, false, null, 1),
+        HostFilter("coinnebula.com", 0xffff, false, null, 1),
+        HostFilter("cdn.cloudcoins.co", 0xffff, false, null, 1),
+        HostFilter("go.megabanners.cf", 0xffff, false, null, 1),
+        HostFilter(" cryptoloot.pro", 0xffff, false, null, 1),
+        HostFilter("bjorksta.men", 0xffff, false, null, 1),
+        HostFilter("crypto.csgocpu.com", 0xffff, false, null, 1),
+        HostFilter("noblock.pro", 0xffff, false, null, 1),
+        HostFilter("1q2w3.me", 0xffff, false, null, 1),
+        HostFilter("minero.pw", 0xffff, false, null, 1),
+        HostFilter("webmine.cz", 0xffff, false, null, 1),
 
-            // url block list
-            SimpleUrl("://kisshentai.net/Content/js/c-hive.js"),
-            SimpleUrl("://kiwifarms.net/js/Jawsh/xmr/xmr.min.js"),
-            SimpleUrl("://anime.reactor.cc/js/ch/cryptonight.wasm"),
-            SimpleUrl("cookiescript.info/libs/"),
-            SimpleUrl("://cookiescriptcdn.pro/libs/"),
-            SimpleUrl("://baiduccdn1.com/lib/")
+        // url block list
+        StartsWithFilter("kisshentai.net/Content/js/c-hive.js", 0xffff, true, null, 1),
+        StartsWithFilter("kiwifarms.net/js/Jawsh/xmr/xmr.min.js", 0xffff, true, null, 1),
+        StartsWithFilter("anime.reactor.cc/js/ch/cryptonight.wasm", 0xffff, true, null, 1),
+        StartsWithFilter("cookiescript.info/libs/", 0xffff, true, null, 1),
+        StartsWithFilter("cookiescriptcdn.pro/libs/", 0xffff, true, null, 1),
+        StartsWithFilter("baiduccdn1.com/lib/", 0xffff, true, null, 1)
     )
 
     fun isBlock(pageUri: Uri, uri: Uri): Boolean {
         if (pageUri.host == pageUri.host) return false
 
-        return blackList.any { it.match(uri) }
+        return blackList.any { it.match(uri, pageUri, 0xffff, true) }
     }
 
     private class EmptyInputStream : InputStream() {

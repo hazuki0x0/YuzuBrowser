@@ -26,7 +26,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.DaggerIntentService
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
 import jp.hazuki.yuzubrowser.adblock.filter.abp.*
-import jp.hazuki.yuzubrowser.adblock.filter.abp.io.AbpFilterWriter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
+import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterWriter
 import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
@@ -154,7 +155,13 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     }
 
     private suspend fun updateAssets(entity: AbpEntity): Boolean {
-        if (entity.version == "1") return false
+        if (entity.version == "1") {
+            val dir = getFilterDir()
+
+            if (dir.getAbpBlackListFile(entity).exists() &&
+                dir.getAbpWhiteListFile(entity).exists() &&
+                dir.getAbpWhitePageListFile(entity).exists()) return false
+        }
 
         assets.open("adblock/yuzu_filter.txt").bufferedReader().use {
             return decode(it, Charsets.UTF_8, entity)
@@ -174,8 +181,8 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         entity.version = info.version
         entity.lastUpdate = info.lastUpdate
         entity.lastLocalUpdate = System.currentTimeMillis()
-        val dir = getAbpDir()
-        val writer = AbpFilterWriter()
+        val dir = getFilterDir()
+        val writer = FilterWriter()
         writer.write(dir.getAbpBlackListFile(entity).outputStream().buffered(), set.blackList)
         writer.write(dir.getAbpWhiteListFile(entity).outputStream().buffered(), set.whiteList)
         writer.write(dir.getAbpWhitePageListFile(entity).outputStream().buffered(), set.whitePageList)
