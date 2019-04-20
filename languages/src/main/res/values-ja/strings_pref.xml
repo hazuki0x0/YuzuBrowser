@@ -374,6 +374,9 @@
     <string name="pref_sort_count">回数順</string>
     <string name="pref_sort_date">日付順</string>
     <string name="pref_sort_name">名前順</string>
+    <string name="pref_sort_registration">登録順</string>
+    <string name="pref_sort_name_reverse">名前順(逆順)</string>
+    <string name="pref_sort_registration_reverse">登録順(逆順)</string>
 
     <string name="pref_show_divider">区切り線表示</string>
     <string-array name="pref_show_divider_list">

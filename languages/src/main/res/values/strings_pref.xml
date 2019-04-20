@@ -374,6 +374,9 @@
     <string name="pref_sort_count">By count</string>
     <string name="pref_sort_date">By date</string>
     <string name="pref_sort_name">By name</string>
+    <string name="pref_sort_registration">By registration</string>
+    <string name="pref_sort_name_reverse">By name(reverse)</string>
+    <string name="pref_sort_registration_reverse">By registration(reverse)</string>
 
     <string name="pref_show_divider">Dividers Display</string>
     <string-array name="pref_show_divider_list">

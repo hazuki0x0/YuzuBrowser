@@ -270,8 +270,26 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                 AdBlockDeleteAllDialog().show(childFragmentManager, "delete_all")
                 return true
             }
+            R.id.sort_registration -> {
+                adapter.items.sortWith(Comparator { m1, m2 -> m1.id.compareTo(m2.id) })
+                adapter.notifyDataSetChanged()
+                layoutManager.scrollToPosition(0)
+                return true
+            }
+            R.id.sort_registration_reverse -> {
+                adapter.items.sortWith(Comparator { m1, m2 -> m2.id.compareTo(m1.id) })
+                adapter.notifyDataSetChanged()
+                layoutManager.scrollToPosition(0)
+                return true
+            }
             R.id.sort_name -> {
-                adapter.items.sortWith(Comparator { (_, m1), (_, m2) -> m1.compareTo(m2) })
+                adapter.items.sortWith(Comparator { m1, m2 -> m1.match.compareTo(m2.match) })
+                adapter.notifyDataSetChanged()
+                layoutManager.scrollToPosition(0)
+                return true
+            }
+            R.id.sort_name_reverse -> {
+                adapter.items.sortWith(Comparator { m1, m2 -> m2.match.compareTo(m1.match) })
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true

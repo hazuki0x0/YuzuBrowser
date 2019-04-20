@@ -30,8 +30,17 @@
         android:title="@string/pref_sort">
         <menu>
             <item
+                android:id="@+id/sort_registration"
+                android:title="@string/pref_sort_registration"/>
+            <item
+                android:id="@+id/sort_registration_reverse"
+                android:title="@string/pref_sort_registration_reverse"/>
+            <item
                 android:id="@+id/sort_name"
                 android:title="@string/pref_sort_name"/>
+            <item
+                android:id="@+id/sort_name_reverse"
+                android:title="@string/pref_sort_name_reverse"/>
         </menu>
     </item>
 
