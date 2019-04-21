@@ -72,5 +72,8 @@ class PatternMatchFilterTest {
 
         val midSeparator = PatternMatchFilter("adsite^ad", 0xffff, false, null, -1)
         assertThat(midSeparator.check("browser.test.com/adsite/ad")).isEqualTo(true)
+
+        val fieldTest1 = PatternMatchFilter("/www/delivery/*", 0xffff, false, null, -1)
+        assertThat(fieldTest1.check("https://www.amazon.co.jp/")).isEqualTo(false)
     }
 }
