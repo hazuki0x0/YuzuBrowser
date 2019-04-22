@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.unified
+package jp.hazuki.yuzubrowser.adblock.repository;
 
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
+import com.rejasupotaro.android.kvs.annotations.Key;
+import com.rejasupotaro.android.kvs.annotations.Table;
 
-class UnifiedFilterSet(
-    val filterInfo: UnifiedFilterInfo,
-    val blackList: List<UnifiedFilter>,
-    val whiteList: List<UnifiedFilter>,
-    val whitePageList: List<UnifiedFilter>,
-    val elementList: List<ElementFilter>
-)
+@Table(name = "abp")
+public class AdBlockPrefSchema {
+
+    @Key(name = "abpNextUpdateTime")
+    public final long abpNextUpdateTime = -1L;
+
+    @Key(name = "abpLastUpdateTime")
+    public final long abpLastUpdateTime = -1L;
+
+    @Key(name = "abpUseElementHide")
+    public final boolean isAbpUseElementHide = true;
+
+    @Key(name = "abpIgnoreGenericElement")
+    public final boolean isAbpIgnoreGenericElement = false;
+}

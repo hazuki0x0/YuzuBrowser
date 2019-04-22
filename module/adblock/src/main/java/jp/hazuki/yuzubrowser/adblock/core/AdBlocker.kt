@@ -17,10 +17,7 @@
 package jp.hazuki.yuzubrowser.adblock.core
 
 import android.net.Uri
-import android.webkit.WebResourceRequest
-import jp.hazuki.yuzubrowser.adblock.convertToAdBlockContentType
 import jp.hazuki.yuzubrowser.adblock.filter.Filter
-import jp.hazuki.yuzubrowser.adblock.isThirdParty
 import java.util.*
 import java.util.regex.Pattern
 
@@ -37,7 +34,7 @@ class AdBlocker(
         whiteList.clear()
     }
 
-    private fun isBlock(uri: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
+    private fun isBlockSearch(uri: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
         val candidates = candidatesCreator.matcher(uri.toString()).findAll()
         candidates.add("")
 
@@ -52,17 +49,17 @@ class AdBlocker(
         return null
     }
 
-    fun isBlock(pageUrl: Uri, request: WebResourceRequest): Filter? {
-        val isThird = request.isThirdParty(pageUrl.host!!)
-        val contentType = request.convertToAdBlockContentType(pageUrl.toString())
-        if (whitePageList.match(request.url, pageUrl, contentType, isThird)) return null
+    fun isWhitePage(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Boolean {
+        return whitePageList.match(url, pageUrl, contentType, isThird)
+    }
 
-        val cacheKey = pageUrl.toString() + request.url.toString() + isThird
+    fun isBlock(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Filter? {
+        val cacheKey = pageUrl.toString() + url.toString() + isThird
         val cache = resultCache[cacheKey]
 
         if (cache != null) return cache
 
-        val result = isBlock(request.url, pageUrl, contentType, isThird)
+        val result = isBlockSearch(url, pageUrl, contentType, isThird)
 
         resultCache[cacheKey] = result
 

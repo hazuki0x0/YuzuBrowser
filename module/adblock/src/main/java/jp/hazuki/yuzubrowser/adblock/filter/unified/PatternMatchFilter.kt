@@ -70,7 +70,9 @@ class PatternMatchFilter(
                         val start = url.searchSeparator(i)
                         when {
                             start < 0 -> return false
-                            url.length == start + 1 -> return false
+                            url.length == start + 1 -> {
+                                return pPtr == pattern.lastIndex
+                            }
                             else -> start + 1
                         }
                     }
@@ -79,7 +81,9 @@ class PatternMatchFilter(
                         if (pPtr == pattern.length) return true
                         when {
                             start < 0 -> return false
-                            url.length == start + 1 -> return false
+                            url.length == start + 1 -> {
+                                return pPtr == pattern.lastIndex
+                            }
                             else -> start + 1
                         }
                     }

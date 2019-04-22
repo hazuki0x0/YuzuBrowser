@@ -19,6 +19,9 @@ package jp.hazuki.yuzubrowser.adblock.filter.abp
 import com.google.re2j.Pattern
 import jp.hazuki.yuzubrowser.adblock.*
 import jp.hazuki.yuzubrowser.adblock.filter.unified.*
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementHideFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ExcludeElementFilter
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
@@ -58,23 +61,50 @@ class AbpFilterDecoder {
         val black = mutableListOf<UnifiedFilter>()
         val white = mutableListOf<UnifiedFilter>()
         val whitePage = mutableListOf<UnifiedFilter>()
+        val elementFilter = mutableListOf<ElementFilter>()
         reader.forEachLine { line ->
             if (line.isEmpty()) return@forEachLine
+            val trimmedLine = line.trim()
             when {
-                line[0] == '!' -> line.decodeComment(url, info)?.let {
+                trimmedLine[0] == '!' -> trimmedLine.decodeComment(url, info)?.let {
                     throw OnRedirectException(it)
                 }
                 else -> {
-                    if (!contentRegex.matches(line)) {
-                        line.decodeFilter(black, white, whitePage)
+                    val matcher = contentRegex.matcher(trimmedLine)
+                    if (matcher.matches()) {
+                        decodeContentFilter(matcher.group(1), matcher.group(2), matcher.group(3), elementFilter)
+                    } else {
+                        trimmedLine.decodeFilter(black, white, whitePage)
                     }
                 }
             }
         }
-        return UnifiedFilterSet(info, black, white, whitePage)
+        return UnifiedFilterSet(info, black, white, whitePage, elementFilter)
     }
 
-    private fun String.decodeFilter(blackList: MutableList<UnifiedFilter>, whiteList: MutableList<UnifiedFilter>, pageWhiteList: MutableList<UnifiedFilter>) {
+    private fun decodeContentFilter(
+        domains: String?,
+        type: String?,
+        body: String,
+        elementFilterList: MutableList<ElementFilter>) {
+
+        if (type == "@") {
+            if (domains == null) return
+
+            val domainList = domains.splitToSequence(',')
+                .map { it.trim() }
+                .filterNot { it.startsWith('~') }
+                .toList()
+            elementFilterList.add(ExcludeElementFilter(body.trim(), domainList))
+        }
+        if (type != null && type.isNotEmpty()) return
+
+        elementFilterList.add(ElementHideFilter(body, domains?.domainsToDomainMap(',')))
+    }
+
+    private fun String.decodeFilter(blackList: MutableList<UnifiedFilter>,
+                                    whiteList: MutableList<UnifiedFilter>,
+                                    pageWhiteList: MutableList<UnifiedFilter>) {
         var contentType = 0
         var ignoreCase = false
         var domain: String? = null
@@ -130,30 +160,7 @@ class AbpFilterDecoder {
             filter = filter.substring(0, optionsIndex)
         }
 
-        val domains = domain?.let {
-            if (it.isEmpty()) return@let null
-            val items = it.split('|')
-            if (items.size == 1) {
-                if (items[0][0] == '~') {
-                    SingleDomainMap(true, items[0].substring(1))
-                } else {
-                    SingleDomainMap(false, items[0])
-                }
-            } else {
-                val domains = ArrayDomainMap(items.size)
-                items.forEach { domain ->
-                    if (domain.isEmpty()) return@forEach
-                    if (domain[0] == '~') {
-                        domains[domain.substring(1)] = false
-                    } else {
-                        domains[domain] = true
-                        domains.include = false
-                    }
-                }
-                domains
-            }
-
-        }
+        val domains = domain?.domainsToDomainMap('|')
         if (contentType == 0) contentType = 0xffff
 
         val abpFilter = if (filter.length >= 2 && filter[0] == '/' && filter[filter.lastIndex] == '/') {
@@ -195,6 +202,31 @@ class AbpFilterDecoder {
             } else {
                 whiteList.add(abpFilter)
             }
+        }
+    }
+
+    private fun String.domainsToDomainMap(delimiter: Char): DomainMap? {
+        if (length == 0) return null
+
+        val items = split(delimiter)
+        return if (items.size == 1) {
+            if (items[0][0] == '~') {
+                SingleDomainMap(false, items[0].substring(1))
+            } else {
+                SingleDomainMap(true, items[0])
+            }
+        } else {
+            val domains = ArrayDomainMap(items.size)
+            items.forEach { domain ->
+                if (domain.isEmpty()) return@forEach
+                if (domain[0] == '~') {
+                    domains[domain.substring(1)] = false
+                } else {
+                    domains[domain] = true
+                    domains.include = true
+                }
+            }
+            domains
         }
     }
 

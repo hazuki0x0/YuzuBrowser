@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.unified
+package jp.hazuki.yuzubrowser.adblock.filter.unified.element
 
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
+interface ElementFilter {
+    val selector: String
 
-class UnifiedFilterSet(
-    val filterInfo: UnifiedFilterInfo,
-    val blackList: List<UnifiedFilter>,
-    val whiteList: List<UnifiedFilter>,
-    val whitePageList: List<UnifiedFilter>,
-    val elementList: List<ElementFilter>
-)
+    val type: Int
+
+    companion object {
+        const val TYPE_HIDE = 1
+        const val TYPE_EXCLUDE = 2
+    }
+}

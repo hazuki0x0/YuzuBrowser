@@ -31,7 +31,7 @@ class ArrayDomainMap(size: Int) : SimpleArrayMap<String, Boolean>(size), DomainM
         put(domain, value)
     }
 
-    override var include: Boolean = true
+    override var include: Boolean = false
 
 
     override fun getKey(index: Int): String {

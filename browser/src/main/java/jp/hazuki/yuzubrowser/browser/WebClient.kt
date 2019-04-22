@@ -34,7 +34,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.adblock.AdBlockController
+import jp.hazuki.yuzubrowser.adblock.convertToAdBlockContentType
 import jp.hazuki.yuzubrowser.adblock.filter.mining.MiningProtector
+import jp.hazuki.yuzubrowser.adblock.isThirdParty
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
@@ -441,6 +443,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             if (webViewRenderingManager.isInvertMode) {
                 web.evaluateJavascript(invertJs.replace("%s", "true"), null)
             }
+            val adBlockController = adBlockController
+            if (adBlockController != null && adBlockController.isElementHideEnabled) {
+                web.evaluateJavascript(AdBlockController.INJECT_HIDE_STYLE, null)
+            }
 
             applyUserScript(web, url, UserScript.RunAt.END)
         }
@@ -522,21 +528,31 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
 
             val tabIndexData = controller.tabManager.getIndexData(web.identityId) ?: return null
-            val uri = Uri.parse(tabIndexData.url ?: "")
+            val uri = Uri.parse(tabIndexData.url ?: web.url ?: "")
 
             adBlockController?.run {
-                try {
-                    val result = isBlock(uri, request)
-                    if (result != null) {
-                        return if (request.isForMainFrame) {
-                            createMainFrameDummy(activity, request.url, result.pattern)
-                        } else {
-                            createDummy(request.url)
+                val host = uri.host
+                if (host != null) {
+                    val isThird = request.isThirdParty(host)
+                    val contentType = request.convertToAdBlockContentType(uri.toString())
+                    if (!isWhitePage(uri, request.url, contentType, isThird)) {
+                        if (request.url.schemeSpecificPart == "adblock/hideElement.css") {
+                            return createElementHideStyle(uri)
+                        }
+                        try {
+                            val result = isBlock(uri, request.url, contentType, isThird)
+                            if (result != null) {
+                                return if (request.isForMainFrame) {
+                                    createMainFrameDummy(activity, request.url, result.pattern)
+                                } else {
+                                    createDummy(request.url)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Crashlytics.logException(e)
+                            throw e
                         }
                     }
-                } catch (e: Exception) {
-                    Crashlytics.logException(e)
-                    throw e
                 }
             }
 

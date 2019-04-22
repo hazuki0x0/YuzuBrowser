@@ -22,6 +22,7 @@ import java.io.File
 internal const val ABP_PREFIX_BLACK = "b_"
 internal const val ABP_PREFIX_WHITE = "w_"
 internal const val ABP_PREFIX_WHITE_PAGE = "wp_"
+internal const val ABP_PREFIX_ELEMENT = "e_"
 
 internal fun File.getAbpBlackListFile(entity: AbpEntity): File {
     return File(this, ABP_PREFIX_BLACK + entity.entityId)
@@ -33,6 +34,10 @@ internal fun File.getAbpWhiteListFile(entity: AbpEntity): File {
 
 internal fun File.getAbpWhitePageListFile(entity: AbpEntity): File {
     return File(this, ABP_PREFIX_WHITE_PAGE + entity.entityId)
+}
+
+internal fun File.getAbpElementListFile(entity: AbpEntity): File {
+    return File(this, ABP_PREFIX_ELEMENT + entity.entityId)
 }
 
 fun List<AbpEntity>.checkNeedUpdate(): Boolean {

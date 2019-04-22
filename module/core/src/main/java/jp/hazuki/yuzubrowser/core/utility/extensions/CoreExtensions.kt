@@ -111,3 +111,7 @@ fun <T : Comparable<T>> Sequence<T>.toSortedList(): List<T> {
     sortedList.sort()
     return sortedList
 }
+
+inline fun <T> T?.isNotNull(notNull: (T) -> Unit, other: () -> Unit) {
+    if (this != null) notNull(this) else other()
+}

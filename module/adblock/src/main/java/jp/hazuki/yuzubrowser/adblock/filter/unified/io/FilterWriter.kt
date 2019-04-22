@@ -45,14 +45,15 @@ class FilterWriter {
             os.write(it.contentType.toShortByteArray(shortBuf))
             os.write(if (it.ignoreCase) 1 else 0)
             os.write(it.thirdParty and 0xff)
-            os.writeVariableInt(it.pattern.length, shortBuf, intBuf)
-            os.write(it.pattern.toByteArray())
-            os.write(it.domains?.size ?: 0)
+            val patternBytes = it.pattern.toByteArray()
+            os.writeVariableInt(patternBytes.size, shortBuf, intBuf)
+            os.write(patternBytes)
+            os.write(min(it.domains?.size ?: 0, 255))
             it.domains?.let { map ->
-                for (i in 0 until min(map.size, 256)) {
-                    val key = map.getKey(i)
-                    os.writeVariableInt(key.length, shortBuf, intBuf)
-                    os.write(key.toByteArray())
+                for (i in 0 until min(map.size, 255)) {
+                    val key = map.getKey(i).toByteArray()
+                    os.writeVariableInt(key.size, shortBuf, intBuf)
+                    os.write(key)
                     os.write(if (map.getValue(i)) 1 else 0)
                 }
             }

@@ -271,8 +271,6 @@ class AdBlockManager internal constructor(private val context: Context) {
 
         private val manager: AdBlockManager = AdBlockManager(context)
 
-        private val context = context.applicationContext
-
         val allItems: ArrayList<AdBlock>
             get() = manager.getAllItems(table)
 

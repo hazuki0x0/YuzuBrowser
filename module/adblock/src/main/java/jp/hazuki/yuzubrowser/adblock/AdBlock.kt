@@ -76,7 +76,7 @@ fun WebResourceRequest.convertToAdBlockContentType(siteUrl: String): Int {
 }
 
 fun WebResourceRequest.isThirdParty(documentHost: String): Boolean {
-    val hostName = url.host
+    val hostName = url.host ?: return true
 
     if (hostName == documentHost) return false
 

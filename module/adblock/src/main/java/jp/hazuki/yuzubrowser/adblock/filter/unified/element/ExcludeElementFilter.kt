@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter.unified
+package jp.hazuki.yuzubrowser.adblock.filter.unified.element
 
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
-
-class UnifiedFilterSet(
-    val filterInfo: UnifiedFilterInfo,
-    val blackList: List<UnifiedFilter>,
-    val whiteList: List<UnifiedFilter>,
-    val whitePageList: List<UnifiedFilter>,
-    val elementList: List<ElementFilter>
-)
+class ExcludeElementFilter(override val selector: String, val domains: List<String>) : ElementFilter {
+    override val type: Int
+        get() = ElementFilter.TYPE_EXCLUDE
+}

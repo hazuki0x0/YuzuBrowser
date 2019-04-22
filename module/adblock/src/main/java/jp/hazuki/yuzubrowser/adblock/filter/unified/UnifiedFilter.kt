@@ -51,9 +51,9 @@ abstract class UnifiedFilter(
     private fun checkDomain(domain: String): Boolean {
         if (domains == null) return true
         return if (domains.include) {
-            domains[domain] != false
-        } else {
             domains[domain] == true
+        } else {
+            domains[domain] != false
         }
     }
 

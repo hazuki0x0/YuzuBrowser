@@ -18,24 +18,19 @@ package jp.hazuki.yuzubrowser.adblock
 
 import android.content.Context
 import android.net.Uri
-import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
-import jp.hazuki.yuzubrowser.adblock.core.AbpLoader
-import jp.hazuki.yuzubrowser.adblock.core.AdBlocker
-import jp.hazuki.yuzubrowser.adblock.core.FilterMatcher
-import jp.hazuki.yuzubrowser.adblock.core.FilterMatcherList
+import jp.hazuki.yuzubrowser.adblock.core.*
 import jp.hazuki.yuzubrowser.adblock.filter.Filter
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_BLACK
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_WHITE
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_WHITE_PAGE
 import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
+import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDao
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlockManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -46,15 +41,21 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
 
     private val manager: AdBlockManager = AdBlockManager(context)
     private var adBlocker: AdBlocker? = null
+    private var elementBlocker: ElementBlocker? = null
+    private var isAbpIgnoreGenericElement = false
     private var updating = false
 
     init {
         update()
     }
 
+    val isElementHideEnabled: Boolean
+        get() = elementBlocker != null
+
     fun update() {
         updating = true
-        GlobalScope.launch {
+        val prefs = AdBlockPref.get(context.applicationContext)
+        GlobalScope.launch(Dispatchers.IO) {
             val abpLoader = AbpLoader(context.getFilterDir(), abpDao.getAll())
             val black = async {
                 FilterMatcher(manager.getCachedMatcherList(AdBlockManager.BLACK_TABLE_NAME).iterator()).also {
@@ -72,14 +73,24 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
                 list.addAll(abpLoader.loadAllList(ABP_PREFIX_WHITE_PAGE))
                 FilterMatcherList(list)
             }
+            var element: Deferred<ElementBlocker>? = null
+            if (prefs.isAbpUseElementHide) {
+                element = async { ElementBlocker().apply { addAll(abpLoader.loadAllElementFilter()) } }
+            }
             adBlocker = AdBlocker(black.await(), white.await(), whitePage.await())
+            elementBlocker = element?.await()
 
+            isAbpIgnoreGenericElement = prefs.isAbpIgnoreGenericElement
             updating = false
         }
     }
 
-    fun isBlock(pageUri: Uri, request: WebResourceRequest): Filter? {
-        return adBlocker?.isBlock(pageUri, request)
+    fun isWhitePage(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Boolean {
+        return adBlocker?.isWhitePage(pageUrl, url, contentType, isThird) ?: false
+    }
+
+    fun isBlock(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Filter? {
+        return adBlocker?.isBlock(pageUrl, url, contentType, isThird)
     }
 
     fun onResume() {
@@ -115,8 +126,24 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
         return getNoCacheResponse("text/html", builder)
     }
 
+    fun createElementHideStyle(url: Uri): WebResourceResponse? {
+        elementBlocker?.let {
+            val host = url.host
+            if (host != null)
+                return getNoCacheResponse("text/css", it.getStyleSheet(host, isAbpIgnoreGenericElement))
+        }
+        return null
+    }
+
     private class EmptyInputStream : InputStream() {
         @Throws(IOException::class)
         override fun read(): Int = -1
+    }
+
+    companion object {
+        const val INJECT_HIDE_STYLE = "var aa =document.createElement(\"link\");" +
+            "aa.type='text/css'; aa.rel='stylesheet'; " +
+            "aa.href='yuzu:adblock/hideElement.css';" +
+            "document.getElementsByTagName(\"head\")[0].appendChild(aa);"
     }
 }

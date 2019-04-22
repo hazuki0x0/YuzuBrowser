@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.repository
+package jp.hazuki.yuzubrowser.adblock.filter.unified.element
 
-import com.rejasupotaro.android.kvs.annotations.Key
-import com.rejasupotaro.android.kvs.annotations.Table
+import jp.hazuki.yuzubrowser.adblock.filter.unified.DomainMap
 
-@Table(name = "abp")
-abstract class AdBlockPrefSchema {
+class ElementHideFilter(override val selector: String, val domains: DomainMap?) : ElementFilter {
 
-    @Key(name = "abpNextUpdateTime")
-    var abpNextUpdateTime = -1L
-
-    @Key(name = "abpLastUpdateTime")
-    var abpLastUpdateTime = -1L
+    override val type: Int
+        get() = ElementFilter.TYPE_HIDE
 }

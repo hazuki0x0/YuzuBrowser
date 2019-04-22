@@ -26,7 +26,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.DaggerIntentService
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
 import jp.hazuki.yuzubrowser.adblock.filter.abp.*
+import jp.hazuki.yuzubrowser.adblock.filter.unified.UnifiedFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
+import jp.hazuki.yuzubrowser.adblock.filter.unified.io.ElementWriter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterWriter
 import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
@@ -115,7 +118,14 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         val request = Request.Builder()
                 .url(entity.url)
                 .get()
-        entity.lastModified?.let { request.addHeader("If-Modified-Since", it) }
+        entity.lastModified?.let {
+            val dir = getFilterDir()
+
+            if (dir.getAbpBlackListFile(entity).exists() ||
+                dir.getAbpWhiteListFile(entity).exists() ||
+                dir.getAbpWhitePageListFile(entity).exists())
+                request.addHeader("If-Modified-Since", it)
+        }
         val call = okHttpClient.newCall(request.build())
         try {
             val response = call.execute()
@@ -182,13 +192,41 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         entity.lastUpdate = info.lastUpdate
         entity.lastLocalUpdate = System.currentTimeMillis()
         val dir = getFilterDir()
-        val writer = FilterWriter()
-        writer.write(dir.getAbpBlackListFile(entity).outputStream().buffered(), set.blackList)
-        writer.write(dir.getAbpWhiteListFile(entity).outputStream().buffered(), set.whiteList)
-        writer.write(dir.getAbpWhitePageListFile(entity).outputStream().buffered(), set.whitePageList)
 
-        abpDatabase.abpDao().update(entity)
+        try {
+            val writer = FilterWriter()
+            writer.write(dir.getAbpBlackListFile(entity), set.blackList)
+            writer.write(dir.getAbpWhiteListFile(entity), set.whiteList)
+            writer.write(dir.getAbpWhitePageListFile(entity), set.whitePageList)
+
+            val elementWriter = ElementWriter()
+            elementWriter.write(dir.getAbpElementListFile(entity), set.elementList)
+
+            abpDatabase.abpDao().update(entity)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
         return true
+    }
+
+    private fun FilterWriter.write(file: File, list: List<UnifiedFilter>) {
+        if (list.isNotEmpty()) {
+            file.outputStream().buffered().use {
+                write(it, list)
+            }
+        } else {
+            if (file.exists()) file.delete()
+        }
+    }
+
+    private fun ElementWriter.write(file: File, list: List<ElementFilter>) {
+        if (list.isNotEmpty()) {
+            file.outputStream().buffered().use {
+                write(it, list)
+            }
+        } else {
+            if (file.exists()) file.delete()
+        }
     }
 
     companion object {

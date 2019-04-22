@@ -462,4 +462,6 @@
     <string name="pref_translators">Hazuki</string>
     <string name="adblock_file_large_mes">It can not be previewed or edited because the file size is larger than 1MB.\nDo you want to import?</string>
     <string name="pref_abp_filter">Ad block filters</string>
+    <string name="pref_abp_use_element_filter">Use page element hiding filter</string>
+    <string name="pref_abp_use_ignore_general_element_filter">Ignore generic element hiding filter</string>
 </resources>
