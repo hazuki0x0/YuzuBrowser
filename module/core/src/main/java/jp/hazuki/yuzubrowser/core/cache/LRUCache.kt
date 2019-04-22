@@ -17,13 +17,13 @@
 package jp.hazuki.yuzubrowser.core.cache
 
 class LRUCache<K : Any, V : Any>(
-        var cacheSize: Int,
-        private val listener: OnCacheOverFlowListener<V>
+    var cacheSize: Int,
+    private val listener: OnCacheOverFlowListener<V>? = null
 ) : LinkedHashMap<K, V>(cacheSize, 0.75f, true) {
 
     override fun removeEldestEntry(eldest: MutableMap.MutableEntry<K, V>): Boolean {
         val result = size > cacheSize
-        if (result) {
+        if (result && listener != null) {
             listener.onCacheOverflow(eldest.value)
         }
         return result

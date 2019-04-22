@@ -20,6 +20,7 @@ import jp.hazuki.yuzubrowser.adblock.filter.unified.SingleDomainMap
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementHideFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ExcludeElementFilter
+import jp.hazuki.yuzubrowser.core.cache.LRUCache
 import kotlin.math.min
 
 class ElementBlocker {
@@ -31,7 +32,7 @@ class ElementBlocker {
 
     private var defaultStyleSheet: String? = null
 
-    private var styleSheetCache = mutableMapOf<String, String>()
+    private var styleSheetCache = LRUCache<String, String>(32)
 
     private fun addFilter(contentHideFilter: ElementHideFilter) {
         clearCache()
