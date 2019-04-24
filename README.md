@@ -58,9 +58,12 @@ You should use new theme pack if you are using version 2.3 or later
 ## Contributing
 Contributions are always welcome
 
+TL;DR
 - Create an issue (except for minor fixes and additional translations/translation fixes).
 - Create a branch for your patch.
 - Create a pull request on the dev branch.
+
+Details are in [Contributing.md](https://github.com/hazuki0x0/YuzuBrowser/blob/dev/Contributing.md)
 
 ## Build
 
