@@ -56,6 +56,11 @@ class PatternMatchFilterTest {
         assertThat(domainName.check("http://badexample.com/banner.gif")).isEqualTo(false)
         assertThat(domainName.check(" http://gooddomain.example/analyze?http://example.com/banner.gif")).isEqualTo(false)
 
+        val domainWildcard = PatternMatchFilter("||example.com/*/banner.gif", 0xffff, false, null, -1)
+        assertThat(domainWildcard.check("http://example.com/test/banner.gif")).isEqualTo(true)
+        assertThat(domainWildcard.check("http://example.com/banner.gif")).isEqualTo(false)
+        assertThat(domainWildcard.check("http://www.example.com/test/banner.gif")).isEqualTo(true)
+
         /** Marking separator characters test */
         val separator = PatternMatchFilter("http://example.com^", 0xffff, false, null, -1)
         assertThat(separator.check("http://example.com/")).isEqualTo(true)

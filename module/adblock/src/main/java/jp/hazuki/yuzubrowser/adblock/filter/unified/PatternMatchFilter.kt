@@ -39,8 +39,10 @@ class PatternMatchFilter(
         var pPtr = 0
         var i = 0
         val ignoreCase = ignoreCase
+        var isFirst = false
 
         if (isStartWith) {
+            isFirst = true
             pPtr = 1
             val start = url.indexOf(':')
             if (start < 0 || start + 1 >= max || url[start + 1] != '/') return false
@@ -49,7 +51,7 @@ class PatternMatchFilter(
         }
 
         loop@ while (i < max) {
-            if (!isStartWith) {
+            if (!isFirst) {
                 i = when (pattern[pPtr]) {
                     '|' -> {
                         if (pPtr == 0 && i == 0) {
@@ -101,6 +103,7 @@ class PatternMatchFilter(
                     when (np) {
                         '*' -> {
                             if (k + 1 == pattern.length) return true
+                            isFirst = false
                             pPtr = k + 1
                             i = j
                             continue@loop
