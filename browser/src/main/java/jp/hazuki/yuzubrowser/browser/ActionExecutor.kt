@@ -585,7 +585,13 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     controller.showMousePointer((action as MousePointerSingleAction).isBackFinish)
                 }
             }
-            SingleAction.FIND_ON_PAGE -> controller.isEnableFindOnPage = !controller.isEnableFindOnPage
+            SingleAction.FIND_ON_PAGE -> {
+                if (controller.isEnableFindOnPage) {
+                    controller.isEnableFindOnPage = false
+                } else {
+                    controller.setEnableFindOnPage(true, (action as FindOnPageAction).isAutoClose)
+                }
+            }
             SingleAction.SAVE_SCREENSHOT -> {
                 val saveSsAction = action as SaveScreenshotSingleAction
                 val file = File(saveSsAction.folder, "ss_" + System.currentTimeMillis() + ".png")

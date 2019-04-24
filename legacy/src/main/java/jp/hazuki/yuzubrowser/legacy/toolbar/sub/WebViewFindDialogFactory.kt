@@ -38,6 +38,8 @@ object WebViewFindDialogFactory {
     }
 
     private class WebViewFind(private val mContext: Context, override val containerView: View) : WebViewFindDialog, LayoutContainer {
+        override var isAutoClose = true
+
         private var mCurrentWeb: CustomWebView? = null
 
         override val isVisible: Boolean
@@ -48,7 +50,8 @@ object WebViewFindDialogFactory {
             howMatchTextView.text = "${if (numberOfMatches > 0) activeMatchOrdinal + 1 else 0}/$numberOfMatches"
         }
 
-        override fun show(web: CustomWebView) {
+        override fun show(web: CustomWebView, autoClose: Boolean) {
+            isAutoClose = autoClose
             mCurrentWeb = web
             web.setFindListener(findListener)
 

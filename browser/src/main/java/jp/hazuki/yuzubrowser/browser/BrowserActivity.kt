@@ -1519,19 +1519,24 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override var isEnableFindOnPage: Boolean
         get() = findOnPage?.isVisible == true
-        set(enable) {
-            if (enable == isEnableFindOnPage) return
+        set(enable) = setEnableFindOnPage(enable, true)
 
-            if (findOnPage == null) {
-                findOnPage = WebViewFindDialogFactory.createInstance(this, toolbar.findOnPage)
-            }
+    override val isFindOnPageAutoClose: Boolean
+        get() = findOnPage?.isAutoClose == true
 
-            if (enable) {
-                findOnPage!!.show(tabManagerIn.currentTabData.mWebView)
-            } else {
-                findOnPage!!.hide()
-            }
+    override fun setEnableFindOnPage(enable: Boolean, autoClose: Boolean) {
+        if (enable == isEnableFindOnPage) return
+
+        if (findOnPage == null) {
+            findOnPage = WebViewFindDialogFactory.createInstance(this, toolbar.findOnPage)
         }
+
+        if (enable) {
+            findOnPage!!.show(tabManagerIn.currentTabData.mWebView, autoClose)
+        } else {
+            findOnPage!!.hide()
+        }
+    }
 
     override var isEnableFlick: Boolean
         get() = AppData.flick_enable.get()

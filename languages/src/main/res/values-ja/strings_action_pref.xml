@@ -89,4 +89,5 @@
 
     <string name="action_bottom_search_bar">検索バーを下に表示</string>
     <string name="show_toast">トーストを表示</string>
+    <string name="auto_close">自動的に閉じる</string>
 </resources>

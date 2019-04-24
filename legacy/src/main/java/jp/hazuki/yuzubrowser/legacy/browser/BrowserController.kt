@@ -110,6 +110,8 @@ interface BrowserController : BrowserInfo {
     fun showMousePointer(isBackFinish: Boolean)
     fun closeMousePointer()
     var isEnableFindOnPage: Boolean
+    val isFindOnPageAutoClose: Boolean
+    fun setEnableFindOnPage(enable: Boolean, autoClose: Boolean)
     var isEnableFlick: Boolean
     override var isEnableUserScript: Boolean
     override var isEnableQuickControl: Boolean

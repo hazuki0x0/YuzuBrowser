@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.action.item
 import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
+import android.view.View
 import android.widget.CheckBox
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
@@ -74,14 +75,15 @@ class LeftRightTabSingleAction : SingleAction {
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
-        val view = CheckBox(context)
-        view.setText(R.string.action_tab_loop)
-        view.isChecked = isTabLoop
+        val view = View.inflate(context, R.layout.action_checkbox, null)
+        val checkBox = view.findViewById(R.id.checkBox) as CheckBox
+        checkBox.setText(R.string.action_tab_loop)
+        checkBox.isChecked = isTabLoop
 
         AlertDialog.Builder(context)
                 .setTitle(R.string.action_settings)
                 .setView(view)
-                .setPositiveButton(android.R.string.ok) { _, _ -> isTabLoop = view.isChecked }
+            .setPositiveButton(android.R.string.ok) { _, _ -> isTabLoop = checkBox.isChecked }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
 

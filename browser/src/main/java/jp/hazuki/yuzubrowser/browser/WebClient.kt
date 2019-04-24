@@ -368,6 +368,9 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 controller.expandToolbar()
                 data.mWebView.isNestedScrollingEnabledMethod = false
             }
+            if (controller.isEnableFindOnPage && controller.isFindOnPageAutoClose) {
+                controller.isEnableFindOnPage = false
+            }
 
             applyUserScript(web, url, UserScript.RunAt.START)
 
@@ -457,6 +460,9 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 if (tab == controller.currentTabData) {
                     controller.notifyChangeWebState(tab)
                 }
+            }
+            if (controller.isEnableFindOnPage && controller.isFindOnPageAutoClose) {
+                controller.isEnableFindOnPage = false
             }
         }
 

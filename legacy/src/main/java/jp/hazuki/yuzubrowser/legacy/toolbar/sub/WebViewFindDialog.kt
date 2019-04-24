@@ -20,9 +20,11 @@ import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 interface WebViewFindDialog {
 
+    val isAutoClose: Boolean
+
     val isVisible: Boolean
 
-    fun show(web: CustomWebView)
+    fun show(web: CustomWebView, autoClose: Boolean)
 
     fun hide()
 }

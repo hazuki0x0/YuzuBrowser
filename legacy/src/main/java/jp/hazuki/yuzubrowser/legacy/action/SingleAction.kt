@@ -243,6 +243,7 @@ open class SingleAction : Parcelable {
                 PAGE_SCROLL -> WebScrollSingleAction(id, parser)
                 PAGE_AUTO_SCROLL -> AutoPageScrollAction(id, parser)
                 MOUSE_POINTER -> MousePointerSingleAction(id, parser)
+                FIND_ON_PAGE -> FindOnPageAction(id, parser)
                 SAVE_SCREENSHOT -> SaveScreenshotSingleAction(id, parser)
                 SHARE_SCREENSHOT -> ShareScreenshotSingleAction(id, parser)
                 OPEN_URL -> OpenUrlSingleAction(id, parser)
@@ -271,6 +272,7 @@ open class SingleAction : Parcelable {
                 GO_BACK, PAGE_SCROLL,
                 PAGE_AUTO_SCROLL,
                 MOUSE_POINTER,
+                FIND_ON_PAGE,
                 SAVE_SCREENSHOT,
                 SHARE_SCREENSHOT,
                 OPEN_URL,

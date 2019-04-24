@@ -29,24 +29,24 @@ import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import java.io.IOException
 
-class MousePointerSingleAction : SingleAction, Parcelable {
-    var isBackFinish = true
+class FindOnPageAction : SingleAction {
+    var isAutoClose = true
         private set
 
     @Throws(IOException::class)
     constructor(id: Int, reader: JsonReader?) : super(id) {
         if (reader != null) {
-            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) return
+            if (reader.peek() != JsonReader.Token.BEGIN_OBJECT) {
+                if (reader.peek() == JsonReader.Token.NULL) reader.skipValue()
+                return
+            }
             reader.beginObject()
             while (reader.hasNext()) {
                 if (reader.peek() != JsonReader.Token.NAME) return
                 when (reader.nextName()) {
-                    FIELD_NAME_BACK_FINISH -> {
-                        if (reader.peek() == JsonReader.Token.NULL) {
-                            reader.skipValue()
-                        } else {
-                            isBackFinish = reader.nextBoolean()
-                        }
+                    FIELD_NAME_AUTO_CLOSE -> {
+                        if (reader.peek() != JsonReader.Token.BOOLEAN) return
+                        isAutoClose = reader.nextBoolean()
                     }
                     else -> reader.skipValue()
                 }
@@ -59,8 +59,8 @@ class MousePointerSingleAction : SingleAction, Parcelable {
     override fun writeIdAndData(writer: JsonWriter) {
         writer.value(id)
         writer.beginObject()
-        writer.name(FIELD_NAME_BACK_FINISH)
-        writer.value(isBackFinish)
+        writer.name(FIELD_NAME_AUTO_CLOSE)
+        writer.value(isAutoClose)
         writer.endObject()
     }
 
@@ -70,43 +70,41 @@ class MousePointerSingleAction : SingleAction, Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id)
-        dest.writeInt(if (isBackFinish) 1 else 0)
+        dest.writeInt(if (isAutoClose) 1 else 0)
     }
 
     private constructor(source: Parcel) : super(source.readInt()) {
-        isBackFinish = source.readInt() == 1
+        isAutoClose = source.readInt() == 1
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
         val view = View.inflate(context, R.layout.action_checkbox, null)
         val checkBox = view.findViewById(R.id.checkBox) as CheckBox
-        checkBox.setText(R.string.action_mousepointer_backfinish)
-        checkBox.isChecked = isBackFinish
+        checkBox.setText(R.string.auto_close)
+        checkBox.isChecked = isAutoClose
 
         AlertDialog.Builder(context)
-                .setTitle(R.string.action_settings)
-                .setView(view)
-            .setPositiveButton(android.R.string.ok) { _, _ -> isBackFinish = checkBox.isChecked }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
+            .setTitle(R.string.action_settings)
+            .setView(view)
+            .setPositiveButton(android.R.string.ok) { _, _ -> isAutoClose = checkBox.isChecked }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
 
         return null
     }
 
     companion object {
-        private const val TAG = "MousePointerSingleAction"
-        private const val FIELD_NAME_BACK_FINISH = "0"
+        private const val FIELD_NAME_AUTO_CLOSE = "0"
 
         @JvmField
-        val CREATOR: Parcelable.Creator<MousePointerSingleAction> = object : Parcelable.Creator<MousePointerSingleAction> {
-            override fun createFromParcel(source: Parcel): MousePointerSingleAction {
-                return MousePointerSingleAction(source)
+        val CREATOR: Parcelable.Creator<FindOnPageAction> = object : Parcelable.Creator<FindOnPageAction> {
+            override fun createFromParcel(source: Parcel): FindOnPageAction {
+                return FindOnPageAction(source)
             }
 
-            override fun newArray(size: Int): Array<MousePointerSingleAction?> {
+            override fun newArray(size: Int): Array<FindOnPageAction?> {
                 return arrayOfNulls(size)
             }
         }
     }
-
 }
