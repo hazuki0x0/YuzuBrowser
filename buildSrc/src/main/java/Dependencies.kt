@@ -28,15 +28,15 @@ object AppVersions {
 
 object Versions {
     const val androidX = "1.0.0"
-    const val appCompat = "1.1.0-alpha03"
-    const val activityX = "1.0.0-alpha05"
+    const val appCompat = "1.1.0-alpha04"
+    const val activityX = "1.0.0-alpha06"
     const val androidKTX = "1.0.1"
     const val androidxRoom = "2.1.0-alpha06"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
-    const val dagger = "2.21"
+    const val dagger = "2.22.1"
     const val kotshi = "1.0.6"
-    const val okhttp = "3.14.0"
+    const val okhttp = "3.14.1"
     const val okio = "2.2.2"
     const val kvs_schema = "5.1.0"
     const val kotlin = "1.3.31"
@@ -49,7 +49,7 @@ object Versions {
     const val header_decor = "0.2.8"
     const val materialprogressbar = "1.6.1"
     const val mockito = "2.+"
-    const val powermock = "2.0.0"
+    const val powermock = "2.0.2"
 }
 
 object AndroidX {
