@@ -91,7 +91,7 @@ class ReaderFragment : androidx.fragment.app.Fragment() {
         }
 
         ui {
-            val dialog = ProgressDialog(getString(R.string.now_loading), true, false).also {
+            val dialog = ProgressDialog(activity.getString(R.string.now_loading), true, false).also {
                 it.show(childFragmentManager, "loading")
             }
 
