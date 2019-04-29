@@ -46,7 +46,8 @@ dependencies {
     androidTestImplementation Libs.espressoCore
     androidTestImplementation Libs.androidRunner
 
-    implementation Libs.support_appcompat_v7
+    implementation AndroidX.appcompat
+    implementation AndroidX.swipeRefreshLayout
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

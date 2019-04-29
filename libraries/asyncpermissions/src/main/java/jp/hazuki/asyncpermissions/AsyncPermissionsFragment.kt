@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,12 +44,12 @@ class AsyncPermissionsFragment : androidx.fragment.app.Fragment() {
         val cont = queue.poll(permissions) ?: return
 
         if (grantResults.all { it.isGranted }) {
-            PermissionResult.Granted(permissions.toList()).let(cont::resume)
+            PermissionResult.Granted(permissions.toList()).let { cont.resume(it) }
         } else {
             if (shouldShowRequestPermissionsRationale(permissions)) {
-                PermissionResult.Denied(permissions.toList()).let(cont::resume)
+                PermissionResult.Denied(permissions.toList()).let { cont.resume(it) }
             } else {
-                PermissionResult.NeverAskAgain(permissions.toList()).let(cont::resume)
+                PermissionResult.NeverAskAgain(permissions.toList()).let { cont.resume(it) }
             }
         }
     }
@@ -60,12 +60,12 @@ class AsyncPermissionsFragment : androidx.fragment.app.Fragment() {
     ) {
         val context = context ?: return
         if (checkSelfPermissions(context, permissions)) {
-            PermissionResult.Granted(permissions.toList()).let(cont::resume)
+            PermissionResult.Granted(permissions.toList()).let { cont.resume(it) }
             return
         }
 
         if (shouldShowRequestPermissionsRationale(permissions)) {
-            PermissionResult.ShouldShowRationale(permissions.toList(), this).let(cont::resume)
+            PermissionResult.ShouldShowRationale(permissions.toList(), this).let { cont.resume(it) }
         } else {
             queue.offer(permissions, cont)
             requestPermissions(permissions, REQUEST_CODE)

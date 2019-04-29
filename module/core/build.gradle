@@ -53,7 +53,8 @@ dependencies {
     androidTestImplementation Libs.androidRunner
     androidTestImplementation Libs.assertk
 
-    implementation Libs.support_appcompat_v7
+    implementation AndroidX.appcompat
+    implementation AndroidX.documentFile
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

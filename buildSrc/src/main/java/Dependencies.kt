@@ -34,13 +34,15 @@ object Versions {
     const val androidxRoom = "2.1.0-alpha06"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
+    const val documentFile = "1.0.1"
+    const val swipeRefreshLayout = "1.0.0"
     const val dagger = "2.22.1"
     const val kotshi = "1.0.6"
     const val okhttp = "3.14.1"
     const val okio = "2.2.2"
     const val kvs_schema = "5.1.0"
     const val kotlin = "1.3.31"
-    const val kotlin_coroutines = "1.2.0"
+    const val kotlin_coroutines = "1.2.1"
     const val kotlin_anko = "0.10.8"
     const val junit = "4.12"
     const val assertk = "0.13"
@@ -64,6 +66,8 @@ object AndroidX {
     const val room = "androidx.room:room-runtime:${Versions.androidxRoom}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.androidxRoom}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.androidxRoom}"
+    const val documentFile = "androidx.documentfile:documentfile:${Versions.documentFile}"
+    const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
 }
 
 object Libs {
