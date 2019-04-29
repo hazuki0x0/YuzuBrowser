@@ -26,6 +26,7 @@ import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
+import jp.hazuki.yuzubrowser.core.utility.utils.getExtensionFromMimeType
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import java.io.File
@@ -208,14 +209,6 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
     }
 
     return fileName + extension
-}
-
-internal fun getExtensionFromMimeType(mimeType: String): String? {
-    return when (mimeType) {
-        "multipart/related", "message/rfc822", "application/x-mimearchive" -> ".mhtml"
-        "application/javascript", "application/x-javascript", "text/javascript" -> ".js"
-        else -> MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-    }
 }
 
 private const val NAME_UTF_8 = "filename\\*=UTF-8''(\\S+)"

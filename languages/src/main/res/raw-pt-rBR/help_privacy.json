@@ -1,0 +1,18 @@
+{
+  "title": "Configurações de privacidade",
+  "private": "Modo privado",
+  "private_info": "Você pode desativar todas configurações de privacidade",
+  "cookie": "Aceitar cookies",
+  "cookie_info": "Aceita uso de cookies<br>Algumas páginas podem não ser mostradas normalmente a menos que ativado",
+  "third_cookie": "Aceitar cookies de terceiros",
+  "third_cookie_info": "Aceita uso de cookies de terceiros<br>Algumas páginas podem não ser mostradas normalmente a menos que ativado",
+  "database": "Ativar banco de dados",
+  "database_info": "Ativa / desativa API de banco de dados HTML5<br>Algumas páginas podem não ser mostradas normalmente a menos que ativado",
+  "dom": "Ativar armazenamento DOM",
+  "dom_info": "Ativa / desativa API de armazenamento HTML5 DOM<br>Algumas páginas podem não ser mostradas normalmente a menos que ativado",
+  "geolocation": "Ativar geolocalização",
+  "geolocation_info": "Ativa / desativa API de informações de localização HTML5",
+  "app_cache": "Ativar cache do app",
+  "app_cache_info": "Ativa / desativa API de cache do app HTML5",
+  "security_settings": "Configurações de segurança"
+}

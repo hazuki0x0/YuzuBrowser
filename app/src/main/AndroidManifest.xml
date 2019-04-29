@@ -287,11 +287,6 @@
             android:name="jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.MultiFingerSettingsActivity"
             android:label="@string/pref_multi_finger_gesture_settings" />
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.help.HelpActivity"
-            android:label="@string/pref_help"
-            android:exported="false"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
             android:name="jp.hazuki.yuzubrowser.legacy.theme.ThemeImportActivity"
             android:label="@string/theme_importer"
             android:theme="@style/BrowserThemeDayNight.Transparent"

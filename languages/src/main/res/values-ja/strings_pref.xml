@@ -351,7 +351,6 @@
     <string name="pref_number_of_fingers">指の数</string>
     <string name="pref_sensitivity">感度</string>
     <string name="pref_help">ヘルプ</string>
-    <string name="pref_help_url">file:///android_asset/help/ja/index.html</string>
     <string name="pref_block_images">画像を読み込まない</string>
 
     <string name="pref_ad_block">広告ブロック設定</string>

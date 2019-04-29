@@ -1,0 +1,12 @@
+{
+  "help": "Yuzu Browser 設定ヘルプ",
+  "comment": null,
+  "browser": "ブラウザ設定",
+  "page": "ページ設定",
+  "privacy": "プライバシー設定",
+  "ui": "UI設定",
+  "action": "アクション設定",
+  "action_list": "アクション一覧",
+  "regex": "パターン(ワイルドカード)の仕様",
+  "faq": "よくありそうな質問"
+}

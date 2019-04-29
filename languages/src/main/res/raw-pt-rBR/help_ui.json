@@ -1,0 +1,32 @@
+{
+  "title": "Configurações de interface",
+  "theme": "Configurações de tema",
+  "theme_info": "Você pode escolher entre um embutido e seu próprio tema<br>Você também pode usar o tema do navegador mikan<br>Tema personalizado está dentro do armazenamento interno<br>Exemplo (faça as alterações apropriadas):<code>/sdcard/YuzuBrowser/theme/**theme name**/theme.json</code><br>Instale de modo que lhe convir",
+  "toolbar": "Configurações de barra de ferramentas",
+  "font_size": "Configurações de tamanho da fonte",
+  "font_size_info": "Você pode alterar o tamanho da fonte de marcadores, histórico, menu e lista de ler mais tarde.",
+  "scrollbar": "Configurações de barra de rolagem de toque",
+  "scrollbar_info": "Mostra na borda do navegador uma barra de rolagem na qual você pode tocar. Você pode definir se deseja mover a barra de ferramentas ao rolar com a barra de rolagem.",
+  "orientation": "Orientação",
+  "orientation_info": {
+    "info": "Você pode definir a orientação da tela do navegador",
+    "unspecified": "Não especificada",
+    "unspecified_info": "Seguir as configurações do dispositivo",
+    "landscape": "Paisagem",
+    "landscape_info": "Forçar na orientação paisagem",
+    "portrait": "Retrato",
+    "portrait_info": "Forçar na orientação retrato",
+    "sensor": "Sensor",
+    "sensor_info": "Detectar com o sensor e mudar a orientação",
+    "no_sensor": "Sem sensor",
+    "no_sensor_info": "Corrigir orientação da tela do app, independentemente da mudança de orientação do terminal pelo sensor."
+  },
+  "orientation_full_screen": "Orientação de vídeo em tela cheia",
+  "orientation_full_screen_info": "Você pode definir a orientação de tela da tela cheia como YouTube<br>Quanto as opções, as mesmas que [Orientação]",
+  "full_screen": "Tela cheia",
+  "full_screen_info": "Você pode usar tela cheia.",
+  "full_screen_mode": "Modo de tela cheia",
+  "full_screen_mode_info": "Você pode definir quais barras ocultar ao usar tela cheia.",
+  "keep_screen_on": "Manter tela ligada",
+  "keep_screen_on_info": "Enquanto navegar, não desligar a tela por conta própria"
+}

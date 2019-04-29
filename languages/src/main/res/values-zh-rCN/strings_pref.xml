@@ -351,7 +351,6 @@
     <string name="pref_number_of_fingers">手指数量</string>
     <string name="pref_sensitivity">灵敏度</string>
     <string name="pref_help">帮助</string>
-    <string name="pref_help_url">file:///android_asset/help/zh-rCN/index.html</string>
     <string name="pref_block_images">屏蔽图像</string>
 
     <string name="pref_ad_block">广告拦截设置</string>

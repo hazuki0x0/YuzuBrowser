@@ -17,7 +17,5 @@
 
 <resources>
 
-    <string name="pref_help_url">file:///android_asset/help/fa/index.html</string>
-
     <string name="pref_translators">david1720</string>
 </resources>

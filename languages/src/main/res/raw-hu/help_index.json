@@ -1,0 +1,12 @@
+{
+  "help": "Yuzu Böngésző beállítások súgó",
+  "comment": "Köszönjük, hogy a Yuzu Böngészőt használod!<br>Reméljük, hogy a súgó segítségedre válik.",
+  "browser": "Böngésző beállítások",
+  "page": "Oldal beállítások",
+  "privacy": "Adatvédelmi beállítások",
+  "ui": "Megjelenés beállításai",
+  "action": "Műveleti beállítások",
+  "action_list": "Műveletek listája",
+  "regex": "Minták(helyettesítő karakterek) specifikációja",
+  "faq": "GyIK"
+}

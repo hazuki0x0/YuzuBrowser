@@ -1,0 +1,12 @@
+{
+  "help": "Ajuda de configurações do Yuzu Browser",
+  "comment": "Obrigado por usar Yuzu Browser!<br>Espero que esta ajuda seja útil para você.",
+  "browser": "Configurações de navegador",
+  "page": "Configurações de página",
+  "privacy": "Configurações de privacidade",
+  "ui": "Configurações de interface",
+  "action": "Configurações de ação",
+  "action_list": "Lista de ações",
+  "regex": "Especificação de padrão(curinga)",
+  "faq": "Perguntas Frequentes"
+}

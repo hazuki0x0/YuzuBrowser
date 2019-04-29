@@ -154,12 +154,6 @@
   url: http://developer.android.com/tools/extras/support-library.html
 - artifact: io.fabric.sdk.android:fabric:+
   skip: true
-- artifact: org.jetbrains.kotlinx:kotlinx-coroutines-core-common:+
-  name: kotlinx-coroutines-core-common
-  copyrightHolder: JetBrains s.r.o.
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/Kotlin/kotlinx.coroutines
 - artifact: org.jsoup:jsoup:+
   name: jsoup Java HTML Parser
   copyrightHolder: Jonathan Hedley (jonathan@hedley.net)
@@ -541,3 +535,48 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/Gericop/Android-Support-Preference-V7-Fix
+- artifact: androidx.sqlite:sqlite:+
+  name: Android DB
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+- artifact: androidx.sqlite:sqlite-framework:+
+  name: Android Support SQLite - Framework Implementation
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+- artifact: com.google.re2j:re2j:+
+  name: RE2/J
+  copyrightHolder: The Go Authors
+  year: 2009
+  license: bsd_3_clauses
+  licenseUrl: https://golang.org/LICENSE
+  url: http://github.com/google/re2j
+  forceGenerate: true
+- artifact: androidx.room:room-runtime:+
+  name: Android Room-Runtime
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+- artifact: androidx.room:room-common:+
+  name: Android Room-Common
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+- artifact: androidx.room:room-ktx:+
+  name: Android Room Kotlin Extensions
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+- artifact: dummy:jquery:+
+  name: jQuery
+  copyrightHolder: JS Foundation
+  license: The MIT License
+  licenseUrl: https://jquery.org/license/
+  url: https://jquery.org/
+  forceGenerate: true

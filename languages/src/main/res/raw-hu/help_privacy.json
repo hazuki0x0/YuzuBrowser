@@ -1,0 +1,18 @@
+{
+  "title": "Adatvédelmi beállítások",
+  "private": "Privát mód",
+  "private_info": "Kikapcsolhatsz minden adatvédelmi beállítást",
+  "cookie": "Sütik engedélyezése",
+  "cookie_info": "Engedélyezi a sütiket<br>Néhány oldal nem rendesen fog működni, ha nincs engedélyezve",
+  "third_cookie": "Sütik engedélyezése harmadik féltől",
+  "third_cookie_info": "Sütik engedélyezése harmadik féltől<br>Néhány oldal nem fog megfelelően működni, ha nincs engedélyezve",
+  "database": "Adatbázis engedélyezése",
+  "database_info": "HTML adatbázis API engedélyezése/tiltása&lt;x/1>néhány oldal nem fog működni nélküle",
+  "dom": "HTML DOM tároló engedélyezése",
+  "dom_info": "HTML DOM tároló engedélyezése/tiltása&lt;x/1>Néhány oldal nem fog működni nélküle",
+  "geolocation": "Helymeghatározás engedélyezése",
+  "geolocation_info": "Helymeghatározás HTML API engedélyezése / tiltása",
+  "app_cache": "Alkalmazás gyorsítótár engedélyezése",
+  "app_cache_info": "HTML5 API gyorsítótár engedélyezése / tiltása",
+  "security_settings": "Biztonsági beállítások"
+}

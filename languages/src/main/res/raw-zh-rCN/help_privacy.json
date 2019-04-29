@@ -1,0 +1,18 @@
+{
+  "title": "隐私设置",
+  "private": "隐私模式",
+  "private_info": "可禁用所有隐私设置",
+  "cookie": "接受 Cookie",
+  "cookie_info": "接受 Cookie 使用请求<br>部分页面必须启用此功能才能正常显示",
+  "third_cookie": "接受第三方 Cookie",
+  "third_cookie_info": "接受第三方 Cookie 使用请求<br>部分页面必须启用此功能才能正常显示",
+  "database": "启用数据库",
+  "database_info": "启用/禁用 HTML5 数据库 API<br>部分页面必须启用此功能才能正常显示",
+  "dom": "启用 DOM 存储",
+  "dom_info": "启用/禁用 HTML5 DOM 存储 API<br>部分页面必须启用此功能才能正常显示",
+  "geolocation": "启用地理位置",
+  "geolocation_info": "启用/禁用 HTML5 位置信息 API",
+  "app_cache": "启用应用程序缓存",
+  "app_cache_info": "启用/禁用 HTML5 应用程序缓存 API",
+  "security_settings": "安全设置"
+}

@@ -1,0 +1,18 @@
+{
+  "title": "プライバシー設定",
+  "private": "プライベートモード",
+  "private_info": "全てのプライバシー設定を無効にすることができます",
+  "cookie": "Cookieの許可",
+  "cookie_info": "Cookieの使用を許可します<br>有効にしないと正常に表示できないページがある場合があります",
+  "third_cookie": "サードパーティCookieの許可",
+  "third_cookie_info": "サードパーティCookieの使用を許可します<br>有効にしないと正常に表示できないページがある場合があります",
+  "database": "データベースを有効にする",
+  "database_info": "HTML5のデータベースAPIの有効/無効を設定する<br>有効にしないと正常に表示できないページがある場合があります",
+  "dom": "DOMストレージを有効にする",
+  "dom_info": "HTML5のDOMストレージAPIの有効/無効を設定する<br>有効にしないと正常に表示できないページがある場合があります",
+  "geolocation": "位置情報を有効にする",
+  "geolocation_info": "HTML5の位置情報APIの有効/無効を設定する",
+  "app_cache": "アプリケーションキャッシュを有効にする",
+  "app_cache_info": "HTML5のアプリケーションキャッシュAPIの有効/無効を設定する",
+  "security_settings": "セキュリティ設定"
+}

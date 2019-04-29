@@ -1,0 +1,32 @@
+{
+  "title": "Einstellungen der Benutzeroberfläche",
+  "theme": "Design-Einstellungen",
+  "theme_info": "Sie können das integrierte und Ihr eigenes Design wählen<br>Sie können auch das Design des Mikan-Browsers verwenden<br>Das benutzerdefinierte Design befindet sich im internen Speicher<br>Beispiel (Bitte entsprechende Änderungen vornehmen):<code>/sdcard/YuzuBrowser/theme/**theme name**/theme.json</code><br>Bitte entsprechend so installieren, dass es für den Browser zugriffsfähig ist.",
+  "toolbar": "Einstellungen der Symbolleiste",
+  "font_size": "Einstellungen der Schriftgröße",
+  "font_size_info": "Sie können die Schriftgröße von Lesezeichen, Verlauf, Menü, Menü und der Später-Lesen-Liste ändern.",
+  "scrollbar": "Touch-Scrollbar-Einstellungen",
+  "scrollbar_info": "Zeigt eine Bildlaufleiste an, die Sie am Rand des Browsers berühren können. Sie können einstellen, ob die Symbolleiste beim Scrollen mit der Bildlaufleiste verschoben werden soll.",
+  "orientation": "Ausrichtung",
+  "orientation_info": {
+    "info": "Sie können die Ausrichtung des Browser-Bildschirms einstellen",
+    "unspecified": "Unspezifiziert",
+    "unspecified_info": "Den Einstellungen des Geräts folgen",
+    "landscape": "Landschaft",
+    "landscape_info": "Querformat erzwingen",
+    "portrait": "Portrait",
+    "portrait_info": "Hochformat erzwingen",
+    "sensor": "Sensor",
+    "sensor_info": "Mit dem Sensor erkennen und die Richtung ändern",
+    "no_sensor": "Kein Sensor",
+    "no_sensor_info": "Bildschirmausrichtung der Anwendung unabhängig von der sensorermittelten Ausrichtungsänderung fixieren"
+  },
+  "orientation_full_screen": "Ausrichtung von Vollbildvideos",
+  "orientation_full_screen_info": "Sie können die Ausrichtung des Vollbilds analog YouTube einstellen<br>Was die Optionen betrifft, so sind diese identisch mit [Ausrichtung].",
+  "full_screen": "Vollbildschirm",
+  "full_screen_info": "Sie können den ganzen Bildschirm nutzen.",
+  "full_screen_mode": "Vollbildschirmmodus",
+  "full_screen_mode_info": "Sie können einstellen, welche Symbolleisten bei Vollbildmodus ausgeblendet werden sollen.",
+  "keep_screen_on": "Bildschirm aktiv lassen",
+  "keep_screen_on_info": "Während des Surfens den Bildschirm nicht eigenständig ausschalten."
+}

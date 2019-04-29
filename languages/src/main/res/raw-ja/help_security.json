@@ -1,0 +1,27 @@
+{
+  "title": "セキュリティ設定",
+  "content_access": "contentアクセスの許可",
+  "content_access_info": "content://で始まるURLのアクセスを許可します",
+  "local_file": "ローカルアクセス設定",
+  "local_file_info": {
+    "info": "file://で始まるURLのアクセスを許可します",
+    "disable": "無効",
+    "disable_info": "アクセスを完全に禁止する。",
+    "sandbox": "サンドボックス内で有効",
+    "sandbox_info": "外部ストレージ内と/data/data/jp.hazuki.yuzubrowser/app_public_html内のアクセスのみ許可する。",
+    "enable": "有効",
+    "enable_info": "アクセス可能なパス全てにアクセス許可する。"
+  },
+  "insecure": "https上の安全でないコンテンツ設定",
+  "insecure_info": {
+    "info": "httpsのページでhttp上にあるスクリプトや画像などを読み込むことを許可します",
+    "never": "許可しない",
+    "never_info": "読み込みません",
+    "compatibility": "互換モード",
+    "compatibility_info": "読み込むか自動的に判断します<br>WebView/Chromeのアップデートにより判断が変わる場合があります",
+    "allow": "全て許可する",
+    "allow_info": "全て読み込みます"
+  },
+  "security_warn": "セキュリティ警告の表示",
+  "security_warn_info": "SSLの証明書に問題がある場合に警告を表示し、ロードを継続するかの確認します<br>無効の場合は自動的にロードがキャンセルされます"
+}

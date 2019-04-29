@@ -1,0 +1,32 @@
+{
+  "title": "用户界面设置",
+  "theme": "主题设置",
+  "theme_info": "可选择内置主题或自定义主题<br>你也可以使用蜜柑浏览器（Mikan Browser）的主题<br>自定义主题需要位于内部存储中<br>示例（请进行适当修改）：<code>/sdcard/YuzuBrowser/theme/**主题名称**/theme.json</code><br>如此安装以使用",
+  "toolbar": "工具栏设置",
+  "font_size": "字体大小设置",
+  "font_size_info": "可更改书签、历史记录、菜单以及稍后阅读列表的字体大小。",
+  "scrollbar": "触摸滚动条设置",
+  "scrollbar_info": "在浏览器边缘显示一个可触摸的滚动条。可设定是否在使用滚动条时移动工具栏。",
+  "orientation": "显示方向",
+  "orientation_info": {
+    "info": "可设置浏览器的显示方向",
+    "unspecified": "未指定",
+    "unspecified_info": "跟随系统设置",
+    "landscape": "横屏",
+    "landscape_info": "强制横屏显示",
+    "portrait": "竖屏",
+    "portrait_info": "强制竖屏显示",
+    "sensor": "使用传感器",
+    "sensor_info": "根据传感器改变显示方向",
+    "no_sensor": "忽略传感器",
+    "no_sensor_info": "忽略设备通过传感器进行的方向切换，以固定方向显示。"
+  },
+  "orientation_full_screen": "全屏视频显示方向",
+  "orientation_full_screen_info": "可设定 YouTube 视频等内容的显示方向<br>选项与 [显示方向] 相同",
+  "full_screen": "全屏显示",
+  "full_screen_info": "可使用全屏显示。",
+  "full_screen_mode": "全屏显示模式",
+  "full_screen_mode_info": "可设定全屏显示时隐藏的工具栏。",
+  "keep_screen_on": "保持亮屏",
+  "keep_screen_on_info": "在浏览时不自动关闭屏幕"
+}

@@ -1,0 +1,27 @@
+{
+  "title": "Sicherheitseinstellungen",
+  "content_access": "Zugriff auf Inhalte erlauben",
+  "content_access_info": "Zugriff auf URLs, die mit content:// beginnen, erlauben",
+  "local_file": "Einstellungen für den Zugriff auf lokale Dateien",
+  "local_file_info": {
+    "info": "Zugriff auf URLs erlauben, die mit file://<br>beginnen.",
+    "disable": "Deaktivieren",
+    "disable_info": "Der Zugriff ist grundsätzlich verwehrt.",
+    "sandbox": "Im Sandkasten aktivieren",
+    "sandbox_info": "Zugriff nur auf externen Speicher und /data/data/jp.hazuki.yuzubrowser/app_public_html erlauben.",
+    "enable": "Aktivieren",
+    "enable_info": "Zugriff auf alle zugänglichen Pfade erlauben."
+  },
+  "insecure": "Einstellungen bei unsicheren Inhalten auf https",
+  "insecure_info": {
+    "info": "Das Laden von Skripten und Bildern etc. auf http auf der https-Seite erlauben",
+    "never": "Niemals erlauben",
+    "never_info": "Es wird nicht geladen",
+    "compatibility": "Kompatibilität",
+    "compatibility_info": "Automatisch entscheiden, ob geladen wird.<br>Die Beurteilung kann sich in Abhängigkeit von WebView / Chrome-Update ändern",
+    "allow": "Immer erlauben",
+    "allow_info": "Alle Inhalte laden"
+  },
+  "security_warn": "Sicherheitswarnungen anzeigen",
+  "security_warn_info": "Zeigen Sie eine Warnung an, wenn es ein Problem mit dem SSL-Zertifikat gibt, und bestätigen, ob das Laden fortgesetzt werden soll.<br>Wenn sie ungültig ist, wird das Laden automatisch abgebrochen."
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Impostazioni barra degli strumenti",
+  "snap": "Barra degli strumenti spezzata",
+  "snap_info": "Al termine di uno scorrimento, se la barra degli strumenti è solo parzialmente visibile, verrà spezzata e scorsa fino al bordo più vicino.<br>Ad esempio, se la barra degli strumenti ha solo il 25% in meno visualizzato, verrà scorsa completamente dallo schermo. Al contrario, se è visibile al 75%, verrà fatto scorrere completamente nella barra degli strumenti.",
+  "alpha_bottom": "Trasparenza barra degli strumenti in basso",
+  "alpha_bottom_info": "È possibile impostare l'intervallo di trasparenza da 0 a 255",
+  "common": "Impostazioni della barra comune",
+  "common_info": {
+    "positioning": "Priorità del posizionamento",
+    "positioning_info": "Minore è il numero, maggiore è la priorità",
+    "size": "Dimensione",
+    "size_info": "Dimensione verticale"
+  },
+  "specific": "Impostazioni specifiche della barra delle schede",
+  "specific_info": {
+    "type": "Scheda di digitazione",
+    "scrollable": "Scorrevole",
+    "full": "Piena",
+    "tab_size": "Dimensione scheda",
+    "tab_width": "Larghezza della scheda"
+  }
+}

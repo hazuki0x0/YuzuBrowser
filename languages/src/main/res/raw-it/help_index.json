@@ -1,0 +1,12 @@
+{
+  "help": "Aiuto per le impostazioni di Yuzu Browser",
+  "comment": "Grazie per aver scelto Yuzu Browser!<br>Spero che questo aiuto ti serva.",
+  "browser": "Impostazioni Browser",
+  "page": "Impostazioni pagina",
+  "privacy": "Impostazioni Privacy",
+  "ui": "Impostazioni UI",
+  "action": "Impostazioni delle azioni",
+  "action_list": "Elenco azioni",
+  "regex": "Specifiche modello (Wildcard)",
+  "faq": "FAQ"
+}

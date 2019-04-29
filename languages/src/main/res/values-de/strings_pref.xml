@@ -351,7 +351,6 @@
     <string name="pref_number_of_fingers">Anzahl der Finger</string>
     <string name="pref_sensitivity">Empfindlichkeit</string>
     <string name="pref_help">Hilfe</string>
-    <string name="pref_help_url">file:///android_asset/help/de/index.html</string>
     <string name="pref_block_images">Bilder blockieren</string>
 
     <string name="pref_ad_block">Werbeblocker-Einstellungen</string>

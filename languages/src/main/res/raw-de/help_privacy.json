@@ -1,0 +1,18 @@
+{
+  "title": "Datenschutzeinstellungen",
+  "private": "Privater Modus",
+  "private_info": "Sie können alle Datenschutzeinstellungen deaktivieren",
+  "cookie": "Cookies akzeptieren",
+  "cookie_info": "Verwendung von Cookies akzeptieren<br>Einige Seiten können nicht normal angezeigt werden, es sei denn, Cookies sind aktiviert",
+  "third_cookie": "Cookies von Drittanbietern akzeptieren",
+  "third_cookie_info": "Verwendung von Cookies von Drittanbietern akzeptieren<br>Einige Seiten können nicht normal angezeigt werden, wenn diese Cookie-Art nicht aktiviert sind.",
+  "database": "Datenbank aktivieren",
+  "database_info": "HTML5-Datenbank-API aktivieren / deaktivieren<br>Einige Seiten können nicht normal angezeigt werden, wenn diese API nicht aktiviert sind",
+  "dom": "DOM-Speicher aktivieren",
+  "dom_info": "HTML5-DOM-Speicher-API aktivieren / deaktivieren<br>Einige Seiten können nicht normal angezeigt werden, wenn diese API nicht aktiviert sind.",
+  "geolocation": "Ortungsfunktion aktivieren",
+  "geolocation_info": "HTML5-Gelocation Information-API aktivieren / deaktivieren",
+  "app_cache": "Anwendungscache aktivieren",
+  "app_cache_info": "HTML5-Application cache-API aktivieren / deaktivieren",
+  "security_settings": "Sicherheitseinstellungen"
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Privacy settings",
+  "private": "Private mode",
+  "private_info": "You can disable all privacy settings",
+  "cookie": "Accept Cookie",
+  "cookie_info": "Accept use of Cookie<br>Some pages can not be displayed normally unless enabled",
+  "third_cookie": "Accept third party Cookie",
+  "third_cookie_info": "Accept use of third party cookies<br>Some pages can not be displayed normally unless enabled",
+  "database": "Enable database",
+  "database_info": "Enable HTML5 database API<br>Some pages can not be displayed normally unless enabled",
+  "dom": "Enable DOM storage",
+  "dom_info": "Enable HTML5 DOM storage API<br>Some pages can not be displayed normally unless enabled",
+  "geolocation": "Enable geolocation",
+  "geolocation_info": "Enable HTML5 location information API",
+  "app_cache": "Enable application cache",
+  "app_cache_info": "Enable HTML5 application cache API",
+  "security_settings": "Security settings"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Toolbar settings",
+  "snap": "Snap Toolbar",
+  "snap_info": "Upon a scroll ending, if the toolbar is only partially visible then it will be snapped and scrolled to it's closest edge.<br>For example, if the toolbar only has it's bottom 25% displayed, it will be scrolled off screen completely. Conversely, if it's bottom 75% is visible then it will be scrolled fully into toolbar.",
+  "alpha_bottom": "Alpha channel of bottom toolbar",
+  "alpha_bottom_info": "You can set the transparency range from 0 to 255",
+  "common": "Common bar settings",
+  "common_info": {
+    "positioning": "Priority of positioning",
+    "positioning_info": "The smaller the number, the higher the priority",
+    "size": "Size",
+    "size_info": "Vertical size"
+  },
+  "specific": "Tab bar specific settings",
+  "specific_info": {
+    "type": "Tab type",
+    "scrollable": "Scrollable",
+    "full": "Full",
+    "tab_size": "Tab size",
+    "tab_width": "Tab width"
+  }
+}

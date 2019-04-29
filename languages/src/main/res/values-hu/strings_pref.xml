@@ -120,8 +120,6 @@
     <string name="pref_gesture_score">Gesztus érték</string>
     <string name="pref_lpress_others">Egyebek</string>
 
-    <string name="pref_help_url">file:///android_asset/help/hu/index.html</string>
-
     <string name="pref_save_tab_for_crash">Lapok nagy gyakoriságú mentése</string>
 
     <string name="pref_translators">windanesz</string>

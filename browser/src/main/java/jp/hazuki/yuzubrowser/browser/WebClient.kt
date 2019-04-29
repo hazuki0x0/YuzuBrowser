@@ -60,6 +60,8 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
+import jp.hazuki.yuzubrowser.legacy.help.getHelpResponse
+import jp.hazuki.yuzubrowser.legacy.help.isHelpUrl
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryAsyncManager
 import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
@@ -521,6 +523,9 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
         override fun shouldInterceptRequest(web: CustomWebView, request: WebResourceRequest): WebResourceResponse? {
             if ("yuzu".equals(request.url.scheme, ignoreCase = true)) {
+                if (request.url.isHelpUrl()) {
+                    return request.url.getHelpResponse(activity)
+                }
                 val action = request.url.schemeSpecificPart
 
                 if (action != null) {

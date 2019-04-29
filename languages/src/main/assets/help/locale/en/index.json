@@ -1,0 +1,12 @@
+{
+  "help": "Yuzu Browser settings help",
+  "comment": "Thank you for using Yuzu browser!<br>I hope this help will be of service to you.<br><br>",
+  "browser": "Browser settings",
+  "page": "Page settings",
+  "privacy": "Privacy settings",
+  "ui": "UI settings",
+  "action": "Action settings",
+  "action_list": "Actions list",
+  "regex": "Pattern(Wildcard) specification",
+  "faq": "FAQ"
+}

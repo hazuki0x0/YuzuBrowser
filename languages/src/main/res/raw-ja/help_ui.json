@@ -1,0 +1,32 @@
+{
+  "title": "表示設定",
+  "theme": "テーマ設定",
+  "theme_info": "ビルトインおよび自作テーマを選択できる<br>mikan browserのテーマも使用できます<br>自作テーマは内部ストレージ内の<br>例(適時読み替えてください)：<code>/sdcard/YuzuBrowser/theme/**テーマ名**/theme.json</code><br>になるように設置してください",
+  "toolbar": "ツールバー設定",
+  "font_size": "フォントサイズ設定",
+  "font_size_info": "ブックマーク、履歴、メニュー、あとで読む一覧のフォントの大きさを変更できます",
+  "scrollbar": "タッチスクロールバー設定",
+  "scrollbar_info": "ブラウザの端にタッチ出来るスクロールバーを表示します。また、スクロールバーでスクロールする際にツールバーを動かすか設定します。",
+  "orientation": "画面の向き",
+  "orientation_info": {
+    "info": "ブラウザの画面の向きを設定できます",
+    "unspecified": "自動",
+    "unspecified_info": "端末設定に従う。",
+    "landscape": "横向き",
+    "landscape_info": "横向きに固定する。",
+    "portrait": "縦向き",
+    "portrait_info": "縦向きに固定する。",
+    "sensor": "センサー",
+    "sensor_info": "センサーで感知して向きを変更する。",
+    "no_sensor": "センサーに従わない",
+    "no_sensor_info": "センサーによる端末の向きの変更に関わらず、アプリの画面の向きを固定する。"
+  },
+  "orientation_full_screen": "フルスクリーン動画の向き",
+  "orientation_full_screen_info": "YouTubeなどのフルスクリーン画面の向きを設定できる<br>選択肢に関しては[画面の向き]と同様",
+  "full_screen": "フルスクリーン",
+  "full_screen_info": "フルスクリーンを使用できます",
+  "full_screen_mode": "フルスクリーンモード",
+  "full_screen_mode_info": "フルスクリーンを使用するときにどのバーを隠すか設定します。",
+  "keep_screen_on": "自動的に消灯しない",
+  "keep_screen_on_info": "ブラウザを使用中、勝手に画面を消灯しないようにします"
+}

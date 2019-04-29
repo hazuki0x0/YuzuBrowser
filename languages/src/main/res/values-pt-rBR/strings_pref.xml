@@ -351,7 +351,6 @@
     <string name="pref_number_of_fingers">Número de dedos</string>
     <string name="pref_sensitivity">Sensibilidade</string>
     <string name="pref_help">Ajuda</string>
-    <string name="pref_help_url">file:///android_asset/help/pt-rBR/index.html</string>
     <string name="pref_block_images">Bloquear imagens</string>
 
     <string name="pref_ad_block">Configurações de bloqueio de anúncio</string>

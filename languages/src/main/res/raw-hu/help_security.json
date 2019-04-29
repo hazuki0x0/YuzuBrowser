@@ -1,0 +1,27 @@
+{
+  "title": "Biztonsági beállítások",
+  "content_access": "Tartalom hozzáférés engedélyezése",
+  "content_access_info": "Engedélyezi a content:// előtaggal kezdődő URL-eket",
+  "local_file": "Helyi fájlok hozzáférésének beállítása",
+  "local_file_info": {
+    "info": "Engedélyezi a file:// előtaggal kezdődő URL-eket",
+    "disable": "Letiltva",
+    "disable_info": "A hozzáférés teljesen le van tiltva a fajlokhoz.",
+    "sandbox": "Sandbox mód",
+    "sandbox_info": "Hozzáférés csak külső tárolóhoz és a /data/data/jp.hazuki.yuzubrowser/app_public_html útvonalhoz.",
+    "enable": "Engedélyez",
+    "enable_info": "Teljes hozzáférés minden elérhető útvonalhoz."
+  },
+  "insecure": "Nem biztonságos tartalmak https-en keresztül",
+  "insecure_info": {
+    "info": "Engedélyezi scriptek és képek stb. betöltését http-vel https oldalakon",
+    "never": "Sosem enged",
+    "never_info": "Nem tölt be",
+    "compatibility": "Kompatibilitási mód",
+    "compatibility_info": "Automatikusan eldönti, hogy betöltsw-e<br>Az elbírálás változhat WebView / Chrome frissítések szerint",
+    "allow": "Mindig engedélyez",
+    "allow_info": "Minden tartalmat betölt"
+  },
+  "security_warn": "Biztonsági figyelmeztetések mutatása",
+  "security_warn_info": "Display a warning if there is a problem with SSL certificate and confirm whether to continue loading.<br>If it is invalid, the load is automatically canceled."
+}

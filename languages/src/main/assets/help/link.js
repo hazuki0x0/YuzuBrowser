@@ -1,1 +1,0 @@
-onload=function(){var b=window.location.hash;if(b){if(b.startsWith("#")){b=b.substr(1)}var a=document.getElementById(b);if(a){a.open=true}}};

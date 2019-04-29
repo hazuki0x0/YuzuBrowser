@@ -1,0 +1,27 @@
+{
+  "title": "Configurações de segurança",
+  "content_access": "Permitir acesso de conteúdo",
+  "content_access_info": "Permite acesso de URL começando com content://",
+  "local_file": "Configurações de acesso de arquivos locais",
+  "local_file_info": {
+    "info": "Permite acesso de URL começando com file://",
+    "disable": "Desativar",
+    "disable_info": "O acesso é completamente proibido.",
+    "sandbox": "Ativar na sandbox",
+    "sandbox_info": "Permitir acesso apenas no armazenamento externo e /data/data/jp.hazuki.yuzubrowser/app_public_html.",
+    "enable": "Ativar",
+    "enable_info": "Permitir acesso para todos caminhos acessíveis."
+  },
+  "insecure": "Configurações de conteúdo inseguro no https",
+  "insecure_info": {
+    "info": "Permite carregar scripts e imagens etc. no http na página https",
+    "never": "Nunca permitir",
+    "never_info": "Não carregar",
+    "compatibility": "Compatibilidade",
+    "compatibility_info": "Decidir automaticamente se deseja carregar<br>O julgamento pode mudar dependendo da atualização do WebView / Chrome",
+    "allow": "Sempre permitir",
+    "allow_info": "Carregar todos conteúdos"
+  },
+  "security_warn": "Mostrar avisos de segurança",
+  "security_warn_info": "Mostra um aviso se houver um problema com o certificado SSL e confirma se deseja continuar carregando.<br>Se for inválido, o carregamento é cancelado automaticamente."
+}

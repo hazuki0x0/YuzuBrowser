@@ -1,0 +1,157 @@
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1"/>
+  <link rel="stylesheet" type="text/css" href="./css/help.css" media="all">
+  <script src="./js/jquery-3.4.0.min.js"></script>
+  <script src="./js/i18n.js"></script>
+</head>
+<body>
+<h1 class="head" data-i18n="title"></h1>
+<details>
+  <summary data-i18n="basic"></summary>
+  <div class="details_info">
+    <span data-i18n="wildcard.title"></span>
+    <ul>
+      <li>'#'</li>
+      <span data-i18n="wildcard.sharp_info"></span>
+      <li>'?'</li>
+      <span data-i18n="wildcard.question_info"></span>
+      <li>'*'</li>
+      <span data-i18n="wildcard.asterisk_info"></span>
+      <li>'+'</li>
+      <span data-i18n="wildcard.plus_info"></span>
+    </ul>
+    <span data-i18n="wildcard.escape"></span><br>
+    '\#', '\?', '\*', '\+'<br><br>
+    <span data-i18n="wildcard.regexp"></span><br>
+    <span data-i18n="wildcard.case"></span>
+  </div>
+</details>
+<details>
+  <summary data-i18n="wildcard_desc.title"></summary>
+  <div class="details_info">
+    <ul>
+      <li data-i18n="wildcard_desc.sharp"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="wildcard_desc.sharp_info"></span><br>
+      <span data-i18n="wildcard_desc.sharp_ex1"></span><br>
+      <span data-i18n="wildcard_desc.sharp_ex1_info"></span><br>
+      <span data-i18n="wildcard_desc.sharp_ex2"></span><br>
+      <span data-i18n="wildcard_desc.sharp_ex2_info"></span>
+    </div>
+    <ul>
+      <li data-i18n="wildcard_desc.question"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="wildcard_desc.question_info"></span><br>
+      <span data-i18n="wildcard_desc.question_ex1"></span><br>
+      <span data-i18n="wildcard_desc.question_ex1_info"></span><br>
+      <span data-i18n="wildcard_desc.question_ex1_ex"></span><br>
+      <span data-i18n="wildcard_desc.question_ex1_but"></span><br>
+      <span data-i18n="wildcard_desc.question_ex2"></span><br>
+      <span data-i18n="wildcard_desc.question_ex2_info"></span>
+    </div>
+    <ul>
+      <li data-i18n="wildcard_desc.asterisk"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="wildcard_desc.asterisk_info"></span><br>
+      <span data-i18n="wildcard_desc.asterisk_ex"></span><br>
+      <span data-i18n="wildcard_desc.asterisk_ex_info"></span><br>
+      <span data-i18n="wildcard_desc.asterisk_ex_info_ex"></span>
+    </div>
+    <ul>
+      <li data-i18n="wildcard_desc.plus"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="wildcard_desc.plus_info"></span><br>
+      <span data-i18n="wildcard_desc.plus_ex"></span><br>
+      <span data-i18n="wildcard_desc.plus_ex_info"></span><br>
+      <span class="redText" data-i18n="wildcard_desc.plus_ex_not"></span><br>
+      <span data-i18n="wildcard_desc.plus_ex_then"></span>
+    </div>
+    <ul>
+      <li data-i18n="wildcard_desc.regexp"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="wildcard_desc.regexp_info"></span><br>
+      <span data-i18n="wildcard_desc.regexp_ex"></span>
+    </div>
+  </div>
+</details>
+<details id="insecure_content">
+  <summary data-i18n="pattern.title"></summary>
+  <div class="details_info">
+    <span data-i18n="pattern.info"></span><br>
+    <span data-i18n="pattern.ex"></span>
+    <ul>
+      <li data-i18n="pattern.sub_domain"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="pattern.sub_domain_info"></span><br>
+      <span data-i18n="pattern.sub_domain_ex"></span><br>
+      <span data-i18n="pattern.sub_domain_match"></span><br>
+      <span data-i18n="pattern.sub_domain_not"></span>
+    </div>
+    <ul>
+      <li data-i18n="pattern.https"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="pattern.https_info"></span><br>
+      <span data-i18n="pattern.https_replace"></span>
+    </div>
+  </div>
+</details>
+<details>
+  <summary data-i18n="ad_block.title"></summary>
+  <div class="details_info">
+    <span data-i18n="ad_block.not_wildcard"></span><br>
+    <span data-i18n="ad_block.not_regex"></span><br>
+    <ul>
+      <li data-i18n="ad_block.not_use_wildcard"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="ad_block.not_use_wildcard_info"></span><br>
+      <span data-i18n="ad_block.not_use_wildcard_ex"></span><br>
+      <span data-i18n="ad_block.not_use_wildcard_ex_info"></span>
+    </div>
+    <ul>
+      <li data-i18n="ad_block.use_wildcard"></li>
+    </ul>
+    <div class="li_info" data-i18n="ad_block.host"></div>
+    <ul>
+      <li data-i18n="ad_block.host"></li>
+    </ul>
+    <div class="li_info">
+      <span data-i18n="ad_block.host_info"></span><br>
+      <ul>
+        <li data-i18n="ad_block.host_perfect"></li>
+      </ul>
+      <div class="li_info">
+        <span data-i18n="ad_block.host_perfect_info"></span><br>
+        <span data-i18n="ad_block.host_perfect_info_ex"></span><br>
+        <span data-i18n="ad_block.host_perfect_info_wildcard"></span><br>
+        <span data-i18n="ad_block.host_perfect_ex"></span><br>
+        <span data-i18n="ad_block.host_perfect_hosts"></span>
+      </div>
+      <ul>
+        <li data-i18n="ad_block.host_partial"></li>
+      </ul>
+      <div class="li_info">
+        <span data-i18n="ad_block.host_partial_info"></span><br>
+        <span data-i18n="ad_block.host_partial_info_ex"></span><br>
+        <span class="redText" data-i18n="ad_block.host_partial_not_wildcard"></span>
+      </div>
+      <ul>
+        <li data-i18n="ad_block.host_regex"></li>
+      </ul>
+      <div class="li_info">
+        <span data-i18n="ad_block.host_regex_info"></span>
+      </div>
+    </div>
+  </div>
+</details>
+</body>
+</html>

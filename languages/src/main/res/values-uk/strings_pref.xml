@@ -354,7 +354,6 @@
     <string name="pref_number_of_fingers">Кількість пальців</string>
     <string name="pref_sensitivity">Чутливість</string>
     <string name="pref_help">Допомога</string>
-    <string name="pref_help_url">file:///android_asset/help/en/index.html</string>
     <string name="pref_block_images">Блокування зображень</string>
 
     <string name="pref_ad_block">Налаштування блокування реклами</string>

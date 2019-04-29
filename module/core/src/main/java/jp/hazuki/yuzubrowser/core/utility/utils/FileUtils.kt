@@ -92,6 +92,7 @@ fun getMimeTypeFromExtension(extension: String): String {
     return when (extension) {
         "js" -> "application/javascript"
         "mhtml", "mht" -> "multipart/related"
+        "json" -> "application/json"
         else -> {
             val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
             if (type.isNullOrEmpty()) {
@@ -100,5 +101,14 @@ fun getMimeTypeFromExtension(extension: String): String {
                 type
             }
         }
+    }
+}
+
+fun getExtensionFromMimeType(mimeType: String): String? {
+    return when (mimeType) {
+        "multipart/related", "message/rfc822", "application/x-mimearchive" -> ".mhtml"
+        "application/javascript", "application/x-javascript", "text/javascript" -> ".js"
+        "application/json" -> ".json"
+        else -> MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
     }
 }

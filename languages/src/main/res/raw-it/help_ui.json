@@ -1,0 +1,32 @@
+{
+  "title": "Impostazioni UI",
+  "theme": "Impostazioni Tema",
+  "theme_info": "Puoi scegliere il tema integrato e il tuo tema<br>Puoi anche utilizzare il tema del browser mikan<br>Il tema personalizzato è all'interno della memoria interna<br>Esempio (si prega di apportare le modifiche appropriate):<code>/sdcard/YuzuBrowser/theme/**theme name**/theme.json</code><br>Si prega di installare in modo che diventi",
+  "toolbar": "Impostazioni barra degli strumenti",
+  "font_size": "Impostazioni dimensione del carattere",
+  "font_size_info": "È possibile modificare la dimensione del carattere di segnalibri, cronologia, menu e leggerlo negli elenchi successivi",
+  "scrollbar": "Impostazioni barra di scorrimento Touch",
+  "scrollbar_info": "Visualizza una barra di scorrimento che puoi toccare sul bordo del browser. È possibile impostare se spostare la barra degli strumenti durante lo scorrimento con la barra di scorrimento.",
+  "orientation": "Orientamento",
+  "orientation_info": {
+    "info": "È possibile impostare l'orientamento della schermata del browser",
+    "unspecified": "non specificato",
+    "unspecified_info": "Segui le impostazioni del dispositivo",
+    "landscape": "Orizzontale",
+    "landscape_info": "Forza orientamento Orizzontale",
+    "portrait": "Verticale",
+    "portrait_info": "Forza orientamento verticale",
+    "sensor": "Sensore",
+    "sensor_info": "Rileva con il sensore e cambia la direzione",
+    "no_sensor": "Nessun sensore",
+    "no_sensor_info": "Fix the orientation of the screen of the application regardless of the change of orientation del terminale dal sensore."
+  },
+  "orientation_full_screen": "Orientamento del video a schermo intero",
+  "orientation_full_screen_info": "È possibile impostare l'orientamento della schermata a schermo intero come YouTube<br>Come per le opzioni, come per [Orientamento]",
+  "full_screen": "Schermo intero",
+  "full_screen_info": "Puoi usare lo schermo intero.",
+  "full_screen_mode": "Modalità schermo intero",
+  "full_screen_mode_info": "È possibile impostare le barre da nascondere quando si utilizza lo schermo intero.",
+  "keep_screen_on": "Mantieni lo schermo acceso",
+  "keep_screen_on_info": "Durante la navigazione, non spegnere lo schermo automaticamente"
+}
