@@ -168,7 +168,11 @@ fun Uri.resolveDirectoryPath(context: Context): String? {
         "${Environment.getExternalStorageDirectory()}/Download"
     } else if (isContentUri() && isExternalStorageDocument() && isTreeUri()) {
         val split = pathSegments[1].split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
-        "${context.resolveStoragePath(split[0])}/${split[1]}"
+        if (split.size == 1) {
+            context.resolveStoragePath(split[0])
+        } else {
+            "${context.resolveStoragePath(split[0])}/${split[1]}"
+        }
     } else {
         null
     }
