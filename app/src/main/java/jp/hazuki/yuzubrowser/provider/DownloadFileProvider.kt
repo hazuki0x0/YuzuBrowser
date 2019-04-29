@@ -123,9 +123,9 @@ class DownloadFileProvider : ContentProvider() {
 
     private fun File.checkPath(): Boolean {
         return isFile &&
-            path.startsWith("/storage/") ||
-            path.startsWith(Environment.getExternalStorageDirectory().absolutePath) ||
-            path.startsWith("/mnt/")
+                path.startsWith("/storage/") ||
+                path.startsWith(Environment.getExternalStorageDirectory().absolutePath) ||
+                path.startsWith("/mnt/")
     }
 
     companion object {
@@ -162,18 +162,18 @@ class DownloadFileProvider : ContentProvider() {
                 modeBits = ParcelFileDescriptor.MODE_READ_ONLY
             } else if ("w" == mode || "wt" == mode) {
                 modeBits = (ParcelFileDescriptor.MODE_WRITE_ONLY
-                    or ParcelFileDescriptor.MODE_CREATE
-                    or ParcelFileDescriptor.MODE_TRUNCATE)
+                        or ParcelFileDescriptor.MODE_CREATE
+                        or ParcelFileDescriptor.MODE_TRUNCATE)
             } else if ("wa" == mode) {
                 modeBits = (ParcelFileDescriptor.MODE_WRITE_ONLY
-                    or ParcelFileDescriptor.MODE_CREATE
-                    or ParcelFileDescriptor.MODE_APPEND)
+                        or ParcelFileDescriptor.MODE_CREATE
+                        or ParcelFileDescriptor.MODE_APPEND)
             } else if ("rw" == mode) {
                 modeBits = ParcelFileDescriptor.MODE_READ_WRITE or ParcelFileDescriptor.MODE_CREATE
             } else if ("rwt" == mode) {
                 modeBits = (ParcelFileDescriptor.MODE_READ_WRITE
-                    or ParcelFileDescriptor.MODE_CREATE
-                    or ParcelFileDescriptor.MODE_TRUNCATE)
+                        or ParcelFileDescriptor.MODE_CREATE
+                        or ParcelFileDescriptor.MODE_TRUNCATE)
             } else {
                 throw IllegalArgumentException("Invalid mode: $mode")
             }
