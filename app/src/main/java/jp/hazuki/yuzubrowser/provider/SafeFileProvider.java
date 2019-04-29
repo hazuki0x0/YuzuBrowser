@@ -48,7 +48,8 @@ public class SafeFileProvider extends ContentProvider {
             mAllowedFolder = new String[]{
                     getContext().getDir("public_html", Context.MODE_PRIVATE).getCanonicalPath(),
                     Environment.getExternalStorageDirectory().getCanonicalPath(),
-                    "/storage/"
+                "/storage/",
+                "/mnt/"
             };
         } catch (IOException e) {
             ErrorReportServer.printAndWriteLog(e);
