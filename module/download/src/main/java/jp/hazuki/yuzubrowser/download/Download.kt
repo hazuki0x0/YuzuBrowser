@@ -32,7 +32,7 @@ import java.io.File
 import java.io.IOException
 
 fun Context.download(root: Uri, file: DownloadFile, meta: MetaData?) {
-    if (file.url.length > ONE_MB - ONE_KB) {
+    if (file.url.length > HALF_MB) {
         ui {
             val tmp = File(cacheDir, DOWNLOAD_TMP_FILENAME)
             try {
@@ -78,9 +78,7 @@ fun String.convertToTmpDownloadUrl(): String {
     return substring(0, last) + DOWNLOAD_TMP_TYPE
 }
 
-private const val ONE_MB = 1024 * 1024
-
-private const val ONE_KB = 1024
+private const val HALF_MB = 512 * 1024
 
 internal const val DOWNLOAD_TMP_TYPE = ";yuzu_tmp_download"
 
