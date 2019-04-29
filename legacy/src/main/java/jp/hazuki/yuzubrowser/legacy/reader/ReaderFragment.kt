@@ -89,12 +89,11 @@ class ReaderFragment : androidx.fragment.app.Fragment() {
         fragmentManager?.findFragmentByTag("loading").isInstanceOf<androidx.fragment.app.DialogFragment> {
             it.dismiss()
         }
+        val dialog = ProgressDialog(activity.getString(R.string.now_loading), true, false).also {
+            it.show(childFragmentManager, "loading")
+        }
 
         ui {
-            val dialog = ProgressDialog(activity.getString(R.string.now_loading), true, false).also {
-                it.show(childFragmentManager, "loading")
-            }
-
             val data = withContext(Dispatchers.Default) { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }
             if (isAdded) {
                 if (isResumed) {
