@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.adblock
 
 import android.util.Patterns
 import android.webkit.WebResourceRequest
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
@@ -37,10 +38,9 @@ const val AD_BLOCK_WEBSOCKET = 512
 fun WebResourceRequest.convertToAdBlockContentType(siteUrl: String): Int {
     var contentType = 0
     val scheme = url.scheme
-    val url = url.toString()
     var isPage = false
     if (isForMainFrame) {
-        if (url == siteUrl) {
+        if (url.toString() == siteUrl) {
             isPage = true
             contentType = contentType or AD_BLOCK_DOCUMENT
         }
@@ -51,28 +51,48 @@ fun WebResourceRequest.convertToAdBlockContentType(siteUrl: String): Int {
         contentType = contentType or AD_BLOCK_WEBSOCKET
     }
 
-    val lastDot = url.lastIndexOf('.')
-    contentType = when {
-        lastDot >= 0 -> when (val extension = url.substring(lastDot + 1).toLowerCase()) {
-            "js" -> contentType or AD_BLOCK_SCRIPT
-            "css" -> contentType or AD_BLOCK_STYLE_SHEET
-            "otf", "ttf", "ttc", "woff", "woff2" -> contentType or AD_BLOCK_FONT
+    val path = url.path ?: url.toString()
+    val lastDot = path.lastIndexOf('.')
+    if (lastDot >= 0) {
+        when (val extension = path.substring(lastDot + 1).toLowerCase()) {
+            "js" -> return contentType or AD_BLOCK_SCRIPT
+            "css" -> return contentType or AD_BLOCK_STYLE_SHEET
+            "otf", "ttf", "ttc", "woff", "woff2" -> return contentType or AD_BLOCK_FONT
+            "php" -> Unit
             else -> {
                 val mimeType = getMimeTypeFromExtension(extension)
-                when {
-                    mimeType.startsWith("image/") -> contentType or AD_BLOCK_IMAGE
-                    mimeType.startsWith("video/") || mimeType.startsWith("audio/") -> contentType or AD_BLOCK_MEDIA
-                    mimeType.startsWith("font/") -> contentType or AD_BLOCK_FONT
-                    else -> contentType or AD_BLOCK_OTHER
+                if (mimeType != MIME_TYPE_UNKNOWN) {
+                    return contentType or mimeType.getContentTypeFromMimeType()
                 }
             }
         }
-        isPage -> contentType or AD_BLOCK_OTHER
-        else -> contentType or AD_BLOCK_OTHER or AD_BLOCK_MEDIA or AD_BLOCK_IMAGE or
-                AD_BLOCK_FONT or AD_BLOCK_STYLE_SHEET or AD_BLOCK_SCRIPT
     }
 
-    return contentType
+    if (isPage) {
+        return contentType or AD_BLOCK_OTHER
+    }
+
+    val accept = requestHeaders["Accept"]
+    return if (accept != null && accept != "*/*") {
+        val mimeType = accept.split(',')[0]
+        contentType or mimeType.getContentTypeFromMimeType()
+    } else {
+        contentType or AD_BLOCK_OTHER or AD_BLOCK_MEDIA or AD_BLOCK_IMAGE or
+            AD_BLOCK_FONT or AD_BLOCK_STYLE_SHEET or AD_BLOCK_SCRIPT
+    }
+}
+
+private fun String.getContentTypeFromMimeType(): Int {
+    return when (this) {
+        "application/javascript", "application/x-javascript", "text/javascript", "application/json" -> AD_BLOCK_SCRIPT
+        "text/css" -> AD_BLOCK_STYLE_SHEET
+        else -> when {
+            startsWith("image/") -> AD_BLOCK_IMAGE
+            startsWith("video/") || startsWith("audio/") -> AD_BLOCK_MEDIA
+            startsWith("font/") -> AD_BLOCK_FONT
+            else -> AD_BLOCK_OTHER
+        }
+    }
 }
 
 fun WebResourceRequest.isThirdParty(documentHost: String): Boolean {
