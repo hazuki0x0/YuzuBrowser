@@ -35,7 +35,7 @@ object Versions {
     const val support_constraint_lib = "1.1.3"
     const val dagger = "2.21"
     const val kotshi = "1.0.6"
-    const val okhttp = "3.14.0"
+    const val okhttp = "3.14.1"
     const val okio = "2.2.2"
     const val kvs_schema = "5.1.0"
     const val kotlin = "1.3.21"
