@@ -34,6 +34,7 @@ const val AD_BLOCK_MEDIA = 64
 const val AD_BLOCK_FONT = 128
 const val AD_BLOCK_POPUP = 256
 const val AD_BLOCK_WEBSOCKET = 512
+const val AD_BLOCK_XML_HTTP_REQUEST = 1024
 
 fun WebResourceRequest.convertToAdBlockContentType(siteUrl: String): Int {
     var contentType = 0
@@ -49,6 +50,10 @@ fun WebResourceRequest.convertToAdBlockContentType(siteUrl: String): Int {
     }
     if (scheme == "ws" || scheme == "wss") {
         contentType = contentType or AD_BLOCK_WEBSOCKET
+    }
+
+    if (requestHeaders["X-Requested-With"] == "XMLHttpRequest") {
+        contentType = contentType or AD_BLOCK_XML_HTTP_REQUEST
     }
 
     val path = url.path ?: url.toString()

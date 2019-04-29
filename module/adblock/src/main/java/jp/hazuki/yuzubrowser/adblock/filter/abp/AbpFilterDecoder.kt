@@ -107,6 +107,7 @@ class AbpFilterDecoder {
                                     pageWhiteList: MutableList<UnifiedFilter>) {
         var contentType = 0
         var ignoreCase = false
+        var xmlHttpRequest = true
         var domain: String? = null
         var thirdParty = -1
         var filter = this
@@ -251,7 +252,8 @@ class AbpFilterDecoder {
             "media" -> AD_BLOCK_MEDIA
             "font" -> AD_BLOCK_FONT
             "popup" -> AD_BLOCK_POPUP
-            "object", "webrtc", "csp", "ping", "xmlhttprequest",
+            "xmlhttprequest" -> AD_BLOCK_XML_HTTP_REQUEST
+            "object", "webrtc", "csp", "ping",
             "object-subrequest", "genericblock", "elemhide", "generichide" -> -1
             else -> 0
         }
