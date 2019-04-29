@@ -25,6 +25,7 @@ import android.content.res.Resources
 import android.gesture.GestureOverlayView
 import android.media.AudioManager
 import android.os.*
+import android.print.PrintManager
 import android.text.TextUtils
 import android.view.*
 import android.webkit.*
@@ -1547,6 +1548,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         set(enable) {
             webGestureOverlayView.isEnabled = enable
         }
+
+    override val printManager: PrintManager
+        get() = originalContext.getSystemService(Context.PRINT_SERVICE) as PrintManager
 
     //** Workaround for M */
     override fun getAssets(): AssetManager {

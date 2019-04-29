@@ -27,8 +27,10 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 @SuppressLint("Registered")
 open class ThemeActivity : AppCompatActivity() {
+    protected lateinit var originalContext: Context
 
     override fun attachBaseContext(newBase: Context) {
+        originalContext = newBase
         val application = newBase.applicationContext
         if (!ThemeData.isLoaded()) {
             ThemeData.createInstance(application, PrefPool.getSharedPref(application).getString(theme_setting, ThemeData.THEME_LIGHT))
