@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy.browser
 
 import android.content.Intent
+import android.print.PrintManager
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.WebChromeClient
@@ -95,6 +96,7 @@ interface BrowserController : BrowserInfo {
     val pagePaddingHeight: Int
     val actionNameArray: ActionNameArray
     val webRtcRequest: WebRtcRequest
+    val printManager: PrintManager
 
     var requestedOrientationByCtrl: Int
     var renderingMode: Int

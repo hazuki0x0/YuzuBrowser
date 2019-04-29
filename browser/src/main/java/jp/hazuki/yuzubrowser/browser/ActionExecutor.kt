@@ -23,7 +23,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.print.PrintManager
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
@@ -976,7 +975,6 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.PRINT -> if (PrintHelper.systemSupportsPrint()) {
                 val tab = controller.getTab(actionTarget)
-                val manager = controller.activity.getSystemService(Context.PRINT_SERVICE) as PrintManager
                 var title = tab.title
                 if (TextUtils.isEmpty(title))
                     title = tab.mWebView.title
@@ -989,7 +987,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                 if (adapter == null) {
                     controller.activity.toast(R.string.failed)
                 } else {
-                    manager.print(jobName, adapter, null)
+                    controller.printManager.print(jobName, adapter, null)
                 }
             } else {
                 Toast.makeText(controller.activity, R.string.print_not_support, Toast.LENGTH_SHORT).show()
