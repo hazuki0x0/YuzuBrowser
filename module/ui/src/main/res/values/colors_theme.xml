@@ -29,4 +29,5 @@
     <color name="urlBarBoxColor">@color/dark_box</color>
     <color name="urlBarBoxBorderColor">@color/dark_border</color>
     <color name="progressBarBackground">#47bfbfbf</color>
+    <color name="background">#303030</color>
 </resources>
