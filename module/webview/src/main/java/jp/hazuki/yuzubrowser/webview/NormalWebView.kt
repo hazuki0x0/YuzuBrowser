@@ -71,6 +71,12 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
             }
         }
 
+    override var verticalScrollRange: Int = -1
+        get() {
+            if (field == -1) computeVerticalScrollRange()
+            return field
+        }
+
     override var isTouching: Boolean = false
         private set
     override var isScrollable: Boolean = false
@@ -300,6 +306,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
 
     override fun computeVerticalScrollRange(): Int {
         val scrollRange = super.computeVerticalScrollRange()
+        verticalScrollRange = scrollRange
         val old = isScrollable
         isScrollable = scrollRange > height + scrollSlop + (scrollableHeight?.invoke() ?: 0)
         if (old != isScrollable) {

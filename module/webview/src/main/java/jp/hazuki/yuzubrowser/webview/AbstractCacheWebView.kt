@@ -558,6 +558,9 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
             currentPage.webView.isNestedScrollingEnabledMethod = value
         }
 
+    override val verticalScrollRange: Int
+        get() = currentPage.webView.verticalScrollRange
+
     override fun setVerticalScrollBarEnabled(enabled: Boolean) {
         verticalScrollBarEnabled = enabled
         for (web in tabs) {

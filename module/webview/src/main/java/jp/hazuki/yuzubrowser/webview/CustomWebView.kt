@@ -71,6 +71,8 @@ interface CustomWebView {
 
     var scrollableChangeListener: OnScrollableChangeListener?
 
+    val verticalScrollRange: Int
+
     val isRedirect: Boolean
         get() {
             val hitTestResult = hitTestResult

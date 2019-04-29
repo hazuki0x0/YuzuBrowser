@@ -157,6 +157,17 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private val scrollChangedListener: OnScrollChangedListener = { webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int ->
         webViewFastScroller.onPageScroll()
         webViewPageFastScroller?.onScrollWebView(webView)
+        if (!bottomAlwaysOverlayToolbarPadding.forceHide) {
+            val padding = if (bottomAlwaysOverlayToolbarPadding.visible) bottomAlwaysOverlayToolbar.height else 0
+            if (t + webView.computeVerticalScrollExtentMethod() + padding > webView.verticalScrollRange - bottomAlwaysOverlayToolbar.height - scrollSlop) {
+                if (!bottomAlwaysOverlayToolbarPadding.visible) {
+                    bottomAlwaysOverlayToolbarPadding.visible = true
+                    bottomAlwaysOverlayToolbarPadding.height = bottomAlwaysOverlayToolbar.height
+                }
+            } else {
+                bottomAlwaysOverlayToolbarPadding.visible = false
+            }
+        }
     }
 
     private lateinit var browserState: BrowserState
@@ -167,6 +178,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private lateinit var bottomBarBehavior: BottomBarBehavior
     private lateinit var webClient: WebClient
     private lateinit var menuWindow: MenuWindow
+    private var scrollSlop: Int = 0
 
     private var isActivityDestroyed = false
     private var isResumed = false
@@ -279,6 +291,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
             userActionManager.onTouchEvent(event)
         }
+        scrollSlop = ViewConfiguration.get(this).scaledPagingTouchSlop
     }
 
     override fun onStart() {
