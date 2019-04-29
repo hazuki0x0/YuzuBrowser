@@ -542,7 +542,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                     val isThird = request.isThirdParty(host)
                     val contentType = request.convertToAdBlockContentType(uri.toString())
                     if (!isWhitePage(uri, request.url, contentType, isThird)) {
-                        if (request.url.schemeSpecificPart == "adblock/hideElement.css") {
+                        if (request.url.host == "adblock" && request.url.path == "/hideElement.css") {
                             return createElementHideStyle(uri)
                         }
                         try {

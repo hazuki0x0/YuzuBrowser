@@ -143,7 +143,7 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
     companion object {
         const val INJECT_HIDE_STYLE = "var aa =document.createElement(\"link\");" +
             "aa.type='text/css'; aa.rel='stylesheet'; " +
-            "aa.href='yuzu:adblock/hideElement.css';" +
+            "aa.href='yuzu://adblock/hideElement.css';" +
             "document.getElementsByTagName(\"head\")[0].appendChild(aa);"
     }
 }
