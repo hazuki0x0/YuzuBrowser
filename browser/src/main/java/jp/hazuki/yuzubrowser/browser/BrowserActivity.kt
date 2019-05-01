@@ -33,7 +33,9 @@ import android.view.*
 import android.webkit.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
@@ -227,8 +229,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         toolbar = Toolbar(this, superFrameLayoutInfo, this, actionController, iconManager)
         toolbar.addToolbarView(resources)
 
-        webViewBehavior = (webGestureOverlayView.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
-        bottomBarBehavior = (bottomOverlayLayout.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
+        webViewBehavior = (webGestureOverlayView.layoutParams as CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
+        bottomBarBehavior = (bottomOverlayLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
         superFrameLayout.setOnImeShownListener { visible ->
             if (isImeShown != visible) {
                 isImeShown = visible
@@ -280,6 +282,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             setCurrentTab(0)
             loadUrl(tab, AppData.home_page.get())
         }
+        toolbar.notifyChangeWebState()
 
         webViewBehavior.setController(this)
 
@@ -446,8 +449,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     private fun restoreWebState() {
         tabManagerIn.loadData()
-        if (!tabManagerIn.isEmpty)
+        if (!tabManagerIn.isEmpty) {
             toolbar.scrollTabTo(tabManagerIn.currentTabNo)
+            toolbar.notifyChangeWebState()
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -1318,7 +1323,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         readItLater(this, contentResolver, tab.originalUrl, tab.mWebView)
     }
 
-    override fun onSaveWebViewToFile(root: androidx.documentfile.provider.DocumentFile, file: DownloadFile, webViewNo: Int) {
+    override fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int) {
         tabManagerIn[webViewNo].mWebView.saveArchive(root, file)
     }
 
@@ -1358,7 +1363,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     override val appBarLayout: AppBarLayout
         get() = appbar
 
-    override val superFrameLayoutInfo: androidx.coordinatorlayout.widget.CoordinatorLayout
+    override val superFrameLayoutInfo: CoordinatorLayout
         get() = superFrameLayout
 
     override val activity: AppCompatActivity
