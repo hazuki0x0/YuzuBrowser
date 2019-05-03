@@ -32,6 +32,7 @@ import android.widget.Toast
 import androidx.print.PrintHelper
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.adblock.ui.original.AddAdBlockDialog
+import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
@@ -56,7 +57,6 @@ import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivitySingl
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionListViewAdapter
-import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager
 import jp.hazuki.yuzubrowser.legacy.browser.Scripts
@@ -75,7 +75,6 @@ import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
-import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListActivity
@@ -84,6 +83,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.handler.*
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
+import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent

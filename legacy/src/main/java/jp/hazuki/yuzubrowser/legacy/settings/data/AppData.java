@@ -30,6 +30,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
@@ -47,7 +48,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.ToolbarActionManager;
-import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager;
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrl;
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlManager;
@@ -63,12 +63,12 @@ import jp.hazuki.yuzubrowser.legacy.settings.container.custom.FontSizeContainer;
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentList;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentUpdaterKt;
-import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils;
 import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList;
 import jp.hazuki.yuzubrowser.ui.BrowserApplication;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
+import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
 
 public class AppData {
     private static final String TAG = "AppData";

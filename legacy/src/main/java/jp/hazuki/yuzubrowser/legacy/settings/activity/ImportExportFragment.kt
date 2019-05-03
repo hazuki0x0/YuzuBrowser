@@ -24,17 +24,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
+import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask
+import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask
+import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
+import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.backup.BackupTask
 import jp.hazuki.yuzubrowser.legacy.backup.RestoreTask
-import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkFolder
-import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
-import jp.hazuki.yuzubrowser.legacy.bookmark.netscape.BookmarkHtmlExportTask
-import jp.hazuki.yuzubrowser.legacy.bookmark.netscape.BookmarkHtmlImportTask
-import jp.hazuki.yuzubrowser.legacy.bookmark.util.BookmarkIdGenerator
 import jp.hazuki.yuzubrowser.legacy.browser.checkStoragePermission
 import jp.hazuki.yuzubrowser.legacy.browser.openRequestPermissionSettings
 import jp.hazuki.yuzubrowser.legacy.browser.requestStoragePermission
@@ -296,14 +296,14 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
         return when (id) {
             0 -> RestoreTask(activity, args.getSerializable("file") as File)
             1 -> BackupTask(activity, args.getSerializable("file") as File)
-            2 -> BookmarkHtmlImportTask(activity,
-                    args.getSerializable("file") as File,
-                    args.getSerializable("manager") as BookmarkManager,
-                    args.getSerializable("folder") as BookmarkFolder,
-                    Handler())
+            2 -> BookmarkHtmlImportTask(requireActivity(),
+                args.getSerializable("file") as File,
+                args.getSerializable("manager") as BookmarkManager,
+                args.getSerializable("folder") as BookmarkFolder,
+                Handler())
             3 -> BookmarkHtmlExportTask(activity,
-                    args.getSerializable("file") as File,
-                    args.getSerializable("folder") as BookmarkFolder)
+                args.getSerializable("file") as File,
+                args.getSerializable("folder") as BookmarkFolder)
             4 -> SpeedDialRestoreTask(activity, args.getSerializable("file") as File)
             5 -> SpeedDialBackupTask(activity, args.getSerializable("file") as File)
             else -> throw IllegalArgumentException("unknown id:$id")

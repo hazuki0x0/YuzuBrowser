@@ -18,6 +18,8 @@
             <option value="$PROJECT_DIR$/libraries/colorpicker" />
             <option value="$PROJECT_DIR$/libraries/floatingactionbutton" />
             <option value="$PROJECT_DIR$/module/adblock" />
+            <option value="$PROJECT_DIR$/module/bookmark" />
+            <option value="$PROJECT_DIR$/module/connecter" />
             <option value="$PROJECT_DIR$/module/core" />
             <option value="$PROJECT_DIR$/module/download" />
             <option value="$PROJECT_DIR$/module/favicon" />

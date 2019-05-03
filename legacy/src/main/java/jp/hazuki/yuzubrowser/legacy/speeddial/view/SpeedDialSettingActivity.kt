@@ -23,9 +23,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.MenuItem
+import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.getBitmap
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDial
 import jp.hazuki.yuzubrowser.legacy.speeddial.WebIcon

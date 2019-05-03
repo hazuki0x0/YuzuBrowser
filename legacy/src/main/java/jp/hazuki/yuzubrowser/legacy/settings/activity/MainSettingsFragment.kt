@@ -49,10 +49,6 @@ class MainSettingsFragment : YuzuPreferenceFragment() {
             openFragment(ActionSettingsFragment())
             true
         }
-        findPreference("fragment_operation").setOnPreferenceClickListener {
-            openFragment(OperationSettingsFragment())
-            true
-        }
         findPreference("fragment_speseddial").setOnPreferenceClickListener {
             openFragment(SpeeddialFragment())
             true

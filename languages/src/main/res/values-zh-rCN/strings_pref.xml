@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">双击轻滑设置</string>
     <string name="pref_double_tap_flick_enable">启用双击轻滑</string>
 
-    <string name="operation_settings">操作设置</string>
+    <string name="pref_operation_settings">操作设置</string>
     <string name="open_bookmark_new_tab">书签图标点击行为</string>
     <string name="open_bookmark_new_tab_info">点击网站图标后在其他标签页中打开</string>
     <string name="open_bookmark_new_tab_action">图标点击行为</string>
@@ -409,9 +409,9 @@
     <string name="pref_reader_theme_same_as">与应用设置相同</string>
 
     <string name="pref_font_size">字体大小设置</string>
-    <string name="pref_menu">选项菜单</string>
-    <string name="pref_history">历史记录</string>
-    <string name="pref_bookmark">书签</string>
+    <string name="pref_font_menu">选项菜单</string>
+    <string name="pref_font_history">历史记录</string>
+    <string name="pref_font_bookmark">书签</string>
     <string name="pref_speeddial_item_text_size">项目文字大小</string>
     <string-array name="pref_text_size_list">
         <item>默认</item>

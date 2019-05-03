@@ -25,4 +25,16 @@ const val INTENT_EXTRA_PREFIX = "jp.hazuki.yuzubrowser.extra"
 const val INTENT_EXTRA_MODE_FULLSCREEN = "$INTENT_EXTRA_PREFIX.fullscreen"
 const val INTENT_EXTRA_MODE_ORIENTATION = "$INTENT_EXTRA_PREFIX.orientation"
 
+const val BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE = "jp.hazuki.yuzubrowser.adblock.broadcast.update.browser.webState"
+
 const val PREFERENCE_FILE_NAME = "main_preference"
+
+const val INTENT_EXTRA_OPENABLE = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_OPENABLE"
+const val INTENT_EXTRA_LOAD_URL_TAB = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_LOAD_URL_TAB"
+
+const val BROWSER_LOAD_URL_TAB_CURRENT = 0
+const val BROWSER_LOAD_URL_TAB_NEW = 1
+const val BROWSER_LOAD_URL_TAB_BG = 2
+const val BROWSER_LOAD_URL_TAB_NEW_RIGHT = 3
+const val BROWSER_LOAD_URL_TAB_BG_RIGHT = 4
+const val BROWSER_LOAD_URL_TAB_CURRENT_FORCE = 5

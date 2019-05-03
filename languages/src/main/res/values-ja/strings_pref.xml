@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">ダブルタップフリック設定</string>
     <string name="pref_double_tap_flick_enable">ダブルタップフリックを有効にする</string>
 
-    <string name="operation_settings">操作設定</string>
+    <string name="pref_operation_settings">操作設定</string>
     <string name="open_bookmark_new_tab">ブックマークアイコンアクション</string>
     <string name="open_bookmark_new_tab_info">サイトのアイコンをタップした時、他のタブで開く</string>
     <string name="open_bookmark_new_tab_action">アイコンアクション</string>
@@ -412,9 +412,9 @@
     <string name="pref_reader_theme_same_as">アプリの設定</string>
 
     <string name="pref_font_size">フォントサイズ設定</string>
-    <string name="pref_menu">メインメニュー</string>
-    <string name="pref_history">履歴</string>
-    <string name="pref_bookmark">ブックマーク</string>
+    <string name="pref_font_menu">メインメニュー</string>
+    <string name="pref_font_history">履歴</string>
+    <string name="pref_font_bookmark">ブックマーク</string>
     <string name="pref_speeddial_item_text_size">アイテムのテキストサイズ</string>
     <string-array name="pref_text_size_list">
         <item>デフォルト</item>
@@ -463,4 +463,6 @@
     <string name="pref_abp_filter">広告ブロックフィルタ</string>
     <string name="pref_abp_use_element_filter">要素非表示フィルタを使用する</string>
     <string name="pref_abp_use_ignore_general_element_filter">汎用的な要素非表示フィルタを無視する</string>
+    <string name="pref_bookmark">ブックマーク設定</string>
+    <string name="pref_bookmark_overflow">アイテムオプション設定</string>
 </resources>

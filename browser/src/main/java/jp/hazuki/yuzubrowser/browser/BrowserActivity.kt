@@ -20,7 +20,6 @@ import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -45,8 +44,11 @@ import jp.hazuki.yuzubrowser.adblock.filter.abp.checkNeedUpdate
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
 import jp.hazuki.yuzubrowser.adblock.ui.original.AddAdBlockDialog
+import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.browser.behavior.WebViewBehavior
+import jp.hazuki.yuzubrowser.browser.connecter.openable.BrowserOpenable
+import jp.hazuki.yuzubrowser.browser.connecter.openable.forEach
 import jp.hazuki.yuzubrowser.browser.manager.UserActionManager
 import jp.hazuki.yuzubrowser.browser.tab.TabManagerFactory
 import jp.hazuki.yuzubrowser.browser.view.Toolbar
@@ -68,9 +70,7 @@ import jp.hazuki.yuzubrowser.legacy.action.item.TabListSingleAction
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.MenuActionManager
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.legacy.browser.*
-import jp.hazuki.yuzubrowser.legacy.browser.openable.BrowserOpenable
 import jp.hazuki.yuzubrowser.legacy.gesture.GestureManager
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.legacy.menuwindow.MenuWindow
@@ -99,8 +99,10 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
+import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.BrowserState
+import jp.hazuki.yuzubrowser.ui.extensions.createIntentFilter
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.PointerView
 import jp.hazuki.yuzubrowser.webview.CustomWebHistoryItem
@@ -325,7 +327,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
         LocalBroadcastManager.getInstance(this)
-                .registerReceiver(onAdBlockFilterUpdate, IntentFilter(BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA))
+            .registerReceiver(localReceiver, createIntentFilter(
+                BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA,
+                BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE))
 
         delayAction?.let {
             actionController.run(it)
@@ -370,7 +374,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         FaviconManager.getInstance(applicationContext).save()
 
         LocalBroadcastManager.getInstance(this)
-                .unregisterReceiver(onAdBlockFilterUpdate)
+            .unregisterReceiver(localReceiver)
 
         if (isActivityPaused) {
             Logger.w(TAG, "Activity is already stopped")
@@ -492,7 +496,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             BrowserController.REQUEST_BOOKMARK, BrowserController.REQUEST_HISTORY -> {
                 if (resultCode != RESULT_OK || data == null) return
                 val openable = data.getParcelableExtra<BrowserOpenable>(BrowserManager.EXTRA_OPENABLE) ?: return
-                openable.open(this)
+                openable.forEach { loadUrl(it, openable.target) }
             }
             BrowserController.REQUEST_SETTING -> {
                 AppData.load(applicationContext, moshi)
@@ -1602,9 +1606,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         return resources.assets
     }
 
-    private val onAdBlockFilterUpdate = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            webClient.updateAdBlockList()
+    private val localReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA -> webClient.updateAdBlockList()
+                BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE -> notifyChangeWebState()
+            }
         }
     }
 

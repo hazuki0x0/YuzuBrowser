@@ -28,7 +28,7 @@ import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.utils.PackageUtils
+import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
 import java.io.IOException
 import java.net.URISyntaxException
 

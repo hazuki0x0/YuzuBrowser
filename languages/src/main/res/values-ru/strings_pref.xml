@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">Настройки двойного перелистывания</string>
     <string name="pref_double_tap_flick_enable">Включить двойное перелистывание</string>
 
-    <string name="operation_settings">Настройки операций</string>
+    <string name="pref_operation_settings">Настройки операций</string>
     <string name="open_bookmark_new_tab">Действие на значке закладки</string>
     <string name="open_bookmark_new_tab_info">При нажатии на значок сайта открыть в другой вкладке</string>
     <string name="open_bookmark_new_tab_action">Действие на значке</string>
@@ -409,9 +409,9 @@
     <string name="pref_reader_theme_same_as">Как настройки приложения</string>
 
     <string name="pref_font_size">Настройки размера шрифта</string>
-    <string name="pref_menu">Меню параметров</string>
-    <string name="pref_history">История</string>
-    <string name="pref_bookmark">Закладки</string>
+    <string name="pref_font_menu">Меню параметров</string>
+    <string name="pref_font_history">История</string>
+    <string name="pref_font_bookmark">Закладки</string>
     <string name="pref_speeddial_item_text_size">Размер текста элемента</string>
     <string-array name="pref_text_size_list">
         <item>По умолчанию</item>

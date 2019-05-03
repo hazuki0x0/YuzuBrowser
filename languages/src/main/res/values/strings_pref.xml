@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">Double tap with flick settings</string>
     <string name="pref_double_tap_flick_enable">Enable double tap with flick</string>
 
-    <string name="operation_settings">Operation Settings</string>
+    <string name="pref_operation_settings">Operation Settings</string>
     <string name="open_bookmark_new_tab">Bookmark icon action</string>
     <string name="open_bookmark_new_tab_info">When you tap the icon of the site, open in another tab</string>
     <string name="open_bookmark_new_tab_action">Icon action</string>
@@ -412,9 +412,9 @@
     <string name="pref_reader_theme_same_as">Same as app settings</string>
 
     <string name="pref_font_size">Font size settings</string>
-    <string name="pref_menu">Options menu</string>
-    <string name="pref_history">History</string>
-    <string name="pref_bookmark">Bookmark</string>
+    <string name="pref_font_menu">Options menu</string>
+    <string name="pref_font_history">History</string>
+    <string name="pref_font_bookmark">Bookmark</string>
     <string name="pref_speeddial_item_text_size">Item text size</string>
     <string-array name="pref_text_size_list">
         <item>Default</item>
@@ -463,4 +463,6 @@
     <string name="pref_abp_filter">Ad block filters</string>
     <string name="pref_abp_use_element_filter">Use page element hiding filter</string>
     <string name="pref_abp_use_ignore_general_element_filter">Ignore generic element hiding filter</string>
+    <string name="pref_bookmark">Bookmark settings</string>
+    <string name="pref_bookmark_overflow">Item options menu settings</string>
 </resources>

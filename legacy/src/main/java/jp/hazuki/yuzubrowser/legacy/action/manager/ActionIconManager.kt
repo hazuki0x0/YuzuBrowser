@@ -18,13 +18,13 @@ package jp.hazuki.yuzubrowser.legacy.action.manager
 
 import android.graphics.drawable.Drawable
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.item.CustomSingleAction
 import jp.hazuki.yuzubrowser.legacy.action.item.WebScrollSingleAction
 import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivitySingleAction
-import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserInfo
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.graphics.SimpleLayerDrawable

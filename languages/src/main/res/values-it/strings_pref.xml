@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">Tocca due volte con le impostazioni di sfioramento</string>
     <string name="pref_double_tap_flick_enable">Attiva il doppio tocco con sfioramento</string>
 
-    <string name="operation_settings">Impostazioni di funzionamento</string>
+    <string name="pref_operation_settings">Impostazioni di funzionamento</string>
     <string name="open_bookmark_new_tab">Azione icona segnalibro</string>
     <string name="open_bookmark_new_tab_info">Quando tocchi l\'icona del sito, apri in un\'altra scheda</string>
     <string name="open_bookmark_new_tab_action">Azione icona</string>
@@ -409,9 +409,9 @@
     <string name="pref_reader_theme_same_as">Come le impostazioni dell\'app</string>
 
     <string name="pref_font_size">Impostazioni dimensione del carattere</string>
-    <string name="pref_menu">Menu Opzioni</string>
-    <string name="pref_history">Cronologia</string>
-    <string name="pref_bookmark">Segnalibro</string>
+    <string name="pref_font_menu">Menu Opzioni</string>
+    <string name="pref_font_history">Cronologia</string>
+    <string name="pref_font_bookmark">Segnalibro</string>
     <string name="pref_speeddial_item_text_size">Dimensione testo dell\'elemento</string>
     <string-array name="pref_text_size_list">
         <item>Predefinito</item>

@@ -16,6 +16,8 @@
 
 package jp.hazuki.yuzubrowser.core.utility.extensions
 
+import android.util.SparseArray
+
 inline fun <reified T> Any?.isInstanceOf(action: (T) -> Unit) {
     if (this is T) action(this)
 }
@@ -114,4 +116,15 @@ fun <T : Comparable<T>> Sequence<T>.toSortedList(): List<T> {
 
 inline fun <T> T?.isNotNull(notNull: (T) -> Unit, other: () -> Unit) {
     if (this != null) notNull(this) else other()
+}
+
+inline fun <T> SparseArray<T>.getOrPut(key: Int, defaultValue: () -> T): T {
+    val value = get(key)
+    return if (value == null) {
+        val answer = defaultValue()
+        put(key, answer)
+        answer
+    } else {
+        value
+    }
 }

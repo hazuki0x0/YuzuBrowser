@@ -82,6 +82,10 @@ android {
             }
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 androidExtensions {
@@ -130,6 +134,7 @@ dependencies {
     implementation project(':favicon')
     implementation project(':download')
     implementation project(':adblock')
+    implementation project(':bookmark')
 
     implementation Libs.kotlin_stdlib
 

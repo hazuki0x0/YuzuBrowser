@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory;
 import jp.hazuki.yuzubrowser.legacy.R;
+import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
 
 public class WebUtils {
     private WebUtils() {

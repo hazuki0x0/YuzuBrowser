@@ -31,6 +31,7 @@ object Versions {
     const val appCompat = "1.1.0-alpha04"
     const val activityX = "1.0.0-alpha06"
     const val androidKTX = "1.0.1"
+    const val fragmentKtx = "1.0.0"
     const val androidxRoom = "2.1.0-alpha06"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
@@ -52,6 +53,7 @@ object Versions {
     const val materialprogressbar = "1.6.1"
     const val mockito = "2.+"
     const val powermock = "2.0.2"
+    const val jsoup = "1.11.3"
 }
 
 object AndroidX {
@@ -62,6 +64,7 @@ object AndroidX {
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.support_constraint_lib}"
     const val fix_preference = "com.takisoft.preferencex:preferencex:${Versions.support_fix_lib}"
     const val KTX = "androidx.core:core-ktx:${Versions.androidKTX}"
+    const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
     const val activty = "androidx.activity:activity:${Versions.activityX}"
     const val room = "androidx.room:room-runtime:${Versions.androidxRoom}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.androidxRoom}"
@@ -117,6 +120,7 @@ object Libs {
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
     const val header_decor = "ca.barrenechea.header-decor:header-decor:${Versions.header_decor}"
     const val materialProgressBar = "me.zhanghai.android.materialprogressbar:library:${Versions.materialprogressbar}"
+    const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
 }
 
 object Dependencies {

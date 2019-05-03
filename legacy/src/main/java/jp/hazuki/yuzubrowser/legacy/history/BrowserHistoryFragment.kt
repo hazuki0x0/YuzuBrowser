@@ -29,16 +29,16 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
+import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
+import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
+import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager
-import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrl
-import jp.hazuki.yuzubrowser.legacy.browser.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
-import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
+import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
@@ -62,7 +62,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val activity = activity ?: throw IllegalStateException()
+        val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
 
         pickMode = arguments.getBoolean(PICK_MODE)
@@ -90,9 +90,9 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.addOnBackPressedCallback(this) {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
             val searchView = searchView
-            return@addOnBackPressedCallback if (searchView != null && !searchView.isIconified) {
+            return@addCallback if (searchView != null && !searchView.isIconified) {
                 searchView.isIconified = true
                 true
             } else {

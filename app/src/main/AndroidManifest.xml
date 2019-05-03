@@ -216,7 +216,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/history" />
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity"
+            android:name=".bookmark.view.BookmarkActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/bookmark"
             android:theme="@style/BrowserThemeDayNight.CustomToolbar"/>

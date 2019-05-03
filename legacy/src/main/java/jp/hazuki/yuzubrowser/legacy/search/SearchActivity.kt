@@ -33,13 +33,13 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import com.squareup.moshi.Moshi
+import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.bookmark.BookmarkManager
 import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlManager
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestHistory

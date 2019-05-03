@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.adblock.isThirdParty
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
+import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
@@ -57,7 +58,6 @@ import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
 import jp.hazuki.yuzubrowser.legacy.help.getHelpResponse

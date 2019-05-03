@@ -318,7 +318,7 @@
     <string name="pref_double_tap_flick_settings">Налаштування подвійного дотику з різким жестом</string>
     <string name="pref_double_tap_flick_enable">Увімкнути подвійний дотик з різким жестом</string>
 
-    <string name="operation_settings">Налаштування операцій</string>
+    <string name="pref_operation_settings">Налаштування операцій</string>
     <string name="open_bookmark_new_tab">Дія піктограми закладки</string>
     <string name="open_bookmark_new_tab_info">При натисканні піктограми сайту, відкрити його в іншій вкладці</string>
     <string name="open_bookmark_new_tab_action">Дія піктограми</string>
@@ -412,9 +412,9 @@
     <string name="pref_reader_theme_same_as">Тема додатка</string>
 
     <string name="pref_font_size">Налаштування розміру шрифту</string>
-    <string name="pref_menu">Опції меню</string>
-    <string name="pref_history">Історія</string>
-    <string name="pref_bookmark">Закладки</string>
+    <string name="pref_font_menu">Опції меню</string>
+    <string name="pref_font_history">Історія</string>
+    <string name="pref_font_bookmark">Закладки</string>
     <string name="pref_speeddial_item_text_size">Розмір тексту елемента</string>
     <string-array name="pref_text_size_list">
         <item>За замовчуванням</item>

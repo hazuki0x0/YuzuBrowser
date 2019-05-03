@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">Configurações de duplo toque com deslize de borda</string>
     <string name="pref_double_tap_flick_enable">Ativar duplo toque com deslize de borda</string>
 
-    <string name="operation_settings">Configurações de operação</string>
+    <string name="pref_operation_settings">Configurações de operação</string>
     <string name="open_bookmark_new_tab">Ação do ícone do marcador</string>
     <string name="open_bookmark_new_tab_info">Quando você toca no ícone do site, abre noutra guia</string>
     <string name="open_bookmark_new_tab_action">Ação do ícone</string>
@@ -409,9 +409,9 @@
     <string name="pref_reader_theme_same_as">As mesmas que as configurações do app</string>
 
     <string name="pref_font_size">Configurações de tamanho da fonte</string>
-    <string name="pref_menu">Menu de opções</string>
-    <string name="pref_history">Histórico</string>
-    <string name="pref_bookmark">Marcador</string>
+    <string name="pref_font_menu">Menu de opções</string>
+    <string name="pref_font_history">Histórico</string>
+    <string name="pref_font_bookmark">Marcador</string>
     <string name="pref_speeddial_item_text_size">Tamanho do texto do item</string>
     <string-array name="pref_text_size_list">
         <item>Padrão</item>

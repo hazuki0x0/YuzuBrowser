@@ -315,7 +315,7 @@
     <string name="pref_double_tap_flick_settings">Einstellungen für Doppeltippen beim schnellen Bewegen</string>
     <string name="pref_double_tap_flick_enable">Doppeltippen beim schnellen Bewegen aktivieren</string>
 
-    <string name="operation_settings">Bedienungseinstellungen</string>
+    <string name="pref_operation_settings">Bedienungseinstellungen</string>
     <string name="open_bookmark_new_tab">Lesezeichen-Symbol-Aktion</string>
     <string name="open_bookmark_new_tab_info">Wenn Sie auf das Symbol der Website tippen, öffnen Sie es in einem neuen Reiter.</string>
     <string name="open_bookmark_new_tab_action">Symbol Aktion</string>
@@ -409,9 +409,9 @@
     <string name="pref_reader_theme_same_as">analog Anwendungseinstellungen</string>
 
     <string name="pref_font_size">Schriftgrößeneinstellungen</string>
-    <string name="pref_menu">Optionsmenü</string>
-    <string name="pref_history">Verlauf</string>
-    <string name="pref_bookmark">Lesezeichen</string>
+    <string name="pref_font_menu">Optionsmenü</string>
+    <string name="pref_font_history">Verlauf</string>
+    <string name="pref_font_bookmark">Lesezeichen</string>
     <string name="pref_speeddial_item_text_size">Textgröße des Elements</string>
     <string-array name="pref_text_size_list">
         <item>Standard</item>

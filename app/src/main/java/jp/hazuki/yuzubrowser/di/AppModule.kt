@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.di
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
@@ -46,6 +47,12 @@ object AppModule {
     @Provides
     @JvmStatic
     fun provideBrowserApplication(app: YuzuBrowserApplication): BrowserApplication {
+        return app
+    }
+
+    @Provides
+    @JvmStatic
+    fun provideApplication(app: YuzuBrowserApplication): Application {
         return app
     }
 
