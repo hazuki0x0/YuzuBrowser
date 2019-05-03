@@ -26,7 +26,7 @@ import androidx.fragment.app.ListFragment
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
+import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import java.io.File
 import java.util.*
 
@@ -56,7 +56,7 @@ class FileListFragment : ListFragment() {
             false
         }
 
-        activity?.addOnBackPressedCallback(this, this::goBack)
+        requireActivity().onBackPressedDispatcher.addCallback(this, this::goBack)
     }
 
     private fun goBack(): Boolean {

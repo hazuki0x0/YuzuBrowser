@@ -16,15 +16,9 @@
 
 package jp.hazuki.yuzubrowser.ui.extensions
 
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.LifecycleOwner
-
-@Deprecated("", ReplaceWith("addOnBackPressedCallback(owner, OnBackPressedCallback { callback() })", "addCallback"))
-inline fun ComponentActivity.addOnBackPressedCallback(owner: LifecycleOwner, crossinline callback: () -> Boolean) {
-    addOnBackPressedCallback(owner, OnBackPressedCallback { callback() })
-}
 
 inline fun OnBackPressedDispatcher.addCallback(owner: LifecycleOwner, crossinline callback: () -> Boolean) {
     addCallback(owner, OnBackPressedCallback { callback() })

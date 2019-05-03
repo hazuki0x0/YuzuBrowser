@@ -28,7 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
-import jp.hazuki.yuzubrowser.ui.extensions.addOnBackPressedCallback
+import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.action_activity.*
 
@@ -42,8 +42,8 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
         return inflater.inflate(R.layout.action_activity, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
 
         defaultAction = arguments.getParcelable(DEFAULT) ?: Action()
@@ -53,13 +53,13 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
 
         resetButton.visibility = View.INVISIBLE
         cancelButton.setOnClickListener {
-            activity?.run {
+            requireActivity().run {
                 setResult(Activity.RESULT_CANCELED)
                 finish()
             }
         }
         okButton.setOnClickListener {
-            activity?.run {
+            requireActivity().run {
                 val intent = Intent()
                 intent.putExtra(DEFAULT, defaultAction as Parcelable?)
                 intent.putExtra(INTENT, intentAction as Parcelable?)
@@ -68,15 +68,13 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
                 finish()
             }
         }
-        activity?.addOnBackPressedCallback(this) {
-            activity?.run {
+        activity.onBackPressedDispatcher.addCallback(this) {
+            requireActivity().run {
                 setResult(Activity.RESULT_CANCELED)
                 finish()
             }
             true
         }
-
-        val activity = activity ?: throw IllegalStateException()
 
         val items = mutableListOf(getString(R.string.pref_close_default),
                 getString(R.string.pref_close_intent),
@@ -87,7 +85,7 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
-        val builder = ActionActivity.Builder(activity ?: return)
+        val builder = ActionActivity.Builder(requireActivity())
         when (position) {
             0 -> startActivityForResult(builder.setDefaultAction(defaultAction)
                     .setTitle(R.string.pref_close_default)
