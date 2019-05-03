@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.di
 
+import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
@@ -49,5 +50,10 @@ import javax.inject.Singleton
 interface AppComponent : AndroidInjector<YuzuBrowserApplication> {
 
     @Component.Builder
-    abstract class Builder : AndroidInjector.Builder<YuzuBrowserApplication>()
+    interface Builder {
+        @BindsInstance
+        fun application(application: YuzuBrowserApplication): Builder
+
+        fun build(): AppComponent
+    }
 }

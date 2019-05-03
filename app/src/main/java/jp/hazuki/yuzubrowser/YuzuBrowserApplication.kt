@@ -78,7 +78,7 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().create(this)
+        val appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
         return appComponent
     }
