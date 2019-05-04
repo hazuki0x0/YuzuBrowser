@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">Назад</string>
+    <string name="action_go_forward">Вперед</string>
+    <string name="action_refresh_stop">Оновити/Зупинити</string>
+    <string name="action_refresh">Оновити</string>
+    <string name="action_stop">Зупинити завантаження</string>
+    <string name="action_home">Домашня сторінка</string>
+    <string name="action_zoom_in">Збільшити</string>
+    <string name="action_zoom_out">Зменшити</string>
+    <string name="action_page_up">Сторінка вгору</string>
+    <string name="action_page_down">Сторінка вниз</string>
+    <string name="action_page_top">На початок сторінки</string>
+    <string name="action_page_bottom">На кінець сторінки</string>
+    <string name="action_custom_page_scroll">Спеціальна прокрутка сторінки</string>
+    <string name="action_seekbar_page_scroll">Повзунок прокрутки сторінки</string>
+    <string name="action_auto_page_scroll">Авто-прокрутка сторінки</string>
+    <string name="action_focus_up">Фокус вгору</string>
+    <string name="action_focus_down">Фокус вниз</string>
+    <string name="action_focus_left">Фокус вліво</string>
+    <string name="action_focus_right">Фокус вправо</string>
+    <string name="action_click_focused">Перегляд сфокусованого</string>
+    <string name="action_toggle_js">JavaScript</string>
+    <string name="action_toggle_loading_image">Завантаження зображень</string>
+    <string name="action_toggle_cookie">Куки</string>
+    <string name="action_toggle_user_script">Сценарій користувача</string>
+    <string name="action_toggle_native_lock">Блокування навігації</string>
+    <string name="action_page_info">Інформація про сторінку</string>
+    <string name="action_copy_url">Копіювати адресу сторінки</string>
+    <string name="action_copy_title">Копіювати заголовок сторінки</string>
+    <string name="action_copy_url_title">Копіювати адресу та заголовок</string>
+    <string name="action_tab_history">Історія вкладки</string>
+    <string name="action_mouse_pointer">Курсор</string>
+    <string name="action_find_on_page">Знайти на сторінці</string>
+    <string name="action_save_screenshot">Зберегти знімок екрану</string>
+    <string name="action_share_screenshot">Поділитися знімком екрану</string>
+    <string name="action_save_page">Зберегти сторінку</string>
+    <string name="action_open_url">Відкрити адресу</string>
+    <string name="action_translate_page">Перекласти сторінку</string>
+    <string name="action_new_tab">Нова вкладка</string>
+    <string name="action_close_tab">Закрити вкладку</string>
+    <string name="action_close_all">Закрити всі</string>
+    <string name="action_close_others">Закрити інші</string>
+    <string name="action_move_to_left_tab">Перемкнутися на вкладку зліва</string>
+    <string name="action_move_to_right_tab">Перемкнутися на вкладку справа</string>
+    <string name="action_tab_move_to_left">Перемістити вкладку вліво</string>
+    <string name="action_tab_move_to_right">Перемістити вкладку вправо</string>
+    <string name="action_tab_list">Список вкладок</string>
+    <string name="action_close_left_tab">Закрити всі вкладки зліва</string>
+    <string name="action_close_right_tab">Закрити всі вкладки справа</string>
+    <string name="action_restore_tab">Відновити вкладку</string>
+    <string name="action_replicate_tab">Клонувати вкладку</string>
+    <string name="action_show_search">Показати вікно пошуку</string>
+    <string name="action_paste_to_search">Вставити у вікно пошуку</string>
+    <string name="action_paste_url">Вставити адресу</string>
+    <string name="action_bookmark">Закладки</string>
+    <string name="action_history">Історія</string>
+    <string name="action_dl_point">Завантаження</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="action_speed_dial">Відкрити швидкий набір</string>
+    <string name="action_add_bookmark">Додати закладку</string>
+    <string name="action_add_speed_dial">Додати до швидкого набору</string>
+    <string name="action_add_pattern_match">Додати шаблон веб-серфінгу</string>
+    <string name="action_add_home">Додати на головний екран</string>
+    <string name="action_sub_gesture">Суб-жест</string>
+    <string name="action_clear_data">Очистити дані</string>
+    <string name="action_proxy">Показати налаштування проксі-сервера</string>
+    <string name="action_orientation_settings">Налаштування орієнтації</string>
+    <string name="action_link_settings">Відкрити налаштування посилань</string>
+    <string name="action_ua_settings">Налаштування агента користувача</string>
+    <string name="action_default_ua_settings">Стандартні параметри агента користувача</string>
+    <string name="action_text_size_settings">Налаштування розміру тексту сторінки</string>
+    <string name="action_user_script">Налаштування сценарію користувача</string>
+    <string name="action_text_encoding">Налаштування кодування тексту</string>
+    <string name="action_rendering">Режим відображення</string>
+    <string name="action_toggle_tab_bar">Відображення панелі вкладок</string>
+    <string name="action_toggle_url_bar">Відображення адресної панелі</string>
+    <string name="action_toggle_progress_bar">Відображення індикатора виконання</string>
+    <string name="action_toggle_custom_bar">Відображення панелі користувача</string>
+    <string name="action_combine_web_titlebar">Combine web titlebar</string>
+    <string name="action_toggle_web_gesture">Веб-жести</string>
+    <string name="action_toggle_flick_action">Дія різким жестом</string>
+    <string name="action_toggle_qc">Швидке управління</string>
+    <string name="action_toggle_multi_touch_gesture">Жести кількома дотиками</string>
+    <string name="action_toggle_ad_block">Блокування реклами</string>
+    <string name="action_black_list">Відкрити чорний список</string>
+    <string name="action_white_list">Відкрити білий список</string>
+    <string name="action_white_page_list">Відкрити список білих сторінок</string>
+    <string name="action_add_white_page_list">Додати до списоку білих сторінок</string>
+    <string name="action_share">Поділитися сторінкою</string>
+    <string name="action_open_in_another">Відкрити в іншому додатку</string>
+    <string name="action_intent">Запуск “Activity”</string>
+    <string name="action_toggle_fullscreen">Повноекранний режим</string>
+    <string name="action_open_menu">Відкрити меню параметрів</string>
+    <string name="action_show_custom_menu">Показати меню користувача</string>
+    <string name="action_finish">Вийти</string>
+    <string name="action_minimize">Перемістити веб-переглядач на задній план</string>
+    <string name="action_custom_action">Користувацька дія</string>
+    <string name="action_vibration">Вібрація</string>
+    <string name="action_toast">Показати спливаюче повідомлення</string>
+    <string name="action_private">Анонімний режим</string>
+    <string name="action_close_auto">Закрити відмінну вкладку</string>
+    <string name="action_show_source">Показати вихідний код сторінки</string>
+    <string name="action_print">Друк</string>
+    <string name="action_pin_tab">Закріпити вкладку</string>
+    <string name="action_action_list">Список дій</string>
+    <string name="action_reader_mode">Режим читання</string>
+    <string name="action_read_it_later">Прочитати пізніше</string>
+    <string name="action_read_it_later_list">Список \"Прочитати пізніше\"</string>
+</resources>

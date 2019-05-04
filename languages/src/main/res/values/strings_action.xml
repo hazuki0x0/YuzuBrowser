@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">Go back</string>
+    <string name="action_go_forward">Go forward</string>
+    <string name="action_refresh_stop">Refresh/Stop</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_stop">Stop loading</string>
+    <string name="action_home">Home</string>
+    <string name="action_zoom_in">Zoom in</string>
+    <string name="action_zoom_out">Zoom out</string>
+    <string name="action_page_up">Page up</string>
+    <string name="action_page_down">Page down</string>
+    <string name="action_page_top">Page top</string>
+    <string name="action_page_bottom">Page bottom</string>
+    <string name="action_custom_page_scroll">Custom page scroll</string>
+    <string name="action_seekbar_page_scroll">Seekbar page scroll</string>
+    <string name="action_auto_page_scroll">Auto page scroll</string>
+    <string name="action_focus_up">Focus up</string>
+    <string name="action_focus_down">Focus down</string>
+    <string name="action_focus_left">Focus left</string>
+    <string name="action_focus_right">Focus right</string>
+    <string name="action_click_focused">Click focused view</string>
+    <string name="action_toggle_js">Toggle JavaScript</string>
+    <string name="action_toggle_loading_image">Toggle loading image</string>
+    <string name="action_toggle_cookie">Toggle Cookie</string>
+    <string name="action_toggle_user_script">Toggle UserScript</string>
+    <string name="action_toggle_native_lock">Toggle navigate lock</string>
+    <string name="action_page_info">Page information</string>
+    <string name="action_copy_url">Copy page URL</string>
+    <string name="action_copy_title">Copy page title</string>
+    <string name="action_copy_url_title">Copy URL and title</string>
+    <string name="action_tab_history">Tab history</string>
+    <string name="action_mouse_pointer">Mouse pointer</string>
+    <string name="action_find_on_page">Find on page</string>
+    <string name="action_save_screenshot">Save screenshot</string>
+    <string name="action_share_screenshot">Share screenshot</string>
+    <string name="action_save_page">Save page</string>
+    <string name="action_open_url">Open URL</string>
+    <string name="action_translate_page">Translate page</string>
+    <string name="action_new_tab">New tab</string>
+    <string name="action_close_tab">Close tab</string>
+    <string name="action_close_all">Close all</string>
+    <string name="action_close_others">Close others</string>
+    <string name="action_move_to_left_tab">Move to left tab</string>
+    <string name="action_move_to_right_tab">Move to right tab</string>
+    <string name="action_tab_move_to_left">Tab move to left</string>
+    <string name="action_tab_move_to_right">Tab move to right</string>
+    <string name="action_tab_list">Tab list</string>
+    <string name="action_close_left_tab">Close all left tab</string>
+    <string name="action_close_right_tab">Close all right tab</string>
+    <string name="action_restore_tab">Restore tab</string>
+    <string name="action_replicate_tab">Replicate tab</string>
+    <string name="action_show_search">Show search box</string>
+    <string name="action_paste_to_search">Paste to search box</string>
+    <string name="action_paste_url">Paste URL</string>
+    <string name="action_bookmark">Bookmark</string>
+    <string name="action_history">History</string>
+    <string name="action_dl_point">Download list</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_speed_dial">Open speed dial</string>
+    <string name="action_add_bookmark">Add bookmark</string>
+    <string name="action_add_speed_dial">Add to speed dial</string>
+    <string name="action_add_pattern_match">Add pattern match</string>
+    <string name="action_add_home">Add to home screen</string>
+    <string name="action_sub_gesture">Sub gesture</string>
+    <string name="action_clear_data">Clear data</string>
+    <string name="action_proxy">Show proxy settings</string>
+    <string name="action_orientation_settings">Orientation settings</string>
+    <string name="action_link_settings">Open link settings</string>
+    <string name="action_ua_settings">UserAgent settings</string>
+    <string name="action_default_ua_settings">Default UserAgent settings</string>
+    <string name="action_text_size_settings">Page text size settings</string>
+    <string name="action_user_script">UserScript settings</string>
+    <string name="action_text_encoding">Text encoding settings</string>
+    <string name="action_rendering">Rendering mode</string>
+    <string name="action_toggle_tab_bar">Toggle Tab bar visibility</string>
+    <string name="action_toggle_url_bar">Toggle Url bar visibility</string>
+    <string name="action_toggle_progress_bar">Toggle Progress bar visibility</string>
+    <string name="action_toggle_custom_bar">Toggle Custom bar visibility</string>
+    <string name="action_combine_web_titlebar">Combine web titlebar</string>
+    <string name="action_toggle_web_gesture">Toggle web gesture</string>
+    <string name="action_toggle_flick_action">Toggle flick action</string>
+    <string name="action_toggle_qc">Toggle quick control</string>
+    <string name="action_toggle_multi_touch_gesture">Toggle multi touch gesture</string>
+    <string name="action_toggle_ad_block">Toggle ad block</string>
+    <string name="action_black_list">Open black list</string>
+    <string name="action_white_list">Open white list</string>
+    <string name="action_white_page_list">Open white page list</string>
+    <string name="action_add_white_page_list">Add to white page list</string>
+    <string name="action_share">Share page</string>
+    <string name="action_open_in_another">Open in other app</string>
+    <string name="action_intent">Start activity</string>
+    <string name="action_toggle_fullscreen">Toggle fullscreen</string>
+    <string name="action_open_menu">Open options menu</string>
+    <string name="action_show_custom_menu">Show custom menu</string>
+    <string name="action_finish">Finish</string>
+    <string name="action_minimize">Move task to back</string>
+    <string name="action_custom_action">Custom action</string>
+    <string name="action_vibration">Vibration</string>
+    <string name="action_toast">Show toast</string>
+    <string name="action_private">Private mode</string>
+    <string name="action_close_auto">Distinction tab finish</string>
+    <string name="action_show_source">Show page source</string>
+    <string name="action_print">Print</string>
+    <string name="action_pin_tab">Pin tab</string>
+    <string name="action_action_list">Action list</string>
+    <string name="action_reader_mode">Reader mode</string>
+    <string name="action_read_it_later">Read it later</string>
+    <string name="action_read_it_later_list">Read it later list</string>
+</resources>

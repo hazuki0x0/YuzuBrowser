@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="action_list">
+        <item>@string/action_go_back</item>
+        <item>@string/action_go_forward</item>
+        <item>@string/action_refresh_stop</item>
+        <item>@string/action_refresh</item>
+        <item>@string/action_stop</item>
+        <item>@string/action_home</item>
+        <item>@string/action_zoom_in</item>
+        <item>@string/action_zoom_out</item>
+        <item>@string/action_page_up</item>
+        <item>@string/action_page_down</item>
+        <item>@string/action_page_top</item>
+        <item>@string/action_page_bottom</item>
+        <item>@string/action_custom_page_scroll</item>
+        <item>@string/action_seekbar_page_scroll</item>
+        <item>@string/action_auto_page_scroll</item>
+        <item>@string/action_focus_up</item>
+        <item>@string/action_focus_down</item>
+        <item>@string/action_focus_left</item>
+        <item>@string/action_focus_right</item>
+        <item>@string/action_click_focused</item>
+        <item>@string/action_toggle_js</item>
+        <item>@string/action_toggle_loading_image</item>
+        <item>@string/action_toggle_cookie</item>
+        <item>@string/action_toggle_user_script</item>
+        <item>@string/action_toggle_native_lock</item>
+        <item>@string/action_page_info</item>
+        <item>@string/action_copy_url</item>
+        <item>@string/action_copy_title</item>
+        <item>@string/action_copy_url_title</item>
+        <item>@string/action_tab_history</item>
+        <item>@string/action_mouse_pointer</item>
+        <item>@string/action_find_on_page</item>
+        <item>@string/action_save_screenshot</item>
+        <item>@string/action_share_screenshot</item>
+        <item>@string/action_save_page</item>
+        <item>@string/action_open_url</item>
+        <item>@string/action_translate_page</item>
+        <item>@string/action_new_tab</item>
+        <item>@string/action_close_tab</item>
+        <item>@string/action_close_all</item>
+        <item>@string/action_close_others</item>
+        <item>@string/action_move_to_left_tab</item>
+        <item>@string/action_move_to_right_tab</item>
+        <item>@string/action_tab_move_to_left</item>
+        <item>@string/action_tab_move_to_right</item>
+        <item>@string/action_tab_list</item>
+        <item>@string/action_close_left_tab</item>
+        <item>@string/action_close_right_tab</item>
+        <item>@string/action_restore_tab</item>
+        <item>@string/action_replicate_tab</item>
+        <item>@string/action_show_search</item>
+        <item>@string/action_paste_to_search</item>
+        <item>@string/action_paste_url</item>
+        <item>@string/action_bookmark</item>
+        <item>@string/action_history</item>
+        <item>@string/action_dl_point</item>
+        <item>@string/action_settings</item>
+        <item>@string/action_speed_dial</item>
+        <item>@string/action_add_bookmark</item>
+        <item>@string/action_add_speed_dial</item>
+        <item>@string/action_add_pattern_match</item>
+        <item>@string/action_add_home</item>
+        <item>@string/action_sub_gesture</item>
+        <item>@string/action_clear_data</item>
+        <item>@string/action_proxy</item>
+        <item>@string/action_orientation_settings</item>
+        <item>@string/action_link_settings</item>
+        <item>@string/action_ua_settings</item>
+        <item>@string/action_default_ua_settings</item>
+        <item>@string/action_text_size_settings</item>
+        <item>@string/action_user_script</item>
+        <item>@string/action_text_encoding</item>
+        <item>@string/action_rendering</item>
+        <item>@string/action_toggle_tab_bar</item>
+        <item>@string/action_toggle_url_bar</item>
+        <item>@string/action_toggle_progress_bar</item>
+        <item>@string/action_toggle_custom_bar</item>
+        <item>@string/action_combine_web_titlebar</item>
+        <item>@string/action_toggle_web_gesture</item>
+        <item>@string/action_toggle_flick_action</item>
+        <item>@string/action_toggle_qc</item>
+        <item>@string/action_toggle_multi_touch_gesture</item>
+        <item>@string/action_toggle_ad_block</item>
+        <item>@string/action_black_list</item>
+        <item>@string/action_white_list</item>
+        <item>@string/action_white_page_list</item>
+        <item>@string/action_add_white_page_list</item>
+        <item>@string/action_share</item>
+        <item>@string/action_open_in_another</item>
+        <item>@string/action_intent</item>
+        <item>@string/action_toggle_fullscreen</item>
+        <item>@string/action_open_menu</item>
+        <item>@string/action_show_custom_menu</item>
+        <item>@string/action_finish</item>
+        <item>@string/action_minimize</item>
+        <item>@string/action_custom_action</item>
+        <item>@string/action_vibration</item>
+        <item>@string/action_toast</item>
+        <item>@string/action_private</item>
+        <item>@string/action_close_auto</item>
+        <item>@string/action_show_source</item>
+        <item>@string/action_print</item>
+        <item>@string/action_pin_tab</item>
+        <item>@string/action_action_list</item>
+        <item>@string/action_reader_mode</item>
+        <item>@string/action_read_it_later</item>
+        <item>@string/action_read_it_later_list</item>
+    </string-array>
+</resources>

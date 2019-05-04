@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">Vissza</string>
+    <string name="action_go_forward">Előre</string>
+    <string name="action_refresh_stop">Frissítés/Megállítás</string>
+    <string name="action_refresh">Frissítés</string>
+    <string name="action_stop">Betöltés leállítása</string>
+    <string name="action_home">Kezdőlap</string>
+    <string name="action_zoom_in">Közelítés</string>
+    <string name="action_zoom_out">Távolítás</string>
+    <string name="action_page_up">Felfelé ugrás</string>
+    <string name="action_page_down">Lefelé ugrás</string>
+    <string name="action_page_top">Lap teteje</string>
+    <string name="action_page_bottom">Lap vége</string>
+    <string name="action_custom_page_scroll">Egyedi lap görgetés</string>
+    <string name="action_seekbar_page_scroll">Keresősáv lapgörgetés</string>
+    <string name="action_auto_page_scroll">Automatikus görgetés</string>
+    <string name="action_focus_up">Fókus fel</string>
+    <string name="action_focus_down">Fókusz le</string>
+    <string name="action_focus_left">Fókusz balra</string>
+    <string name="action_focus_right">Fókusz jobbra</string>
+    <string name="action_click_focused">Fókuszra kattintás</string>
+    <string name="action_toggle_js">JavaScript ki / be</string>
+    <string name="action_toggle_loading_image">Képek ki / be</string>
+    <string name="action_toggle_cookie">Sütik ki / be</string>
+    <string name="action_toggle_user_script">UserScript ki / be</string>
+    <string name="action_toggle_native_lock">Navigáció zárolása</string>
+    <string name="action_page_info">Oldal adatai</string>
+    <string name="action_copy_url">Oldal URL másolása</string>
+    <string name="action_copy_title">Oldal cím másolása</string>
+    <string name="action_copy_url_title">Oldal URL és cím másolása</string>
+    <string name="action_tab_history">Lap előzményei</string>
+    <string name="action_mouse_pointer">Egér kurzor</string>
+    <string name="action_find_on_page">Keresés az oldalon</string>
+    <string name="action_save_screenshot">Képernyőkép mentése</string>
+    <string name="action_share_screenshot">Képernyőkép megosztása</string>
+    <string name="action_save_page">Oldal mentése</string>
+    <string name="action_open_url">URL megnyitása</string>
+    <string name="action_translate_page">Oldal fordítása</string>
+    <string name="action_new_tab">Új lap</string>
+    <string name="action_close_tab">Lap bezárása</string>
+    <string name="action_close_all">Összes bezárása</string>
+    <string name="action_close_others">Többi lap bezárása</string>
+    <string name="action_move_to_left_tab">Ugrás baloldali lapra</string>
+    <string name="action_move_to_right_tab">Ugrás jobboldali lapra</string>
+    <string name="action_tab_move_to_left">Lap mozgatása balra</string>
+    <string name="action_tab_move_to_right">Lap mozgatása jobbra</string>
+    <string name="action_tab_list">Lapok listája</string>
+    <string name="action_close_left_tab">Baloldali lapok bezárása</string>
+    <string name="action_close_right_tab">Jobboldali lapok bezárása</string>
+    <string name="action_restore_tab">Lap visszaállítása</string>
+    <string name="action_replicate_tab">Lap duplikálása</string>
+    <string name="action_show_search">Keresősáv megjelenítése</string>
+    <string name="action_paste_to_search">Beillesztés a keresősávba</string>
+    <string name="action_paste_url">URL beillesztése</string>
+    <string name="action_bookmark">Könyvjelzők</string>
+    <string name="action_history">Előzmények</string>
+    <string name="action_dl_point">Letöltések</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="action_speed_dial">Gyorsindító megnyitása</string>
+    <string name="action_add_bookmark">Mentés könyvjelzőnek</string>
+    <string name="action_add_speed_dial">Hozzáadás a gyorsindítóhoz</string>
+    <string name="action_add_pattern_match">Hozzáadás mintának</string>
+    <string name="action_add_home">Kezdőképernyőhöz ad</string>
+    <string name="action_sub_gesture">Kézművelet</string>
+    <string name="action_clear_data">Adatok törlése</string>
+    <string name="action_proxy">Proxy beállítások</string>
+    <string name="action_orientation_settings">Tájolási beállítások</string>
+    <string name="action_link_settings">Link beállítások</string>
+    <string name="action_ua_settings">UserAgent beállítások</string>
+    <string name="action_default_ua_settings">Alapértelmezett UserAgent beállítások</string>
+    <string name="action_text_size_settings">Oldal betűméret beállítása</string>
+    <string name="action_user_script">UserScript beállítások</string>
+    <string name="action_text_encoding">Karakterkódolási beállítások</string>
+    <string name="action_rendering">Renderelési mód</string>
+    <string name="action_toggle_tab_bar">Lapsor megjelenítése / elrejtése</string>
+    <string name="action_toggle_url_bar">URL sáv elrejtése / megjelenítése</string>
+    <string name="action_toggle_progress_bar">Töltési sáv elrejtése / megjelenítése</string>
+    <string name="action_toggle_custom_bar">Egyéni sáv elrejtése / megjelenítése</string>
+    <string name="action_combine_web_titlebar">Címsor kombinálása</string>
+    <string name="action_toggle_web_gesture">Webes műveletek ki / be</string>
+    <string name="action_toggle_flick_action">Oldalra húzási műveletek ki / be</string>
+    <string name="action_toggle_qc">Gyorsmenü ki / be control</string>
+    <string name="action_toggle_multi_touch_gesture">Többpontos érintési rajzok</string>
+    <string name="action_toggle_ad_block">Reklámszűrő ki / be</string>
+    <string name="action_black_list">Tiltólista megnyitása</string>
+    <string name="action_white_list">Kivételek listája</string>
+    <string name="action_white_page_list">Kivétellistás oldalak</string>
+    <string name="action_add_white_page_list">Felvétel kivétel listás oldalnak</string>
+    <string name="action_share">Oldal megosztása</string>
+    <string name="action_open_in_another">Megnyitás másik alkalmazásban</string>
+    <string name="action_intent">Tevékenység indítása</string>
+    <string name="action_toggle_fullscreen">Teljes képernyős mód</string>
+    <string name="action_open_menu">Opciók menü megnyitása</string>
+    <string name="action_show_custom_menu">Egyedi menü megnyitása</string>
+    <string name="action_finish">Bezárás</string>
+    <string name="action_minimize">Böngésző minimalizálása</string>
+    <string name="action_custom_action">Egyéni művelet</string>
+    <string name="action_vibration">Rezgés</string>
+    <string name="action_toast">Felugró üzenet</string>
+    <string name="action_private">Privát mód</string>
+    <string name="action_close_auto">Megkülönböztetett lap bezárás</string>
+    <string name="action_show_source">Oldal forrása</string>
+    <string name="action_print">Nyomtatás</string>
+    <string name="action_pin_tab">Lap rögzítése</string>
+    <string name="action_action_list">Műveletek listája</string>
+    <string name="action_reader_mode">Olvasómód</string>
+    <string name="action_read_it_later">Oldal tárolása</string>
+    <string name="action_read_it_later_list">Tárolt oldalak listája</string>
+</resources>

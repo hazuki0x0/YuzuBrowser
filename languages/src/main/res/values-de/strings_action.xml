@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">Zurück</string>
+    <string name="action_go_forward">Weiter</string>
+    <string name="action_refresh_stop">Aktualisieren/Stopp</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_stop">Seite laden stoppen</string>
+    <string name="action_home">Startseite</string>
+    <string name="action_zoom_in">Vergrößern</string>
+    <string name="action_zoom_out">Verkleinern</string>
+    <string name="action_page_up">Seite nach oben</string>
+    <string name="action_page_down">Seite nach unten</string>
+    <string name="action_page_top">Seitenanfang</string>
+    <string name="action_page_bottom">Seitenende</string>
+    <string name="action_custom_page_scroll">benutzerdefinierter Bildlauf</string>
+    <string name="action_seekbar_page_scroll">Scrollen auf der Suchleisten-Seite</string>
+    <string name="action_auto_page_scroll">Automatisches Scrollen der Seite</string>
+    <string name="action_focus_up">Fokus nach oben</string>
+    <string name="action_focus_down">Fokus unten</string>
+    <string name="action_focus_left">Fokus links</string>
+    <string name="action_focus_right">Fokus rechts</string>
+    <string name="action_click_focused">Fokussierte Ansicht anklicken</string>
+    <string name="action_toggle_js">JavaScript umschalten</string>
+    <string name="action_toggle_loading_image">Bild laden umschalten</string>
+    <string name="action_toggle_cookie">Cookies umschalten</string>
+    <string name="action_toggle_user_script">UserScript umschalten</string>
+    <string name="action_toggle_native_lock">Navigationssperre umschalten</string>
+    <string name="action_page_info">Seiteninformation</string>
+    <string name="action_copy_url">Seiten URL kopieren</string>
+    <string name="action_copy_title">Seiten Titel kopieren</string>
+    <string name="action_copy_url_title">URL und Titel kopieren</string>
+    <string name="action_tab_history">Reiter-Verlauf</string>
+    <string name="action_mouse_pointer">Mauszeiger</string>
+    <string name="action_find_on_page">Auf der Seite suchen</string>
+    <string name="action_save_screenshot">Screenshot speichern</string>
+    <string name="action_share_screenshot">Screenshot teilen</string>
+    <string name="action_save_page">Seite speichern</string>
+    <string name="action_open_url">URL öffnen</string>
+    <string name="action_translate_page">Seite übersetzen</string>
+    <string name="action_new_tab">Neuer Reiter</string>
+    <string name="action_close_tab">Reiter schließen</string>
+    <string name="action_close_all">Alles schließen</string>
+    <string name="action_close_others">Übrige schließen</string>
+    <string name="action_move_to_left_tab">zum linken Reiter verschieben</string>
+    <string name="action_move_to_right_tab">zum rechten Reiter verschieben</string>
+    <string name="action_tab_move_to_left">Reiter nach links verschieben</string>
+    <string name="action_tab_move_to_right">Reiter nach rechts verschieben</string>
+    <string name="action_tab_list">Reiterliste</string>
+    <string name="action_close_left_tab">Alle linken Reiter schließen</string>
+    <string name="action_close_right_tab">Alle rechten Reiter schließen</string>
+    <string name="action_restore_tab">Reiter wiederherstellen</string>
+    <string name="action_replicate_tab">Reiter replizieren</string>
+    <string name="action_show_search">Suchfeld anzeigen</string>
+    <string name="action_paste_to_search">In das Suchfeld einfügen</string>
+    <string name="action_paste_url">URL einfügen</string>
+    <string name="action_bookmark">Lesezeichen</string>
+    <string name="action_history">Verlauf</string>
+    <string name="action_dl_point">Download Liste</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_speed_dial">Schnellwahl öffnen</string>
+    <string name="action_add_bookmark">Lesezeichen hinzufügen</string>
+    <string name="action_add_speed_dial">zur Schnellwahl hinzufügen</string>
+    <string name="action_add_pattern_match">Mustervergleich hinzufügen</string>
+    <string name="action_add_home">zum Startbildschirm hinzufügen</string>
+    <string name="action_sub_gesture">Sub-Geste</string>
+    <string name="action_clear_data">Daten löschen</string>
+    <string name="action_proxy">Proxy-Einstellungen anzeigen</string>
+    <string name="action_orientation_settings">Einstellungen zur Ausrichtung</string>
+    <string name="action_link_settings">Einstellungen für den geöffneten Link</string>
+    <string name="action_ua_settings">Einstellungen für den UserAgent</string>
+    <string name="action_default_ua_settings">Standardeinstellungen für den UserAgent</string>
+    <string name="action_text_size_settings">Einstellungen für die Seiten-Schriftgröße</string>
+    <string name="action_user_script">Einstellungen für UserScript</string>
+    <string name="action_text_encoding">Einstellungen für die Textkodierung</string>
+    <string name="action_rendering">Darstellungsmodus</string>
+    <string name="action_toggle_tab_bar">Sichtbarkeit der Reiter-Leiste umschalten</string>
+    <string name="action_toggle_url_bar">Sichtbarkeit der URL-Leiste umschalten</string>
+    <string name="action_toggle_progress_bar">Sichtbarkeit der Fortschrittsleiste umschalten</string>
+    <string name="action_toggle_custom_bar">Sichtbarkeit der benutzerdefinierten Leiste umschalten</string>
+    <string name="action_combine_web_titlebar">Web-Titelzeile kombinieren</string>
+    <string name="action_toggle_web_gesture">Web-Geste umschalten</string>
+    <string name="action_toggle_flick_action">Schnelles Streichen umschalten</string>
+    <string name="action_toggle_qc">Schnellsteuerung umschalten</string>
+    <string name="action_toggle_multi_touch_gesture">Geste mit mehreren Berührungen umschalten</string>
+    <string name="action_toggle_ad_block">Werbeblocker umschalten</string>
+    <string name="action_black_list">Black List öffnen</string>
+    <string name="action_white_list">White List öffnen</string>
+    <string name="action_white_page_list">White Page List öffnen</string>
+    <string name="action_add_white_page_list">zur White Page List hinzufügen</string>
+    <string name="action_share">Share page</string>
+    <string name="action_open_in_another">in einer anderen App öffnen</string>
+    <string name="action_intent">Startaktivität</string>
+    <string name="action_toggle_fullscreen">Vollbildschirm umschalten</string>
+    <string name="action_open_menu">Optionsmenü öffnen</string>
+    <string name="action_show_custom_menu">Benutzerdefiniertes Menü anzeigen</string>
+    <string name="action_finish">Oberfläche</string>
+    <string name="action_minimize">Aufgabe nach hinten verschieben</string>
+    <string name="action_custom_action">Benutzerdefinierte Aktion</string>
+    <string name="action_vibration">Vibration</string>
+    <string name="action_toast">Toast-Benachrichtigung anzeigen</string>
+    <string name="action_private">Privater Modus</string>
+    <string name="action_close_auto">Reiter unterschiedlich beenden</string>
+    <string name="action_show_source">Seitenquelltext anzeigen</string>
+    <string name="action_print">Drucken</string>
+    <string name="action_pin_tab">Reiter anpinnen</string>
+    <string name="action_action_list">Aktionsliste</string>
+    <string name="action_reader_mode">Lesemodus</string>
+    <string name="action_read_it_later">Später-Lesen</string>
+    <string name="action_read_it_later_list">Später-Lesen-Liste</string>
+</resources>

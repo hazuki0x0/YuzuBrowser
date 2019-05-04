@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">Вернуться</string>
+    <string name="action_go_forward">Вперёд</string>
+    <string name="action_refresh_stop">Обновить/остановить</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="action_stop">Остановить загрузку</string>
+    <string name="action_home">Главная</string>
+    <string name="action_zoom_in">Увеличить</string>
+    <string name="action_zoom_out">Уменьшить</string>
+    <string name="action_page_up">Страница вверх</string>
+    <string name="action_page_down">Страница вниз</string>
+    <string name="action_page_top">Верх страницы</string>
+    <string name="action_page_bottom">Низ страницы</string>
+    <string name="action_custom_page_scroll">Настраиваемая прокрутка страницы</string>
+    <string name="action_seekbar_page_scroll">Полоса прокрутки страницы</string>
+    <string name="action_auto_page_scroll">Автопрокрутка страницы</string>
+    <string name="action_focus_up">Фокусировка вверху</string>
+    <string name="action_focus_down">Фокусировка внизу</string>
+    <string name="action_focus_left">Фокусировка слева</string>
+    <string name="action_focus_right">Фокусировка справа</string>
+    <string name="action_click_focused">Нажмите сфокусированный вид</string>
+    <string name="action_toggle_js">Переключить JavaScript</string>
+    <string name="action_toggle_loading_image">Переключить загрузку изображения</string>
+    <string name="action_toggle_cookie">Переключить cookies</string>
+    <string name="action_toggle_user_script">Переключить скрипт</string>
+    <string name="action_toggle_native_lock">Переключить блокировку навигации</string>
+    <string name="action_page_info">Информация о странице</string>
+    <string name="action_copy_url">Скопировать адрес страницы</string>
+    <string name="action_copy_title">Скопировать заголовок страницы</string>
+    <string name="action_copy_url_title">Скопировать адрес и заголовок</string>
+    <string name="action_tab_history">История вкладок</string>
+    <string name="action_mouse_pointer">Указатель мыши</string>
+    <string name="action_find_on_page">Поиск на странице</string>
+    <string name="action_save_screenshot">Сохранить скриншот</string>
+    <string name="action_share_screenshot">Поделиться скриншотом</string>
+    <string name="action_save_page">Сохранить</string>
+    <string name="action_open_url">Открыть ссылку</string>
+    <string name="action_translate_page">Перевести страницу</string>
+    <string name="action_new_tab">Новая вкладка</string>
+    <string name="action_close_tab">Закрыть вкладку</string>
+    <string name="action_close_all">Закрыть все</string>
+    <string name="action_close_others">Закрыть другие</string>
+    <string name="action_move_to_left_tab">Перейти на вкладку слева</string>
+    <string name="action_move_to_right_tab">Перейти на вкладку справа</string>
+    <string name="action_tab_move_to_left">Переместить вкладку влево</string>
+    <string name="action_tab_move_to_right">Переместить вкладку вправо</string>
+    <string name="action_tab_list">Список вкладок</string>
+    <string name="action_close_left_tab">Закрыть все вкладки слева</string>
+    <string name="action_close_right_tab">Закрыть все вкладки справа</string>
+    <string name="action_restore_tab">Восстановить вкладку</string>
+    <string name="action_replicate_tab">Дублировать вкладку</string>
+    <string name="action_show_search">Показать поле поиска</string>
+    <string name="action_paste_to_search">Вставить в поле поиска</string>
+    <string name="action_paste_url">Вставить адрес</string>
+    <string name="action_bookmark">Закладки</string>
+    <string name="action_history">История</string>
+    <string name="action_dl_point">Список загрузок</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_speed_dial">Открыть быстрый набор</string>
+    <string name="action_add_bookmark">Добавить закладку</string>
+    <string name="action_add_speed_dial">Добавить в быстрый доступ</string>
+    <string name="action_add_pattern_match">Добавить совпадение по шаблону</string>
+    <string name="action_add_home">Добавить ярлык на главный экран</string>
+    <string name="action_sub_gesture">Вспомогательный жест</string>
+    <string name="action_clear_data">Очистить данные</string>
+    <string name="action_proxy">Показать параметры прокси</string>
+    <string name="action_orientation_settings">Настройки ориентации</string>
+    <string name="action_link_settings">Открыть настройки ссылки</string>
+    <string name="action_ua_settings">Настройки UserAgent</string>
+    <string name="action_default_ua_settings">Параметры UserAgent по умолчанию</string>
+    <string name="action_text_size_settings">Настройки размера текста страницы</string>
+    <string name="action_user_script">Настройки скриптов</string>
+    <string name="action_text_encoding">Настройки кодировки текста</string>
+    <string name="action_rendering">Режим визуализации</string>
+    <string name="action_toggle_tab_bar">Переключить видимость панели</string>
+    <string name="action_toggle_url_bar">Переключить видимость панели адреса</string>
+    <string name="action_toggle_progress_bar">Переключить видимость индикатора выполнения</string>
+    <string name="action_toggle_custom_bar">Переключить видимость пользовательской панели</string>
+    <string name="action_combine_web_titlebar">Объединить строку заголовка</string>
+    <string name="action_toggle_web_gesture">Переключить жест</string>
+    <string name="action_toggle_flick_action">Переключить действия перелистывания</string>
+    <string name="action_toggle_qc">Переключить быстрое управление</string>
+    <string name="action_toggle_multi_touch_gesture">Переключить жесты с несколькими касаниями</string>
+    <string name="action_toggle_ad_block">Переключить блокировку рекламы</string>
+    <string name="action_black_list">Открыть чёрный список</string>
+    <string name="action_white_list">Открыть белый список</string>
+    <string name="action_white_page_list">Открыть белый список страниц</string>
+    <string name="action_add_white_page_list">Добавить в белый список страниц</string>
+    <string name="action_share">Поделиться страницей</string>
+    <string name="action_open_in_another">Открыть в другом приложении</string>
+    <string name="action_intent">Запустить действие</string>
+    <string name="action_toggle_fullscreen">Включить полноэкранный режим</string>
+    <string name="action_open_menu">Открыть меню настроек</string>
+    <string name="action_show_custom_menu">Показать пользовательское меню</string>
+    <string name="action_finish">Выход</string>
+    <string name="action_minimize">Переместить задачу назад</string>
+    <string name="action_custom_action">Пользовательское действие</string>
+    <string name="action_vibration">Вибрация</string>
+    <string name="action_toast">Показать всплывающее уведомление</string>
+    <string name="action_private">Приватный режим</string>
+    <string name="action_close_auto">Отличие завершения вкладки</string>
+    <string name="action_show_source">Показать источник страницы</string>
+    <string name="action_print">Печать</string>
+    <string name="action_pin_tab">Закрепить вкладку</string>
+    <string name="action_action_list">Список действий</string>
+    <string name="action_reader_mode">Режим чтения</string>
+    <string name="action_read_it_later">Отложить</string>
+    <string name="action_read_it_later_list">Список отложенного</string>
+</resources>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">戻る</string>
+    <string name="action_go_forward">進む</string>
+    <string name="action_refresh_stop">更新/停止</string>
+    <string name="action_refresh">更新</string>
+    <string name="action_stop">停止</string>
+    <string name="action_home">ホーム</string>
+    <string name="action_zoom_in">ズームイン!!</string>
+    <string name="action_zoom_out">ズームアウト</string>
+    <string name="action_page_up">ページアップ</string>
+    <string name="action_page_down">ページダウン</string>
+    <string name="action_page_top">先頭へ移動</string>
+    <string name="action_page_bottom">末尾へ移動</string>
+    <string name="action_custom_page_scroll">カスタムページスクロール</string>
+    <string name="action_seekbar_page_scroll">シークバーページスクロール</string>
+    <string name="action_auto_page_scroll">オートページスクロール</string>
+    <string name="action_focus_up">フォーカス上</string>
+    <string name="action_focus_down">フォーカス下</string>
+    <string name="action_focus_left">フォーカス左</string>
+    <string name="action_focus_right">フォーカス右</string>
+    <string name="action_click_focused">フォーカスビューをクリック</string>
+    <string name="action_toggle_js">JavaScriptの切替</string>
+    <string name="action_toggle_loading_image">画像読み込みの切替</string>
+    <string name="action_toggle_cookie">Cookieの切替</string>
+    <string name="action_toggle_user_script">UserScriptの切替</string>
+    <string name="action_toggle_native_lock">ナビゲートロックの切替</string>
+    <string name="action_page_info">ページ情報</string>
+    <string name="action_copy_url">URLのコピー</string>
+    <string name="action_copy_title">タイトルのコピー</string>
+    <string name="action_copy_url_title">URLとタイトルのコピー</string>
+    <string name="action_tab_history">タブ内履歴</string>
+    <string name="action_mouse_pointer">マウスポインター</string>
+    <string name="action_find_on_page">ページ内検索</string>
+    <string name="action_save_screenshot">スクリーンショットの保存</string>
+    <string name="action_share_screenshot">スクリーンショットの共有</string>
+    <string name="action_save_page">ページの保存</string>
+    <string name="action_open_url">URLを開く</string>
+    <string name="action_translate_page">ページの翻訳</string>
+    <string name="action_new_tab">新規タブ</string>
+    <string name="action_close_tab">タブを閉じる</string>
+    <string name="action_close_all">すべてのタブを閉じる</string>
+    <string name="action_close_others">他のタブをすべて閉じる</string>
+    <string name="action_move_to_left_tab">左のタブへ移動</string>
+    <string name="action_move_to_right_tab">右のタブへ移動</string>
+    <string name="action_tab_move_to_left">タブを左へ移動</string>
+    <string name="action_tab_move_to_right">タブを右へ移動</string>
+    <string name="action_tab_list">タブ一覧</string>
+    <string name="action_close_left_tab">左のタブをすべて閉じる</string>
+    <string name="action_close_right_tab">右のタブをすべて閉じる</string>
+    <string name="action_restore_tab">タブの復元</string>
+    <string name="action_replicate_tab">タブの複製</string>
+    <string name="action_show_search">検索バーの表示</string>
+    <string name="action_paste_to_search">検索バーへ貼り付け</string>
+    <string name="action_paste_url">クリップボードのテキストを開く</string>
+    <string name="action_bookmark">ブックマーク</string>
+    <string name="action_history">履歴</string>
+    <string name="action_dl_point">ダウンロード一覧</string>
+    <string name="action_settings">設定</string>
+    <string name="action_speed_dial">スピードダイアルを開く</string>
+    <string name="action_add_bookmark">ブックマークの追加</string>
+    <string name="action_add_speed_dial">スピードダイアルに追加</string>
+    <string name="action_add_pattern_match">パターンマッチに追加</string>
+    <string name="action_add_home">ホーム画面へ追加</string>
+    <string name="action_sub_gesture">サブジェスチャー</string>
+    <string name="action_clear_data">データ消去</string>
+    <string name="action_proxy">Proxy設定</string>
+    <string name="action_orientation_settings">画面の向きの設定</string>
+    <string name="action_link_settings">リンクを開くときの設定</string>
+    <string name="action_ua_settings">UserAgentの変更</string>
+    <string name="action_default_ua_settings">デフォルトUserAgentの変更</string>
+    <string name="action_text_size_settings">テキストサイズの設定</string>
+    <string name="action_user_script">UserScriptの設定</string>
+    <string name="action_text_encoding">テキストエンコードの設定</string>
+    <string name="action_rendering">レンダリング モード</string>
+    <string name="action_toggle_tab_bar">タブバー表示の切替</string>
+    <string name="action_toggle_url_bar">URLバー表示の切替</string>
+    <string name="action_toggle_progress_bar">プログレスバー表示の切替</string>
+    <string name="action_toggle_custom_bar">カスタムバー表示の切替</string>
+    <string name="action_combine_web_titlebar">Webタイトルバーの結合</string>
+    <string name="action_toggle_web_gesture">Webジェスチャーの切替</string>
+    <string name="action_toggle_flick_action">フリックアクションの切替</string>
+    <string name="action_toggle_qc">クイックコントロールの切替</string>
+    <string name="action_toggle_multi_touch_gesture">マルチタッチジェスチャの切替</string>
+    <string name="action_toggle_ad_block">広告ブロックの切替</string>
+    <string name="action_black_list">ブラックリストを開く</string>
+    <string name="action_white_list">ホワイトリストを開く</string>
+    <string name="action_white_page_list">ホワイトページリストを開く</string>
+    <string name="action_add_white_page_list">ホワイトページリストに追加</string>
+    <string name="action_share">ページの共有</string>
+    <string name="action_open_in_another">他のアプリで開く</string>
+    <string name="action_intent">Activityを開く</string>
+    <string name="action_toggle_fullscreen">フルスクリーン</string>
+    <string name="action_open_menu">メインメニューを開く</string>
+    <string name="action_show_custom_menu">カスタムメニュー</string>
+    <string name="action_finish">終了</string>
+    <string name="action_minimize">最小化</string>
+    <string name="action_custom_action">カスタムアクション</string>
+    <string name="action_vibration">バイブレーション</string>
+    <string name="action_toast">トーストを表示</string>
+    <string name="action_private">プライベートモード</string>
+    <string name="action_close_auto">判別タブ終了</string>
+    <string name="action_show_source">ページのソースを表示</string>
+    <string name="action_print">印刷</string>
+    <string name="action_pin_tab">タブのピン留め</string>
+    <string name="action_action_list">アクション一覧</string>
+    <string name="action_reader_mode">リーダーモード</string>
+    <string name="action_read_it_later">あとで読む</string>
+    <string name="action_read_it_later_list">あとで読む一覧</string>
+</resources>
