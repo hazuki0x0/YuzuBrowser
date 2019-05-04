@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="action_go_back">뒤로</string>
+    <string name="action_go_forward">앞으로</string>
+    <string name="action_refresh_stop">새로고침/중지</string>
+    <string name="action_refresh">새로고침</string>
+    <string name="action_stop">로딩 중지</string>
+    <string name="action_home">홈</string>
+    <string name="action_zoom_in">확대</string>
+    <string name="action_zoom_out">축소</string>
+    <string name="action_page_up">페이지 위로</string>
+    <string name="action_page_down">페이지 아래로</string>
+    <string name="action_page_top">페이지 맨 위로</string>
+    <string name="action_page_bottom">페이지 맨 아래로</string>
+    <string name="action_custom_page_scroll">임의의 페이지 스크롤</string>
+    <string name="action_seekbar_page_scroll">시크바 페이지 스크롤</string>
+    <string name="action_auto_page_scroll">자동 페이지 스크롤</string>
+    <string name="action_focus_up">포커스 위로</string>
+    <string name="action_focus_down">포커스 아래로</string>
+    <string name="action_focus_left">포커스 왼쪽으로</string>
+    <string name="action_focus_right">포커스 오른쪽으로</string>
+    <string name="action_click_focused">포커스된 뷰 클릭</string>
+    <string name="action_toggle_js">자바스크립트 토글</string>
+    <string name="action_toggle_loading_image">이미지 로딩 토글</string>
+    <string name="action_toggle_cookie">쿠키 토글</string>
+    <string name="action_toggle_user_script">유저 스크립트 토글</string>
+    <string name="action_toggle_native_lock">네비게이트 락 토글</string>
+    <string name="action_page_info">페이지 정보</string>
+    <string name="action_copy_url">페이지 URL 복사</string>
+    <string name="action_copy_title">페이지 목록 복사</string>
+    <string name="action_copy_url_title">URL과 제목 복사</string>
+    <string name="action_tab_history">탭 히스토리</string>
+    <string name="action_mouse_pointer">마우스 포인터</string>
+    <string name="action_find_on_page">페이지에서 찾기</string>
+    <string name="action_save_screenshot">스크린샷 저장</string>
+    <string name="action_share_screenshot">스크린샷 공유</string>
+    <string name="action_save_page">페이지 저장</string>
+    <string name="action_open_url">URL 열기</string>
+    <string name="action_translate_page">페이지 번역</string>
+    <string name="action_new_tab">새 탭</string>
+    <string name="action_close_tab">탭 닫기</string>
+    <string name="action_close_all">모두 닫기</string>
+    <string name="action_close_others">다른 탭 닫기</string>
+    <string name="action_move_to_left_tab">왼쪽 탭으로 이동</string>
+    <string name="action_move_to_right_tab">오른쪽 탭으로 이동</string>
+    <string name="action_tab_move_to_left">탭 왼쪽으로 이동</string>
+    <string name="action_tab_move_to_right">탭 오른쪽으로 이동</string>
+    <string name="action_tab_list">탭 목록</string>
+    <string name="action_close_left_tab">모든 왼쪽 탭 삭제</string>
+    <string name="action_close_right_tab">모든 오른쪽 탭 삭제</string>
+    <string name="action_restore_tab">탭 다시 열기</string>
+    <string name="action_replicate_tab">탭 복제</string>
+    <string name="action_show_search">검색 박스 보이기</string>
+    <string name="action_paste_to_search">검색 박스로 붙여넣기</string>
+    <string name="action_paste_url">URL 붙여넣기</string>
+    <string name="action_bookmark">북마크</string>
+    <string name="action_history">히스토리</string>
+    <string name="action_dl_point">다운로드 목록</string>
+    <string name="action_settings">설정</string>
+    <string name="action_speed_dial">스피드 다이얼 열기</string>
+    <string name="action_add_bookmark">북마크 추가</string>
+    <string name="action_add_speed_dial">스피드 다이얼에 추가</string>
+    <string name="action_add_pattern_match">패턴 매치 추가</string>
+    <string name="action_add_home">홈 화면에 추가</string>
+    <string name="action_sub_gesture">서브 제스처</string>
+    <string name="action_clear_data">데이터 비우기</string>
+    <string name="action_proxy">프록시 설정 보기</string>
+    <string name="action_orientation_settings">화면 전환 설정</string>
+    <string name="action_link_settings">링크 열기 설정</string>
+    <string name="action_ua_settings">유저 에이전트 설정</string>
+    <string name="action_default_ua_settings">유저 에이전트 기본 설정</string>
+    <string name="action_text_size_settings">페이지 텍스트 크기 설정</string>
+    <string name="action_user_script">유저 스크립트 설정</string>
+    <string name="action_text_encoding">텍스트 인코딩 설정</string>
+    <string name="action_rendering">렌더링 모드</string>
+    <string name="action_toggle_tab_bar">탭 바 보기 토글</string>
+    <string name="action_toggle_url_bar">URL 바 보기 토글</string>
+    <string name="action_toggle_progress_bar">진행 바 표기 토글</string>
+    <string name="action_toggle_custom_bar">커스텀 바 표기 토글</string>
+    <string name="action_combine_web_titlebar">웹 목록 바 합치기</string>
+    <string name="action_toggle_web_gesture">웹 제스처 토글</string>
+    <string name="action_toggle_flick_action">튕기기 액션 토글</string>
+    <string name="action_toggle_qc">퀵 컨트롤 토글</string>
+    <string name="action_toggle_multi_touch_gesture">멀티 터치 토글</string>
+    <string name="action_toggle_ad_block">광고 차단 토글</string>
+    <string name="action_black_list">블랙 리스트 열기</string>
+    <string name="action_white_list">화이트 리스트 열기</string>
+    <string name="action_white_page_list">화이트 페이지 목록 열기</string>
+    <string name="action_add_white_page_list">화이트 페이지 목록에 추가</string>
+    <string name="action_share">페이지 공유</string>
+    <string name="action_open_in_another">다른 앱으로 열기</string>
+    <string name="action_intent">활동 시작</string>
+    <string name="action_toggle_fullscreen">전체화면 토글</string>
+    <string name="action_open_menu">옵션 메뉴 열기</string>
+    <string name="action_show_custom_menu">커스텀 메뉴 보이기</string>
+    <string name="action_finish">끝내기</string>
+    <string name="action_minimize">작업을 뒤로 이동</string>
+    <string name="action_custom_action">임의의 액션</string>
+    <string name="action_vibration">진동</string>
+    <string name="action_toast">알림 보이기</string>
+    <string name="action_private">프라이빗 모드</string>
+    <string name="action_close_auto">종료할 탭 구분</string>
+    <string name="action_show_source">페이지 소스 보이기</string>
+    <string name="action_print">인쇄</string>
+    <string name="action_pin_tab">탭 핀</string>
+    <string name="action_action_list">액션 리스트</string>
+    <string name="action_reader_mode">읽기 모드</string>
+    <string name="action_read_it_later">나중에 읽기</string>
+    <string name="action_read_it_later_list">나중에 읽기 목록</string>
+</resources>
