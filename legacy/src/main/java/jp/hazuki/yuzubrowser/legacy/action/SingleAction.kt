@@ -150,7 +150,8 @@ open class SingleAction : Parcelable {
         const val USERJS_SETTING = 35307
         const val WEB_ENCODE_SETTING = 35308
         const val DEFALUT_USERAGENT_SETTING = 35309
-        const val RENDER_SETTING = 35400
+        const val RENDER_ALL_SETTING = 35400
+        const val RENDER_SETTING = 35401
         const val TOGGLE_VISIBLE_TAB = 38000
         const val TOGGLE_VISIBLE_URL = 38001
         const val TOGGLE_VISIBLE_PROGRESS = 38002

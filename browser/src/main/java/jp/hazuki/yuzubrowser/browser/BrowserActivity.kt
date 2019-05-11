@@ -1384,11 +1384,15 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             requestedOrientation = value
         }
 
-    override var renderingMode: Int
-        get() = webClient.renderingMode
+    override var defaultRenderingMode: Int
+        get() = webClient.defaultRenderingMode
         set(value) {
-            webClient.renderingMode = value
+            webClient.defaultRenderingMode = value
         }
+
+    override fun applyRenderingMode(tab: MainTabData, mode: Int) {
+        webClient.applyRenderingMode(tab.mWebView, mode)
+    }
 
     override val pagePaddingHeight: Int
         get() = topAlwaysToolbar.height + bottomAlwaysToolbar.height +

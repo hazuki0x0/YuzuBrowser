@@ -24,6 +24,8 @@ import android.print.PrintDocumentAdapter
 import android.view.View
 import android.webkit.*
 import jp.hazuki.yuzubrowser.core.utility.common.listener.OnTouchEventListener
+import jp.hazuki.yuzubrowser.webview.WebViewRenderingManager.Companion.RENDERING_INVERT
+import jp.hazuki.yuzubrowser.webview.WebViewRenderingManager.Companion.RENDERING_INVERT_GRAY
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 
@@ -82,6 +84,11 @@ interface CustomWebView {
                 false
             }
         }
+
+    var renderingMode: Int
+
+    val isInvertMode: Boolean
+        get() = renderingMode == RENDERING_INVERT || renderingMode == RENDERING_INVERT_GRAY
 
     fun canGoBack(): Boolean
 

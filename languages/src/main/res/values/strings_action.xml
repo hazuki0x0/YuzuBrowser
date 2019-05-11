@@ -88,6 +88,7 @@
     <string name="action_user_script">UserScript settings</string>
     <string name="action_text_encoding">Text encoding settings</string>
     <string name="action_rendering">Rendering mode</string>
+    <string name="action_all_rendering">Rendering mode(All tab)</string>
     <string name="action_toggle_tab_bar">Toggle Tab bar visibility</string>
     <string name="action_toggle_url_bar">Toggle Url bar visibility</string>
     <string name="action_toggle_progress_bar">Toggle Progress bar visibility</string>

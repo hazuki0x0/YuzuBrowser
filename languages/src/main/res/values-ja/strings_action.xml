@@ -88,6 +88,7 @@
     <string name="action_user_script">UserScriptの設定</string>
     <string name="action_text_encoding">テキストエンコードの設定</string>
     <string name="action_rendering">レンダリング モード</string>
+    <string name="action_all_rendering">レンダリング モード(全てのタブ)</string>
     <string name="action_toggle_tab_bar">タブバー表示の切替</string>
     <string name="action_toggle_url_bar">URLバー表示の切替</string>
     <string name="action_toggle_progress_bar">プログレスバー表示の切替</string>

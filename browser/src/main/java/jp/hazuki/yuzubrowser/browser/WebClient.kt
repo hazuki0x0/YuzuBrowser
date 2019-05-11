@@ -41,6 +41,7 @@ import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
+import jp.hazuki.yuzubrowser.core.cache.SoftCache
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
@@ -87,7 +88,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
-import jp.hazuki.yuzubrowser.legacy.webkit.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
@@ -95,6 +95,7 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.CustomWebViewClient
+import jp.hazuki.yuzubrowser.webview.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
 import jp.hazuki.yuzubrowser.webview.utility.evaluateJavascript
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
@@ -117,20 +118,12 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
     private var miningProtector: MiningProtector? = null
     private var userScriptList: ArrayList<UserScript>? = null
     private var webUploadHandler: WebUploadHandler? = null
-    private val invertJs by lazy(LazyThreadSafetyMode.NONE) { activity.readAssetsText("scripts/invert-min.js") }
-
-    var renderingMode
-        get() = webViewRenderingManager.mode
-        set(value) {
-            if (value == renderingMode) return
-
-            webViewRenderingManager.mode = value
-            val js = invertJs.replace("%s", webViewRenderingManager.isInvertMode.toString())
-            controller.tabManager.loadedData.forEach {
-                webViewRenderingManager.setWebViewRendering(it.mWebView)
-                it.mWebView.evaluateJavascript(js, null)
-            }
-        }
+    private val invertEnableJs by SoftCache {
+        activity.readAssetsText("scripts/invert-min.js").replace("%s", "true")
+    }
+    private val invertDisableJs by SoftCache {
+        activity.readAssetsText("scripts/invert-min.js").replace("%s", "false")
+    }
 
     var isEnableHistory
         get() = browserHistoryManager != null
@@ -184,7 +177,10 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
     fun onPreferenceReset() {
         patternManager.load(activity.applicationContext)
-        webViewRenderingManager.onPreferenceReset()
+        webViewRenderingManager.onPreferenceReset(
+            AppData.rendering.get(),
+            AppData.night_mode_color.get(),
+            AppData.night_mode_bright.get())
 
         isEnableHistory = !AppData.private_mode.get() && AppData.save_history.get()
 
@@ -207,13 +203,15 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             miningProtector = null
         }
 
-        val js by lazy(LazyThreadSafetyMode.NONE) { invertJs.replace("%s", webViewRenderingManager.isInvertMode.toString()) }
-        val isInverted = webViewRenderingManager.isInverted
-
         controller.tabManager.loadedData.forEach {
-            initWebSetting(it.mWebView)
-            it.mWebView.onPreferenceReset()
-            if (isInverted) it.mWebView.evaluateJavascript(js, null)
+            val webView = it.mWebView
+            val oldInverted = webView.isInvertMode
+            initWebSetting(webView)
+            webView.onPreferenceReset()
+
+            if (oldInverted != webView.isInvertMode) {
+                webView.evaluateJavascript(if (webView.isInvertMode) invertEnableJs else invertDisableJs, null)
+            }
         }
 
         controller.tabManager.currentTabData?.let {
@@ -240,6 +238,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         web.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY)
         web.setOverScrollModeMethod(View.OVER_SCROLL_IF_CONTENT_SCROLLS)
 
+        applyRenderingMode(web, webViewRenderingManager.defaultMode)
         webViewRenderingManager.setWebViewRendering(web)
         web.setScrollableHeight(scrollableToolbarHeight)
 
@@ -445,8 +444,8 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
 
         private fun applyJavascriptInjection(web: CustomWebView, url: String) {
-            if (webViewRenderingManager.isInvertMode) {
-                web.evaluateJavascript(invertJs.replace("%s", "true"), null)
+            if (web.isInvertMode) {
+                web.evaluateJavascript(invertEnableJs, null)
             }
             val adBlockController = adBlockController
             if (adBlockController != null && adBlockController.isElementHideEnabled) {
@@ -1103,6 +1102,20 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             return true
         }
         return false
+    }
+
+    var defaultRenderingMode: Int
+        get() = webViewRenderingManager.defaultMode
+        set(value) {
+            webViewRenderingManager.defaultMode = value
+        }
+
+    fun applyRenderingMode(webView: CustomWebView, mode: Int) {
+        val oldIsInvert = webView.isInvertMode
+        webViewRenderingManager.setWebViewRendering(webView, mode)
+        if (oldIsInvert != webView.isInvertMode) {
+            webView.evaluateJavascript(if (webView.isInvertMode) invertEnableJs else invertDisableJs, null)
+        }
     }
 
     private fun getString(id: Int): String = activity.getString(id)

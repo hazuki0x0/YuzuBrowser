@@ -90,6 +90,7 @@
         <item>@string/action_user_script</item>
         <item>@string/action_text_encoding</item>
         <item>@string/action_rendering</item>
+        <item>@string/action_all_rendering</item>
         <item>@string/action_toggle_tab_bar</item>
         <item>@string/action_toggle_url_bar</item>
         <item>@string/action_toggle_progress_bar</item>

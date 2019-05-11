@@ -175,7 +175,7 @@ class ActionIconManager(val info: BrowserInfo) {
             SingleAction.USERJS_SETTING -> return info.resourcesByInfo.getDrawable(R.drawable.ic_memory_white_24dp, info.themeByInfo)
             SingleAction.WEB_ENCODE_SETTING -> return info.resourcesByInfo.getDrawable(R.drawable.ic_format_shapes_white_24dp, info.themeByInfo)
             SingleAction.DEFALUT_USERAGENT_SETTING -> return info.resourcesByInfo.getDrawable(R.drawable.ic_group_white_24dp, info.themeByInfo)
-            SingleAction.RENDER_SETTING -> return info.resourcesByInfo.getDrawable(R.drawable.ic_blur_linear_white_24dp, info.themeByInfo)
+            SingleAction.RENDER_SETTING, SingleAction.RENDER_ALL_SETTING -> return info.resourcesByInfo.getDrawable(R.drawable.ic_blur_linear_white_24dp, info.themeByInfo)
             SingleAction.TOGGLE_VISIBLE_TAB -> return info.resourcesByInfo.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, info.themeByInfo)
             SingleAction.TOGGLE_VISIBLE_URL -> return info.resourcesByInfo.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, info.themeByInfo)
             SingleAction.TOGGLE_VISIBLE_PROGRESS -> return info.resourcesByInfo.getDrawable(R.drawable.ic_remove_red_eye_white_24dp, info.themeByInfo)

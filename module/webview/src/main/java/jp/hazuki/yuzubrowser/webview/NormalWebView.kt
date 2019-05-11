@@ -82,6 +82,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     override var isScrollable: Boolean = false
         private set
     override var isToolbarShowing: Boolean = false
+    override var renderingMode = 0
 
     override fun copyMyBackForwardList(): CustomWebBackForwardList = CustomWebBackForwardList(copyBackForwardList())
 

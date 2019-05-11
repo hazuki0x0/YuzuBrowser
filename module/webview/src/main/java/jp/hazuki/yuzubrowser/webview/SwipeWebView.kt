@@ -22,10 +22,11 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import jp.hazuki.yuzubrowser.core.utility.extensions.getThemeResId
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 
-internal class SwipeWebView private constructor(context: Context, override val webView: NormalWebView) : androidx.swiperefreshlayout.widget.SwipeRefreshLayout(context), CustomWebView by webView, androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener, OnScrollableChangeListener {
+internal class SwipeWebView private constructor(context: Context, override val webView: NormalWebView) : SwipeRefreshLayout(context), CustomWebView by webView, SwipeRefreshLayout.OnRefreshListener, OnScrollableChangeListener {
 
     constructor(context: Context, webViewId: Long = -1) : this(context, NormalWebView(context, id = webViewId))
 

@@ -847,12 +847,27 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
             }
             SingleAction.RENDER_SETTING -> {
                 val builder = AlertDialog.Builder(controller.activity)
+                val mode = controller.getTab(actionTarget).mWebView.renderingMode
                 builder.setTitle(R.string.pref_rendering)
-                        .setSingleChoiceItems(R.array.pref_rendering_list, controller.renderingMode) { dialog, which ->
-                            dialog.dismiss()
-                            controller.renderingMode = which
+                    .setSingleChoiceItems(R.array.pref_rendering_list, mode) { dialog, which ->
+                        dialog.dismiss()
+                        controller.applyRenderingMode(controller.getTab(actionTarget), which)
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                builder.create().show()
+            }
+            SingleAction.RENDER_ALL_SETTING -> {
+                val builder = AlertDialog.Builder(controller.activity)
+                val mode = controller.defaultRenderingMode
+                builder.setTitle(R.string.pref_rendering)
+                    .setSingleChoiceItems(R.array.pref_rendering_list, mode) { dialog, which ->
+                        dialog.dismiss()
+                        controller.defaultRenderingMode = which
+                        controller.tabManager.loadedData.forEach {
+                            controller.applyRenderingMode(it, which)
                         }
-                        .setNegativeButton(android.R.string.cancel, null)
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
                 builder.create().show()
             }
             SingleAction.TOGGLE_VISIBLE_TAB -> controller.toolbarManager.tabBar.toggleVisibility()

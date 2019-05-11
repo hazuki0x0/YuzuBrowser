@@ -97,6 +97,11 @@ public abstract class JvmWebViewBridge extends WebView implements CustomWebView 
     }
 
     @Override
+    public boolean isInvertMode() {
+        return CustomWebView.DefaultImpls.isInvertMode(this);
+    }
+
+    @Override
     public boolean isNestedScrollingEnabledMethod() {
         return isNestedScrollingEnabled();
     }

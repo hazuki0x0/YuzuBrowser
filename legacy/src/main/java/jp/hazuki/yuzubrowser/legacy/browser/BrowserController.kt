@@ -23,6 +23,7 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
@@ -76,14 +77,13 @@ interface BrowserController : BrowserInfo {
     fun getVideoLoadingProgressView(): View?
     fun showActionName(text: String?)
     fun hideActionName()
-    fun requestIconChange() = notifyChangeWebState()
     fun requestAdjustWebView()
     fun expandToolbar()
     fun adjustBrowserPadding(tab: MainTabData)
 
     val secretKey: String
     val tabManager: TabManager
-    val superFrameLayoutInfo: androidx.coordinatorlayout.widget.CoordinatorLayout
+    val superFrameLayoutInfo: CoordinatorLayout
     val activity: AppCompatActivity
     val toolbarManager: ToolbarManager
     val appBarLayout: AppBarLayout
@@ -99,7 +99,8 @@ interface BrowserController : BrowserInfo {
     val printManager: PrintManager
 
     var requestedOrientationByCtrl: Int
-    var renderingMode: Int
+    var defaultRenderingMode: Int
+    fun applyRenderingMode(tab: MainTabData, mode: Int)
     var isFullscreenMode: Boolean
     override var isPrivateMode: Boolean
     val isEnableFastPageScroller: Boolean
