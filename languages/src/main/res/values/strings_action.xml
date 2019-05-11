@@ -72,7 +72,6 @@
     <string name="action_bookmark">Bookmark</string>
     <string name="action_history">History</string>
     <string name="action_dl_point">Download list</string>
-    <string name="action_settings">Settings</string>
     <string name="action_speed_dial">Open speed dial</string>
     <string name="action_add_bookmark">Add bookmark</string>
     <string name="action_add_speed_dial">Add to speed dial</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">Open in other app</string>
     <string name="action_intent">Start activity</string>
     <string name="action_toggle_fullscreen">Toggle fullscreen</string>
-    <string name="action_open_menu">Open options menu</string>
+    <string name="action_open_options_menu">Open options menu</string>
     <string name="action_show_custom_menu">Show custom menu</string>
     <string name="action_finish">Finish</string>
     <string name="action_minimize">Move task to back</string>

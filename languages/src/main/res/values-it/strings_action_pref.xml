@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">Velocità Auto scorrimento</string>
     <string name="action_auto_scroll_speed_zero">Errore : la velocità non può essere 0</string>
 
-    <string name="action_tab_list">Modalità elenco schede</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">Modalità elenco schede</string>
+    <string-array name="action_tab_list_pref">
         <item>Elenco verticale</item>
         <item>Elenco verticale inversa</item>
         <item>Elenco orizzontale</item>

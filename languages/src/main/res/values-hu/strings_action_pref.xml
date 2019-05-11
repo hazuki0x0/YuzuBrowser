@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">Automatikus görgetés sebessége</string>
     <string name="action_auto_scroll_speed_zero">Hiba : A sebesség nem lehet 0</string>
 
-    <string name="action_tab_list">Lapok listázási módja</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">Lapok listázási módja</string>
+    <string-array name="action_tab_list_pref">
         <item>Függőleges lista</item>
         <item>Fordított függőleges lista</item>
         <item>Vízszintes lista</item>

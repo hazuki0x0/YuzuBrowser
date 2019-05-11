@@ -72,7 +72,6 @@
     <string name="action_bookmark">Segnalibro</string>
     <string name="action_history">Cronologia</string>
     <string name="action_dl_point">Elenco download</string>
-    <string name="action_settings">Impostazioni</string>
     <string name="action_speed_dial">Apri selezione rapida</string>
     <string name="action_add_bookmark">Aggiungi segnalibro</string>
     <string name="action_add_speed_dial">Aggiungi a speed dial</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">Apri in un\'altra app</string>
     <string name="action_intent">Inizia attività</string>
     <string name="action_toggle_fullscreen">Schermo intero</string>
-    <string name="action_open_menu">Apri menu delle opzioni</string>
+    <string name="action_open_options_menu">Apri menu delle opzioni</string>
     <string name="action_show_custom_menu">Mostra menu personalizzato</string>
     <string name="action_finish">Termina e chiudi</string>
     <string name="action_minimize">Sposta l\'attività indietro</string>

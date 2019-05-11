@@ -72,7 +72,6 @@
     <string name="action_bookmark">북마크</string>
     <string name="action_history">히스토리</string>
     <string name="action_dl_point">다운로드 목록</string>
-    <string name="action_settings">설정</string>
     <string name="action_speed_dial">스피드 다이얼 열기</string>
     <string name="action_add_bookmark">북마크 추가</string>
     <string name="action_add_speed_dial">스피드 다이얼에 추가</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">다른 앱으로 열기</string>
     <string name="action_intent">활동 시작</string>
     <string name="action_toggle_fullscreen">전체화면 토글</string>
-    <string name="action_open_menu">옵션 메뉴 열기</string>
+    <string name="action_open_options_menu">옵션 메뉴 열기</string>
     <string name="action_show_custom_menu">커스텀 메뉴 보이기</string>
     <string name="action_finish">끝내기</string>
     <string name="action_minimize">작업을 뒤로 이동</string>

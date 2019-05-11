@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">Auto scroll speed</string>
     <string name="action_auto_scroll_speed_zero">Error : Speed must not be 0</string>
 
-    <string name="action_tab_list">Tab list mode</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">Tab list mode</string>
+    <string-array name="action_tab_list_pref">
         <item>Vertical list</item>
         <item>Vertical Reverse list</item>
         <item>Horizontal list</item>

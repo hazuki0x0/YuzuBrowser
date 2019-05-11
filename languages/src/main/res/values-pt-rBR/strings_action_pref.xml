@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">Velocidade de autorrolagem</string>
     <string name="action_auto_scroll_speed_zero">Erro : A velocidade não deve ser 0</string>
 
-    <string name="action_tab_list">Modo de lista de guia</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">Modo de lista de guia</string>
+    <string-array name="action_tab_list_pref">
         <item>Lista vertical</item>
         <item>Lista vertical reversa</item>
         <item>Lista horizontal</item>

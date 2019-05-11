@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">Auto Scroll Geschwinidigkeit</string>
     <string name="action_auto_scroll_speed_zero">Fehler: Geschwindigkeit darf nicht 0 sein.</string>
 
-    <string name="action_tab_list">Reiter-Listenmodus</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">Reiter-Listenmodus</string>
+    <string-array name="action_tab_list_pref">
         <item>vertikale Liste</item>
         <item>umgekehrte vertikale Liste</item>
         <item>horizontale Liste</item>

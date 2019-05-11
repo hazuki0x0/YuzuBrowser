@@ -72,7 +72,6 @@
     <string name="action_bookmark">ブックマーク</string>
     <string name="action_history">履歴</string>
     <string name="action_dl_point">ダウンロード一覧</string>
-    <string name="action_settings">設定</string>
     <string name="action_speed_dial">スピードダイアルを開く</string>
     <string name="action_add_bookmark">ブックマークの追加</string>
     <string name="action_add_speed_dial">スピードダイアルに追加</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">他のアプリで開く</string>
     <string name="action_intent">Activityを開く</string>
     <string name="action_toggle_fullscreen">フルスクリーン</string>
-    <string name="action_open_menu">メインメニューを開く</string>
+    <string name="action_open_options_menu">メインメニューを開く</string>
     <string name="action_show_custom_menu">カスタムメニュー</string>
     <string name="action_finish">終了</string>
     <string name="action_minimize">最小化</string>

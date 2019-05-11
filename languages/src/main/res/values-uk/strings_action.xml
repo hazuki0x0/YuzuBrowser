@@ -72,7 +72,6 @@
     <string name="action_bookmark">Закладки</string>
     <string name="action_history">Історія</string>
     <string name="action_dl_point">Завантаження</string>
-    <string name="action_settings">Налаштування</string>
     <string name="action_speed_dial">Відкрити швидкий набір</string>
     <string name="action_add_bookmark">Додати закладку</string>
     <string name="action_add_speed_dial">Додати до швидкого набору</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">Відкрити в іншому додатку</string>
     <string name="action_intent">Запуск “Activity”</string>
     <string name="action_toggle_fullscreen">Повноекранний режим</string>
-    <string name="action_open_menu">Відкрити меню параметрів</string>
+    <string name="action_open_options_menu">Відкрити меню параметрів</string>
     <string name="action_show_custom_menu">Показати меню користувача</string>
     <string name="action_finish">Вийти</string>
     <string name="action_minimize">Перемістити веб-переглядач на задній план</string>

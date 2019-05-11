@@ -72,7 +72,6 @@
     <string name="action_bookmark">书签</string>
     <string name="action_history">历史记录</string>
     <string name="action_dl_point">下载内容列表</string>
-    <string name="action_settings">设置</string>
     <string name="action_speed_dial">打开快捷访问</string>
     <string name="action_add_bookmark">添加书签</string>
     <string name="action_add_speed_dial">添加至快捷访问</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">在其他应用中打开</string>
     <string name="action_intent">开始应用活动</string>
     <string name="action_toggle_fullscreen">切换全屏显示</string>
-    <string name="action_open_menu">打开选项菜单</string>
+    <string name="action_open_options_menu">打开选项菜单</string>
     <string name="action_show_custom_menu">显示自定义菜单</string>
     <string name="action_finish">结束</string>
     <string name="action_minimize">任务移至后台</string>

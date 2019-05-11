@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">Швидкість авто-прокрутки</string>
     <string name="action_auto_scroll_speed_zero">Помилка: Швидкість не повинна бути 0</string>
 
-    <string name="action_tab_list">Режим списку вкладок</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">Режим списку вкладок</string>
+    <string-array name="action_tab_list_pref">
         <item>Вертикальний список</item>
         <item>Вертикальний зворотний список</item>
         <item>Горизонтальний список</item>

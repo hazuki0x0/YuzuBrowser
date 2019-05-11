@@ -61,8 +61,8 @@
     <string name="action_auto_scroll_speed">自动滚动速度</string>
     <string name="action_auto_scroll_speed_zero">错误：速度不能为 0</string>
 
-    <string name="action_tab_list">标签页列表模式</string>
-    <string-array name="action_tab_list">
+    <string name="action_tab_list_pref">标签页列表模式</string>
+    <string-array name="action_tab_list_pref">
         <item>垂直列表</item>
         <item>反向垂直列表</item>
         <item>水平列表</item>

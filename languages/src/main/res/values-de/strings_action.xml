@@ -72,7 +72,6 @@
     <string name="action_bookmark">Lesezeichen</string>
     <string name="action_history">Verlauf</string>
     <string name="action_dl_point">Download Liste</string>
-    <string name="action_settings">Einstellungen</string>
     <string name="action_speed_dial">Schnellwahl öffnen</string>
     <string name="action_add_bookmark">Lesezeichen hinzufügen</string>
     <string name="action_add_speed_dial">zur Schnellwahl hinzufügen</string>
@@ -107,7 +106,7 @@
     <string name="action_open_in_another">in einer anderen App öffnen</string>
     <string name="action_intent">Startaktivität</string>
     <string name="action_toggle_fullscreen">Vollbildschirm umschalten</string>
-    <string name="action_open_menu">Optionsmenü öffnen</string>
+    <string name="action_open_options_menu">Optionsmenü öffnen</string>
     <string name="action_show_custom_menu">Benutzerdefiniertes Menü anzeigen</string>
     <string name="action_finish">Oberfläche</string>
     <string name="action_minimize">Aufgabe nach hinten verschieben</string>
