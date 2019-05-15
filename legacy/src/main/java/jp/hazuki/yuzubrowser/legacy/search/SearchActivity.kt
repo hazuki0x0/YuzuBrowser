@@ -35,7 +35,6 @@ import android.widget.Toast
 import com.squareup.moshi.Moshi
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
-import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -51,7 +50,6 @@ import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
-import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OutSideClickableRecyclerView
 import kotlinx.android.synthetic.main.tab_list.*
 import kotlinx.coroutines.Dispatchers
@@ -119,8 +117,6 @@ class SearchActivity : DaggerThemeActivity(), TextWatcher, SearchButton.Callback
 
         val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(
-                this, getResColor(R.color.divider)))
 
         if (bottomBoxMode) {
             layoutManager.reverseLayout = true
