@@ -318,7 +318,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         else
             url
         if (!checkUrl(tab, newUrl, Uri.parse(newUrl))) {
-            if (checkPatternMatch(tab, newUrl, handleOpenInBrowser) <= 0)
+            if (!checkLoadPagePatternMatch(tab, url, handleOpenInBrowser))
                 tab.mWebView.loadUrl(newUrl)
         }
     }
@@ -346,13 +346,9 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 controller.loadUrl(data, safeFileProvider.convertToSaferUrl(url))
                 return true
             }
-            val patternResult = checkPatternMatch(data, url, false)
-            if (patternResult == 0) {
-                web.loadUrl(url)
-                return true
-            }
+            val patternResult = checkLoadPagePatternMatch(data, url, false)
 
-            if (patternResult == 1 || checkNewTabLinkAuto(getNewTabPerformType(data), data, url)) {
+            if (patternResult || checkNewTabLinkAuto(getNewTabPerformType(data), data, url)) {
                 if (web.url == null || data.mWebView.isBackForwardListEmpty) {
                     controller.removeTab(controller.indexOf(data.id))
                 }
@@ -372,6 +368,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             if (controller.isEnableFindOnPage && controller.isFindOnPageAutoClose) {
                 controller.isEnableFindOnPage = false
             }
+            checkSettingsPatternMatch(data, url)
 
             applyUserScript(web, url, UserScript.RunAt.START)
 
@@ -396,14 +393,15 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
 
         override fun onPageCommitVisible(web: CustomWebView, url: String) {
-            applyJavascriptInjection(web, url)
+            val data = controller.getTabOrNull(web) ?: return
+            applyJavascriptInjection(data, web, url)
         }
 
         override fun onPageFinished(web: CustomWebView, url: String) {
             val data = controller.getTabOrNull(web) ?: return
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                applyJavascriptInjection(web, url)
+                applyJavascriptInjection(data, web, url)
             }
             applyUserScript(web, url, UserScript.RunAt.IDLE)
 
@@ -443,7 +441,11 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
             }
         }
 
-        private fun applyJavascriptInjection(web: CustomWebView, url: String) {
+        private fun applyJavascriptInjection(tab: MainTabData, web: CustomWebView, url: String) {
+            if (tab.renderingMode >= 0) {
+                applyRenderingMode(web, tab.renderingMode)
+                tab.resetRenderingMode()
+            }
             if (web.isInvertMode) {
                 web.evaluateJavascript(invertEnableJs, null)
             }
@@ -461,6 +463,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
                 if (tab == controller.currentTabData) {
                     controller.notifyChangeWebState(tab)
                 }
+                checkSettingsPatternMatch(tab, url)
             }
             if (controller.isEnableFindOnPage && controller.isFindOnPageAutoClose) {
                 controller.isEnableFindOnPage = false
@@ -584,45 +587,53 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
     }
 
-    fun checkPatternMatch(tab: MainTabData, url: String?, handleOpenInBrowser: Boolean): Int {
-        if (url == null) return -1
+    fun checkLoadPagePatternMatch(tab: MainTabData, url: String?, handleOpenInBrowser: Boolean): Boolean {
+        if (url == null) return false
+
+        for (item in patternManager.list) {
+            if (item.action is WebSettingPatternAction) continue
+            if (!item.isMatchUrl(url)) continue
+
+            if (handleOpenInBrowser && item.action is OpenOthersPatternAction) {
+                continue
+            } else if (item.action.run(activity, tab, url))
+                return true
+        }
+        return false
+    }
+
+    fun checkSettingsPatternMatch(tab: MainTabData, url: String?) {
+        if (url == null) return
         var normalSettings = true
         var changeSetting = false
-        patternManager.list
-                .filter { it.isMatchUrl(url) }
-                .forEach {
-                    if (it.action is WebSettingPatternAction) {
-                        if (tab.resetAction != null && tab.resetAction.patternAction == it.action) {
-                            normalSettings = false
-                            return@forEach
-                        }
 
-                        /* save normal settings */
-                        if (tab.resetAction == null)
-                            tab.resetAction = WebSettingResetAction(tab)
-                        tab.resetAction.patternAction = it.action as WebSettingPatternAction
+        for (item in patternManager.list) {
+            if (item.action !is WebSettingPatternAction) continue
+            if (!item.isMatchUrl(url)) continue
 
-                        /* change web settings */
-                        it.action.run(activity, tab, url)
-                        changeSetting = true
-                    } else if (handleOpenInBrowser && it.action is OpenOthersPatternAction) {
-                        return@forEach
-                    } else if (it.action.run(activity, tab, url))
-                        return 1
-                }
+            if (tab.resetAction != null && tab.resetAction.patternAction == item.action) {
+                normalSettings = false
+                continue
+            }
 
-        if (changeSetting) {
-            return 0
+            /* save normal settings */
+            if (tab.resetAction == null)
+                tab.resetAction = WebSettingResetAction(tab)
+            tab.resetAction.patternAction = item.action as WebSettingPatternAction
+
+            /* change web settings */
+            item.action.run(activity, tab, url)
+            changeSetting = true
         }
+
+        if (changeSetting) return
 
         /* reset to normal */
         if (normalSettings && tab.resetAction != null) {
             tab.resetAction.reset(tab)
             tab.resetAction = null
             controller.notifyChangeWebState()
-            return 0
         }
-        return -1
     }
 
     private fun onDownloadStart(web: CustomWebView, url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
@@ -1111,6 +1122,8 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
         }
 
     fun applyRenderingMode(webView: CustomWebView, mode: Int) {
+        if (webView.renderingMode == mode) return
+
         val oldIsInvert = webView.isInvertMode
         webViewRenderingManager.setWebViewRendering(webView, mode)
         if (oldIsInvert != webView.isInvertMode) {

@@ -1,157 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dialog_padding_top"
+            android:paddingStart="@dimen/dialog_padding"
+            android:paddingEnd="@dimen/dialog_padding">
 
-
-    <LinearLayout
-        android:id="@+id/inner"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/header_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <CheckBox
+            android:id="@+id/uaCheckBox"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:ignore="UselessParent">
+            android:layout_height="wrap_content"
+            android:text="@string/useragent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_frame"/>
 
-            <CheckBox
-                android:id="@+id/uaCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/useragent"/>
+        <EditText
+            android:id="@+id/uaEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/useragent"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/uaButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/uaCheckBox"/>
 
-            <LinearLayout
-                android:id="@+id/uaLayout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_below="@+id/uaCheckBox">
+        <ImageButton
+            android:id="@+id/uaButton"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/useragent"
+            android:src="@drawable/ic_add_white_24dp"
+            android:tint="?attr/iconColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/uaEditText"/>
 
 
-                <EditText
-                    android:id="@+id/uaEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/useragent"
-                    android:inputType="text"/>
+        <CheckBox
+            android:id="@+id/jsCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
+            android:layout_toStartOf="@+id/jsSwitch"
+            android:text="@string/javascript"
+            app:layout_constraintEnd_toStartOf="@+id/jsSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/uaEditText"/>
 
-                <ImageButton
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:tint="?attr/iconColor"
-                    android:src="@drawable/ic_add_white_24dp"
-                    android:contentDescription="@string/useragent"
-                    android:id="@+id/uaButton"/>
+        <Switch
+            android:id="@+id/jsSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignTop="@+id/jsCheckBox"
+            android:layout_alignBottom="@+id/jsCheckBox"
+            android:layout_alignParentEnd="true"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/jsCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/jsCheckBox"/>
 
-            </LinearLayout>
+        <CheckBox
+            android:id="@+id/navLockCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/navigate_lock"
+            app:layout_constraintEnd_toStartOf="@+id/navLockSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/jsCheckBox"/>
 
-            <CheckBox
-                android:id="@+id/jsCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/javascript"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/uaLayout"
-                android:layout_toStartOf="@+id/jsSwitch"
-                android:layout_alignParentStart="true"/>
+        <Switch
+            android:id="@+id/navLockSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignParentEnd="true"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/navLockCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/navLockCheckBox"/>
 
-            <Switch
-                android:id="@+id/jsSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:layout_alignTop="@+id/jsCheckBox"
-                android:layout_alignBottom="@+id/jsCheckBox"/>
 
-            <CheckBox
-                android:id="@+id/navLockCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/jsCheckBox"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/navigate_lock"
-                android:layout_toStartOf="@+id/navLockSwitch"/>
+        <CheckBox
+            android:id="@+id/loadImageCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/load_image"
+            app:layout_constraintEnd_toStartOf="@+id/loadImageSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/navLockCheckBox"/>
 
-            <Switch
-                android:id="@+id/navLockSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/navLockCheckBox"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:layout_alignBottom="@+id/navLockCheckBox"/>
+        <Switch
+            android:id="@+id/loadImageSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/loadImageCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/loadImageCheckBox"/>
 
-            <CheckBox
-                android:id="@+id/loadImageCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/navLockCheckBox"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/load_image"
-                android:layout_toStartOf="@+id/loadImageSwitch"/>
+        <CheckBox
+            android:id="@+id/cookieCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/pref_accept_cookie"
+            app:layout_constraintEnd_toStartOf="@+id/cookieSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loadImageCheckBox"/>
 
-            <Switch
-                android:id="@+id/loadImageSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/loadImageCheckBox"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:layout_alignBottom="@+id/loadImageCheckBox"/>
+        <Switch
+            android:id="@+id/cookieSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cookieCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cookieCheckBox"/>
 
-            <CheckBox
-                android:id="@+id/cookieCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/loadImageSwitch"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/pref_accept_cookie"
-                android:layout_toStartOf="@+id/thirdCookieSwitch"/>
+        <CheckBox
+            android:id="@+id/thirdCookieCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/pref_accept_third_cookie"
+            app:layout_constraintEnd_toStartOf="@+id/thirdCookieSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cookieCheckBox"/>
 
-            <Switch
-                android:id="@+id/cookieSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/cookieCheckBox"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:layout_alignBottom="@+id/cookieCheckBox"/>
+        <Switch
+            android:id="@+id/thirdCookieSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/thirdCookieCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/thirdCookieCheckBox"/>
 
-            <CheckBox
-                android:id="@+id/thirdCookieCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/cookieSwitch"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/pref_accept_third_cookie"
-                android:layout_toStartOf="@+id/thirdCookieSwitch"/>
+        <CheckBox
+            android:id="@+id/renderingModeCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/pref_rendering"
+            app:layout_constraintEnd_toStartOf="@+id/renderingModeSpinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thirdCookieCheckBox"/>
 
-            <Switch
-                android:id="@+id/thirdCookieSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/thirdCookieCheckBox"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:layout_alignBottom="@+id/thirdCookieCheckBox"/>
-        </RelativeLayout>
-    </LinearLayout>
-
+        <Spinner
+            android:id="@+id/renderingModeSpinner"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:entries="@array/pref_rendering_list"
+            app:layout_constraintBottom_toBottomOf="@+id/renderingModeCheckBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/renderingModeCheckBox"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

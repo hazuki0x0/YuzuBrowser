@@ -34,7 +34,6 @@ abstract class PatternAction : AbstractPatternAction() {
 
     companion object {
         const val OPEN_OTHERS = 1
-        //public static final int REPLACE_URL = 2;
         const val WEB_SETTING = 3
         const val BLOCK = 4
 

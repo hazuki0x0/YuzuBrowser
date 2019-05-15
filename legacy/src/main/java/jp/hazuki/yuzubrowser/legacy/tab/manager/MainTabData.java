@@ -208,6 +208,7 @@ public class MainTabData extends TabData {
     private boolean iconReceived;
     private int alertMode;
     private int cookieMode = COOKIE_UNDEFINED;
+    private int renderingMode = RENDERING_MODE_UNDEFINED;
 
     public WebSettingResetAction getResetAction() {
         return resetAction;
@@ -266,6 +267,18 @@ public class MainTabData extends TabData {
         this.alertMode = alertMode;
     }
 
+    public int getRenderingMode() {
+        return renderingMode;
+    }
+
+    public void setRenderingMode(int renderingMode) {
+        this.renderingMode = renderingMode;
+    }
+
+    public void resetRenderingMode() {
+        renderingMode = RENDERING_MODE_UNDEFINED;
+    }
+
     public static final int COOKIE_ENABLE = 1;
     public static final int COOKIE_DISABLE = 0;
     public static final int COOKIE_UNDEFINED = -1;
@@ -273,4 +286,6 @@ public class MainTabData extends TabData {
     public static final int ALERT_ALLOWED = 0;
     public static final int ALERT_MULTIPULE = 1;
     public static final int ALERT_BLOCKED = -1;
+
+    public static final int RENDERING_MODE_UNDEFINED = -1;
 }

@@ -36,7 +36,6 @@ import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData;
-import jp.hazuki.yuzubrowser.legacy.tab.manager.OnWebViewCreatedListener;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabCache;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabFaviconManager;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabIndexData;
@@ -60,7 +59,6 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
     private final TabFaviconManager tabFaviconManager;
 
     private List<View> mTabView;
-    private OnWebViewCreatedListener listener;
 
     CacheTabManager(BrowserActivity activity, WebViewFactory factory) {
         mWebBrowser = activity;
@@ -72,9 +70,6 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
         mTabStorage.setOnWebViewCreatedListener(tab -> {
             synchronized (mTabCache) {
                 mTabCache.put(tab.getId(), tab);
-            }
-            if (listener != null) {
-                listener.onWebViewCreated(tab);
             }
         });
     }
@@ -366,11 +361,6 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
     @Override
     public void forceTakeThumbnail(MainTabData data) {
         thumbnailManager.forceTakeThumbnail(data);
-    }
-
-    @Override
-    public void setOnWebViewCreatedListener(OnWebViewCreatedListener listener) {
-        this.listener = listener;
     }
 
     private void setText(View view, TabIndexData indexData) {

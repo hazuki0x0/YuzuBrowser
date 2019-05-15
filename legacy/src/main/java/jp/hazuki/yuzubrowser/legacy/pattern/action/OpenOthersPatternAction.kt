@@ -38,7 +38,7 @@ class OpenOthersPatternAction : PatternAction {
     private var mUrl: String? = null
 
     override val typeId: Int
-        get() = PatternAction.OPEN_OTHERS
+        get() = OPEN_OTHERS
 
     val intent: Intent?
         get() {
@@ -82,7 +82,7 @@ class OpenOthersPatternAction : PatternAction {
 
     @Throws(IOException::class)
     override fun write(writer: JsonWriter): Boolean {
-        writer.value(PatternAction.OPEN_OTHERS)
+        writer.value(OPEN_OTHERS)
         writer.beginObject()
         writer.name(FIELD_TYPE)
         writer.value(openType)
@@ -98,7 +98,7 @@ class OpenOthersPatternAction : PatternAction {
                 val pre = context.getString(R.string.pattern_open_others)
                 try {
                     val pm = context.packageManager
-                    return pre + " : " + pm.getActivityInfo(intent!!.component, 0).loadLabel(pm).toString()
+                    return "$pre : ${pm.getActivityInfo(intent!!.component, 0).loadLabel(pm)}"
                 } catch (e: NameNotFoundException) {
                     e.printStackTrace()
                 }

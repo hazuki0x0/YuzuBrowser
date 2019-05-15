@@ -81,7 +81,6 @@ import jp.hazuki.yuzubrowser.legacy.tab.BrowserTabManager
 import jp.hazuki.yuzubrowser.legacy.tab.TabListLayout
 import jp.hazuki.yuzubrowser.legacy.tab.UiTabManager
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
-import jp.hazuki.yuzubrowser.legacy.tab.manager.OnWebViewCreatedListener
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager
 import jp.hazuki.yuzubrowser.legacy.tab.manager.WebViewProvider
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
@@ -116,7 +115,7 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
 
-class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, OnWebViewCreatedListener, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener, WebViewProvider {
+class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener, WebViewProvider {
 
     private lateinit var asyncPermissions: AsyncPermissions
     private val handler = Handler(Looper.getMainLooper())
@@ -262,7 +261,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         webGestureOverlayView.setWebFrame(appbar)
 
         onPreferenceReset()
-        tabManagerIn.setOnWebViewCreatedListener(this)
 
         if (savedInstanceState != null) {
             restoreWebState()
@@ -1333,10 +1331,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun startActivity(intent: Intent, @RequestCause cause: Int) {
         startActivityForResult(intent, cause)
-    }
-
-    override fun onWebViewCreated(tab: MainTabData) {
-        webClient.checkPatternMatch(tab, tab.url, true)
     }
 
     override fun showActionName(text: String?) {

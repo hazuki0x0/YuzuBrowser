@@ -126,7 +126,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             val view = View.inflate(activity, R.layout.pattern_add_websetting, null) as ViewGroup
             if (activity is PatternUrlActivity) {
                 header = (activity as PatternUrlActivity).makeHeaderView(checker)
-                (view.findViewById<View>(R.id.inner) as LinearLayout).addView(header, 0)
+                view.findViewById<FrameLayout>(R.id.header_frame).addView(header)
             }
 
             layout = SettingWebDialogView(view).apply { init(checker) }
@@ -233,8 +233,12 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                         WebSettingPatternAction.DISABLE
                     }
                 }
+                var renderingMode = WebSettingPatternAction.UNDEFINED_RENDERING
+                if (renderingModeCheckBox.isChecked) {
+                    renderingMode = renderingModeSpinner.selectedItemPosition
+                }
 
-                return WebSettingPatternAction(ua, js, navLock, image, cookie, thirdCookie)
+                return WebSettingPatternAction(ua, js, navLock, image, cookie, thirdCookie, renderingMode)
             }
 
             private fun setData(checker: PatternUrlChecker?) {
@@ -246,6 +250,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     loadImageSwitch.isEnabled = false
                     cookieSwitch.isEnabled = false
                     thirdCookieSwitch.isEnabled = false
+                    renderingModeSpinner.isEnabled = false
                 } else {
                     val action = checker.action as WebSettingPatternAction
                     val ua = action.userAgentString
@@ -336,6 +341,15 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                             thirdCookieSwitch.isChecked = false
                         }
                     }
+                    if (action.renderingMode < 0) {
+                        renderingModeCheckBox.isChecked = false
+                        renderingModeSpinner.isEnabled = false
+                        renderingModeSpinner.setSelection(0)
+                    } else {
+                        renderingModeCheckBox.isChecked = true
+                        renderingModeSpinner.isEnabled = true
+                        renderingModeSpinner.setSelection(action.renderingMode)
+                    }
                 }
             }
 
@@ -366,6 +380,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 cookieCheckBox.setOnCheckedChangeListener { _, b -> cookieSwitch.isEnabled = b }
 
                 thirdCookieCheckBox.setOnCheckedChangeListener { _, b -> thirdCookieSwitch.isEnabled = b }
+
+                renderingModeCheckBox.setOnCheckedChangeListener { _, b -> renderingModeSpinner.isEnabled = b }
             }
         }
     }

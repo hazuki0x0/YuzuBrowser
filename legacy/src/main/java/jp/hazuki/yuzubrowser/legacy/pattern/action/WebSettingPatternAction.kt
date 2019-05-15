@@ -40,14 +40,17 @@ class WebSettingPatternAction : PatternAction {
         private set
     var thirdCookie = UNDEFINED
         private set
+    var renderingMode = UNDEFINED_RENDERING
+        private set
 
-    constructor(ua: String?, js: Int, navLock: Int, image: Int, cookie: Int, thirdCookie: Int) {
+    constructor(ua: String?, js: Int, navLock: Int, image: Int, cookie: Int, thirdCookie: Int, renderingMode: Int) {
         userAgentString = ua
         javaScriptSetting = js
         this.navLock = navLock
         loadImage = image
         this.cookie = cookie
         this.thirdCookie = thirdCookie
+        this.renderingMode = renderingMode
     }
 
     @Throws(IOException::class)
@@ -80,6 +83,10 @@ class WebSettingPatternAction : PatternAction {
                     if (reader.peek() != JsonReader.Token.NUMBER) return
                     cookie = reader.nextInt()
                 }
+                FIELD_NAME_RENDERING_MODE -> {
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    renderingMode = reader.nextInt()
+                }
                 else -> {
                     reader.skipValue()
                 }
@@ -88,7 +95,7 @@ class WebSettingPatternAction : PatternAction {
         reader.endObject()
     }
 
-    override val typeId = PatternAction.WEB_SETTING
+    override val typeId = WEB_SETTING
 
     override fun getTitle(context: Context): String {
         return context.getString(R.string.pattern_change_websettings)
@@ -96,7 +103,7 @@ class WebSettingPatternAction : PatternAction {
 
     @Throws(IOException::class)
     override fun write(writer: JsonWriter): Boolean {
-        writer.value(PatternAction.WEB_SETTING)
+        writer.value(WEB_SETTING)
         writer.beginObject()
         if (userAgentString != null) {
             writer.name(FIELD_NAME_UA)
@@ -112,6 +119,8 @@ class WebSettingPatternAction : PatternAction {
         writer.value(thirdCookie)
         writer.name(FIELD_NAME_COOKIE)
         writer.value(cookie)
+        writer.name(FIELD_NAME_RENDERING_MODE)
+        writer.value(renderingMode)
         writer.endObject()
         return true
     }
@@ -148,6 +157,10 @@ class WebSettingPatternAction : PatternAction {
             ENABLE -> CookieManager.getInstance().setAcceptThirdPartyCookies(tab.mWebView.webView, true)
             DISABLE -> CookieManager.getInstance().setAcceptThirdPartyCookies(tab.mWebView.webView, false)
         }
+
+        if (renderingMode >= 0) {
+            tab.renderingMode = renderingMode
+        }
         return false
     }
 
@@ -156,11 +169,14 @@ class WebSettingPatternAction : PatternAction {
         const val ENABLE = 1
         const val DISABLE = 2
 
+        const val UNDEFINED_RENDERING = -1
+
         private const val FIELD_NAME_UA = "0"
         private const val FIELD_NAME_JS = "1"
         private const val FIELD_NAME_NAV_LOCK = "2"
         private const val FIELD_NAME_IMAGE = "3"
         private const val FIELD_NAME_THIRD_COOKIE = "4"
         private const val FIELD_NAME_COOKIE = "5"
+        private const val FIELD_NAME_RENDERING_MODE = "6"
     }
 }

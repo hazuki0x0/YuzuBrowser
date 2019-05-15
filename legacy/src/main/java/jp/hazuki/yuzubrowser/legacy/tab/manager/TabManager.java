@@ -89,6 +89,4 @@ public interface TabManager {
     void removeThumbnailCache(String url);
 
     void forceTakeThumbnail(MainTabData data);
-
-    void setOnWebViewCreatedListener(OnWebViewCreatedListener listener);
 }

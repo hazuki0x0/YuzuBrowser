@@ -27,7 +27,7 @@ import java.io.IOException
 class BlockPatternAction : PatternAction {
 
     override val typeId: Int
-        get() = PatternAction.BLOCK
+        get() = BLOCK
 
     constructor()
 
@@ -43,7 +43,7 @@ class BlockPatternAction : PatternAction {
 
     @Throws(IOException::class)
     override fun write(writer: JsonWriter): Boolean {
-        writer.value(PatternAction.BLOCK)
+        writer.value(BLOCK)
         writer.value(0)
         return true
     }
