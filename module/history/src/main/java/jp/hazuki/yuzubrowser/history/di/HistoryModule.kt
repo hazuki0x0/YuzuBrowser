@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.history
+package jp.hazuki.yuzubrowser.history.di
 
-class BrowserHistory(var id: Long = 0, var title: String? = null, var url: String? = null, var time: Long = 0)
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+import jp.hazuki.yuzubrowser.history.presenter.BrowserHistoryActivity
+
+@Module
+abstract class HistoryModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeBrowserHistoryActivity(): BrowserHistoryActivity
+}

@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon', ':download', ':adblock', ':bookmark', ':connecter', ':history'
+package jp.hazuki.yuzubrowser.history.repository
 
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
-}
+class BrowserHistoryModel(var id: Long = 0, var title: String? = null, var url: String? = null, var time: Long = 0)

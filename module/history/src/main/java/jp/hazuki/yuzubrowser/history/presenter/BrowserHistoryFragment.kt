@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.history
+package jp.hazuki.yuzubrowser.history.presenter
 
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
@@ -33,15 +33,17 @@ import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
-import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryModel
+import jp.hazuki.yuzubrowser.history.repository.HistoryPref
+import jp.hazuki.yuzubrowser.historyModel.R
+import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
+import jp.hazuki.yuzubrowser.ui.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
-import kotlinx.android.synthetic.main.fragment_recycler_with_scroller.*
+import kotlinx.android.synthetic.main.fragment_history.*
+import org.jetbrains.anko.share
 import java.util.*
 
 
@@ -56,14 +58,18 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
     private var actionMode: ActionMode? = null
 
+    private lateinit var prefs: HistoryPref
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_recycler_with_scroller, container, false)
+        return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
+
+        prefs = HistoryPref.get(activity)
 
         pickMode = arguments.getBoolean(PICK_MODE)
 
@@ -79,7 +85,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         touchScrollBar.addScrollListener(listener)
 
         manager = BrowserHistoryManager.getInstance(activity)
-        adapter = BrowserHistoryAdapter(activity, manager, pickMode, this)
+        adapter = BrowserHistoryAdapter(activity, prefs, manager, pickMode, this)
         val decoration = StickyHeaderDecoration(adapter)
         adapter.setDecoration(decoration)
         recyclerView.addItemDecoration(decoration)
@@ -105,7 +111,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         if (adapter.isMultiSelectMode) {
             adapter.toggle(position)
         } else {
-            sendUrl(adapter.getItem(position), AppData.newtab_history.get())
+            sendUrl(adapter.getItem(position), prefs.newtabHistory)
         }
     }
 
@@ -134,23 +140,23 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
             val popupMenu = PopupMenu(activity, v, locationDetector.gravity)
             val menu = popupMenu.menu
             menu.add(R.string.open).setOnMenuItemClickListener {
-                sendUrl(url, BrowserManager.LOAD_URL_TAB_CURRENT)
+                sendUrl(url, BROWSER_LOAD_URL_TAB_CURRENT)
                 false
             }
             menu.add(R.string.open_new).setOnMenuItemClickListener {
-                sendUrl(url, BrowserManager.LOAD_URL_TAB_NEW)
+                sendUrl(url, BROWSER_LOAD_URL_TAB_NEW)
                 false
             }
             menu.add(R.string.open_bg).setOnMenuItemClickListener {
-                sendUrl(url, BrowserManager.LOAD_URL_TAB_BG)
+                sendUrl(url, BROWSER_LOAD_URL_TAB_BG)
                 false
             }
             menu.add(R.string.open_new_right).setOnMenuItemClickListener {
-                sendUrl(url, BrowserManager.LOAD_URL_TAB_NEW_RIGHT)
+                sendUrl(url, BROWSER_LOAD_URL_TAB_NEW_RIGHT)
                 false
             }
             menu.add(R.string.open_bg_right).setOnMenuItemClickListener {
-                sendUrl(url, BrowserManager.LOAD_URL_TAB_BG_RIGHT)
+                sendUrl(url, BROWSER_LOAD_URL_TAB_BG_RIGHT)
                 false
             }
             menu.add(R.string.add_bookmark).setOnMenuItemClickListener {
@@ -159,20 +165,20 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
             }
             menu.add(R.string.delete_history).setOnMenuItemClickListener {
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(R.string.confirm_delete_history)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            manager.delete(url)
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_history)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        manager.delete(url)
 
-                            adapter.remove(position)
-                            adapter.notifyDataSetChanged()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                        adapter.remove(position)
+                        adapter.notifyDataSetChanged()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
                 false
             }
             menu.add(R.string.share).setOnMenuItemClickListener {
-                WebUtils.shareWeb(activity, url, title)
+                activity.share(url, title)
                 false
             }
             menu.add(R.string.copy_url).setOnMenuItemClickListener {
@@ -185,14 +191,14 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     }
 
     override fun onIconClicked(v: View, position: Int) {
-        sendUrl(adapter.getItem(position), BrowserManager.LOAD_URL_TAB_NEW)
+        sendUrl(adapter.getItem(position), BROWSER_LOAD_URL_TAB_NEW)
     }
 
-    private fun sendUrl(history: BrowserHistory, target: Int) {
+    private fun sendUrl(historyModel: BrowserHistoryModel, target: Int) {
         if (pickMode) {
-            sendPicked(history)
+            sendPicked(historyModel)
         } else {
-            sendUrl(history.url, target)
+            sendUrl(historyModel.url, target)
         }
     }
 
@@ -201,20 +207,20 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
 
         if (url != null) {
             val intent = Intent()
-            intent.putExtra(BrowserManager.EXTRA_OPENABLE, OpenUrl(url, target))
+            intent.putExtra(INTENT_EXTRA_OPENABLE, OpenUrl(url, target))
             activity.setResult(RESULT_OK, intent)
         }
         activity.finish()
     }
 
-    private fun sendPicked(history: BrowserHistory) {
+    private fun sendPicked(historyModel: BrowserHistoryModel) {
         val activity = activity ?: return
 
         val intent = Intent()
-        intent.putExtra(Intent.EXTRA_TITLE, history.title)
-        intent.putExtra(Intent.EXTRA_TEXT, history.url)
+        intent.putExtra(Intent.EXTRA_TITLE, historyModel.title)
+        intent.putExtra(Intent.EXTRA_TEXT, historyModel.url)
         intent.putExtra(Intent.EXTRA_STREAM,
-                history.url?.let { FaviconManager.getInstance(activity).getFaviconBytes(it) })
+            historyModel.url?.let { FaviconManager.getInstance(activity).getFaviconBytes(it) })
         activity.setResult(RESULT_OK, intent)
         activity.finish()
     }
@@ -252,45 +258,45 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         when (item.itemId) {
             R.id.delete_all_favicon -> {
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(R.string.confirm_delete_all_favicon)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            FaviconManager.getInstance(activity).clear()
-                            adapter.notifyDataSetChanged()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_all_favicon)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        FaviconManager.getInstance(activity).clear()
+                        adapter.notifyDataSetChanged()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
                 return true
             }
             R.id.delete_all_histories -> {
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(R.string.confirm_delete_all_history)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            manager.deleteAll()
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_all_history)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        manager.deleteAll()
 
-                            adapter.reLoad()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                        adapter.reLoad()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
                 return true
             }
             R.id.delete_all_displayed_item -> {
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(R.string.confirm_delete_all_displayed_item)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            if (searchView!!.isIconified || TextUtils.isEmpty(searchView!!.query)) {
-                                manager.deleteAll()
-                                adapter.reLoad()
-                            } else {
-                                val query = searchView!!.query.toString()
-                                manager.deleteWithSearch(query)
-                                adapter.search(query)
-                            }
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_all_displayed_item)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        if (searchView!!.isIconified || TextUtils.isEmpty(searchView!!.query)) {
+                            manager.deleteAll()
+                            adapter.reLoad()
+                        } else {
+                            val query = searchView!!.query.toString()
+                            manager.deleteWithSearch(query)
+                            adapter.search(query)
                         }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
                 return true
             }
         }
@@ -321,13 +327,13 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
                 val items = adapter.selectedItems
                 Collections.sort(items, Collections.reverseOrder())
                 items
-                        .map { adapter.remove(it) }
-                        .forEach { manager.delete(it.url) }
+                    .map { adapter.remove(it) }
+                    .forEach { manager.delete(it.url) }
                 adapter.notifyDataSetChanged()
                 mode.finish()
             }
-            R.id.openAllNew -> openUrls(adapter.selectedItems, BrowserManager.LOAD_URL_TAB_NEW)
-            R.id.openAllBg -> openUrls(adapter.selectedItems, BrowserManager.LOAD_URL_TAB_BG)
+            R.id.openAllNew -> openUrls(adapter.selectedItems, BROWSER_LOAD_URL_TAB_NEW)
+            R.id.openAllBg -> openUrls(adapter.selectedItems, BROWSER_LOAD_URL_TAB_BG)
         }
         return false
     }
@@ -343,7 +349,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
             val urls = items.mapNotNull { adapter.getItem(it).url }
 
             val intent = Intent()
-            intent.putExtra(BrowserManager.EXTRA_OPENABLE, OpenUrlList(urls, target))
+            intent.putExtra(INTENT_EXTRA_OPENABLE, OpenUrlList(urls, target))
             activity.setResult(RESULT_OK, intent)
             activity.finish()
         }

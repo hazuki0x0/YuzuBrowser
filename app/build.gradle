@@ -135,6 +135,7 @@ dependencies {
     implementation project(':download')
     implementation project(':adblock')
     implementation project(':bookmark')
+    implementation project(':history')
 
     implementation Libs.kotlin_stdlib
 

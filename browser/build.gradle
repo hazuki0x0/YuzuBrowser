@@ -82,6 +82,7 @@ dependencies {
     implementation project(':adblock')
     implementation project(':bookmark')
     implementation project(':connecter')
+    implementation project(':history')
     implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }

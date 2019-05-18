@@ -28,9 +28,9 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;
-import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.ui.BrowserApplication;
 import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;

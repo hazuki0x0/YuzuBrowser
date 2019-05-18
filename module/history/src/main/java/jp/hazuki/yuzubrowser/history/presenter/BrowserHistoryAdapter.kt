@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.history
+package jp.hazuki.yuzubrowser.history.presenter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -34,25 +34,33 @@ import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
-import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryModel
+import jp.hazuki.yuzubrowser.history.repository.HistoryPref
+import jp.hazuki.yuzubrowser.historyModel.R
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
+import jp.hazuki.yuzubrowser.ui.extensions.getColorFromThemeRes
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import java.text.SimpleDateFormat
 import java.util.*
 
 class BrowserHistoryAdapter @SuppressLint("SimpleDateFormat")
-constructor(context: Context, private val manager: BrowserHistoryManager, private val pickMode: Boolean, private val listener: OnHistoryRecyclerListener) : RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>(), StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
+constructor(
+    context: Context,
+    private val prefs: HistoryPref,
+    private val manager: BrowserHistoryManager,
+    private val pickMode: Boolean,
+    private val listener: OnHistoryRecyclerListener
+) : RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>(), StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
 
     private val defaultColorFilter = PorterDuffColorFilter(
-            ThemeUtils.getColorFromThemeRes(context, R.attr.iconColor), PorterDuff.Mode.SRC_ATOP)
+        context.getColorFromThemeRes(R.attr.iconColor), PorterDuff.Mode.SRC_ATOP)
 
     private val dateFormat = DateFormat.getLongDateFormat(context)
     @SuppressLint("SimpleDateFormat")
     private val timeFormat = SimpleDateFormat("kk:mm")
     private val faviconManager = FaviconManager.getInstance(context.applicationContext)
-    private var histories: MutableList<BrowserHistory> = manager.getList(0, 100)
+    private var historyModels: MutableList<BrowserHistoryModel> = manager.getList(0, 100)
     private var mQuery: String? = null
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var mDecoration: StickyHeaderDecoration? = null
@@ -76,7 +84,7 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         private set
     private val itemSelected = SparseBooleanArray()
     private val foregroundOverlay = ColorDrawable(ResourcesCompat.getColor(context.resources,
-            R.color.selected_overlay, context.theme))
+        R.color.selected_overlay, context.theme))
 
     val selectedItems: List<Int>
         get() {
@@ -92,11 +100,11 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryHolder {
-        return HistoryHolder(inflater.inflate(R.layout.history_item, parent, false))
+        return HistoryHolder(inflater.inflate(R.layout.history_item, parent, false), prefs)
     }
 
     override fun onBindViewHolder(holder: HistoryHolder, position: Int) {
-        val item = histories[holder.adapterPosition]
+        val item = historyModels[holder.adapterPosition]
         val url = item.url?.decodePunyCodeUrlHost()
         val image = faviconManager[item.url!!]
 
@@ -149,36 +157,36 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
     }
 
     override fun getItemCount(): Int {
-        return histories.size
+        return historyModels.size
     }
 
-    fun getItem(position: Int): BrowserHistory {
-        return histories[position]
+    fun getItem(position: Int): BrowserHistoryModel {
+        return historyModels[position]
     }
 
-    fun remove(position: Int): BrowserHistory {
-        return histories.removeAt(position)
+    fun remove(position: Int): BrowserHistoryModel {
+        return historyModels.removeAt(position)
     }
 
     fun loadMore() {
         if (mQuery == null) {
-            histories.addAll(manager.getList(itemCount, 100))
+            historyModels.addAll(manager.getList(itemCount, 100))
         } else {
-            histories.addAll(manager.search(mQuery, itemCount, 100))
+            historyModels.addAll(manager.search(mQuery, itemCount, 100))
         }
         mDecoration!!.clearHeaderCache()
     }
 
     fun reLoad() {
         mQuery = null
-        histories = manager.getList(0, 100)
+        historyModels = manager.getList(0, 100)
         mDecoration!!.clearHeaderCache()
         notifyDataSetChanged()
     }
 
     fun search(query: String) {
         mQuery = query
-        histories = manager.search(mQuery, 0, 100)
+        historyModels = manager.search(mQuery, 0, 100)
         mDecoration!!.clearHeaderCache()
         notifyDataSetChanged()
     }
@@ -188,7 +196,7 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
     }
 
     override fun getHeaderId(position: Int): Long {
-        val time = histories[position].time
+        val time = historyModels[position].time
         calendar.timeInMillis = time
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -198,11 +206,11 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
     }
 
     override fun onCreateHeaderViewHolder(parent: ViewGroup): HeaderHolder {
-        return HeaderHolder(inflater.inflate(R.layout.recycler_view_header, parent, false))
+        return HeaderHolder(inflater.inflate(R.layout.recycler_view_header, parent, false), prefs)
     }
 
     override fun onBindHeaderViewHolder(viewHolder: HeaderHolder, position: Int) {
-        viewHolder.header.text = dateFormat.format(Date(histories[position].time))
+        viewHolder.header.text = dateFormat.format(Date(historyModels[position].time))
     }
 
     fun toggle(position: Int) {
@@ -228,7 +236,7 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         return itemSelected.get(position, false)
     }
 
-    class HistoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class HistoryHolder(itemView: View, prefs: HistoryPref) : RecyclerView.ViewHolder(itemView) {
 
         val foreground: View = itemView.findViewById(R.id.foreground)
         val imageButton: ImageButton = itemView.findViewById(R.id.imageButton)
@@ -238,7 +246,7 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         val overflowButton: ImageButton = itemView.findViewById(R.id.overflowButton)
 
         init {
-            val fontSizeSetting = AppData.font_size.history.get()
+            val fontSizeSetting = prefs.fontSizeHistory
             if (fontSizeSetting >= 0) {
                 val normal = FontUtils.getTextSize(fontSizeSetting)
                 val small = FontUtils.getSmallerTextSize(fontSizeSetting)
@@ -250,11 +258,11 @@ constructor(context: Context, private val manager: BrowserHistoryManager, privat
         }
     }
 
-    class HeaderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class HeaderHolder(itemView: View, prefs: HistoryPref) : RecyclerView.ViewHolder(itemView) {
         val header: TextView = itemView as TextView
 
         init {
-            val fontSizeSetting = AppData.font_size.history.get()
+            val fontSizeSetting = prefs.fontSizeHistory
             if (fontSizeSetting >= 0) {
                 header.textSize = FontUtils.getTextSize(fontSizeSetting).toFloat()
             }

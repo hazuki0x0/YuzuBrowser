@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.history
+package jp.hazuki.yuzubrowser.history.presenter
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.WindowManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
-import jp.hazuki.yuzubrowser.legacy.Constants
-import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.historyModel.R
+import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
+import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
+import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
+import javax.inject.Inject
 
-class BrowserHistoryActivity : ThemeActivity() {
+class BrowserHistoryActivity : DaggerThemeActivity() {
+    @Inject
+    internal lateinit var uiPrefs: UiPrefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,14 +41,14 @@ class BrowserHistoryActivity : ThemeActivity() {
         }
 
         var pickMode = false
-        var fullscreen = AppData.fullscreen.get()
-        var orientation = AppData.oritentation.get()
+        var fullscreen = uiPrefs.fullscreen
+        var orientation = uiPrefs.oritentation
         intent?.run {
             if (Intent.ACTION_PICK == action)
                 pickMode = true
 
-            fullscreen = getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen)
-            orientation = getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation)
+            fullscreen = getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, fullscreen)
+            orientation = getIntExtra(INTENT_EXTRA_MODE_ORIENTATION, orientation)
         }
 
         if (fullscreen)
@@ -53,8 +57,8 @@ class BrowserHistoryActivity : ThemeActivity() {
         requestedOrientation = orientation
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, BrowserHistoryFragment(pickMode))
-                .commit()
+            .replace(R.id.container, BrowserHistoryFragment(pickMode))
+            .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

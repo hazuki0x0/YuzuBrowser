@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon', ':download', ':adblock', ':bookmark', ':connecter', ':history'
+package jp.hazuki.yuzubrowser.history;
 
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() {
+        assertEquals(4, 2 + 2);
+    }
 }

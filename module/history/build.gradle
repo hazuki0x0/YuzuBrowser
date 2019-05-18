@@ -31,23 +31,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
-    }
     dataBinding {
         enabled = true
+    }
+
+    kotlinOptions {
+        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
     }
 }
 
@@ -57,7 +53,6 @@ androidExtensions {
 
 repositories {
     maven { url 'https://jitpack.io' }
-    mavenCentral()
 }
 
 dependencies {
@@ -75,11 +70,9 @@ dependencies {
     implementation AndroidX.design
     implementation AndroidX.recyclerView
     implementation AndroidX.constraintLayout
-    implementation AndroidX.fix_preference
     implementation AndroidX.activty
     implementation AndroidX.KTX
     implementation AndroidX.fragmentKtx
-    implementation AndroidX.room
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
@@ -88,37 +81,24 @@ dependencies {
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
 
-    implementation Libs.okhttp
     implementation Libs.okio
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
-    implementation Libs.header_decor
-    implementation Libs.jsoup
-    implementation project(':libraries:floatingactionbutton')
-    implementation project(':libraries:colorpicker')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
-        transitive = true
-    }
-    implementation project(':libraries:asyncpermissions')
     implementation project(':ui')
     implementation project(':core')
     implementation project(':languages')
-    implementation project(':webview')
     implementation project(':favicon')
-    implementation project(':download')
-    implementation project(':adblock')
-    implementation project(':bookmark')
     implementation project(':connecter')
-    implementation project(':history')
+    implementation project(':bookmark')
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
     implementation Libs.kotlin_anko_commons
-    implementation Libs.kotlin_anko_sql
 
     implementation Libs.kvs_schema
+    kapt Libs.kvs_schema_compiler
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
@@ -127,4 +107,7 @@ dependencies {
     implementation Libs.dagger_android
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
+
+    implementation Libs.header_decor
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.2'
 }

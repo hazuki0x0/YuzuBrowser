@@ -212,7 +212,7 @@
             android:grantUriPermissions="true" />
 
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity"
+            android:name=".history.presenter.BrowserHistoryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/history" />
         <activity

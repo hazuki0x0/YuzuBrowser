@@ -56,7 +56,6 @@ import jp.hazuki.yuzubrowser.legacy.settings.container.BooleanContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.Containable;
 import jp.hazuki.yuzubrowser.legacy.settings.container.FloatContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.IntContainer;
-import jp.hazuki.yuzubrowser.legacy.settings.container.LongContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.custom.FontSizeContainer;
@@ -127,8 +126,6 @@ public class AppData {
     public static final BooleanContainer save_history = new BooleanContainer("save_history", true);
     public static final IntContainer newtab_link = new IntContainer("newtab_link", BrowserManager.LOAD_URL_TAB_CURRENT);
     public static final IntContainer newtab_speeddial = new IntContainer("newtab_speeddial", BrowserManager.LOAD_URL_TAB_CURRENT);
-    public static final IntContainer newtab_bookmark = new IntContainer("newtab_bookmark", BrowserManager.LOAD_URL_TAB_CURRENT);
-    public static final IntContainer newtab_history = new IntContainer("newtab_history", BrowserManager.LOAD_URL_TAB_CURRENT);
     public static final IntContainer newtab_blank = new IntContainer("newtab_blank", BrowserManager.LOAD_URL_TAB_NEW_RIGHT);
     public static final StringContainer proxy_address = new StringContainer("proxy_address", "");
     public static final BooleanContainer proxy_set = new BooleanContainer("proxy_set", false);
@@ -164,8 +161,6 @@ public class AppData {
     public static final IntContainer search_suggest = new IntContainer("search_suggest", 0);
     public static final BooleanContainer search_suggest_histories = new BooleanContainer("search_suggest_histories", true);
     public static final BooleanContainer search_suggest_bookmarks = new BooleanContainer("search_suggest_bookmarks", true);
-    public static final IntContainer history_max_day = new IntContainer("history_max_day", 0);
-    public static final IntContainer history_max_count = new IntContainer("history_max_count", 0);
     public static final BooleanContainer detailed_log = new BooleanContainer("detailed_log", false);
     public static final StringContainer theme_setting = new StringContainer("theme_setting", ThemeData.THEME_LIGHT);
     public static final BooleanContainer resblock_enable = new BooleanContainer("resblock_enable", false);
@@ -176,10 +171,6 @@ public class AppData {
     public static final IntContainer double_tap_flick_sensitivity_speed = new IntContainer("double_tap_flick_sensitivity_speed", 20);
     public static final IntContainer double_tap_flick_sensitivity_distance = new IntContainer("double_tap_flick_sensitivity_distance", 15);
     public static final IntContainer mixed_content = new IntContainer("mixed_content", WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
-    public static final BooleanContainer save_bookmark_folder = new BooleanContainer("save_bookmark_folder", false);
-    public static final LongContainer save_bookmark_folder_id = new LongContainer("save_bookmark_folder_id", -1L);
-    public static final BooleanContainer open_bookmark_new_tab = new BooleanContainer("open_bookmark_new_tab", true);
-    public static final IntContainer open_bookmark_icon_action = new IntContainer("open_bookmark_icon_action", 1);
     public static final IntContainer search_suggest_engine = new IntContainer("search_suggest_engine", 0);
     public static final IntContainer tabs_cache_number = new IntContainer("tab_cache_number", 5);
     public static final IntContainer rendering = new IntContainer("rendering", 0);
@@ -220,8 +211,6 @@ public class AppData {
     public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);
     public static final BooleanContainer mining_protect = new BooleanContainer("mining_protect", true);
     public static final BooleanContainer fake_chrome = new BooleanContainer("fake_chrome", false);
-    public static final BooleanContainer bookmark_breadcrumbs = new BooleanContainer("bookmark_breadcrumbs", true);
-    public static final BooleanContainer bookmark_simpleDisplay = new BooleanContainer("bookmark_simpleDisplay", false);
     public static final BooleanContainer menu_icon = new BooleanContainer("menu_icon", true);
     public static final StringContainer language = new StringContainer("language", "");
 

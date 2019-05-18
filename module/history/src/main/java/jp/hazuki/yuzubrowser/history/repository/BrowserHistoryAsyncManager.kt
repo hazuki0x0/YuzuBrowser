@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.history
+package jp.hazuki.yuzubrowser.history.repository
 
 import android.content.Context
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
@@ -38,6 +38,10 @@ class BrowserHistoryAsyncManager(context: Context) {
 
     fun update(url: String?, title: String?) {
         thread.sendMessage(MyMessage(UPDATE_TITLE, url, title))
+    }
+
+    fun trim(maxDay: Int, maxCount: Int) {
+        historyManager.trim(maxDay, maxCount)
     }
 
     fun getHistoryArray(limit: Int): Array<String> {

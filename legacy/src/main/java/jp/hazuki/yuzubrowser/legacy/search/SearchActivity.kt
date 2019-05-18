@@ -37,9 +37,9 @@ import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlManager
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestHistory
 import jp.hazuki.yuzubrowser.legacy.search.suggest.SuggestItem

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.history;
+package jp.hazuki.yuzubrowser.history.repository;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,8 +24,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 
 public class BrowserHistoryManager {
     private static final String DB_NAME = "webhistory1.db";
@@ -54,19 +52,6 @@ public class BrowserHistoryManager {
 
     private BrowserHistoryManager(Context context) {
         mOpenHelper = new MyOpenHelper(context);
-        int max_day = AppData.history_max_day.get();
-        int max_count = AppData.history_max_count.get();
-        if (max_day == 0 && max_count == 0)
-            return;
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        if (max_day != 0)
-            db.delete(TABLE_NAME, COLUMN_TIME + " < " + (System.currentTimeMillis() - max_day * 24 * 60 * 60 * 1000), null);
-        if (max_count != 0)
-            db.execSQL("DELETE FROM " + TABLE_NAME +
-                    " WHERE " + COLUMN_ID + " IN" +
-                    " (SELECT " + COLUMN_ID + " FROM " + TABLE_NAME +
-                    " ORDER BY " + COLUMN_TIME + " DESC" +
-                    " LIMIT -1 OFFSET " + max_count + ")");
     }
 
     public void add(String url) {
@@ -105,8 +90,8 @@ public class BrowserHistoryManager {
         query = query.replace("%", "$%").replace("_", "$_");
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_TITLE + " LIKE '%' || ? || '%' OR "
-                        + COLUMN_URL + " LIKE '%' || ? || '%' ESCAPE '$'",
-                new String[]{query, query});
+                + COLUMN_URL + " LIKE '%' || ? || '%' ESCAPE '$'",
+            new String[]{query, query});
     }
 
     public void deleteAll() {
@@ -128,40 +113,54 @@ public class BrowserHistoryManager {
         return histories.toArray(new String[histories.size()]);
     }
 
-    public ArrayList<BrowserHistory> getList(int offset, int limit) {
+    public ArrayList<BrowserHistoryModel> getList(int offset, int limit) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        ArrayList<BrowserHistory> histories = new ArrayList<>();
+        ArrayList<BrowserHistoryModel> histories = new ArrayList<>();
         Cursor c = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
         if (c.getCount() > 0) {
             while (c.moveToNext()) {
-                histories.add(new BrowserHistory(
-                        c.getLong(COLUMN_ID_INDEX),
-                        c.getString(COLUMN_TITLE_INDEX),
-                        c.getString(COLUMN_URL_INDEX),
-                        c.getLong(COLUMN_TIME_INDEX)));
+                histories.add(new BrowserHistoryModel(
+                    c.getLong(COLUMN_ID_INDEX),
+                    c.getString(COLUMN_TITLE_INDEX),
+                    c.getString(COLUMN_URL_INDEX),
+                    c.getLong(COLUMN_TIME_INDEX)));
             }
         }
         c.close();
         return histories;
     }
 
-    public ArrayList<BrowserHistory> search(String query, int offset, int limit) {
+    public ArrayList<BrowserHistoryModel> search(String query, int offset, int limit) {
         query = query.replace("%", "$%").replace("_", "$_");
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        ArrayList<BrowserHistory> histories = new ArrayList<>();
+        ArrayList<BrowserHistoryModel> histories = new ArrayList<>();
         Cursor c = db.query(TABLE_NAME, null,
-                COLUMN_TITLE + " LIKE '%' || ? || '%' OR "
-                        + COLUMN_URL + " LIKE '%' || ? || '%' ESCAPE '$'",
-                new String[]{query, query}, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
+            COLUMN_TITLE + " LIKE '%' || ? || '%' OR "
+                + COLUMN_URL + " LIKE '%' || ? || '%' ESCAPE '$'",
+            new String[]{query, query}, null, null, COLUMN_TIME + " DESC", offset + ", " + limit);
         while (c.moveToNext()) {
-            histories.add(new BrowserHistory(
-                    c.getLong(COLUMN_ID_INDEX),
-                    c.getString(COLUMN_TITLE_INDEX),
-                    c.getString(COLUMN_URL_INDEX),
-                    c.getLong(COLUMN_TIME_INDEX)));
+            histories.add(new BrowserHistoryModel(
+                c.getLong(COLUMN_ID_INDEX),
+                c.getString(COLUMN_TITLE_INDEX),
+                c.getString(COLUMN_URL_INDEX),
+                c.getLong(COLUMN_TIME_INDEX)));
         }
         c.close();
         return histories;
+    }
+
+    public void trim(int maxDay, int maxCount) {
+        if (maxDay == 0 && maxCount == 0) return;
+
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        if (maxDay != 0)
+            db.delete(TABLE_NAME, COLUMN_TIME + " < " + (System.currentTimeMillis() - maxDay * 24 * 60 * 60 * 1000), null);
+        if (maxCount != 0)
+            db.execSQL("DELETE FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_ID + " IN" +
+                " (SELECT " + COLUMN_ID + " FROM " + TABLE_NAME +
+                " ORDER BY " + COLUMN_TIME + " DESC" +
+                " LIMIT -1 OFFSET " + maxCount + ")");
     }
 
     private static boolean checkUrl(String url) {
@@ -178,11 +177,11 @@ public class BrowserHistoryManager {
             db.beginTransaction();
             try {
                 db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                        COLUMN_ID + " INTEGER PRIMARY KEY" +
-                        ", " + COLUMN_URL + " TEXT NOT NULL" +
-                        ", " + COLUMN_TITLE + " TEXT" +
-                        ", " + COLUMN_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
-                        ")");
+                    COLUMN_ID + " INTEGER PRIMARY KEY" +
+                    ", " + COLUMN_URL + " TEXT NOT NULL" +
+                    ", " + COLUMN_TITLE + " TEXT" +
+                    ", " + COLUMN_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
+                    ")");
                 db.execSQL("CREATE UNIQUE INDEX url_index_1 ON " + TABLE_NAME + "(" + COLUMN_URL + ")");
                 db.setTransactionSuccessful();
             } finally {
@@ -200,14 +199,14 @@ public class BrowserHistoryManager {
                     try {
                         db.execSQL("ALTER TABLE " + TABLE_NAME + " RENAME TO " + TABLE_NAME + "_old;");
                         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                                COLUMN_ID + " INTEGER PRIMARY KEY" +
-                                ", " + COLUMN_URL + " TEXT NOT NULL" +
-                                ", " + COLUMN_TITLE + " TEXT" +
-                                ", " + COLUMN_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
-                                ")");
+                            COLUMN_ID + " INTEGER PRIMARY KEY" +
+                            ", " + COLUMN_URL + " TEXT NOT NULL" +
+                            ", " + COLUMN_TITLE + " TEXT" +
+                            ", " + COLUMN_TIME + " INTEGER DEFAULT (datetime('now','localtime'))" +
+                            ")");
                         db.execSQL("INSERT INTO " + TABLE_NAME + "(" +
-                                COLUMN_ID + ", " + COLUMN_URL + ", " + COLUMN_TITLE + ", " + COLUMN_TIME + ") SELECT " +
-                                COLUMN_ID + ", " + COLUMN_URL + ", " + COLUMN_TITLE + ", " + COLUMN_TIME + " FROM " + TABLE_NAME + "_old;");
+                            COLUMN_ID + ", " + COLUMN_URL + ", " + COLUMN_TITLE + ", " + COLUMN_TIME + ") SELECT " +
+                            COLUMN_ID + ", " + COLUMN_URL + ", " + COLUMN_TITLE + ", " + COLUMN_TIME + " FROM " + TABLE_NAME + "_old;");
                         db.execSQL("DROP TABLE " + TABLE_NAME + "_old;");
                         db.execSQL("CREATE UNIQUE INDEX url_index_1 ON " + TABLE_NAME + "(" + COLUMN_URL + ")");
                         db.setTransactionSuccessful();

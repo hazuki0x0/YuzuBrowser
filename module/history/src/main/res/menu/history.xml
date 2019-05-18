@@ -16,7 +16,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/search_history"
@@ -24,20 +24,20 @@
         android:title="@string/search"
         android:icon="@drawable/ic_search_white_24dp"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/delete_all_histories"
         android:title="@string/delete_all_history"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/delete_all_displayed_item"
         android:title="@string/delete_all_displayed_item"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/delete_all_favicon"
         android:title="@string/delete_all_favicon"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>

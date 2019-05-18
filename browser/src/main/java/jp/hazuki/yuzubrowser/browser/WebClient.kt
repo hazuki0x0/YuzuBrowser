@@ -57,14 +57,14 @@ import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
+import jp.hazuki.yuzubrowser.history.presenter.BrowserHistoryActivity
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryAsyncManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
 import jp.hazuki.yuzubrowser.legacy.help.getHelpResponse
 import jp.hazuki.yuzubrowser.legacy.help.isHelpUrl
-import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryActivity
-import jp.hazuki.yuzubrowser.legacy.history.BrowserHistoryAsyncManager
 import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingPatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingResetAction
