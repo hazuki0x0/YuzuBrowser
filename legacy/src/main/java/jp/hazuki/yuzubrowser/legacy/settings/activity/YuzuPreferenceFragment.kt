@@ -18,9 +18,9 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.NightModePreference
-import jp.hazuki.yuzubrowser.legacy.settings.preference.SearchUrlPreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.SlowRenderingPreference
 import jp.hazuki.yuzubrowser.legacy.settings.preference.WebTextSizePreference
+import jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlPreference
 import jp.hazuki.yuzubrowser.ui.preference.*
 import jp.hazuki.yuzubrowser.ui.settings.fragment.YuzuBasePreferenceFragment
 

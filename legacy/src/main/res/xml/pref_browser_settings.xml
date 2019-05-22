@@ -72,14 +72,14 @@
         android:title="@string/pref_search_settings">
 
         <PreferenceCategory android:title="@string/pref_search_cat_search">
-            <jp.hazuki.yuzubrowser.legacy.settings.preference.SearchUrlPreference
+            <jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlPreference
                 android:key="search_url"
                 android:singleLine="true"
                 android:title="@string/pref_search_url_settings"/>
 
             <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
                 android:title="@string/pref_search_url"
-                app:intent="jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlListActivity"/>
+                app:intent="jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlListActivity"/>
 
             <SwitchPreference
                 android:key="search_url_show_icon"

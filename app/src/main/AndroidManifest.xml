@@ -150,7 +150,7 @@
             android:name="jp.hazuki.yuzubrowser.legacy.action.view.ActionListManagerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.search.SearchActivity"
+            android:name=".search.presentation.search.SearchActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/BrowserThemeDayNight.Transparent"/>
         <activity
@@ -318,7 +318,7 @@
             android:name="jp.hazuki.yuzubrowser.provider.ReadItLaterProvider"
             android:exported="false"/>
         <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlListActivity"
+            android:name=".search.presentation.settings.SearchUrlListActivity"
             android:label="@string/pref_search_url_settings"/>
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity"

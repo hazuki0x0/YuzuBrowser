@@ -30,6 +30,8 @@ import jp.hazuki.yuzubrowser.browser.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
+import jp.hazuki.yuzubrowser.ui.utils.isUrl
+import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 
 class HandleIntentActivity : AppCompatActivity() {
     companion object;
@@ -73,12 +75,12 @@ class HandleIntentActivity : AppCompatActivity() {
         } else if (Intent.ACTION_SEND == action) {
             val query = getIntent().getStringExtra(Intent.EXTRA_TEXT)
             if (!TextUtils.isEmpty(query)) {
-                if (WebUtils.isUrl(query)) {
+                if (query.isUrl()) {
                     startBrowser(query, false, false)
                 } else {
                     var text = WebUtils.extractionUrl(query)
                     if (query == text) {
-                        text = WebUtils.makeUrlFromQuery(query, AppData.search_url.get(), "%s")
+                        text = query.makeUrlFromQuery(AppData.search_url.get(), "%s")
                     }
                     startBrowser(text, false, false)
                 }

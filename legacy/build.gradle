@@ -111,6 +111,7 @@ dependencies {
     implementation project(':bookmark')
     implementation project(':connecter')
     implementation project(':history')
+    implementation project(':search')
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines

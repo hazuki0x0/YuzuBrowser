@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/module/download" />
             <option value="$PROJECT_DIR$/module/favicon" />
             <option value="$PROJECT_DIR$/module/history" />
+            <option value="$PROJECT_DIR$/module/search" />
             <option value="$PROJECT_DIR$/module/ui" />
             <option value="$PROJECT_DIR$/module/webview" />
           </set>

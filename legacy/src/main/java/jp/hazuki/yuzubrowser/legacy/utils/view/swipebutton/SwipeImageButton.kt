@@ -26,6 +26,9 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.widget.swipebutton.OverlayImageButton
+import jp.hazuki.yuzubrowser.ui.widget.swipebutton.SmallButtonDrawable
+import jp.hazuki.yuzubrowser.ui.widget.swipebutton.SwipeController
 
 class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : OverlayImageButton(context, attrs), SwipeController.OnChangeListener {
     private val mController = SwipeSoftButtonController(getContext().applicationContext)

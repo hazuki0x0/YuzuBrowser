@@ -65,7 +65,6 @@ import jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity
 import jp.hazuki.yuzubrowser.legacy.reader.ReaderActivity
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterActivity
 import jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity
-import jp.hazuki.yuzubrowser.legacy.search.SearchUtils
 import jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.settings.preference.ClearBrowserDataAlertDialog
@@ -80,10 +79,12 @@ import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.handler.*
+import jp.hazuki.yuzubrowser.search.blogic.makeGoogleImageSearch
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
+import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
@@ -218,7 +219,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
-                        controller.openInNewTab(SearchUtils.makeGoogleImageSearch(url), TabType.WINDOW)
+                        controller.openInNewTab(url.makeGoogleImageSearch(), TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_IMAGE_RES_BLOCK -> {
@@ -352,7 +353,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                         return true
                     }
                     SingleAction.LPRESS_GOOGLE_IMAGE_SEARCH -> {
-                        controller.openInNewTab(SearchUtils.makeGoogleImageSearch(url), TabType.WINDOW)
+                        controller.openInNewTab(url.makeGoogleImageSearch(), TabType.WINDOW)
                         return true
                     }
                     SingleAction.LPRESS_IMAGE_RES_BLOCK -> {
@@ -759,7 +760,7 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
                     Toast.makeText(controller.applicationContextInfo, R.string.clipboard_empty, Toast.LENGTH_SHORT).show()
                     return true
                 }
-                controller.loadUrl(controller.getTab(actionTarget), WebUtils.makeUrlFromQuery(text, AppData.search_url.get(), "%s"), (action as PasteGoSingleAction).targetTab, TabType.WINDOW)
+                controller.loadUrl(controller.getTab(actionTarget), text.makeUrlFromQuery(AppData.search_url.get(), "%s"), (action as PasteGoSingleAction).targetTab, TabType.WINDOW)
             }
             SingleAction.SHOW_BOOKMARK -> {
                 val intent = Intent(controller.applicationContextInfo, BookmarkActivity::class.java)

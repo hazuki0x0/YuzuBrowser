@@ -33,8 +33,12 @@ import dagger.android.DaggerContentProvider
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.ErrorReportServer
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
-import jp.hazuki.yuzubrowser.legacy.search.suggest.*
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
+import jp.hazuki.yuzubrowser.search.model.suggest.ISuggest
+import jp.hazuki.yuzubrowser.search.model.suggest.SuggestBing
+import jp.hazuki.yuzubrowser.search.model.suggest.SuggestDuckDuckGo
+import jp.hazuki.yuzubrowser.search.model.suggest.SuggestGoogle
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -87,13 +91,13 @@ class SuggestProvider : DaggerContentProvider() {
             val net = getSuggests(query)
             if (net != null) {
                 val dbQuery = query.replace("%", "$%").replace("_", "\$_")
-                val suggestions = ArrayList<Suggestion>()
+                val suggestions = ArrayList<SearchSuggestModel.SuggestModel>()
 
                 val db = mOpenHelper.readableDatabase
                 val c = db.query(TABLE_NAME, null, SearchManager.SUGGEST_COLUMN_QUERY + " LIKE '%' || ? || '%' ESCAPE '$'", arrayOf(dbQuery), null, null, BaseColumns._ID + " DESC", "3")
                 val colQuery = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
                 while (c.moveToNext()) {
-                    val suggestion = Suggestion(c.getString(colQuery), true)
+                    val suggestion = SearchSuggestModel.SuggestModel(c.getString(colQuery), true)
 
                     suggestions.add(suggestion)
                     net.remove(suggestion)
@@ -104,7 +108,7 @@ class SuggestProvider : DaggerContentProvider() {
 
                 for (prefix in yuzuPrefix) {
                     if (prefix.startsWith(query)) {
-                        suggestions.add(Suggestion(prefix))
+                        suggestions.add(SearchSuggestModel.SuggestModel(prefix))
                     }
                 }
 
@@ -127,7 +131,7 @@ class SuggestProvider : DaggerContentProvider() {
             if (list != null) {
                 for (prefix in yuzuPrefix) {
                     if (prefix.startsWith(query)) {
-                        list.add(Suggestion(prefix))
+                        list.add(SearchSuggestModel.SuggestModel(prefix))
                     }
                 }
                 return SuggestionsCursor(list)
@@ -140,7 +144,7 @@ class SuggestProvider : DaggerContentProvider() {
     }
 
     @Throws(UnknownHostException::class)
-    private fun getSuggests(query: String): MutableList<Suggestion>? {
+    private fun getSuggests(query: String): MutableList<SearchSuggestModel.SuggestModel>? {
         if (AppData.search_suggest_engine.get() != mSuggestType) {
             mSuggestType = AppData.search_suggest_engine.get()
             mSuggestEngine = getSuggestEngine(mSuggestType)
@@ -188,18 +192,18 @@ class SuggestProvider : DaggerContentProvider() {
     }
 
     private fun addYuzuPrefix(query: String, c: Cursor?): Cursor {
-        val suggestions = ArrayList<Suggestion>()
+        val suggestions = ArrayList<SearchSuggestModel.SuggestModel>()
         if (!TextUtils.isEmpty(query)) {
             for (prefix in yuzuPrefix) {
                 if (prefix.startsWith(query)) {
-                    suggestions.add(Suggestion(prefix))
+                    suggestions.add(SearchSuggestModel.SuggestModel(prefix))
                 }
             }
         }
         if (c != null) {
             val colQuery = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
             while (c.moveToNext()) {
-                suggestions.add(Suggestion(c.getString(colQuery), true))
+                suggestions.add(SearchSuggestModel.SuggestModel(c.getString(colQuery), true))
             }
             c.close()
         }
@@ -207,11 +211,11 @@ class SuggestProvider : DaggerContentProvider() {
     }
 
     private fun wrapCursor(c: Cursor?): Cursor {
-        val suggestions = ArrayList<Suggestion>()
+        val suggestions = ArrayList<SearchSuggestModel.SuggestModel>()
         if (c != null) {
             val colQuery = c.getColumnIndex(SearchManager.SUGGEST_COLUMN_QUERY)
             while (c.moveToNext()) {
-                suggestions.add(Suggestion(c.getString(colQuery), true))
+                suggestions.add(SearchSuggestModel.SuggestModel(c.getString(colQuery), true))
             }
             c.close()
         }
@@ -226,7 +230,7 @@ class SuggestProvider : DaggerContentProvider() {
         }
     }
 
-    class SuggestionsCursor(private val mList: List<Suggestion>) : AbstractCursor() {
+    class SuggestionsCursor(private val mList: List<SearchSuggestModel.SuggestModel>) : AbstractCursor() {
 
         override fun getColumnNames(): Array<String> {
             return COLUMNS
@@ -241,7 +245,7 @@ class SuggestProvider : DaggerContentProvider() {
             when (column) {
                 COL_ID -> return position.toString()
                 //case COL_TEXT_1:
-                COL_QUERY -> return mList[position].title
+                COL_QUERY -> return mList[position].suggest
             }
             return null
         }

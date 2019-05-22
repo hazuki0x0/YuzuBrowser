@@ -34,10 +34,10 @@ import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerMenu
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
+import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerMenu
 import kotlinx.android.synthetic.main.action_custom.*
 
 class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, RecyclerMenu.OnRecyclerMenuListener {

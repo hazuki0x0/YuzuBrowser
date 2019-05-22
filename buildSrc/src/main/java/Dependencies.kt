@@ -33,6 +33,7 @@ object Versions {
     const val androidKTX = "1.0.1"
     const val fragmentKtx = "1.0.0"
     const val androidxRoom = "2.1.0-alpha06"
+    const val lifeCycle = "2.0.0"
     const val support_fix_lib = androidX
     const val support_constraint_lib = "1.1.3"
     const val documentFile = "1.0.1"
@@ -71,6 +72,7 @@ object AndroidX {
     const val roomCompiler = "androidx.room:room-compiler:${Versions.androidxRoom}"
     const val documentFile = "androidx.documentfile:documentfile:${Versions.documentFile}"
     const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
+    const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifeCycle}"
 }
 
 object Libs {

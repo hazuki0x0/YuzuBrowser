@@ -30,7 +30,6 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
@@ -49,8 +48,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.TabActionManager;
 import jp.hazuki.yuzubrowser.legacy.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;
-import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrl;
-import jp.hazuki.yuzubrowser.legacy.search.settings.SearchUrlManager;
 import jp.hazuki.yuzubrowser.legacy.settings.PreferenceConstants;
 import jp.hazuki.yuzubrowser.legacy.settings.container.BooleanContainer;
 import jp.hazuki.yuzubrowser.legacy.settings.container.Containable;
@@ -65,6 +62,9 @@ import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentUpdaterKt;
 import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList;
+import jp.hazuki.yuzubrowser.search.model.provider.SearchSuggestProviders;
+import jp.hazuki.yuzubrowser.search.model.provider.SearchUrl;
+import jp.hazuki.yuzubrowser.search.repository.SearchUrlManager;
 import jp.hazuki.yuzubrowser.ui.BrowserApplication;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
@@ -158,9 +158,6 @@ public class AppData {
     public static final IntContainer webswipe_sensitivity_distance = new IntContainer("webswipe_sensitivity_distance", 15);
     public static final IntContainer auto_tab_save_delay = new IntContainer("auto_tab_save_delay", 0);
     public static final IntContainer minimum_font = new IntContainer("minimum_font", 8);
-    public static final IntContainer search_suggest = new IntContainer("search_suggest", 0);
-    public static final BooleanContainer search_suggest_histories = new BooleanContainer("search_suggest_histories", true);
-    public static final BooleanContainer search_suggest_bookmarks = new BooleanContainer("search_suggest_bookmarks", true);
     public static final BooleanContainer detailed_log = new BooleanContainer("detailed_log", false);
     public static final StringContainer theme_setting = new StringContainer("theme_setting", ThemeData.THEME_LIGHT);
     public static final BooleanContainer resblock_enable = new BooleanContainer("resblock_enable", false);
@@ -204,8 +201,6 @@ public class AppData {
     public static final IntContainer reader_text_size = new IntContainer("reader_text_size", 18);
     public static final StringContainer reader_text_font = new StringContainer("reader_text_font", "");
     public static final FontSizeContainer font_size = new FontSizeContainer();
-    public static final BooleanContainer search_url_show_icon = new BooleanContainer("search_url_show_icon", true);
-    public static final BooleanContainer search_url_save_switching = new BooleanContainer("search_url_save_switching", false);
     public static final BooleanContainer slow_rendering = new BooleanContainer("slow_rendering", false);
     public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
     public static final BooleanContainer webRtc = new BooleanContainer("webRtc", true);
@@ -360,13 +355,14 @@ public class AppData {
                 String[] urls = context.getResources().getStringArray(R.array.default_search_url);
                 String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
                 int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
+                SearchSuggestProviders providers = new SearchSuggestProviders(0, 0, new ArrayList<>());
 
                 for (int i = 0; i < urls.length; i++) {
-                    urlManager.add(new SearchUrl(titles[i], urls[i], colors[i]));
+                    providers.add(new SearchUrl(titles[i], urls[i], colors[i]));
                 }
 
-                urlManager.save();
-                AppData.search_url.set(urlManager.get(0).getUrl());
+                urlManager.save(providers.toSettings());
+                AppData.search_url.set(providers.get(0).getUrl());
                 AppData.commit(context, AppData.search_url);
             }
         }
@@ -374,24 +370,9 @@ public class AppData {
 
         int versionCode = ContextExtensionsKt.getVersionCode(context);
 
-        if (lastLaunch == 1130000) {
-            lastLaunch = 0;
-        }
-
         if (lastLaunch < versionCode) {
             if (lastLaunch >= 0) {
                 //version up code
-                if (lastLaunch < 106000) {
-                    BookmarkManager manager = BookmarkManager.getInstance(context);
-                    manager.save();
-                }
-
-                if (lastLaunch < 200000) {
-                    //TODO : add old app converter class
-                    //BundleDataBaseConverter converter = new BundleDataBaseConverter(context.getFileStreamPath("last_url_2.dat"));
-                    //converter.readList(context);
-                    //converter.clear();
-                }
 
                 if (lastLaunch < 300000) {
                     PatternUrlConverter converter = new PatternUrlConverter();
@@ -411,18 +392,19 @@ public class AppData {
                     String[] urls = context.getResources().getStringArray(R.array.default_search_url);
                     String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
                     int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
+                    SearchSuggestProviders providers = new SearchSuggestProviders(urlManager.load());
 
                     for (int i = 0; i < urls.length; i++) {
-                        urlManager.add(new SearchUrl(titles[i], urls[i], colors[i]));
+                        providers.add(new SearchUrl(titles[i], urls[i], colors[i]));
                     }
 
                     if (!"http://www.google.com/m?q=%s".equals(AppData.search_url.get())) {
-                        urlManager.add(new SearchUrl("Custom", AppData.search_url.get(), 0));
-                        urlManager.setSelectedId(urlManager.get(urlManager.size() - 1).getId());
+                        providers.add(new SearchUrl("Custom", AppData.search_url.get(), 0));
+                        providers.setSelectedId(providers.get(providers.getSize() - 1).getId());
                     }
 
-                    urlManager.save();
-                    AppData.search_url.set(urlManager.get(urlManager.getSelectedIndex()).getUrl());
+                    urlManager.save(providers.toSettings());
+                    AppData.search_url.set(providers.get(providers.getSelectedIndex()).getUrl());
 
                     AppData.fullscreen_hide_mode.set(shared_preference.getBoolean("fullscreen_hide_nav", false) ? 2 : 0);
 

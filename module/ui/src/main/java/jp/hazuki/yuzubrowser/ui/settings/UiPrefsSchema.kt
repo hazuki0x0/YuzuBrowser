@@ -28,4 +28,7 @@ class UiPrefsSchema {
 
     @Key(name = "oritentation")
     var oritentation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+    @Key(name = "swipebtn_sensitivity")
+    var swipeButtonSensitivity = 150
 }

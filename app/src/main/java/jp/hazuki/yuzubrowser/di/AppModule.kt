@@ -26,6 +26,7 @@ import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
 import jp.hazuki.yuzubrowser.legacy.kotshi.LegacyJsonAdapterFactory
 import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
+import jp.hazuki.yuzubrowser.search.di.SearchJsonAdapterFactory
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
 import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
@@ -61,10 +62,11 @@ object AppModule {
     @JvmStatic
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
-                .add(ApplicationJsonAdapterFactory.INSTANCE)
-                .add(LegacyJsonAdapterFactory.INSTANCE)
-                .add(WebViewJsonAdapterFactory.INSTANCE)
-                .build()
+            .add(ApplicationJsonAdapterFactory.INSTANCE)
+            .add(LegacyJsonAdapterFactory.INSTANCE)
+            .add(WebViewJsonAdapterFactory.INSTANCE)
+            .add(SearchJsonAdapterFactory.INSTANCE)
+            .build()
     }
 
     @Provides

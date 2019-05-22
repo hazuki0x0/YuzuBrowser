@@ -75,7 +75,6 @@ import jp.hazuki.yuzubrowser.legacy.browser.*
 import jp.hazuki.yuzubrowser.legacy.gesture.GestureManager
 import jp.hazuki.yuzubrowser.legacy.menuwindow.MenuWindow
 import jp.hazuki.yuzubrowser.legacy.readitlater.readItLater
-import jp.hazuki.yuzubrowser.legacy.search.SearchActivity
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.BrowserTabManager
 import jp.hazuki.yuzubrowser.legacy.tab.TabListLayout
@@ -98,11 +97,14 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
+import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
 import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.BrowserState
 import jp.hazuki.yuzubrowser.ui.extensions.createIntentFilter
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.utils.makeUrl
+import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 import jp.hazuki.yuzubrowser.ui.widget.PointerView
 import jp.hazuki.yuzubrowser.webview.CustomWebHistoryItem
 import jp.hazuki.yuzubrowser.webview.CustomWebView
@@ -479,9 +481,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
                 val url: String
                 url = when (data.getIntExtra(SearchActivity.EXTRA_SEARCH_MODE, SearchActivity.SEARCH_MODE_AUTO)) {
-                    SearchActivity.SEARCH_MODE_URL -> WebUtils.makeUrl(query)
+                    SearchActivity.SEARCH_MODE_URL -> query.makeUrl()
                     SearchActivity.SEARCH_MODE_WORD -> WebUtils.makeSearchUrlFromQuery(query, searchUrl, "%s")
-                    else -> WebUtils.makeUrlFromQuery(query, searchUrl, "%s")
+                    else -> query.makeUrlFromQuery(searchUrl, "%s")
                 }
                 val appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA)
                 val target = appdata.getInt(EXTRA_DATA_TARGET, -1)

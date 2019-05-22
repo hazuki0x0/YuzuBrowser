@@ -20,10 +20,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Patterns;
 import android.webkit.URLUtil;
 
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,20 +34,9 @@ public class WebUtils {
         throw new UnsupportedOperationException();
     }
 
-    private static final Pattern URI_SCHEMA = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu|blob):)(.*)", Pattern.CASE_INSENSITIVE);
-
     private static final Pattern URL_EXTRACTION = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu|blob):)(\\S*)", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern URL_SUB_DOMAIN = Pattern.compile("://.*\\.", Pattern.LITERAL);
-
-    public static boolean isUrl(String query) {
-        query = query.trim();
-        boolean hasSpace = (query.indexOf(' ') != -1);
-        Matcher matcher = URI_SCHEMA.matcher(query);
-        if (matcher.matches())
-            return true;
-        return !hasSpace && Patterns.WEB_URL.matcher(query).matches();
-    }
 
     public static String extractionUrl(String text) {
         if (text == null) return null;
@@ -79,46 +66,8 @@ public class WebUtils {
         }
     }
 
-    public static String makeUrlFromQuery(String query, String search_url, String search_place_holder) {
-        query = query.trim();
-        boolean hasSpace = (query.indexOf(' ') != -1);
-
-        Matcher matcher = URI_SCHEMA.matcher(query);
-        if (matcher.matches()) {
-            String scheme = matcher.group(1);
-            String lcScheme = scheme.toLowerCase(Locale.US);
-            if (!lcScheme.equals(scheme)) {
-                query = lcScheme + matcher.group(2);
-            }
-            return query;
-        }
-        if (!hasSpace && Patterns.WEB_URL.matcher(query).matches()) {
-            return URLUtil.guessUrl(query);
-        }
-        return URLUtil.composeSearchUrl(query, search_url, search_place_holder);
-    }
-
     public static String makeSearchUrlFromQuery(String query, String search_url, String search_place_holder) {
         return URLUtil.composeSearchUrl(query.trim(), search_url, search_place_holder);
-    }
-
-    public static String makeUrl(String query) {
-        query = query.trim();
-        boolean hasSpace = (query.indexOf(' ') != -1);
-
-        Matcher matcher = URI_SCHEMA.matcher(query);
-        if (matcher.matches()) {
-            String scheme = matcher.group(1);
-            String lcScheme = scheme.toLowerCase(Locale.US);
-            if (!lcScheme.equals(scheme)) {
-                query = lcScheme + matcher.group(2);
-            }
-            if (hasSpace && Patterns.WEB_URL.matcher(query).matches()) {
-                query = query.replace(" ", "%20");
-            }
-            return query;
-        }
-        return URLUtil.guessUrl(query);
     }
 
     public static Intent createShareWebIntent(String url, String title) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
+import jp.hazuki.yuzubrowser.ui.widget.swipebutton.SwipeController
 
 class SwipeSoftButtonController
 //private Drawable mBackgroundDrawable;
@@ -52,12 +53,12 @@ class SwipeSoftButtonController
         val actionList = mActionList ?: return null
         return iconManager?.let {
             when (whatNo) {
-                SwipeController.SWIPE_CANCEL, SwipeController.SWIPE_PRESS -> it[actionList.press]
-                SwipeController.SWIPE_LPRESS -> it[actionList.lpress]
-                SwipeController.SWIPE_UP -> it[actionList.up]
-                SwipeController.SWIPE_DOWN -> it[actionList.down]
-                SwipeController.SWIPE_LEFT -> it[actionList.left]
-                SwipeController.SWIPE_RIGHT -> it[actionList.right]
+                SWIPE_CANCEL, SWIPE_PRESS -> it[actionList.press]
+                SWIPE_LPRESS -> it[actionList.lpress]
+                SWIPE_UP -> it[actionList.up]
+                SWIPE_DOWN -> it[actionList.down]
+                SWIPE_LEFT -> it[actionList.left]
+                SWIPE_RIGHT -> it[actionList.right]
                 else -> null
             }
         }
@@ -69,12 +70,12 @@ class SwipeSoftButtonController
         val controller = controller ?: return
 
         when (whatNo) {
-            SwipeController.SWIPE_PRESS -> controller.run(actionList.press)
+            SWIPE_PRESS -> controller.run(actionList.press)
         //SwipeController.SWIPE_LPRESS -> Nothing
-            SwipeController.SWIPE_UP -> controller.run(actionList.up)
-            SwipeController.SWIPE_DOWN -> controller.run(actionList.down)
-            SwipeController.SWIPE_LEFT -> controller.run(actionList.left)
-            SwipeController.SWIPE_RIGHT -> controller.run(actionList.right)
+            SWIPE_UP -> controller.run(actionList.up)
+            SWIPE_DOWN -> controller.run(actionList.down)
+            SWIPE_LEFT -> controller.run(actionList.left)
+            SWIPE_RIGHT -> controller.run(actionList.right)
         }
     }
 

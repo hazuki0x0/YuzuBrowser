@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="jp.hazuki.yuzubrowser.search.model.SearchSuggestModel.SuggestModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="?android:attr/colorBackground">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:focusable="true"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:minHeight="@dimen/search_list_size"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@{model.suggest}"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/pref_text_color"/>
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="@dimen/search_list_size"
+            android:layout_height="@dimen/search_list_size"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="center"
+            android:tint="@color/iconColor"
+            android:src="@drawable/ic_reply_black_24dp"/>
+
+    </LinearLayout>
+</layout>
