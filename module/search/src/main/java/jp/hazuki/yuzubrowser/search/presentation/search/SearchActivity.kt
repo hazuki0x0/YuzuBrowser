@@ -87,8 +87,6 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
 
         if (!prefs.get().searchUrlShowIcon) {
             barBinding.searchUrlSpinner.visibility = View.GONE
-        } else if (prefs.get().searchUrlSaveSwitching) {
-
         }
 
         val searchButton = barBinding.searchButton
@@ -184,7 +182,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
     override fun onStart() {
         super.onStart()
         val pref = prefs.get()
-        if (!pref.searchUrlShowIcon && pref.searchUrlSaveSwitching)
+        if (pref.searchUrlShowIcon && pref.searchUrlSaveSwitching)
             viewModel.providerSelection.addOnPropertyChangedCallback(callback)
     }
 
@@ -212,8 +210,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
             putExtra(EXTRA_SEARCH_MODE, mode)
             putExtra(EXTRA_SEARCH_URL, result.url)
             putExtra(EXTRA_OPEN_NEW_TAB, openNewTab)
-            if (appData != null)
-                putExtra(EXTRA_APP_DATA, appData)
+            appData?.let { putExtra(EXTRA_APP_DATA, it) }
         })
         finish()
     }
