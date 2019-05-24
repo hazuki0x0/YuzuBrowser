@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.forEach
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerFragment
 import jp.hazuki.bookmark.R
@@ -27,11 +28,14 @@ import jp.hazuki.bookmark.databinding.FragmentBookmarkOverflowBinding
 import jp.hazuki.yuzubrowser.bookmark.overflow.HideMenuType
 import jp.hazuki.yuzubrowser.bookmark.overflow.MenuType
 import jp.hazuki.yuzubrowser.bookmark.overflow.viewmodel.OverflowMenuViewModel
+import jp.hazuki.yuzubrowser.ui.extensions.get
 import javax.inject.Inject
 
 class BookmarkOverflowMenuFragment : DaggerFragment() {
     @Inject
-    internal lateinit var mainViewModel: OverflowMenuViewModel
+    internal lateinit var factory: OverflowMenuViewModel.Factory
+
+    private lateinit var mainViewModel: OverflowMenuViewModel
 
     private lateinit var binding: FragmentBookmarkOverflowBinding
 
@@ -44,6 +48,9 @@ class BookmarkOverflowMenuFragment : DaggerFragment() {
         val binding = binding
         val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
+
+        mainViewModel = ViewModelProviders.of(this, factory).get()
+        binding.lifecycleOwner = this
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.adapter = OverflowMenuAdapter()

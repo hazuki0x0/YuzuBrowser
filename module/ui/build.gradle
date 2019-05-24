@@ -57,6 +57,7 @@ dependencies {
     implementation AndroidX.constraintLayout
     implementation AndroidX.activty
     implementation AndroidX.KTX
+    implementation AndroidX.lifecycleExtensions
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler

@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.search.presentation.widget.SearchButton
 import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.extensions.get
 import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import javax.inject.Inject
@@ -74,7 +75,8 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
         }
         barBinding.callback = this
 
-        viewModel = ViewModelProviders.of(this, factory).get(SearchViewModel::class.java).also {
+        viewModel = ViewModelProviders.of(this, factory).get()
+        viewModel.also {
             binding.model = it
             barBinding.viewModel = it
 

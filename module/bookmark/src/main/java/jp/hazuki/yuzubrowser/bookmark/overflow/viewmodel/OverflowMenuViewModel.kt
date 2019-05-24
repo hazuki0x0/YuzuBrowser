@@ -20,6 +20,8 @@ import android.app.Application
 import android.view.MenuItem
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import jp.hazuki.yuzubrowser.bookmark.overflow.model.OverflowMenuModel
 import jp.hazuki.yuzubrowser.bookmark.repository.HideMenuRepository
 import javax.inject.Inject
@@ -40,6 +42,18 @@ class OverflowMenuViewModel @Inject constructor(
     fun save(type: Int) {
         menuModels.value?.let { models ->
             repository.saveHideMenu(type, models.filter { !it.enable }.map { it.id })
+        }
+    }
+
+
+    class Factory(
+        private val application: Application,
+        private val repository: HideMenuRepository
+    ) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            @Suppress("UNCHECKED_CAST")
+            return OverflowMenuViewModel(application, repository) as T
         }
     }
 }

@@ -35,7 +35,7 @@ object BookmarkOverflowMenuUiModule {
 
     @JvmStatic
     @Provides
-    fun provideOverflowMenuViewModel(application: Application, hideMenuRepository: HideMenuRepository): OverflowMenuViewModel {
-        return OverflowMenuViewModel(application, hideMenuRepository)
+    fun provideOverflowMenuViewModelFactory(application: Application, hideMenuRepository: HideMenuRepository): OverflowMenuViewModel.Factory {
+        return OverflowMenuViewModel.Factory(application, hideMenuRepository)
     }
 }

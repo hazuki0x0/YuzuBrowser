@@ -70,6 +70,7 @@ dependencies {
     implementation AndroidX.activty
     implementation AndroidX.KTX
     implementation AndroidX.fragmentKtx
+    implementation AndroidX.lifecycleExtensions
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
