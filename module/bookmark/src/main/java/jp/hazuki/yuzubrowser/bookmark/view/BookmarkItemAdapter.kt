@@ -37,9 +37,12 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
 open class BookmarkItemAdapter(
-    protected val context: Context, list: MutableList<BookmarkItem>,
-    private val pickMode: Boolean, private val openNewTab: Boolean,
+    protected val context: Context,
+    list: MutableList<BookmarkItem>,
+    private val pickMode: Boolean,
+    private val openNewTab: Boolean,
     protected val fontSize: Int,
+    private val faviconManager: FaviconManager,
     private val bookmarkItemListener: OnBookmarkRecyclerListener
 ) : ArrayRecyclerAdapter<BookmarkItem, BookmarkItemAdapter.BookmarkFolderHolder>(context, list, null) {
 
@@ -48,7 +51,6 @@ open class BookmarkItemAdapter(
 
     private val foregroundOverlay =
         ColorDrawable(context.getResColor(R.color.selected_overlay))
-    private val faviconManager: FaviconManager = FaviconManager.getInstance(context)
 
     init {
         setRecyclerListener(object : OnRecyclerListener {

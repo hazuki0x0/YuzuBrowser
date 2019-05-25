@@ -49,6 +49,7 @@ constructor(
     context: Context,
     private val prefs: HistoryPref,
     private val manager: BrowserHistoryManager,
+    private val faviconManager: FaviconManager,
     private val pickMode: Boolean,
     private val listener: OnHistoryRecyclerListener
 ) : RecyclerView.Adapter<BrowserHistoryAdapter.HistoryHolder>(), StickyHeaderAdapter<BrowserHistoryAdapter.HeaderHolder> {
@@ -59,7 +60,6 @@ constructor(
     private val dateFormat = DateFormat.getLongDateFormat(context)
     @SuppressLint("SimpleDateFormat")
     private val timeFormat = SimpleDateFormat("kk:mm")
-    private val faviconManager = FaviconManager.getInstance(context.applicationContext)
     private var historyModels: MutableList<BrowserHistoryModel> = manager.getList(0, 100)
     private var mQuery: String? = null
     private val inflater: LayoutInflater = LayoutInflater.from(context)

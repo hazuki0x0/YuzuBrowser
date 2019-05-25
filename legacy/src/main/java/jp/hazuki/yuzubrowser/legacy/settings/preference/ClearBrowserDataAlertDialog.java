@@ -26,7 +26,10 @@ import android.webkit.WebViewDatabase;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
+import dagger.android.support.AndroidSupportInjection;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.legacy.R;
@@ -58,12 +61,16 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
 
         private int[] ids;
 
+        @Inject
+        FaviconManager faviconManager;
+
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AndroidSupportInjection.inject(this);
             mSelected = AppData.clear_data_default.get();
 
-            final Context context = getContext();
+            final Context context = requireContext();
 
             String[] arrays = context.getResources().getStringArray(R.array.clear_browser_data);
             ids = context.getResources().getIntArray(R.array.clear_browser_data_id);
@@ -109,12 +116,11 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
             }
 
             AppData.clear_data_default.set(mSelected);
-            AppData.commit(getContext().getApplicationContext(), AppData.clear_data_default);
+            AppData.commit(requireContext().getApplicationContext(), AppData.clear_data_default);
         }
 
         private void runAction(int i) {
-            Context con = getContext();
-            if (con == null) throw new IllegalStateException();
+            Context con = requireContext();
             switch (i) {
                 case 0:
                     BrowserManager.clearAppCacheFile(con.getApplicationContext());
@@ -127,7 +133,6 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                     WebViewDatabase.getInstance(con.getApplicationContext()).clearHttpAuthUsernamePassword();
                     break;
                 case 3:
-                    //noinspection deprecation
                     WebViewDatabase.getInstance(con).clearFormData();
                     break;
                 case 4:
@@ -140,12 +145,12 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                     BrowserHistoryManager.getInstance(con.getApplicationContext()).deleteAll();
                     break;
                 case 7:
-                    getContext().getApplicationContext().getContentResolver().delete(
+                    con.getApplicationContext().getContentResolver().delete(
                             ((BrowserApplication)con.getApplicationContext()).getProviderManager().getSuggestProvider().getUriLocal()
                             , null, null);
                     break;
                 case 8:
-                    FaviconManager.Companion.getInstance(getContext()).clear();
+                    faviconManager.clear();
                     break;
             }
         }

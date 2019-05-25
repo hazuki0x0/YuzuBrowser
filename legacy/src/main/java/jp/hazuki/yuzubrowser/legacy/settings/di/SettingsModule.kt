@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.browser.tab;
+package jp.hazuki.yuzubrowser.legacy.settings.di
 
-import jp.hazuki.yuzubrowser.browser.BrowserActivity;
-import jp.hazuki.yuzubrowser.favicon.FaviconManager;
-import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
-import jp.hazuki.yuzubrowser.webview.WebViewFactory;
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+import jp.hazuki.yuzubrowser.legacy.settings.activity.ImportExportFragment
+import jp.hazuki.yuzubrowser.legacy.settings.preference.ClearBrowserDataAlertDialog
 
-public class TabManagerFactory {
-    public static TabManager newInstance(BrowserActivity activity, WebViewFactory factory, FaviconManager faviconManager) {
-        return new CacheTabManager(activity, factory, faviconManager);
-    }
+@Module
+abstract class SettingsModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeClearBrowserDataAlertDialog(): ClearBrowserDataAlertDialog.ClearDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeImportExportFragment(): ImportExportFragment
 }

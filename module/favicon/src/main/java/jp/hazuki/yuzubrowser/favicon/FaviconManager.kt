@@ -30,7 +30,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.*
 
-class FaviconManager private constructor(context: Context) : FaviconCache.OnIconCacheOverFlowListener, DiskLruCache.OnTrimCacheListener {
+class FaviconManager(context: Context) : FaviconCache.OnIconCacheOverFlowListener, DiskLruCache.OnTrimCacheListener {
 
     private val diskCache = DiskLruCache.open(context.getDir(CACHE_FOLDER, Context.MODE_PRIVATE), 1, 1, DISK_CACHE_SIZE.toLong())
     private val diskCacheIndex = FaviconCacheIndex(context.applicationContext, CACHE_FOLDER)
@@ -72,7 +72,7 @@ class FaviconManager private constructor(context: Context) : FaviconCache.OnIcon
             }
         }
 
-        val result = diskCacheIndex.get(normalizedUrl)
+        val result = diskCacheIndex[normalizedUrl]
         if (result.exists) {
             val icon = getFromDiskCache(formatHashString(result.hash))
             if (icon != null) {
@@ -108,7 +108,7 @@ class FaviconManager private constructor(context: Context) : FaviconCache.OnIcon
             }
         }
 
-        val result = diskCacheIndex.get(normalizedUrl)
+        val result = diskCacheIndex[normalizedUrl]
         return if (result.exists) {
             getFromDiskCacheBytes(formatHashString(result.hash))
         } else null
@@ -237,23 +237,5 @@ class FaviconManager private constructor(context: Context) : FaviconCache.OnIcon
         private const val RAM_CACHE_SIZE = 1024 * 1024
         private const val CACHE_FOLDER = "favicon"
         private const val DISK_CACHE_INDEX = 0
-
-        private var faviconManager: FaviconManager? = null
-
-        fun getInstance(context: Context): FaviconManager {
-            if (faviconManager == null) {
-                faviconManager = FaviconManager(context)
-            }
-
-            return faviconManager!!
-        }
-
-        fun destroyInstance() {
-            if (faviconManager != null) {
-                val tmp = faviconManager
-                faviconManager = null
-                tmp!!.destroy()
-            }
-        }
     }
 }

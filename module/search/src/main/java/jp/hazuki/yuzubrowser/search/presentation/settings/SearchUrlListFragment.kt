@@ -41,6 +41,8 @@ class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedL
     private lateinit var viewModel: SearchSettingsViewModel
     @Inject
     internal lateinit var factory: SearchSettingsViewModel.Factory
+    @Inject
+    internal lateinit var faviconManager: FaviconManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = requireActivity()
@@ -59,7 +61,7 @@ class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedL
 
         val binding = binding
         binding.lifecycleOwner = this
-        binding.adapter = SearchUrlAdapter(FaviconManager.getInstance(activity.application), this)
+        binding.adapter = SearchUrlAdapter(faviconManager, this)
         binding.model = viewModel
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)

@@ -23,14 +23,22 @@ import androidx.loader.content.AsyncTaskLoader
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import java.io.File
 import java.io.IOException
 
-class BookmarkHtmlImportTask(context: Context, private val html: File, private val manager: BookmarkManager, private val folder: BookmarkFolder, private val handler: Handler) : AsyncTaskLoader<Boolean>(context) {
+class BookmarkHtmlImportTask(
+    context: Context,
+    private val html: File,
+    private val manager: BookmarkManager,
+    private val faviconManager: FaviconManager,
+    private val folder: BookmarkFolder,
+    private val handler: Handler
+) : AsyncTaskLoader<Boolean>(context) {
 
     override fun loadInBackground(): Boolean? {
         try {
-            val parser = NetscapeBookmarkParser(context, folder)
+            val parser = NetscapeBookmarkParser(folder, faviconManager)
             parser.parse(html)
             manager.save()
             return java.lang.Boolean.TRUE

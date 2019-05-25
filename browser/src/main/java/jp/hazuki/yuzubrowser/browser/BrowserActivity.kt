@@ -121,7 +121,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     private lateinit var asyncPermissions: AsyncPermissions
     private val handler = Handler(Looper.getMainLooper())
-    private val actionController = ActionExecutor(this)
+    private lateinit var actionController: ActionExecutor
     private val iconManager = ActionIconManager(this)
     private val connectionStateMonitor = ConnectionStateMonitor { isAvailable ->
         handler.post {
@@ -210,6 +210,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     internal lateinit var moshi: Moshi
     @Inject
     internal lateinit var abpDatabase: AbpDatabase
+    @Inject
+    internal lateinit var faviconManager: FaviconManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,6 +220,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         //Crash workaround for pagePaddingHeight...
         toolbarPadding.visibility = View.GONE
 
+        actionController = ActionExecutor(this, faviconManager)
         browserState = (applicationContext as BrowserApplication).browserState
 
         if (browserState.isNeedLoad) {
@@ -226,8 +229,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
         userActionManager = UserActionManager(this, this, actionController, iconManager)
-        tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory), this)
-        webClient = WebClient(this, this, abpDatabase)
+        tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory, faviconManager), this)
+        webClient = WebClient(this, this, abpDatabase, faviconManager)
 
         toolbar = Toolbar(this, superFrameLayoutInfo, this, actionController, iconManager)
         toolbar.addToolbarView(resources)
@@ -371,7 +374,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         tabManagerIn.saveData()
         handler.removeCallbacks(saveTabsRunnable)
-        FaviconManager.getInstance(applicationContext).save()
+        faviconManager.save()
 
         LocalBroadcastManager.getInstance(this)
             .unregisterReceiver(localReceiver)
@@ -1123,7 +1126,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             BrowserManager.clearGeolocation()
         }
         if (finish_clear and 0x100 != 0) {
-            FaviconManager.getInstance(applicationContext).clear()
+            faviconManager.clear()
         }
 
         handler.removeCallbacks(saveTabsRunnable)

@@ -26,9 +26,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
+import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
@@ -45,9 +45,10 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.jetbrains.anko.share
 import java.util.*
+import javax.inject.Inject
 
 
-class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
+class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
 
     private var pickMode: Boolean = false
     private lateinit var adapter: BrowserHistoryAdapter
@@ -59,6 +60,9 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
     private var actionMode: ActionMode? = null
 
     private lateinit var prefs: HistoryPref
+
+    @Inject
+    lateinit var faviconManager: FaviconManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -85,7 +89,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         touchScrollBar.addScrollListener(listener)
 
         manager = BrowserHistoryManager.getInstance(activity)
-        adapter = BrowserHistoryAdapter(activity, prefs, manager, pickMode, this)
+        adapter = BrowserHistoryAdapter(activity, prefs, manager, faviconManager, pickMode, this)
         val decoration = StickyHeaderDecoration(adapter)
         adapter.setDecoration(decoration)
         recyclerView.addItemDecoration(decoration)
@@ -220,7 +224,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
         intent.putExtra(Intent.EXTRA_TITLE, historyModel.title)
         intent.putExtra(Intent.EXTRA_TEXT, historyModel.url)
         intent.putExtra(Intent.EXTRA_STREAM,
-            historyModel.url?.let { FaviconManager.getInstance(activity).getFaviconBytes(it) })
+            historyModel.url?.let { faviconManager.getFaviconBytes(it) })
         activity.setResult(RESULT_OK, intent)
         activity.finish()
     }
@@ -261,7 +265,7 @@ class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecycl
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_all_favicon)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
-                        FaviconManager.getInstance(activity).clear()
+                        faviconManager.clear()
                         adapter.notifyDataSetChanged()
                     }
                     .setNegativeButton(android.R.string.cancel, null)

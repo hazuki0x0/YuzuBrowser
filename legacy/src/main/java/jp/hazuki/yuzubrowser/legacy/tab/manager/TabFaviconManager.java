@@ -35,9 +35,9 @@ public class TabFaviconManager {
     private Context context;
     private boolean iconMode;
 
-    public TabFaviconManager(Context context) {
+    public TabFaviconManager(Context context, FaviconManager faviconManager) {
         this.context = context;
-        manager = FaviconManager.Companion.getInstance(context);
+        manager = faviconManager;
     }
 
     public void onPreferenceReset(List<View> tabViews, List<TabIndexData> indexDataList) {

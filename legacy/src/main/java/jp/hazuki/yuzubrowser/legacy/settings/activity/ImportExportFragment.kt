@@ -23,6 +23,10 @@ import android.os.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.DialogFragment
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.Loader
+import dagger.android.support.AndroidSupportInjection
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
 import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask
@@ -32,6 +36,7 @@ import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.backup.BackupTask
 import jp.hazuki.yuzubrowser.legacy.backup.RestoreTask
@@ -47,12 +52,17 @@ import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
 import java.io.File
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
-class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.LoaderManager.LoaderCallbacks<Boolean> {
-    private var progress: androidx.fragment.app.DialogFragment? = null
+class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallbacks<Boolean> {
+    private var progress: DialogFragment? = null
     private val asyncPermissions by lazy { AsyncPermissions(appCompatActivity) }
 
+    @Inject
+    internal lateinit var faviconManager: FaviconManager
+
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        AndroidSupportInjection.inject(this)
         addPreferencesFromResource(R.xml.pref_import_export)
         val activity = activity ?: return
 
@@ -136,7 +146,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                                             bundle.putSerializable("file", file)
                                             bundle.putSerializable("manager", manager)
                                             bundle.putSerializable("folder", root)
-                                            loaderManager.restartLoader(2, bundle, this@ImportExportFragment)
+                                            LoaderManager.getInstance(this@ImportExportFragment)
+                                                .restartLoader(2, bundle, this@ImportExportFragment)
                                             progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
                                                 dialog.show(childFragmentManager, "progress")
                                             }
@@ -170,7 +181,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                 val bundle = Bundle()
                 bundle.putSerializable("file", externalFile)
                 bundle.putSerializable("folder", manager.root)
-                loaderManager.restartLoader(3, bundle, this@ImportExportFragment)
+                LoaderManager.getInstance(this@ImportExportFragment)
+                    .restartLoader(3, bundle, this@ImportExportFragment)
                 progress = ProgressDialog(getString(R.string.exporting)).also {
                     it.show(childFragmentManager, "progress")
                 }
@@ -192,7 +204,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                             if (file.exists()) {
                                 val bundle = Bundle()
                                 bundle.putSerializable("file", file)
-                                loaderManager.restartLoader(4, bundle, this@ImportExportFragment)
+                                LoaderManager.getInstance(this@ImportExportFragment)
+                                    .restartLoader(4, bundle, this@ImportExportFragment)
                                 progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
                                     dialog.show(childFragmentManager, "progress")
                                 }
@@ -213,7 +226,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                 val file = File(externalUserDirectory, "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
-                loaderManager.restartLoader(5, bundle, this@ImportExportFragment)
+                LoaderManager.getInstance(this@ImportExportFragment)
+                    .restartLoader(5, bundle, this@ImportExportFragment)
                 progress = ProgressDialog(getString(R.string.backing_up)).also {
                     it.show(childFragmentManager, "progress")
                 }
@@ -239,7 +253,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                                         if (file.exists()) {
                                             val bundle = Bundle()
                                             bundle.putSerializable("file", file)
-                                            loaderManager.restartLoader(0, bundle, this@ImportExportFragment)
+                                            LoaderManager.getInstance(this@ImportExportFragment)
+                                                .restartLoader(0, bundle, this@ImportExportFragment)
                                             progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
                                                 dialog.show(childFragmentManager, "progress")
                                             }
@@ -264,7 +279,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
                 val file = File(externalUserDirectory, "backup" + File.separator + FileUtils.getTimeFileName() + EXT)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
-                loaderManager.restartLoader(1, bundle, this@ImportExportFragment)
+                LoaderManager.getInstance(this@ImportExportFragment)
+                    .restartLoader(1, bundle, this@ImportExportFragment)
                 progress = ProgressDialog(getString(R.string.backing_up)).also {
                     it.show(childFragmentManager, "progress")
                 }
@@ -290,7 +306,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
         }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): androidx.loader.content.Loader<Boolean> {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Boolean> {
         if (args == null) throw IllegalArgumentException("args must not be null")
 
         return when (id) {
@@ -299,6 +315,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
             2 -> BookmarkHtmlImportTask(requireActivity(),
                 args.getSerializable("file") as File,
                 args.getSerializable("manager") as BookmarkManager,
+                faviconManager,
                 args.getSerializable("folder") as BookmarkFolder,
                 Handler())
             3 -> BookmarkHtmlExportTask(activity,
@@ -310,7 +327,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
         }
     }
 
-    override fun onLoadFinished(loader: androidx.loader.content.Loader<Boolean>, data: Boolean) {
+    override fun onLoadFinished(loader: Loader<Boolean>, data: Boolean) {
         handler.sendEmptyMessage(0)
 
         if (data) {
@@ -323,7 +340,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
         }
     }
 
-    override fun onLoaderReset(loader: androidx.loader.content.Loader<Boolean>) {
+    override fun onLoaderReset(loader: Loader<Boolean>) {
 
     }
 
@@ -331,7 +348,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
         get() = activity as AppCompatActivity
 
     private class DialogHandler : Handler() {
-        private var dialogRef: WeakReference<androidx.fragment.app.DialogFragment>? = null
+        private var dialogRef: WeakReference<DialogFragment>? = null
 
         override fun handleMessage(msg: Message) {
             if (dialogRef == null) return
@@ -342,8 +359,8 @@ class ImportExportFragment : YuzuPreferenceFragment(), androidx.loader.app.Loade
             }
         }
 
-        internal fun setDialog(dialog: androidx.fragment.app.DialogFragment?) {
-            dialogRef = WeakReference<androidx.fragment.app.DialogFragment>(dialog)
+        internal fun setDialog(dialog: DialogFragment?) {
+            dialogRef = WeakReference<DialogFragment>(dialog)
         }
     }
 

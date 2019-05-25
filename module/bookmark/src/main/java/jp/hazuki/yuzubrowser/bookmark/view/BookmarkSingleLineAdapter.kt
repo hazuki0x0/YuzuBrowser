@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkItem
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 
 class BookmarkSingleLineAdapter(
     context: Context,
@@ -28,8 +29,9 @@ class BookmarkSingleLineAdapter(
     pickMode: Boolean,
     openNewTab: Boolean,
     fontSize: Int,
+    faviconManager: FaviconManager,
     bookmarkItemListener: OnBookmarkRecyclerListener
-) : BookmarkItemAdapter(context, list, pickMode, openNewTab, fontSize, bookmarkItemListener) {
+) : BookmarkItemAdapter(context, list, pickMode, openNewTab, fontSize, faviconManager, bookmarkItemListener) {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): BookmarkFolderHolder {
         return when (viewType) {

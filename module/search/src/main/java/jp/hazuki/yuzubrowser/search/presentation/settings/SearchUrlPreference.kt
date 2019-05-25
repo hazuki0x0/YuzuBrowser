@@ -54,6 +54,8 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
         lateinit var moshi: Moshi
         @Inject
         internal lateinit var prefsProvider: SearchPrefsProvider
+        @Inject
+        internal lateinit var faviconManager: FaviconManager
 
         private lateinit var provider: SearchSuggestProviders
 
@@ -74,7 +76,7 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
             val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
             recyclerView.layoutManager = LinearLayoutManager(activity)
 
-            recyclerView.adapter = Adapter(activity, provider, FaviconManager.getInstance(activity), this)
+            recyclerView.adapter = Adapter(activity, provider, faviconManager, this)
 
             return view
         }

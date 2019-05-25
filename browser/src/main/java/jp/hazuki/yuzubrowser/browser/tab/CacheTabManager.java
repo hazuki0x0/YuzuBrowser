@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.yuzubrowser.browser.BrowserActivity;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
@@ -53,20 +51,21 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
 
     private BrowserActivity mWebBrowser;
     private final TabCache<MainTabData> mTabCache;
-    @Inject
-    TabStorage mTabStorage;
+    private final TabStorage mTabStorage;
+    private final FaviconManager faviconManager;
     private final ThumbnailManager thumbnailManager;
     private final TabFaviconManager tabFaviconManager;
 
     private List<View> mTabView;
 
-    CacheTabManager(BrowserActivity activity, WebViewFactory factory) {
+    CacheTabManager(BrowserActivity activity, WebViewFactory factory, FaviconManager faviconManager) {
         mWebBrowser = activity;
         mTabCache = new TabCache<>(AppData.tabs_cache_number.get(), this);
         mTabStorage = new TabStorage(activity, factory);
+        this.faviconManager = faviconManager;
         mTabView = new ArrayList<>();
         thumbnailManager = new ThumbnailManager(activity);
-        tabFaviconManager = new TabFaviconManager(activity);
+        tabFaviconManager = new TabFaviconManager(activity, faviconManager);
         mTabStorage.setOnWebViewCreatedListener(tab -> {
             synchronized (mTabCache) {
                 mTabCache.put(tab.getId(), tab);
@@ -313,12 +312,9 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
 
     @Override
     public void clearExceptPinnedTab() {
-        mTabStorage.clearExceptPinnedTab(new TabStorage.OnClearExceptPinnedTabListener() {
-            @Override
-            public void onRemove(int index, long id) {
-                synchronized (mTabCache) {
-                    mTabCache.remove(id);
-                }
+        mTabStorage.clearExceptPinnedTab((index, id) -> {
+            synchronized (mTabCache) {
+                mTabCache.remove(id);
             }
         });
     }
@@ -378,7 +374,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
             return;
         }
 
-        Bitmap icon = FaviconManager.Companion.getInstance(view.getContext()).get(indexData.getOriginalUrl());
+        Bitmap icon = faviconManager.get(indexData.getOriginalUrl());
         Drawable drawable;
         if (icon != null) {
             drawable = new BitmapDrawable(view.getResources(), icon);

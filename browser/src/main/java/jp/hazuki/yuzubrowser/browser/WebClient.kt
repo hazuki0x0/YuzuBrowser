@@ -57,6 +57,7 @@ import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconAsyncManager
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.history.presenter.BrowserHistoryActivity
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryAsyncManager
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -104,11 +105,16 @@ import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread
 
-class WebClient(private val activity: BrowserBaseActivity, private val controller: BrowserController, private val abpDatabase: AbpDatabase) : WebViewUtility {
+class WebClient(
+    private val activity: BrowserBaseActivity,
+    private val controller: BrowserController,
+    private val abpDatabase: AbpDatabase,
+    faviconManager: FaviconManager
+) : WebViewUtility {
     private val patternManager = PatternUrlManager(activity.applicationContext)
     private val speedDialManager = SpeedDialAsyncManager(activity.applicationContext)
     private val speedDialHtml = SpeedDialHtml(activity.applicationContext)
-    private val faviconManager = FaviconAsyncManager(activity.applicationContext)
+    private val faviconManager = FaviconAsyncManager(faviconManager)
     private val webViewRenderingManager = WebViewRenderingManager()
     private val scrollableToolbarHeight = { controller.appBarLayout.totalScrollRange + controller.pagePaddingHeight }
     private val safeFileProvider = (activity.applicationContext as BrowserApplication).providerManager.safeFileProvider
@@ -459,7 +465,7 @@ class WebClient(private val activity: BrowserBaseActivity, private val controlle
 
         override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {
             controller.getTabOrNull(web)?.let { tab ->
-                tab.onStateChanged(web.title, url, originalUrl, progress, isLoading)
+                tab.onStateChanged(web.title, url, originalUrl, progress, isLoading, faviconManager)
                 if (tab == controller.currentTabData) {
                     controller.notifyChangeWebState(tab)
                 }

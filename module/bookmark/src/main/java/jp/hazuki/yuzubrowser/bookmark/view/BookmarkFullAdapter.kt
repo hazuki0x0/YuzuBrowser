@@ -25,6 +25,7 @@ import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkItem
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkSite
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 
 class BookmarkFullAdapter(
@@ -33,8 +34,9 @@ class BookmarkFullAdapter(
     pickMode: Boolean,
     openNewTab: Boolean,
     fontSize: Int,
+    faviconManager: FaviconManager,
     bookmarkItemListener: OnBookmarkRecyclerListener
-) : BookmarkItemAdapter(context, list, pickMode, openNewTab, fontSize, bookmarkItemListener) {
+) : BookmarkItemAdapter(context, list, pickMode, openNewTab, fontSize, faviconManager, bookmarkItemListener) {
 
     override fun onBindViewHolder(holder: BookmarkFolderHolder, item: BookmarkItem, position: Int) {
         super.onBindViewHolder(holder, item, position)

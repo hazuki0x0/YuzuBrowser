@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.tab.manager;
 import android.graphics.Bitmap;
 
 import jp.hazuki.yuzubrowser.core.android.utils.BitmapUtilsKt;
+import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
@@ -131,7 +132,7 @@ public class TabData {
         mIndexData.setTitle(title);
     }
 
-    public void onStateChanged(String title, String url, String originalUrl, int progress, Boolean isLoading) {
+    public void onStateChanged(String title, String url, String originalUrl, int progress, Boolean isLoading, FaviconManager faviconManager) {
         mProgress = progress;
         mIndexData.setTitle(title);
         mIndexData.setUrl(url);

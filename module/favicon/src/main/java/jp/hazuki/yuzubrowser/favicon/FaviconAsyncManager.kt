@@ -16,14 +16,11 @@
 
 package jp.hazuki.yuzubrowser.favicon
 
-import android.content.Context
 import android.graphics.Bitmap
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import java.util.concurrent.LinkedBlockingQueue
 
-class FaviconAsyncManager(context: Context) {
-
-    private val manager: FaviconManager = FaviconManager.getInstance(context)
+class FaviconAsyncManager(private val manager: FaviconManager) {
     private val faviconThread: FaviconThread
 
     init {

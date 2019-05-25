@@ -94,7 +94,10 @@ import org.jetbrains.anko.toast
 import java.io.File
 import java.io.IOException
 
-class ActionExecutor(private val controller: BrowserController) : ActionController {
+class ActionExecutor(
+    private val controller: BrowserController,
+    private val faviconManager: FaviconManager
+) : ActionController {
     override fun run(action: SingleAction, target: ActionController.HitTestResultTargetInfo): Boolean {
         val result = target.webView.hitTestResult ?: return false
         val url = result.extra ?: return false
@@ -1083,11 +1086,11 @@ class ActionExecutor(private val controller: BrowserController) : ActionControll
 
     private fun createShortCut(tab: MainTabData, iconUrl: String) = ui {
         val bitmap = if (iconUrl.isEmpty() || iconUrl == "null") {
-            FaviconManager.getInstance(controller.applicationContextInfo)[tab.originalUrl]
+            faviconManager[tab.originalUrl]
         } else {
             val userAgent = tab.mWebView.getUserAgent()
             withContext(Dispatchers.Default) { HttpUtils.getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url)) }
-                    ?: FaviconManager.getInstance(controller.applicationContextInfo)[tab.originalUrl]
+                ?: faviconManager[tab.originalUrl]
         }
 
         PackageUtils.createShortcut(controller.activity, tab.title, tab.url, bitmap)

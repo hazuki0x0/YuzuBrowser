@@ -78,6 +78,8 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
     @Inject
     internal lateinit var hideMenuRepository: HideMenuRepository
+    @Inject
+    internal lateinit var faviconManager: FaviconManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -172,9 +174,9 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
         setTitle(folder)
 
         adapter = if (prefs.bookmarkSimpleDisplay) {
-            BookmarkSingleLineAdapter(activity, folder.itemList, pickMode, prefs.openBookmarkNewTab, prefs.fontSizeBookmark, this)
+            BookmarkSingleLineAdapter(activity, folder.itemList, pickMode, prefs.openBookmarkNewTab, prefs.fontSizeBookmark, faviconManager, this)
         } else {
-            BookmarkFullAdapter(activity, folder.itemList, pickMode, prefs.openBookmarkNewTab, prefs.fontSizeBookmark, this)
+            BookmarkFullAdapter(activity, folder.itemList, pickMode, prefs.openBookmarkNewTab, prefs.fontSizeBookmark, faviconManager, this)
         }
 
         recyclerView.adapter = adapter
@@ -387,7 +389,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             R.id.copyUrl -> activity.setClipboardWithToast((item as BookmarkSite).url)
             R.id.addToHome -> {
                 val url = (item as BookmarkSite).url
-                val bitmap = FaviconManager.getInstance(activity)[url]
+                val bitmap = faviconManager[url]
                 createShortcut(activity, item.title, url, bitmap)
             }
             R.id.editBookmark -> if (item is BookmarkSite) {

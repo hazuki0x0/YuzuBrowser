@@ -103,8 +103,8 @@ public class MainTabData extends TabData {
     }
 
     @Override
-    public void onStateChanged(String title, String url, String originalUrl, int progress, Boolean isLoading) {
-        super.onStateChanged(title, url, originalUrl, progress, isLoading);
+    public void onStateChanged(String title, String url, String originalUrl, int progress, Boolean isLoading, FaviconManager faviconManager) {
+        super.onStateChanged(title, url, originalUrl, progress, isLoading, faviconManager);
         if (title != null)
             setText(title);
         else
@@ -114,8 +114,7 @@ public class MainTabData extends TabData {
             if (originalUrl.startsWith("yuzu:")) {
                 removeIcon();
             } else {
-                setIcon(new BitmapDrawable(context.getResources(),
-                        FaviconManager.Companion.getInstance(context).get(originalUrl)));
+                setIcon(new BitmapDrawable(context.getResources(), faviconManager.get(originalUrl)));
             }
         }
     }

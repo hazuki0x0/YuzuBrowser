@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.bookmark.netscape
 
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Base64
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
@@ -30,9 +29,9 @@ import org.jsoup.nodes.Element
 import java.io.File
 import java.io.IOException
 
-class NetscapeBookmarkParser(context: Context, val parent: BookmarkFolder) {
-
-    val favicon = FaviconManager.getInstance(context)
+class NetscapeBookmarkParser(
+    private val parent: BookmarkFolder,
+    private val favicon: FaviconManager) {
 
     @Throws(NetscapeBookmarkException::class, IOException::class)
     fun parse(file: File) {

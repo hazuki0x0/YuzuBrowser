@@ -19,10 +19,14 @@ package jp.hazuki.yuzubrowser.history.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import jp.hazuki.yuzubrowser.history.presenter.BrowserHistoryActivity
+import jp.hazuki.yuzubrowser.history.presenter.BrowserHistoryFragment
 
 @Module
 abstract class HistoryModule {
 
     @ContributesAndroidInjector
     abstract fun contributeBrowserHistoryActivity(): BrowserHistoryActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeBrowserHistoryFragment(): BrowserHistoryFragment
 }

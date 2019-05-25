@@ -47,6 +47,8 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
     internal lateinit var prefs: SearchPrefsProvider
     @Inject
     internal lateinit var factory: SearchViewModel.Factory
+    @Inject
+    internal lateinit var faviconManager: FaviconManager
 
     private lateinit var viewModel: SearchViewModel
     private lateinit var binding: SearchActivityBinding
@@ -81,7 +83,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
             barBinding.viewModel = it
 
             barBinding.searchUrlSpinner.adapter = SearchUrlSpinnerAdapter(
-                this, it.suggestProviders.urls, FaviconManager.getInstance(application))
+                this, it.suggestProviders.urls, faviconManager)
             it.providerSelection.set(it.suggestProviders.getSelectedIndex())
         }
 

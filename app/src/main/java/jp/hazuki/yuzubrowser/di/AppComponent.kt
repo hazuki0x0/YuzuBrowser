@@ -27,6 +27,7 @@ import jp.hazuki.yuzubrowser.bookmark.BookmarkUiModule
 import jp.hazuki.yuzubrowser.browser.di.ActivityModule
 import jp.hazuki.yuzubrowser.download.DownloadModule
 import jp.hazuki.yuzubrowser.history.di.HistoryModule
+import jp.hazuki.yuzubrowser.legacy.settings.di.SettingsModule
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentModule
 import jp.hazuki.yuzubrowser.legacy.webencode.WebEncodeModule
 import jp.hazuki.yuzubrowser.search.di.SearchModule
@@ -45,7 +46,8 @@ import javax.inject.Singleton
     AdBlockModule::class,
     AdBlockUiModule::class,
     BookmarkUiModule::class,
-    HistoryModule::class
+    HistoryModule::class,
+    SettingsModule::class
 ])
 interface AppComponent : AndroidInjector<YuzuBrowserApplication> {
 

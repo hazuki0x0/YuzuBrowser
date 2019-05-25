@@ -23,6 +23,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
 import jp.hazuki.yuzubrowser.legacy.kotshi.LegacyJsonAdapterFactory
 import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
@@ -97,5 +98,12 @@ object AppModule {
     @JvmStatic
     fun provideUiPrefs(context: Context): UiPrefs {
         return UiPrefs.get(context)
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun provideFaviconManager(context: Context): FaviconManager {
+        return FaviconManager(context)
     }
 }
