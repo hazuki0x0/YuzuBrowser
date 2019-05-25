@@ -19,9 +19,13 @@ package jp.hazuki.yuzubrowser.search.presentation.widget
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
+import jp.hazuki.yuzubrowser.search.model.provider.SearchUrl
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchSuggestAdapter
+import jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlAdapter
+import jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlDiffCallback
 
 @BindingMethods(BindingMethod(type = SearchButton::class, attribute = "callback", method = "setActionCallback"))
 class SearchBindingAdapter
@@ -41,3 +45,15 @@ fun RecyclerView.setViewModels(suggestModels: List<SearchSuggestModel>?) {
     }
 }
 
+@BindingAdapter("viewmodels")
+fun RecyclerView.setSearchUrl(searchUrls: List<SearchUrl>?) {
+    if (searchUrls == null) return
+
+    val adapter = adapter as SearchUrlAdapter
+    val diff = DiffUtil.calculateDiff(SearchUrlDiffCallback(adapter.list, searchUrls), true)
+    adapter.list.run {
+        clear()
+        addAll(searchUrls)
+    }
+    diff.dispatchUpdatesTo(adapter)
+}

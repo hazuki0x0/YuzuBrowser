@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.search.blogic
+package jp.hazuki.yuzubrowser.search.domain
 
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
 

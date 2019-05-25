@@ -79,7 +79,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListActivity
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.handler.*
-import jp.hazuki.yuzubrowser.search.blogic.makeGoogleImageSearch
+import jp.hazuki.yuzubrowser.search.domain.makeGoogleImageSearch
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl

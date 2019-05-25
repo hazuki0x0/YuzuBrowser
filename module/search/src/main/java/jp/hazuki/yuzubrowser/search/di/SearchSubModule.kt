@@ -23,10 +23,12 @@ import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
-import jp.hazuki.yuzubrowser.search.blogic.ISearchUrlRepository
-import jp.hazuki.yuzubrowser.search.blogic.ISuggestRepository
-import jp.hazuki.yuzubrowser.search.blogic.usecase.SearchViewUseCase
+import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
+import jp.hazuki.yuzubrowser.search.domain.ISuggestRepository
+import jp.hazuki.yuzubrowser.search.domain.usecase.SearchSettingsViewUseCase
+import jp.hazuki.yuzubrowser.search.domain.usecase.SearchViewUseCase
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchViewModel
+import jp.hazuki.yuzubrowser.search.presentation.settings.SearchSettingsViewModel
 import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.search.repository.SearchUrlManager
 import jp.hazuki.yuzubrowser.search.repository.SuggestRepository
@@ -68,5 +70,17 @@ object SearchSubModule {
     @JvmStatic
     internal fun provideSearchViewModelFactory(application: Application, useCase: SearchViewUseCase, provider: SearchPrefsProvider): SearchViewModel.Factory {
         return SearchViewModel.Factory(application, useCase, provider)
+    }
+
+    @Provides
+    @JvmStatic
+    internal fun provideSearchSettingsViewUseCase(searchUrlRepository: ISearchUrlRepository): SearchSettingsViewUseCase {
+        return SearchSettingsViewUseCase(searchUrlRepository)
+    }
+
+    @Provides
+    @JvmStatic
+    internal fun provideSearchSettingsViewModelFactory(application: Application, useCase: SearchSettingsViewUseCase): SearchSettingsViewModel.Factory {
+        return SearchSettingsViewModel.Factory(application, useCase)
     }
 }

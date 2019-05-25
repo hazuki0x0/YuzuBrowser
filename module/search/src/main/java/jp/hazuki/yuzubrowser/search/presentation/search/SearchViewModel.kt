@@ -23,7 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
-import jp.hazuki.yuzubrowser.search.blogic.usecase.SearchViewUseCase
+import jp.hazuki.yuzubrowser.search.domain.usecase.SearchViewUseCase
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
 import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.ui.extensions.addOnPropertyChangedCallback

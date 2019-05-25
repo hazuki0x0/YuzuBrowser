@@ -30,9 +30,9 @@ import androidx.fragment.app.DialogFragment
 import com.android.colorpicker.ColorPickerDialog
 import com.android.colorpicker.ColorPickerSwatch
 import jp.hazuki.yuzubrowser.search.R
-import jp.hazuki.yuzubrowser.search.blogic.COLORS
-import jp.hazuki.yuzubrowser.search.blogic.getIdentityColor
-import jp.hazuki.yuzubrowser.search.blogic.randomColor
+import jp.hazuki.yuzubrowser.search.domain.COLORS
+import jp.hazuki.yuzubrowser.search.domain.getIdentityColor
+import jp.hazuki.yuzubrowser.search.domain.randomColor
 import jp.hazuki.yuzubrowser.search.model.provider.SearchUrl
 
 class SearchSettingDialog : DialogFragment(), ColorPickerSwatch.OnColorSelectedListener {

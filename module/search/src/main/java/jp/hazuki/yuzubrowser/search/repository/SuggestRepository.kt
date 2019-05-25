@@ -20,7 +20,7 @@ import android.app.Application
 import android.app.SearchManager
 import android.content.ContentValues
 import android.net.Uri
-import jp.hazuki.yuzubrowser.search.blogic.ISuggestRepository
+import jp.hazuki.yuzubrowser.search.domain.ISuggestRepository
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
 

@@ -32,6 +32,4 @@ data class SearchUrl @KotshiConstructor constructor(
 ) : Serializable {
 
     constructor(title: String, url: String, color: Int) : this(-1, title, url, color)
-
-    constructor(title: String, url: String) : this(-1, title, url, 0)
 }

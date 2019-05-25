@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.search.blogic
+package jp.hazuki.yuzubrowser.search.domain
 
-import jp.hazuki.yuzubrowser.search.model.provider.SearchSettings
+import java.io.UnsupportedEncodingException
+import java.net.URLEncoder
 
-interface ISearchUrlRepository {
+private const val GOOGLE_IMAGE_SEARCH = "https://www.google.com/searchbyimage?image_url="
 
-    fun load(): SearchSettings
+fun String.makeGoogleImageSearch(): String {
+    try {
+        return GOOGLE_IMAGE_SEARCH + URLEncoder.encode(this, "UTF-8")
+    } catch (e: UnsupportedEncodingException) {
+        e.printStackTrace()
+    }
 
-    fun save(settings: SearchSettings)
+    return ""
 }

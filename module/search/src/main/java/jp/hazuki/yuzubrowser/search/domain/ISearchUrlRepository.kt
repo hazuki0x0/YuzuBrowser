@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.search.blogic
+package jp.hazuki.yuzubrowser.search.domain
 
-import androidx.annotation.ColorInt
+import jp.hazuki.yuzubrowser.search.model.provider.SearchSettings
 
-val COLORS = intArrayOf(-0xbbcca, -0x16e19d, -0x63d850, -0x98c549, -0xc0ae4b, -0xde690d, -0xfc560c, -0xff432c, -0xff6978, -0xb350b0, -0x743cb6, -0x3223c7, -0x14c5, -0x3ef9, -0x6800, -0xa8de, -0x86aab8, -0x616162, -0x9f8275, -0xdededf)
+interface ISearchUrlRepository {
 
-internal val randomColor: Int
-    @ColorInt
-    get() = COLORS[(Math.random() * COLORS.size).toInt()]
+    fun load(): SearchSettings
 
-@ColorInt
-internal fun String.getIdentityColor(): Int {
-    return COLORS[Math.abs(hashCode() % COLORS.size)]
+    fun save(settings: SearchSettings)
 }

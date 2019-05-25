@@ -18,7 +18,7 @@ package jp.hazuki.yuzubrowser.search.repository
 
 import android.content.Context
 import com.squareup.moshi.Moshi
-import jp.hazuki.yuzubrowser.search.blogic.ISearchUrlRepository
+import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
 import jp.hazuki.yuzubrowser.search.model.provider.SearchSettings
 import okio.buffer
 import okio.sink

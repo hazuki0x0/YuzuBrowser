@@ -26,8 +26,8 @@ import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.search.R
-import jp.hazuki.yuzubrowser.search.blogic.getIdentityColor
-import jp.hazuki.yuzubrowser.search.blogic.randomColor
+import jp.hazuki.yuzubrowser.search.domain.getIdentityColor
+import jp.hazuki.yuzubrowser.search.domain.randomColor
 import jp.hazuki.yuzubrowser.search.model.provider.SearchUrl
 
 class SearchSimpleIconView @JvmOverloads constructor(

@@ -32,7 +32,7 @@ import com.squareup.moshi.Moshi
 import dagger.android.support.AndroidSupportInjection
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.search.R
-import jp.hazuki.yuzubrowser.search.blogic.ISearchUrlRepository
+import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
 import jp.hazuki.yuzubrowser.search.model.provider.SearchSuggestProviders
 import jp.hazuki.yuzubrowser.search.presentation.widget.SearchSimpleIconView
 import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider

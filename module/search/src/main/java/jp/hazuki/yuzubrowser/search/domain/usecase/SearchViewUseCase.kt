@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.search.blogic.usecase
+package jp.hazuki.yuzubrowser.search.domain.usecase
 
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
-import jp.hazuki.yuzubrowser.search.blogic.ISearchUrlRepository
-import jp.hazuki.yuzubrowser.search.blogic.ISuggestRepository
+import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
+import jp.hazuki.yuzubrowser.search.domain.ISuggestRepository
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
 import jp.hazuki.yuzubrowser.search.model.provider.SearchSuggestProviders
 import jp.hazuki.yuzubrowser.ui.utils.isUrl
