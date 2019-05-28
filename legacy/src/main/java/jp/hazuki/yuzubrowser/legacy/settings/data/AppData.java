@@ -30,6 +30,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
@@ -70,11 +71,14 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
 
 public class AppData {
+    private static final int PREF_VERSION = 0;
+
     private static final String TAG = "AppData";
     public static final String PREFERENCE_NAME = "main_preference";
     private static SoftReference<ArrayList<Containable>> sPreferenceList;
 
     public static final IntContainer lastLaunchVersion = new IntContainer("_lastLaunchVersion", -1);
+    public static final IntContainer lastLaunchPrefVersion = new IntContainer("_lastLaunchPrefVersion", -1);
     public static final IntContainer clear_data_default = new IntContainer("_clear_data_default", 0);
     public static final IntContainer finish_alert_default = new IntContainer("_finish_alert_default", 0);
 
@@ -210,7 +214,8 @@ public class AppData {
     public static final StringContainer language = new StringContainer("language", "");
 
 
-    public static void settingInitialValue(Context context, SharedPreferences shared_preference, Moshi moshi) {
+    public static void settingInitialValue(Context context, SharedPreferences shared_preference, Moshi moshi, AbpDatabase abpDatabase) {
+        boolean modified = false;
         int lastLaunch = lastLaunchVersion.get();
         if (lastLaunch < 0) {
             Logger.d(TAG, "is first launch");
@@ -365,14 +370,16 @@ public class AppData {
                 AppData.search_url.set(providers.get(0).getUrl());
                 AppData.commit(context, AppData.search_url);
             }
+
+            AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
         }
 
 
-        int versionCode = ContextExtensionsKt.getVersionCode(context);
+        int prefVersionCode = lastLaunchPrefVersion.get();
 
-        if (lastLaunch < versionCode) {
-            if (lastLaunch >= 0) {
-                //version up code
+        if (prefVersionCode < PREF_VERSION) {
+            //version up code from classic type
+            if (lastLaunch > -1 && prefVersionCode < 0) {
 
                 if (lastLaunch < 300000) {
                     PatternUrlConverter converter = new PatternUrlConverter();
@@ -426,9 +433,20 @@ public class AppData {
                     from.deleteDatabase(context);
                     download_folder.set("file://" + download_folder.get());
                 }
+
+                if (lastLaunch < 410009) {
+                    AdBlockInitSupportKt.disableYuzuList(abpDatabase);
+                }
             }
 
-            {
+            lastLaunchPrefVersion.set(PREF_VERSION);
+            modified = true;
+        }
+
+        int versionCode = ContextExtensionsKt.getVersionCode(context);
+
+        if (versionCode > lastLaunch) {
+            if (lastLaunch > -1) {
                 UserAgentList list = new UserAgentList();
                 list.read(context, moshi);
                 UserAgentUpdaterKt.upgrade(list);
@@ -436,16 +454,18 @@ public class AppData {
             }
 
             lastLaunchVersion.set(versionCode);
-            commit(context);
+            modified = true;
         }
+
+        if (modified) commit(context);
     }
 
-    public static boolean load(Context context, Moshi moshi) {
+    public static boolean load(Context context, Moshi moshi, AbpDatabase abpDatabase) {
         SharedPreferences shared_preference = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         for (Containable pref : getPreferenceList()) {
             pref.read(shared_preference);
         }
-        settingInitialValue(context, shared_preference, moshi);
+        settingInitialValue(context, shared_preference, moshi, abpDatabase);
         return true;
     }
 

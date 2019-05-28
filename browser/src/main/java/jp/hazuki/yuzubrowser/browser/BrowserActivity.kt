@@ -224,7 +224,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         browserState = (applicationContext as BrowserApplication).browserState
 
         if (browserState.isNeedLoad) {
-            AppData.load(this, moshi)
+            AppData.load(this, moshi, abpDatabase)
             browserState.isNeedLoad = false
         }
 
@@ -502,7 +502,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 openable.forEach { loadUrl(it, openable.target) }
             }
             BrowserController.REQUEST_SETTING -> {
-                AppData.load(applicationContext, moshi)
+                AppData.load(applicationContext, moshi, abpDatabase)
                 onPreferenceReset()
             }
             BrowserController.REQUEST_USERAGENT -> {

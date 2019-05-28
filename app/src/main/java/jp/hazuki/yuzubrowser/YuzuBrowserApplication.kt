@@ -29,6 +29,7 @@ import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
+import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
 import jp.hazuki.yuzubrowser.download.registerDownloadNotification
@@ -51,6 +52,8 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
     lateinit var dispatchingAndroidFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject
     override lateinit var moshi: Moshi
+    @Inject
+    lateinit var abpDatabase: AbpDatabase
 
     override fun onCreate() {
         super.onCreate()
@@ -65,7 +68,7 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         Logger.d(TAG, "onCreate()")
         browserState.isNeedLoad = false
         ErrorReportServer.initialize(this)
-        AppData.load(this, moshi)
+        AppData.load(this, moshi, abpDatabase)
         ErrorReportServer.setDetailedLog(AppData.detailed_log.get())
         if (AppData.slow_rendering.get()) {
             WebView.enableSlowWholeDocumentDraw()
