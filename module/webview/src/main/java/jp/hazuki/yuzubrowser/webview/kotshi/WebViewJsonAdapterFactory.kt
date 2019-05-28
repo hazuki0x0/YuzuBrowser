@@ -23,6 +23,6 @@ import se.ansman.kotshi.KotshiJsonAdapterFactory
 abstract class WebViewJsonAdapterFactory : JsonAdapter.Factory {
     companion object {
         val INSTANCE: WebViewJsonAdapterFactory
-            get() = KotshiWebViewJsonAdapterFactory()
+            get() = KotshiWebViewJsonAdapterFactory
     }
 }

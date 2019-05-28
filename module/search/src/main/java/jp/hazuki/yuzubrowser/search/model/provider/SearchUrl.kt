@@ -17,18 +17,16 @@
 package jp.hazuki.yuzubrowser.search.model.provider
 
 import com.squareup.moshi.Json
-import se.ansman.kotshi.JsonDefaultValueBoolean
 import se.ansman.kotshi.JsonSerializable
-import se.ansman.kotshi.KotshiConstructor
 import java.io.Serializable
 
 @JsonSerializable
-data class SearchUrl @KotshiConstructor constructor(
+data class SearchUrl constructor(
     @Json(name = "3") var id: Int,
     @Json(name = "0") var title: String,
     @Json(name = "1") var url: String,
     @Json(name = "2") var color: Int,
-    @Json(name = "4") @JsonDefaultValueBoolean(true) var isUseFavicon: Boolean = true
+    @Json(name = "4") var isUseFavicon: Boolean = true
 ) : Serializable {
 
     constructor(title: String, url: String, color: Int) : this(-1, title, url, color)

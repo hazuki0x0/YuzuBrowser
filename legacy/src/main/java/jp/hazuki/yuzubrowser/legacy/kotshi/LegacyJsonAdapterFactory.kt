@@ -23,6 +23,6 @@ import se.ansman.kotshi.KotshiJsonAdapterFactory
 abstract class LegacyJsonAdapterFactory : JsonAdapter.Factory {
     companion object {
         val INSTANCE: LegacyJsonAdapterFactory
-            get() = KotshiLegacyJsonAdapterFactory()
+            get() = KotshiLegacyJsonAdapterFactory
     }
 }

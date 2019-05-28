@@ -99,7 +99,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.28.1'
+        classpath 'io.fabric.tools:gradle:1.29.0'
         classpath 'com.cookpad.android.licensetools:license-tools-plugin:1.7.0'
     }
 }
@@ -122,7 +122,7 @@ dependencies {
     implementation AndroidX.appcompat
     implementation AndroidX.fix_preference
     implementation AndroidX.room
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
     implementation project(':browser')

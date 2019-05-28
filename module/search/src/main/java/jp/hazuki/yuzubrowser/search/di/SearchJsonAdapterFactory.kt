@@ -23,6 +23,6 @@ import se.ansman.kotshi.KotshiJsonAdapterFactory
 abstract class SearchJsonAdapterFactory : JsonAdapter.Factory {
     companion object {
         val INSTANCE: SearchJsonAdapterFactory
-            get() = KotshiSearchJsonAdapterFactory()
+            get() = KotshiSearchJsonAdapterFactory
     }
 }

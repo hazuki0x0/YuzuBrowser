@@ -22,6 +22,6 @@ import se.ansman.kotshi.JsonSerializable
 import java.io.Serializable
 
 @JsonSerializable
-class WebTextEncode(
+data class WebTextEncode(
         @Json(name = "0") var encoding: String
 ) : Serializable
