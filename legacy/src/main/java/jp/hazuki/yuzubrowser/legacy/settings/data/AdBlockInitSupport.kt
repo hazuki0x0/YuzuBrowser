@@ -22,7 +22,7 @@ import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import kotlinx.coroutines.runBlocking
 
 fun initAbpFilter(context: Context, abpDatabase: AbpDatabase) = runBlocking {
-    val sites = context.assets.open("adblock/yuzu_filter.txt").bufferedReader().readLines()
+    val sites = context.assets.open("adblock/default_filter_list.txt").bufferedReader().readLines()
     abpDatabase
             .abpDao()
             .inset(sites
