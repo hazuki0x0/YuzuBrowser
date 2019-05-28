@@ -101,6 +101,7 @@ import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
 import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.BrowserState
+import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_RESTART
 import jp.hazuki.yuzubrowser.ui.extensions.createIntentFilter
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.utils.makeUrl
@@ -502,8 +503,13 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 openable.forEach { loadUrl(it, openable.target) }
             }
             BrowserController.REQUEST_SETTING -> {
-                AppData.load(applicationContext, moshi, abpDatabase)
-                onPreferenceReset()
+                if (data?.getBooleanExtra(INTENT_EXTRA_RESTART, false) == true) {
+                    forceDestroy = data.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
+                    restartBrowser()
+                } else {
+                    AppData.load(applicationContext, moshi, abpDatabase)
+                    onPreferenceReset()
+                }
             }
             BrowserController.REQUEST_USERAGENT -> {
                 if (resultCode != RESULT_OK || data == null) return
@@ -667,14 +673,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         if (action == null) return false
         if (Constants.intent.ACTION_FINISH == action) {
             forceDestroy = intent.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
-            browserState.isNeedLoad = true
-            if (parent == null) {
-                ActivityCompat.recreate(this)
-            } else {
-                val restart = Intent(this, BrowserActivity::class.java)
-                finish()
-                startActivity(restart)
-            }
+            restartBrowser()
             return false
         }
         if (Constants.intent.ACTION_NEW_TAB == action) {
@@ -704,6 +703,17 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
         tabListView?.close()
         return true
+    }
+
+    private fun restartBrowser() {
+        browserState.isNeedLoad = true
+        if (parent == null) {
+            ActivityCompat.recreate(this)
+        } else {
+            val restart = Intent(this, BrowserActivity::class.java)
+            finish()
+            startActivity(restart)
+        }
     }
 
     private fun onPreferenceReset() {

@@ -17,8 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.os.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +39,7 @@ import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
+import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.backup.BackupTask
 import jp.hazuki.yuzubrowser.legacy.backup.RestoreTask
@@ -48,6 +51,8 @@ import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialRestoreTask
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListDialog
 import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListViewController
+import jp.hazuki.yuzubrowser.ui.ACTIVITY_MAIN_BROWSER
+import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_RESTART
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
 import java.io.File
@@ -329,11 +334,20 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
 
     override fun onLoadFinished(loader: Loader<Boolean>, data: Boolean) {
         handler.sendEmptyMessage(0)
+        val activity = requireActivity()
 
         if (data) {
             Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
             if (loader is RestoreTask) {
-                AppUtils.restartApp(activity, true)
+                if (activity.callingActivity?.className == ACTIVITY_MAIN_BROWSER) {
+                    activity.setResult(Activity.RESULT_OK, Intent().apply {
+                        putExtra(INTENT_EXTRA_RESTART, true)
+                        putExtra(Constants.intent.EXTRA_FORCE_DESTROY, true)
+                    })
+                    activity.finish()
+                } else {
+                    AppUtils.restartApp(activity, true)
+                }
             }
         } else {
             Toast.makeText(activity, R.string.failed, Toast.LENGTH_SHORT).show()

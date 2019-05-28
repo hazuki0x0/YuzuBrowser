@@ -71,7 +71,7 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
 
 public class AppData {
-    private static final int PREF_VERSION = 0;
+    private static final int PREF_VERSION = 1;
 
     private static final String TAG = "AppData";
     public static final String PREFERENCE_NAME = "main_preference";
@@ -377,9 +377,9 @@ public class AppData {
 
         int prefVersionCode = lastLaunchPrefVersion.get();
 
-        if (prefVersionCode < PREF_VERSION) {
-            //version up code from classic type
-            if (lastLaunch > -1 && prefVersionCode < 0) {
+        if (lastLaunch < 410010 || prefVersionCode < PREF_VERSION) {
+            //version up code
+            if (lastLaunch < 410010) {
 
                 if (lastLaunch < 300000) {
                     PatternUrlConverter converter = new PatternUrlConverter();
@@ -434,7 +434,8 @@ public class AppData {
                     download_folder.set("file://" + download_folder.get());
                 }
 
-                if (lastLaunch < 410009) {
+                if (lastLaunch < 410010) {
+                    AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
                     AdBlockInitSupportKt.disableYuzuList(abpDatabase);
                 }
             }
