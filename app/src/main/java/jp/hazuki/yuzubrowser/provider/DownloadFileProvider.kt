@@ -48,18 +48,18 @@ class DownloadFileProvider : ContentProvider() {
     }
 
     override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
-        var projection = projection
+        var colRequest = projection
         val file = getFileForUri(uri)
         if (!file.checkPath()) return null
 
-        if (projection == null) {
-            projection = COLUMNS
+        if (colRequest == null) {
+            colRequest = COLUMNS
         }
 
-        var cols = arrayOfNulls<String>(projection.size)
-        var values = arrayOfNulls<Any>(projection.size)
+        var cols = arrayOfNulls<String>(colRequest.size)
+        var values = arrayOfNulls<Any>(colRequest.size)
         var i = 0
-        for (col in projection) {
+        for (col in colRequest) {
             if (OpenableColumns.DISPLAY_NAME == col) {
                 cols[i] = OpenableColumns.DISPLAY_NAME
                 values[i++] = file.name
