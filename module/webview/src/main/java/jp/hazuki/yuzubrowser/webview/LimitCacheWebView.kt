@@ -121,7 +121,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi, pri
 
     private fun webView2data(web: CustomWebView): WebViewPage? = tabCache[web.identityId]
 
-    override fun newTab(url: String, additionalHttpHeaders: MutableMap<String, String>) {
+    override fun newTab(url: String, additionalHttpHeaders: Map<String, String>) {
         val from = currentPage
         val to = makeWebView()
         val currentUrl = from.url
@@ -135,8 +135,8 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi, pri
         tabCache[to.id] = to
         moveTo(from, true)
 
-        if (sHeaderMap == additionalHttpHeaders || additionalHttpHeaders.isEmpty()) {
-            to.webView.loadUrl(url)
+        if (emptyMap == additionalHttpHeaders || additionalHttpHeaders.isEmpty()) {
+            to.webView.loadUrl(url, getReferrerMap(currentUrl))
         } else {
             to.webView.loadUrl(url, additionalHttpHeaders.getHeaderMap(currentUrl))
         }

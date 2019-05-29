@@ -118,7 +118,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
 
     private fun webView2Data(web: CustomWebView): WebViewPage? = mList.firstOrNull { it.webView == web }
 
-    override fun newTab(url: String, additionalHttpHeaders: MutableMap<String, String>) {
+    override fun newTab(url: String, additionalHttpHeaders: Map<String, String>) {
         val from = mList[current]
         val to = WebViewPage(SwipeWebView(context))
         for (i in mList.size - 1 downTo current + 1) {
@@ -135,8 +135,8 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
         ++current
         move(from, to)
 
-        if (sHeaderMap == additionalHttpHeaders || additionalHttpHeaders.isEmpty()) {
-            to.webView.loadUrl(url)
+        if (emptyMap == additionalHttpHeaders || additionalHttpHeaders.isEmpty()) {
+            to.webView.loadUrl(url, getReferrerMap(currentUrl))
         } else {
             to.webView.loadUrl(url, additionalHttpHeaders.getHeaderMap(currentUrl))
         }

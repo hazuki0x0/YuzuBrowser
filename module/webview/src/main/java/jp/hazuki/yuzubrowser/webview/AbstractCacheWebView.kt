@@ -79,7 +79,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
 
     internal abstract fun removeCurrentTab(tab: WebViewPage)
     internal abstract fun resetCurrentTab(): WebViewPage
-    protected abstract fun newTab(url: String, additionalHttpHeaders: MutableMap<String, String> = sHeaderMap)
+    protected abstract fun newTab(url: String, additionalHttpHeaders: Map<String, String> = emptyMap)
 
     override fun clearCache(includeDiskFiles: Boolean) {
         for (web in tabs) {
@@ -168,7 +168,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
             }
             url != null && url.shouldLoadSameTabUser() -> currentPage.webView.loadUrl(url, additionalHttpHeaders)
             url != null && additionalHttpHeaders != null -> newTab(url, additionalHttpHeaders)
-            url != null -> newTab(url, additionalHttpHeaders ?: sHeaderMap)
+            url != null -> newTab(url, additionalHttpHeaders ?: emptyMap)
         }
     }
 
@@ -582,7 +582,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
 
     override fun onPreferenceReset() {}
 
-    protected fun MutableMap<String, String>.getHeaderMap(referrer: String?): ArrayMap<String, String> {
+    protected fun Map<String, String>.getHeaderMap(referrer: String?): ArrayMap<String, String> {
         cachedMap.clear()
         if (this is ArrayMap<String, String>) {
             cachedMap.putAllItems(this)
@@ -598,9 +598,20 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         putAll(map as SimpleArrayMap<out K, out V>)
     }
 
+    protected fun getReferrerMap(referrer: String?): MutableMap<String, String> {
+        if (referrer == null) return mutableEmptyMap
+        referrerMap["Referer"] = referrer
+
+        return referrerMap
+    }
+
     companion object {
+        private val mutableEmptyMap = ArrayMap<String, String>()
         @JvmStatic
-        protected val sHeaderMap = ArrayMap<String, String>()
+        protected val emptyMap: Map<String, String>
+            get() = mutableEmptyMap
+
+        private val referrerMap = ArrayMap<String, String>(1)
         private val cachedMap = ArrayMap<String, String>()
 
         internal const val CAN_NOT_MOVE = 0
