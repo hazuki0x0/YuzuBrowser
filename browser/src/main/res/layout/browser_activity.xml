@@ -21,22 +21,22 @@
                                             android:id="@+id/superFrameLayout"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@color/background">
+                                            android:background="@color/browserBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <jp.hazuki.yuzubrowser.ui.widget.CustomCoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                                 android:id="@+id/coordinator"
-                                                                 android:layout_width="match_parent"
-                                                                 android:layout_height="0dp"
-                                                                 android:layout_above="@+id/bottomAlwaysToolbar"
-                                                                 android:layout_alignParentTop="true"
-                                                                 android:layout_toLeftOf="@+id/rightToolbar"
-                                                                 android:layout_toRightOf="@+id/leftToolbar"
-                                                                 tools:ignore="RtlHardcoded">
+        <jp.hazuki.yuzubrowser.ui.widget.CustomCoordinatorLayout
+            android:id="@+id/coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@+id/bottomAlwaysToolbar"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/rightToolbar"
+            android:layout_toRightOf="@+id/leftToolbar"
+            tools:ignore="RtlHardcoded">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"

@@ -212,6 +212,7 @@ public class AppData {
     public static final BooleanContainer fake_chrome = new BooleanContainer("fake_chrome", false);
     public static final BooleanContainer menu_icon = new BooleanContainer("menu_icon", true);
     public static final StringContainer language = new StringContainer("language", "");
+    public static final BooleanContainer whiteBackground = new BooleanContainer("white_background", true);
 
 
     public static void settingInitialValue(Context context, SharedPreferences shared_preference, Moshi moshi, AbpDatabase abpDatabase) {

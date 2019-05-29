@@ -18,15 +18,21 @@ package jp.hazuki.yuzubrowser.ui.widget
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import androidx.annotation.AttrRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.extensions.isImeShown
+import jp.hazuki.yuzubrowser.ui.R
 
 class RootLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         @AttrRes defStyleAttr: Int = 0
-) : androidx.coordinatorlayout.widget.CoordinatorLayout(context, attrs, defStyleAttr) {
+) : CoordinatorLayout(context, attrs, defStyleAttr) {
+    private var isWhiteMode = false
+
     private var onImeShownListener: ((Boolean) -> Unit)? = null
 
 
@@ -38,5 +44,16 @@ class RootLayout @JvmOverloads constructor(
 
     fun setOnImeShownListener(l: (visible: Boolean) -> Unit) {
         onImeShownListener = l
+    }
+
+    fun setWhiteBackgroundMode(whiteMode: Boolean) {
+        if (isWhiteMode != whiteMode) {
+            isWhiteMode = whiteMode
+            if (whiteMode) {
+                setBackgroundColor(Color.WHITE)
+            } else {
+                setBackgroundColor(context.getResColor(R.color.browserBackground))
+            }
+        }
     }
 }

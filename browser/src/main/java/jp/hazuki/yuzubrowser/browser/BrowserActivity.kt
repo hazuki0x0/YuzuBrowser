@@ -742,6 +742,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 webViewFastScroller.handlePressedColor = themeData.tabAccentColor
             }
         }
+        superFrameLayout.setWhiteBackgroundMode(AppData.whiteBackground.get())
 
         menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController, iconManager)
 
@@ -1182,6 +1183,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         web.view.id = View.generateViewId()
         web.webView.isFocusableInTouchMode = true
         web.webView.isFocusable = true
+        web.webView.setBackgroundColor(0)
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             web.webView.isDrawingCacheEnabled = false

@@ -30,4 +30,5 @@
     <color name="urlBarBoxBorderColor">@color/dark_border</color>
     <color name="progressBarBackground">#47bfbfbf</color>
     <color name="background">#303030</color>
+    <color name="browserBackground">#000000</color>
 </resources>
