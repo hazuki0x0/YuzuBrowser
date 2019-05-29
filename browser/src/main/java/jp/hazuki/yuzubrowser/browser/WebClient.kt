@@ -684,7 +684,7 @@ class WebClient(
     }
 
     private fun actionDownload(url: String, referrer: String?, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-        activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, referrer), "download")
+        activity.showDialog(DownloadDialog(url, userAgent, contentDisposition, mimetype, contentLength, referrer), "download")
     }
 
     private fun actionOpen(url: String, referrer: String?, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
