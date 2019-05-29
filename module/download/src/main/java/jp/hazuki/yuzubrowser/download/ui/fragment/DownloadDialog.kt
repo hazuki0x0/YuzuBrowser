@@ -105,7 +105,7 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
         return AlertDialog.Builder(activity)
             .setTitle(R.string.download)
             .setView(view)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }
+            .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)
             .create()
     }
