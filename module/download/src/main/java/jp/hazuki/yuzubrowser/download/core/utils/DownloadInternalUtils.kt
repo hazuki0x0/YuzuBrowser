@@ -38,12 +38,13 @@ internal fun ContentResolver.saveBase64Image(imageData: Base64Image, info: Downl
     if (imageData.isValid) {
         try {
             val image = Base64.decode(imageData.getData(), Base64.DEFAULT)
+            val file = info.root.createFile(imageData.mimeType, info.name) ?: return null
 
-            openOutputStream(info.root.createFile(imageData.mimeType, info.name)!!.uri)!!.use { outputStream ->
+            openOutputStream(file.uri)!!.use { outputStream ->
                 outputStream.write(image)
                 outputStream.flush()
             }
-            return info.root.findFile(info.name)
+            return file
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         } catch (e: IOException) {
