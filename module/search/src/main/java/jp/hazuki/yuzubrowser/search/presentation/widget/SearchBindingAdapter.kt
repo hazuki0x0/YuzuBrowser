@@ -16,6 +16,8 @@
 
 package jp.hazuki.yuzubrowser.search.presentation.widget
 
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
@@ -56,4 +58,15 @@ fun RecyclerView.setSearchUrl(searchUrls: List<SearchUrl>?) {
         addAll(searchUrls)
     }
     diff.dispatchUpdatesTo(adapter)
+}
+
+@BindingAdapter("callback")
+fun EditText.setSearchCallback(callback: SearchButton.Callback) {
+    setOnEditorActionListener { _, actionId, _ ->
+        if (EditorInfo.IME_ACTION_GO == actionId) {
+            callback.autoSearch()
+            return@setOnEditorActionListener true
+        }
+        return@setOnEditorActionListener false
+    }
 }

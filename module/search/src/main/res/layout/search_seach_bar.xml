@@ -56,6 +56,7 @@
             android:imeOptions="actionGo"
             android:inputType="text|textUri"
             android:onTextChanged="@{(text, s, b, c) -> viewModel.setQuery(text.toString())}"
+            app:callback="@{callback}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/searchButton"
             app:layout_constraintStart_toEndOf="@+id/searchUrlSpinner"
