@@ -643,6 +643,7 @@ class WebClient(
     }
 
     private fun onDownloadStart(web: CustomWebView, url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
+        val referrer = web.url
         if (url.startsWith("blob")) {
             web.evaluateJavascript(activity.getBlobDownloadJavaScript(url, controller.secretKey), null)
             return
@@ -652,12 +653,12 @@ class WebClient(
             PreferenceConstants.DOWNLOAD_DO_NOTHING -> {
             }
             PreferenceConstants.DOWNLOAD_AUTO -> if (WebDownloadUtils.shouldOpen(contentDisposition)) {
-                actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
+                actionOpen(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
             } else {
-                actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
+                actionDownload(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
             }
-            PreferenceConstants.DOWNLOAD_DOWNLOAD -> actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
-            PreferenceConstants.DOWNLOAD_OPEN -> actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
+            PreferenceConstants.DOWNLOAD_DOWNLOAD -> actionDownload(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
+            PreferenceConstants.DOWNLOAD_OPEN -> actionOpen(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
             PreferenceConstants.DOWNLOAD_SHARE -> actionShare(url)
             PreferenceConstants.DOWNLOAD_SELECT -> {
 
@@ -667,8 +668,8 @@ class WebClient(
                                 arrayOf(getString(R.string.download), getString(R.string.open), getString(R.string.share))
                         ) { _, which ->
                             when (which) {
-                                0 -> actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
-                                1 -> actionOpen(url, userAgent, contentDisposition, mimetype, contentLength)
+                                0 -> actionDownload(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
+                                1 -> actionOpen(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
                                 2 -> actionShare(url)
                             }
                         }
@@ -682,15 +683,15 @@ class WebClient(
         }
     }
 
-    private fun actionDownload(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-        activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, null), "download")
+    private fun actionDownload(url: String, referrer: String?, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
+        activity.showDialog(DownloadDialog(activity, url, userAgent, contentDisposition, mimetype, contentLength, referrer), "download")
     }
 
-    private fun actionOpen(url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
+    private fun actionOpen(url: String, referrer: String?, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
         if (!WebDownloadUtils.openFile(activity, url, mimetype)) {
             //application not found
             Toast.makeText(activity.applicationContext, R.string.app_notfound, Toast.LENGTH_SHORT).show()
-            actionDownload(url, userAgent, contentDisposition, mimetype, contentLength)
+            actionDownload(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
         }
     }
 
