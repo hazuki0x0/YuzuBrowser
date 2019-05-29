@@ -596,6 +596,15 @@ class WebClient(
     fun checkLoadPagePatternMatch(tab: MainTabData, url: String?, handleOpenInBrowser: Boolean): Boolean {
         if (url == null) return false
 
+        if (url.startsWith("yuzu://help")) {
+            if (!tab.mWebView.webSettings.javaScriptEnabled) {
+                if (tab.resetAction == null) {
+                    tab.resetAction = WebSettingResetAction(tab)
+                }
+                tab.mWebView.webSettings.javaScriptEnabled = true
+            }
+        }
+
         for (item in patternManager.list) {
             if (item.action is WebSettingPatternAction) continue
             if (!item.isMatchUrl(url)) continue
@@ -612,6 +621,11 @@ class WebClient(
         if (url == null) return
         var normalSettings = true
         var changeSetting = false
+
+        if (url.startsWith("yuzu://help")) {
+            normalSettings = false
+            changeSetting = true
+        }
 
         for (item in patternManager.list) {
             if (item.action !is WebSettingPatternAction) continue

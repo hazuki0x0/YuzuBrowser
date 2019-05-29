@@ -5,18 +5,14 @@
   "alpha_bottom": "底部工具栏透明度",
   "alpha_bottom_info": "可设定 0 至 255 范围内的透明度",
   "common": "常规工具栏设置",
-  "common_info": {
-    "positioning": "排序优先级",
-    "positioning_info": "数字越小优先级越高",
-    "size": "大小",
-    "size_info": "垂直方向的大小"
-  },
+  "common_info_positioning": "排序优先级",
+  "common_info_positioning_info": "数字越小优先级越高",
+  "common_info_size": "大小",
+  "common_info_size_info": "垂直方向的大小",
   "specific": "标签页栏设置",
-  "specific_info": {
-    "type": "标签页类型",
-    "scrollable": "可滚动",
-    "full": "完整",
-    "tab_size": "标签页大小",
-    "tab_width": "标签页宽度"
-  }
+  "specific_info_type": "标签页类型",
+  "specific_info_scrollable": "可滚动",
+  "specific_info_full": "完整",
+  "specific_info_tab_size": "标签页大小",
+  "specific_info_tab_width": "标签页宽度"
 }

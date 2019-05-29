@@ -5,18 +5,14 @@
   "alpha_bottom": "下部バーのアルファ値",
   "alpha_bottom_info": "透過率を0～255の範囲で設定できます",
   "common": "バー共通設定",
-  "common_info": {
-    "positioning": "位置決定の優先度(縦画面)",
-    "positioning_info": "数字が小さいほど優先して配置されます",
-    "size": "サイズ",
-    "size_info": "縦のサイズ"
-  },
+  "common_info_positioning": "位置決定の優先度(縦画面)",
+  "common_info_positioning_info": "数字が小さいほど優先して配置されます",
+  "common_info_size": "サイズ",
+  "common_info_size_info": "縦のサイズ",
   "specific": "タブバー固有設定",
-  "specific_info": {
-    "type": "タブの種類",
-    "scrollable": "スクロールタイプ",
-    "full": "全体タイプ",
-    "tab_size": "タブのサイズ",
-    "tab_width": "タブの横幅"
-  }
+  "specific_info_type": "タブの種類",
+  "specific_info_scrollable": "スクロールタイプ",
+  "specific_info_full": "全体タイプ",
+  "specific_info_tab_size": "タブのサイズ",
+  "specific_info_tab_width": "タブの横幅"
 }

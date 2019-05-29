@@ -5,33 +5,38 @@
   <link rel="stylesheet" type="text/css" href="./css/help.css" media="all">
   <script src="./js/jquery-3.4.0.min.js"></script>
   <script src="./js/i18n.js"></script>
+  <style>.needJs{display: none}</style>
 </head>
 <body>
-<h1 class="head" data-i18n="help"></h1>
+<h1 class="head needJs" data-i18n="help"></h1>
+<noscript>
+  <p>Please enable JavaScript to use Yuzu Browser help</p>
+</noscript>
 <div data-i18n="comment"></div>
-<a href="./browser.html">
+<a href="./browser.html" class="needJs">
   <div class="button" data-i18n="browser"></div>
 </a>
-<a href="./page.html">
+<a href="./page.html" class="needJs">
   <div class="button" data-i18n="page"></div>
 </a>
-<a href="./privacy.html">
+<a href="./privacy.html" class="needJs">
   <div class="button" data-i18n="privacy"></div>
 </a>
-<a href="./ui.html">
+<a href="./ui.html" class="needJs">
   <div class="button" data-i18n="ui"></div>
 </a>
-<a href="./action.html">
+<a href="./action.html" class="needJs">
   <div class="button" data-i18n="action"></div>
 </a>
-<a href="./action_list.html">
+<a href="./action_list.html" class="needJs">
   <div class="button" data-i18n="action_list"></div>
 </a>
-<a href="./regex.html">
+<a href="./regex.html" class="needJs">
   <div class="button" data-i18n="regex"></div>
 </a>
-<a href="./faq.html">
+<a href="./faq.html" class="needJs">
   <div class="button" data-i18n="faq"></div>
 </a>
+<script>$('.needJs').show()</script>
 </body>
 </html>

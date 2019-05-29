@@ -28,21 +28,12 @@ function getParam(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function getter(obj, selectorStr) {
-  var selectors = selectorStr.split('.');
-  for(var i=0; i< selectors.length; i++) {
-    if(!obj) return null;
-    obj = obj[selectors[i]];
-  }
-  return obj;
-}
-
 function applyTranslation(page) {
   getTranslation(page, function(translation, fallback) {
     $('[data-i18n]').each(function(index, element) {
       var key = $(element).data('i18n');
-      var item = getter(translation, key);
-      if (item !== null && !item) item = getter(fallback, key);
+      var item = translation[key];
+      if (item !== null && !item) item = fallback[key];
       if (item && item.length != 0) element.innerHTML = item;
     });
   });

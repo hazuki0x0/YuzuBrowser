@@ -5,18 +5,14 @@
   "alpha_bottom": "Alpha-Kanal der unteren Symbolleiste",
   "alpha_bottom_info": "Sie können den Transparenzbereich von 0 bis 255 einstellen",
   "common": "Allgemeine Leisteneinstellungen",
-  "common_info": {
-    "positioning": "Priorität der Positionierung",
-    "positioning_info": "Je kleiner die Zahl, desto höher die Priorität",
-    "size": "Größe",
-    "size_info": "Vertikale Größe"
-  },
+  "common_info_positioning": "Priorität der Positionierung",
+  "common_info_positioning_info": "Je kleiner die Zahl, desto höher die Priorität",
+  "common_info_size": "Größe",
+  "common_info_size_info": "Vertikale Größe",
   "specific": "spezifische Reiter-Leisteneinstellungen",
-  "specific_info": {
-    "type": "Reitertyp",
-    "scrollable": "Scrollfähig",
-    "full": "Vollständig",
-    "tab_size": "Reitergröße",
-    "tab_width": "Reiterbreite"
-  }
+  "specific_info_type": "Reitertyp",
+  "specific_info_scrollable": "Scrollfähig",
+  "specific_info_full": "Vollständig",
+  "specific_info_tab_size": "Reitergröße",
+  "specific_info_tab_width": "Reiterbreite"
 }

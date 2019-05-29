@@ -5,7 +5,7 @@
   "page": "페이지 설정",
   "privacy": "개인정보 설정",
   "ui": "UI 설정",
-  "action": "액션 설정",
+  "action": "",
   "action_list": "액션 목록",
   "regex": "패턴(와일드카드) 설명서",
   "faq": "FAQ"

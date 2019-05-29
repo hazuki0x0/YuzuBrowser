@@ -5,18 +5,14 @@
   "alpha_bottom": "مقدار محو بودن نوارابزار پایین",
   "alpha_bottom_info": "می توانید مقدار محو بودن را از بین 1 تا 255 انتخاب کنید",
   "common": "تنظیمات نوار ابزار دم دستی",
-  "common_info": {
-    "positioning": "ترتیب اولویت",
-    "positioning_info": "عدد کوچکتریعنی اولویت بیشتر",
-    "size": "اندازه",
-    "size_info": "اندازه افقی"
-  },
+  "common_info_positioning": "ترتیب اولویت",
+  "common_info_positioning_info": "عدد کوچکتریعنی اولویت بیشتر",
+  "common_info_size": "اندازه",
+  "common_info_size_info": "اندازه افقی",
   "specific": "تنظیمات نوار برگه ها",
-  "specific_info": {
-    "type": "نوع برگه",
-    "scrollable": "پیمایشی",
-    "full": "ثابت",
-    "tab_size": "اندازه سربرگ",
-    "tab_width": "پهنای سربرگ"
-  }
+  "specific_info_type": "نوع برگه",
+  "specific_info_scrollable": "پیمایشی",
+  "specific_info_full": "ثابت",
+  "specific_info_tab_size": "اندازه سربرگ",
+  "specific_info_tab_width": "پهنای سربرگ"
 }

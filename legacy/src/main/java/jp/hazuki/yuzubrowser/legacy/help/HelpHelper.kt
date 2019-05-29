@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.help
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebResourceResponse
+import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import java.io.IOException
@@ -42,7 +43,7 @@ fun Uri.getHelpResponse(context: Context): WebResourceResponse? {
             val id = context.resources.getIdentifier("help_$fileName", "raw", context.packageName)
             if (id == 0) return null
             val input = context.resources.openRawResource(id)
-            return WebResourceResponse(mimeType, "utf-8", input)
+            return getNoCacheResponse(mimeType, input)
         }
 
     }
@@ -50,7 +51,7 @@ fun Uri.getHelpResponse(context: Context): WebResourceResponse? {
     val mimeType = getMimeType(path)
     try {
         val input = context.assets.open("help$path")
-        return WebResourceResponse(mimeType, "utf-8", input)
+        return getNoCacheResponse(mimeType, input)
     } catch (e: IOException) {
         ErrorReport.printAndWriteLog(e)
     }
