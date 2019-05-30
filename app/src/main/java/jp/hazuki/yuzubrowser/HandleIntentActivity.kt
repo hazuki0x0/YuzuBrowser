@@ -25,7 +25,7 @@ import android.provider.Browser
 import android.speech.RecognizerResultsIntent
 import android.text.TextUtils
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import jp.hazuki.yuzubrowser.browser.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -33,8 +33,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.ui.utils.isUrl
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 
-class HandleIntentActivity : AppCompatActivity() {
-    companion object;
+class HandleIntentActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +87,7 @@ class HandleIntentActivity : AppCompatActivity() {
             }
         } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS == action) {
             val urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS)
-            if (urls != null && !urls.isEmpty()) {
+            if (!urls.isNullOrEmpty()) {
                 startBrowser(urls[0], false, false)
                 return
             }
