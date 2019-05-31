@@ -32,6 +32,7 @@ import java.util.zip.ZipInputStream
 internal fun importTheme(context: Context, uri: Uri):Result {
     val root = File(externalUserDirectory, "theme")
     val tmpFolder = File(root, System.currentTimeMillis().toString())
+    val tmpFolderPath = tmpFolder.canonicalPath
 
     try {
         ZipInputStream(context.contentResolver.openInputStream(uri)).use { zis ->
@@ -39,6 +40,9 @@ internal fun importTheme(context: Context, uri: Uri):Result {
 
             zis.forEach { entry ->
                 val file = File(tmpFolder, entry.name)
+                if (!file.canonicalPath.startsWith(tmpFolderPath)) {
+                    throw IOException("This file is not put in tmp folder. to:${file.canonicalPath}")
+                }
                 if (entry.isDirectory) {
                     if (file.exists()) {
                         FileUtils.deleteFile(file)

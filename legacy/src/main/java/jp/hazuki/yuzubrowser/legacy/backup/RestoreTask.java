@@ -51,6 +51,7 @@ public class RestoreTask extends AsyncTaskLoader<Boolean> {
         ZipEntry entry;
 
         try {
+            String rootPath = root.getCanonicalPath();
             zipStream = new ZipInputStream(new FileInputStream(zip));
 
             byte[] buffer = new byte[8192];
@@ -59,6 +60,9 @@ public class RestoreTask extends AsyncTaskLoader<Boolean> {
 
             while ((entry = zipStream.getNextEntry()) != null) {
                 file = new File(root, entry.getName());
+                if (!file.getCanonicalPath().startsWith(rootPath)) {
+                    throw new IOException("This file is not put in tmp folder. to:" + file.getCanonicalPath());
+                }
                 if ("main_preference.xml".equalsIgnoreCase(file.getName())) {
                     PrefXmlParser parser = new PrefXmlParser(getContext(), "main_preference");
                     try {
