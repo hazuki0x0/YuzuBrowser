@@ -26,6 +26,7 @@ import com.squareup.moshi.Moshi;
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase;
+import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 import jp.hazuki.yuzubrowser.download.compatible.DownloadInfoDatabase;
@@ -284,6 +285,9 @@ public class AppData {
                     AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
                     AdBlockInitSupportKt.disableYuzuList(abpDatabase);
                 }
+            }
+            if (lastLaunch == 410010) {
+                AbpUpdateService.Companion.updateAll(context, true, null);
             }
 
             AppPrefs.lastLaunchPrefVersion.set(PREF_VERSION);

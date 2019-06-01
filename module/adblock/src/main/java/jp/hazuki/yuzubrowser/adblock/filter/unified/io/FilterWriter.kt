@@ -50,6 +50,7 @@ class FilterWriter {
             os.write(patternBytes)
             os.write(min(it.domains?.size ?: 0, 255))
             it.domains?.let { map ->
+                os.write(if (map.include) 1 else 0)
                 for (i in 0 until min(map.size, 255)) {
                     val key = map.getKey(i).toByteArray()
                     os.writeVariableInt(key.size, shortBuf, intBuf)

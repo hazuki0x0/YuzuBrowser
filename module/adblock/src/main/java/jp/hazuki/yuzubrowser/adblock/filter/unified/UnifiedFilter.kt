@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.adblock.filter.unified
 import android.net.Uri
 import jp.hazuki.yuzubrowser.adblock.filter.Filter
 import jp.hazuki.yuzubrowser.adblock.filter.SingleFilter
-import jp.hazuki.yuzubrowser.adblock.filter.abp.AbpFilter
 
 abstract class UnifiedFilter(
     override val pattern: String,
@@ -33,7 +32,7 @@ abstract class UnifiedFilter(
     protected abstract fun check(url: Uri): Boolean
 
     override fun find(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
-        if ((this.contentType or contentType) != 0 && checkThird(isThirdParty) && checkDomain(pageUrl.host!!.toLowerCase())) {
+        if ((this.contentType and contentType) != 0 && checkThird(isThirdParty) && checkDomain(pageUrl.host!!.toLowerCase())) {
             if (check(url)) return this
         }
         return null
@@ -67,7 +66,7 @@ abstract class UnifiedFilter(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AbpFilter
+        other as UnifiedFilter
 
         if (pattern != other.pattern) return false
         if (contentType != other.contentType) return false

@@ -165,7 +165,7 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     }
 
     private suspend fun updateAssets(entity: AbpEntity): Boolean {
-        if (entity.version == "1") {
+        if (entity.version == "2") {
             val dir = getFilterDir()
 
             if (dir.getAbpBlackListFile(entity).exists() &&
