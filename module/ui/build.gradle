@@ -66,9 +66,6 @@ dependencies {
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
 
-    implementation Libs.kvs_schema
-    kapt Libs.kvs_schema_compiler
-
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 

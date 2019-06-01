@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.core.settings
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
-import com.rejasupotaro.android.kvs.annotations.Key
-import com.rejasupotaro.android.kvs.annotations.Table
+import android.content.SharedPreferences;
 
-@Table(name = "dummy", builder = WebViewPrefsBuilder::class)
-abstract class WebViewPrefsSchema {
-    @Key(name = "fast_back_cache_size")
-    var fastBackCacheSize = 5
+public class FloatContainer extends BaseContainer<Float> {
+    public FloatContainer(String name, Float def_value) {
+        super(name, def_value);
+    }
 
-    @Key(name = "fast_back")
-    var fastBack = false
+    @Override
+    public void read(SharedPreferences shared_preference) {
+        mValue = shared_preference.getFloat(mName, mDefValue);
+    }
+
+    @Override
+    public void write(SharedPreferences.Editor editor) {
+        editor.putFloat(mName, mValue);
+    }
 }

@@ -24,20 +24,20 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeTextButton
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
-abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_url, layout, request_callback) {
+abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: RequestCallback) : ToolbarBase(context, AppPrefs.toolbar_url, layout, request_callback) {
     private val mLeftButtonController: ButtonToolbarController
     private val mRightButtonController: ButtonToolbarController
     protected val centerUrlButton: SwipeTextButton
 
     init {
-        val toolbarSizeY = context.convertDpToPx(AppData.toolbar_url.size.get())
+        val toolbarSizeY = context.convertDpToPx(AppPrefs.toolbar_url.size.get())
 
         val softbtnManager = SoftButtonActionManager.getInstance(context)
 
@@ -57,8 +57,8 @@ abstract class UrlBarBase(context: Context, controller: ActionController, iconMa
         addButtons()
 
         centerUrlButton.notifyChangeState()
-        centerUrlButton.setSense(AppData.swipebtn_sensitivity.get())
-        centerUrlButton.textSize = AppData.toolbar_text_size_url.get().toFloat()
+        centerUrlButton.setSense(AppPrefs.swipebtn_sensitivity.get())
+        centerUrlButton.textSize = AppPrefs.toolbar_text_size_url.get().toFloat()
     }
 
     override fun applyTheme(themeData: ThemeData?) {
@@ -92,7 +92,7 @@ abstract class UrlBarBase(context: Context, controller: ActionController, iconMa
     fun changeTitle(data: MainTabData) {
         //need post Runnable?
         post {
-            if (!AppData.toolbar_always_show_url.get() && data.title != null && !data.isInPageLoad) {
+            if (!AppPrefs.toolbar_always_show_url.get() && data.title != null && !data.isInPageLoad) {
                 centerUrlButton.run {
                     setTypeUrl(false)
                     text = data.title

@@ -29,19 +29,12 @@ import jp.hazuki.yuzubrowser.search.domain.usecase.SearchSettingsViewUseCase
 import jp.hazuki.yuzubrowser.search.domain.usecase.SearchViewUseCase
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchViewModel
 import jp.hazuki.yuzubrowser.search.presentation.settings.SearchSettingsViewModel
-import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.search.repository.SearchUrlManager
 import jp.hazuki.yuzubrowser.search.repository.SuggestRepository
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
 
 @Module
 object SearchSubModule {
-
-    @Provides
-    @JvmStatic
-    internal fun provideSearchPrefProvider(context: Context): SearchPrefsProvider {
-        return SearchPrefsProvider(context)
-    }
 
     @Provides
     @JvmStatic
@@ -68,8 +61,8 @@ object SearchSubModule {
 
     @Provides
     @JvmStatic
-    internal fun provideSearchViewModelFactory(application: Application, useCase: SearchViewUseCase, provider: SearchPrefsProvider): SearchViewModel.Factory {
-        return SearchViewModel.Factory(application, useCase, provider)
+    internal fun provideSearchViewModelFactory(application: Application, useCase: SearchViewUseCase): SearchViewModel.Factory {
+        return SearchViewModel.Factory(application, useCase)
     }
 
     @Provides

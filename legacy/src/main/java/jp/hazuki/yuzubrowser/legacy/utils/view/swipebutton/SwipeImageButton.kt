@@ -24,7 +24,7 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.swipebutton.OverlayImageButton
 import jp.hazuki.yuzubrowser.ui.widget.swipebutton.SmallButtonDrawable
@@ -42,7 +42,7 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
         mController.setActionData(action_list, controller, iconManager)
         mController.setOnChangeListener(this)
         setImageDrawable(mController.defaultIcon)
-        setOverlayIcon(AppData.toolbar_small_icon.get())
+        setOverlayIcon(AppPrefs.toolbar_small_icon.get())
         setBackgroundResource(R.drawable.swipebtn_image_background_normal)
     }
 
@@ -52,7 +52,7 @@ class SwipeImageButton @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun notifyChangeState() {
         mController.notifyChangeState()
-        setOverlayIcon(AppData.toolbar_small_icon.get())
+        setOverlayIcon(AppPrefs.toolbar_small_icon.get())
     }
 
     fun setSense(sense: Int) {

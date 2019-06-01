@@ -27,17 +27,17 @@ import android.webkit.WebBackForwardList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import jp.hazuki.yuzubrowser.core.cache.LRUCache
-import jp.hazuki.yuzubrowser.core.settings.WebViewPrefs
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.webview.page.Page
 import jp.hazuki.yuzubrowser.webview.page.WebViewPage
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
 import java.util.*
 
 @SuppressLint("ViewConstructor")
-internal class LimitCacheWebView(context: Context, private val moshi: Moshi, private val prefs: WebViewPrefs) : AbstractCacheWebView(context), LRUCache.OnCacheOverFlowListener<WebViewPage>, WebViewUtility {
+internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : AbstractCacheWebView(context), LRUCache.OnCacheOverFlowListener<WebViewPage>, WebViewUtility {
     private val tabIndexList = ArrayList<Page>()
     private val tabSaveData = LongSparseArray<Bundle>()
-    private val tabCache: LRUCache<Long, WebViewPage> = LRUCache(prefs.fastBackCacheSize, this)
+    private val tabCache: LRUCache<Long, WebViewPage> = LRUCache(AppPrefs.fast_back_cache_size.get(), this)
     override var currentPage: WebViewPage = SwipeWebView(context).let { web ->
         val data = WebViewPage(web)
         tabIndexList.add(data.page)
@@ -284,7 +284,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi, pri
         get() = isFirst || current == 0 && tabIndexList.size == 1 && tabIndexList[0].url == null
 
     override fun onPreferenceReset() {
-        tabCache.cacheSize = prefs.fastBackCacheSize
+        tabCache.cacheSize = AppPrefs.fast_back_cache_size.get()
     }
 
     override fun onCacheOverflow(tabData: WebViewPage) {

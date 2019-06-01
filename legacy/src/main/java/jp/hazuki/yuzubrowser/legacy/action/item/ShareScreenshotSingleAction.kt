@@ -26,15 +26,15 @@ import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import java.io.IOException
 
 class ShareScreenshotSingleAction : SingleAction, Parcelable {
     private var mSsType: Int = SS_TYPE_PART
 
     val type: Int
-        get() = if (AppData.slow_rendering.get()) mSsType else SS_TYPE_PART
+        get() = if (AppPrefs.slow_rendering.get()) mSsType else SS_TYPE_PART
 
     @Throws(IOException::class)
     constructor(id: Int, reader: JsonReader?) : super(id) {
@@ -84,7 +84,7 @@ class ShareScreenshotSingleAction : SingleAction, Parcelable {
 
         captureAllCheckBox.isChecked = mSsType == SS_TYPE_ALL
 
-        if (AppData.slow_rendering.get()) {
+        if (AppPrefs.slow_rendering.get()) {
             captureAllCheckBox.isEnabled = true
             view.findViewById<View>(R.id.captureAllErrorTextView).visibility = View.GONE
         }

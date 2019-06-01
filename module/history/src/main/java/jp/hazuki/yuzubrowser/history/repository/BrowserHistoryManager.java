@@ -25,6 +25,8 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
+
 public class BrowserHistoryManager {
     private static final String DB_NAME = "webhistory1.db";
     private static final int DB_VERSION = 3;
@@ -52,6 +54,19 @@ public class BrowserHistoryManager {
 
     private BrowserHistoryManager(Context context) {
         mOpenHelper = new MyOpenHelper(context);
+        int max_day = AppPrefs.history_max_day.get();
+        int max_count = AppPrefs.history_max_count.get();
+        if (max_day == 0 && max_count == 0)
+            return;
+        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        if (max_day != 0)
+            db.delete(TABLE_NAME, COLUMN_TIME + " < " + (System.currentTimeMillis() - max_day * 24 * 60 * 60 * 1000), null);
+        if (max_count != 0)
+            db.execSQL("DELETE FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_ID + " IN" +
+                " (SELECT " + COLUMN_ID + " FROM " + TABLE_NAME +
+                " ORDER BY " + COLUMN_TIME + " DESC" +
+                " LIMIT -1 OFFSET " + max_count + ")");
     }
 
     public void add(String url) {

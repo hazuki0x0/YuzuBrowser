@@ -27,8 +27,8 @@ import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.canResolvePath
 import jp.hazuki.yuzubrowser.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import org.jetbrains.anko.longToast
 
 class BrowserSettingsFragment : YuzuPreferenceFragment() {
@@ -93,8 +93,8 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
                             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 }
 
-                AppData.download_folder.set(uri.toString())
-                AppData.commit(activity, AppData.download_folder)
+                AppPrefs.download_folder.set(uri.toString())
+                AppPrefs.commit(activity, AppPrefs.download_folder)
 
                 if (!uri.canResolvePath(activity)) {
                     activity.longToast(R.string.pref_storage_location_warn)

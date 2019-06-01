@@ -27,7 +27,7 @@ import java.util.List;
 
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public class TabFaviconManager {
 
@@ -41,8 +41,8 @@ public class TabFaviconManager {
     }
 
     public void onPreferenceReset(List<View> tabViews, List<TabIndexData> indexDataList) {
-        if (iconMode != AppData.toolbar_show_favicon.get()) {
-            iconMode = AppData.toolbar_show_favicon.get();
+        if (iconMode != AppPrefs.toolbar_show_favicon.get()) {
+            iconMode = AppPrefs.toolbar_show_favicon.get();
 
             int length = Math.min(tabViews.size(), indexDataList.size());
 

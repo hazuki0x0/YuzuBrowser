@@ -20,10 +20,10 @@ import android.content.Context
 import android.os.SystemClock
 import android.view.MotionEvent
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 internal class MfGestureAnalyzer(context: Context) {
-    private var sensitivity: Int = context.convertDpToPx(AppData.multi_finger_gesture_sensitivity.get())
+    private var sensitivity: Int = context.convertDpToPx(AppPrefs.multi_finger_gesture_sensitivity.get())
 
     private val dX = DoubleArray(5)
     private val dY = DoubleArray(5)

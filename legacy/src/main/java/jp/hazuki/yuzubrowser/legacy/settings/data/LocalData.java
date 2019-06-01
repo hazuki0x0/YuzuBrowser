@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
-import jp.hazuki.yuzubrowser.legacy.settings.container.Containable;
+import jp.hazuki.yuzubrowser.ui.settings.container.Containable;
 
 public class LocalData {
     private final String mPreferenceName;

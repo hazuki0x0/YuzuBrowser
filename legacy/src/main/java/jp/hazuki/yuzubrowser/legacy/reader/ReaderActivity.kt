@@ -22,17 +22,16 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class ReaderActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val themeMode = AppData.reader_theme.get()
+        val themeMode = AppPrefs.reader_theme.get()
         if (themeMode >= 0) {
-            delegate.setLocalNightMode(
-                    if (themeMode == 0) AppCompatDelegate.MODE_NIGHT_YES
-                    else AppCompatDelegate.MODE_NIGHT_NO)
+            delegate.localNightMode = if (themeMode == 0) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
@@ -45,8 +44,8 @@ class ReaderActivity : ThemeActivity() {
 
         val intent = intent
         if (intent != null) {
-            var fullscreen = AppData.fullscreen.get()
-            var orientation = AppData.oritentation.get()
+            var fullscreen = AppPrefs.fullscreen.get()
+            var orientation = AppPrefs.oritentation.get()
 
             val url = intent.getStringExtra(Constants.intent.EXTRA_URL)
             val ua = intent.getStringExtra(Constants.intent.EXTRA_USER_AGENT)

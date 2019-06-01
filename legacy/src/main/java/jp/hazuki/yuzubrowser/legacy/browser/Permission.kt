@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import org.jetbrains.anko.longToast
 import java.lang.ref.SoftReference
 
@@ -100,9 +100,9 @@ private suspend fun AppCompatActivity.handleResult(asyncPermissions: AsyncPermis
     when (permissionResult) {
         is PermissionResult.Granted -> Unit
         is PermissionResult.Denied -> {
-            if (location && !checkLocationPermission() && AppData.web_geolocation.get()) {
-                AppData.web_geolocation.set(false)
-                AppData.commit(this, AppData.web_geolocation)
+            if (location && !checkLocationPermission() && AppPrefs.web_geolocation.get()) {
+                AppPrefs.web_geolocation.set(false)
+                AppPrefs.commit(this, AppPrefs.web_geolocation)
             }
             if (storage && !checkStoragePermission()) {
                 requestStoragePermission(asyncPermissions)

@@ -37,8 +37,8 @@ import jp.hazuki.yuzubrowser.legacy.gesture.GestureManager
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureManager
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureDetector
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureInfo
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.widget.MultiTouchGestureDetector
 import jp.hazuki.yuzubrowser.webview.CustomOnCreateContextMenuListener
@@ -82,8 +82,8 @@ class UserActionManager(private val context: Context, private val browser: Brows
                 multiFingerGestureManager = MultiFingerGestureManager(context)
                 if (multiFingerGestureDetector == null)
                     multiFingerGestureDetector = MultiFingerGestureDetector(context, this)
-                multiFingerGestureDetector!!.setShowName(AppData.multi_finger_gesture_show_name.get())
-                multiFingerGestureDetector!!.setSensitivity(AppData.multi_finger_gesture_sensitivity.get())
+                multiFingerGestureDetector!!.setShowName(AppPrefs.multi_finger_gesture_show_name.get())
+                multiFingerGestureDetector!!.setSensitivity(AppPrefs.multi_finger_gesture_sensitivity.get())
             } else {
                 if (multiFingerGestureManager == null)
                     multiFingerGestureManager = null
@@ -94,11 +94,11 @@ class UserActionManager(private val context: Context, private val browser: Brows
         }
 
     fun setEnableGesture(gestureLayout: GestureFrameLayout) {
-        if (AppData.gesture_enable_web.get()) {
+        if (AppPrefs.gesture_enable_web.get()) {
             mWebGestureManager = GestureManager.getInstance(context.applicationContext, GestureManager.GESTURE_TYPE_WEB).apply { load() }
 
             gestureLayout.isEnabled = true
-            gestureLayout.setGestureVisible(AppData.gesture_line_web.get())
+            gestureLayout.setGestureVisible(AppPrefs.gesture_line_web.get())
 
             gestureLayout.removeAllOnGestureListeners()
             gestureLayout.removeAllOnGesturePerformedListeners()
@@ -323,10 +323,10 @@ class UserActionManager(private val context: Context, private val browser: Brows
             val tab = browser.currentTabData ?: return false
 
             if (e1.pointerCount <= 1 || e2.pointerCount <= 1) {
-                if (!AppData.flick_enable.get())
+                if (!AppPrefs.flick_enable.get())
                     return false
 
-                if (AppData.flick_disable_scroll.get() && tab.isMoved)
+                if (AppPrefs.flick_disable_scroll.get() && tab.isMoved)
                     return false
 
                 val dx = Math.abs(velocityX)
@@ -335,14 +335,14 @@ class UserActionManager(private val context: Context, private val browser: Brows
 
                 if (dy > dx)
                     return false
-                if (dx < AppData.flick_sensitivity_speed.get() * 100)
+                if (dx < AppPrefs.flick_sensitivity_speed.get() * 100)
                     return false
-                if (Math.abs(dist) < AppData.flick_sensitivity_distance.get() * 10)
+                if (Math.abs(dist) < AppPrefs.flick_sensitivity_distance.get() * 10)
                     return false
                 if (e2.eventTime - e1.eventTime > 300L)
                     return false
 
-                if (AppData.flick_edge.get()) {
+                if (AppPrefs.flick_edge.get()) {
                     val x = e1.x
                     val slop = browser.resourcesByInfo.getDimension(R.dimen.flick_slop).toInt()
 
@@ -358,7 +358,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
                 else
                     controller.run(manager.flick_right.action)
             } else {
-                if (!AppData.webswipe_enable.get())
+                if (!AppPrefs.webswipe_enable.get())
                     return false
 
                 val manager = WebSwipeActionManager.getInstance(browser.applicationContextInfo)
@@ -368,8 +368,8 @@ class UserActionManager(private val context: Context, private val browser: Brows
                 val distY0 = e2.getY(0) - e1.getY(0)
                 val distY1 = e2.getY(1) - e1.getY(1)
 
-                val senseSpeed = AppData.webswipe_sensitivity_speed.get() * 100
-                val senseDist = AppData.webswipe_sensitivity_distance.get() * 10
+                val senseSpeed = AppPrefs.webswipe_sensitivity_speed.get() * 100
+                val senseDist = AppPrefs.webswipe_sensitivity_distance.get() * 10
 
                 if (checkWebSwipe(senseSpeed, senseDist, velocityX, distX0, distX1)) {
                     if (checkWebSwipe(senseSpeed, senseDist, velocityY, distY0, distY1))
@@ -433,7 +433,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
         override fun onDoubleTapScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float) = false
 
         override fun onDoubleTapFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
-            if (!AppData.double_tap_flick_enable.get())
+            if (!AppPrefs.double_tap_flick_enable.get())
                 return false
 
             if (e1 == null || e2 == null)
@@ -454,9 +454,9 @@ class UserActionManager(private val context: Context, private val browser: Brows
 
                 val returnValue: Boolean
                 if (dy > dx) {
-                    if (dy < AppData.double_tap_flick_sensitivity_speed.get() * 100)
+                    if (dy < AppPrefs.double_tap_flick_sensitivity_speed.get() * 100)
                         return false
-                    if (Math.abs(distY) < AppData.double_tap_flick_sensitivity_distance.get() * 10)
+                    if (Math.abs(distY) < AppPrefs.double_tap_flick_sensitivity_distance.get() * 10)
                         return false
 
                     returnValue = if (distY < 0)
@@ -464,9 +464,9 @@ class UserActionManager(private val context: Context, private val browser: Brows
                     else
                         controller.run(manager.flick_down.action)
                 } else {
-                    if (dx < AppData.double_tap_flick_sensitivity_speed.get() * 100)
+                    if (dx < AppPrefs.double_tap_flick_sensitivity_speed.get() * 100)
                         return false
-                    if (Math.abs(distX) < AppData.double_tap_flick_sensitivity_distance.get() * 10)
+                    if (Math.abs(distX) < AppPrefs.double_tap_flick_sensitivity_distance.get() * 10)
                         return false
 
                     returnValue = if (distX < 0)

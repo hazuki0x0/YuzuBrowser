@@ -26,8 +26,8 @@ import android.widget.ListView
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionStringActivity
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class DebugActivity : ThemeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,13 +76,13 @@ class DebugActivity : ThemeActivity() {
                 val activity = activity ?: throw IllegalStateException()
                 val names = activity.resources.getStringArray(R.array.language_list)
                 val values = activity.resources.getStringArray(R.array.language_value)
-                val checked = values.indexOf(AppData.language.get())
+                val checked = values.indexOf(AppPrefs.language.get())
 
                 return AlertDialog.Builder(activity)
                         .setTitle("Language")
                         .setSingleChoiceItems(names, checked) { dialog, which ->
-                            AppData.language.set(values[which])
-                            AppData.commit(activity, AppData.language)
+                            AppPrefs.language.set(values[which])
+                            AppPrefs.commit(activity, AppPrefs.language)
                             dialog.dismiss()
                         }
                         .setNegativeButton(android.R.string.cancel, null)

@@ -25,9 +25,9 @@ import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.QuickControlActionManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.view.pie.PieItem
 import jp.hazuki.yuzubrowser.legacy.utils.view.pie.PieMenu
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 class PieManager(private val context: Context, private val actionController: ActionController, private val iconManager: ActionIconManager) : PieMenu.PieController {
@@ -74,10 +74,10 @@ class PieManager(private val context: Context, private val actionController: Act
 
     fun onPreferenceReset() {
         val density = context.density
-        pie.setRadiusStart((AppData.qc_rad_start.get() * density + 0.5f).toInt())
-        pie.setRadiusIncrement((AppData.qc_rad_inc.get() * density + 0.5f).toInt())
-        pie.setSlop((AppData.qc_slop.get() * density + 0.5f).toInt())
-        pie.setPosition(AppData.qc_position.get())
+        pie.setRadiusStart((AppPrefs.qc_rad_start.get() * density + 0.5f).toInt())
+        pie.setRadiusIncrement((AppPrefs.qc_rad_inc.get() * density + 0.5f).toInt())
+        pie.setSlop((AppPrefs.qc_slop.get() * density + 0.5f).toInt())
+        pie.setPosition(AppPrefs.qc_position.get())
     }
 
     fun onThemeChanged(themeData: ThemeData?) {

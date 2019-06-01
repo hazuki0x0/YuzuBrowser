@@ -17,9 +17,8 @@
 package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
 import android.content.Context
-
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
-class CustomToolbar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : CustomToolbarBase(context, AppData.toolbar_custom1, controller, iconManager, request_callback)
+class CustomToolbar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : CustomToolbarBase(context, AppPrefs.toolbar_custom1, controller, iconManager, request_callback)

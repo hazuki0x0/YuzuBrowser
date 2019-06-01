@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.search.repository
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
-import android.content.Context
+import android.content.SharedPreferences;
 
-internal class SearchPrefsProvider(context: Context) {
-    private val prefs = SearchPrefs(context)
+public class LongContainer extends BaseContainer<Long> {
+    public LongContainer(String name, Long def_value) {
+        super(name, def_value);
+    }
 
-    fun get() = prefs
+    @Override
+    public void read(SharedPreferences shared_preference) {
+        mValue = shared_preference.getLong(mName, mDefValue);
+    }
+
+    @Override
+    public void write(SharedPreferences.Editor editor) {
+        editor.putLong(mName, mValue);
+    }
 }

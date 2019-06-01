@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.download.settings
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
-import android.os.Environment
-import com.rejasupotaro.android.kvs.annotations.Key
-import com.rejasupotaro.android.kvs.annotations.Table
-import jp.hazuki.yuzubrowser.ui.PREFERENCE_FILE_NAME
+import android.content.SharedPreferences;
 
-@Table(name = PREFERENCE_FILE_NAME)
-internal abstract class DownloadPrefsSchema {
-    @Key(name = "download_folder")
-    var downloadFolder: String = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+public class IntContainer extends BaseContainer<Integer> {
+    public IntContainer(String name, Integer def_value) {
+        super(name, def_value);
+    }
+
+    @Override
+    public void read(SharedPreferences shared_preference) {
+        mValue = shared_preference.getInt(mName, mDefValue);
+    }
+
+    @Override
+    public void write(SharedPreferences.Editor editor) {
+        editor.putInt(mName, mValue);
+    }
 }

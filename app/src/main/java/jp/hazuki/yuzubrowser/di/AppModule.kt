@@ -30,7 +30,6 @@ import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
 import jp.hazuki.yuzubrowser.search.di.SearchJsonAdapterFactory
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
-import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
 import jp.hazuki.yuzubrowser.webview.kotshi.WebViewJsonAdapterFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -92,12 +91,6 @@ object AppModule {
     @JvmStatic
     fun provideSuggestProvider(): ISuggestProvider {
         return SuggestProviderBridge()
-    }
-
-    @Provides
-    @JvmStatic
-    fun provideUiPrefs(context: Context): UiPrefs {
-        return UiPrefs.get(context)
     }
 
     @Provides

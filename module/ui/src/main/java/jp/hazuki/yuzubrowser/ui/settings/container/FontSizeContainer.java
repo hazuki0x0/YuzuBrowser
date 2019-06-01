@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.settings.container;
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
 import android.content.SharedPreferences;
 
@@ -23,10 +23,16 @@ import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
 
-public class MenuHeaderContainer implements Containable {
+public class FontSizeContainer implements Containable {
     public final ArrayList<Containable> mPreferenceList = new ArrayList<>();
+    public final IntContainer menu;
+    public final IntContainer speeddial_item;
+    public final IntContainer readItLater;
 
-    public MenuHeaderContainer() {
+    public FontSizeContainer() {
+        menu = new IntContainer("font_size_menu", -1);
+        speeddial_item = new IntContainer("font_size_speeddial_item", -1);
+        readItLater = new IntContainer("font_size_read_it_later", -1);
 
         checkPreferenceList();
     }
@@ -46,10 +52,8 @@ public class MenuHeaderContainer implements Containable {
     }
 
     private void checkPreferenceList() {
-        //if (!mPreferenceList.isEmpty())
-        //	return;
         try {
-            Field[] fields = MenuHeaderContainer.class.getDeclaredFields();
+            Field[] fields = FontSizeContainer.class.getDeclaredFields();
             for (Field field : fields) {
                 Object obj = field.get(this);
                 if (obj instanceof Containable) {

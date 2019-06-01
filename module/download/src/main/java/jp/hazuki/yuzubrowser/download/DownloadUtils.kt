@@ -28,8 +28,8 @@ import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
-import jp.hazuki.yuzubrowser.download.settings.DownloadPrefs
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import java.util.*
 
 
@@ -59,7 +59,7 @@ fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: Str
 }
 
 fun getDownloadFolderUri(context: Context): Uri {
-    return Uri.parse(DownloadPrefs.get(context).downloadFolder)
+    return Uri.parse(AppPrefs.download_folder.get())
 }
 
 fun Context.registerDownloadNotification() {

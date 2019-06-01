@@ -30,9 +30,9 @@ import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
-import jp.hazuki.yuzubrowser.download.settings.DownloadPrefs
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -91,7 +91,7 @@ class FastDownloadActivity : DaggerThemeActivity() {
     }
 
     private fun download(url: String, referrer: String?, ua: String, defExt: String): Uri? {
-        val root = Uri.parse(DownloadPrefs.get(this).downloadFolder).toDocumentFile(applicationContext)
+        val root = Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(applicationContext)
         val file = DownloadFile(url, null, DownloadRequest(referrer, ua, defExt))
         val meta = MetaData(applicationContext, okHttpClient, root, file.url, file.request)
         val info = DownloadFileInfo(root, file, meta)

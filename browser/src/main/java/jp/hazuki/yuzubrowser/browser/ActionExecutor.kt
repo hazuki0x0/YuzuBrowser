@@ -66,7 +66,6 @@ import jp.hazuki.yuzubrowser.legacy.reader.ReaderActivity
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterActivity
 import jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity
 import jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.settings.preference.ClearBrowserDataAlertDialog
 import jp.hazuki.yuzubrowser.legacy.settings.preference.ProxySettingDialog
 import jp.hazuki.yuzubrowser.legacy.speeddial.view.SpeedDialSettingActivity
@@ -83,6 +82,7 @@ import jp.hazuki.yuzubrowser.search.domain.makeGoogleImageSearch
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
@@ -473,7 +473,7 @@ class ActionExecutor(
             }
             SingleAction.WEB_RELOAD -> controller.getTab(actionTarget).mWebView.reload()
             SingleAction.WEB_STOP -> controller.getTab(actionTarget).mWebView.stopLoading()
-            SingleAction.GO_HOME -> controller.loadUrl(controller.getTab(actionTarget), AppData.home_page.get())
+            SingleAction.GO_HOME -> controller.loadUrl(controller.getTab(actionTarget), AppPrefs.home_page.get())
             SingleAction.ZOOM_IN -> controller.getTab(actionTarget).mWebView.zoomIn()
             SingleAction.ZOOM_OUT -> controller.getTab(actionTarget).mWebView.zoomOut()
             SingleAction.PAGE_UP -> controller.getTab(actionTarget).mWebView.pageUp(false)
@@ -530,9 +530,9 @@ class ActionExecutor(
                 web.reload()
             }
             SingleAction.TOGGLE_COOKIE -> {
-                val cookie = !AppData.accept_cookie.get()
-                AppData.accept_cookie.set(cookie)
-                AppData.commit(controller.applicationContextInfo, AppData.accept_cookie)
+                val cookie = !AppPrefs.accept_cookie.get()
+                AppPrefs.accept_cookie.set(cookie)
+                AppPrefs.commit(controller.applicationContextInfo, AppPrefs.accept_cookie)
                 CookieManager.getInstance().setAcceptCookie(cookie)
                 Toast.makeText(controller.applicationContextInfo, if (cookie) R.string.toggle_enable else R.string.toggle_disable, Toast.LENGTH_SHORT).show()
             }
@@ -682,12 +682,12 @@ class ActionExecutor(
                     controller.loadUrl(tab, url)
                 }
             }
-            SingleAction.NEW_TAB -> controller.openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
+            SingleAction.NEW_TAB -> controller.openInNewTab(AppPrefs.home_page.get(), TabType.DEFAULT)
             SingleAction.CLOSE_TAB -> if (!controller.removeTab(actionTarget)) {
                 checkAndRun((action as CloseTabSingleAction).defaultAction, target)
             }
             SingleAction.CLOSE_ALL -> {
-                controller.openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
+                controller.openInNewTab(AppPrefs.home_page.get(), TabType.DEFAULT)
                 for (i in controller.tabManager.lastTabNo - 1 downTo 0) {
                     controller.removeTab(i, false)
                 }
@@ -763,7 +763,7 @@ class ActionExecutor(
                     Toast.makeText(controller.applicationContextInfo, R.string.clipboard_empty, Toast.LENGTH_SHORT).show()
                     return true
                 }
-                controller.loadUrl(controller.getTab(actionTarget), text.makeUrlFromQuery(AppData.search_url.get(), "%s"), (action as PasteGoSingleAction).targetTab, TabType.WINDOW)
+                controller.loadUrl(controller.getTab(actionTarget), text.makeUrlFromQuery(AppPrefs.search_url.get(), "%s"), (action as PasteGoSingleAction).targetTab, TabType.WINDOW)
             }
             SingleAction.SHOW_BOOKMARK -> {
                 val intent = Intent(controller.applicationContextInfo, BookmarkActivity::class.java)
@@ -820,7 +820,7 @@ class ActionExecutor(
                     .show()
             SingleAction.OPEN_LINK_SETTING -> AlertDialog.Builder(controller.activity)
                     .setItems(R.array.pref_newtab_list
-                    ) { _, which -> AppData.newtab_link.set(controller.resourcesByInfo.getIntArray(R.array.pref_newtab_values)[which]) }
+                    ) { _, which -> AppPrefs.newtab_link.set(controller.resourcesByInfo.getIntArray(R.array.pref_newtab_values)[which]) }
                     .show()
             SingleAction.USERAGENT_SETTING -> {
                 val uaIntent = Intent(controller.applicationContextInfo, UserAgentListActivity::class.java)

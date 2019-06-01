@@ -55,12 +55,11 @@ dependencies {
     implementation Libs.kotlin_coroutines_android
     implementation Libs.kotlin_anko_commons
     implementation project(':core')
+    implementation project(':ui')
 
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
     kaptTest Libs.kotshi_compiler
-
-    implementation Libs.kvs_schema
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler

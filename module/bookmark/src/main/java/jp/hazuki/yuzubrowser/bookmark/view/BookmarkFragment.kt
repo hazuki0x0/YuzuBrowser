@@ -37,7 +37,6 @@ import jp.hazuki.yuzubrowser.bookmark.item.BookmarkItem
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkSite
 import jp.hazuki.yuzubrowser.bookmark.overflow.MenuType
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
-import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkPref
 import jp.hazuki.yuzubrowser.bookmark.repository.HideMenuRepository
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
@@ -46,6 +45,7 @@ import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import jp.hazuki.yuzubrowser.ui.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils.createShortcut
 import jp.hazuki.yuzubrowser.ui.utils.shareWeb
 import jp.hazuki.yuzubrowser.ui.widget.breadcrumbs.BreadcrumbsView
@@ -74,8 +74,6 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
     private lateinit var breadcrumbAdapter: BreadcrumbsViewAdapter<BookmarkCrumb>
 
-    private lateinit var prefs: BookmarkPref
-
     @Inject
     internal lateinit var hideMenuRepository: HideMenuRepository
     @Inject
@@ -89,8 +87,6 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
-
-        prefs = BookmarkPref.get(activity)
 
         (activity as AppCompatActivity).run {
             setSupportActionBar(tool_bar)
@@ -125,7 +121,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
         fastScroller.let {
             it.attachRecyclerView(recyclerView)
             it.attachAppBarLayout(coordinator, subBar)
-            it.isFixed = prefs.touchScrollbarFixedToolbar
+            it.isFixed = AppPrefs.touch_scrollbar_fixed_toolbar.get()
         }
 
         setList(firstPos)
@@ -173,10 +169,10 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
         mCurrentFolder = folder
         setTitle(folder)
 
-        adapter = if (prefs.bookmarkSimpleDisplay) {
-            BookmarkSingleLineAdapter(activity, folder.itemList, pickMode, prefs.openBookmarkNewTab, prefs.fontSizeBookmark, faviconManager, this)
+        adapter = if (AppPrefs.bookmarkSimpleDisplay.get()) {
+            BookmarkSingleLineAdapter(activity, folder.itemList, pickMode, AppPrefs.openBookmarkNewTab.get(), AppPrefs.fontSizeBookmark.get(), faviconManager, this)
         } else {
-            BookmarkFullAdapter(activity, folder.itemList, pickMode, prefs.openBookmarkNewTab, prefs.fontSizeBookmark, faviconManager, this)
+            BookmarkFullAdapter(activity, folder.itemList, pickMode, AppPrefs.openBookmarkNewTab.get(), AppPrefs.fontSizeBookmark.get(), faviconManager, this)
         }
 
         recyclerView.adapter = adapter
@@ -188,7 +184,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
                 if (pickMode) {
                     pickBookmark(item)
                 } else {
-                    sendUrl(item.url, prefs.newtabBookmark)
+                    sendUrl(item.url, AppPrefs.newtabBookmark.get())
                 }
                 activity?.finish()
             }
@@ -219,7 +215,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
     override fun onIconClick(v: View, position: Int) {
         val item = adapter[position]
         if (item is BookmarkSite) {
-            sendUrl(item.url, prefs.openBookmarkIconAction)
+            sendUrl(item.url, AppPrefs.openBookmarkIconAction.get())
         }
     }
 
@@ -261,9 +257,9 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         if (!pickMode) {
             inflater.inflate(R.menu.bookmark, menu)
-            val show = prefs.bookmarkBreadcrumbs
+            val show = AppPrefs.bookmarkBreadcrumbs.get()
             menu.findItem(R.id.breadcrumbs).isChecked = show
-            menu.findItem(R.id.simpleDisplay).isChecked = prefs.bookmarkSimpleDisplay
+            menu.findItem(R.id.simpleDisplay).isChecked = AppPrefs.bookmarkSimpleDisplay.get()
             showBreadCrumbs(show)
         }
     }
@@ -288,14 +284,16 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             R.id.breadcrumbs -> {
                 val checked = !item.isChecked
                 item.isChecked = checked
-                prefs.bookmarkBreadcrumbs = checked
+                AppPrefs.bookmarkBreadcrumbs.set(checked)
+                AppPrefs.commit(activity, AppPrefs.bookmarkBreadcrumbs)
                 showBreadCrumbs(checked)
                 return true
             }
             R.id.simpleDisplay -> {
                 val checked = !item.isChecked
                 item.isChecked = checked
-                prefs.bookmarkSimpleDisplay = checked
+                AppPrefs.bookmarkSimpleDisplay.set(checked)
+                AppPrefs.commit(activity, AppPrefs.bookmarkSimpleDisplay)
                 setList(mCurrentFolder)
                 return true
             }
@@ -393,7 +391,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
                 createShortcut(activity, item.title, url, bitmap)
             }
             R.id.editBookmark -> if (item is BookmarkSite) {
-                AddBookmarkSiteDialog(activity, prefs, mManager, item)
+                AddBookmarkSiteDialog(activity, mManager, item)
                         .setOnClickListener { _, _ -> adapter.notifyDataSetChanged() }
                         .show()
             } else if (item is BookmarkFolder) {
@@ -554,8 +552,9 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (prefs.saveBookmarkFolder) {
-            prefs.saveBookmarkFolderId = mCurrentFolder.id
+        if (AppPrefs.saveBookmarkFolder.get()) {
+            AppPrefs.saveBookmarkFolderId.set(mCurrentFolder.id)
+            AppPrefs.commit(requireContext(), AppPrefs.saveBookmarkFolderId)
         }
     }
 
@@ -612,9 +611,9 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
     private fun getFirstPosition(arguments: Bundle): BookmarkFolder {
         var id = arguments.getLong(ITEM_ID)
-        if (prefs.saveBookmarkFolder || id > 0) {
+        if (AppPrefs.saveBookmarkFolder.get() || id > 0) {
             if (id < 1) {
-                id = prefs.saveBookmarkFolderId
+                id = AppPrefs.saveBookmarkFolderId.get()
             }
             val item = mManager[id]
             if (item is BookmarkFolder) {

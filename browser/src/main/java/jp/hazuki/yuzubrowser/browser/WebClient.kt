@@ -74,9 +74,7 @@ import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterActivity
 import jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity
 import jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockManager
 import jp.hazuki.yuzubrowser.legacy.resblock.ResourceChecker
-import jp.hazuki.yuzubrowser.legacy.settings.PreferenceConstants
 import jp.hazuki.yuzubrowser.legacy.settings.activity.MainSettingsActivity
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialAsyncManager
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialHtml
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
@@ -92,6 +90,8 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
+import jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
@@ -184,24 +184,24 @@ class WebClient(
     fun onPreferenceReset() {
         patternManager.load(activity.applicationContext)
         webViewRenderingManager.onPreferenceReset(
-            AppData.rendering.get(),
-            AppData.night_mode_color.get(),
-            AppData.night_mode_bright.get())
+            AppPrefs.rendering.get(),
+            AppPrefs.night_mode_color.get(),
+            AppPrefs.night_mode_bright.get())
 
-        isEnableHistory = !AppData.private_mode.get() && AppData.save_history.get()
+        isEnableHistory = !AppPrefs.private_mode.get() && AppPrefs.save_history.get()
 
-        resourceCheckerList = if (AppData.resblock_enable.get()) {
+        resourceCheckerList = if (AppPrefs.resblock_enable.get()) {
             ResourceBlockManager(activity.applicationContext).list
         } else {
             null
         }
 
-        adBlockController = if (AppData.ad_block.get()) {
+        adBlockController = if (AppPrefs.ad_block.get()) {
             AdBlockController(activity.applicationContext, abpDatabase.abpDao())
         } else {
             null
         }
-        if (AppData.mining_protect.get()) {
+        if (AppPrefs.mining_protect.get()) {
             if (miningProtector == null) {
                 miningProtector = MiningProtector()
             }
@@ -224,20 +224,20 @@ class WebClient(
             controller.toolbarManager.notifyChangeWebState(it)
         }
 
-        val cookie = if (AppData.private_mode.get())
-            AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+        val cookie = if (AppPrefs.private_mode.get())
+            AppPrefs.accept_cookie.get() && AppPrefs.accept_cookie_private.get()
         else
-            AppData.accept_cookie.get()
+            AppPrefs.accept_cookie.get()
 
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(cookie)
 
-        val thirdCookie = cookie && AppData.accept_third_cookie.get()
+        val thirdCookie = cookie && AppPrefs.accept_third_cookie.get()
         controller.tabManager.loadedData.forEach {
             it.mWebView.setAcceptThirdPartyCookies(cookieManager, thirdCookie)
         }
 
-        resetUserScript(AppData.userjs_enable.get())
+        resetUserScript(AppPrefs.userjs_enable.get())
     }
 
     fun initWebSetting(web: CustomWebView) {
@@ -259,44 +259,44 @@ class WebClient(
         setting.setNeedInitialFocus(false)
         setting.defaultFontSize = 16
         setting.defaultFixedFontSize = 13
-        setting.minimumLogicalFontSize = AppData.minimum_font.get()
-        setting.minimumFontSize = AppData.minimum_font.get()
+        setting.minimumLogicalFontSize = AppPrefs.minimum_font.get()
+        setting.minimumFontSize = AppPrefs.minimum_font.get()
 
-        setting.mixedContentMode = AppData.mixed_content.get()
-        setting.setSupportMultipleWindows(AppData.newtab_blank.get() != BrowserManager.LOAD_URL_TAB_CURRENT)
-        setting.textZoom = AppData.text_size.get()
-        setting.javaScriptEnabled = AppData.javascript.get()
+        setting.mixedContentMode = AppPrefs.mixed_content.get()
+        setting.setSupportMultipleWindows(AppPrefs.newtab_blank.get() != BrowserManager.LOAD_URL_TAB_CURRENT)
+        setting.textZoom = AppPrefs.text_size.get()
+        setting.javaScriptEnabled = AppPrefs.javascript.get()
 
 
-        setting.allowContentAccess = AppData.allow_content_access.get()
-        setting.allowFileAccess = AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_ENABLE
-        setting.defaultTextEncodingName = AppData.default_encoding.get()
-        if (AppData.user_agent.get().isNullOrEmpty()) {
-            if (AppData.fake_chrome.get()) {
+        setting.allowContentAccess = AppPrefs.allow_content_access.get()
+        setting.allowFileAccess = AppPrefs.file_access.get() == PreferenceConstants.FILE_ACCESS_ENABLE
+        setting.defaultTextEncodingName = AppPrefs.default_encoding.get()
+        if (AppPrefs.user_agent.get().isNullOrEmpty()) {
+            if (AppPrefs.fake_chrome.get()) {
                 setting.userAgentString = activity.getFakeChromeUserAgent()
             }
         } else {
-            setting.userAgentString = AppData.user_agent.get()
+            setting.userAgentString = AppPrefs.user_agent.get()
         }
-        setting.loadWithOverviewMode = AppData.load_overview.get()
-        setting.useWideViewPort = AppData.web_wideview.get()
-        setting.displayZoomButtons = AppData.show_zoom_button.get()
-        setting.cacheMode = AppData.web_cache.get()
-        setting.javaScriptCanOpenWindowsAutomatically = AppData.web_popup.get()
-        setting.layoutAlgorithm = WebSettings.LayoutAlgorithm.valueOf(AppData.layout_algorithm.get())
-        setting.loadsImagesAutomatically = !AppData.block_web_images.get()
+        setting.loadWithOverviewMode = AppPrefs.load_overview.get()
+        setting.useWideViewPort = AppPrefs.web_wideview.get()
+        setting.displayZoomButtons = AppPrefs.show_zoom_button.get()
+        setting.cacheMode = AppPrefs.web_cache.get()
+        setting.javaScriptCanOpenWindowsAutomatically = AppPrefs.web_popup.get()
+        setting.layoutAlgorithm = WebSettings.LayoutAlgorithm.valueOf(AppPrefs.layout_algorithm.get())
+        setting.loadsImagesAutomatically = !AppPrefs.block_web_images.get()
 
-        val noPrivate = !AppData.private_mode.get()
-        setting.databaseEnabled = noPrivate && AppData.web_db.get()
-        setting.domStorageEnabled = noPrivate && AppData.web_dom_db.get()
-        setting.geolocationEnabled = noPrivate && AppData.web_geolocation.get()
-        setting.appCacheEnabled = noPrivate && AppData.web_app_cache.get()
+        val noPrivate = !AppPrefs.private_mode.get()
+        setting.databaseEnabled = noPrivate && AppPrefs.web_db.get()
+        setting.domStorageEnabled = noPrivate && AppPrefs.web_dom_db.get()
+        setting.geolocationEnabled = noPrivate && AppPrefs.web_geolocation.get()
+        setting.appCacheEnabled = noPrivate && AppPrefs.web_app_cache.get()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setting.safeBrowsingEnabled = AppData.safe_browsing.get()
+            setting.safeBrowsingEnabled = AppPrefs.safe_browsing.get()
         } else {
             @Suppress("DEPRECATION")
-            setting.saveFormData = noPrivate && AppData.save_formdata.get()
+            setting.saveFormData = noPrivate && AppPrefs.save_formdata.get()
         }
 
         setting.setAppCachePath(activity.appCacheFilePath)
@@ -309,7 +309,7 @@ class WebClient(
             webViewTheme = CustomWebView.WebViewTheme(color, isDark)
         }
         web.setWebViewTheme(webViewTheme)
-        web.swipeEnable = AppData.pull_to_refresh.get()
+        web.swipeEnable = AppPrefs.pull_to_refresh.get()
 
         //if add to this, should also add to AbstractCacheWebView#settingWebView
     }
@@ -319,7 +319,7 @@ class WebClient(
             controller.performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW)
             return
         }
-        val newUrl = if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
+        val newUrl = if (AppPrefs.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
             safeFileProvider.convertToSaferUrl(url)
         else
             url
@@ -348,7 +348,7 @@ class WebClient(
         override fun shouldOverrideUrlLoading(web: CustomWebView, url: String, uri: Uri): Boolean {
             val data = controller.getTabOrNull(web) ?: return true
 
-            if (AppData.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url)) {
+            if (AppPrefs.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url)) {
                 controller.loadUrl(data, safeFileProvider.convertToSaferUrl(url))
                 return true
             }
@@ -367,7 +367,7 @@ class WebClient(
         override fun onPageStarted(web: CustomWebView, url: String, favicon: Bitmap?) {
             val data = controller.getTabOrNull(web) ?: return
 
-            if (AppData.toolbar_auto_open.get()) {
+            if (AppPrefs.toolbar_auto_open.get()) {
                 controller.expandToolbar()
                 data.mWebView.isNestedScrollingEnabledMethod = false
             }
@@ -392,7 +392,7 @@ class WebClient(
 
             data.onStartPage()
 
-            if (AppData.save_tabs_for_crash.get())
+            if (AppPrefs.save_tabs_for_crash.get())
                 controller.tabManager.saveData()
 
             controller.tabManager.removeThumbnailCache(url)
@@ -427,7 +427,7 @@ class WebClient(
 
             controller.tabManager.takeThumbnailIfNeeded(data)
 
-            if (AppData.save_tabs_for_crash.get())
+            if (AppPrefs.save_tabs_for_crash.get())
                 controller.tabManager.saveData()
 
             if (speedDialManager.isNeedUpdate(data.originalUrl)) {
@@ -503,7 +503,7 @@ class WebClient(
         }
 
         override fun onReceivedSslError(web: CustomWebView, handler: SslErrorHandler, error: SslError) {
-            if (!AppData.ssl_error_alert.get()) {
+            if (!AppPrefs.ssl_error_alert.get()) {
                 handler.cancel()
                 return
             }
@@ -663,7 +663,7 @@ class WebClient(
             return
         }
 
-        when (AppData.download_action.get()) {
+        when (AppPrefs.download_action.get()) {
             PreferenceConstants.DOWNLOAD_DO_NOTHING -> {
             }
             PreferenceConstants.DOWNLOAD_AUTO -> if (WebDownloadUtils.shouldOpen(contentDisposition)) {
@@ -762,7 +762,7 @@ class WebClient(
 
 
         override fun onCreateWindow(view: CustomWebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message): Boolean {
-            controller.checkNewTabLink(AppData.newtab_blank.get(), resultMsg.obj as WebView.WebViewTransport)
+            controller.checkNewTabLink(AppPrefs.newtab_blank.get(), resultMsg.obj as WebView.WebViewTransport)
             resultMsg.sendToTarget()
             return true
         }
@@ -876,7 +876,7 @@ class WebClient(
 
         override fun onPermissionRequest(request: PermissionRequest) {
             controller.activity.runOnUiThread {
-                if (AppData.webRtc.get()) {
+                if (AppPrefs.webRtc.get()) {
                     WebRtcPermission.getInstance(controller.applicationContextInfo).requestPermission(request, controller.webRtcRequest)
                 } else {
                     request.deny()
@@ -963,11 +963,11 @@ class WebClient(
                         }
                         "speeddial" -> return false
                         "home" -> {
-                            if ("yuzu:home".equals(AppData.home_page.get(), ignoreCase = true) || "yuzu://home".equals(AppData.home_page.get(), ignoreCase = true)) {
-                                AppData.home_page.set("about:blank")
-                                AppData.commit(activity, AppData.home_page)
+                            if ("yuzu:home".equals(AppPrefs.home_page.get(), ignoreCase = true) || "yuzu://home".equals(AppPrefs.home_page.get(), ignoreCase = true)) {
+                                AppPrefs.home_page.set("about:blank")
+                                AppPrefs.commit(activity, AppPrefs.home_page)
                             }
-                            controller.loadUrl(data, AppData.home_page.get())
+                            controller.loadUrl(data, AppPrefs.home_page.get())
                             return true
                         }
                         "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
@@ -1032,7 +1032,7 @@ class WebClient(
             }
         }
 
-        if (AppData.share_unknown_scheme.get()) {
+        if (AppPrefs.share_unknown_scheme.get()) {
             if (WebUtils.isOverrideScheme(uri)) {
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 val info = activity.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
@@ -1106,9 +1106,9 @@ class WebClient(
 
     private fun getNewTabPerformType(tab: MainTabData): Int {
         return if ((tab.originalUrl ?: tab.url ?: "").isSpeedDial()) {
-            AppData.newtab_speeddial.get()
+            AppPrefs.newtab_speeddial.get()
         } else {
-            AppData.newtab_link.get()
+            AppPrefs.newtab_link.get()
         }
     }
 

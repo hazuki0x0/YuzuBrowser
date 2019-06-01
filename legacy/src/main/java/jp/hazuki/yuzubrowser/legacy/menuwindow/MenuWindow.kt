@@ -29,8 +29,8 @@ import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 typealias OnMenuCloseListener = () -> Unit
 
@@ -64,7 +64,7 @@ class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: Act
             false
         }
 
-        val fontSize = FontUtils.getTextSize(AppData.font_size.menu.get())
+        val fontSize = FontUtils.getTextSize(AppPrefs.font_size.menu.get())
         for (action in actionList) {
             val child = inflater.inflate(R.layout.menu_list_item, v, false)
             val icon = child.findViewById<ImageView>(R.id.iconImageView)
@@ -76,7 +76,7 @@ class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: Act
                 controller.run(action)
                 window.dismiss()
             }
-            if (AppData.menu_icon.get()) {
+            if (AppPrefs.menu_icon.get()) {
                 icon.setImageDrawable(iconManager[action])
             } else {
                 icon.visibility = View.GONE
@@ -85,7 +85,7 @@ class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: Act
             layout.addView(child)
         }
 
-        if (AppData.fullscreen.get())
+        if (AppPrefs.fullscreen.get())
             setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 

@@ -26,12 +26,9 @@ import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
 import jp.hazuki.yuzubrowser.ui.app.DaggerLongPressFixActivity
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
-import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
-import javax.inject.Inject
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class BookmarkActivity : DaggerLongPressFixActivity() {
-    @Inject
-    internal lateinit var uiPrefs: UiPrefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +37,8 @@ class BookmarkActivity : DaggerLongPressFixActivity() {
         val intent = intent
         var pickMode = false
         var itemId: Long = -1
-        var fullscreen = uiPrefs.fullscreen
-        var orientation = uiPrefs.oritentation
+        var fullscreen = AppPrefs.fullscreen.get()
+        var orientation = AppPrefs.oritentation.get()
         if (intent != null) {
             pickMode = Intent.ACTION_PICK == intent.action
             itemId = intent.getLongExtra("id", -1)

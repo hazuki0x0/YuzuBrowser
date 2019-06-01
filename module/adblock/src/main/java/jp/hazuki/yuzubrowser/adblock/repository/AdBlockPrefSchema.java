@@ -27,10 +27,4 @@ public class AdBlockPrefSchema {
 
     @Key(name = "abpLastUpdateTime")
     public final long abpLastUpdateTime = -1L;
-
-    @Key(name = "abpUseElementHide")
-    public final boolean isAbpUseElementHide = true;
-
-    @Key(name = "abpIgnoreGenericElement")
-    public final boolean isAbpIgnoreGenericElement = false;
 }

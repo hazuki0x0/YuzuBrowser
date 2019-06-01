@@ -25,17 +25,16 @@ import androidx.lifecycle.ViewModelProvider
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.search.domain.usecase.SearchViewUseCase
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
-import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.ui.extensions.addOnPropertyChangedCallback
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 
 internal class SearchViewModel(
     application: Application,
-    private val useCase: SearchViewUseCase,
-    private val provider: SearchPrefsProvider
+    private val useCase: SearchViewUseCase
 ) : AndroidViewModel(application) {
     var initQuery: String? = null
         private set
@@ -62,10 +61,9 @@ internal class SearchViewModel(
         this.query = query
         queryJob?.cancel()
         queryJob = ui {
-            val prefs = provider.get()
             val search = async(Dispatchers.Default) { useCase.getSearchQuery(query) }
-            val histories = if (prefs.searchSuggestHistories) async { useCase.getHistoryQuery(query) } else null
-            val bookmarks = if (prefs.searchSuggestBookmarks) async { useCase.getBookmarkQuery(query) } else null
+            val histories = if (AppPrefs.searchSuggestHistories.get()) async { useCase.getHistoryQuery(query) } else null
+            val bookmarks = if (AppPrefs.searchSuggestBookmarks.get()) async { useCase.getBookmarkQuery(query) } else null
 
             val suggestions = mutableListOf<SearchSuggestModel>()
             suggestions.addAll(search.await())
@@ -78,7 +76,7 @@ internal class SearchViewModel(
     }
 
     fun getFinishResult(mode: Int): FinishResult {
-        if (!provider.get().isPrivateMode && mode != SEARCH_MODE_URL) {
+        if (!AppPrefs.private_mode.get() && mode != SEARCH_MODE_URL) {
             useCase.saveQuery(query)
         }
         return FinishResult(query, suggestProviders[providerSelection.get()].url)
@@ -107,13 +105,12 @@ internal class SearchViewModel(
 
     class Factory(
         private val application: Application,
-        private val useCase: SearchViewUseCase,
-        private val provider: SearchPrefsProvider
+        private val useCase: SearchViewUseCase
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return SearchViewModel(application, useCase, provider) as T
+            return SearchViewModel(application, useCase) as T
         }
     }
 }

@@ -20,10 +20,9 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
-
-import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.AbstractToolbar
+import jp.hazuki.yuzubrowser.ui.settings.container.ToolbarContainer
 
 abstract class ToolbarBase(context: Context, preference: ToolbarContainer, layout_id: Int, request_callback: RequestCallback) : AbstractToolbar(context) {
     val toolbarPreferences: ToolbarContainer = preference

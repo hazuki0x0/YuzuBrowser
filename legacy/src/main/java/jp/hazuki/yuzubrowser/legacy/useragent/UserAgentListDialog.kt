@@ -28,7 +28,7 @@ import com.squareup.moshi.Moshi
 import dagger.android.support.AndroidSupportInjection
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import javax.inject.Inject
 
 class UserAgentListDialog : DialogFragment() {
@@ -46,7 +46,7 @@ class UserAgentListDialog : DialogFragment() {
         val entryValues = arrayOfNulls<String>(mUserAgentList.size + 1)
 
         val ua = arguments!!.getString(UA)
-        val defaultUserAgent = if (AppData.fake_chrome.get()) activity.getFakeChromeUserAgent() else WebSettings.getDefaultUserAgent(activity)
+        val defaultUserAgent = if (AppPrefs.fake_chrome.get()) activity.getFakeChromeUserAgent() else WebSettings.getDefaultUserAgent(activity)
 
         var pos = if (ua.isNullOrEmpty() || defaultUserAgent == ua) 0 else -1
 

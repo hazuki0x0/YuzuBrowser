@@ -25,12 +25,9 @@ import jp.hazuki.yuzubrowser.historyModel.R
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
-import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
-import javax.inject.Inject
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class BrowserHistoryActivity : DaggerThemeActivity() {
-    @Inject
-    internal lateinit var uiPrefs: UiPrefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +38,8 @@ class BrowserHistoryActivity : DaggerThemeActivity() {
         }
 
         var pickMode = false
-        var fullscreen = uiPrefs.fullscreen
-        var orientation = uiPrefs.oritentation
+        var fullscreen = AppPrefs.fullscreen.get()
+        var orientation = AppPrefs.oritentation.get()
         intent?.run {
             if (Intent.ACTION_PICK == action)
                 pickMode = true

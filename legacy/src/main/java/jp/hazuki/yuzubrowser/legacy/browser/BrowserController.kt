@@ -29,12 +29,12 @@ import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
 import jp.hazuki.yuzubrowser.legacy.action.item.OpenOptionsMenuAction
 import jp.hazuki.yuzubrowser.legacy.action.item.TabListSingleAction
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 interface BrowserController : BrowserInfo {
@@ -58,7 +58,7 @@ interface BrowserController : BrowserInfo {
     fun showSubGesture()
     fun showMenu(button: View?, action: OpenOptionsMenuAction)
     fun finishAlert(clearTabNo: Int)
-    fun finishQuick(clearTabNo: Int, finish_clear: Int = AppData.finish_alert_default.get())
+    fun finishQuick(clearTabNo: Int, finish_clear: Int = AppPrefs.finish_alert_default.get())
     fun moveTaskToBack(root: Boolean): Boolean
     fun openInCurrentTab(url: String)
     fun openInNewTab(tab: MainTabData)

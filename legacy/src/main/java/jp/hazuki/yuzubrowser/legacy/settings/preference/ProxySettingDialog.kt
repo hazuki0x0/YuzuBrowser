@@ -25,9 +25,9 @@ import android.view.LayoutInflater
 import android.widget.CheckBox
 import android.widget.EditText
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class ProxySettingDialog @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : CustomDialogPreference(context, attrs) {
     private var mSaveSettings = true
@@ -52,10 +52,10 @@ class ProxySettingDialog @JvmOverloads constructor(context: Context, attrs: Attr
 
             httpsCheckBox.setOnCheckedChangeListener { _, isChecked -> httpsText.isEnabled = isChecked }
 
-            checkBox.isChecked = AppData.proxy_set.get()
-            editText.setText(AppData.proxy_address.get())
-            httpsCheckBox.isChecked = AppData.proxy_https_set.get()
-            httpsText.setText(AppData.proxy_https_address.get())
+            checkBox.isChecked = AppPrefs.proxy_set.get()
+            editText.setText(AppPrefs.proxy_address.get())
+            httpsCheckBox.isChecked = AppPrefs.proxy_https_set.get()
+            httpsText.setText(AppPrefs.proxy_https_address.get())
             httpsText.isEnabled = httpsCheckBox.isChecked
 
             val builder = AlertDialog.Builder(activity)
@@ -73,12 +73,12 @@ class ProxySettingDialog @JvmOverloads constructor(context: Context, attrs: Attr
                         WebViewProxy.setProxy(context, enable, proxyAddress, enableHttps, httpsProxyAddress)
 
                         if (arguments!!.getBoolean(SAVE)) {
-                            AppData.proxy_set.set(enable)
-                            AppData.proxy_address.set(proxyAddress)
-                            AppData.proxy_https_set.set(enableHttps)
-                            AppData.proxy_https_address.set(httpsProxyAddress)
-                            AppData.commit(context, AppData.proxy_set, AppData.proxy_address,
-                                    AppData.proxy_https_set, AppData.proxy_https_address)
+                            AppPrefs.proxy_set.set(enable)
+                            AppPrefs.proxy_address.set(proxyAddress)
+                            AppPrefs.proxy_https_set.set(enableHttps)
+                            AppPrefs.proxy_https_address.set(httpsProxyAddress)
+                            AppPrefs.commit(context, AppPrefs.proxy_set, AppPrefs.proxy_address,
+                                AppPrefs.proxy_https_set, AppPrefs.proxy_https_address)
                         }
                     }
                     .setNegativeButton(android.R.string.cancel, null)

@@ -26,21 +26,17 @@ import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadListFragment
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
-import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
-import javax.inject.Inject
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class DownloadListActivity : DaggerThemeActivity(), ActivityClient.ActivityClientListener, DownloadCommandController {
 
     private lateinit var downloadService: ServiceSocket
 
-    @Inject
-    internal lateinit var uiPrefs: UiPrefs
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var fullscreen = uiPrefs.fullscreen
-        var orientation = uiPrefs.oritentation
+        var fullscreen = AppPrefs.fullscreen.get()
+        var orientation = AppPrefs.oritentation.get()
         if (intent != null) {
             fullscreen = intent.getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, fullscreen)
             orientation = intent.getIntExtra(INTENT_EXTRA_MODE_ORIENTATION, orientation)

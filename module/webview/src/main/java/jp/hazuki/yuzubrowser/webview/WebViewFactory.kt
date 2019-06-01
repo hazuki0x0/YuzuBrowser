@@ -19,15 +19,15 @@ package jp.hazuki.yuzubrowser.webview
 import android.content.Context
 import android.os.Bundle
 import com.squareup.moshi.Moshi
-import jp.hazuki.yuzubrowser.core.settings.WebViewPrefs
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 
-class WebViewFactory(private val moshi: Moshi, private val prefs: WebViewPrefs) {
+class WebViewFactory(private val moshi: Moshi) {
 
     val mode: Int
         get() {
-            return if (prefs.fastBack) {
-                when (prefs.fastBackCacheSize) {
+            return if (AppPrefs.fast_back.get()) {
+                when (AppPrefs.fast_back_cache_size.get()) {
                     0 -> MODE_CACHE
                     1 -> MODE_NORMAL
                     else -> MODE_LIMIT_CACHE
@@ -41,7 +41,7 @@ class WebViewFactory(private val moshi: Moshi, private val prefs: WebViewPrefs) 
         return when (mode) {
             MODE_NORMAL -> SwipeWebView(context)
             MODE_CACHE -> CacheWebView(context)
-            MODE_LIMIT_CACHE -> LimitCacheWebView(context, moshi, prefs)
+            MODE_LIMIT_CACHE -> LimitCacheWebView(context, moshi)
             else -> SwipeWebView(context)
         }
     }

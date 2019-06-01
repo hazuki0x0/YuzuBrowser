@@ -35,8 +35,8 @@ import jp.hazuki.yuzubrowser.search.R
 import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
 import jp.hazuki.yuzubrowser.search.model.provider.SearchSuggestProviders
 import jp.hazuki.yuzubrowser.search.presentation.widget.SearchSimpleIconView
-import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
@@ -52,8 +52,6 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
         lateinit var manager: ISearchUrlRepository
         @Inject
         lateinit var moshi: Moshi
-        @Inject
-        internal lateinit var prefsProvider: SearchPrefsProvider
         @Inject
         internal lateinit var faviconManager: FaviconManager
 
@@ -84,7 +82,8 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
         override fun onRecyclerItemClicked(v: View, position: Int) {
             provider.selectedId = provider[position].id
             manager.save(provider.toSettings())
-            prefsProvider.get().searchUrl = provider[position].url
+            AppPrefs.search_url.set(provider[position].url)
+            AppPrefs.commit(requireActivity(), AppPrefs.search_url)
             dismiss()
         }
 

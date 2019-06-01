@@ -26,10 +26,10 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
@@ -150,7 +150,7 @@ class ReadItLaterFragment : androidx.fragment.app.Fragment(), OnRecyclerListener
             val foreground = view.findViewById<View>(R.id.foreground)!!
 
             init {
-                val font = AppData.font_size.readItLater.get()
+                val font = AppPrefs.font_size.readItLater.get()
                 if (font >= 0) {
                     title.textSize = FontUtils.getTextSize(font).toFloat()
                     val small = FontUtils.getSmallerTextSize(font).toFloat()

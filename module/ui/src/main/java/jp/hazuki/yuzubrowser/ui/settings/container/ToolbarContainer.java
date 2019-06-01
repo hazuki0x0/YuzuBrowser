@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.settings.container;
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
 import android.content.SharedPreferences;
 
@@ -22,7 +22,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport;
-import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager;
+
+import static jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants.TOOLBAR_LOCATION_TOP;
+import static jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants.TOOLBAR_LOCATION_UNDEFINED;
 
 public class ToolbarContainer implements Containable {
     public final ArrayList<Containable> mPreferenceList = new ArrayList<>();
@@ -31,12 +33,12 @@ public class ToolbarContainer implements Containable {
     public final IntContainer location_landscape;
     public final IntContainer location_landscape_priority;
     public final IntContainer size;
-    public final ToolbarVisibilityContainer visibility;
+    public final jp.hazuki.yuzubrowser.ui.settings.container.ToolbarVisibilityContainer visibility;
 
     public ToolbarContainer(String id, int loc) {
-        location = new IntContainer("toolbar_location_" + id, ToolbarManager.LOCATION_TOP);
+        location = new IntContainer("toolbar_location_" + id, TOOLBAR_LOCATION_TOP);
         location_priority = new IntContainer("toolbar_location_priority_" + id, loc);
-        location_landscape = new IntContainer("toolbar_location_l_" + id, ToolbarManager.LOCATION_UNDEFINED);
+        location_landscape = new IntContainer("toolbar_location_l_" + id, TOOLBAR_LOCATION_UNDEFINED);
         location_landscape_priority = new IntContainer("toolbar_location_l_priority_" + id, -1);
         size = new IntContainer("toolbar_size_" + id, 48);
         visibility = new ToolbarVisibilityContainer("toolbar_visibility_" + id, 1);

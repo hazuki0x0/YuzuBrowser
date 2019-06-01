@@ -100,6 +100,7 @@ import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
 import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.extensions.createIntentFilter
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.utils.makeUrl
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
@@ -133,7 +134,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         override fun run() {
             tabManagerIn.saveData()
 
-            val delay = AppData.auto_tab_save_delay.get()
+            val delay = AppPrefs.auto_tab_save_delay.get()
             if (delay > 0)
                 handler.postDelayed(this, (delay * 1000).toLong())
         }
@@ -222,7 +223,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         browserState = (applicationContext as BrowserApplication).browserState
 
         if (browserState.isNeedLoad) {
-            AppData.load(this, moshi, abpDatabase)
+            AppData.init(this, moshi, abpDatabase)
             browserState.isNeedLoad = false
         }
 
@@ -283,7 +284,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         if (tabManagerIn.isEmpty) {
             val tab = addNewTab(TabType.DEFAULT)
             setCurrentTab(0)
-            loadUrl(tab, AppData.home_page.get())
+            loadUrl(tab, AppPrefs.home_page.get())
         }
         toolbar.notifyChangeWebState()
 
@@ -303,7 +304,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     override fun onStart() {
         super.onStart()
 
-        if (AppData.auto_tab_save_delay.get() > 0)
+        if (AppPrefs.auto_tab_save_delay.get() > 0)
             handler.post(saveTabsRunnable)
 
         if (isActivityPaused) {
@@ -317,8 +318,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
 
-        WebViewProxy.setProxy(applicationContext, AppData.proxy_set.get(), AppData.proxy_address.get(),
-                AppData.proxy_https_set.get(), AppData.proxy_https_address.get())
+        WebViewProxy.setProxy(applicationContext, AppPrefs.proxy_set.get(), AppPrefs.proxy_address.get(),
+            AppPrefs.proxy_https_set.get(), AppPrefs.proxy_https_address.get())
 
         connectionStateMonitor.enable(this)
 
@@ -351,7 +352,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         if (!checkBrowserPermission()) {
             ui { requestBrowserPermissions(asyncPermissions) }
         }
-        if (AppData.ad_block.get()) {
+        if (AppPrefs.ad_block.get()) {
             ui {
                 if (abpDatabase.abpDao().getAll().checkNeedUpdate()) {
                     AbpUpdateService.updateAll(this@BrowserActivity)
@@ -382,7 +383,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             return
         }
 
-        if (AppData.pause_web_background.get()) {
+        if (AppPrefs.pause_web_background.get()) {
             isActivityPaused = true
 
             val tab = tabManagerIn.currentTabData
@@ -505,7 +506,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                     forceDestroy = data.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
                     restartBrowser()
                 } else {
-                    AppData.load(applicationContext, moshi, abpDatabase)
+                    AppData.init(applicationContext, moshi, abpDatabase)
                     onPreferenceReset()
                 }
             }
@@ -513,21 +514,21 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 if (resultCode != RESULT_OK || data == null) return
                 val ua = data.getStringExtra(Intent.EXTRA_TEXT)
                 val tab = tabManagerIn.currentTabData
-                tab.mWebView.webSettings.userAgentString = if (ua.isNullOrEmpty() && AppData.fake_chrome.get()) getFakeChromeUserAgent() else ua
+                tab.mWebView.webSettings.userAgentString = if (ua.isNullOrEmpty() && AppPrefs.fake_chrome.get()) getFakeChromeUserAgent() else ua
                 tab.mWebView.reload()
             }
             BrowserController.REQUEST_DEFAULT_USERAGENT -> {
                 if (resultCode != RESULT_OK || data == null) return
                 val ua = data.getStringExtra(Intent.EXTRA_TEXT)
-                AppData.user_agent.set(ua)
-                val browserUA = if (ua.isNullOrEmpty() && AppData.fake_chrome.get()) getFakeChromeUserAgent() else ua
-                AppData.commit(this, AppData.user_agent)
+                AppPrefs.user_agent.set(ua)
+                val browserUA = if (ua.isNullOrEmpty() && AppPrefs.fake_chrome.get()) getFakeChromeUserAgent() else ua
+                AppPrefs.commit(this, AppPrefs.user_agent)
                 for (tabData in tabManagerIn.loadedData) {
                     tabData.mWebView.webSettings.userAgentString = browserUA
                     tabData.mWebView.reload()
                 }
             }
-            BrowserController.REQUEST_USERJS_SETTING -> webClient.resetUserScript(AppData.userjs_enable.get())
+            BrowserController.REQUEST_USERJS_SETTING -> webClient.resetUserScript(AppPrefs.userjs_enable.get())
             BrowserController.REQUEST_WEB_ENCODE_SETTING -> {
                 if (resultCode != RESULT_OK || data == null) return
                 val encoding = data.getStringExtra(Intent.EXTRA_TEXT) ?: return
@@ -574,14 +575,14 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
-            KeyEvent.KEYCODE_VOLUME_UP -> if (AppData.volume_default_playing.get() && (getSystemService(Context.AUDIO_SERVICE) as AudioManager).isMusicActive) {
+            KeyEvent.KEYCODE_VOLUME_UP -> if (AppPrefs.volume_default_playing.get() && (getSystemService(Context.AUDIO_SERVICE) as AudioManager).isMusicActive) {
                 return super.onKeyDown(keyCode, event)
 
             } else if (webCustomViewHandler?.isCustomViewShowing != true) {
                 if (userActionManager.onVolumeKey(true))
                     return true
             }
-            KeyEvent.KEYCODE_VOLUME_DOWN -> if (AppData.volume_default_playing.get() && (getSystemService(Context.AUDIO_SERVICE) as AudioManager).isMusicActive) {
+            KeyEvent.KEYCODE_VOLUME_DOWN -> if (AppPrefs.volume_default_playing.get() && (getSystemService(Context.AUDIO_SERVICE) as AudioManager).isMusicActive) {
                 return super.onKeyDown(keyCode, event)
 
             } else if (webCustomViewHandler?.isCustomViewShowing != true) {
@@ -610,7 +611,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 if (menuWindow.isShowing) {
                     menuWindow.dismiss()
                 } else {
-                    menuWindow.show(findViewById(R.id.superFrameLayout), OpenOptionsMenuAction.getGravity(AppData.menu_btn_list_mode.get()))
+                    menuWindow.show(findViewById(R.id.superFrameLayout), OpenOptionsMenuAction.getGravity(AppPrefs.menu_btn_list_mode.get()))
                 }
                 return true
             }
@@ -676,7 +677,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
         if (Constants.intent.ACTION_NEW_TAB == action) {
             tabListView?.close()
-            openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
+            openInNewTab(AppPrefs.home_page.get(), TabType.DEFAULT)
             return false
         }
         if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) {
@@ -720,7 +721,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         userActionManager.onPreferenceReset()
         CrashlyticsUtils.setWebViewMode()
 
-        ThemeData.createInstanceIfNeed(applicationContext, AppData.theme_setting.get())?.let { themeData ->
+        ThemeData.createInstanceIfNeed(applicationContext, AppPrefs.theme_setting.get())?.let { themeData ->
             toolbar.onThemeChanged(themeData)
             userActionManager.onThemeChanged(themeData)
             toolbar.notifyChangeWebState()
@@ -740,23 +741,23 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 webViewFastScroller.handlePressedColor = themeData.tabAccentColor
             }
         }
-        superFrameLayout.setWhiteBackgroundMode(AppData.whiteBackground.get())
+        superFrameLayout.setWhiteBackgroundMode(AppPrefs.whiteBackground.get())
 
         menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController, iconManager)
 
         webClient.onPreferenceReset()
-        isEnableQuickControl = AppData.qc_enable.get()
-        requestedOrientation = AppData.oritentation.get()
-        isFullscreenMode = AppData.fullscreen.get()
-        isEnableMultiFingerGesture = AppData.multi_finger_gesture.get()
+        isEnableQuickControl = AppPrefs.qc_enable.get()
+        requestedOrientation = AppPrefs.oritentation.get()
+        isFullscreenMode = AppPrefs.fullscreen.get()
+        isEnableMultiFingerGesture = AppPrefs.multi_finger_gesture.get()
         userActionManager.setEnableGesture(webGestureOverlayView)
 
-        if (AppData.keep_screen_on.get())
+        if (AppPrefs.keep_screen_on.get())
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        val touchScrollbar = AppData.touch_scrollbar.get()
+        val touchScrollbar = AppPrefs.touch_scrollbar.get()
         if (touchScrollbar >= 0) {
             webViewFastScroller.setScrollEnabled(true)
             webViewFastScroller.isShowLeft = touchScrollbar == 1
@@ -764,7 +765,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             webViewFastScroller.setScrollEnabled(false)
         }
 
-        ErrorReport.setDetailedLog(AppData.detailed_log.get())
+        ErrorReport.setDetailedLog(AppPrefs.detailed_log.get())
     }
 
     override fun getTabOrNull(target: Int): MainTabData? = tabManagerIn[target]
@@ -820,7 +821,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     private fun addTab(index: Int, tab: MainTabData) {
         tabManager.addTab(index, tab)
-        if (AppData.save_closed_tab.get()) {
+        if (AppPrefs.save_closed_tab.get()) {
             closedTabs?.poll()
         }
     }
@@ -843,7 +844,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         val oldWeb = oldData.mWebView
 
-        if (AppData.save_closed_tab.get()) {
+        if (AppPrefs.save_closed_tab.get()) {
             val outState = Bundle()
             oldWeb.saveState(outState)
             outState.putInt(TAB_TYPE, oldData.tabType)
@@ -863,13 +864,13 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     private fun getNewTabNo(no: Int, oldData: MainTabData): Int {
-        if (AppData.move_to_parent.get() && oldData.tabType == TabType.WINDOW && oldData.parent != 0L) {
+        if (AppPrefs.move_to_parent.get() && oldData.tabType == TabType.WINDOW && oldData.parent != 0L) {
             val newNo = tabManagerIn.searchParentTabNo(oldData.parent)
             if (newNo >= 0) {
                 return newNo
             }
         }
-        return if (AppData.move_to_left_tab.get()) {
+        return if (AppPrefs.move_to_left_tab.get()) {
             if (no == 0) 1 else no - 1
         } else {
             if (no == tabManagerIn.lastTabNo) no - 1 else no + 1
@@ -921,7 +922,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 }
 
                 override fun requestAddTab() {
-                    openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
+                    openInNewTab(AppPrefs.home_page.get(), TabType.DEFAULT)
                 }
 
                 override fun requestMoveTab(positionFrom: Int, positionTo: Int) {
@@ -933,7 +934,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 }
 
                 override fun requestCloseAllTab() {
-                    openInNewTab(AppData.home_page.get(), TabType.DEFAULT)
+                    openInNewTab(AppPrefs.home_page.get(), TabType.DEFAULT)
                     for (i in tabManagerIn.lastTabNo - 1 downTo 0) {
                         removeTab(i, false)
                     }
@@ -999,7 +1000,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     override fun restoreTab() {
         val bundle = closedTabs?.poll()
         if (bundle == null) {
-            if (AppData.save_closed_tab.get())
+            if (AppPrefs.save_closed_tab.get())
                 Toast.makeText(applicationContext, R.string.tab_restored_failed, Toast.LENGTH_SHORT).show()
             else
                 Toast.makeText(applicationContext, R.string.tab_restored_setting_error, Toast.LENGTH_LONG).show()
@@ -1058,7 +1059,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         if (webCustomViewHandler == null) {
             webCustomViewHandler = WebCustomViewHandler(fullscreenLayout)
         }
-        webCustomViewHandler!!.showCustomView(this, view, AppData.web_customview_oritentation.get(), callback)
+        webCustomViewHandler!!.showCustomView(this, view, AppPrefs.web_customview_oritentation.get(), callback)
     }
 
     override fun hideCustomView() {
@@ -1139,9 +1140,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
         handler.removeCallbacks(saveTabsRunnable)
-        if (AppData.save_last_tabs.get() && finish_clear and 0x1000 == 0) {
+        if (AppPrefs.save_last_tabs.get() && finish_clear and 0x1000 == 0) {
             tabManagerIn.saveData()
-        } else if (AppData.save_pinned_tabs.get()) {
+        } else if (AppPrefs.save_pinned_tabs.get()) {
             tabManagerIn.clearExceptPinnedTab()
             tabManagerIn.saveData()
         } else {
@@ -1159,14 +1160,14 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private fun addNewTab(@WebViewType cacheType: Int, @TabType type: Int): MainTabData {
         val web = makeWebView(cacheType)
         // TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
-        //        if (AppData.pause_web_tab_change.get())
+        //        if (AppPrefs.pause_web_tab_change.get())
         //            web.onPause();
         val tab = tabManagerIn.add(web, type)
         if (ThemeData.isEnabled())
             tab.onMoveTabToBackground(resources, theme)
 
         toolbar.notifyChangeWebState()
-        if (AppData.toolbar_auto_open.get()) expandToolbar()
+        if (AppPrefs.toolbar_auto_open.get()) expandToolbar()
         return tab
     }
 
@@ -1188,11 +1189,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             web.webView.setWillNotCacheDrawing(true)
         }
         webClient.initWebSetting(web)
-        val enableCookie = if (AppData.private_mode.get())
-            AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+        val enableCookie = if (AppPrefs.private_mode.get())
+            AppPrefs.accept_cookie.get() && AppPrefs.accept_cookie_private.get()
         else
-            AppData.accept_cookie.get()
-        web.setAcceptThirdPartyCookies(CookieManager.getInstance(), enableCookie && AppData.accept_third_cookie.get())
+            AppPrefs.accept_cookie.get()
+        web.setAcceptThirdPartyCookies(CookieManager.getInstance(), enableCookie && AppPrefs.accept_third_cookie.get())
         return web
     }
 
@@ -1436,27 +1437,27 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             field = isPrivate
             val noPrivate = !isPrivate
             val enableCookie = if (isPrivate)
-                AppData.accept_cookie.get() && AppData.accept_cookie_private.get()
+                AppPrefs.accept_cookie.get() && AppPrefs.accept_cookie_private.get()
             else
-                AppData.accept_cookie.get()
+                AppPrefs.accept_cookie.get()
 
-            webClient.isEnableHistory = noPrivate && AppData.save_history.get()
+            webClient.isEnableHistory = noPrivate && AppPrefs.save_history.get()
             CookieManager.getInstance().setAcceptCookie(enableCookie)
 
             tabManagerIn.loadedData.forEach {
                 val settings = it.mWebView.webSettings
 
                 it.mWebView.setAcceptThirdPartyCookies(
-                        CookieManager.getInstance(), enableCookie && AppData.accept_third_cookie.get())
+                    CookieManager.getInstance(), enableCookie && AppPrefs.accept_third_cookie.get())
 
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                     @Suppress("DEPRECATION")
-                    settings.saveFormData = noPrivate && AppData.save_formdata.get()
+                    settings.saveFormData = noPrivate && AppPrefs.save_formdata.get()
                 }
-                settings.databaseEnabled = noPrivate && AppData.web_db.get()
-                settings.domStorageEnabled = noPrivate && AppData.web_dom_db.get()
-                settings.geolocationEnabled = noPrivate && AppData.web_geolocation.get()
-                settings.appCacheEnabled = noPrivate && AppData.web_app_cache.get()
+                settings.databaseEnabled = noPrivate && AppPrefs.web_db.get()
+                settings.domStorageEnabled = noPrivate && AppPrefs.web_dom_db.get()
+                settings.geolocationEnabled = noPrivate && AppPrefs.web_geolocation.get()
+                settings.appCacheEnabled = noPrivate && AppPrefs.web_app_cache.get()
                 settings.setAppCachePath(appCacheFilePath)
             }
 
@@ -1575,10 +1576,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     override var isEnableFlick: Boolean
-        get() = AppData.flick_enable.get()
+        get() = AppPrefs.flick_enable.get()
         set(value) {
-            AppData.flick_enable.set(value)
-            AppData.commit(applicationContext, AppData.flick_enable)
+            AppPrefs.flick_enable.set(value)
+            AppPrefs.commit(applicationContext, AppPrefs.flick_enable)
         }
 
     override var isEnableUserScript: Boolean

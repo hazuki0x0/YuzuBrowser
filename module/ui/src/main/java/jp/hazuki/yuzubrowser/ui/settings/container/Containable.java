@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.ui.settings
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
-import android.content.pm.ActivityInfo
-import com.rejasupotaro.android.kvs.annotations.Key
-import com.rejasupotaro.android.kvs.annotations.Table
-import jp.hazuki.yuzubrowser.ui.PREFERENCE_FILE_NAME
+import android.content.SharedPreferences;
 
-@Table(name = PREFERENCE_FILE_NAME)
-class UiPrefsSchema {
-    @Key(name = "fullscreen")
-    var fullscreen = false
+public interface Containable {
+    void read(SharedPreferences shared_preference);
 
-    @Key(name = "oritentation")
-    var oritentation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
-    @Key(name = "swipebtn_sensitivity")
-    var swipeButtonSensitivity = 150
+    void write(SharedPreferences.Editor editor);
 }

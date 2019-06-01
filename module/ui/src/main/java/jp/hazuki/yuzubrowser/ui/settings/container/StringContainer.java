@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.di
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
-import com.squareup.moshi.Moshi
-import dagger.Module
-import dagger.Provides
-import jp.hazuki.yuzubrowser.webview.WebViewFactory
+import android.content.SharedPreferences;
 
-@Module
-object WebViewModule {
+public class StringContainer extends BaseContainer<String> {
+    public StringContainer(String name, String def_value) {
+        super(name, def_value);
+    }
 
-    @Provides
-    @JvmStatic
-    fun provideWebViewFactory(moshi: Moshi): WebViewFactory {
-        return WebViewFactory(moshi)
+    @Override
+    public void read(SharedPreferences shared_preference) {
+        mValue = shared_preference.getString(mName, mDefValue);
+    }
+
+    @Override
+    public void write(SharedPreferences.Editor editor) {
+        editor.putString(mName, mValue);
     }
 }
+

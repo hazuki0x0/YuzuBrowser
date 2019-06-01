@@ -45,7 +45,7 @@ public abstract class GestureManager {
         mDatabase = new ActionDatabase(context, new File(dir, id + ".list.dat"));
 
         if (!load()) {
-            Logger.e(TAG, "load error at constructor");
+            Logger.e(TAG, "init error at constructor");
         }
     }
 
@@ -108,9 +108,7 @@ public abstract class GestureManager {
         ArrayList<Prediction> list = mLibrary.recognize(gesture);
         if (!list.isEmpty()) {
             Prediction prediction = list.get(0);
-            if (prediction.score > getGestureScore()) {
-                return true;
-            }
+            return prediction.score > getGestureScore();
         }
         return false;
     }

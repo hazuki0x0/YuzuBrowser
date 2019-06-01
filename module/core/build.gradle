@@ -60,8 +60,5 @@ dependencies {
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
     implementation Libs.kotlin_anko_commons
-
-    implementation Libs.kvs_schema
-    kapt Libs.kvs_schema_compiler
 }
 

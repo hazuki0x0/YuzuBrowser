@@ -22,7 +22,7 @@ import android.os.Build;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.legacy.Constants;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public class AppUtils {
     public static void restartApp(Context context) {
@@ -48,8 +48,8 @@ public class AppUtils {
     }
 
     private static String getWebViewMode() {
-        if (AppData.fast_back.get()) {
-            int size = AppData.fast_back_cache_size.get();
+        if (AppPrefs.fast_back.get()) {
+            int size = AppPrefs.fast_back_cache_size.get();
             if (size == 0) {
                 return "I";
             } else if (size > 1) {

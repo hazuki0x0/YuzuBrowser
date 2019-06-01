@@ -36,10 +36,10 @@ import jp.hazuki.yuzubrowser.core.utility.utils.FontUtils
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryModel
-import jp.hazuki.yuzubrowser.history.repository.HistoryPref
 import jp.hazuki.yuzubrowser.historyModel.R
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.extensions.getColorFromThemeRes
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,7 +47,6 @@ import java.util.*
 class BrowserHistoryAdapter @SuppressLint("SimpleDateFormat")
 constructor(
     context: Context,
-    private val prefs: HistoryPref,
     private val manager: BrowserHistoryManager,
     private val faviconManager: FaviconManager,
     private val pickMode: Boolean,
@@ -100,7 +99,7 @@ constructor(
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryHolder {
-        return HistoryHolder(inflater.inflate(R.layout.history_item, parent, false), prefs)
+        return HistoryHolder(inflater.inflate(R.layout.history_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: HistoryHolder, position: Int) {
@@ -206,7 +205,7 @@ constructor(
     }
 
     override fun onCreateHeaderViewHolder(parent: ViewGroup): HeaderHolder {
-        return HeaderHolder(inflater.inflate(R.layout.recycler_view_header, parent, false), prefs)
+        return HeaderHolder(inflater.inflate(R.layout.recycler_view_header, parent, false))
     }
 
     override fun onBindHeaderViewHolder(viewHolder: HeaderHolder, position: Int) {
@@ -236,7 +235,7 @@ constructor(
         return itemSelected.get(position, false)
     }
 
-    class HistoryHolder(itemView: View, prefs: HistoryPref) : RecyclerView.ViewHolder(itemView) {
+    class HistoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val foreground: View = itemView.findViewById(R.id.foreground)
         val imageButton: ImageButton = itemView.findViewById(R.id.imageButton)
@@ -246,7 +245,7 @@ constructor(
         val overflowButton: ImageButton = itemView.findViewById(R.id.overflowButton)
 
         init {
-            val fontSizeSetting = prefs.fontSizeHistory
+            val fontSizeSetting = AppPrefs.fontSizeHistory.get()
             if (fontSizeSetting >= 0) {
                 val normal = FontUtils.getTextSize(fontSizeSetting)
                 val small = FontUtils.getSmallerTextSize(fontSizeSetting)
@@ -258,11 +257,11 @@ constructor(
         }
     }
 
-    class HeaderHolder(itemView: View, prefs: HistoryPref) : RecyclerView.ViewHolder(itemView) {
+    class HeaderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val header: TextView = itemView as TextView
 
         init {
-            val fontSizeSetting = prefs.fontSizeHistory
+            val fontSizeSetting = AppPrefs.fontSizeHistory.get()
             if (fontSizeSetting >= 0) {
                 header.textSize = FontUtils.getTextSize(fontSizeSetting).toFloat()
             }

@@ -100,9 +100,6 @@ dependencies {implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
 
-    implementation Libs.kvs_schema
-    kapt Libs.kvs_schema_compiler
-
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
     kapt Libs.dagger2_compiler

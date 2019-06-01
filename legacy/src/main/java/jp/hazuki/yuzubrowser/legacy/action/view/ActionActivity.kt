@@ -29,10 +29,10 @@ import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.*
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import kotlinx.android.synthetic.main.action_activity.*
 
@@ -53,8 +53,8 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
         val intent = intent ?: throw NullPointerException("intent is null")
 
         if (ACTION_ALL_ACTION == intent.action) {
-            val fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, AppData.fullscreen.get())
-            val orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, AppData.oritentation.get())
+            val fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, AppPrefs.fullscreen.get())
+            val orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, AppPrefs.oritentation.get())
 
             if (fullscreen)
                 window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)

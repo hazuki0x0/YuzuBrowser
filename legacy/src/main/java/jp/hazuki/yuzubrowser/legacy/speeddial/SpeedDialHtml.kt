@@ -22,8 +22,8 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.HtmlUtils
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import java.io.*
 import java.nio.charset.StandardCharsets
 
@@ -51,41 +51,41 @@ class SpeedDialHtml(context: Context) {
         get() {
             val builder = StringBuilder(400)
 
-            if (!AppData.speeddial_show_header.get())
+            if (!AppPrefs.speeddial_show_header.get())
                 builder.append(".browserName{display:none}")
 
-            if (!AppData.speeddial_show_search.get())
+            if (!AppPrefs.speeddial_show_search.get())
                 builder.append("#searchBox{display:none}")
 
-            if (!AppData.speeddial_show_icon.get())
+            if (!AppPrefs.speeddial_show_icon.get())
                 builder.append(".box img{display:none;}")
 
             // portrait
-            val pColumn = AppData.speeddial_column.get()
+            val pColumn = AppPrefs.speeddial_column.get()
             builder.append("@media screen and (orientation:portrait){.linkBox{max-width:")
-                    .append(AppData.speeddial_column_width.get() * pColumn).append("px}")
+                .append(AppPrefs.speeddial_column_width.get() * pColumn).append("px}")
             // = (100 - marginSize * (column + 1) * 2 + 2 * marginSize) / column
             builder.append(".box{width:").append((100f - 2f * pColumn) / pColumn).append("%}")
             builder.append(".box:nth-child(n+").append(pColumn + 1).append("){order:1}}")
 
             // landscape
-            val lColumn = AppData.speeddial_column_landscape.get()
+            val lColumn = AppPrefs.speeddial_column_landscape.get()
             builder.append("@media screen and (orientation:landscape){.linkBox{max-width:")
-                    .append(AppData.speeddial_column_width.get() * lColumn).append("px}")
+                .append(AppPrefs.speeddial_column_width.get() * lColumn).append("px}")
             // = (100 - marginSize * (column + 1) * 2 + 2 * marginSize) / column
             builder.append(".box{width:").append((100f - 2f * lColumn) / lColumn).append("%}")
             builder.append(".box:nth-child(n+").append(lColumn + 1).append("){order:1}}")
 
-            val fontSize = AppData.font_size.speeddial_item.get()
+            val fontSize = AppPrefs.font_size.speeddial_item.get()
             if (fontSize >= 0) {
                 builder.append(".name{font-size:").append(getFontSize(fontSize)).append("}")
             }
 
-            if (AppData.speeddial_dark_theme.get()) {
+            if (AppPrefs.speeddial_dark_theme.get()) {
                 builder.append(DARK_THEME)
             }
 
-            when (AppData.speeddial_layout.get()) {
+            when (AppPrefs.speeddial_layout.get()) {
                 1 -> builder.append(SMALL_ICON)
             }
 

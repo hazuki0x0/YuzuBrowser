@@ -37,6 +37,7 @@ import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.provider.ProviderManager
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import javax.inject.Inject
 
 
@@ -68,9 +69,9 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         Logger.d(TAG, "onCreate()")
         browserState.isNeedLoad = false
         ErrorReportServer.initialize(this)
-        AppData.load(this, moshi, abpDatabase)
-        ErrorReportServer.setDetailedLog(AppData.detailed_log.get())
-        if (AppData.slow_rendering.get()) {
+        AppData.init(this, moshi, abpDatabase)
+        ErrorReportServer.setDetailedLog(AppPrefs.detailed_log.get())
+        if (AppPrefs.slow_rendering.get()) {
             WebView.enableSlowWholeDocumentDraw()
         }
         Logger.isDebug = BuildConfig.DEBUG

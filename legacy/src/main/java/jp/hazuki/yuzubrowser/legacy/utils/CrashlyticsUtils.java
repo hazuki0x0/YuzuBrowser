@@ -24,7 +24,7 @@ import com.crashlytics.android.Crashlytics;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public final class CrashlyticsUtils {
     private static Pattern VERSION_REGEX = Pattern.compile("Chrome/([.0-9]+)");
@@ -36,8 +36,8 @@ public final class CrashlyticsUtils {
     }
 
     public static void setWebViewMode() {
-        if (AppData.fast_back.get()) {
-            int size = AppData.fast_back_cache_size.get();
+        if (AppPrefs.fast_back.get()) {
+            int size = AppPrefs.fast_back_cache_size.get();
             if (size == 0) {
                 Crashlytics.setString(WEB_VIEW_MODE, "Infinite cache");
                 return;

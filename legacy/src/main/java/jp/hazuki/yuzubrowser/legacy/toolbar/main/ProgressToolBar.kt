@@ -21,17 +21,17 @@ import android.graphics.PorterDuff
 import android.view.View
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import kotlinx.android.synthetic.main.toolbar_progress.view.*
 
-class ProgressToolBar(context: Context, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_progress, R.layout.toolbar_progress, request_callback) {
+class ProgressToolBar(context: Context, request_callback: RequestCallback) : ToolbarBase(context, AppPrefs.toolbar_progress, R.layout.toolbar_progress, request_callback) {
 
     init {
 
-        val toolbarSizeY = context.convertDpToPx(AppData.toolbar_progress.size.get())
+        val toolbarSizeY = context.convertDpToPx(AppPrefs.toolbar_progress.size.get())
 
         ButtonToolbarController.settingButtonSizeHeight(progressBar, toolbarSizeY)
     }

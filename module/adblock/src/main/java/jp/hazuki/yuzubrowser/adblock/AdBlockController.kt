@@ -25,11 +25,11 @@ import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_BLACK
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_WHITE
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_WHITE_PAGE
 import jp.hazuki.yuzubrowser.adblock.filter.unified.getFilterDir
-import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDao
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlockManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.getNoCacheResponse
 import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.*
 import java.io.ByteArrayInputStream
 import java.io.IOException
@@ -54,7 +54,6 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
 
     fun update() {
         updating = true
-        val prefs = AdBlockPref.get(context.applicationContext)
         GlobalScope.launch(Dispatchers.IO) {
             val abpLoader = AbpLoader(context.getFilterDir(), abpDao.getAll())
             val black = async {
@@ -74,13 +73,13 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
                 FilterMatcherList(list)
             }
             var element: Deferred<ElementBlocker>? = null
-            if (prefs.isAbpUseElementHide) {
+            if (AppPrefs.isAbpUseElementHide.get()) {
                 element = async { ElementBlocker().apply { addAll(abpLoader.loadAllElementFilter()) } }
             }
             adBlocker = AdBlocker(black.await(), white.await(), whitePage.await())
             elementBlocker = element?.await()
 
-            isAbpIgnoreGenericElement = prefs.isAbpIgnoreGenericElement
+            isAbpIgnoreGenericElement = AppPrefs.isAbpIgnoreGenericElement.get()
             updating = false
         }
     }

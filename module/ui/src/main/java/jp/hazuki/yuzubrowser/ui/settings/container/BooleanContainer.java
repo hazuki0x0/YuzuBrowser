@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.core.settings
+package jp.hazuki.yuzubrowser.ui.settings.container;
 
-import android.content.Context
-import com.rejasupotaro.android.kvs.PrefsBuilder
-import org.jetbrains.anko.defaultSharedPreferences
+import android.content.SharedPreferences;
 
-class WebViewPrefsBuilder : PrefsBuilder<WebViewPrefs> {
-    override fun build(context: Context): WebViewPrefs {
-        return WebViewPrefs(context.defaultSharedPreferences)
+public class BooleanContainer extends BaseContainer<Boolean> {
+    public BooleanContainer(String name, Boolean def_value) {
+        super(name, def_value);
+    }
+
+    @Override
+    public void read(SharedPreferences shared_preference) {
+        mValue = shared_preference.getBoolean(mName, mDefValue);
+    }
+
+    @Override
+    public void write(SharedPreferences.Editor editor) {
+        editor.putBoolean(mName, mValue);
     }
 }
+

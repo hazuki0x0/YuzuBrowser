@@ -28,8 +28,8 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import jp.hazuki.yuzubrowser.browser.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.isUrl
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 
@@ -65,7 +65,7 @@ class HandleIntentActivity : FragmentActivity() {
         } else if (Intent.ACTION_WEB_SEARCH == action) {
             val query = intent.getStringExtra(SearchManager.QUERY)
             if (query != null) {
-                val url = WebUtils.makeSearchUrlFromQuery(query, AppData.search_url.get(), "%s")
+                val url = WebUtils.makeSearchUrlFromQuery(query, AppPrefs.search_url.get(), "%s")
                 if (!TextUtils.isEmpty(url)) {
                     startBrowser(url, packageName == intent.getStringExtra(Browser.EXTRA_APPLICATION_ID), false)
                     return
@@ -79,7 +79,7 @@ class HandleIntentActivity : FragmentActivity() {
                 } else {
                     var text = WebUtils.extractionUrl(query)
                     if (query == text) {
-                        text = query.makeUrlFromQuery(AppData.search_url.get(), "%s")
+                        text = query.makeUrlFromQuery(AppPrefs.search_url.get(), "%s")
                     }
                     startBrowser(text, false, false)
                 }

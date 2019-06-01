@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeImageButton
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 open class ButtonToolbarController(private val linearLayout: ViewGroup, private val controller: ActionController, private val iconManager: ActionIconManager, private val TOOLBAR_SIZE_Y: Int) {
     private val mButtonList: ArrayList<SwipeImageButton> = ArrayList(1)
@@ -37,7 +36,7 @@ open class ButtonToolbarController(private val linearLayout: ViewGroup, private 
         if (mButtonList.size == size) {
             for ((i, btn) in mButtonList.withIndex()) {
                 btn.setActionData(list[i], controller, iconManager)
-                btn.setSense(AppData.swipebtn_sensitivity.get())
+                btn.setSense(AppPrefs.swipebtn_sensitivity.get())
             }
         } else {
             linearLayout.removeAllViews()
@@ -48,7 +47,7 @@ open class ButtonToolbarController(private val linearLayout: ViewGroup, private 
                 val btn = inflateButtonView(inflater, linearLayout)
                 mButtonList.add(btn)
                 btn.setActionData(list[i], controller, iconManager)
-                btn.setSense(AppData.swipebtn_sensitivity.get())
+                btn.setSense(AppPrefs.swipebtn_sensitivity.get())
                 settingButtonSize(btn, TOOLBAR_SIZE_Y)
             }
         }

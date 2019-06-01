@@ -38,7 +38,7 @@ import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.utils.guessDownloadFileName
 import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.download
-import jp.hazuki.yuzubrowser.download.settings.DownloadPrefs
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class SaveWebArchiveDialog : DialogFragment() {
@@ -61,7 +61,7 @@ class SaveWebArchiveDialog : DialogFragment() {
 
         val file = arguments.getParcelable<DownloadFile>(ARG_FILE) ?: throw IllegalArgumentException()
 
-        root = Uri.parse(DownloadPrefs.get(activity).downloadFolder).toDocumentFile(activity)
+        root = Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(activity)
 
         val name = file.name ?: "index$EXT_HTML"
         filenameEditText.setText(name)
@@ -146,7 +146,7 @@ class SaveWebArchiveDialog : DialogFragment() {
 
 
         operator fun invoke(context: Context, url: String, webView: CustomWebView, webViewNo: Int): SaveWebArchiveDialog {
-            val name = guessDownloadFileName(Uri.parse(DownloadPrefs.get(context).downloadFolder).toDocumentFile(context),
+            val name = guessDownloadFileName(Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(context),
                     url, null, MIME_TYPE_HTML, null)
 
             return SaveWebArchiveDialog().apply {

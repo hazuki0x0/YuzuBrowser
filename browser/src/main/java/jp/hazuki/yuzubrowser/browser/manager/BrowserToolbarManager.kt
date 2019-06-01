@@ -30,7 +30,6 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.SubToolbar
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
@@ -47,6 +46,7 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_UN
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager.Companion.LOCATION_WEB
 import jp.hazuki.yuzubrowser.legacy.toolbar.main.*
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import kotlinx.android.extensions.LayoutContainer
@@ -54,7 +54,7 @@ import kotlinx.android.synthetic.main.browser_activity.*
 
 open class BrowserToolbarManager(context: Context, override val containerView: View, controller: ActionController, iconManager: ActionIconManager, requestCallback: RequestCallback) : ToolbarManager, LayoutContainer {
     override val tabBar = TabBar(context, controller, iconManager, requestCallback)
-    override val urlBar = if (AppData.toolbar_url_box.get()) WhiteUrlBar(context, controller, iconManager, requestCallback) else UrlBar(context, controller, iconManager, requestCallback)
+    override val urlBar = if (AppPrefs.toolbar_url_box.get()) WhiteUrlBar(context, controller, iconManager, requestCallback) else UrlBar(context, controller, iconManager, requestCallback)
     override val progressBar = ProgressToolBar(context, requestCallback)
     override val customBar = CustomToolbar(context, controller, iconManager, requestCallback)
     private var mIsWebToolbarCombined = false
@@ -160,15 +160,15 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
         customBar.onPreferenceReset()
 
         val params = topToolbar.layoutParams as AppBarLayout.LayoutParams
-        params.scrollFlags = if (AppData.snap_toolbar.get()) {
+        params.scrollFlags = if (AppPrefs.snap_toolbar.get()) {
             (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                     or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
                     or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP)
         } else {
             AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
         }
-        bottomOverlayToolbar.background.alpha = AppData.overlay_bottom_alpha.get()
-        bottomAlwaysOverlayToolbar.background.alpha = AppData.overlay_bottom_alpha.get()
+        bottomOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
+        bottomAlwaysOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
     }
 
     override fun onThemeChanged(themeData: ThemeData?) {
@@ -199,8 +199,8 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
             bottomToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray)
         }
 
-        bottomOverlayToolbar.background.alpha = AppData.overlay_bottom_alpha.get()
-        bottomAlwaysOverlayToolbar.background.alpha = AppData.overlay_bottom_alpha.get()
+        bottomOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
+        bottomAlwaysOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
 
         for (i in 0 until bottomToolbarAlwaysLayout.childCount) {
             (bottomOverlayToolbar.getChildAt(i) as? SubToolbar)?.run {
@@ -323,7 +323,7 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     override fun onWebViewTapUp() {
-        if (topToolbar.height == 0 && AppData.snap_toolbar.get()) {
+        if (topToolbar.height == 0 && AppPrefs.snap_toolbar.get()) {
             val trans = bottomOverlayLayout.translationY
             val animator: ObjectAnimator
             var duration: Int

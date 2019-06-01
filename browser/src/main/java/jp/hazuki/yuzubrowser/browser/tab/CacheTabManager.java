@@ -32,7 +32,6 @@ import jp.hazuki.yuzubrowser.browser.BrowserActivity;
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabCache;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabFaviconManager;
@@ -40,6 +39,7 @@ import jp.hazuki.yuzubrowser.legacy.tab.manager.TabIndexData;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabManager;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.TabStorage;
 import jp.hazuki.yuzubrowser.legacy.tab.manager.ThumbnailManager;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 import jp.hazuki.yuzubrowser.webview.WebViewFactory;
@@ -60,7 +60,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
 
     CacheTabManager(BrowserActivity activity, WebViewFactory factory, FaviconManager faviconManager) {
         mWebBrowser = activity;
-        mTabCache = new TabCache<>(AppData.tabs_cache_number.get(), this);
+        mTabCache = new TabCache<>(AppPrefs.tabs_cache_number.get(), this);
         mTabStorage = new TabStorage(activity, factory);
         this.faviconManager = faviconManager;
         mTabView = new ArrayList<>();
@@ -322,7 +322,7 @@ public class CacheTabManager implements TabManager, TabCache.OnCacheOverFlowList
     @Override
     public void onPreferenceReset() {
         synchronized (mTabCache) {
-            mTabCache.setSize(AppData.tabs_cache_number.get());
+            mTabCache.setSize(AppPrefs.tabs_cache_number.get());
         }
         onLayoutCreated();
     }

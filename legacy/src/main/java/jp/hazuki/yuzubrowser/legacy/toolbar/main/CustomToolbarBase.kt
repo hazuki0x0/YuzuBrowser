@@ -25,10 +25,10 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.ToolbarActionManager
-import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarContainer
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.swipebutton.SwipeImageButton
+import jp.hazuki.yuzubrowser.ui.settings.container.ToolbarContainer
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 open class CustomToolbarBase(context: Context, toolbarContainer: ToolbarContainer, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, toolbarContainer, R.layout.toolbar_custom, request_callback) {

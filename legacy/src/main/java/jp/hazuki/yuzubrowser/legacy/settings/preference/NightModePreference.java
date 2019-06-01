@@ -27,8 +27,8 @@ import androidx.preference.DialogPreference;
 import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.core.utility.utils.ColorFilterUtils;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.ui.preference.YuzuPreferenceDialog;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public class NightModePreference extends DialogPreference {
 
@@ -55,8 +55,8 @@ public class NightModePreference extends DialogPreference {
             brightness = v.findViewById(R.id.brightnessSeekBar);
             final View preview = v.findViewById(R.id.previewView);
 
-            temperature.setProgress(AppData.night_mode_color.get() - 3000);
-            brightness.setProgress(AppData.night_mode_bright.get());
+            temperature.setProgress(AppPrefs.night_mode_color.get() - 3000);
+            brightness.setProgress(AppPrefs.night_mode_bright.get());
 
 
             SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
@@ -82,8 +82,8 @@ public class NightModePreference extends DialogPreference {
             temperature.setOnSeekBarChangeListener(listener);
             brightness.setOnSeekBarChangeListener(listener);
 
-            int[] rgb = ColorFilterUtils.colorTemperatureToRGB(AppData.night_mode_color.get());
-            float bright = AppData.night_mode_bright.get() / 100f;
+            int[] rgb = ColorFilterUtils.colorTemperatureToRGB(AppPrefs.night_mode_color.get());
+            float bright = AppPrefs.night_mode_bright.get() / 100f;
             preview.setBackgroundColor(Color.argb(
                     0xff,
                     (int) (rgb[0] * bright + 0.5f),
@@ -96,9 +96,9 @@ public class NightModePreference extends DialogPreference {
         @Override
         public void onDialogClosed(boolean positiveResult) {
             if (positiveResult) {
-                AppData.night_mode_color.set(temperature.getProgress() + 3000);
-                AppData.night_mode_bright.set(brightness.getProgress());
-                AppData.commit(getContext(), AppData.night_mode_color, AppData.night_mode_bright);
+                AppPrefs.night_mode_color.set(temperature.getProgress() + 3000);
+                AppPrefs.night_mode_bright.set(brightness.getProgress());
+                AppPrefs.commit(getContext(), AppPrefs.night_mode_color, AppPrefs.night_mode_bright);
             }
         }
 

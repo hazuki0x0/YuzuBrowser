@@ -47,7 +47,7 @@ open class ActionManager {
     fun load(context: Context): Boolean {
         for (actions in actionFileList) {
             if (!actions.load(context)) {
-                Logger.e(TAG, "load failed")
+                Logger.e(TAG, "init failed")
                 return false
             }
         }

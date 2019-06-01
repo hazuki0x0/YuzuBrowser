@@ -20,14 +20,13 @@ import android.content.Context
 import android.view.View
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkSite
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
-import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkPref
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 
 class AddBookmarkSiteDialog : AddBookmarkDialog<BookmarkSite, String> {
-    constructor(context: Context, bookmarkPref: BookmarkPref, manager: BookmarkManager, item: BookmarkSite) : super(context, bookmarkPref, manager, item, item.title, item.url)
+    constructor(context: Context, manager: BookmarkManager, item: BookmarkSite) : super(context, manager, item, item.title, item.url)
 
-    constructor(context: Context, title: String, url: String) : super(context, null, null, null, title, url)
+    constructor(context: Context, title: String, url: String) : super(context, null, null, title, url)
 
     override fun initView(view: View, title: String?, url: String) {
         super.initView(view, title, url)

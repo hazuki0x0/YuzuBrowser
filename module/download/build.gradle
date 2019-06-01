@@ -71,9 +71,6 @@ dependencies {
     implementation Libs.okhttp
     implementation Libs.header_decor
 
-    implementation Libs.kvs_schema
-    kapt Libs.kvs_schema_compiler
-
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
     kapt Libs.dagger2_compiler

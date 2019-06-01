@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public class FinishAlertDialog extends CustomDialogPreference {
     private final boolean mShowMessage;
@@ -132,7 +132,7 @@ public class FinishAlertDialog extends CustomDialogPreference {
             if (!showMessage)
                 textView.setVisibility(View.GONE);
 
-            final int def = AppData.finish_alert_default.get();
+            final int def = AppPrefs.finish_alert_default.get();
             cacheCheckBox.setChecked((def & 0x01) != 0);
             cookieCheckBox.setChecked((def & 0x02) != 0);
             databaseCheckBox.setChecked((def & 0x04) != 0);
@@ -143,7 +143,7 @@ public class FinishAlertDialog extends CustomDialogPreference {
             geoCheckBox.setChecked((def & 0x80) != 0);
             faviconCheckBox.setChecked((def & 0x100) != 0);
 
-            if (!AppData.save_last_tabs.get())
+            if (!AppPrefs.save_last_tabs.get())
                 closeallCheckBox.setVisibility(View.GONE);
             //else
             //	closeallCheckBox.setChecked((def & 0x1000) != 0);
@@ -190,8 +190,8 @@ public class FinishAlertDialog extends CustomDialogPreference {
                         if (closeallCheckBox.isChecked())
                             new_settings |= 0x1000;
 
-                        AppData.finish_alert_default.set(new_settings);
-                        AppData.commit(getContext(), AppData.finish_alert_default);
+                        AppPrefs.finish_alert_default.set(new_settings);
+                        AppPrefs.commit(getContext(), AppPrefs.finish_alert_default);
 
                         if (callBack != null)
                             callBack.onFinishPositiveButtonClicked(clearTabNo, new_settings);

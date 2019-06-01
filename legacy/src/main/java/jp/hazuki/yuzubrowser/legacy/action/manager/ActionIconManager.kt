@@ -26,9 +26,9 @@ import jp.hazuki.yuzubrowser.legacy.action.item.CustomSingleAction
 import jp.hazuki.yuzubrowser.legacy.action.item.WebScrollSingleAction
 import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivitySingleAction
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserInfo
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.graphics.SimpleLayerDrawable
 import jp.hazuki.yuzubrowser.legacy.utils.graphics.TabListActionTextDrawable
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class ActionIconManager(val info: BrowserInfo) {
 
@@ -188,7 +188,7 @@ class ActionIconManager(val info: BrowserInfo) {
                     info.resourcesByInfo.getDrawable(R.drawable.ic_gesture_white_disable_24px, info.themeByInfo)
             }
             SingleAction.TOGGLE_FLICK -> {
-                return if (AppData.flick_enable.get())
+                return if (AppPrefs.flick_enable.get())
                     info.resourcesByInfo.getDrawable(R.drawable.ic_gesture_white_24dp, info.themeByInfo)
                 else
                     info.resourcesByInfo.getDrawable(R.drawable.ic_gesture_white_disable_24px, info.themeByInfo)

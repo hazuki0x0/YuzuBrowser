@@ -34,9 +34,9 @@ import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.ui.BrowserApplication;
 import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
 
@@ -68,7 +68,7 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AndroidSupportInjection.inject(this);
-            mSelected = AppData.clear_data_default.get();
+            mSelected = AppPrefs.clear_data_default.get();
 
             final Context context = requireContext();
 
@@ -115,8 +115,8 @@ public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
                     runAction(ids[i]);
             }
 
-            AppData.clear_data_default.set(mSelected);
-            AppData.commit(requireContext().getApplicationContext(), AppData.clear_data_default);
+            AppPrefs.clear_data_default.set(mSelected);
+            AppPrefs.commit(requireContext().getApplicationContext(), AppPrefs.clear_data_default);
         }
 
         private void runAction(int i) {

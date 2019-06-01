@@ -33,12 +33,12 @@ import dagger.android.DaggerContentProvider
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.ErrorReportServer
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
 import jp.hazuki.yuzubrowser.search.model.suggest.ISuggest
 import jp.hazuki.yuzubrowser.search.model.suggest.SuggestBing
 import jp.hazuki.yuzubrowser.search.model.suggest.SuggestDuckDuckGo
 import jp.hazuki.yuzubrowser.search.model.suggest.SuggestGoogle
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -60,7 +60,7 @@ class SuggestProvider : DaggerContentProvider() {
         super.onCreate()
         val context = context ?: throw IllegalStateException()
         mOpenHelper = DatabaseHelper(context)
-        mSuggestType = AppData.search_suggest_engine.get()
+        mSuggestType = AppPrefs.search_suggest_engine.get()
         mSuggestEngine = getSuggestEngine(mSuggestType)
         return true
     }
@@ -145,8 +145,8 @@ class SuggestProvider : DaggerContentProvider() {
 
     @Throws(UnknownHostException::class)
     private fun getSuggests(query: String): MutableList<SearchSuggestModel.SuggestModel>? {
-        if (AppData.search_suggest_engine.get() != mSuggestType) {
-            mSuggestType = AppData.search_suggest_engine.get()
+        if (AppPrefs.search_suggest_engine.get() != mSuggestType) {
+            mSuggestType = AppPrefs.search_suggest_engine.get()
             mSuggestEngine = getSuggestEngine(mSuggestType)
         }
 

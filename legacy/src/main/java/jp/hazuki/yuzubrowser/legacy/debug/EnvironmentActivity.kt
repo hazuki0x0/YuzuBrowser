@@ -23,8 +23,8 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.resolveDirectoryPath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.storage.getStorageList
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.android.synthetic.main.environment_activity.*
 import java.io.IOException
 
@@ -57,7 +57,7 @@ class EnvironmentActivity : ThemeActivity() {
             estimatedExternalFilesDirTextView.append("\n")
         }
 
-        val dlUri = Uri.parse(AppData.download_folder.get())
+        val dlUri = Uri.parse(AppPrefs.download_folder.get())
         downloadUriTextView.text = dlUri.toString()
 
         downloadPathTextView.text = dlUri.resolveDirectoryPath(this)

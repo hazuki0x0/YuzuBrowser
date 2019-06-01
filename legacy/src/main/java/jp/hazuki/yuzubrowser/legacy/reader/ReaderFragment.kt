@@ -30,9 +30,9 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -53,9 +53,9 @@ class ReaderFragment : androidx.fragment.app.Fragment() {
         titleTextView = view.findViewById(R.id.titleTextView)
         bodyTextView = view.findViewById(R.id.bodyTextView)
 
-        bodyTextView.textSize = AppData.reader_text_size.get().toFloat()
+        bodyTextView.textSize = AppPrefs.reader_text_size.get().toFloat()
 
-        val fontPath = AppData.reader_text_font.get()
+        val fontPath = AppPrefs.reader_text_font.get()
         if (!TextUtils.isEmpty(fontPath)) {
             val font = File(fontPath)
 

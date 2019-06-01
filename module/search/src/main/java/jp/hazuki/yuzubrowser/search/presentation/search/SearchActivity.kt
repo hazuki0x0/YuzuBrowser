@@ -31,20 +31,15 @@ import jp.hazuki.yuzubrowser.search.R
 import jp.hazuki.yuzubrowser.search.databinding.SearchActivityBinding
 import jp.hazuki.yuzubrowser.search.databinding.SearchSeachBarBinding
 import jp.hazuki.yuzubrowser.search.presentation.widget.SearchButton
-import jp.hazuki.yuzubrowser.search.repository.SearchPrefsProvider
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.extensions.get
-import jp.hazuki.yuzubrowser.ui.settings.UiPrefs
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import javax.inject.Inject
 
 class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSuggestAdapter.OnSearchSelectedListener, SuggestDeleteDialog.OnDeleteQuery {
 
-    @Inject
-    internal lateinit var uiPrefs: UiPrefs
-    @Inject
-    internal lateinit var prefs: SearchPrefsProvider
     @Inject
     internal lateinit var factory: SearchViewModel.Factory
     @Inject
@@ -66,7 +61,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
         barBinding.lifecycleOwner = this
 
         val intent = intent ?: throw IllegalStateException("Intent is null")
-        if (intent.getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, uiPrefs.fullscreen))
+        if (intent.getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, AppPrefs.fullscreen.get()))
             window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val bottomBoxMode = intent.getBooleanExtra(EXTRA_REVERSE, false)
@@ -87,7 +82,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
             it.providerSelection.set(it.suggestProviders.getSelectedIndex())
         }
 
-        if (!prefs.get().searchUrlShowIcon) {
+        if (!AppPrefs.searchUrlShowIcon.get()) {
             barBinding.searchUrlSpinner.visibility = View.GONE
         }
 
@@ -115,7 +110,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
             }
         }
 
-        searchButton.setSense(uiPrefs.swipeButtonSensitivity)
+        searchButton.setSense(AppPrefs.swipebtn_sensitivity.get())
 
         editText.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(mode: ActionMode, menu: Menu) = true
@@ -183,8 +178,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
 
     override fun onStart() {
         super.onStart()
-        val pref = prefs.get()
-        if (pref.searchUrlShowIcon && pref.searchUrlSaveSwitching)
+        if (AppPrefs.searchUrlShowIcon.get() && AppPrefs.searchUrlSaveSwitching.get())
             viewModel.providerSelection.addOnPropertyChangedCallback(callback)
     }
 
@@ -275,7 +269,8 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
 
     private val callback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            prefs.get().searchUrl = viewModel.suggestProviders[viewModel.providerSelection.get()].url
+            AppPrefs.search_url.set(viewModel.suggestProviders[viewModel.providerSelection.get()].url)
+            AppPrefs.commit(this@SearchActivity, AppPrefs.search_url)
             viewModel.saveProvider()
         }
     }

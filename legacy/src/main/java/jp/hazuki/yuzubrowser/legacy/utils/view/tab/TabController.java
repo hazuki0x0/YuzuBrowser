@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
 import jp.hazuki.yuzubrowser.legacy.utils.graphics.DividerDrawable;
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout.OnTabClickListener;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 
 public abstract class TabController {
@@ -190,7 +190,7 @@ public abstract class TabController {
 
     public void applyTheme(LinearLayout layout, ThemeData themedata) {
         DividerDrawable divider = (DividerDrawable) layout.getDividerDrawable();
-        if (isShowDivider(AppData.show_tab_divider.get(), themedata == null || themedata.showTabDivider)) {
+        if (isShowDivider(AppPrefs.show_tab_divider.get(), themedata == null || themedata.showTabDivider)) {
             if (divider == null) {
                 divider = newDividerInstance();
                 layout.setDividerDrawable(divider);

@@ -17,8 +17,8 @@
 package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
 import android.content.res.Configuration
-import jp.hazuki.yuzubrowser.legacy.settings.container.ToolbarVisibilityContainer
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
+import jp.hazuki.yuzubrowser.ui.settings.container.ToolbarVisibilityContainer
 
 interface RequestCallback {
     fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration? = null): Boolean

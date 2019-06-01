@@ -119,8 +119,6 @@ dependencies {
     implementation Libs.kotlin_anko_commons
     implementation Libs.kotlin_anko_sql
 
-    implementation Libs.kvs_schema
-
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
     kapt Libs.dagger2_compiler

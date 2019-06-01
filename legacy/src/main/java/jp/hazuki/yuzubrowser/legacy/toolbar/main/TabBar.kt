@@ -26,19 +26,19 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayManager
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.ButtonToolbarController
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.FullTabLayout
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.ScrollableTabLayout
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import kotlinx.android.synthetic.main.toolbar_tab.view.*
 
-class TabBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, AppData.toolbar_tab, R.layout.toolbar_tab, request_callback) {
-    private val tabSizeX = context.convertDpToPx(AppData.tab_size_x.get())
-    private val tabSizeY = context.convertDpToPx(AppData.toolbar_tab.size.get())
-    private val tabFontSize = AppData.tab_font_size.get()
+class TabBar(context: Context, controller: ActionController, iconManager: ActionIconManager, request_callback: RequestCallback) : ToolbarBase(context, AppPrefs.toolbar_tab, R.layout.toolbar_tab, request_callback) {
+    private val tabSizeX = context.convertDpToPx(AppPrefs.tab_size_x.get())
+    private val tabSizeY = context.convertDpToPx(AppPrefs.toolbar_tab.size.get())
+    private val tabFontSize = AppPrefs.tab_font_size.get()
     private val mTabLayout: TabLayout
     private val mLeftButtonController: ButtonToolbarController
     private val mRightButtonController: ButtonToolbarController
@@ -47,7 +47,7 @@ class TabBar(context: Context, controller: ActionController, iconManager: Action
         mLeftButtonController = ButtonToolbarController(leftLinearLayout, controller, iconManager, tabSizeY)
         mRightButtonController = ButtonToolbarController(rightLinearLayout, controller, iconManager, tabSizeY)
 
-        mTabLayout = when (AppData.tab_type.get()) {
+        mTabLayout = when (AppPrefs.tab_type.get()) {
             TAB_TYPE_SCROLLABLE -> {
                 ScrollableTabLayout(context).also {
                     tabLayoutBase.addView(it)
@@ -102,7 +102,7 @@ class TabBar(context: Context, controller: ActionController, iconManager: Action
         addButtons()
 
         mTabLayout.onPreferenceReset()
-        mTabLayout.setSense(AppData.tab_action_sensitivity.get())
+        mTabLayout.setSense(AppPrefs.tab_action_sensitivity.get())
     }
 
     fun removeTab(no: Int) {

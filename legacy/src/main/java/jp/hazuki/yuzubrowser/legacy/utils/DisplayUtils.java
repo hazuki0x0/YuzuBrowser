@@ -18,7 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.utils;
 
 import android.view.View;
 
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 
 public class DisplayUtils {
@@ -27,7 +27,7 @@ public class DisplayUtils {
     }
 
     public static int getFullScreenVisibility() {
-        switch (AppData.fullscreen_hide_mode.get()) {
+        switch (AppPrefs.fullscreen_hide_mode.get()) {
             case 0:
             default:
                 return View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -42,6 +42,6 @@ public class DisplayUtils {
     }
 
     public static boolean isNeedFullScreenFlag() {
-        return AppData.fullscreen_hide_mode.get() != 1;
+        return AppPrefs.fullscreen_hide_mode.get() != 1;
     }
 }

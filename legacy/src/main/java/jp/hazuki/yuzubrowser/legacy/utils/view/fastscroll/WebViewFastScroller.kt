@@ -39,8 +39,8 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import com.google.android.material.appbar.AppBarLayout
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.legacy.utils.ThemeUtils
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
@@ -247,7 +247,7 @@ class WebViewFastScroller @JvmOverloads constructor(context: Context, attrs: Att
 
                         val coordinator = mCoordinatorLayout
                         val appBar = mAppBarLayout
-                        if (!AppData.touch_scrollbar_fixed_toolbar.get() && coordinator != null && appBar != null) {
+                        if (!AppPrefs.touch_scrollbar_fixed_toolbar.get() && coordinator != null && appBar != null) {
                             val params = appBar.layoutParams as androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
                             val behavior = params.behavior as AppBarLayout.Behavior?
                             behavior?.onNestedPreScroll(coordinator, appBar,

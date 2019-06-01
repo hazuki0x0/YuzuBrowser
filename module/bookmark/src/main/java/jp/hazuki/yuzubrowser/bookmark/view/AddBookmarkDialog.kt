@@ -32,14 +32,13 @@ import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkItem
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
-import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkPref
 import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
 import jp.hazuki.yuzubrowser.ui.extensions.toPunyCodeUrl
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.SpinnerButton
 
 abstract class AddBookmarkDialog<S : BookmarkItem, T>(
     protected val context: Context,
-    bookmarkPref: BookmarkPref?,
     manager: BookmarkManager?,
     protected val mItem: S?,
     title: String?,
@@ -52,7 +51,6 @@ abstract class AddBookmarkDialog<S : BookmarkItem, T>(
     protected val folderButton: SpinnerButton
     protected val addToTopCheckBox: CheckBox
     protected var mOnClickListener: DialogInterface.OnClickListener? = null
-    private val bookmarkPref = bookmarkPref ?: BookmarkPref.get(context)
     protected val mManager: BookmarkManager = manager ?: BookmarkManager.getInstance(context)
     protected lateinit var mParent: BookmarkFolder
 
@@ -98,8 +96,8 @@ abstract class AddBookmarkDialog<S : BookmarkItem, T>(
     }
 
     private fun getRootPosition(): BookmarkFolder {
-        if (bookmarkPref.saveBookmarkFolder) {
-            val id = bookmarkPref.saveBookmarkFolderId
+        if (AppPrefs.saveBookmarkFolder.get()) {
+            val id = AppPrefs.saveBookmarkFolderId.get()
             val item = mManager[id]
             if (item is BookmarkFolder) {
                 return item

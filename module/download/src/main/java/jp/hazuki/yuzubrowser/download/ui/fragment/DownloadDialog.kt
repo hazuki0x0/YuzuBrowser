@@ -37,7 +37,7 @@ import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.*
 import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.download
-import jp.hazuki.yuzubrowser.download.settings.DownloadPrefs
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -70,7 +70,7 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
                 val name: String
                 if (request.resolver != null) {
                     val resolver = request.resolver
-                    name = resolver.resolveName(Uri.parse(DownloadPrefs.get(activity).downloadFolder).toDocumentFile(activity))
+                    name = resolver.resolveName(Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(activity))
 
                     if (resolver.mimeType.isNullOrEmpty()) {
                         val newType = getMimeType(name)
@@ -93,7 +93,7 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
             view.findViewById<View>(R.id.loading).visibility = View.GONE
         }
 
-        root = Uri.parse(DownloadPrefs.get(activity).downloadFolder).toDocumentFile(activity)
+        root = Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(activity)
 
         folderButton.text = if (root.name.isNullOrBlank())
             getText(R.string.pref_download_folder) else root.name

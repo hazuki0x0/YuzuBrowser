@@ -23,7 +23,7 @@ import android.net.Uri
 import jp.hazuki.yuzubrowser.download.compatible.ConvertDownloadInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
-import jp.hazuki.yuzubrowser.download.settings.DownloadPrefs
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import org.jetbrains.anko.db.*
 
 class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpenHelper(context, NAME, null, VERSION) {
@@ -135,7 +135,7 @@ class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpen
                     columns[COL_MIME_TYPE] as String,
                     Uri.parse(
                             (columns[COL_ROOT] as String?).let {
-                                if (it.isNullOrEmpty()) DownloadPrefs.get(context).downloadFolder else it
+                                if (it.isNullOrEmpty()) AppPrefs.download_folder.get() else it
                             }
                     ).toDocumentFile(context),
                     columns[COL_NAME] as String,

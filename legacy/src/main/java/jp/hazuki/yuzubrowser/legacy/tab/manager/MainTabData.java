@@ -31,7 +31,7 @@ import androidx.core.content.res.ResourcesCompat;
 import jp.hazuki.yuzubrowser.favicon.FaviconManager;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingResetAction;
-import jp.hazuki.yuzubrowser.legacy.settings.data.AppData;
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 import jp.hazuki.yuzubrowser.webview.CustomWebView;
 
@@ -60,7 +60,7 @@ public class MainTabData extends TabData {
         startDocument = true;
         iconReceived = false;
         alertMode = ALERT_ALLOWED;
-        if (AppData.toolbar_show_favicon.get()) {
+        if (AppPrefs.toolbar_show_favicon.get()) {
             if (url.startsWith("yuzu:")) {
                 removeIcon();
             } else {
@@ -78,10 +78,10 @@ public class MainTabData extends TabData {
         if (bgTab) {
             bgTab = false;
 //TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.
-//            if (AppData.pause_web_tab_change.get())
+//            if (AppPrefs.pause_web_tab_change.get())
 //                mWebView.onPause();
         }
-        if (AppData.toolbar_show_favicon.get() && !url.startsWith("yuzu:") && !iconReceived) {
+        if (AppPrefs.toolbar_show_favicon.get() && !url.startsWith("yuzu:") && !iconReceived) {
             setIcon(context.getDrawable(R.drawable.ic_page_white_24px));
         }
     }
@@ -97,7 +97,7 @@ public class MainTabData extends TabData {
             loadingIcon.stop();
         }
         iconReceived = true;
-        if (AppData.toolbar_show_favicon.get()) {
+        if (AppPrefs.toolbar_show_favicon.get()) {
             setIcon(new BitmapDrawable(context.getResources(), bitmap));
         }
     }
@@ -110,7 +110,7 @@ public class MainTabData extends TabData {
         else
             setText(url);
 
-        if (originalUrl != null && AppData.toolbar_show_favicon.get()) {
+        if (originalUrl != null && AppPrefs.toolbar_show_favicon.get()) {
             if (originalUrl.startsWith("yuzu:")) {
                 removeIcon();
             } else {
@@ -240,7 +240,7 @@ public class MainTabData extends TabData {
 
     public boolean isEnableCookie() {
         if (cookieMode == COOKIE_UNDEFINED) {
-            return !AppData.private_mode.get() && AppData.accept_cookie.get();
+            return !AppPrefs.private_mode.get() && AppPrefs.accept_cookie.get();
         } else {
             return cookieMode == COOKIE_ENABLE;
         }

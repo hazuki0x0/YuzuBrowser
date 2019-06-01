@@ -35,11 +35,11 @@ import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryModel
-import jp.hazuki.yuzubrowser.history.repository.HistoryPref
 import jp.hazuki.yuzubrowser.historyModel.R
 import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import jp.hazuki.yuzubrowser.ui.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import kotlinx.android.synthetic.main.fragment_history.*
@@ -59,8 +59,6 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
 
     private var actionMode: ActionMode? = null
 
-    private lateinit var prefs: HistoryPref
-
     @Inject
     lateinit var faviconManager: FaviconManager
 
@@ -72,8 +70,6 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
-
-        prefs = HistoryPref.get(activity)
 
         pickMode = arguments.getBoolean(PICK_MODE)
 
@@ -89,7 +85,7 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
         touchScrollBar.addScrollListener(listener)
 
         manager = BrowserHistoryManager.getInstance(activity)
-        adapter = BrowserHistoryAdapter(activity, prefs, manager, faviconManager, pickMode, this)
+        adapter = BrowserHistoryAdapter(activity, manager, faviconManager, pickMode, this)
         val decoration = StickyHeaderDecoration(adapter)
         adapter.setDecoration(decoration)
         recyclerView.addItemDecoration(decoration)
@@ -115,7 +111,7 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
         if (adapter.isMultiSelectMode) {
             adapter.toggle(position)
         } else {
-            sendUrl(adapter.getItem(position), prefs.newtabHistory)
+            sendUrl(adapter.getItem(position), AppPrefs.newtabHistory.get())
         }
     }
 
