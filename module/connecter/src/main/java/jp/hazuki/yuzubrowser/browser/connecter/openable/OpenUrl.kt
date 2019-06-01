@@ -24,7 +24,7 @@ class OpenUrl(private val url: String, override val target: Int) : BrowserOpenab
         get() = 1
 
     override fun get(index: Int): String {
-        if (index != 0) throw IllegalArgumentException()
+        if (index != 0) throw IndexOutOfBoundsException("Index: $index, Size: $size")
         return url
     }
 }
