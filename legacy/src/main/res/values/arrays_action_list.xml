@@ -109,7 +109,7 @@
         <item>@string/action_open_in_another</item>
         <item>@string/action_intent</item>
         <item>@string/action_toggle_fullscreen</item>
-        <item>@string/action_open_menu</item>
+        <item>@string/action_open_options_menu</item>
         <item>@string/action_show_custom_menu</item>
         <item>@string/action_finish</item>
         <item>@string/action_minimize</item>
