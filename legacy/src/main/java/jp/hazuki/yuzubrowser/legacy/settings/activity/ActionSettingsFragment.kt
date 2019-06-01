@@ -58,7 +58,7 @@ class ActionSettingsFragment : YuzuPreferenceFragment() {
         replaceFragment = null
     }
 
-    private class BookmarkPreferenceScreen : YuzuPreferenceFragment() {
+    class BookmarkPreferenceScreen : YuzuPreferenceFragment() {
 
         override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_action_settings, "ps_bookmark")
