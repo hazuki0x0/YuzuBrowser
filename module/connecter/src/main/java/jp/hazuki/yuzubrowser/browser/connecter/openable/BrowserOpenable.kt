@@ -27,5 +27,5 @@ interface BrowserOpenable : Parcelable {
 }
 
 inline fun BrowserOpenable.forEach(action: (String) -> Unit) {
-    for (i in 0 until target) action(this[i])
+    for (i in 0 until size) action(this[i])
 }

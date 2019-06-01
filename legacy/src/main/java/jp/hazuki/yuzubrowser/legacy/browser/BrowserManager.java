@@ -23,7 +23,6 @@ import android.webkit.WebStorage;
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils;
 
 public class BrowserManager {
-    public static final String EXTRA_OPENABLE = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_OPENABLE";
     //same as pref_newtab_values
     public static final int LOAD_URL_TAB_CURRENT = 0;
     public static final int LOAD_URL_TAB_NEW = 1;

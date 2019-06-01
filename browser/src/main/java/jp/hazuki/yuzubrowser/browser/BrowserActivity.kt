@@ -98,10 +98,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
-import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
-import jp.hazuki.yuzubrowser.ui.BrowserApplication
-import jp.hazuki.yuzubrowser.ui.BrowserState
-import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_RESTART
+import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.extensions.createIntentFilter
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.utils.makeUrl
@@ -499,7 +496,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
             BrowserController.REQUEST_BOOKMARK, BrowserController.REQUEST_HISTORY -> {
                 if (resultCode != RESULT_OK || data == null) return
-                val openable = data.getParcelableExtra<BrowserOpenable>(BrowserManager.EXTRA_OPENABLE) ?: return
+                val openable = data.getParcelableExtra<BrowserOpenable>(INTENT_EXTRA_OPENABLE)
+                    ?: return
                 openable.forEach { loadUrl(it, openable.target) }
             }
             BrowserController.REQUEST_SETTING -> {
