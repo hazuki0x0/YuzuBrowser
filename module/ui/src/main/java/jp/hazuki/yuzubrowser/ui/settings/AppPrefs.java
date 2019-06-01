@@ -215,6 +215,13 @@ public class AppPrefs {
         return true;
     }
 
+    public static boolean commit(Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+        for (Containable pref : getPreferenceList()) {
+            pref.write(editor);
+        }
+        return editor.commit();
+    }
 
     public static boolean commit(Context context, Containable... prefs) {
         SharedPreferences.Editor editor = getPreference(context).edit();
