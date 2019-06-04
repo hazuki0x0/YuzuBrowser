@@ -115,9 +115,14 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     }
 
     private suspend fun updateHttp(entity: AbpEntity): Boolean {
-        val request = Request.Builder()
+        val request = try {
+            Request.Builder()
                 .url(entity.url)
                 .get()
+        } catch (e: IllegalArgumentException) {
+            return false
+        }
+
         entity.lastModified?.let {
             val dir = getFilterDir()
 
