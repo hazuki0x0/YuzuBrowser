@@ -22,6 +22,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
 import jp.hazuki.yuzubrowser.search.model.provider.SearchUrl
@@ -41,7 +42,8 @@ fun RecyclerView.setViewModels(suggestModels: List<SearchSuggestModel>?) {
             addAll(suggestModels)
         }
         adapter.notifyDataSetChanged()
-        if (adapter.itemCount > 0) {
+        val layoutManager = layoutManager as LinearLayoutManager
+        if (layoutManager.reverseLayout && adapter.itemCount > 0) {
             scrollToPosition(0)
         }
     }
