@@ -18,7 +18,8 @@ package jp.hazuki.yuzubrowser.ui.theme
 
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
-import okio.Okio
+import okio.buffer
+import okio.source
 import java.io.File
 import java.io.IOException
 
@@ -51,7 +52,7 @@ private constructor(val version: String, val name: String, val id: String) {
         fun decodeManifest(manifestFile: File): ThemeManifest? {
             if (manifestFile.exists() && manifestFile.isFile) {
                 try {
-                    JsonReader.of(Okio.buffer(Okio.source(manifestFile))).use { return decode(it) }
+                    JsonReader.of(manifestFile.source().buffer()).use { return decode(it) }
                 } catch (e: IOException) {
                     e.printStackTrace()
                     throw IllegalManifestException("unknown error", 0)
