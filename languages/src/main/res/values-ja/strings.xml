@@ -134,7 +134,7 @@
     <string name="start_sort">並べ替えするよ\u266a</string>
     <string name="end_sort">並べ替えできたよ！</string>
     <string name="edit_bookmark">ブックマークの編集</string>
-    <string name="move_bookmark">フォルダを移動 \u2026</string>
+    <string name="move_bookmark">フォルダを移動</string>
     <string name="proxy_enable">Proxyを有効にする</string>
     <string name="proxy_mes">Proxyアドレス</string>
     <string name="proxy_edittext_hint">127.0.0.1:8000</string>

@@ -135,7 +135,7 @@
     <string name="start_sort">来排序吧♪</string>
     <string name="end_sort">排序完成！</string>
     <string name="edit_bookmark">编辑书签</string>
-    <string name="move_bookmark">移动至...</string>
+    <string name="move_bookmark">移动至…</string>
     <string name="proxy_enable">启用代理</string>
     <string name="proxy_mes">代理地址</string>
     <string name="proxy_edittext_hint">127.0.0.1:8000</string>
