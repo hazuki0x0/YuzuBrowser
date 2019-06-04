@@ -67,6 +67,8 @@ dependencies {
     implementation AndroidX.fix_preference
     implementation AndroidX.room
 
+    implementation Libs.okhttp
+    implementation Libs.okio
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 

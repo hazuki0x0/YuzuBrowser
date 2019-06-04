@@ -47,7 +47,6 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
-import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.download
@@ -93,6 +92,7 @@ import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.utils.getImage
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.CustomWebViewClient
@@ -440,7 +440,8 @@ class WebClient(
                         val userAgent = data.mWebView.getUserAgent()
                         thread {
                             speedDialManager.updateAsync(data.originalUrl,
-                                    HttpUtils.getImage(iconUrl, userAgent, url, CookieManager.getInstance().getCookie(url)))
+                                controller.okHttpClient
+                                    .getImage(iconUrl, userAgent, url, CookieManager.getInstance().getCookie(url)))
                         }
                     }
                 }

@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
@@ -35,12 +36,17 @@ import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import java.io.File
+import javax.inject.Inject
 
-class ReaderFragment : androidx.fragment.app.Fragment() {
+class ReaderFragment : DaggerFragment() {
 
     private lateinit var titleTextView: TextView
     private lateinit var bodyTextView: TextView
+
+    @Inject
+    internal lateinit var okHttp: OkHttpClient
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_reader, container, false)
@@ -94,7 +100,9 @@ class ReaderFragment : androidx.fragment.app.Fragment() {
         }
 
         ui {
-            val data = withContext(Dispatchers.Default) { decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA)) }
+            val data = withContext(Dispatchers.Default) {
+                okHttp.decodeToReaderData(activity.applicationContext, url, arguments.getString(ARG_UA))
+            }
             if (isAdded) {
                 if (isResumed) {
                     dialog.dismiss()

@@ -36,7 +36,6 @@ import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.HttpUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
@@ -84,6 +83,7 @@ import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
+import jp.hazuki.yuzubrowser.ui.utils.getImage
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
@@ -1089,7 +1089,10 @@ class ActionExecutor(
             faviconManager[tab.originalUrl]
         } else {
             val userAgent = tab.mWebView.getUserAgent()
-            withContext(Dispatchers.Default) { HttpUtils.getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url)) }
+            withContext(Dispatchers.Default) {
+                controller.okHttpClient
+                    .getImage(iconUrl, userAgent, tab.url, CookieManager.getInstance().getCookie(tab.url))
+            }
                 ?: faviconManager[tab.originalUrl]
         }
 

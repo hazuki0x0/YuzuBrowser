@@ -112,6 +112,7 @@ import jp.hazuki.yuzubrowser.webview.WebViewType
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 import kotlinx.android.synthetic.main.browser_activity.*
+import okhttp3.OkHttpClient
 import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
@@ -211,6 +212,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     internal lateinit var abpDatabase: AbpDatabase
     @Inject
     internal lateinit var faviconManager: FaviconManager
+    @Inject
+    internal lateinit var okHttp: OkHttpClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1614,6 +1617,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override val printManager: PrintManager
         get() = originalContext.getSystemService(Context.PRINT_SERVICE) as PrintManager
+
+    override val okHttpClient: OkHttpClient
+        get() = okHttp
 
     //** Workaround for M */
     override fun getAssets(): AssetManager {

@@ -36,6 +36,7 @@ import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.webview.CustomWebView
+import okhttp3.OkHttpClient
 
 interface BrowserController : BrowserInfo {
     fun getTab(target: Int): MainTabData = getTabOrNull(target) ?: throw IndexOutOfBoundsException("$target not found")
@@ -97,6 +98,7 @@ interface BrowserController : BrowserInfo {
     val actionNameArray: ActionNameArray
     val webRtcRequest: WebRtcRequest
     val printManager: PrintManager
+    val okHttpClient: OkHttpClient
 
     var requestedOrientationByCtrl: Int
     var defaultRenderingMode: Int
