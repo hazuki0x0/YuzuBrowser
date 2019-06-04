@@ -30,7 +30,6 @@ import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
-import java.util.*
 
 
 fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: String): Intent {
@@ -80,7 +79,7 @@ fun Context.registerDownloadNotification() {
 
         notify.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
-        manager.createNotificationChannels(Arrays.asList(service, notify))
+        manager.createNotificationChannels(listOf(service, notify))
     }
 }
 

@@ -22,9 +22,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
+import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.DaggerIntentService
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
+import jp.hazuki.yuzubrowser.adblock.NOTIFICATION_CHANNEL_ADBLOCK_FILTER_UPDATE
+import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.filter.abp.*
 import jp.hazuki.yuzubrowser.adblock.filter.unified.UnifiedFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
@@ -52,6 +55,14 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     internal lateinit var abpDatabase: AbpDatabase
 
     override fun onHandleIntent(intent: Intent?) {
+        val notify = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ADBLOCK_FILTER_UPDATE)
+            .setContentTitle(getText(R.string.updating_ad_filters))
+            .setSmallIcon(R.drawable.ic_yuzubrowser_white)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setProgress(0, 0, true)
+            .build()
+        startForeground(1, notify)
+
         when (intent?.action) {
             ACTION_UPDATE_ABP -> {
                 val param1 = intent.getParcelableExtra<AbpEntity>(EXTRA_ABP_ENTRY)
@@ -64,6 +75,7 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 updateAll(forceUpdate, result)
             }
         }
+        stopForeground(true)
     }
 
     private fun updateAll(forceUpdate: Boolean, resultReceiver: ResultReceiver?) = runBlocking {

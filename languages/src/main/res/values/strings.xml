@@ -327,4 +327,5 @@
     <string name="update_all">Update all</string>
     <string name="add_filter">Add filter</string>
     <string name="site">Site</string>
+    <string name="updating_ad_filters">Updating Ad block filters</string>
 </resources>

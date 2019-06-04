@@ -29,6 +29,7 @@ import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.fabric.sdk.android.Fabric
+import jp.hazuki.yuzubrowser.adblock.registerAdBlockNotification
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
@@ -65,6 +66,7 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         CrashlyticsUtils.setChromeVersion(this)
         CrashlyticsUtils.setWebViewMode()
         registerDownloadNotification()
+        registerAdBlockNotification()
 
         Logger.d(TAG, "onCreate()")
         browserState.isNeedLoad = false
