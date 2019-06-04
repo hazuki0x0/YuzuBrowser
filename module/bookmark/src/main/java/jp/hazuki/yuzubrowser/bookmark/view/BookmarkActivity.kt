@@ -25,7 +25,6 @@ import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
 import jp.hazuki.yuzubrowser.ui.app.DaggerLongPressFixActivity
-import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 class BookmarkActivity : DaggerLongPressFixActivity() {
@@ -50,11 +49,6 @@ class BookmarkActivity : DaggerLongPressFixActivity() {
         if (fullscreen)
             window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         requestedOrientation = orientation
-
-        onBackPressedDispatcher.addCallback(this) {
-            finish()
-            true
-        }
 
         supportFragmentManager.transaction {
             replace(R.id.container, BookmarkFragment(pickMode, itemId))
