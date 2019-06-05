@@ -17,23 +17,24 @@
 package jp.hazuki.yuzubrowser.adblock.filter.unified
 
 import android.net.Uri
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import org.junit.Test
 
-class StartsWithFilter(
-    filter: String,
-    contentType: Int,
-    ignoreCase: Boolean,
-    domains: DomainMap?,
-    thirdParty: Int
-) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
-    override val type: Int
-        get() = FILTER_TYPE_START
+import org.mockito.Mockito
 
-    override fun check(url: Uri): Boolean {
-        val path = url.schemeSpecificPart
-        val index = path.indexOf(pattern, ignoreCase = ignoreCase)
-        if (index > -1) {
-            return path.checkIsDomainInSsp(index)
-        }
-        return false
+class StartEndFilterTest {
+
+    @Test
+    fun check() {
+        val uri = Mockito.mock(Uri::class.java)
+        whenever(uri.schemeSpecificPart).thenReturn("//js.ad-stir.com/js/nativeapi.js")
+
+        assertThat(StartEndFilter("ad-stir.com", 0, false, null, -1).check(uri))
+            .isEqualTo(true)
+
+        whenever(uri.schemeSpecificPart).thenReturn("//js.ad-stir.com")
+        assertThat(StartEndFilter("ad-stir.com", 0, false, null, -1).check(uri))
+            .isEqualTo(true)
     }
 }

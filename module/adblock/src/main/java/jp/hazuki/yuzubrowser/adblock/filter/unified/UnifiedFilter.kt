@@ -29,7 +29,7 @@ abstract class UnifiedFilter(
 ) : SingleFilter() {
     abstract val type: Int
 
-    protected abstract fun check(url: Uri): Boolean
+    internal abstract fun check(url: Uri): Boolean
 
     override fun find(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
         if ((this.contentType and contentType) != 0 && checkThird(isThirdParty) && checkDomain(pageUrl.host!!.toLowerCase())) {
@@ -60,6 +60,16 @@ abstract class UnifiedFilter(
         val it = this.toInt()
         return it in 0..0x24 || it in 0x26..0x2c || it == 0x2f || it in 0x3a..0x40 ||
             it in 0x5b..0x5e || it == 0x60 || it in 0x7b..0x7f
+    }
+
+    protected fun String.checkIsDomainInSsp(end: Int): Boolean {
+        if (end == 0 || end == 2) return true
+
+        for (i in 2 until end - 1) {
+            if (this[i] == '/') return false
+        }
+
+        return this[end - 1] == '.'
     }
 
     override fun equals(other: Any?): Boolean {

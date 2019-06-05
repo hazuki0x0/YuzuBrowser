@@ -40,6 +40,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 androidExtensions {
@@ -53,6 +57,7 @@ dependencies {
     androidTestImplementation Libs.espressoCore
     androidTestImplementation Libs.androidTestCore
     androidTestImplementation Libs.androidRunner
+    testImplementation Libs.mockito
 
     implementation AndroidX.appcompat
     implementation AndroidX.recyclerView

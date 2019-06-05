@@ -80,5 +80,8 @@ class PatternMatchFilterTest {
 
         val fieldTest1 = PatternMatchFilter("/www/delivery/*", 0xffff, false, null, -1)
         assertThat(fieldTest1.check("https://www.amazon.co.jp/")).isEqualTo(false)
+
+        val fT2 = PatternMatchFilter("||ad-stir.com^", 0, false, null, -1)
+        assertThat(fT2.check("http://js.ad-stir.com/js/nativeapi.js")).isEqualTo(true)
     }
 }

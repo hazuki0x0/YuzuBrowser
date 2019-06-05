@@ -16,24 +16,6 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import android.net.Uri
+import org.mockito.Mockito
 
-class StartsWithFilter(
-    filter: String,
-    contentType: Int,
-    ignoreCase: Boolean,
-    domains: DomainMap?,
-    thirdParty: Int
-) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
-    override val type: Int
-        get() = FILTER_TYPE_START
-
-    override fun check(url: Uri): Boolean {
-        val path = url.schemeSpecificPart
-        val index = path.indexOf(pattern, ignoreCase = ignoreCase)
-        if (index > -1) {
-            return path.checkIsDomainInSsp(index)
-        }
-        return false
-    }
-}
+fun <T> whenever(methodCall: T?) = Mockito.`when`(methodCall)

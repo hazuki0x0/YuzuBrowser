@@ -30,11 +30,12 @@ class StartEndFilter(
 
     override fun check(url: Uri): Boolean {
         val urlStr = url.schemeSpecificPart
-        if (urlStr.regionMatches(2, pattern, 0, pattern.length, ignoreCase)) {
-            return if (pattern.length + 2 == urlStr.length) {
+        val startIndex = urlStr.indexOf(pattern, ignoreCase = ignoreCase)
+        if (startIndex > -1 && urlStr.checkIsDomainInSsp(startIndex)) {
+            return if (pattern.length + startIndex == urlStr.length) {
                 true
             } else {
-                urlStr[pattern.length + 2].checkSeparator()
+                urlStr[pattern.length + startIndex].checkSeparator()
             }
         }
         return false
