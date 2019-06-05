@@ -54,7 +54,14 @@ class SearchSuggestAdapter : RecyclerView.Adapter<SearchSuggestAdapter.SuggestHo
                 holder.binding.imageButton.setOnClickListener {
                     listener?.onInputQuery(item.suggest)
                 }
-                holder.binding.textView.setOnLongClickListener(null)
+                if (item.suggestHistory) {
+                    holder.binding.textView.setOnLongClickListener {
+                        if (item.suggestHistory) listener?.onDeleteQuery(item.suggest)
+                        true
+                    }
+                } else {
+                    holder.binding.textView.setOnLongClickListener(null)
+                }
             }
             is SearchSuggestModel.HistoryModel -> {
                 (holder.binding as SearchActivitySuggestHistoryBinding).model = item
@@ -63,10 +70,6 @@ class SearchSuggestAdapter : RecyclerView.Adapter<SearchSuggestAdapter.SuggestHo
                 }
                 holder.binding.inputImageButton.setOnClickListener {
                     listener?.onInputQuery(item.url)
-                }
-                holder.binding.background.setOnLongClickListener {
-                    if (item.suggestHistory) listener?.onDeleteQuery(item.title)
-                    true
                 }
             }
         }

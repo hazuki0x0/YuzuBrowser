@@ -55,10 +55,15 @@ internal class SearchViewModel(
         providerSelection.addOnPropertyChangedCallback { _, _ ->
             suggestProviders.selectedId = providerSelection.get()
         }
+        useCase.suggestType = AppPrefs.searchSuggestType.get()
     }
 
     fun setQuery(query: String) {
         this.query = query
+        updateSuggest()
+    }
+
+    private fun updateSuggest() {
         queryJob?.cancel()
         queryJob = ui {
             val search = async(Dispatchers.Default) { useCase.getSearchQuery(query) }
@@ -88,7 +93,8 @@ internal class SearchViewModel(
     }
 
     fun deleteQuery(query: String) {
-        useCase.saveQuery(query)
+        useCase.deleteQuery(query)
+        updateSuggest()
     }
 
     fun saveProvider() {
