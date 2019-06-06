@@ -208,8 +208,6 @@
   "pin_info": "Blocca / sblocca scheda.<br>Mentre è bloccata, la scheda è protetta enon può essere chiusa.",
   "action_list": "Elenco azioni",
   "action_list_info": "Mostra elenco azioni",
-  "add_home_screen": "Aggiungi alla schermata Home",
-  "add_home_screen_info": "Aggiungi scorciatoia per la pagina corrente alla schermata Home.",
   "reader_mode": "Modalità lettore",
   "reader_mode_info": "Visualizza la pagina corrente in un layout semplice.",
   "read_it_later": "Leggi più tardi",

@@ -208,8 +208,6 @@
   "pin_info": "固定/取消固定当前标签页。<br>固定的标签页会受到保护，无法关闭。",
   "action_list": "行为列表",
   "action_list_info": "显示行为列表",
-  "add_home_screen": "添加至主屏幕",
-  "add_home_screen_info": "将当前页面的快捷方式添加至 Android 系统的主屏幕应用。",
   "reader_mode": "阅读模式",
   "reader_mode_info": "使用较为简单的页面布局显示当前页面。",
   "read_it_later": "稍后阅读",

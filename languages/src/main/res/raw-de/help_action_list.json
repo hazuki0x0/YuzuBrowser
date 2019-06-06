@@ -208,8 +208,6 @@
   "pin_info": "Reiter anpinnen / abpinnen <br>Während des Pinnens ist der Reiter geschützt und kann nicht geschlossen werden.",
   "action_list": "Aktionsliste",
   "action_list_info": "Aktionsliste anzeigen",
-  "add_home_screen": "zum Startbildschirm hinzufügen",
-  "add_home_screen_info": "die aktuelle Seitenverknüpfung zur Android Home App hinzufügen",
   "reader_mode": "Lesemodus",
   "reader_mode_info": "Die aktuelle Seite in einem einfachen Layout anzeigen",
   "read_it_later": "Später-Lesen",

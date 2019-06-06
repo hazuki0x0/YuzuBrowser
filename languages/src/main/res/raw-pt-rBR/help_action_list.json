@@ -208,8 +208,6 @@
   "pin_info": "Fixa / desfixa guia.<br>Enquanto fixa, a guia é protegida e não pode ser fechada.",
   "action_list": "Lista de ação",
   "action_list_info": "Mostra lista de ação",
-  "add_home_screen": "Adicionar na tela inicial",
-  "add_home_screen_info": "Adiciona atalho da página atual no app de início do Android.",
   "reader_mode": "Modo de leitura",
   "reader_mode_info": "Mostra página atual em um layout simples.",
   "read_it_later": "Ler mais tarde",

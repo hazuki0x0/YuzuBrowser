@@ -208,8 +208,6 @@
   "pin_info": "Lap rögzítése / rögzítés feloldása.<br>A kitűzött lap védett és nem lehet bezárni.",
   "action_list": "Műveletek listája",
   "action_list_info": "Megjeleníti a Műveletek listáját",
-  "add_home_screen": "Hozzáadás az Indítóhoz",
-  "add_home_screen_info": "Hozzáadja az aktuális oldalt az android kezdőképernyőhöz (launcher alkalmazáshoz).",
   "reader_mode": "Olvasómód",
   "reader_mode_info": "Megjeleníti az aktuális oldalt egy egyszerű nézetben.",
   "read_it_later": "Oldal tárolása",

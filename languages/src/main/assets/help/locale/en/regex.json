@@ -57,7 +57,7 @@
   "ad_block_not_use_wildcard_info": "If there is a specified string in the URL, block it.",
   "ad_block_not_use_wildcard_ex": "ex.)Pattern string =<code>ad.jpg</code>",
   "ad_block_not_use_wildcard_ex_info": "Block <code>http://test.com/ad/ad.jpg</code>, <code>https://test.jp/ad/img/ad.jpg</code> etc.",
-  "ad_block_use_wildcard": "If you do not use wildcard(<code>#?*+</code>)",
+  "ad_block_use_wildcard": "If you use wildcard(<code>#?*+</code>)",
   "ad_block_use_wildcard_info": "See the wildcard description for more information.",
   "ad_block_host": "Host block",
   "ad_block_host_info": "Block all specified hosts.",
