@@ -52,6 +52,7 @@ import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.download
 import jp.hazuki.yuzubrowser.download.getBlobDownloadJavaScript
 import jp.hazuki.yuzubrowser.download.getDownloadFolderUri
+import jp.hazuki.yuzubrowser.download.getImage
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
@@ -92,7 +93,6 @@ import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
-import jp.hazuki.yuzubrowser.ui.utils.getImage
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.CustomWebViewClient

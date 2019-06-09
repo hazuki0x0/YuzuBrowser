@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.ui.utils
+package jp.hazuki.yuzubrowser.download
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import jp.hazuki.yuzubrowser.download.core.utils.setCookie
+import jp.hazuki.yuzubrowser.download.core.utils.setReferrer
+import jp.hazuki.yuzubrowser.download.core.utils.setUserAgent
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 
 fun OkHttpClient.getImage(url: String, userAgent: String?, referrer: String?, cookie: String? = null): Bitmap? {
-    val requestBuilder = Request.Builder()
+    val request = Request.Builder()
         .url(url)
         .get()
-
-    if (!userAgent.isNullOrEmpty()) requestBuilder.addHeader("User-Agent", userAgent)
-    if (!referrer.isNullOrEmpty()) requestBuilder.addHeader("Referer", referrer)
-    if (!cookie.isNullOrEmpty()) requestBuilder.addHeader("Cookie", cookie)
+        .setUserAgent(userAgent)
+        .setReferrer(referrer)
+        .setCookie(cookie)
+        .build()
 
     try {
-        newCall(requestBuilder.build()).execute().use { response ->
+        newCall(request).execute().use { response ->
             response.body()?.let {
                 return BitmapFactory.decodeStream(it.byteStream())
             }

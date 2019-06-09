@@ -22,45 +22,53 @@ import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import okhttp3.Request
 import okhttp3.Response
+import java.net.URLEncoder
 
 fun Request.Builder.setCookie(cookie: String?): Request.Builder {
-    if (!cookie.isNullOrEmpty())
-        header("Cookie", cookie.removeUnexpectedChar())
+    if (!cookie.isNullOrEmpty()) {
+        try {
+            header("Cookie", cookie)
+        } catch (e: IllegalArgumentException) {
+            header("Cookie", cookie.normalizeValue())
+        }
+    }
+
     return this
 }
 
 fun Request.Builder.setReferrer(referrer: String?): Request.Builder {
-    if (!referrer.isNullOrEmpty())
-        header("Referer", referrer.removeUnexpectedChar())
+    if (!referrer.isNullOrEmpty()) {
+        try {
+            header("Referer", referrer)
+        } catch (e: IllegalArgumentException) {
+            header("Referer", referrer.normalizeValue())
+        }
+    }
     return this
 }
 
 fun Request.Builder.setUserAgent(context: Context, userAgent: String?): Request.Builder {
     if (userAgent.isNullOrEmpty()) {
-        header("User-Agent", WebSettings.getDefaultUserAgent(context))
+        setUserAgent(WebSettings.getDefaultUserAgent(context))
     } else {
-        header("User-Agent", userAgent.removeUnexpectedChar())
+        setUserAgent(userAgent)
     }
     return this
 }
 
-private fun String.removeUnexpectedChar(): String {
-    var index = checkUnexpectedChar(0)
-    if (index < 0) return this
-    val builder = StringBuilder(this)
-    while (index >= 0) {
-        builder.deleteCharAt(index)
-        index = builder.checkUnexpectedChar(index)
+fun Request.Builder.setUserAgent(userAgent: String?): Request.Builder {
+    if (!userAgent.isNullOrEmpty()) {
+        try {
+            header("User-Agent", userAgent)
+        } catch (e: IllegalArgumentException) {
+            header("User-Agent", userAgent.normalizeValue())
+        }
     }
-    return builder.toString()
+    return this
 }
 
-private fun CharSequence.checkUnexpectedChar(startIndex: Int): Int {
-    for (i in startIndex until length) {
-        val c = this[i]
-        if ((c <= '\u001f' && c != '\t') || c >= '\u007f') return i
-    }
-    return -1
+private fun String.normalizeValue(): String {
+    return URLEncoder.encode(this, "UTF-8")
 }
 
 val Response.contentLength: Long

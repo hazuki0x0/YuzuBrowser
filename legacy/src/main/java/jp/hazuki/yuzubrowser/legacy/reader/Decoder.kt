@@ -26,8 +26,8 @@ import android.text.TextUtils
 import android.webkit.WebSettings
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
+import jp.hazuki.yuzubrowser.download.getImage
 import jp.hazuki.yuzubrowser.legacy.reader.snacktory.HtmlFetcher
-import jp.hazuki.yuzubrowser.ui.utils.getImage
 import okhttp3.OkHttpClient
 import java.util.*
 
