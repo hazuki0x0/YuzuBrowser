@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.adblock.service
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
@@ -56,14 +57,6 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     internal lateinit var abpDatabase: AbpDatabase
 
     override fun onHandleIntent(intent: Intent?) {
-        val notify = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ADBLOCK_FILTER_UPDATE)
-            .setContentTitle(getText(R.string.updating_ad_filters))
-            .setSmallIcon(R.drawable.ic_yuzubrowser_white)
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .setProgress(0, 0, true)
-            .build()
-        startForeground(1, notify)
-
         when (intent?.action) {
             ACTION_UPDATE_ABP -> {
                 val param1 = intent.getParcelableExtra<AbpEntity>(EXTRA_ABP_ENTRY)
@@ -76,6 +69,22 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 updateAll(forceUpdate, result)
             }
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val notify = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ADBLOCK_FILTER_UPDATE)
+            .setContentTitle(getText(R.string.updating_ad_filters))
+            .setSmallIcon(R.drawable.ic_yuzubrowser_white)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setProgress(0, 0, true)
+            .build()
+        startForeground(1, notify)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         stopForeground(true)
     }
 
@@ -266,7 +275,11 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 putExtra(EXTRA_FORCE_UPDATE, forceUpdate)
                 putExtra(EXTRA_RESULT, result)
             }
-            context.startService(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
         }
 
         fun update(context: Context, abpEntity: AbpEntity, result: UpdateResult? = null) {
@@ -275,7 +288,11 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 putExtra(EXTRA_ABP_ENTRY, abpEntity)
                 putExtra(EXTRA_RESULT, result)
             }
-            context.startService(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
         }
     }
 
