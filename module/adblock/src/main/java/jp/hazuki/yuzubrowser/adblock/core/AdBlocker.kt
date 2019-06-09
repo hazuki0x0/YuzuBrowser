@@ -26,6 +26,8 @@ class AdBlocker(
         val whiteList: FilterMatcher,
         val whitePageList: FilterMatcherList) {
 
+    private var whitePageCache: String? = null
+    private var whitePageCacheResult: Boolean = false
     private val resultCache = Collections.synchronizedMap(LruCache<String, Filter?>())
     private val candidatesCreator = Pattern.compile("[a-z0-9%]{3,}", Pattern.CASE_INSENSITIVE)
 
@@ -49,8 +51,13 @@ class AdBlocker(
         return null
     }
 
-    fun isWhitePage(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Boolean {
-        return whitePageList.match(url, pageUrl, contentType, isThird)
+    fun isWhitePage(pageUrl: Uri, contentType: Int, isThird: Boolean): Boolean {
+        val url = pageUrl.toString()
+        if (whitePageCache != url) {
+            whitePageCache = url
+            whitePageCacheResult = whitePageList.match(pageUrl, pageUrl, contentType, isThird)
+        }
+        return whitePageCacheResult
     }
 
     fun isBlock(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Filter? {

@@ -84,8 +84,8 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
         }
     }
 
-    fun isWhitePage(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Boolean {
-        return adBlocker?.isWhitePage(pageUrl, url, contentType, isThird) ?: false
+    fun isWhitePage(pageUrl: Uri, contentType: Int, isThird: Boolean): Boolean {
+        return adBlocker?.isWhitePage(pageUrl, contentType, isThird) ?: false
     }
 
     fun isBlock(pageUrl: Uri, url: Uri, contentType: Int, isThird: Boolean): Filter? {
