@@ -47,7 +47,7 @@ fun OkHttpClient.decodeToReaderData(context: Context, url: String, userAgent: St
     }
 
     try {
-        val result = fetcher.fetchAndExtract(url, 2500, true)
+        val result = fetcher.fetchAndExtract(this, url, 2500, true)
         if (!TextUtils.isEmpty(result.text)) {
             val html: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(result.text, Html.FROM_HTML_MODE_LEGACY, Html.ImageGetter { getImage(context, it, url, userAgent) }, null)

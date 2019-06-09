@@ -51,29 +51,6 @@ public class Converter {
         return this;
     }
 
-    public static String extractEncoding(String contentType) {
-        String[] values;
-        if (contentType != null)
-            values = contentType.split(";");
-        else
-            values = new String[0];
-
-        String charset = "";
-
-        for (String value : values) {
-            value = value.trim().toLowerCase();
-
-            if (value.startsWith("charset="))
-                charset = value.substring("charset=".length());
-        }
-
-        // http1.1 says ISO-8859-1 is the default charset
-        if (charset.length() == 0)
-            charset = UTF8;
-
-        return charset;
-    }
-
     public String getEncoding() {
         if (encoding == null)
             return "";

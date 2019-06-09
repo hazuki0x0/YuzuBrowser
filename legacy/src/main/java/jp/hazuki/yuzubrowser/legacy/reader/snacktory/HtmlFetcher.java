@@ -15,24 +15,21 @@
  */
 package jp.hazuki.yuzubrowser.legacy.reader.snacktory;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Class to fetch articles. This class is thread safe.
@@ -47,31 +44,6 @@ public class HtmlFetcher {
         SHelper.enableAnySSL();
     }
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("urls.txt"));
-        String line;
-        Set<String> existing = new HashSet<>();
-        while ((line = reader.readLine()) != null) {
-            int index1 = line.indexOf("\"");
-            int index2 = line.indexOf("\"", index1 + 1);
-            String url = line.substring(index1 + 1, index2);
-            String domainStr = SHelper.extractDomain(url, true);
-            String counterStr = "";
-            // TODO more similarities
-            if (existing.contains(domainStr))
-                counterStr = "2";
-            else
-                existing.add(domainStr);
-
-            String html = new HtmlFetcher().fetchAsString(url, 20000);
-            String outFile = domainStr + counterStr + ".html";
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
-            writer.write(html);
-            writer.close();
-        }
-        reader.close();
-    }
-
     private String referrer = "https://github.com/karussell/snacktory";
     private String userAgent = "Mozilla/5.0 (compatible; Snacktory; +" + referrer + ")";
     private String cacheControl = "max-age=0";
@@ -79,7 +51,6 @@ public class HtmlFetcher {
     private String accept = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
     private String charset = "UTF-8";
     private SCache cache;
-    private Proxy proxy = null;
     private AtomicInteger cacheCounter = new AtomicInteger(0);
     private int maxTextLength = -1;
     private ArticleTextExtractor extractor = new ArticleTextExtractor();
@@ -201,19 +172,12 @@ public class HtmlFetcher {
         return charset;
     }
 
-    public void setProxy(Proxy proxy) {
-        this.proxy = proxy;
-    }
+    public JResult fetchAndExtract(OkHttpClient client, String url, int timeout, boolean resolve) throws Exception {
+        OkHttpClient newClient = client.newBuilder()
+            .callTimeout(timeout, TimeUnit.MILLISECONDS)
+            .readTimeout(timeout, TimeUnit.MILLISECONDS)
+            .build();
 
-    public Proxy getProxy() {
-        return (proxy != null ? proxy : Proxy.NO_PROXY);
-    }
-
-    public boolean isProxySet() {
-        return getProxy() != null;
-    }
-
-    public JResult fetchAndExtract(String url, int timeout, boolean resolve) throws Exception {
         String originalUrl = url;
         url = SHelper.removeHashbang(url);
         String gUrl = SHelper.getUrlFromUglyGoogleRedirect(url);
@@ -231,7 +195,7 @@ public class HtmlFetcher {
             if (res != null)
                 return res;
 
-            String resUrl = getResolvedUrl(url, timeout);
+            String resUrl = getResolvedUrl(newClient, url);
             if (resUrl.isEmpty()) {
                 Logger.w("snacktory", "resolved url is empty. Url is: ", url);
 
@@ -274,7 +238,7 @@ public class HtmlFetcher {
         } else if (SHelper.isImage(lowerUrl)) {
             result.setImageUrl(url);
         } else {
-            extractor.extractContent(result, fetchAsString(url, timeout));
+            extractor.extractContent(result, fetchAsString(newClient, url, timeout));
             if (result.getFaviconUrl().isEmpty())
                 result.setFaviconUrl(SHelper.getDefaultFavicon(url));
 
@@ -305,26 +269,23 @@ public class HtmlFetcher {
         return SHelper.useDomainOfFirstArg4Second(url, urlOrPath);
     }
 
-    public String fetchAsString(String urlAsString, int timeout)
-            throws MalformedURLException, IOException {
-        return fetchAsString(urlAsString, timeout, true);
+    public String fetchAsString(OkHttpClient client, String urlAsString, int timeout) throws IOException {
+        return fetchAsString(client, urlAsString, timeout, true);
     }
 
-    public String fetchAsString(String urlAsString, int timeout, boolean includeSomeGooseOptions)
-            throws MalformedURLException, IOException {
-        HttpURLConnection hConn = createUrlConnection(urlAsString, timeout, includeSomeGooseOptions);
-        hConn.setInstanceFollowRedirects(true);
-        String encoding = hConn.getContentEncoding();
-        InputStream is;
-        if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-            is = new GZIPInputStream(hConn.getInputStream());
-        } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-            is = new InflaterInputStream(hConn.getInputStream(), new Inflater(true));
-        } else {
-            is = hConn.getInputStream();
-        }
+    public String fetchAsString(OkHttpClient client, String urlAsString, int timeout, boolean includeSomeGooseOptions)
+        throws IOException {
+        Request request = createRequest(urlAsString, includeSomeGooseOptions, false);
 
-        String enc = Converter.extractEncoding(hConn.getContentType());
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+        if (body == null) throw new IOException("Connection failed");
+
+        InputStream is = body.byteStream();
+
+        MediaType type = body.contentType();
+
+        String enc = type != null ? type.charset(Charset.defaultCharset()).toString() : "UTF-8";
         String res = createConverter(urlAsString).streamToString(is, enc);
         Logger.d("snacktory", res.length(), " FetchAsString:", urlAsString);
         return res;
@@ -338,27 +299,32 @@ public class HtmlFetcher {
      * On some devices we have to hack:
      * http://developers.sun.com/mobility/reference/techart/design_guidelines/http_redirection.html
      *
-     * @param timeout Sets a specified timeout value, in milliseconds
      * @return the resolved url if any. Or null if it couldn't resolve the url
      * (within the specified time) or the same url if response code is OK
      */
-    public String getResolvedUrl(String urlAsString, int timeout) {
+    public String getResolvedUrl(OkHttpClient client, String urlAsString) {
+        // force no follow
+        OkHttpClient newClient = client.newBuilder()
+            .followRedirects(false)
+            .followSslRedirects(false)
+            .build();
+        return getResolvedUrlInternal(newClient, urlAsString);
+    }
+
+    private String getResolvedUrlInternal(OkHttpClient client, String urlAsString) {
         String newUrl = null;
         int responseCode = -1;
         try {
-            HttpURLConnection hConn = createUrlConnection(urlAsString, timeout, true);
-            // force no follow
-            hConn.setInstanceFollowRedirects(false);
-            // the program doesn't care what the content actually is !!
-            // http://java.sun.com/developer/JDCTechTips/2003/tt0422.html
-            hConn.setRequestMethod("HEAD");
-            hConn.connect();
-            responseCode = hConn.getResponseCode();
-            hConn.getInputStream().close();
+            Request request = createRequest(urlAsString, true, true);
+
+            Response response = client.newCall(request).execute();
+
+            responseCode = response.code();
+            if (response.body() != null) response.close();
             if (responseCode == HttpURLConnection.HTTP_OK)
                 return urlAsString;
 
-            newUrl = hConn.getHeaderField("Location");
+            newUrl = response.header("Location");
             if (responseCode / 100 == 3 && newUrl != null) {
                 newUrl = newUrl.replaceAll(" ", "+");
                 // some services use (none-standard) utf8 in their location header
@@ -367,7 +333,7 @@ public class HtmlFetcher {
 
                 // fix problems if shortened twice. as it is often the case after twitters' t.co bullshit
                 if (furtherResolveNecessary.contains(SHelper.extractDomain(newUrl, true)))
-                    newUrl = getResolvedUrl(newUrl, timeout);
+                    newUrl = getResolvedUrlInternal(client, newUrl);
 
                 return newUrl;
             } else
@@ -401,29 +367,25 @@ public class HtmlFetcher {
         return sb.toString();
     }
 
-    protected HttpURLConnection createUrlConnection(String urlAsStr, int timeout,
-                                                    boolean includeSomeGooseOptions) throws MalformedURLException, IOException {
-        URL url = new URL(urlAsStr);
-        //using proxy may increase latency
-        Proxy proxy = getProxy();
-        HttpURLConnection hConn = (HttpURLConnection) url.openConnection(proxy);
-        hConn.setRequestProperty("User-Agent", userAgent);
-        hConn.setRequestProperty("Accept", accept);
+    protected Request createRequest(String urlAsStr, boolean includeSomeGooseOptions, boolean head) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(urlAsStr)
+            .addHeader("User-Agent", userAgent)
+            .addHeader("Accept", accept);
 
-        if (includeSomeGooseOptions) {
-            hConn.setRequestProperty("Accept-Language", language);
-            hConn.setRequestProperty("content-charset", charset);
-            hConn.addRequestProperty("Referer", referrer);
-            // avoid the cache for testing purposes only?
-            hConn.setRequestProperty("Cache-Control", cacheControl);
+        if (head) {
+            builder.head();
+        } else {
+            builder.get();
         }
 
-        // suggest respond to be gzipped or deflated (which is just another compression)
-        // http://stackoverflow.com/q/3932117
-        hConn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-        hConn.setConnectTimeout(timeout);
-        hConn.setReadTimeout(timeout);
-        return hConn;
+        if (includeSomeGooseOptions) {
+            builder.addHeader("Accept-Language", language)
+                .addHeader("content-charset", charset)
+                .addHeader("Referer", referrer)
+                .addHeader("Cache-Control", cacheControl);
+        }
+        return builder.build();
     }
 
     private JResult getFromCache(String url, String originalUrl) throws Exception {
