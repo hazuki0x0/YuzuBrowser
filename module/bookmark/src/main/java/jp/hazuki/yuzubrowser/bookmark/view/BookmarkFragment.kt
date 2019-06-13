@@ -316,8 +316,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
                 if (bookmarkItem is BookmarkSite) {
                     pickBookmark(bookmarkItem)
                 } else {
-                    val sender = Intent()
-                    sender.setClassName(activity, ACTIVITY_MAIN_BROWSER)
+                    val sender = Intent(requireContext(), BookmarkActivity::class.java)
                     sender.putExtra("id", bookmarkItem.id)
 
                     val intent = Intent()
