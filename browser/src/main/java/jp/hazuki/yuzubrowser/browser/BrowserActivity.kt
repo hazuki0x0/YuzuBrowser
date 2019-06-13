@@ -664,6 +664,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     override fun adjustBrowserPadding(tab: MainTabData) {
+        val mode = tab.mWebView.isInvertMode
+        toolbarPadding.setBlackColorMode(mode)
+        bottomAlwaysOverlayToolbarPadding.setBlackColorMode(mode)
+
         webViewBehavior.adjustWebView(tab, topToolbar.height + bottomOverlayLayout.height)
     }
 

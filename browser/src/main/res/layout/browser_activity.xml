@@ -85,10 +85,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
-                    <FrameLayout
+                    <jp.hazuki.yuzubrowser.ui.widget.PaddingFrameLayout
                         android:id="@+id/toolbarPadding"
                         android:layout_width="match_parent"
                         android:layout_height="0px"
+                        android:background="@color/white"
                         android:visibility="gone"
                         android:layout_weight="0"/>
 
@@ -96,6 +97,7 @@
                         android:id="@+id/bottomAlwaysOverlayToolbarPadding"
                         android:layout_width="match_parent"
                         android:layout_height="0px"
+                        android:background="@color/white"
                         android:visibility="gone"
                         android:layout_weight="0"/>
                 </LinearLayout>

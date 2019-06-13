@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Hazuki
+ * Copyright (C) 2017-2019 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.ui.widget
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -28,6 +29,7 @@ class PaddingFrameLayout @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     var realHeight = 0
         private set
+    private var isBlackMode = false
 
     var visible = false
         set(value) {
@@ -40,6 +42,20 @@ class PaddingFrameLayout @JvmOverloads constructor(
             field = value
             setVisible()
         }
+
+    fun setBlackColorMode(blackMode: Boolean) {
+        if (blackMode) {
+            if (!isBlackMode) {
+                setBackgroundColor(Color.BLACK)
+                isBlackMode = true
+            }
+        } else {
+            if (isBlackMode) {
+                setBackgroundColor(Color.WHITE)
+                isBlackMode = false
+            }
+        }
+    }
 
     fun setHeight(height: Int) {
         if (realHeight != height) {
