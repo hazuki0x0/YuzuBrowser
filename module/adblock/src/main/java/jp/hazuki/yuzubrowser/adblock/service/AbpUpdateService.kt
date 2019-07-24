@@ -38,7 +38,6 @@ import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterWriter
 import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
-import jp.hazuki.yuzubrowser.ui.utils.canonicalizeHost
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -137,11 +136,14 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     }
 
     private suspend fun updateHttp(entity: AbpEntity): Boolean {
-        if (Uri.parse(entity.url).host?.canonicalizeHost() == null) return false
 
-        val request = Request.Builder()
+        val request = try {
+            Request.Builder()
                 .url(entity.url)
                 .get()
+        } catch (e: IllegalArgumentException) {
+            return false
+        }
 
         entity.lastModified?.let {
             val dir = getFilterDir()
