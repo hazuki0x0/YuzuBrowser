@@ -155,12 +155,12 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         try {
             val response = call.execute()
 
-            if (response.code() == 304) {
+            if (response.code == 304) {
                 entity.lastLocalUpdate = System.currentTimeMillis()
                 abpDatabase.abpDao().update(entity)
                 return false
             }
-            response.body()?.run {
+            response.body?.run {
                 val charset = contentType()?.charset() ?: Charsets.UTF_8
                 source().inputStream().bufferedReader(charset).use { reader ->
                     if (decode(reader, charset, entity)) {
@@ -176,7 +176,8 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     }
 
     private suspend fun updateFile(entity: AbpEntity): Boolean {
-        val file = File(Uri.parse(entity.url).path)
+        val path = Uri.parse(entity.url).path ?: return false
+        val file = File(path)
         if (file.lastModified() < entity.lastLocalUpdate) return false
 
         try {

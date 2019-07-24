@@ -28,7 +28,7 @@ import java.io.IOException
 
 class EmptyImageData : ResourceData {
 
-    constructor() {}
+    constructor()
 
     @Throws(IOException::class)
     constructor(reader: JsonReader) {
@@ -36,7 +36,7 @@ class EmptyImageData : ResourceData {
     }
 
     override fun getTypeId(): Int {
-        return ResourceData.EMPTY_IMAGE_DATA
+        return EMPTY_IMAGE_DATA
     }
 
     override fun getTitle(context: Context): String? {
@@ -56,7 +56,7 @@ class EmptyImageData : ResourceData {
 
     @Throws(IOException::class)
     override fun write(writer: JsonWriter): Boolean {
-        writer.value(ResourceData.EMPTY_IMAGE_DATA)
+        writer.value(EMPTY_IMAGE_DATA)
         return true
     }
 

@@ -36,7 +36,7 @@ fun OkHttpClient.getImage(url: String, userAgent: String?, referrer: String?, co
 
     try {
         newCall(request).execute().use { response ->
-            response.body()?.let {
+            response.body?.let {
                 return BitmapFactory.decodeStream(it.byteStream())
             }
         }

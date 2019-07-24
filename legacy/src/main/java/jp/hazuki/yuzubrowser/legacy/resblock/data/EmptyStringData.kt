@@ -26,7 +26,7 @@ import java.io.InputStream
 
 class EmptyStringData : ResourceData {
 
-    constructor() {}
+    constructor()
 
     @Throws(IOException::class)
     constructor(reader: JsonReader) {
@@ -34,7 +34,7 @@ class EmptyStringData : ResourceData {
     }
 
     override fun getTypeId(): Int {
-        return ResourceData.EMPTY_STRING_DATA
+        return EMPTY_STRING_DATA
     }
 
     override fun getTitle(context: Context): String? {

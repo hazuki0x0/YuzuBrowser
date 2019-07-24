@@ -60,12 +60,12 @@ class OkHttpDownloader(private val context: Context, private val okHttpClient: O
         try {
             val response = call.execute()
 
-            val mode = when (response.code()) {
+            val mode = when (response.code) {
                 HttpURLConnection.HTTP_OK -> "w"
                 HttpURLConnection.HTTP_PARTIAL -> "wa"
                 else -> {
                     info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
-                    downloadListener?.onFileDownloadFailed(info, "failed connect response:${response.code()}\nat:${info.url}")
+                    downloadListener?.onFileDownloadFailed(info, "failed connect response:${response.code}\nat:${info.url}")
                     return false
                 }
             }
@@ -79,7 +79,7 @@ class OkHttpDownloader(private val context: Context, private val okHttpClient: O
                     ?: throw DownloadException("Can not open file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
 
             BufferedOutputStream(os).use { out ->
-                response.body()!!.source().use { source ->
+                response.body!!.source().use { source ->
                     downloadListener?.onStartDownload(info)
                     var len: Int
                     var progress = info.currentSize

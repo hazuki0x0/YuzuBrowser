@@ -49,7 +49,7 @@ public class BundleDataBaseConverter {
 
         try (InputStream is = new BufferedInputStream(new FileInputStream(mFile))) {
             Parcel parcel = Parcel.obtain();
-            byte b[] = IOUtils.readByte(is);
+            byte[] b = IOUtils.readByte(is);
             parcel.unmarshall(b, 0, b.length);
             parcel.setDataPosition(0);
             Bundle bundle = parcel.readBundle(Bundle.class.getClassLoader());
@@ -83,7 +83,7 @@ public class BundleDataBaseConverter {
 
         TabStorage fileData = new TabStorage(context, webViewFactory);
         for (int i = 0; i < list_count; ++i) {
-            Bundle webBundle = bundle.getBundle("TAB.W" + String.valueOf(i));
+            Bundle webBundle = bundle.getBundle("TAB.W" + i);
             fileData.addIndexData(new TabIndexData("", "", tabType[i], ids[i], parents[i]));
             fileData.saveBundle(ids[i], webBundle);
         }

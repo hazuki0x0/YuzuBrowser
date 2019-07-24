@@ -163,7 +163,7 @@ class SuggestProvider : DaggerContentProvider() {
         try {
             val response = call.execute()
             if (response.isSuccessful) {
-                val body = response.body()
+                val body = response.body
                 if (body != null) {
                     JsonReader.of(body.source()).use {
                         return mSuggestEngine.getSuggestions(it)

@@ -199,7 +199,7 @@ public class TabStorage {
 
     private void saveThumbnail(long id, byte[] image) {
         try (FileOutputStream stream = new FileOutputStream(
-                new File(tabPath, Long.toString(id) + FILE_TAB_THUMBNAIL_SUFFIX))) {
+            new File(tabPath, id + FILE_TAB_THUMBNAIL_SUFFIX))) {
             stream.write(image);
         } catch (IOException e) {
             ErrorReport.printAndWriteLog(e);
@@ -207,7 +207,7 @@ public class TabStorage {
     }
 
     private byte[] getThumbnail(long id) {
-        File file = new File(tabPath, Long.toString(id) + FILE_TAB_THUMBNAIL_SUFFIX);
+        File file = new File(tabPath, id + FILE_TAB_THUMBNAIL_SUFFIX);
 
         if (!file.exists()) return null;
 
@@ -232,7 +232,7 @@ public class TabStorage {
         if (file.exists()) {
             try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
                 Parcel parcel = Parcel.obtain();
-                byte b[] = IOUtils.readByte(is);
+                byte[] b = IOUtils.readByte(is);
                 parcel.unmarshall(b, 0, b.length);
                 parcel.setDataPosition(0);
                 Bundle bundle = parcel.readBundle(Bundle.class.getClassLoader());
