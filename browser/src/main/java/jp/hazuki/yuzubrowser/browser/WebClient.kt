@@ -548,7 +548,7 @@ class WebClient(
             }
 
             val tabIndexData = controller.tabManager.getIndexData(web.identityId) ?: return null
-            val uri = Uri.parse(tabIndexData.url ?: web.url ?: "")
+            val uri = Uri.parse(tabIndexData.url ?: "")
 
             adBlockController?.run {
                 val host = uri.host
