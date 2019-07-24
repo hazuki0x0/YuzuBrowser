@@ -23,7 +23,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath Dependencies.kotlin_plugin
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
         classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta04'
