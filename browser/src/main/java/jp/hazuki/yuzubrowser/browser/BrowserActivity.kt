@@ -1620,7 +1620,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
     override val printManager: PrintManager
-        get() = originalContext.getSystemService(Context.PRINT_SERVICE) as PrintManager
+        get() = getSystemService(Context.PRINT_SERVICE) as PrintManager
 
     override val okHttpClient: OkHttpClient
         get() = okHttp

@@ -17,9 +17,11 @@
 package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageConfig
@@ -27,10 +29,8 @@ import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 @SuppressLint("Registered")
 open class ThemeActivity : AppCompatActivity() {
-    protected lateinit var originalContext: Context
 
     override fun attachBaseContext(newBase: Context) {
-        originalContext = newBase
         val application = newBase.applicationContext
         if (!ThemeData.isLoaded()) {
             ThemeData.createInstance(application, PrefPool.getSharedPref(application).getString(theme_setting, ThemeData.THEME_LIGHT))
@@ -42,7 +42,7 @@ open class ThemeActivity : AppCompatActivity() {
         applyThemeMode(isLightMode)
         config.updateTheme(isLightMode)
 
-        super.attachBaseContext(ContextWrapper(newBase.createConfigurationContext(config)))
+        super.attachBaseContext(ContextCompat(newBase.createConfigurationContext(config), newBase))
     }
 
     private fun applyThemeMode(isLightMode: Boolean) {
@@ -66,6 +66,21 @@ open class ThemeActivity : AppCompatActivity() {
         val newNightMode = if (isLightMode) Configuration.UI_MODE_NIGHT_NO else Configuration.UI_MODE_NIGHT_YES
 
         uiMode = newNightMode or (uiMode and Configuration.UI_MODE_NIGHT_MASK.inv())
+    }
+
+    private class ContextCompat(
+        configContext: Context,
+        private val baseActivityContext: Context
+    ) : ContextWrapper(configContext) {
+
+        override fun getSystemService(name: String): Any? {
+            return baseActivityContext.getSystemService(name)
+        }
+
+        @TargetApi(Build.VERSION_CODES.M)
+        override fun getSystemServiceName(serviceClass: Class<*>): String? {
+            return baseActivityContext.getSystemServiceName(serviceClass)
+        }
     }
 
     companion object {
