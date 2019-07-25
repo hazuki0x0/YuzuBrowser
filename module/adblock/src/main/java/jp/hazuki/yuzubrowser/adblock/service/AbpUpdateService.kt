@@ -273,6 +273,11 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         private const val A_DAY = 24 * AN_HOUR
 
         fun updateAll(context: Context, forceUpdate: Boolean = false, result: UpdateResult? = null) {
+            if (!forceUpdate) {
+                val prefs = AdBlockPref.get(context.applicationContext)
+                if (prefs.abpNextUpdateTime < System.currentTimeMillis()) return
+            }
+
             val intent = Intent(context, AbpUpdateService::class.java).apply {
                 action = ACTION_UPDATE_ALL
                 putExtra(EXTRA_FORCE_UPDATE, forceUpdate)
