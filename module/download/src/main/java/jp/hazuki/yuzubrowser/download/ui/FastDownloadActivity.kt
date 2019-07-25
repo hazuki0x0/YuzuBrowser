@@ -20,8 +20,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.webkit.MimeTypeMap
 import android.widget.Toast
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
+import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
@@ -75,8 +76,8 @@ class FastDownloadActivity : DaggerThemeActivity() {
                 val index = uri.toString().lastIndexOf(".")
                 if (index > -1) {
                     val extension = uri.toString().substring(index + 1)
-                    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-                    if (mimeType != null) {
+                    val mimeType = getMimeTypeFromExtension(extension)
+                    if (mimeType != MIME_TYPE_UNKNOWN) {
                         result.putExtra(EXTRA_MINE_TYPE, mimeType)
                     }
                 }

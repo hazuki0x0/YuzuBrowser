@@ -22,11 +22,11 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.text.format.Formatter
 import android.util.Base64
-import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.core.utility.utils.getExtensionFromMimeType
+import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import java.io.File
@@ -181,9 +181,8 @@ private fun guessFileName(url: String, contentDisposition: String?, mimeType: St
             // Compare the last segment of the extension against the mime type.
             // If there's a mismatch, discard the entire extension.
             val lastDotIndex = fileName.lastIndexOf('.')
-            val typeFromExt = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileName.substring(lastDotIndex + 1))
-            if (typeFromExt != null && !typeFromExt.equals(mimeType, ignoreCase = true)) {
+            val typeFromExt = getMimeTypeFromExtension(fileName.substring(lastDotIndex + 1))
+            if (!typeFromExt.equals(mimeType, ignoreCase = true)) {
                 extension = getExtensionFromMimeType(mimeType)
                 if (extension != null) {
                     extension = ".$extension"
