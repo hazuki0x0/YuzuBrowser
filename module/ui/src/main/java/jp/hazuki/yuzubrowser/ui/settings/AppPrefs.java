@@ -205,6 +205,7 @@ public class AppPrefs {
     //AdBlock
     public static final BooleanContainer isAbpIgnoreGenericElement = new BooleanContainer("abpIgnoreGenericElement", false);
     public static final BooleanContainer isAbpUseElementHide = new BooleanContainer("abpUseElementHide", true);
+    public static final BooleanContainer abpUpdateWifiOnly = new BooleanContainer("abpUpdateWifiOnly", false);
 
 
     public static boolean load(Context context) {

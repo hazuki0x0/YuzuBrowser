@@ -47,4 +47,8 @@
         android:title="@string/mining_protect"
         android:summary="@string/mining_protect_summary"/>
 
+    <SwitchPreference
+        android:key="abpUpdateWifiOnly"
+        android:title="@string/pref_abp_update_wifi_only"/>
+
 </PreferenceScreen>

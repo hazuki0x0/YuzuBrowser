@@ -18,12 +18,14 @@ package jp.hazuki.yuzubrowser.adblock.service
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
 import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.DaggerIntentService
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
@@ -38,6 +40,8 @@ import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterWriter
 import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
+import jp.hazuki.yuzubrowser.core.utility.extensions.isConnectedWifi
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -276,6 +280,11 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
             if (!forceUpdate) {
                 val prefs = AdBlockPref.get(context.applicationContext)
                 if (prefs.abpNextUpdateTime < System.currentTimeMillis()) return
+
+                if (AppPrefs.abpUpdateWifiOnly.get()) {
+                    val cm = context.getSystemService<ConnectivityManager>()!!
+                    if (!cm.isConnectedWifi()) return
+                }
             }
 
             val intent = Intent(context, AbpUpdateService::class.java).apply {

@@ -467,4 +467,5 @@
     <string name="pref_bookmark_overflow">アイテムオプション設定</string>
     <string name="pref_page_background_white">ブラウザの背景を白にする</string>
     <string name="pref_page_background_white_info">新しいタブを開くとき、またはタブを切り替えるときにちらつく時は、無効にして下さい。</string>
+    <string name="pref_abp_update_wifi_only">Wi-Fi接続時のみフィルタを更新</string>
 </resources>
