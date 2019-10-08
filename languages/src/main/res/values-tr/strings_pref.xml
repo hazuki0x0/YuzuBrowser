@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <string name="pref_settings">Ayarlar</string>
+    <string name="pref_about">Hakkında</string>
+    <string name="pref_ui_settings">Arayüz ayarları</string>
+    <string name="pref_toolbar_settings">Araç çubuğu ayarları</string>
+    <string name="pref_tab_bar">Sekme çubuğu</string>
+    <string name="pref_url_bar">Url çubuğu</string>
+    <string name="pref_progress_bar">İlerleme çubuğu</string>
+    <string name="pref_tab_type">Sekme türü</string>
+
+    <string-array name="pref_tab_type_list">
+        <item>Kaydırılabilir</item>
+        <item>Tam</item>
+    </string-array>
+
+    <string name="pref_page_settings">Sayfa ayarları</string>
+    <string name="pref_toolbar_location">Konum (portre)</string>
+    <string name="pref_toolbar_location_landscape">Konum (manzara)</string>
+    <string name="pref_toolbar_location_priority">Konumlandırma önceliği (portre)</string>
+    <string name="pref_toolbar_location_priority_landscape">Konumlandırma önceliği (manzara)</string>
+    <string name="pref_toolbar_location_undefine">Tanımsız</string>
+    <string name="pref_toolbar_location_top">Üst çubuk</string>
+    <string name="pref_toolbar_location_top_always">Üst çubuk(Her zaman görüntüle)</string>
+    <string name="pref_toolbar_location_bottom">Alt çubuk</string>
+    <string name="pref_toolbar_location_bottom_overlay_always">Alt kaplama çubuğu (Her zaman görüntüle)</string>
+    <string name="pref_toolbar_location_bottom_always">Alt çubuk (Her zaman görüntüle)</string>
+    <string name="pref_toolbar_location_web">Web çubuğu</string>
+    <string name="pref_toolbar_location_web_fix">Web çubuğu (sabit)</string>
+    <string name="pref_toolbar_location_left">Sol çubuk</string>
+    <string name="pref_toolbar_location_right">Sağ çubuk</string>
+    <string name="pref_allow_content_access">İçeriğe erişime izin ver</string>
+    <string name="pref_default_encoding">Varsayılan metin kodlama</string>
+    <string name="pref_text_encoding">Metin kodlama</string>
+    <string name="pref_softbtn_settings">Araç çubuğu düğme ayarları</string>
+    <string name="pref_btn_tab_left">Sekme çubuğu sol düğme</string>
+    <string name="pref_btn_tab_right">Sekme çubuğu sağ düğme</string>
+    <string name="pref_btn_url_left">URL çubuğu sol düğme</string>
+    <string name="pref_btn_url_right">URL çubuğu sağ düğme</string>
+    <string name="pref_btn_url_center">URL çubuğu merkez düğmesi (URL kutusu)</string>
+    <string name="pref_btn_action_press">Basma</string>
+    <string name="pref_btn_action_lpress">Uzun basma</string>
+    <string name="pref_btn_action_up">Yukarı kaydır</string>
+    <string name="pref_btn_action_down">Aşağı kaydır</string>
+    <string name="pref_btn_action_left">Sola kaydır</string>
+    <string name="pref_btn_action_right">Sağa kaydır</string>
+    <string name="pref_toolbar_size">Çubuk boyutu</string>
+    <string name="pref_toolbar_text_size">Metin boyutu</string>
+    <string name="pref_text_size">Metin boyutu</string>
+
+    <string name="pref_private_mode">Özel mod</string>
+    <string name="pref_javascript">JavaScript\'i etkinleştir</string>
+    <string name="pref_web_db">Veritabanını etkinleştir</string>
+    <string name="pref_web_dom_db">DOM depolamayı etkinleştir</string>
+    <string name="pref_menu_settings">Seçenekler menüsü ayarları</string>
+    <string name="pref_user_agent">Kullanıcı Aracısı</string>
+
+    <string name="pref_sensitivity_distance">Hassasiyet (mesafe)</string>
+    <string name="pref_browser_settings">Tarayıcı ayarları</string>
+    <string name="pref_pattern_match">Desen eşleşmesi</string>
+    <string name="pref_home_page">Anasayfa</string>
+    <string name="pref_hardbtn_settings">Donanım düğmesi ayarları</string>
+    <string name="pref_btn_back_press">Geriye bas</string>
+    <string name="pref_btn_back_lpress">Geriye uzun bas</string>
+    <string name="pref_btn_serach_press">Aramaya bas</string>
+    <string name="pref_btn_volume_up">Ses açma</string>
+    <string name="pref_btn_volume_down">Ses kısma</string>
+    <string name="pref_btn_volume_default_play">Video oynatırken ses seviyesini değiştir</string>
+    <string name="pref_btn_camera_press">Kameraya bas</string>
+    <string name="pref_btn_menu_press">Menüye bas</string>
+    <string name="pref_load_overview">Genel bakış moduyla yükle</string>
+    <string name="pref_web_wideview">Geniş görünüm portu kullan</string>
+    <string name="pref_oritentation">Yönlendirme</string>
+    <string name="pref_web_customview_oritentation">Tam ekran video yönlendirmesi</string>
+    <string name="pref_oritentation_unspecified">Belirtilmemiş</string>
+    <string name="pref_oritentation_landscape">Manzara</string>
+    <string name="pref_oritentation_portrait">Portre</string>
+    <string name="pref_oritentation_sensor">Algılayıcı</string>
+    <string name="pref_oritentation_no_sensor">Algılayıcı yok</string>
+    <string name="pref_search_url">Arama motoru URL ayarları</string>
+    <string name="pref_search_url_error">%s yok</string>
+    <string name="pref_lpress_settings">Uzun basma ayarları</string>
+    <string name="pref_lpress_link">Bağlantı</string>
+    <string name="pref_lpress_image">Resim</string>
+    <string name="pref_lpress_linkimage">Resim bağlantısı</string>
+    <string name="pref_tab_size_x">Sekmenin ekran genişliği</string>
+    <string name="pref_tab_font_size">Sekme yazı tipi boyutu</string>
+    <string name="pref_action_settings">Eylem ayarları</string>
+    <string name="pref_tab_action">Sekme eylemi</string>
+    <string name="pref_show_zoom_button">Yakınlaştırma düğmelerini görüntüle</string>
+    <string name="pref_fullscreen">Tam ekran</string>
+    <string name="pref_keep_screen_on">Ekranını açık tut</string>
+    <string name="pref_accept_cookie">Çereze izin ver</string>
+    <string name="pref_accept_third_cookie">Üçüncü taraf çerezlere izin ver</string>
+    <string name="pref_accept_cookie_private">Özel modda çereze izin ver</string>
+    <string name="pref_web_cache">Önbellek modu</string>
+
+    <string-array name="pref_web_cache_list">
+        <item>Varsayılan</item>
+        <item>Önbellek yok</item>
+        <item>Önbelleği tercihli olarak yükle</item>
+        <item>Yalnızca önbelleği yükle</item>
+    </string-array>
+
+    <string name="pref_web_popup">Açılır pencereyi etkinleştir</string>
+    <string name="pref_download_action">İndirme eylemi</string>
+
+    <string-array name="pref_download_action_list">
+        <item>Hiçbir şey yapma</item>
+        <item>Otomatik</item>
+        <item>Her zaman indir</item>
+        <item>Her zaman aç</item>
+        <item>Paylaş</item>
+        <item>Seç</item>
+    </string-array>
+
+    <string name="pref_download_folder">İndirme dizini</string>
+    <string name="pref_pause_web_background">Web\'i arka planda duraklat</string>
+    <string name="pref_pause_web_tab_change">Sekmeyi değiştirirken web’i duraklat</string>
+    <string name="pref_pause_web_tab_change_disable_summary">WebView\'daki bir hata nedeniyle devre dışı bırakıldı</string>
+    <string name="pref_btn_custom">Özel çubuk düğmesi</string>
+    <string name="pref_custom_bar">Özel çubuk</string>
+    <string name="pref_save_formdata">Web formlarındaki verileri kaydet</string>
+    <string name="pref_web_app_cache">Uygulama önbelleğini etkinleştir</string>
+    <string name="pref_web_geolocation">Coğrafi konumu etkinleştir</string>
+    <string name="pref_privacy_settings">Gizlilik ayarları</string>
+    <string name="pref_clear_browser_data">Veriyi temizle</string>
+    <string name="pref_layout_algorithm">Düzen algoritması</string>
+
+    <string-array name="pref_layout_algorithm_list">
+        <item>Normal</item>
+        <item>Metin otomatik boyutlandırma</item>
+        <item>Tek sütun (kullanımdan kaldırıldı)</item>
+        <item>Dar sütunlar (kullanımdan kaldırıldı)</item>
+    </string-array>
+
+    <string name="pref_save_history">Geçmişi kaydet</string>
+    <string name="pref_newtab_settings">Yeni sekme ayarları</string>
+
+    <string-array name="pref_newtab_list">
+        <item>Geçerli sekme</item>
+        <item>Yeni sekme</item>
+        <item>Arka plan sekmesi</item>
+        <item>Sağ yeni sekme</item>
+        <item>Sağ arka plan sekmesi</item>
+    </string-array>
+
+    <string name="pref_newtab_link">Bağlantı</string>
+    <string name="pref_newtab_bookmark">Yer imi</string>
+    <string name="pref_newtab_history">Geçmiş</string>
+    <string name="pref_newtab_blank">hedef=\"_boş\"</string>
+    <string name="pref_proxy_settings">Vekil ayarları</string>
+    <string name="pref_ssl_error_alert">Güvenlik uyarılarını göster</string>
+    <string name="pref_gesture_settings">Hareket ayarları</string>
+    <string name="pref_web_gesture_settings">Web hareketi ayarları</string>
+    <string name="pref_sub_gesture_settings">Alt hareket ayarları</string>
+    <string name="pref_gesture_enable">Hareketi etkinleştir</string>
+    <string name="pref_gesture_line">Hareket çizgisini göster</string>
+    <string name="pref_gesture_score">Hareket puanı</string>
+    <string name="pref_lpress_others">Diğer</string>
+    <string name="pref_clear_data_at_finish">Tamamlanan veriyi temizle</string>
+    <string name="pref_security_settings">Güvenlik ayarları</string>
+    <string name="pref_file_access">Yerel dosya erişim ayarları</string>
+
+    <string-array name="pref_file_access_list">
+        <item>Devre dışı (en güvenli)</item>
+        <item>Sanal alanda etkin (daha güvenli)</item>
+        <item>Etkinleştir (güvenli değil)</item>
+    </string-array>
+
+    <string name="pref_mixed_content">Https\'de güvensiz içerik ayarları</string>
+
+    <string-array name="pref_mixed_content_list">
+        <item>Asla izin verme (en güvenli)</item>
+        <item>Uyumluluk (varsayılan)</item>
+        <item>Her zaman izin ver (güvenli değil)</item>
+    </string-array>
+
+    <string name="pref_toolbar_visibility">Görünürlük</string>
+
+    <string-array name="pref_toolbar_visibility_list">
+        <item>Görünür</item>
+        <item>Tam ekranda gizle</item>
+        <item>Son işlem yüklemesini gizle</item>
+        <item>Portre ekranında gizle</item>
+        <item>Manzara ekranında gizle</item>
+        <item>Düzen daraltmasında gizle</item>
+    </string-array>
+
+    <string name="pref_web_swipe_settings">İki parmakla kaydırma işlemleri</string>
+    <string name="pref_web_swipe_enable">İki parmakla kaydırma işlemini etkinleştir</string>
+    <string name="pref_flick_settings">Vurma ayarları</string>
+    <string name="pref_flick_left">Sola vurma eylemi</string>
+    <string name="pref_flick_right">Sağa vurma eylemi</string>
+    <string name="pref_flick_up">Yukarı vurma eylemi</string>
+    <string name="pref_flick_down">Aşağı vurma eylemi</string>
+    <string name="pref_sensitivity_speed">Hassasiyet (hız)</string>
+    <string name="pref_flick_enable">Vurma eylemini etkinleştir</string>
+    <string name="pref_flick_disable_scrolling">Yatay kaydırma sırasında vurmayı iptal et</string>
+    <string name="pref_qc_settings">Hızlı kontrol ayarları</string>
+    <string name="pref_qc_enable">Hızlı kontrolü etkinleştir</string>
+    <string name="pref_qc_rad_start">Yarıçap</string>
+    <string name="pref_qc_rad_inc">Yarıçap artışı</string>
+    <string name="pref_qc_slop">Sıçratma</string>
+    <string name="pref_qc_r_pos">Tepki konumu</string>
+
+    <string-array name="pref_qc_r_pos_list">
+        <item>Sol ve Sağ</item>
+        <item>Sol</item>
+        <item>Sağ</item>
+    </string-array>
+
+    <string name="pref_qc_level1">Seviye 1</string>
+    <string name="pref_qc_level2">Seviye 2</string>
+    <string name="pref_qc_level3">Seviye 3</string>
+    <string name="pref_overlay_bottom_alpha">Alt çubuğun alfa kanalı</string>
+    <string name="pref_save_last_tabs">Çıkışta sekmeleri kaydet</string>
+    <string name="pref_save_pinned_tabs">Çıkışta sabitlenmiş sekmeleri kaydet</string>
+    <string name="pref_save_closed_tab">Kapalı sekmeleri kaydet</string>
+    <string name="pref_flick_edge">Kenar kontrolü</string>
+    <string name="pref_import_export">İçe/Dışa Aktar</string>
+    <string name="pref_import_bookmark">Yer imlerini geri yükle</string>
+    <string name="pref_import_bookmark_confirm">Yer imlerini geri yüklemek istediğinizden emin misiniz?</string>
+    <string name="pref_export_bookmark">Yer imlerini yedekle</string>
+    <string name="pref_export_bookmark_confirm">Yer imlerini yedeklemek istediğinizden emin misiniz?</string>
+    <string name="pref_import_html_bookmark">Html yer imlerini içe aktar</string>
+    <string name="pref_import_html_bookmark_confirm">Yer imlerini içe aktarmak istediğinizden emin misiniz?</string>
+    <string name="pref_export_html_bookmark">Html yer imlerini dışa aktar</string>
+    <string name="pref_export_html_bookmark_confirm">Yer imlerini dışa aktarmak istediğinizden emin misiniz?</string>
+    <string name="pref_fast_back">Hızlı geri</string>
+    <string name="pref_fast_back_cache_size">Hızlı geri önbellek boyutu</string>
+    <string name="pref_fast_back_cache_size_comment">0 = sınırsız</string>
+    <string name="pref_userjs_settings">Kullanıcı Betiği ayarları</string>
+    <string name="pref_userjs_enable">Kullanıcı Betiğini Etkinleştir</string>
+    <string name="pref_userjs_manage">Kullanıcı Betiğini Yönet</string>
+    <string name="pref_rendering">Oluşturma modu</string>
+    <string name="pref_auto_tab_save_delay">Otomatik kaydetme aralığı (saniye)</string>
+    <string name="pref_resblock_settings">Kaynak kesme ayarları</string>
+    <string name="pref_resblock_enable">Kaynak kesmesini etkinleştir</string>
+    <string name="pref_resblock_manage">Kaynak kesmesini yönet</string>
+    <string name="pref_minimum_font">En az yazı tipi boyutu</string>
+
+    <string name="pref_app_settings">Uygulama ayarları</string>
+    <string name="pref_search_suggest">Arama önerisi türü</string>
+
+    <string-array name="pref_search_suggest_list">
+        <item>Ağ</item>
+        <item>Son sorgular</item>
+        <item>Her ikisi de</item>
+        <item>Yok</item>
+    </string-array>
+
+    <string name="pref_history_settings">Geçmiş ayarları</string>
+    <string name="pref_history_max_day">Geçmişi tut (gün)</string>
+    <string name="pref_history_max_count">En fazla geçmiş sayısı</string>
+
+    <string name="open_source_license">Açık kaynak lisansı</string>
+    <string name="pref_log">Günlük</string>
+    <string name="pref_detailed_log">Ayrıntılılı günlük çıktısı</string>
+    <string name="pref_delete_all_logs">Tüm günlükleri sil</string>
+    <string name="pref_delete_log_mes">Tüm günlükleri silmek istediğinize emin misiniz?</string>
+
+    <string name="backup_settings">Yedekleme ayarları</string>
+    <string name="restore_settings">Geri yükleme ayarları</string>
+    <string name="pref_backup_settings_confirm">Ayarları yedeklemek istediğinizden emin misiniz?</string>
+    <string name="pref_restore_settings_confirm">Tüm mevcut ayarlar kaybolacak, ancak geri yükleyeceğinizden emin misiniz?\nAyrıca, geri yükleme tamamlandığında otomatik olarak yeniden başlatılır.</string>
+
+    <string name="version">Sürüm</string>
+    <string name="build">Yapım</string>
+    <string name="build_time">Yapım zamanı</string>
+
+    <string name="theme_setting">Tema ayarları</string>
+
+    <string name="reflect_setting">Şimdi ayarı yansıt</string>
+    <string name="reflect_setting_mes">Bazı değişiklikler siz uygulamayı yeniden başlatana kadar etkili olmayacak.</string>
+
+    <string name="pref_close_auto_select">Ayırım sekmesi bitiş ayarları</string>
+    <string name="pref_close_default">Varsayılan</string>
+    <string name="pref_close_intent">Niyetinden</string>
+    <string name="pref_close_window">Yeni pencere (hedef=_boş)</string>
+
+    <string name="pref_pull_to_refresh">Yenilemek için çekin</string>
+
+    <string name="pref_share_unkown_scheme">Bilinmeyen şemayı paylaş</string>
+    <string name="pref_share_unkown_scheme_summary">Başka bir uygulamayla bilinmeyen bir URL şeması aç</string>
+
+    <string name="pref_speed_dial_setting">Hızlı Arama ayarları</string>
+    <string name="pref_edit_speeddial">Hızlı aramayı düzenle</string>
+    <string name="pref_speeddial_ui_settings">Hızlı arama arayüz ayarları</string>
+    <string name="pref_speeddial_show_header">Başlığı göster</string>
+    <string name="pref_speeddial_show_search_bar">Arama çubuğunu göster</string>
+    <string name="pref_speeddial_show_icon">Simge göster</string>
+    <string name="pref_speeddial_column">Dikey modda sütun sayısı</string>
+    <string name="pref_speeddial_column_landscape">Manzara modunda sütun sayısı</string>
+    <string name="pref_speeddial_column_max_width">En fazla sütun genişliği</string>
+    <string name="pref_speeddial_dark_theme">Koyu tema kullan</string>
+
+    <string name="pref_double_tap_flick_settings">Vurma ayarlarıyla çift dokunma</string>
+    <string name="pref_double_tap_flick_enable">Vurma ile çift dokunmayı etkinleştir</string>
+
+    <string name="pref_operation_settings">İşlem Ayarları</string>
+    <string name="open_bookmark_new_tab">Yer imi simgesi eylemi</string>
+    <string name="open_bookmark_new_tab_info">Sitenin simgesine dokunduğunuzda başka bir sekmede açın</string>
+    <string name="open_bookmark_new_tab_action">Simge eylemi</string>
+    <string name="save_bookmark_folder">Yer imi dizini konumunu hatırla</string>
+
+    <string name="pref_search_suggest_engine">Arama önerisi motoru</string>
+
+    <string name="pref_number_of_tab_to_cache">Önbelleklenecek sekme sayısı</string>
+    <string name="pref_dark_theme">Karanlık tema</string>
+    <string name="pref_light_theme">Açık tema</string>
+
+    <string-array name="pref_rendering_list">
+        <item>Normal</item>
+        <item>Ters çevir</item>
+        <item>Gri tonlama</item>
+        <item>Gri tonlamayı ters çevir</item>
+        <item>Gece modu</item>
+    </string-array>
+
+    <string name="pref_night_mode_settings">Gece modu ayarları</string>
+    <string name="pref_color_temperature">Renk sıcaklığı</string>
+    <string name="pref_warm_color">Sıcak renk</string>
+    <string name="pref_cool_color">Soğuk renk</string>
+    <string name="pref_brightness">Parlaklık</string>
+    <string name="pref_dark">Karanlık</string>
+    <string name="pref_bright">Parlak</string>
+
+    <string name="pref_move_to_parent">Sekme kapandığında üst sekmeye git</string>
+    <string name="pref_move_to_left_tab">Sekme kapandığında soldaki sekmeye git</string>
+    <string name="pref_multi_finger_gesture_settings">Çoklu dokunma hareketi ayarları</string>
+    <string name="pref_multi_finger_gesture_enable">Çoklu dokunma hareketini etkinleştir</string>
+    <string name="pref_multi_finger_gesture_name_enable">Eylem adını göster</string>
+    <string name="pref_number_of_fingers">Parmak sayısı</string>
+    <string name="pref_sensitivity">Hassasiyet</string>
+    <string name="pref_help">Yardım</string>
+    <string name="pref_block_images">Resimleri engelle</string>
+
+    <string name="pref_ad_block">Reklam engelleme ayarları</string>
+    <string name="pref_ad_block_enable">Reklam engellemeyi etkinleştir</string>
+    <string name="pref_ad_block_black">Kara liste</string>
+    <string name="pref_ad_block_white">Beyaz liste</string>
+    <string name="pref_ad_block_white_page">Beyaz sayfa ayarları</string>
+    <string name="exclude_comment">Yorum satırlarını hariç tut</string>
+    <string name="pref_edit">Düzenle</string>
+    <string name="pref_delete">Sil</string>
+    <string name="pref_select_all">Tümünü seç</string>
+    <string name="pref_ad_block_delete_confirm">\"%1$s\" silmek istediğinize emin misiniz?</string>
+    <string name="pref_ad_block_delete_selected_confirm">Seçili öğeleri silmek istediğinize emin misiniz?</string>
+    <string name="pref_ad_block_delete">\"%1$s\" silindi.</string>
+    <string name="pref_export">Dışa aktar</string>
+    <string name="pref_exported">Dışa aktarma tamamlandı</string>
+    <string name="pref_delete_all">Tümünü sil</string>
+    <string name="pref_delete_all_confirm">Tüm öğeleri silmek istediğinize emin misiniz?</string>
+    <string name="pref_sort">Sırala</string>
+    <string name="pref_sort_count">Sayıma göre</string>
+    <string name="pref_sort_date">Tarihe göre</string>
+    <string name="pref_sort_name">Adına göre</string>
+    <string name="pref_sort_registration">Kayda göre</string>
+    <string name="pref_sort_name_reverse">Adına göre(ters sıra)</string>
+    <string name="pref_sort_registration_reverse">Kayda göre(ters sıra)</string>
+
+    <string name="pref_show_divider">Ekran Bölücüler</string>
+    <string-array name="pref_show_divider_list">
+        <item>Otomatik</item>
+        <item>Göster</item>
+        <item>Gizle</item>
+    </string-array>
+
+    <string name="pref_speed_dial">Hızlı arama</string>
+    <string name="pref_restore_speed_dial">Hızlı aramayı geri yükle</string>
+    <string name="pref_backup_speed_dial">Hızlı aramayı yedekle</string>
+    <string name="pref_backup_speed_dial_confirm">Hızlı aramayı yedeklemek istediğinize emin misiniz?</string>
+    <string name="pref_snap_toolbar">Araç Çubuğunu Yasla</string>
+    <string name="pref_toolbar_show_loading">Yüklerken araç çubuğunu göster</string>
+    <string name="pref_enable_safe_browsing">Güvenli göz atmayı etkinleştir</string>
+    <string name="pref_required_android_O">Devre dışı bırakmak için Android 8.0 (Oreo) veya daha üstü gerekir</string>
+    <string name="pref_always_show_url">Her zaman URL göster</string>
+    <string name="pref_show_favicon">Favicon göster</string>
+    <string name="pref_save_tab_for_crash">Sekme sıklığını kaydet</string>
+
+    <string name="pref_touch_scrollbar">Kaydırma çubuğu ayarlarına dokun</string>
+    <string name="pref_display_position">Ekran konumu</string>
+    <string name="pref_touch_scrollbar_do_not_move_toolbar">Araç çubuğunu hareket ettirme</string>
+    <string-array name="pref_touch_scrollbar_list">
+        <item>Gizle</item>
+        <item>Sağ</item>
+        <item>Sol</item>
+    </string-array>
+
+    <string name="pref_reader_settings">Okuyucu ayarları</string>
+    <string name="pref_reader_text_size">Metin boyutu</string>
+    <string name="pref_reader_text_font">Gövde yazı tipi</string>
+    <string name="pref_reader_theme">Okuyucu teması</string>
+    <string name="pref_reader_theme_same_as">Uygulama ayarlarıyla aynı</string>
+
+    <string name="pref_font_size">Yazı tipi boyutu ayarları</string>
+    <string name="pref_font_menu">Seçenekler menüsü</string>
+    <string name="pref_font_history">Geçmiş</string>
+    <string name="pref_font_bookmark">Yer imi</string>
+    <string name="pref_speeddial_item_text_size">Öğe metin boyutu</string>
+    <string-array name="pref_text_size_list">
+        <item>Varsayılan</item>
+        <item>Minik</item>
+        <item>Küçük</item>
+        <item>Orta</item>
+        <item>Büyük</item>
+        <item>Kocaman</item>
+    </string-array>
+
+    <string name="pref_search_settings">Arama ayarları</string>
+    <string name="pref_search_url_settings">Arama motoru ayarları</string>
+    <string name="pref_search_url_show_icon">Arama çubuğundaki anahtar simgesini göster</string>
+    <string name="pref_search_url_save_switching">Arama motoru geçişini kaydet</string>
+    <string name="pref_search_cat_search">Arama motoru</string>
+    <string name="pref_search_cat_suggest">Arama önerisi</string>
+    <string name="pref_fullscreen_mode">Tam ekran modu</string>
+    <string-array name="pref_fullscreen_mode_list">
+        <item>Durum çubuğunu gizle</item>
+        <item>Gezinme çubuğunu gizle</item>
+        <item>Her ikisini de gizle</item>
+    </string-array>
+    <string name="pref_slow_rendering">Yavaş oluşturma</string>
+    <string name="pref_slow_rendering_alert">Uyarı\nBu işlev etkinse donma sık sık gerçekleşebilir.\nAyrıca, bu ayarı değiştirmek için tarayıcıyı en son uygulamalardan yeniden başlatmak gerekir.\nTüm ekran görüntüleri yakalama kullanımı dışında bu işlevi kullanmanızı önermeyiz.</string>
+    <string name="browser_settings">Tarayıcı ayarları</string>
+    <string name="pref_basic_settings">Temel ayarlar</string>
+    <string name="pref_white_url_box">URL kutusunu göster</string>
+    <string name="pref_enable_web_rtc">WebRTC\'yi etkinleştir</string>
+    <string name="pref_content_settings">Web sitesi içerik ayarları</string>
+    <string name="pref_speeddial_layout">Düzen</string>
+    <string-array name="pref_speeddial_layout_list">
+        <item>Büyük simge</item>
+        <item>Küçük simge</item>
+    </string-array>
+    <string name="pref_privacy_policy">Gizlilik Politikası</string>
+    <string name="mining_protect">Bozuk Para Yok</string>
+    <string name="mining_protect_summary">Kripto para madenciliği koruması</string>
+    <string name="pref_storage_location_warn">Bu depolama konumu diğer uygulamalarla düzgün çalışmayabilir.</string>
+    <string name="pref_fake_chrome">Chrome olarak gizlenmiş</string>
+    <string name="pref_fake_chrome_summary">Varsayılan Kullanıcı Aracısını Chrome olarak taklit etme</string>
+    <string name="pref_toolbar_small_icon">Uzun basılmış simgeyi göster</string>
+    <string name="pref_show_icon">Simgeyi göster</string>
+    <string name="pref_translation">Çeviri</string>
+    <string name="pref_translators">Hazuki</string>
+    <string name="adblock_file_large_mes">Dosya boyutu 1 MB’den büyük olduğundan önizlenemez veya düzenlenemez.\nAlmak ister misiniz?</string>
+    <string name="pref_abp_filter">Reklam engelleme süzgeçleri</string>
+    <string name="pref_abp_use_element_filter">Sayfa öğesi gizleme süzgeci kullan</string>
+    <string name="pref_abp_use_ignore_general_element_filter">Genel eleman gizleme süzgecini yoksay</string>
+    <string name="pref_bookmark">Yer imi ayarları</string>
+    <string name="pref_bookmark_overflow">Öğe seçenekleri menü ayarları</string>
+    <string name="pref_page_background_white">Tarayıcı arka planını beyaz yap</string>
+    <string name="pref_page_background_white_info">Yeni bir sekme açarken veya sekmeler arasında geçiş yaparken titremeniz varsa, devre dışı bırakın.</string>
+</resources>
