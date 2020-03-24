@@ -39,6 +39,7 @@ object Versions {
     const val support_fix_lib = "1.1.0"
     const val support_constraint_lib = "1.1.3"
     const val documentFile = "1.0.1"
+    const val print = "1.0.0"
     const val swipeRefreshLayout = "1.0.0"
     const val dagger = "2.27"
     const val kotshi = "2.2.3"
@@ -77,6 +78,7 @@ object AndroidX {
     const val documentFile = "androidx.documentfile:documentfile:${Versions.documentFile}"
     const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
     const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifeCycle}"
+    const val print = "androidx.print:print:${Versions.print}"
 }
 
 object Libs {
@@ -99,7 +101,6 @@ object Libs {
     const val kotlin_android_extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
     const val kotlin_coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlin_coroutines}"
     const val kotlin_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlin_coroutines}"
-    const val kotlin_anko_commons = "org.jetbrains.anko:anko-commons:${Versions.kotlin_anko}"
     const val kotlin_anko_sql = "org.jetbrains.anko:anko-sqlite:${Versions.kotlin_anko}"
 
     const val kvs_schema = "com.rejasupotaro:kvs-schema:${Versions.kvs_schema}"

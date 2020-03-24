@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,6 +93,7 @@ import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.widget.longToast
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.CustomWebViewClient
@@ -100,7 +101,6 @@ import jp.hazuki.yuzubrowser.webview.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
 import jp.hazuki.yuzubrowser.webview.utility.evaluateJavascript
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
-import org.jetbrains.anko.longToast
 import java.net.URISyntaxException
 import java.text.DateFormat
 import kotlin.concurrent.thread

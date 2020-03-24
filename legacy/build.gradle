@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,7 @@ dependencies {
     implementation AndroidX.KTX
     implementation AndroidX.fragmentKtx
     implementation AndroidX.room
+    implementation AndroidX.documentFile
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
@@ -116,7 +117,6 @@ dependencies {
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation Libs.kotlin_anko_commons
     implementation Libs.kotlin_anko_sql
 
     implementation Libs.dagger2

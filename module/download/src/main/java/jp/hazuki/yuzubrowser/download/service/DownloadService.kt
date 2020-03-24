@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,10 +45,10 @@ import jp.hazuki.yuzubrowser.download.service.connection.ServiceClient
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceCommand
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceSocket
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
+import jp.hazuki.yuzubrowser.ui.extensions.intentFor
+import jp.hazuki.yuzubrowser.ui.widget.longToast
+import jp.hazuki.yuzubrowser.ui.widget.toast
 import okhttp3.OkHttpClient
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.toast
 import javax.inject.Inject
 
 class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {

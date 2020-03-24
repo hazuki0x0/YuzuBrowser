@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,55 +14,72 @@
  * limitations under the License.
  */
 
-@file:Suppress("NOTHING_TO_INLINE")
-
-package jp.hazuki.yuzubrowser.core.utility.extensions
+package jp.hazuki.yuzubrowser.ui.extensions
 
 import android.app.Activity
-import android.app.Service
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
-import org.jetbrains.anko.*
-import org.jetbrains.anko.internals.AnkoInternals
 import java.io.Serializable
 
-inline fun <reified T : Activity> androidx.fragment.app.Fragment.startActivity(vararg params: Pair<String, Any?>) = AnkoInternals.internalStartActivity(activity!!, T::class.java, params)
+inline fun <reified T : Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
+    internalStartActivity(this, T::class.java, params)
 
-inline fun <reified T : Activity> androidx.fragment.app.Fragment.startActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>) =
-        startActivityForResult(AnkoInternals.createIntent(activity!!, T::class.java, params), requestCode)
+inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any?>) =
+    internalStartActivity(this.requireActivity(), T::class.java, params)
 
-inline fun <reified T : Service> androidx.fragment.app.Fragment.startService(vararg params: Pair<String, Any?>) =
-        AnkoInternals.internalStartService(activity!!, T::class.java, params)
+inline fun <reified T : Activity> Fragment.startActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>) =
+    startActivityForResult(createIntent(requireActivity(), T::class.java, params), requestCode)
 
-inline fun <reified T : Service> androidx.fragment.app.Fragment.stopService(vararg params: Pair<String, Any?>) =
-        AnkoInternals.internalStopService(activity!!, T::class.java, params)
+inline fun <reified T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent =
+    createIntent(this, T::class.java, params)
 
-inline fun <reified T : Any> androidx.fragment.app.Fragment.intentFor(vararg params: Pair<String, Any?>): Intent =
-        AnkoInternals.createIntent(activity!!, T::class.java, params)
+inline fun <reified T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent =
+    createIntent(requireActivity(), T::class.java, params)
 
-fun Fragment.intentFor(targetActivity: String, vararg params: Pair<String, Any?>): Intent {
-    return Intent().apply {
-        setClassName(activity!!, targetActivity)
-        if (params.isNotEmpty()) fillIntentArguments(this, params)
+fun intentFor(action: String, vararg params: Pair<String, Any?>): Intent =
+    createIntent(action, params)
+
+fun Context.share(text: String, subject: String = ""): Boolean {
+    return try {
+        val intent = Intent(android.content.Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject)
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, text)
+        startActivity(Intent.createChooser(intent, null))
+        true
+    } catch (e: ActivityNotFoundException) {
+        e.printStackTrace()
+        false
     }
 }
 
-inline fun androidx.fragment.app.Fragment.browse(url: String, newTask: Boolean = false) = activity!!.browse(url, newTask)
+fun internalStartActivity(
+    ctx: Context,
+    activity: Class<out Activity>,
+    params: Array<out Pair<String, Any?>>
+) {
+    ctx.startActivity(createIntent(ctx, activity, params))
+}
 
-inline fun androidx.fragment.app.Fragment.share(text: String, subject: String = "") = activity!!.share(text, subject)
+fun createIntent(action: String, params: Array<out Pair<String, Any?>>): Intent {
+    val intent = Intent(action)
+    if (params.isNotEmpty()) fillIntentArguments(intent, params)
+    return intent
+}
 
-inline fun androidx.fragment.app.Fragment.email(email: String, subject: String = "", text: String = "") = activity!!.email(email, subject, text)
-
-inline fun androidx.fragment.app.Fragment.makeCall(number: String): Boolean = activity!!.makeCall(number)
-
-inline fun androidx.fragment.app.Fragment.sendSMS(number: String, text: String = ""): Boolean = activity!!.sendSMS(number, text)
+fun <T> createIntent(ctx: Context, clazz: Class<out T>, params: Array<out Pair<String, Any?>>): Intent {
+    val intent = Intent(ctx, clazz)
+    if (params.isNotEmpty()) fillIntentArguments(intent, params)
+    return intent
+}
 
 private fun fillIntentArguments(intent: Intent, params: Array<out Pair<String, Any?>>) {
     params.forEach {
-        val value = it.second
-        when (value) {
+        when (val value = it.second) {
             null -> intent.putExtra(it.first, null as Serializable?)
             is Int -> intent.putExtra(it.first, value)
             is Long -> intent.putExtra(it.first, value)
@@ -80,7 +97,6 @@ private fun fillIntentArguments(intent: Intent, params: Array<out Pair<String, A
                 value.isArrayOf<CharSequence>() -> intent.putExtra(it.first, value)
                 value.isArrayOf<String>() -> intent.putExtra(it.first, value)
                 value.isArrayOf<Parcelable>() -> intent.putExtra(it.first, value)
-                else -> throw AnkoException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
             }
             is IntArray -> intent.putExtra(it.first, value)
             is LongArray -> intent.putExtra(it.first, value)
@@ -89,8 +105,8 @@ private fun fillIntentArguments(intent: Intent, params: Array<out Pair<String, A
             is CharArray -> intent.putExtra(it.first, value)
             is ShortArray -> intent.putExtra(it.first, value)
             is BooleanArray -> intent.putExtra(it.first, value)
-            else -> throw AnkoException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
         }
         return@forEach
     }
 }
+

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package jp.hazuki.yuzubrowser.adblock.ui.original
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpActivity
+import jp.hazuki.yuzubrowser.ui.extensions.startActivity
 import jp.hazuki.yuzubrowser.ui.settings.fragment.YuzuBasePreferenceFragment
-import org.jetbrains.anko.startActivity
 
 class AdBlockMainFragment : YuzuBasePreferenceFragment() {
 
@@ -32,21 +33,21 @@ class AdBlockMainFragment : YuzuBasePreferenceFragment() {
         setHasOptionsMenu(true)
         addPreferencesFromResource(R.xml.pref_ad_block)
 
-        findPreference("black_list").setOnPreferenceClickListener {
+        findPreference<Preference>("black_list")!!.setOnPreferenceClickListener {
             listener!!.openBlackList()
             false
         }
 
-        findPreference("white_list").setOnPreferenceClickListener {
+        findPreference<Preference>("white_list")!!.setOnPreferenceClickListener {
             listener!!.openWhiteList()
             false
         }
 
-        findPreference("white_page_list").setOnPreferenceClickListener {
+        findPreference<Preference>("white_page_list")!!.setOnPreferenceClickListener {
             listener!!.openWhitePageList()
             false
         }
-        findPreference("abp_list").setOnPreferenceClickListener {
+        findPreference<Preference>("abp_list")!!.setOnPreferenceClickListener {
             activity?.startActivity<AbpActivity>()
             false
         }

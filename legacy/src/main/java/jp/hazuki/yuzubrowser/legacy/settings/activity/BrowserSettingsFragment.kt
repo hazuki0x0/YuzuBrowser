@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import jp.hazuki.yuzubrowser.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
-import org.jetbrains.anko.longToast
+import jp.hazuki.yuzubrowser.ui.widget.longToast
 
 class BrowserSettingsFragment : YuzuPreferenceFragment() {
 
@@ -38,8 +38,8 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_browser_settings)
 
-        val pref = findPreference("search_suggest") as StrToIntListPreference
-        val suggest = findPreference("search_suggest_engine")
+        val pref = findPreference<StrToIntListPreference>("search_suggest")!!
+        val suggest = findPreference<Preference>("search_suggest_engine")!!
 
         suggest.isEnabled = pref.value != 2
 
@@ -48,8 +48,8 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
             true
         }
 
-        val savePinned = findPreference("save_pinned_tabs")
-        val saveLast = findPreference("save_last_tabs") as SwitchPreference
+        val savePinned = findPreference<Preference>("save_pinned_tabs")!!
+        val saveLast = findPreference<SwitchPreference>("save_last_tabs")!!
 
         savePinned.isEnabled = !saveLast.isChecked
         saveLast.setOnPreferenceChangeListener { _, newValue ->
@@ -57,12 +57,12 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
             true
         }
 
-        findPreference("ad_block_settings").setOnPreferenceClickListener {
+        findPreference<Preference>("ad_block_settings")!!.setOnPreferenceClickListener {
             startActivity(Intent(activity, AdBlockActivity::class.java))
             true
         }
 
-        findPreference("download_folder").setOnPreferenceClickListener {
+        findPreference<Preference>("download_folder")!!.setOnPreferenceClickListener {
             try {
                 startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
             } catch (e: Exception) {
@@ -128,10 +128,10 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
         override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_browser_settings, "ps_search")
 
-            val suggestMode = findPreference("search_suggest") as StrToIntListPreference
-            suggestEngine = findPreference("search_suggest_engine")
-            suggestHistory = findPreference("search_suggest_histories")
-            suggestBookmark = findPreference("search_suggest_bookmarks")
+            val suggestMode = findPreference<StrToIntListPreference>("search_suggest")!!
+            suggestEngine = findPreference("search_suggest_engine")!!
+            suggestHistory = findPreference("search_suggest_histories")!!
+            suggestBookmark = findPreference("search_suggest_bookmarks")!!
 
             setSuggestEnable(suggestMode.value)
             suggestMode.setOnPreferenceChangeListener { _, newValue ->

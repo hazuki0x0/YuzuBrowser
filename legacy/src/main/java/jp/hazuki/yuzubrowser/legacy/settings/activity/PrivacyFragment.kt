@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import jp.hazuki.asyncpermissions.AsyncPermissions
-import jp.hazuki.yuzubrowser.core.utility.extensions.startActivity
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.legacy.browser.requestLocationPermission
 import jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity
+import jp.hazuki.yuzubrowser.ui.extensions.startActivity
 
 class PrivacyFragment : YuzuPreferenceFragment() {
     private val asyncPermissions by lazy { AsyncPermissions(activity as AppCompatActivity) }
@@ -35,7 +35,7 @@ class PrivacyFragment : YuzuPreferenceFragment() {
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_privacy)
 
-        findPreference("web_geolocation").setOnPreferenceClickListener {
+        findPreference<Preference>("web_geolocation")?.setOnPreferenceClickListener {
             val activity = activity ?: return@setOnPreferenceClickListener false
 
             if (activity.checkLocationPermission()) {
@@ -46,13 +46,13 @@ class PrivacyFragment : YuzuPreferenceFragment() {
             }
         }
 
-        val privateMode = findPreference("private_mode") as SwitchPreference
+        val privateMode: SwitchPreference = findPreference("private_mode")!!
 
-        val formData = findPreference("save_formdata")
-        val webDB = findPreference("web_db")
-        val webDom = findPreference("web_dom_db")
-        val geo = findPreference("web_geolocation")
-        val appCache = findPreference("web_app_cache")
+        val formData = findPreference<Preference>("save_formdata")!!
+        val webDB = findPreference<Preference>("web_db")!!
+        val webDom = findPreference<Preference>("web_dom_db")!!
+        val geo = findPreference<Preference>("web_geolocation")!!
+        val appCache = findPreference<Preference>("web_app_cache")!!
 
         val enableSettings = !privateMode.isChecked
 
@@ -65,9 +65,10 @@ class PrivacyFragment : YuzuPreferenceFragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             preferenceScreen.removePreference(formData)
         } else {
-            val safeBrowsing = findPreference("safe_browsing")
-            safeBrowsing.isEnabled = false
-            safeBrowsing.setSummary(R.string.pref_required_android_O)
+            findPreference<Preference>("safe_browsing")!!.run {
+                isEnabled = false
+                setSummary(R.string.pref_required_android_O)
+            }
         }
 
         privateMode.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -83,7 +84,7 @@ class PrivacyFragment : YuzuPreferenceFragment() {
             true
         }
 
-        findPreference("contentSettings").setOnPreferenceClickListener {
+        findPreference<Preference>("contentSettings")!!.setOnPreferenceClickListener {
             startActivity<WebPermissionActivity>()
             return@setOnPreferenceClickListener true
         }

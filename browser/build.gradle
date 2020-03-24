@@ -66,6 +66,7 @@ dependencies {
     implementation AndroidX.constraintLayout
     implementation AndroidX.fix_preference
     implementation AndroidX.room
+    implementation AndroidX.print
 
     implementation Libs.okhttp
     implementation Libs.okio
@@ -93,7 +94,6 @@ dependencies {
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation Libs.kotlin_anko_commons
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
