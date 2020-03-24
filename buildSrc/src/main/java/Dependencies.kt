@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,42 +28,44 @@ object AppVersions {
 
 object Versions {
     const val androidX = "1.0.0"
-    const val appCompat = "1.1.0-alpha04"
-    const val activityX = "1.0.0-alpha06"
-    const val androidKTX = "1.0.2"
-    const val fragmentKtx = "1.0.0"
-    const val androidxRoom = "2.1.0"
-    const val lifeCycle = "2.0.0"
-    const val support_fix_lib = androidX
+    const val appCompat = "1.1.0"
+    const val activityX = "1.1.0"
+    const val androidKTX = "1.2.0"
+    const val fragmentKtx = "1.2.3"
+    const val recyclerView = "1.1.0"
+    const val androidxRoom = "2.2.5"
+    const val lifeCycle = "2.2.0"
+    const val material = "1.1.0"
+    const val support_fix_lib = "1.1.0"
     const val support_constraint_lib = "1.1.3"
     const val documentFile = "1.0.1"
     const val swipeRefreshLayout = "1.0.0"
-    const val dagger = "2.23.2"
-    const val kotshi = "2.0.1"
-    const val okhttp = "4.0.1"
-    const val okio = "2.2.2"
+    const val dagger = "2.27"
+    const val kotshi = "2.2.3"
+    const val okhttp = "4.4.1"
+    const val okio = "2.5.0"
     const val kvs_schema = "5.1.0"
-    const val kotlin = "1.3.41"
-    const val kotlin_coroutines = "1.3.0-RC"
+    const val kotlin = "1.3.71"
+    const val kotlin_coroutines = "1.3.5"
     const val kotlin_anko = "0.10.8"
-    const val junit = "4.12"
-    const val assertk = "0.16"
+    const val junit = "4.13"
+    const val assertk = "0.22"
     const val espresso = "3.2.0"
     const val testCore = "1.2.0"
     const val runner = "1.1.1"
     const val header_decor = "0.2.8"
     const val materialprogressbar = "1.6.1"
-    const val mockito = "3.0.0"
-    const val powermock = "2.0.2"
-    const val jsoup = "1.12.1"
+    const val mockito = "3.3.3"
+    const val powermock = "2.0.6"
+    const val jsoup = "1.13.1"
     const val re2j = "1.3"
 }
 
 object AndroidX {
     const val annotations = "androidx.annotation:annotation:${Versions.androidX}"
     const val appcompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
-    const val design = "com.google.android.material:material:${Versions.androidX}"
-    const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.androidX}"
+    const val design = "com.google.android.material:material:${Versions.material}"
+    const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.support_constraint_lib}"
     const val fix_preference = "com.takisoft.preferencex:preferencex:${Versions.support_fix_lib}"
     const val KTX = "androidx.core:core-ktx:${Versions.androidKTX}"
