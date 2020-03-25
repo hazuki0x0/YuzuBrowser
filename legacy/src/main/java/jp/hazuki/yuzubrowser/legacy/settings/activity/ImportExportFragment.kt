@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
+import androidx.preference.Preference
 import dagger.android.support.AndroidSupportInjection
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
@@ -60,7 +61,6 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallbacks<Boolean> {
-    private var progress: DialogFragment? = null
     private val asyncPermissions by lazy { AsyncPermissions(appCompatActivity) }
 
     @Inject
@@ -71,7 +71,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
         addPreferencesFromResource(R.xml.pref_import_export)
         val activity = activity ?: return
 
-        findPreference("import_sd_bookmark").setOnPreferenceClickListener {
+        findPreference<Preference>("import_sd_bookmark")!!.setOnPreferenceClickListener {
             val manager = BookmarkManager.getInstance(activity)
             val internalFile = manager.file
 
@@ -109,7 +109,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             false
         }
 
-        (findPreference("export_sd_bookmark") as AlertDialogPreference).setOnPositiveButtonListener {
+        findPreference<AlertDialogPreference>("export_sd_bookmark")!!.setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
                 val manager = BookmarkManager.getInstance(activity)
                 val internalFile = manager.file
@@ -132,7 +132,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             }
         }
 
-        findPreference("import_html_bookmark").setOnPreferenceClickListener {
+        findPreference<Preference>("import_html_bookmark")!!.setOnPreferenceClickListener {
             val manager = BookmarkManager.getInstance(activity)
             val defFolder = Environment.getExternalStorageDirectory()
 
@@ -153,10 +153,10 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                                             bundle.putSerializable("folder", root)
                                             LoaderManager.getInstance(this@ImportExportFragment)
                                                 .restartLoader(2, bundle, this@ImportExportFragment)
-                                            progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
+                                            ProgressDialog(getString(R.string.restoring)).also { dialog ->
                                                 dialog.show(childFragmentManager, "progress")
+                                                handler.setDialog(dialog)
                                             }
-                                            handler.setDialog(progress)
                                         }
                                     }
                                     .setNegativeButton(android.R.string.cancel, null)
@@ -172,7 +172,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             false
         }
 
-        (findPreference("export_html_bookmark") as AlertDialogPreference).setOnPositiveButtonListener {
+        findPreference<AlertDialogPreference>("export_html_bookmark")!!.setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
                 val manager = BookmarkManager.getInstance(activity)
                 val externalFile = File(externalUserDirectory, manager.file.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".html")
@@ -188,16 +188,16 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                 bundle.putSerializable("folder", manager.root)
                 LoaderManager.getInstance(this@ImportExportFragment)
                     .restartLoader(3, bundle, this@ImportExportFragment)
-                progress = ProgressDialog(getString(R.string.exporting)).also {
+                ProgressDialog(getString(R.string.exporting)).also {
                     it.show(childFragmentManager, "progress")
+                    handler.setDialog(it)
                 }
-                handler.setDialog(progress)
             } else {
                 ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
             }
         }
 
-        findPreference("restore_speed_dial").setOnPreferenceClickListener {
+        findPreference<Preference>("restore_speed_dial")!!.setOnPreferenceClickListener {
             val dir = File(externalUserDirectory, "speedDial")
             if (!dir.exists())
                 dir.mkdirs()
@@ -211,10 +211,10 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                                 bundle.putSerializable("file", file)
                                 LoaderManager.getInstance(this@ImportExportFragment)
                                     .restartLoader(4, bundle, this@ImportExportFragment)
-                                progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
+                                ProgressDialog(getString(R.string.restoring)).also { dialog ->
                                     dialog.show(childFragmentManager, "progress")
+                                    handler.setDialog(dialog)
                                 }
-                                handler.setDialog(progress)
                             }
                         }
 
@@ -226,23 +226,23 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             true
         }
 
-        (findPreference("backup_speed_dial") as AlertDialogPreference).setOnPositiveButtonListener {
+        findPreference<AlertDialogPreference>("backup_speed_dial")!!.setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
                 val file = File(externalUserDirectory, "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
                 LoaderManager.getInstance(this@ImportExportFragment)
                     .restartLoader(5, bundle, this@ImportExportFragment)
-                progress = ProgressDialog(getString(R.string.backing_up)).also {
+                ProgressDialog(getString(R.string.backing_up)).also {
                     it.show(childFragmentManager, "progress")
+                    handler.setDialog(it)
                 }
-                handler.setDialog(progress)
             } else {
                 ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
             }
         }
 
-        findPreference("restore_settings").setOnPreferenceClickListener {
+        findPreference<Preference>("restore_settings")!!.setOnPreferenceClickListener {
             val dir = File(externalUserDirectory, "backup")
             if (!dir.exists())
                 dir.mkdirs()
@@ -260,10 +260,10 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
                                             bundle.putSerializable("file", file)
                                             LoaderManager.getInstance(this@ImportExportFragment)
                                                 .restartLoader(0, bundle, this@ImportExportFragment)
-                                            progress = ProgressDialog(getString(R.string.restoring)).also { dialog ->
+                                            ProgressDialog(getString(R.string.restoring)).also { dialog ->
                                                 dialog.show(childFragmentManager, "progress")
+                                                handler.setDialog(dialog)
                                             }
-                                            handler.setDialog(progress)
                                         }
 
                                     }
@@ -279,17 +279,17 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             true
         }
 
-        (findPreference("backup_settings") as AlertDialogPreference).setOnPositiveButtonListener {
+        findPreference<AlertDialogPreference>("backup_settings")!!.setOnPositiveButtonListener {
             if (activity.checkStoragePermission()) {
                 val file = File(externalUserDirectory, "backup" + File.separator + FileUtils.getTimeFileName() + EXT)
                 val bundle = Bundle()
                 bundle.putSerializable("file", file)
                 LoaderManager.getInstance(this@ImportExportFragment)
                     .restartLoader(1, bundle, this@ImportExportFragment)
-                progress = ProgressDialog(getString(R.string.backing_up)).also {
+                ProgressDialog(getString(R.string.backing_up)).also {
                     it.show(childFragmentManager, "progress")
+                    handler.setDialog(it)
                 }
-                handler.setDialog(progress)
             } else {
                 ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
             }
@@ -373,7 +373,7 @@ class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallb
             }
         }
 
-        internal fun setDialog(dialog: DialogFragment?) {
+        internal fun setDialog(dialog: DialogFragment) {
             dialogRef = WeakReference<DialogFragment>(dialog)
         }
     }

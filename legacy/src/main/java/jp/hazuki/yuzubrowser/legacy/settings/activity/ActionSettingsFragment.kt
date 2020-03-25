@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import jp.hazuki.yuzubrowser.bookmark.overflow.MenuType
 import jp.hazuki.yuzubrowser.bookmark.overflow.view.BookmarkOverflowMenuActivity
@@ -32,7 +33,7 @@ class ActionSettingsFragment : YuzuPreferenceFragment() {
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_action_settings)
 
-        findPreference("mf_gesture").setOnPreferenceClickListener {
+        findPreference<Preference>("mf_gesture")!!.setOnPreferenceClickListener {
             startActivity(Intent(activity, MultiFingerSettingsActivity::class.java))
             true
         }
@@ -63,11 +64,11 @@ class ActionSettingsFragment : YuzuPreferenceFragment() {
         override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_action_settings, "ps_bookmark")
 
-            findPreference("bookmark_option_site").setOnPreferenceClickListener {
+            findPreference<Preference>("bookmark_option_site")!!.setOnPreferenceClickListener {
                 startActivity(BookmarkOverflowMenuActivity.createIntent(requireActivity(), MenuType.SITE))
                 true
             }
-            findPreference("bookmark_option_folder").setOnPreferenceClickListener {
+            findPreference<Preference>("bookmark_option_folder")!!.setOnPreferenceClickListener {
                 startActivity(BookmarkOverflowMenuActivity.createIntent(requireActivity(), MenuType.FOLDER))
                 true
             }

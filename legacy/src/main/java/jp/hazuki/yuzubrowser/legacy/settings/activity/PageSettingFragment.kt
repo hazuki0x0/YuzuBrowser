@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeSettingActivity
 
@@ -26,7 +27,7 @@ class PageSettingFragment : YuzuPreferenceFragment() {
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_page_settings)
 
-        findPreference("web_encode_list").setOnPreferenceClickListener {
+        findPreference<Preference>("web_encode_list")!!.setOnPreferenceClickListener {
             val intent = Intent(activity, WebTextEncodeSettingActivity::class.java)
             startActivity(intent)
             true

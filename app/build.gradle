@@ -46,6 +46,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 
     buildTypes {
         release {
@@ -122,9 +125,12 @@ dependencies {
     implementation AndroidX.appcompat
     implementation AndroidX.fix_preference
     implementation AndroidX.room
+    implementation AndroidX.documentFile
+    implementation AndroidX.design
     implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
+    implementation project(':libraries:asyncpermissions')
     implementation project(':browser')
     implementation project(':ui')
     implementation project(':legacy')

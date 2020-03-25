@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import com.takisoft.preferencex.PreferenceFragmentCompat
 import jp.hazuki.yuzubrowser.ui.PREFERENCE_FILE_NAME
@@ -57,8 +58,9 @@ abstract class YuzuBasePreferenceFragment : PreferenceFragmentCompat() {
         val activity = activity ?: return
 
         preferenceScreen?.run {
-            val key: String? = arguments?.getString(ARG_PREFERENCE_ROOT)
-            val title = if (!TextUtils.isEmpty(key)) findPreference(key).title else title
+            val key = arguments?.getString(ARG_PREFERENCE_ROOT)
+            val title = if (!key.isNullOrEmpty()) findPreference<Preference>(key)?.title
+                ?: title else title
             activity.title = if (TextUtils.isEmpty(title)) getText(R.string.pref_settings) else title
         }
     }

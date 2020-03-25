@@ -22,8 +22,6 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
 
-
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
@@ -31,7 +29,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     buildTypes {
@@ -68,6 +74,7 @@ dependencies {
     implementation AndroidX.room
     implementation AndroidX.roomKtx
     implementation AndroidX.fix_preference
+    implementation AndroidX.localBroadcast
     kapt AndroidX.roomCompiler
 
     implementation Libs.kotlin_stdlib

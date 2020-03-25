@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,5 +21,9 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.LifecycleOwner
 
 inline fun OnBackPressedDispatcher.addCallback(owner: LifecycleOwner, crossinline callback: () -> Boolean) {
-    addCallback(owner, OnBackPressedCallback { callback() })
+    addCallback(owner, object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            callback()
+        }
+    })
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,11 +53,10 @@ import javax.inject.Singleton
 ])
 interface AppComponent : AndroidInjector<YuzuBrowserApplication> {
 
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(application: YuzuBrowserApplication): Builder
-
-        fun build(): AppComponent
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance application: YuzuBrowserApplication): AppComponent
     }
+
+    override fun inject(application: YuzuBrowserApplication)
 }

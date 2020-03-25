@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,33 +18,25 @@ package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
 @Suppress("DEPRECATION")
 @SuppressLint("Registered")
-open class DaggerLongPressFixActivity : LongPressFixActivity(), HasFragmentInjector, HasSupportFragmentInjector {
+open class DaggerLongPressFixActivity : LongPressFixActivity(), HasAndroidInjector {
 
     @Inject
-    internal lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject
-    internal lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
+    internal lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-        return supportFragmentInjector
-    }
-
-    override fun fragmentInjector(): AndroidInjector<android.app.Fragment> {
-        return frameworkFragmentInjector
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
     }
 }

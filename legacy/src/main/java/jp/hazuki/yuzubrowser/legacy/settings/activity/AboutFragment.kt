@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.core.utility.extensions.getVersionName
-import jp.hazuki.yuzubrowser.core.utility.extensions.intentFor
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.licenses.LicensesActivity
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
+import jp.hazuki.yuzubrowser.ui.extensions.intentFor
 import java.io.File
 
 class AboutFragment : YuzuPreferenceFragment() {
@@ -37,26 +38,27 @@ class AboutFragment : YuzuPreferenceFragment() {
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: throw IllegalStateException()
         addPreferencesFromResource(R.xml.pref_about)
-        val version = findPreference("version")
-        version.setOnPreferenceClickListener {
-            activity.setClipboardWithToast(AppUtils.getVersionDeviceInfo(activity))
-            true
+        findPreference<Preference>("version")!!.run {
+            setOnPreferenceClickListener {
+                activity.setClipboardWithToast(AppUtils.getVersionDeviceInfo(activity))
+                true
+            }
+            summary = activity.getVersionName()
         }
 
-        version.summary = activity.getVersionName()
-        findPreference("build").summary = activity.getString(R.string.package_build)
-        findPreference("build_time").summary = activity.getString(R.string.package_build_time)
+        findPreference<Preference>("build")!!.summary = activity.getString(R.string.package_build)
+        findPreference<Preference>("build_time")!!.summary = activity.getString(R.string.package_build_time)
 
-        findPreference("osl").setOnPreferenceClickListener {
+        findPreference<Preference>("osl")!!.setOnPreferenceClickListener {
             startActivity(intentFor<LicensesActivity>())
             true
         }
-        findPreference("translation").setOnPreferenceClickListener {
+        findPreference<Preference>("translation")!!.setOnPreferenceClickListener {
             TranslationDialog().show(childFragmentManager, "translation")
             true
         }
 
-        findPreference("privacy_policy").setOnPreferenceClickListener {
+        findPreference<Preference>("privacy_policy")!!.setOnPreferenceClickListener {
             startActivity(intentFor(Constants.activity.MAIN_BROWSER).apply {
                 action = Constants.intent.ACTION_OPEN_DEFAULT
                 data = Uri.parse("https://github.com/hazuki0x0/YuzuBrowser/wiki/Privacy-policy")
@@ -64,7 +66,7 @@ class AboutFragment : YuzuPreferenceFragment() {
             true
         }
 
-        findPreference("delete_log").setOnPreferenceClickListener {
+        findPreference<Preference>("delete_log")!!.setOnPreferenceClickListener {
             DeleteLogDialog().show(childFragmentManager, "delete")
             true
         }

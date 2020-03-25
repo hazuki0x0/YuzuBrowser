@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
 
 package jp.hazuki.yuzubrowser
 
+import android.app.Application
 import android.content.Context
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.core.CrashlyticsCore
 import com.squareup.moshi.Moshi
 import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import io.fabric.sdk.android.Fabric
 import jp.hazuki.yuzubrowser.adblock.registerAdBlockNotification
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
@@ -42,7 +41,7 @@ import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import javax.inject.Inject
 
 
-class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSupportFragmentInjector {
+class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInjector {
 
     override val applicationId = BuildConfig.APPLICATION_ID
     override val permissionAppSignature = PERMISSION_MYAPP_SIGNATURE
@@ -51,7 +50,7 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
     override val context: Context
         get() = this
     @Inject
-    lateinit var dispatchingAndroidFragmentInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
     override lateinit var moshi: Moshi
     @Inject
@@ -79,14 +78,9 @@ class YuzuBrowserApplication : DaggerApplication(), BrowserApplication, HasSuppo
         Logger.isDebug = BuildConfig.DEBUG
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return dispatchingAndroidFragmentInjector
-    }
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().application(this).build()
-        appComponent.inject(this)
-        return appComponent
+    override fun androidInjector(): AndroidInjector<Any> {
+        DaggerAppComponent.factory().create(this).inject(this)
+        return androidInjector
     }
 
     companion object {

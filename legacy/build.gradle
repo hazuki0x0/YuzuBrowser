@@ -36,6 +36,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -98,7 +107,7 @@ dependencies {
     implementation Libs.jsoup
     implementation project(':libraries:floatingactionbutton')
     implementation project(':libraries:colorpicker')
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
     implementation project(':libraries:asyncpermissions')

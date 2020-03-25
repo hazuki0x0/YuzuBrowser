@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.gesture.multiFinger
 
 import android.content.Context
 import android.os.Bundle
+import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.settings.activity.YuzuPreferenceFragment
 
@@ -30,7 +31,7 @@ class MfsFragment : YuzuPreferenceFragment() {
 
         retainInstance = true
 
-        findPreference("multi_finger_gesture_list").setOnPreferenceClickListener {
+        findPreference<Preference>("multi_finger_gesture_list")!!.setOnPreferenceClickListener {
             listener?.onGoToList()
             false
         }

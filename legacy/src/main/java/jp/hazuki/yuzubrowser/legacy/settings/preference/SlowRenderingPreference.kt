@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,19 +52,18 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
         }
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val arguments = arguments ?: throw IllegalArgumentException()
             val fragment = targetFragment as? DialogPreference.TargetFragment
                     ?: throw IllegalStateException("Target fragment must implement TargetFragment" + " interface")
 
-            val key = arguments.getString(ARG_KEY)
+            val key = requireArguments().getString(ARG_KEY)
 
-            val preference = fragment.findPreference(key) as SlowRenderingPreference
+            val preference: SlowRenderingPreference = fragment.findPreference(key)!!
 
             return AlertDialog.Builder(context).run {
                 setTitle(preference.title)
                 setMessage(R.string.pref_slow_rendering_alert)
-                setPositiveButton(android.R.string.ok,
-                        { _, _ -> if (preference.callChangeListener(true)) preference.isChecked = true })
+                setPositiveButton(android.R.string.ok)
+                { _, _ -> if (preference.callChangeListener(true)) preference.isChecked = true }
                 setNegativeButton(android.R.string.cancel, null)
                 create()
             }
