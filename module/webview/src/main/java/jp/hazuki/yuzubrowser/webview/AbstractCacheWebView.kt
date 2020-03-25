@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,16 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
 
     internal abstract fun removeCurrentTab(tab: WebViewPage)
     internal abstract fun resetCurrentTab(): WebViewPage
-    protected abstract fun newTab(url: String, additionalHttpHeaders: Map<String, String> = emptyMap)
+    protected abstract fun createTab(url: String, additionalHttpHeaders: Map<String, String>)
+
+    protected fun newTab(url: String, additionalHttpHeaders: Map<String, String> = emptyMap) {
+        val current = currentPage.webView
+        // partial support remove history
+        if (current.canGoForward() && !current.canGoBack()) {
+            current.clearHistory()
+        }
+        createTab(url, additionalHttpHeaders)
+    }
 
     override fun clearCache(includeDiskFiles: Boolean) {
         for (web in tabs) {

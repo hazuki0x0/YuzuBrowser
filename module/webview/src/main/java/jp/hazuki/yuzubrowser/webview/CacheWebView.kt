@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,7 +118,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
 
     private fun webView2Data(web: CustomWebView): WebViewPage? = mList.firstOrNull { it.webView == web }
 
-    override fun newTab(url: String, additionalHttpHeaders: Map<String, String>) {
+    override fun createTab(url: String, additionalHttpHeaders: Map<String, String>) {
         val from = mList[current]
         val to = WebViewPage(SwipeWebView(context))
         for (i in mList.size - 1 downTo current + 1) {

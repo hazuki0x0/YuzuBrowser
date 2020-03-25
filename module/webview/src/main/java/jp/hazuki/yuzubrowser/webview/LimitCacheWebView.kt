@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
 
     private fun webView2data(web: CustomWebView): WebViewPage? = tabCache[web.identityId]
 
-    override fun newTab(url: String, additionalHttpHeaders: Map<String, String>) {
+    override fun createTab(url: String, additionalHttpHeaders: Map<String, String>) {
         val from = currentPage
         val to = makeWebView()
         val currentUrl = from.url
