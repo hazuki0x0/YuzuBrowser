@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +85,6 @@ public class ErrorReportServer implements UncaughtExceptionHandler, IErrorReport
                 writer.printf("BUILD:%s\n", BuildConfig.GIT_HASH);
                 writer.printf("BUILD TIME:%s\n", BuildConfig.BUILD_TIME);
                 writer.printf("BUILD TYPE:%s\n", BuildConfig.BUILD_TYPE);
-                writer.printf("BUILD FLAVOR%s\n", BuildConfig.FLAVOR);
                 writer.printf("MANUFACTURER:%s\n", Build.MANUFACTURER);
                 writer.printf("DEVICE:%s\n", Build.DEVICE);
                 writer.printf("MODEL:%s\n", Build.MODEL);
