@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ dependencies {
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.2'
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.4'
     implementation project(':libraries:asyncpermissions')
     implementation project(':ui')
     implementation project(':legacy')

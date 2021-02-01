@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath Dependencies.kotlin_plugin
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.28.0'
-        classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta09'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.36.0'
+        classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta10'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -45,6 +45,18 @@ configurations {
                 }
             }
         }
+    }
+}
+
+static def isNonStable(v) {
+    ["-alpha", "-beta", "-rc", "-m"].any { v.toLowerCase().contains(it) }
+}
+
+tasks.named("dependencyUpdates").configure {
+
+    // Example 2: disallow release candidates as upgradable versions from stable versions
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
     }
 }
 

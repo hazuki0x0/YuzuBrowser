@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,38 +28,38 @@ object AppVersions {
 
 object Versions {
     const val androidX = "1.0.0"
-    const val appCompat = "1.1.0"
+    const val appCompat = "1.2.0"
     const val activityX = "1.1.0"
-    const val androidKTX = "1.2.0"
-    const val fragmentKtx = "1.2.3"
+    const val androidKTX = "1.3.2"
+    const val fragmentKtx = "1.2.5"
     const val recyclerView = "1.1.0"
-    const val androidxRoom = "2.2.5"
+    const val androidxRoom = "2.2.6"
     const val lifeCycle = "2.2.0"
-    const val material = "1.1.0"
+    const val material = "1.2.1"
     const val support_fix_lib = "1.1.0"
-    const val support_constraint_lib = "1.1.3"
+    const val support_constraint_lib = "2.0.4"
     const val documentFile = "1.0.1"
     const val print = "1.0.0"
-    const val swipeRefreshLayout = "1.0.0"
-    const val dagger = "2.27"
-    const val kotshi = "2.2.3"
-    const val okhttp = "4.4.1"
-    const val okio = "2.5.0"
+    const val swipeRefreshLayout = "1.1.0"
+    const val dagger = "2.31.2"
+    const val kotshi = "2.4.0"
+    const val okhttp = "4.9.1"
+    const val okio = "2.10.0"
     const val kvs_schema = "5.1.0"
-    const val kotlin = "1.3.71"
-    const val kotlin_coroutines = "1.3.5"
+    const val kotlin = "1.4.21"
+    const val kotlin_coroutines = "1.4.2"
     const val kotlin_anko = "0.10.8"
-    const val junit = "4.13"
-    const val assertk = "0.22"
-    const val espresso = "3.2.0"
+    const val junit = "4.13.1"
+    const val assertk = "0.23"
+    const val espresso = "3.3.0"
     const val testCore = "1.2.0"
     const val runner = "1.1.1"
     const val header_decor = "0.2.8"
     const val materialprogressbar = "1.6.1"
-    const val mockito = "3.3.3"
-    const val powermock = "2.0.6"
+    const val mockito = "3.7.7"
+    const val powermock = "2.0.9"
     const val jsoup = "1.13.1"
-    const val re2j = "1.3"
+    const val re2j = "1.5"
 }
 
 object AndroidX {
