@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ dependencies {
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
 
-    implementation project(':core')
+    implementation project(':module:core')
 }
 repositories {
     mavenCentral()

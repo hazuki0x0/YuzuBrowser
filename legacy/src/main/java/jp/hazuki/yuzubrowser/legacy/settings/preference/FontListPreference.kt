@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,16 +54,14 @@ class FontListPreference(context: Context, attrs: AttributeSet) : ListPreference
         names.add(context.getString(R.string.default_text))
         values.add("")
 
-        if (fileList != null) {
-            fileList.asSequence()
-                    .filter {
-                        val name = it.absolutePath
-                        name.endsWith(".ttf") || name.endsWith(".otf") || name.endsWith(".ttc")
-                    }
-                    .forEach {
-                        names.add(it.name)
-                        values.add(it.absolutePath)
-                    }
+        fileList?.apply {
+            asSequence().filter {
+                val name = it.absolutePath
+                name.endsWith(".ttf") || name.endsWith(".otf") || name.endsWith(".ttc")
+            }.forEach {
+                names.add(it.name)
+                values.add(it.absolutePath)
+            }
         }
 
         entries = names.toTypedArray()

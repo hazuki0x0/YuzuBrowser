@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -226,7 +226,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
             RESULT_REQUEST_SPEECH -> {
                 if (resultCode != RESULT_OK || data == null) return
                 val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (results.isNotEmpty()) {
+                if (!results.isNullOrEmpty()) {
                     val query = results[0]
                     barBinding.editText.run {
                         setText(query)

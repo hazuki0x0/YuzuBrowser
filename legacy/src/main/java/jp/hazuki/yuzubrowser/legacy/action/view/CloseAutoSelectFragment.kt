@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,9 +110,9 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
             when (requestCode) {
-                REQUEST_DEFAULT -> defaultAction = data.getParcelableExtra(ActionActivity.EXTRA_ACTION)
-                REQUEST_INTENT -> intentAction = data.getParcelableExtra(ActionActivity.EXTRA_ACTION)
-                REQUEST_WINDOW -> windowAction = data.getParcelableExtra(ActionActivity.EXTRA_ACTION)
+                REQUEST_DEFAULT -> defaultAction = data.getParcelableExtra(ActionActivity.EXTRA_ACTION)!!
+                REQUEST_INTENT -> intentAction = data.getParcelableExtra(ActionActivity.EXTRA_ACTION)!!
+                REQUEST_WINDOW -> windowAction = data.getParcelableExtra(ActionActivity.EXTRA_ACTION)!!
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.provider
 
+import android.net.Uri
 import jp.hazuki.yuzubrowser.ui.provider.IDownloadProvider
 import java.io.File
 
@@ -23,4 +24,6 @@ class DownloadFileProviderBridge : IDownloadProvider {
     override fun getUriFromPath(filePath: String) = DownloadFileProvider.getUriFromPath(filePath)
 
     override fun getUriForFile(file: File) = DownloadFileProvider.getUriForFile(file)
+
+    override fun getUriFromUri(uri: Uri) = DownloadFileProvider.getUriFromUri(uri)
 }

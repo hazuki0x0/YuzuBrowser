@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 package jp.hazuki.yuzubrowser.core.utility.utils;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.media.MediaScannerConnection;
 import android.util.Log;
 
 import java.io.File;
@@ -130,10 +128,6 @@ public class FileUtils {
         }
 
         return false;
-    }
-
-    public static void notifyImageFile(Context context, String... files) {
-        MediaScannerConnection.scanFile(context, files, null, null);
     }
 
     public static String replaceProhibitionWord(String name) {

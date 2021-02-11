@@ -127,17 +127,17 @@ dependencies {
     implementation AndroidX.design
     implementation project(':libraries:asyncpermissions')
     implementation project(':browser')
-    implementation project(':ui')
+    implementation project(':module:ui')
     implementation project(':legacy')
-    implementation project(':core')
-    implementation project(':webview')
+    implementation project(':module:core')
+    implementation project(':module:webview')
     implementation project(':languages')
-    implementation project(':favicon')
-    implementation project(':download')
-    implementation project(':adblock')
-    implementation project(':bookmark')
-    implementation project(':history')
-    implementation project(':search')
+    implementation project(':module:favicon')
+    implementation project(':module:download')
+    implementation project(':module:adblock')
+    implementation project(':module:bookmark')
+    implementation project(':module:history')
+    implementation project(':module:search')
 
     implementation Libs.kotlin_stdlib
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ class MaterialProgressBar : ProgressBar {
      *
      * @return The current drawable.
      */
-    val currentDrawable: Drawable?
+    val currentProgressDrawable: Drawable?
         get() = if (isIndeterminate) indeterminateDrawable else progressDrawable
 
     /**
@@ -250,7 +250,7 @@ class MaterialProgressBar : ProgressBar {
     override fun setIndeterminate(indeterminate: Boolean) {
         super.setIndeterminate(indeterminate)
 
-        if (mSuperInitialized && currentDrawable !is MaterialProgressDrawable) {
+        if (mSuperInitialized && currentProgressDrawable !is MaterialProgressDrawable) {
             Log.w(TAG, "Current drawable is not a MaterialProgressDrawable, you may want to set" + " app:mpb_setBothDrawables")
         }
     }

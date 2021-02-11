@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,15 +58,20 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
             conn.setRequestProperty("User-Agent", request.userAgent)
         }
 
-        val existTmp = info.root.findFile("${info.name}$TMP_FILE_SUFFIX")
+        val downloadFile = if (request.isScopedStorageMode) {
+            info.root
+        } else {
+            val existTmp = info.root.findFile("${info.name}$TMP_FILE_SUFFIX")
 
-        if (info.resumable) {
-            info.resumable = false
-        }
+            if (info.resumable) {
+                info.resumable = false
+            }
 
-        val tmp = existTmp
+            existTmp
                 ?: info.root.createFile(info.mimeType, "${info.name}$TMP_FILE_SUFFIX")
                 ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX")
+        }
+
 
         try {
             conn.connect()
@@ -75,7 +80,7 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                 info.size = conn.contentLength.toLong()
             }
 
-            context.contentResolver.openOutputStream(tmp.uri, "w").use { output ->
+            context.contentResolver.openOutputStream(downloadFile.uri, "w").use { output ->
                 if (output == null) throw IllegalStateException()
                 conn.inputStream.use { input ->
                     downloadListener?.onStartDownload(info)
@@ -113,14 +118,19 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
-                if (!tmp.renameTo(info.name)) {
-                    downloadedFile = info.root.findFile(info.name)
-                    if (downloadedFile == null)
-                        throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
-                }
-                downloadedFile = downloadedFile ?: info.root.findFile(info.name)
-                if (downloadedFile == null) {
-                    throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                if (request.isScopedStorageMode) {
+                    downloadedFile = info.root
+                } else {
+                    if (!downloadFile.renameTo(info.name)) {
+                        downloadedFile = info.root.findFile(info.name)
+                        if (downloadedFile == null)
+                            throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                    }
+
+                    downloadedFile = downloadedFile ?: info.root.findFile(info.name)
+                    if (downloadedFile == null) {
+                        throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                    }
                 }
             }
 
@@ -129,7 +139,9 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
             return true
         } catch (e: IOException) {
             ErrorReport.printAndWriteLog(e)
-            tmp.delete()
+            if (downloadFile.exists()) {
+                downloadFile.delete()
+            }
             info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
             downloadListener?.onFileDownloadFailed(info, null)
         }

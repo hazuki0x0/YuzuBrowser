@@ -15,10 +15,10 @@
  */
 
 object Build {
-    const val compile_sdk_version = 28
-    const val build_tools_version = "28.0.3"
+    const val compile_sdk_version = 30
+    const val build_tools_version = "30.0.2"
     const val min_sdk_version = 21
-    const val target_sdk_version = 28
+    const val target_sdk_version = 30
 }
 
 object AppVersions {
@@ -46,7 +46,7 @@ object Versions {
     const val okhttp = "4.9.1"
     const val okio = "2.10.0"
     const val kvs_schema = "5.1.0"
-    const val kotlin = "1.4.21"
+    const val kotlin = "1.4.30"
     const val kotlin_coroutines = "1.4.2"
     const val kotlin_anko = "0.10.8"
     const val junit = "4.13.1"

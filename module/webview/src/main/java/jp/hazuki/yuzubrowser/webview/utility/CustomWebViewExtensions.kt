@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 
 package jp.hazuki.yuzubrowser.webview.utility
 
+import android.graphics.Bitmap
 import android.webkit.ValueCallback
 import android.webkit.WebSettings
+import jp.hazuki.yuzubrowser.core.utility.utils.savePictureAsPng
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
-inline fun CustomWebView.evaluateJavascript(js: String?, crossinline callback: ((String) -> Unit)) {
+inline fun CustomWebView.evaluateJavascript(js: String, crossinline callback: ((String) -> Unit)) {
     evaluateJavascript(js, ValueCallback { callback(it) })
 }
 
@@ -30,5 +32,30 @@ fun CustomWebView.getUserAgent(): String {
         WebSettings.getDefaultUserAgent(view.context)
     } else {
         ua
+    }
+}
+
+fun CustomWebView.savePictureOverall(fileName: String): Boolean {
+    var bitmap: Bitmap? = null
+    return try {
+        bitmap = WebViewUtils.capturePictureOverall(this)
+        val resolver = webView.context.contentResolver
+        resolver.savePictureAsPng("$fileName.png", bitmap)
+    } catch (e: OutOfMemoryError) {
+        System.gc()
+        false
+    } finally {
+        bitmap?.recycle()
+    }
+}
+
+fun CustomWebView.savePicturePart(fileName: String): Boolean {
+    var bitmap: Bitmap? = null
+    return try {
+        bitmap = WebViewUtils.capturePicturePart(this.webView)
+        val resolver = webView.context.contentResolver
+        resolver.savePictureAsPng("$fileName.png", bitmap)
+    } finally {
+        bitmap?.recycle()
     }
 }

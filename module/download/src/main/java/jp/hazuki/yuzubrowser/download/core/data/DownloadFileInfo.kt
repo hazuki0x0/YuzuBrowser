@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ package jp.hazuki.yuzubrowser.download.core.data
 import androidx.documentfile.provider.DocumentFile
 
 class DownloadFileInfo(
-        var id: Long,
-        val url: String,
-        val mimeType: String,
-        val root: DocumentFile,
-        val name: String,
-        var size: Long,
-        var resumable: Boolean = false,
-        var startTime: Long = System.currentTimeMillis(),
-        var state: Int
+    var id: Long,
+    val url: String,
+    val mimeType: String,
+    var root: DocumentFile,
+    val name: String,
+    var size: Long,
+    var resumable: Boolean = false,
+    var startTime: Long = System.currentTimeMillis(),
+    var state: Int
 ) {
 
     constructor (

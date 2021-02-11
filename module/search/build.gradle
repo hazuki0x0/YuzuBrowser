@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,13 +96,13 @@ dependencies {implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
-    implementation project(':ui')
-    implementation project(':core')
+    implementation project(':module:ui')
+    implementation project(':module:core')
     implementation project(':languages')
-    implementation project(':favicon')
-    implementation project(':connecter')
-    implementation project(':bookmark')
-    implementation project(':history')
+    implementation project(':module:favicon')
+    implementation project(':module:connecter')
+    implementation project(':module:bookmark')
+    implementation project(':module:history')
     implementation project(':libraries:colorpicker')
 
     implementation Libs.kotlin_stdlib

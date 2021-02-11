@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,7 +165,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data != null) {
-            val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)
+            val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)!!
             when (requestCode) {
                 RESULT_REQUEST_ADD -> mList.add(action)
                 RESULT_REQUEST_EDIT -> {
@@ -173,14 +173,14 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
                         Snackbar.make(rootView, R.string.action_cant_empty, Snackbar.LENGTH_SHORT).show()
                         return
                     }
-                    val position = data.getBundleExtra(ActionActivity.EXTRA_RETURN).getInt(EXTRA_POSITION)
+                    val position = data.getBundleExtra(ActionActivity.EXTRA_RETURN)!!.getInt(EXTRA_POSITION)
                     mList[position] = action
                 }
                 RESULT_REQUEST_ADD_EASY -> action.forEach {
                     mList.add(Action(it))
                 }
                 RESULT_REQUEST_JSON -> {
-                    val actionList = data.getParcelableExtra<ActionList>(ActionStringActivity.EXTRA_ACTION)
+                    val actionList = data.getParcelableExtra<ActionList>(ActionStringActivity.EXTRA_ACTION)!!
                     mList.clear()
                     mList.addAll(actionList)
                 }
@@ -194,7 +194,7 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
     override val isLongPressDragEnabled
         get() = adapter.isSortMode
 
-    private class ActionListAdapter internal constructor(context: Context, actionList: ActionList, private val nameList: ActionNameArray, recyclerListener: OnRecyclerListener) : ArrayRecyclerAdapter<Action, SimpleViewHolder<Action>>(context, actionList, recyclerListener) {
+    private class ActionListAdapter(context: Context, actionList: ActionList, private val nameList: ActionNameArray, recyclerListener: OnRecyclerListener) : ArrayRecyclerAdapter<Action, SimpleViewHolder<Action>>(context, actionList, recyclerListener) {
 
         override fun onBindViewHolder(holder: SimpleViewHolder<Action>, item: Action, position: Int) {
             holder.textView.text = item.toString(nameList)
@@ -202,9 +202,9 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<Action> {
             return SimpleViewHolder(
-                    inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
-                    android.R.id.text1,
-                    this)
+                inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
+                android.R.id.text1,
+                this)
         }
     }
 

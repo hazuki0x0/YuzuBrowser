@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,12 +94,12 @@ dependencies {
     implementation Libs.kotshi
     kapt Libs.kotshi_compiler
 
-    implementation project(':ui')
-    implementation project(':core')
+    implementation project(':module:ui')
+    implementation project(':module:core')
     implementation project(':languages')
-    implementation project(':favicon')
-    implementation project(':connecter')
-    implementation project(':bookmark')
+    implementation project(':module:favicon')
+    implementation project(':module:connecter')
+    implementation project(':module:bookmark')
 
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
@@ -114,5 +114,5 @@ dependencies {
     kapt Libs.dagger_android_processor
 
     implementation Libs.header_decor
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.2'
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.4'
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -239,11 +239,11 @@ class ReadItLaterProvider : DaggerContentProvider() {
         return 0
     }
 
-    override fun openFile(uri: Uri, mode: String?): ParcelFileDescriptor {
+    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor {
         return ParcelFileDescriptor.open(getFileForUri(uri), ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
-    override fun getType(p0: Uri?): String {
+    override fun getType(p0: Uri): String {
         return "multipart/related"
     }
 

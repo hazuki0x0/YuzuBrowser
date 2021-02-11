@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ class UserScript : Parcelable {
 
     constructor(source: Parcel) {
         val id = source.readLong()
-        val data = source.readString()
+        val data = source.readString()!!
         val enabled = source.readInt() == 1
         info = UserScriptInfo(id, data, enabled)
         loadHeaderData()

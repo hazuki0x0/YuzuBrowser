@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ class OpenOthersPatternAction : PatternAction {
                 val pre = context.getString(R.string.pattern_open_others)
                 try {
                     val pm = context.packageManager
-                    return "$pre : ${pm.getActivityInfo(intent!!.component, 0).loadLabel(pm)}"
+                    return "$pre : ${pm.getActivityInfo(intent!!.component!!, 0).loadLabel(pm)}"
                 } catch (e: NameNotFoundException) {
                     e.printStackTrace()
                 }

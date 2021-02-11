@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@ class CustomSingleAction : SingleAction {
         return StartActivityInfo(intent) { _, resultCode, data ->
             if (resultCode != Activity.RESULT_OK || data == null)
                 return@StartActivityInfo
-            action = data.getParcelableExtra(CustomSingleActionActivity.EXTRA_ACTION)
+            action = data.getParcelableExtra(CustomSingleActionActivity.EXTRA_ACTION)!!
             mName = data.getStringExtra(CustomSingleActionActivity.EXTRA_NAME)
         }
     }

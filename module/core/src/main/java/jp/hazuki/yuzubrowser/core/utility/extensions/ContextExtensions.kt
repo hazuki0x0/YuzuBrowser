@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ var Context.clipboardText: String
     set(text) {
         val clipData = ClipData("text_data", arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), ClipData.Item(text))
         val manager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        manager.primaryClip = clipData
+        manager.setPrimaryClip(clipData)
     }
 
 fun Context.convertDpToPx(dp: Int): Int = (resources.displayMetrics.density * dp + 0.5f).toInt()

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
         }
 
         val permissions = arguments.getSerializable(ARG_PERMISSION) as WebPermissions
-        val host = arguments.getString(ARG_HOST)
+        val host = arguments.getString(ARG_HOST)!!
 
         camera.setSelection(permissions.camera.state)
         mic.setSelection(permissions.microphone.state)

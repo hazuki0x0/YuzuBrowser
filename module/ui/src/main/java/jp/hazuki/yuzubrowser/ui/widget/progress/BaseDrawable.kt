@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,8 @@ internal abstract class BaseDrawable : Drawable(), TintAwareDrawable {
     /**
      * {@inheritDoc}
      */
-    override fun setTintMode(tintMode: PorterDuff.Mode) {
+    override fun setTintMode(tintMode: PorterDuff.Mode?) {
+        if (tintMode == null) return
         mTintMode = tintMode
         if (updateTintFilter()) {
             invalidateSelf()

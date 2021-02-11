@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ class StartActivityPreferenceFragment : androidx.fragment.app.ListFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        listAdapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.action_start_activity_template))
+        listAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.action_start_activity_template))
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {

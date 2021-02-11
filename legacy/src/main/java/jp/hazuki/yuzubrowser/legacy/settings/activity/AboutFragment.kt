@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,7 @@ class AboutFragment : YuzuPreferenceFragment() {
 
     class TranslationDialog : androidx.fragment.app.DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val activity = requireActivity()
             return AlertDialog.Builder(activity)
                     .setTitle(R.string.pref_translation)
                     .setView(WebView(activity).apply { loadUrl("file:///android_asset/translators.html") })

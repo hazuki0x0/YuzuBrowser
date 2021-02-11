@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,19 +101,11 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED) {
             info.getFile()?.let {
                 try {
-                    val filePath = it.uri.resolvePath(activity)
-                    val uri = if (filePath != null) {
-                        (activity.application as BrowserApplication).providerManager
-                                .downloadFileProvider.getUriFromPath(filePath)
-                    } else {
-                        it.uri
-                    }
-                    startActivity(createFileOpenIntent(activity, uri, info.mimeType, info.name))
+                    startActivity(createFileOpenIntent(activity, it.uri, info.mimeType, info.name))
                 } catch (e: ActivityNotFoundException) {
                     activity.longToast(R.string.app_notfound)
                 }
             }
-
         }
     }
 

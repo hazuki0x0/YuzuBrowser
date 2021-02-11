@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,10 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Message
-import android.text.TextUtils
 import android.view.View
 import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
-import com.crashlytics.android.Crashlytics
 import jp.hazuki.yuzubrowser.adblock.AdBlockController
 import jp.hazuki.yuzubrowser.adblock.convertToAdBlockContentType
 import jp.hazuki.yuzubrowser.adblock.filter.mining.MiningProtector
@@ -47,12 +45,9 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.download.*
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
-import jp.hazuki.yuzubrowser.download.download
-import jp.hazuki.yuzubrowser.download.getBlobDownloadJavaScript
-import jp.hazuki.yuzubrowser.download.getDownloadFolderUri
-import jp.hazuki.yuzubrowser.download.getImage
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
@@ -569,7 +564,6 @@ class WebClient(
                                 }
                             }
                         } catch (e: Exception) {
-                            Crashlytics.logException(e)
                             throw e
                         }
                     }
@@ -914,7 +908,7 @@ class WebClient(
 
                             }
                             val fallbackUrl = intent.getStringExtra("browser_fallback_url")
-                            if (!TextUtils.isEmpty(fallbackUrl)) {
+                            if (!fallbackUrl.isNullOrEmpty()) {
                                 controller.loadUrl(data, fallbackUrl)
                             }
                         }
@@ -1048,7 +1042,7 @@ class WebClient(
 
                 }
                 val fallbackUrl = intent.getStringExtra("browser_fallback_url")
-                if (!TextUtils.isEmpty(fallbackUrl)) {
+                if (!fallbackUrl.isNullOrEmpty()) {
                     controller.loadUrl(data, fallbackUrl)
                 }
                 return true

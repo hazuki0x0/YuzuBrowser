@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,31 +30,40 @@ import java.io.BufferedOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 
-class OkHttpDownloader(private val context: Context, private val okHttpClient: OkHttpClient, private val info: DownloadFileInfo, private val downloadRequest: DownloadRequest) : Downloader {
+class OkHttpDownloader(
+    private val context: Context,
+    private val okHttpClient: OkHttpClient,
+    private val info: DownloadFileInfo,
+    private val downloadRequest: DownloadRequest,
+) : Downloader {
     override var downloadListener: Downloader.DownloadListener? = null
 
     private var abort = false
 
     override fun download(): Boolean {
         val requestBuilder = Request.Builder()
-                .url(info.url)
-                .get()
-                .setCookie(CookieManager.getInstance().getCookie(info.url))
-                .setReferrer(downloadRequest.referrer)
-                .setUserAgent(context, downloadRequest.userAgent)
+            .url(info.url)
+            .get()
+            .setCookie(CookieManager.getInstance().getCookie(info.url))
+            .setReferrer(downloadRequest.referrer)
+            .setUserAgent(context, downloadRequest.userAgent)
 
-        val existTmp = info.root.findFile("${info.name}$TMP_FILE_SUFFIX")
+        val downloadFile = if (downloadRequest.isScopedStorageMode) {
+            info.root
+        } else {
+            val existTmp = info.root.findFile("${info.name}$TMP_FILE_SUFFIX")
 
-        if (info.resumable && info.checkFlag(DownloadFileInfo.STATE_PAUSED) && existTmp != null) {
-            info.currentSize = existTmp.length()
-            requestBuilder.header("Range", "bytes=${info.currentSize}-${info.size}")
-        }
+            if (info.resumable && info.checkFlag(DownloadFileInfo.STATE_PAUSED) && existTmp != null) {
+                info.currentSize = existTmp.length()
+                requestBuilder.header("Range", "bytes=${info.currentSize}-${info.size}")
+            }
 
-        val mimeType = if (info.mimeType.isNotEmpty()) info.mimeType else MIME_TYPE_UNKNOWN
+            val mimeType = if (info.mimeType.isNotEmpty()) info.mimeType else MIME_TYPE_UNKNOWN
 
-        val tmp = existTmp
+            existTmp
                 ?: info.root.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX")
                 ?: throw DownloadException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
+        }
 
         val call = okHttpClient.newCall(requestBuilder.build())
         try {
@@ -75,8 +84,8 @@ class OkHttpDownloader(private val context: Context, private val okHttpClient: O
             if (!info.resumable) {
                 info.resumable = response.isResumable
             }
-            val os = context.contentResolver.openOutputStream(tmp.uri, mode)
-                    ?: throw DownloadException("Can not open file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
+            val os = context.contentResolver.openOutputStream(downloadFile.uri, mode)
+                ?: throw DownloadException("Can not open file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
 
             BufferedOutputStream(os).use { out ->
                 response.body!!.source().use { source ->
@@ -115,14 +124,19 @@ class OkHttpDownloader(private val context: Context, private val okHttpClient: O
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
-                if (!tmp.renameTo(info.name)) {
-                    downloadedFile = info.root.findFile(info.name)
-                    if (downloadedFile == null)
-                        throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
-                }
-                downloadedFile = downloadedFile ?: info.root.findFile(info.name)
-                if (downloadedFile == null) {
-                    throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                if (downloadRequest.isScopedStorageMode) {
+                    downloadedFile = info.root
+                } else {
+                    if (!downloadFile.renameTo(info.name)) {
+                        downloadedFile = info.root.findFile(info.name)
+                        if (downloadedFile == null)
+                            throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                    }
+
+                    downloadedFile = downloadedFile ?: info.root.findFile(info.name)
+                    if (downloadedFile == null) {
+                        throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                    }
                 }
             }
 
@@ -135,7 +149,9 @@ class OkHttpDownloader(private val context: Context, private val okHttpClient: O
             if (info.resumable) {
                 info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR or DownloadFileInfo.STATE_PAUSED
             } else {
-                tmp.delete()
+                if (downloadFile.exists()) {
+                    downloadFile.delete()
+                }
                 info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
             }
             if (e is DownloadException) {

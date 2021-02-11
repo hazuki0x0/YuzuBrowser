@@ -30,7 +30,6 @@ import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
 import jp.hazuki.yuzubrowser.download.registerDownloadNotification
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
-import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.provider.ProviderManager
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
@@ -54,8 +53,6 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInje
 
     override fun onCreate() {
         super.onCreate()
-        CrashlyticsUtils.setChromeVersion(this)
-        CrashlyticsUtils.setWebViewMode()
         registerDownloadNotification()
         registerAdBlockNotification()
 

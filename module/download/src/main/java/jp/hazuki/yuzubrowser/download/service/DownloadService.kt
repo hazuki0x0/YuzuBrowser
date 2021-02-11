@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,10 @@ package jp.hazuki.yuzubrowser.download.service
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.net.Uri
 import android.os.*
+import android.provider.MediaStore
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.documentfile.provider.DocumentFile
@@ -106,7 +104,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
             var thread: DownloadThread? = null
             when (intent.action) {
                 INTENT_ACTION_START_DOWNLOAD -> {
-                    val root = intent.getParcelableExtra<Uri>(INTENT_EXTRA_DOWNLOAD_ROOT_URI).toDocumentFile(this)
+                    val root = intent.getParcelableExtra<Uri>(INTENT_EXTRA_DOWNLOAD_ROOT_URI)!!.toDocumentFile(this)
                     val file = intent.getParcelableExtra<DownloadFile>(INTENT_EXTRA_DOWNLOAD_REQUEST)
                     val metadata = intent.getParcelableExtra<MetaData?>(INTENT_EXTRA_DOWNLOAD_METADATA)
                     if (file != null) {
@@ -219,21 +217,43 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
             val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DownloadThread:wakelock")
             prepareThread(wakelock)
 
+
+            if (checkValidRootDir(info.root.uri)) {
+                if (!info.root.exists()) {
+                    failedCheckFolder(info, R.string.download_failed_root_not_exists)
+                    endThreaded(wakelock)
+                    return
+                } else if (!info.root.canWrite()) {
+                    failedCheckFolder(info, R.string.download_failed_root_not_writable)
+                    endThreaded(wakelock)
+                    return
+                }
+            } else {
+                request.isScopedStorageMode = true
+                info.resumable = false
+
+                val values = ContentValues().apply {
+                    put(MediaStore.Downloads.DISPLAY_NAME, info.name)
+                    put(MediaStore.Downloads.MIME_TYPE, info.mimeType)
+                    put(MediaStore.Downloads.IS_PENDING, 1)
+                    put(MediaStore.Downloads.IS_DOWNLOAD, 1)
+                }
+
+                val collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                val itemUri = contentResolver.insert(collection, values)
+                if (itemUri == null) {
+                    failedCheckFolder(info, R.string.failed)
+                    endThreaded(wakelock)
+                    return
+                }
+                info.root = DocumentFile.fromSingleUri(this@DownloadService, itemUri)!!
+            }
+
             if (info.id < 0) {
                 database.insert(info)
             } else {
                 info.state = DownloadFileInfo.STATE_DOWNLOADING
                 database.update(info)
-            }
-
-            if (!info.root.exists()) {
-                failedCheckFolder(info, R.string.download_failed_root_not_exists)
-                endThreaded(wakelock)
-                return
-            } else if (!info.root.canWrite()) {
-                failedCheckFolder(info, R.string.download_failed_root_not_writable)
-                endThreaded(wakelock)
-                return
             }
 
             val downloader = Downloader.getDownloader(this@DownloadService, okHttpClient, info, request)
@@ -274,6 +294,17 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                 info.size = info.currentSize
             }
             database.update(info)
+
+            if (request.isScopedStorageMode) {
+                val values = ContentValues().apply {
+                    put(MediaStore.Downloads.IS_PENDING, 0)
+                }
+                contentResolver.update(info.root.uri, values, null, null)
+            } else {
+                info.root.findFile(info.name)?.uri?.resolvePath(this@DownloadService)
+                    ?.let { registerMediaScanner(it) }
+            }
+
             NotificationCompat.Builder(this@DownloadService, NOTIFICATION_CHANNEL_DOWNLOAD_NOTIFY).run {
                 setOngoing(false)
                 setContentTitle(info.name)
@@ -286,11 +317,16 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                 notificationManager.notify(info.id.toInt(), build())
             }
             updateInfo(ServiceSocket.UPDATE, info)
-            info.root.findFile(info.name)?.uri?.resolvePath(this@DownloadService)
-                    ?.let { registerMediaScanner(it) }
         }
 
         override fun onFileDownloadFailed(info: DownloadFileInfo, cause: String?) {
+            if (request.isScopedStorageMode) {
+                val file = info.root
+                if (file.exists()) {
+                    file.delete()
+                }
+            }
+
             database.update(info)
             if (cause != null) {
                 handler.post { longToast(cause) }

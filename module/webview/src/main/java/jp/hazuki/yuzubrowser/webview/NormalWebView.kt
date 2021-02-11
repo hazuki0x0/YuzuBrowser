@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
         webChromeClient = client
     }
 
-    override fun setMyWebViewClient(client: CustomWebViewClient?) {
+    override fun setMyWebViewClient(client: CustomWebViewClient) {
         webViewClient = client
     }
 
@@ -260,7 +260,6 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
         setEmbeddedTitleBarMethod(null)
         setWebViewTouchDetector(null)
         setMyWebChromeClient(null)
-        setMyWebViewClient(null)
         setOnMyCreateContextMenuListener(null)
         setMyOnScrollChangedListener(null)
 

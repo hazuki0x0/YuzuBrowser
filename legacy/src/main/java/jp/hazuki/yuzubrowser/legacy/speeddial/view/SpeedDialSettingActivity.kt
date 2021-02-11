@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,7 +105,7 @@ class SpeedDialSettingActivity : ThemeActivity(), SpeedDialEditCallBack, android
     @Suppress("DEPRECATION")
     override fun onShortCutSelected(data: Intent) {
         goBack()
-        val intent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)
+        val intent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
         val name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)
         var icon: Bitmap? = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON)
         if (icon == null) {

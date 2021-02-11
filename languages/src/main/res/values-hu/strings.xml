@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2017-2019 Hazuki
+  ~ Copyright (C) 2017-2021 Hazuki
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -214,7 +214,7 @@
     <string name="multi_select">Több kijelölése</string>
     <string name="select_this_item">Ennek az elemnek a kiválasztása</string>
     <string name="save_to">Mentés ide</string>
-    <string name="saved_file">Mentve :</string>
+    <string name="saved_file">Mentve</string>
     <string name="savepage_save_archive">Mentés mint Archív MHTML</string>
     <string name="action_easy_add">Egyszerű hozzáadás</string>
     <string name="resblock_is_white">Ne blokkolja</string>

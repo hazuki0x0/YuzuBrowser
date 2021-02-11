@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -164,8 +164,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
             if (state != null) {
                 data.webView.restoreState(state)
             } else {
-                if (now.url != null)
-                    data.webView.loadUrl(now.url)
+                now.url?.let { data.webView.loadUrl(it) }
             }
             tabCache[now.id] = data
         }
@@ -224,7 +223,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
             if (inState.getBoolean(BUNDLE_LOADED + indexData.id, false)) {
                 val web = WebViewPage(SwipeWebView(context, indexData.id), indexData)
                 web.webView.onPause()
-                tabCache[id] = web
+                tabCache[identityId] = web
                 if (i == current) {
                     addView(web.webView.view)
                     currentPage = web

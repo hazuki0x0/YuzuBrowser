@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,7 +200,7 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
                 mOnActivityResultListener = null
             }
             RESULT_REQUEST_JSON -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val result = data.getParcelableExtra<Action>(ActionStringActivity.EXTRA_ACTION)
+                val result = data.getParcelableExtra<Action>(ActionStringActivity.EXTRA_ACTION)!!
                 mAction.clear()
                 mAction.addAll(result)
 
@@ -223,6 +223,7 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
                 if (initialPosition != -1)
                     recyclerView.scrollToPosition(initialPosition)
             }
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -327,7 +328,7 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
 
         @JvmStatic
         fun getActionFromIntent(intent: Intent): Action {
-            return intent.getParcelableExtra(EXTRA_ACTION)
+            return intent.getParcelableExtra(EXTRA_ACTION)!!
         }
 
         @JvmStatic

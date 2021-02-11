@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ class SpeedDialSettingActivityEditFragment : androidx.fragment.app.Fragment() {
 
             }
             REQUEST_CROP_IMAGE -> if (resultCode == Activity.RESULT_OK && data != null && data.extras != null) {
-                val bitmap = data.extras.getParcelable<Bitmap>("data")
+                val bitmap = data.extras!!.getParcelable<Bitmap>("data")
                 speedDial.icon = WebIcon.createIconOrNull(bitmap)
                 icon.setImageBitmap(bitmap)
             }

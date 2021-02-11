@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ internal class SwipeWebView private constructor(context: Context, override val w
         webView.setMyWebChromeClient(mWebChromeClientWrapper)
     }
 
-    override fun setMyWebViewClient(client: CustomWebViewClient?) {
+    override fun setMyWebViewClient(client: CustomWebViewClient) {
         mWebViewClientWrapper.setWebViewClient(client)
         webView.setMyWebViewClient(mWebViewClientWrapper)
     }

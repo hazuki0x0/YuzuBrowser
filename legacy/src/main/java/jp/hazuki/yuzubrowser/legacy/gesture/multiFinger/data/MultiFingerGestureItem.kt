@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ class MultiFingerGestureItem : Parcelable {
     private constructor(parcel: Parcel) {
         parcel.readList(traces, null)
         fingers = parcel.readInt()
-        action = parcel.readParcelable(Action::class.java.classLoader)
+        action = parcel.readParcelable(Action::class.java.classLoader)!!
     }
 
     companion object {

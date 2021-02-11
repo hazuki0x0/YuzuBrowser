@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ class ActivityListActivity : ThemeActivity() {
         override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
             super.onListItemClick(l, v, position, id)
             val intent = Intent()
-            intent.setClassName(activity, (l.adapter.getItem(position) as ActivityInfo).name)
+            intent.setClassName(requireContext(), (l.adapter.getItem(position) as ActivityInfo).name)
             try {
                 startActivity(intent)
             } catch (e: ActivityNotFoundException) {

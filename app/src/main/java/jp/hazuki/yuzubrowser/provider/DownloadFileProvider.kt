@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
+import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
+import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -42,6 +43,11 @@ class DownloadFileProvider : ContentProvider() {
 
     @Throws(FileNotFoundException::class)
     override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
+        if (isUriMode(uri)) {
+            val fileUri = getUriFromUri(uri)
+            return context!!.contentResolver.openFileDescriptor(fileUri, mode)
+        }
+
         val file = getFileForUri(uri)
         if (!file.checkPath()) return super.openFile(uri, mode)
         return ParcelFileDescriptor.open(file, modeToMode(mode))
@@ -49,8 +55,7 @@ class DownloadFileProvider : ContentProvider() {
 
     override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
         var colRequest = projection
-        val file = getFileForUri(uri)
-        if (!file.checkPath()) return null
+        val file = getDocumentFile(uri) ?: return null
 
         if (colRequest == null) {
             colRequest = COLUMNS
@@ -78,9 +83,8 @@ class DownloadFileProvider : ContentProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        val file = getFileForUri(uri)
-        if (!file.checkPath()) return null
-        return FileUtils.getMineType(file)
+        val file = getDocumentFile(uri) ?: return null
+        return getMimeType(file.name ?: "")
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
@@ -88,12 +92,37 @@ class DownloadFileProvider : ContentProvider() {
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        val file = getFileForUri(uri)
+        val file = getDocumentFile(uri) ?: return 0
         return if (file.delete()) 1 else 0
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
         return 0
+    }
+
+    private fun isUriMode(uri: Uri): Boolean {
+        return uri.path == "/$URI_MODE"
+    }
+
+    private fun getUriFromUri(uri: Uri): Uri {
+        return Uri.parse(uri.getQueryParameter(URI_MODE_KEY))
+    }
+
+    private fun getDocumentFile(uri: Uri): DocumentFile? = if (isUriMode(uri)) {
+        getDocumentFileFromFileUri(uri)
+    } else {
+        val file = getFileForUri(uri)
+        if (file.checkPath()) DocumentFile.fromFile(file) else null
+
+    }
+
+    private fun getDocumentFileFromFileUri(uri: Uri): DocumentFile {
+        val fileUri = getUriFromUri(uri)
+        return if (DocumentFile.isDocumentUri(context!!, fileUri)) {
+            DocumentFile.fromTreeUri(context!!, fileUri)!!
+        } else {
+            DocumentFile.fromSingleUri(context!!, fileUri)!!
+        }
     }
 
     private fun getFileForUri(uri: Uri): File {
@@ -137,6 +166,10 @@ class DownloadFileProvider : ContentProvider() {
 
         private const val AUTHORITY = BuildConfig.APPLICATION_ID + ".downloadFileProvider"
 
+        private const val URI_MODE = "encoded_file"
+
+        private const val URI_MODE_KEY = "q"
+
         fun getUriFromPath(filePath: String): Uri {
             val path = PATH + '/'.toString() + Uri.encode(filePath, "/")
             return Uri.Builder().scheme(SCHEME).authority(AUTHORITY).encodedPath(path).build()
@@ -151,6 +184,19 @@ class DownloadFileProvider : ContentProvider() {
             }
 
             return getUriFromPath(path)
+        }
+
+        fun getUriFromUri(uri: Uri): Uri {
+            return if (uri.scheme == "file") {
+                getUriFromPath(uri.path!!)
+            } else {
+                Uri.Builder()
+                    .scheme(SCHEME)
+                    .authority(AUTHORITY)
+                    .path(URI_MODE)
+                    .appendQueryParameter(URI_MODE_KEY, uri.toString())
+                    .build()
+            }
         }
 
         /**

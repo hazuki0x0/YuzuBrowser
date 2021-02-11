@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.Context
+import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.download.DOWNLOAD_TMP_TYPE
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
@@ -38,9 +39,9 @@ interface Downloader {
             return if (info.url.startsWith("data:")) {
                 val semicolon = info.url.indexOf(';')
                 if (info.url.startsWith(DOWNLOAD_TMP_TYPE, semicolon)) {
-                    Base64TmpDownloader(context, info)
+                    Base64TmpDownloader(context, info, request)
                 } else {
-                    Base64Downloader(context.contentResolver, info)
+                    Base64Downloader(context.contentResolver, info, request)
                 }
 
             } else if (info.url.startsWith("http:", true) || info.url.startsWith("https:", true)) {
@@ -55,7 +56,7 @@ interface Downloader {
 
         fun onStartDownload(info: DownloadFileInfo)
 
-        fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: androidx.documentfile.provider.DocumentFile)
+        fun onFileDownloaded(info: DownloadFileInfo, downloadedFile: DocumentFile)
 
         fun onFileDownloadAbort(info: DownloadFileInfo)
 

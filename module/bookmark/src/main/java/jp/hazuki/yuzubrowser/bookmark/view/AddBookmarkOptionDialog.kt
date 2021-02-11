@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,15 +44,19 @@ class AddBookmarkOptionDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val arguments = arguments ?: throw IllegalArgumentException()
+        val arguments = requireArguments()
         return AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.bookmark)
             setItems(R.array.add_bookmark_option) { _, i ->
                 when (i) {
-                    0 -> AddBookmarkSiteDialog(requireActivity(), arguments.getString(ARG_TITLE), arguments.getString(ARG_URL)).show()
+                    0 -> AddBookmarkSiteDialog(
+                        requireActivity(),
+                        arguments.getString(ARG_TITLE)!!,
+                        arguments.getString(ARG_URL)!!,
+                    ).show()
                     1 -> {
                         BookmarkManager.getInstance(requireActivity()).run {
-                            removeAll(arguments.getString(ARG_URL))
+                            removeAll(arguments.getString(ARG_URL)!!)
                             save()
                         }
                         LocalBroadcastManager.getInstance(requireActivity())

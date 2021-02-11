@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -192,7 +192,7 @@ class StartActivitySingleAction : SingleAction, Parcelable {
         if (icon == null) {
             icon = if (mIcon == null) {
                 try {
-                    LauncherIconDrawable(context.packageManager.getActivityIcon(mIntent!!.component))//Does not return null.
+                    LauncherIconDrawable(context.packageManager.getActivityIcon(mIntent!!.component!!))//Does not return null.
                 } catch (e: NameNotFoundException) {
                     e.printStackTrace()
                     return null

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +46,9 @@ class CloseAutoSelectActivity : ThemeActivity() {
         fun setListener(callback: (defaultAction: Action, intentAction: Action, windowAction: Action) -> Unit): Builder {
             listener = { _, resultCode, intent ->
                 if (resultCode == RESULT_OK && intent != null) {
-                    val defaultAction = intent.getParcelableExtra<Action>(DEFAULT)
-                    val intentAction = intent.getParcelableExtra<Action>(INTENT)
-                    val windowAction = intent.getParcelableExtra<Action>(WINDOW)
+                    val defaultAction = intent.getParcelableExtra<Action>(DEFAULT)!!
+                    val intentAction = intent.getParcelableExtra<Action>(INTENT)!!
+                    val windowAction = intent.getParcelableExtra<Action>(WINDOW)!!
                     callback(defaultAction, intentAction, windowAction)
                 }
             }

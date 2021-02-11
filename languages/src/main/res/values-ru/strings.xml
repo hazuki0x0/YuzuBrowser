@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2017-2019 Hazuki
+  ~ Copyright (C) 2017-2021 Hazuki
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -212,7 +212,7 @@
     <string name="multi_select">Множественный выбор</string>
     <string name="select_this_item">Выберите этот элемент</string>
     <string name="save_to">Сохранить в</string>
-    <string name="saved_file">Сохранено:</string>
+    <string name="saved_file">Сохранено</string>
     <string name="savepage_save_archive">Сохранить как веб-архив MHTML</string>
     <string name="action_easy_add">Лёгкое добавление</string>
     <string name="resblock_is_white">Не блокировать</string>

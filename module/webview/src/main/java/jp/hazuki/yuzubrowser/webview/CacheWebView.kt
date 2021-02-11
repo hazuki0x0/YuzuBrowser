@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,7 +179,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
             mList.add(web)
             if (i == current)
                 addView(web.webView.view)
-            web.webView.restoreState(inState.getBundle("CacheWebView.WEB_NO$i"))
+            web.webView.restoreState(inState.getBundle("CacheWebView.WEB_NO$i")!!)
             from.webView.copySettingsTo(web.webView)
         }
         move(from, mList[current])

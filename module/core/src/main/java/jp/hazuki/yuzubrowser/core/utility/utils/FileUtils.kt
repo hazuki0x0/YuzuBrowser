@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.core.utility.utils
 
+import android.os.Build
 import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
@@ -24,10 +25,15 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.binarySearch
 import jp.hazuki.yuzubrowser.core.utility.extensions.toSortedList
 import java.io.File
 
+@Deprecated("Not use it")
 val externalUserDirectory: File
     get() = File(Environment.getExternalStorageDirectory().toString() + File.separator + "YuzuBrowser" + File.separator)
 
 fun createUniqueFileName(root: DocumentFile, fileName: String, suffix: String): String {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && root.uri.scheme == "file") {
+        return fileName
+    }
+
     val checkName = CheckName(root.listFiles())
 
     if (!checkName.exists(fileName) && !checkName.exists(fileName)) return fileName

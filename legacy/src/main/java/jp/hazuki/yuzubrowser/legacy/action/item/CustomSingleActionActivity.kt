@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ class CustomSingleActionActivity : ThemeActivity() {
             val intent = intent
             val action = intent.getParcelableExtra<Action>(EXTRA_ACTION)
             val name = intent.getStringExtra(EXTRA_NAME)
-            val actionNameArray = intent.getParcelableExtra<ActionNameArray>(ActionNameArray.INTENT_EXTRA)
+            val actionNameArray = intent.getParcelableExtra<ActionNameArray>(ActionNameArray.INTENT_EXTRA)!!
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, CustomSingleActionFragment.newInstance(action, name, actionNameArray))
                     .commit()

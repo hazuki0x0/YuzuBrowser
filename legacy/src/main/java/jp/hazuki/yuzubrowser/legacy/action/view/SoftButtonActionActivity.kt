@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ class SoftButtonActionActivity : ThemeActivity() {
     class ActionFragment : androidx.fragment.app.ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-            listAdapter = ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1).apply {
+            listAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1).apply {
                 add(getString(R.string.pref_btn_action_press))
                 add(getString(R.string.pref_btn_action_lpress))
                 add(getString(R.string.pref_btn_action_up))

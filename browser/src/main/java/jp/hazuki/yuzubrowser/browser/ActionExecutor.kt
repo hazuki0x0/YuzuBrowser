@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import jp.hazuki.yuzubrowser.adblock.ui.original.AddAdBlockDialog
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
-import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
@@ -89,6 +88,8 @@ import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
 import jp.hazuki.yuzubrowser.ui.widget.toast
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
+import jp.hazuki.yuzubrowser.webview.utility.savePictureOverall
+import jp.hazuki.yuzubrowser.webview.utility.savePicturePart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -597,23 +598,22 @@ class ActionExecutor(
             }
             SingleAction.SAVE_SCREENSHOT -> {
                 val saveSsAction = action as SaveScreenshotSingleAction
-                val file = File(saveSsAction.folder, "ss_" + System.currentTimeMillis() + ".png")
+
+                val fileName = "ss_${System.currentTimeMillis()}"
                 val type = saveSsAction.type
                 try {
                     when (type) {
                         SaveScreenshotSingleAction.SS_TYPE_ALL -> {
-                            if (WebViewUtils.savePictureOverall(controller.getTab(actionTarget).mWebView, file))
-                                Toast.makeText(controller.applicationContextInfo, getString(R.string.saved_file) + file.absolutePath, Toast.LENGTH_SHORT).show()
+                            if (controller.getTab(actionTarget).mWebView.savePictureOverall(fileName))
+                                Toast.makeText(controller.applicationContextInfo, R.string.saved_file, Toast.LENGTH_SHORT).show()
                             else
                                 Toast.makeText(controller.applicationContextInfo, R.string.failed, Toast.LENGTH_SHORT).show()
-                            FileUtils.notifyImageFile(controller.applicationContextInfo, file.absolutePath)
                         }
                         SaveScreenshotSingleAction.SS_TYPE_PART -> {
-                            if (WebViewUtils.savePicturePart(controller.getTab(actionTarget).mWebView.webView, file))
-                                Toast.makeText(controller.applicationContextInfo, getString(R.string.saved_file) + file.absolutePath, Toast.LENGTH_SHORT).show()
+                            if (controller.getTab(actionTarget).mWebView.savePicturePart(fileName))
+                                Toast.makeText(controller.applicationContextInfo, getString(R.string.saved_file), Toast.LENGTH_SHORT).show()
                             else
                                 Toast.makeText(controller.applicationContextInfo, R.string.failed, Toast.LENGTH_SHORT).show()
-                            FileUtils.notifyImageFile(controller.applicationContextInfo, file.absolutePath)
                         }
                         else -> Toast.makeText(controller.applicationContextInfo, "Unknown screenshot type : $type", Toast.LENGTH_LONG).show()
                     }

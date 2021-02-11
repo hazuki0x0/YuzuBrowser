@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
             val fragment = targetFragment as? DialogPreference.TargetFragment
                     ?: throw IllegalStateException("Target fragment must implement TargetFragment" + " interface")
 
-            val key = requireArguments().getString(ARG_KEY)
+            val key = requireArguments().getString(ARG_KEY)!!
 
             val preference: SlowRenderingPreference = fragment.findPreference(key)!!
 

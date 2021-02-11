@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,16 +33,23 @@ import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
 
 fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: String): Intent {
-    val target = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val provider = (context.applicationContext as BrowserApplication).providerManager.downloadFileProvider
-        val path = uri.path ?: ""
-        if (uri.scheme == "file") provider.getUriFromPath(path) else uri
-    } else {
-        if (uri.scheme == "file") {
-            uri
-        } else {
-            val path = uri.resolvePath(context)
-            if (path != null) Uri.parse("file://$path") else uri
+    val target = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
+            val provider = (context.applicationContext as BrowserApplication).providerManager.downloadFileProvider
+            provider.getUriFromUri(uri)
+        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
+            val provider = (context.applicationContext as BrowserApplication).providerManager.downloadFileProvider
+            val path = uri.path ?: ""
+            if (uri.scheme == "file") provider.getUriFromPath(path) else provider.getUriFromUri(uri)
+        }
+        else -> {
+            if (uri.scheme == "file") {
+                uri
+            } else {
+                val path = uri.resolvePath(context)
+                if (path != null) Uri.parse("file://$path") else uri
+            }
         }
     }
 
@@ -84,12 +91,7 @@ fun Context.registerDownloadNotification() {
 }
 
 fun DownloadFileInfo.createFileOpenIntent(context: Context, downloadedFile: DocumentFile): Intent {
-    val uri = if (downloadedFile.uri.scheme == "file") {
-        downloadedFile.uri
-    } else {
-        Uri.parse("file://${downloadedFile.uri.resolvePath(context)}") ?: downloadedFile.uri
-    }
-    return createFileOpenIntent(context, uri, mimeType, name)
+    return createFileOpenIntent(context, downloadedFile.uri, mimeType, name)
 }
 
 fun Context.getBlobDownloadJavaScript(url: String, secretKey: String, type: Int = 0): String {

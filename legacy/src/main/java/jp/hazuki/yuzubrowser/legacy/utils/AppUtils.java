@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,10 @@ public class AppUtils {
 
     public static String getVersionDeviceInfo(Context context) {
         return "Yuzu " + ContextExtensionsKt.getVersionName(context) + "/" +
-                Build.MANUFACTURER + "/" +
-                Build.MODEL + "/" +
-                Build.VERSION.RELEASE + "/" +
-                getWebViewMode() + "/" +
-                "Chrome " + CrashlyticsUtils.getChromeVersion(context);
+            Build.MANUFACTURER + "/" +
+            Build.MODEL + "/" +
+            Build.VERSION.RELEASE + "/" +
+            getWebViewMode();
     }
 
     private static String getWebViewMode() {

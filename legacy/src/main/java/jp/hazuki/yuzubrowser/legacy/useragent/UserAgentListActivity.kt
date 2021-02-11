@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ class UserAgentListActivity : ThemeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UserAgentListDialog
-                .newInstance(intent.getStringExtra(Intent.EXTRA_TEXT))
+            .newInstance(intent.getStringExtra(Intent.EXTRA_TEXT)!!)
                 .show(supportFragmentManager, "ua")
     }
 }

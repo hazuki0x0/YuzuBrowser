@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,24 +34,24 @@ import java.io.IOException
 import java.net.URLDecoder
 import java.util.*
 
-internal fun ContentResolver.saveBase64Image(imageData: Base64Image, info: DownloadFileInfo): DocumentFile? {
+internal fun ContentResolver.saveBase64Image(imageData: Base64Image, file: DocumentFile): Boolean {
     if (imageData.isValid) {
         try {
             val image = Base64.decode(imageData.getData(), Base64.DEFAULT)
-            val file = info.root.createFile(imageData.mimeType, info.name) ?: return null
 
-            openOutputStream(file.uri)!!.use { outputStream ->
+            openOutputStream(file.uri)?.use { outputStream ->
                 outputStream.write(image)
                 outputStream.flush()
+
+                return true
             }
-            return file
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
-    return null
+    return false
 }
 
 internal fun decodeBase64Image(url: String): Base64Image {
@@ -257,14 +257,28 @@ internal fun DownloadFileInfo.getNotificationString(context: Context): String {
     }
 }
 
-internal fun DownloadFileInfo.getFile(): DocumentFile? =
-        if (state == DownloadFileInfo.STATE_DOWNLOADED) root.findFile(name) else null
+internal fun DownloadFileInfo.getFile(): DocumentFile? {
+
+    return if (state == DownloadFileInfo.STATE_DOWNLOADED) {
+        when {
+            root.isFile -> root
+            root.isDirectory -> root.findFile(name)
+            else -> null
+        }
+    } else {
+        null
+    }
+}
 
 internal fun DownloadFileInfo.checkFlag(flag: Int): Boolean = (state and flag) == flag
 
 internal fun Uri.toDocumentFile(context: Context): DocumentFile {
     return when (scheme) {
-        ContentResolver.SCHEME_CONTENT -> DocumentFile.fromTreeUri(context, this)!!
+        ContentResolver.SCHEME_CONTENT -> if (DocumentFile.isDocumentUri(context, this)) {
+            DocumentFile.fromTreeUri(context, this)!!
+        } else {
+            DocumentFile.fromSingleUri(context, this)!!
+        }
         "file" -> DocumentFile.fromFile(File(path))
         else -> throw IllegalStateException("unknown scheme :$scheme, Uri:$this")
     }

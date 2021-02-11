@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,9 +64,9 @@ class FastDownloadActivity : DaggerThemeActivity() {
             dialog.show(supportFragmentManager, "dialog")
             val uri = withContext(Dispatchers.Default) {
                 download(url,
-                        intent.getStringExtra(EXTRA_FILE_REFERER),
-                        intent.getStringExtra(EXTRA_USER_AGENT),
-                        intent.getStringExtra(EXTRA_DEFAULT_EXTENSION))
+                    intent.getStringExtra(EXTRA_FILE_REFERER),
+                    intent.getStringExtra(EXTRA_USER_AGENT)!!,
+                    intent.getStringExtra(EXTRA_DEFAULT_EXTENSION)!!)
             }
             dialog.dismiss()
             if (uri != null) {

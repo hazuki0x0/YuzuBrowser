@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,4 @@
  * limitations under the License.
  */
 
-include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':legacy', ':ui', ':core', ':languages', ':webview', ':browser', ':favicon', ':download', ':adblock', ':bookmark', ':connecter', ':history', ':search'
-
-file('module').eachDir { dir ->
-    include dir.name
-    project(":${dir.name}").projectDir = dir
-}
+include ':app', ':libraries:floatingactionbutton', ':libraries:colorpicker', ':libraries:asyncpermissions', ':legacy', ':module:ui', ':module:core', ':languages', ':module:webview', ':browser', ':module:favicon', ':module:download', ':module:adblock', ':module:bookmark', ':module:connecter', ':module:history', ':module:search'

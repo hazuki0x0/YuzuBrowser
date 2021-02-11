@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ internal open class BaseProgressLayerDrawable<BackgroundDrawableType : TintAware
      * {@inheritDoc}
      */
     @SuppressLint("NewApi")
-    override fun setTintMode(tintMode: PorterDuff.Mode) {
+    override fun setTintMode(tintMode: PorterDuff.Mode?) {
         backgroundDrawable.setTintMode(tintMode)
         secondaryProgressDrawable.setTintMode(tintMode)
         progressDrawable.setTintMode(tintMode)

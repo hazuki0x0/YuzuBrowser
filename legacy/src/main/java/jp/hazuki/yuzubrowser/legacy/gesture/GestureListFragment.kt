@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
                 RESULT_REQUEST_EDIT -> {
                     if (data == null) return
 
-                    val bundle = data.getBundleExtra(ActionActivity.EXTRA_RETURN)
+                    val bundle = data.getBundleExtra(ActionActivity.EXTRA_RETURN)!!
                     val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)
                     mManager.updateAction(bundle.getLong(ITEM_ID), action)
                     reset()
@@ -134,7 +134,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
         adapter.notifyDataSetChanged()
     }
 
-    private class GestureListAdapter internal constructor(context: Context, actionList: MutableList<GestureItem>, private val nameList: ActionNameArray, recyclerListener: OnRecyclerListener) : ArrayRecyclerAdapter<GestureItem, GestureListAdapter.ViewHolder>(context, actionList, recyclerListener) {
+    private class GestureListAdapter(context: Context, actionList: MutableList<GestureItem>, private val nameList: ActionNameArray, recyclerListener: OnRecyclerListener) : ArrayRecyclerAdapter<GestureItem, GestureListAdapter.ViewHolder>(context, actionList, recyclerListener) {
         private val size: Int = context.dimension(R.dimen.gesture_image_size)
         private val color: Int = context.getResColor(R.color.add_gesture_color)
 
@@ -142,7 +142,7 @@ class GestureListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDia
             return ViewHolder(inflater.inflate(R.layout.image_text_list_item, parent, false), this)
         }
 
-        internal inner class ViewHolder(itemView: View, adapter: GestureListAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<GestureItem>(itemView, adapter) {
+        inner class ViewHolder(itemView: View, adapter: GestureListAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<GestureItem>(itemView, adapter) {
             var title: TextView = itemView.findViewById(R.id.textView)
             var imageView: ImageView = itemView.findViewById(R.id.imageView)
 

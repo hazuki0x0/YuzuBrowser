@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     override fun onHandleIntent(intent: Intent?) {
         when (intent?.action) {
             ACTION_UPDATE_ABP -> {
-                val param1 = intent.getParcelableExtra<AbpEntity>(EXTRA_ABP_ENTRY)
+                val param1 = intent.getParcelableExtra<AbpEntity>(EXTRA_ABP_ENTRY)!!
                 val result = intent.getParcelableExtra<ResultReceiver?>(EXTRA_RESULT)
                 updateAbpEntity(param1, result)
             }

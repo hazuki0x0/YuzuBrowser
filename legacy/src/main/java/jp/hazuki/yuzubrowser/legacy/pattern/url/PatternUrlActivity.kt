@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -389,7 +389,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
     class OpenOtherDialog : androidx.fragment.app.DialogFragment() {
 
         private var patternActivity: PatternUrlActivity? = null
-        private var intent: Intent? = null
+        private lateinit var intent: Intent
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val activity = activity ?: throw IllegalStateException()
@@ -483,8 +483,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     OpenOthersPatternAction(OpenOthersPatternAction.TYPE_APP_LIST)
                 } else {
                     val item = openAppList[position - 1]
-                    intent!!.setClassName(item.activityInfo.packageName, item.activityInfo.name)
-                    OpenOthersPatternAction(intent!!)
+                    intent.setClassName(item.activityInfo.packageName, item.activityInfo.name)
+                    OpenOthersPatternAction(intent)
                 }
                 val newChecker = patternActivity!!.makeActionChecker(pattern, headerView)
                 if (newChecker != null) {

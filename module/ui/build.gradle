@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ dependencies {
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation project(':core')
+    implementation project(':module:core')
     implementation project(':languages')
     implementation project(':libraries:floatingactionbutton')
 }

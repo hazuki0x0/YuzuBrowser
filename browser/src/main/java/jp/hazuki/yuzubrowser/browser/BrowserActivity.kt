@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,6 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialog
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewFindDialogFactory
 import jp.hazuki.yuzubrowser.legacy.toolbar.sub.WebViewPageFastScroller
-import jp.hazuki.yuzubrowser.legacy.utils.CrashlyticsUtils
 import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
@@ -479,18 +478,17 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             BrowserController.REQUEST_WEB_UPLOAD -> webClient.webUploadResult(resultCode, data)
             BrowserController.REQUEST_SEARCHBOX -> {
                 if (resultCode != RESULT_OK || data == null) return
-                val query = data.getStringExtra(SearchActivity.EXTRA_QUERY)
-                val searchUrl = data.getStringExtra(SearchActivity.EXTRA_SEARCH_URL)
+                val query = data.getStringExtra(SearchActivity.EXTRA_QUERY)!!
+                val searchUrl = data.getStringExtra(SearchActivity.EXTRA_SEARCH_URL)!!
 
                 if (TextUtils.isEmpty(query)) return
 
-                val url: String
-                url = when (data.getIntExtra(SearchActivity.EXTRA_SEARCH_MODE, SearchActivity.SEARCH_MODE_AUTO)) {
+                val url = when (data.getIntExtra(SearchActivity.EXTRA_SEARCH_MODE, SearchActivity.SEARCH_MODE_AUTO)) {
                     SearchActivity.SEARCH_MODE_URL -> query.makeUrl()
                     SearchActivity.SEARCH_MODE_WORD -> WebUtils.makeSearchUrlFromQuery(query, searchUrl, "%s")
                     else -> query.makeUrlFromQuery(searchUrl, "%s")
                 }
-                val appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA)
+                val appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA)!!
                 val target = appdata.getInt(EXTRA_DATA_TARGET, -1)
                 val tab = tabManagerIn.get(target)
                 if (data.getBooleanExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, false) || tab == null)
@@ -726,7 +724,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         toolbar.onPreferenceReset()
         tabManagerIn.onPreferenceReset()
         userActionManager.onPreferenceReset()
-        CrashlyticsUtils.setWebViewMode()
 
         ThemeData.createInstanceIfNeed(applicationContext, AppPrefs.theme_setting.get())?.let { themeData ->
             toolbar.onThemeChanged(themeData)

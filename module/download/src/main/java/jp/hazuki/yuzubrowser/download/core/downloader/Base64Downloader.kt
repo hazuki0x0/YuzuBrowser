@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,29 @@ package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.ContentResolver
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
+import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.utils.decodeBase64Image
 import jp.hazuki.yuzubrowser.download.core.utils.saveBase64Image
 
-class Base64Downloader(private val contentResolver: ContentResolver, private val info: DownloadFileInfo) : Downloader {
+class Base64Downloader(
+    private val contentResolver: ContentResolver,
+    private val info: DownloadFileInfo,
+    private val request: DownloadRequest,
+) : Downloader {
     override var downloadListener: Downloader.DownloadListener? = null
 
     override fun download(): Boolean {
         downloadListener?.onStartDownload(info)
-        val downloadedFile = contentResolver.saveBase64Image(decodeBase64Image(info.url), info)
-        return if (downloadedFile != null) {
+        val image = decodeBase64Image(info.url)
+        val file = if (request.isScopedStorageMode) {
+            info.root
+        } else {
+            info.root.createFile(image.mimeType, info.name)
+        }
+        return if (file != null && contentResolver.saveBase64Image(image, file)) {
             info.state = DownloadFileInfo.STATE_DOWNLOADED
-            info.size = downloadedFile.length()
-            downloadListener?.onFileDownloaded(info, downloadedFile)
+            info.size = file.length()
+            downloadListener?.onFileDownloaded(info, file)
             true
         } else {
             info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR

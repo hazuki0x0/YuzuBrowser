@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,13 @@ import android.net.NetworkCapabilities
 import android.os.Build
 
 fun ConnectivityManager.isConnectedWifi(): Boolean {
-    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-        val info = activeNetworkInfo
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val capabilities = getNetworkCapabilities(activeNetwork)
+        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+    } else {
+        @Suppress("DEPRECATION")
+        val info = activeNetworkInfo!!
         @Suppress("DEPRECATION")
         info.isConnected && info.type == ConnectivityManager.TYPE_WIFI
-    } else {
-        val capabilities = getNetworkCapabilities(activeNetwork)
-        activeNetworkInfo.isConnected && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
     }
 }
