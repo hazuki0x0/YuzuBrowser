@@ -21,9 +21,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.*
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
@@ -33,7 +33,6 @@ import jp.hazuki.yuzubrowser.search.databinding.SearchSeachBarBinding
 import jp.hazuki.yuzubrowser.search.presentation.widget.SearchButton
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
-import jp.hazuki.yuzubrowser.ui.extensions.get
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import javax.inject.Inject
@@ -45,7 +44,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
     @Inject
     internal lateinit var faviconManager: FaviconManager
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModels<SearchViewModel>(factoryProducer = { factory })
     private lateinit var binding: SearchActivityBinding
     private lateinit var barBinding: SearchSeachBarBinding
 
@@ -72,7 +71,6 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
         }
         barBinding.callback = this
 
-        viewModel = ViewModelProviders.of(this, factory).get()
         viewModel.also {
             binding.model = it
             barBinding.viewModel = it

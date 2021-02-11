@@ -27,32 +27,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
+import jp.hazuki.yuzubrowser.legacy.databinding.ActionCustomBinding
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerMenu
-import kotlinx.android.synthetic.main.action_custom.*
 
-class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, RecyclerMenu.OnRecyclerMenuListener {
+class CustomSingleActionFragment : Fragment(), OnRecyclerListener, RecyclerMenu.OnRecyclerMenuListener {
 
     private lateinit var adapter: ActionAdapter
     private lateinit var actionNameArray: ActionNameArray
 
+    private lateinit var binding: ActionCustomBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.action_custom, container, false)
+        binding = ActionCustomBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
-        recyclerView.run {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        binding.recyclerView.run {
+            layoutManager = LinearLayoutManager(activity)
             addItemDecoration(DividerItemDecoration(activity))
 
             val helper = ItemTouchHelper(Touch())
@@ -63,16 +68,17 @@ class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerL
         val arguments = arguments ?: return
         val actions = arguments.getParcelable(ARG_ACTION) ?: Action()
         val name = arguments.getString(ARG_NAME) ?: ""
-        actionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA) ?: ActionNameArray(activity)
+        actionNameArray = arguments.getParcelable(ActionNameArray.INTENT_EXTRA)
+            ?: ActionNameArray(activity)
 
         adapter = ActionAdapter(activity, actions, actionNameArray, this, this).apply {
             isSortMode = true
         }
-        recyclerView.adapter = adapter
-        editText.setText(name)
+        binding.recyclerView.adapter = adapter
+        binding.editText.setText(name)
 
-        okButton.setOnClickListener {
-            var newName: String? = editText.text.toString()
+        binding.okButton.setOnClickListener {
+            var newName: String? = binding.editText.text.toString()
 
             if (TextUtils.isEmpty(newName) && adapter.itemCount > 0) {
                 newName = adapter[0].toString(actionNameArray)
@@ -85,13 +91,13 @@ class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerL
             activity.finish()
         }
 
-        cancelButton.setOnClickListener { activity.finish() }
+        binding.cancelButton.setOnClickListener { activity.finish() }
 
-        addButton.setOnClickListener {
+        binding.addButton.setOnClickListener {
             val intent = ActionActivity.Builder(activity)
-                    .setTitle(R.string.add)
-                    .setActionNameArray(actionNameArray)
-                    .create()
+                .setTitle(R.string.add)
+                .setActionNameArray(actionNameArray)
+                .create()
 
             startActivityForResult(intent, RESULT_REQUEST_PREFERENCE)
         }
@@ -152,7 +158,7 @@ class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerL
     private inner class Touch : ItemTouchHelper.Callback() {
 
         override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int {
-            return ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
+            return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
         }
 
         override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
@@ -164,7 +170,7 @@ class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerL
             val position = viewHolder.adapterPosition
             val action = adapter.remove(position)
 
-            Snackbar.make(rootLayout, R.string.deleted, Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.rootLayout, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo) {
                         adapter.add(position, action)
                         adapter.notifyItemInserted(position)
@@ -173,7 +179,7 @@ class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerL
         }
     }
 
-    private class ActionAdapter internal constructor(private val context: Context, list: Action, private val nameArray: ActionNameArray, private val menuListener: RecyclerMenu.OnRecyclerMenuListener, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SingleAction, ActionAdapter.AVH>(context, list, listener), RecyclerMenu.OnRecyclerMoveListener {
+    private class ActionAdapter constructor(private val context: Context, list: Action, private val nameArray: ActionNameArray, private val menuListener: RecyclerMenu.OnRecyclerMenuListener, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SingleAction, ActionAdapter.AVH>(context, list, listener), RecyclerMenu.OnRecyclerMoveListener {
 
         override fun onBindViewHolder(holder: AVH, item: SingleAction, position: Int) {
             holder.title.text = item.toString(nameArray)
@@ -196,7 +202,7 @@ class CustomSingleActionFragment : androidx.fragment.app.Fragment(), OnRecyclerL
             }
         }
 
-        internal class AVH(itemView: View, adapter: ActionAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<SingleAction>(itemView, adapter) {
+        class AVH(itemView: View, adapter: ActionAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<SingleAction>(itemView, adapter) {
 
             internal val title: TextView = itemView.findViewById(R.id.titleTextView)
             internal val menu: ImageButton = itemView.findViewById(R.id.menu)

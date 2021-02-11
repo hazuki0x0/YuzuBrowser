@@ -1,42 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:background="?android:attr/selectableItemBackground"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:gravity="center_vertical"
-    android:descendantFocusability="blocksDescendants">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <data>
+
+        <variable
+            name="script"
+            type="jp.hazuki.yuzubrowser.legacy.userjs.UserScript" />
+
+        <variable
+            name="viewHolder"
+            type="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListFragment.UserJsAdapter.ViewHolder" />
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_weight="1"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> viewHolder.onClick()}"
+        android:descendantFocusability="blocksDescendants">
 
-    <ImageButton
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_info_white_24dp"
-        android:id="@+id/infoButton"
-        android:tint="?attr/iconColor"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="10dp"
-        android:layout_weight="0"
-        android:layout_marginEnd="5dp"
-        android:scaleType="centerCrop" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:text="@{script.name}"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox"
-        android:focusable="false"
-        android:clickable="false"
-        android:background="@android:color/transparent"
-        android:layout_weight="0" />
-</LinearLayout>
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_info_white_24dp"
+            android:id="@+id/infoButton"
+            android:tint="?attr/iconColor"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:layout_weight="0"
+            android:layout_marginEnd="5dp"
+            android:scaleType="centerCrop" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox"
+            android:focusable="false"
+            android:clickable="false"
+            android:checked="@{script.enabled}"
+            android:background="@android:color/transparent"
+            android:layout_weight="0" />
+    </LinearLayout>
+</layout>

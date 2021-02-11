@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
 import android.content.Context
 import android.view.Gravity
+import android.view.LayoutInflater
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
@@ -31,12 +32,13 @@ import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
-abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: RequestCallback) : ToolbarBase(context, AppPrefs.toolbar_url, layout, request_callback) {
+abstract class UrlBarBase(context: Context, controller: ActionController, iconManager: ActionIconManager, layout: Int, request_callback: RequestCallback) : ToolbarBase(context, AppPrefs.toolbar_url, request_callback) {
     private val mLeftButtonController: ButtonToolbarController
     private val mRightButtonController: ButtonToolbarController
     protected val centerUrlButton: SwipeTextButton
 
     init {
+        LayoutInflater.from(context).inflate(layout, this)
         val toolbarSizeY = context.convertDpToPx(AppPrefs.toolbar_url.size.get())
 
         val softbtnManager = SoftButtonActionManager.getInstance(context)

@@ -28,9 +28,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
+import jp.hazuki.yuzubrowser.legacy.databinding.ActionActivityBinding
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.action_activity.*
 
 class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
 
@@ -38,8 +38,19 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
     private lateinit var intentAction: Action
     private lateinit var windowAction: Action
 
+    private var viewBinding: ActionActivityBinding? = null
+
+    private val binding: ActionActivityBinding
+        get() = viewBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.action_activity, container, false)
+        viewBinding = ActionActivityBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,14 +62,14 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
         windowAction = arguments.getParcelable(WINDOW) ?: Action()
 
 
-        resetButton.visibility = View.INVISIBLE
-        cancelButton.setOnClickListener {
+        binding.resetButton.visibility = View.INVISIBLE
+        binding.cancelButton.setOnClickListener {
             requireActivity().run {
                 setResult(Activity.RESULT_CANCELED)
                 finish()
             }
         }
-        okButton.setOnClickListener {
+        binding.okButton.setOnClickListener {
             requireActivity().run {
                 val intent = Intent()
                 intent.putExtra(DEFAULT, defaultAction as Parcelable?)
@@ -77,11 +88,11 @@ class CloseAutoSelectFragment : Fragment(), OnRecyclerListener {
         }
 
         val items = mutableListOf(getString(R.string.pref_close_default),
-                getString(R.string.pref_close_intent),
-                getString(R.string.pref_close_window))
+            getString(R.string.pref_close_intent),
+            getString(R.string.pref_close_window))
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = CloseAutoSelectAdapter(activity, items, this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerView.adapter = CloseAutoSelectAdapter(activity, items, this)
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {

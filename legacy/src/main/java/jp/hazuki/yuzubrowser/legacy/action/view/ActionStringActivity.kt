@@ -22,21 +22,30 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.widget.Toast
+import androidx.activity.viewModels
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.Action
 import jp.hazuki.yuzubrowser.legacy.action.ActionList
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
+import jp.hazuki.yuzubrowser.legacy.databinding.ScrollEditTextModel
+import jp.hazuki.yuzubrowser.legacy.databinding.ScrollEdittextBinding
 import jp.hazuki.yuzubrowser.legacy.utils.util.JsonConvertable
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
-import kotlinx.android.synthetic.main.scroll_edittext.*
 
 class ActionStringActivity : ThemeActivity() {
     private var mTarget: Int = 0
     private var mActionNameArray: ActionNameArray? = null
 
+    private lateinit var binding: ScrollEdittextBinding
+
+    private val viewModel by viewModels<ScrollEditTextModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.scroll_edittext)
+        binding = ScrollEdittextBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.lifecycleOwner = this
+        binding.model = viewModel
 
         val intent = intent ?: throw NullPointerException("Intent is null")
 
@@ -46,11 +55,11 @@ class ActionStringActivity : ThemeActivity() {
         if (action != null) {
             if (action is Action) {
                 mTarget = ACTION_ACTIVITY
-                editText.setText((action as JsonConvertable).toJsonString())
+                viewModel.text.value = (action as JsonConvertable).toJsonString()
                 return
             } else if (action is ActionList) {
                 mTarget = ACTION_LIST_ACTIVITY
-                editText.setText((action as JsonConvertable).toJsonString())
+                viewModel.text.value = (action as JsonConvertable).toJsonString()
                 return
             }
             throw IllegalArgumentException("ARG_ACTION is not action or actionlist")
@@ -68,7 +77,7 @@ class ActionStringActivity : ThemeActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(R.string.json_to_action).setOnMenuItemClickListener {
-            val jsonStr = editText.text.toString()
+            val jsonStr = viewModel.text.value ?: ""
 
             if (callingPackage == null) {
                 when (mTarget) {
@@ -119,14 +128,16 @@ class ActionStringActivity : ThemeActivity() {
                 if (resultCode != Activity.RESULT_OK || data == null) return
 
                 val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION) ?: return
-                editText.setText(action.toJsonString())
+                viewModel.text.value = action.toJsonString()
             }
             ACTION_LIST_ACTIVITY -> {
                 if (resultCode != Activity.RESULT_OK || data == null) return
 
-                val action = data.getParcelableExtra<ActionList>(ActionListActivity.EXTRA_ACTION_LIST) ?: return
-                editText.setText(action.toJsonString())
+                val action = data.getParcelableExtra<ActionList>(ActionListActivity.EXTRA_ACTION_LIST)
+                    ?: return
+                viewModel.text.value = action.toJsonString()
             }
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 

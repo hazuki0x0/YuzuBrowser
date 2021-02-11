@@ -20,53 +20,54 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.PageFastScrollBinding
 import jp.hazuki.yuzubrowser.legacy.toolbar.SubToolbar
 import jp.hazuki.yuzubrowser.webview.CustomWebView
-import kotlinx.android.synthetic.main.page_fast_scroll.view.*
 
 class WebViewPageFastScroller(context: Context) : SubToolbar(context) {
     private var mOnEndListener: (() -> Boolean)? = null
 
-    init {
-        LayoutInflater.from(context).inflate(R.layout.page_fast_scroll, this)
+    private val binding = PageFastScrollBinding.inflate(LayoutInflater.from(context), this, true)
 
-        buttonEnd.setOnClickListener { close() }
+    init {
+        binding.buttonEnd.setOnClickListener { close() }
     }
 
     fun show(web: CustomWebView) {
-        buttonUp.run {
-            setOnClickListener { web.pageUp(false) }
-            setOnLongClickListener {
-                web.pageUp(true)
-                true
-            }
-        }
-        buttonDown.run {
-            setOnClickListener { web.pageDown(false) }
-            setOnLongClickListener {
-                web.pageDown(true)
-                true
-            }
-        }
-        seekBar.run {
-            max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
-            progress = web.computeVerticalScrollOffsetMethod()
-            setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-                override fun onStopTrackingTouch(seekBar: SeekBar) {
-                    web.scrollTo(web.computeHorizontalScrollOffsetMethod(), seekBar.progress)
+        binding.apply {
+            buttonUp.run {
+                setOnClickListener { web.pageUp(false) }
+                setOnLongClickListener {
+                    web.pageUp(true)
+                    true
                 }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar) {
-                    seekBar.max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
+            }
+            buttonDown.run {
+                setOnClickListener { web.pageDown(false) }
+                setOnLongClickListener {
+                    web.pageDown(true)
+                    true
                 }
-
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    if (fromUser) {
-                        web.scrollTo(web.computeHorizontalScrollOffsetMethod(), progress)
+            }
+            seekBar.run {
+                max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
+                progress = web.computeVerticalScrollOffsetMethod()
+                setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+                        web.scrollTo(web.computeHorizontalScrollOffsetMethod(), seekBar.progress)
                     }
-                }
-            })
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {
+                        seekBar.max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
+                    }
+
+                    override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                        if (fromUser) {
+                            web.scrollTo(web.computeHorizontalScrollOffsetMethod(), progress)
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -79,7 +80,7 @@ class WebViewPageFastScroller(context: Context) : SubToolbar(context) {
     }
 
     fun onScrollWebView(web: CustomWebView) {
-        seekBar.run {
+        binding.seekBar.run {
             max = web.computeVerticalScrollRangeMethod() - web.computeVerticalScrollExtentMethod()
             progress = web.computeVerticalScrollOffsetMethod()
         }

@@ -18,13 +18,12 @@ package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
 import android.content.Context
 import android.content.res.Configuration
-import android.view.LayoutInflater
 import android.view.View
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.toolbar.AbstractToolbar
 import jp.hazuki.yuzubrowser.ui.settings.container.ToolbarContainer
 
-abstract class ToolbarBase(context: Context, preference: ToolbarContainer, layout_id: Int, request_callback: RequestCallback) : AbstractToolbar(context) {
+abstract class ToolbarBase(context: Context, preference: ToolbarContainer, request_callback: RequestCallback) : AbstractToolbar(context) {
     val toolbarPreferences: ToolbarContainer = preference
     protected val mRequestCallback: RequestCallback = request_callback
 
@@ -53,9 +52,5 @@ abstract class ToolbarBase(context: Context, preference: ToolbarContainer, layou
 
     fun onActivityConfigurationChanged(newConfig: Configuration) {
         visibility = if (mRequestCallback.shouldShowToolbar(toolbarPreferences.visibility, null, newConfig)) View.VISIBLE else View.GONE
-    }
-
-    init {
-        LayoutInflater.from(context).inflate(layout_id, this)
     }
 }

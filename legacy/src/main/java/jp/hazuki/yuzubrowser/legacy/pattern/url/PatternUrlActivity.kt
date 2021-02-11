@@ -31,18 +31,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.fragment.app.DialogFragment
 import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory
 import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.PatternAddWebsettingBinding
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.PatternActivity
 import jp.hazuki.yuzubrowser.legacy.pattern.action.OpenOthersPatternAction
 import jp.hazuki.yuzubrowser.legacy.pattern.action.WebSettingPatternAction
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentListActivity
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.pattern_add_websetting.*
 import java.util.*
 import java.util.regex.PatternSyntaxException
 
@@ -114,7 +114,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         return super.onOptionsItemSelected(item)
     }
 
-    class SettingWebDialog : androidx.fragment.app.DialogFragment() {
+    class SettingWebDialog : DialogFragment() {
 
         private lateinit var header: View
         private lateinit var layout: SettingWebDialogView
@@ -123,17 +123,17 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             val arguments = arguments ?: throw IllegalArgumentException()
 
             val checker = arguments.getSerializable(CHECKER) as? PatternUrlChecker
-            val view = View.inflate(activity, R.layout.pattern_add_websetting, null) as ViewGroup
+            val binding = PatternAddWebsettingBinding.inflate(requireActivity().layoutInflater)
             if (activity is PatternUrlActivity) {
                 header = (activity as PatternUrlActivity).makeHeaderView(checker)
-                view.findViewById<FrameLayout>(R.id.header_frame).addView(header)
+                binding.headerFrame.addView(header)
             }
 
-            layout = SettingWebDialogView(view).apply { init(checker) }
+            layout = SettingWebDialogView(binding).apply { init(checker) }
 
             val alertDialog = AlertDialog.Builder(activity)
-                    .setTitle(R.string.pattern_change_websettings)
-                    .setView(view)
+                .setTitle(R.string.pattern_change_websettings)
+                .setView(binding.root)
                     .setPositiveButton(android.R.string.ok, null)
                     .setNegativeButton(android.R.string.cancel, null)
                     .create()
@@ -177,7 +177,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             }
         }
 
-        private inner class SettingWebDialogView(override val containerView: View) : LayoutContainer {
+        private inner class SettingWebDialogView(val binding: PatternAddWebsettingBinding) {
 
             fun init(checker: PatternUrlChecker?) {
                 setData(checker)
@@ -185,63 +185,65 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             }
 
             fun getAction(): WebSettingPatternAction {
-                var ua: String? = null
-                if (uaCheckBox.isChecked) {
-                    ua = uaEditText.text.toString()
-                }
-
-                var js = WebSettingPatternAction.UNDEFINED
-                if (jsCheckBox.isChecked) {
-                    js = if (jsSwitch.isChecked) {
-                        WebSettingPatternAction.ENABLE
-                    } else {
-                        WebSettingPatternAction.DISABLE
+                binding.apply {
+                    var ua: String? = null
+                    if (uaCheckBox.isChecked) {
+                        ua = uaEditText.text.toString()
                     }
-                }
 
-                var navLock = WebSettingPatternAction.UNDEFINED
-                if (navLockCheckBox.isChecked) {
-                    navLock = if (navLockSwitch.isChecked) {
-                        WebSettingPatternAction.ENABLE
-                    } else {
-                        WebSettingPatternAction.DISABLE
+                    var js = WebSettingPatternAction.UNDEFINED
+                    if (jsCheckBox.isChecked) {
+                        js = if (jsSwitch.isChecked) {
+                            WebSettingPatternAction.ENABLE
+                        } else {
+                            WebSettingPatternAction.DISABLE
+                        }
                     }
-                }
-                var image = WebSettingPatternAction.UNDEFINED
-                if (loadImageCheckBox.isChecked) {
-                    image = if (loadImageSwitch.isChecked) {
-                        WebSettingPatternAction.ENABLE
-                    } else {
-                        WebSettingPatternAction.DISABLE
-                    }
-                }
 
-                var cookie = WebSettingPatternAction.UNDEFINED
-                if (cookieCheckBox.isChecked) {
-                    cookie = if (cookieSwitch.isChecked) {
-                        WebSettingPatternAction.ENABLE
-                    } else {
-                        WebSettingPatternAction.DISABLE
+                    var navLock = WebSettingPatternAction.UNDEFINED
+                    if (navLockCheckBox.isChecked) {
+                        navLock = if (navLockSwitch.isChecked) {
+                            WebSettingPatternAction.ENABLE
+                        } else {
+                            WebSettingPatternAction.DISABLE
+                        }
                     }
-                }
-
-                var thirdCookie = WebSettingPatternAction.UNDEFINED
-                if (thirdCookieCheckBox.isChecked) {
-                    thirdCookie = if (thirdCookieSwitch.isChecked) {
-                        WebSettingPatternAction.ENABLE
-                    } else {
-                        WebSettingPatternAction.DISABLE
+                    var image = WebSettingPatternAction.UNDEFINED
+                    if (loadImageCheckBox.isChecked) {
+                        image = if (loadImageSwitch.isChecked) {
+                            WebSettingPatternAction.ENABLE
+                        } else {
+                            WebSettingPatternAction.DISABLE
+                        }
                     }
-                }
-                var renderingMode = WebSettingPatternAction.UNDEFINED_RENDERING
-                if (renderingModeCheckBox.isChecked) {
-                    renderingMode = renderingModeSpinner.selectedItemPosition
-                }
 
-                return WebSettingPatternAction(ua, js, navLock, image, cookie, thirdCookie, renderingMode)
+                    var cookie = WebSettingPatternAction.UNDEFINED
+                    if (cookieCheckBox.isChecked) {
+                        cookie = if (cookieSwitch.isChecked) {
+                            WebSettingPatternAction.ENABLE
+                        } else {
+                            WebSettingPatternAction.DISABLE
+                        }
+                    }
+
+                    var thirdCookie = WebSettingPatternAction.UNDEFINED
+                    if (thirdCookieCheckBox.isChecked) {
+                        thirdCookie = if (thirdCookieSwitch.isChecked) {
+                            WebSettingPatternAction.ENABLE
+                        } else {
+                            WebSettingPatternAction.DISABLE
+                        }
+                    }
+                    var renderingMode = WebSettingPatternAction.UNDEFINED_RENDERING
+                    if (renderingModeCheckBox.isChecked) {
+                        renderingMode = renderingModeSpinner.selectedItemPosition
+                    }
+
+                    return WebSettingPatternAction(ua, js, navLock, image, cookie, thirdCookie, renderingMode)
+                }
             }
 
-            private fun setData(checker: PatternUrlChecker?) {
+            private fun setData(checker: PatternUrlChecker?) = binding.apply {
                 if (checker == null) {
                     uaEditText.isEnabled = false
                     uaButton.isEnabled = false
@@ -355,11 +357,11 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
 
             fun handleResult(requestCode: Int, resultCode: Int, data: Intent?) {
                 if (requestCode == REQUEST_USER_AGENT && resultCode == RESULT_OK) {
-                    uaEditText.setText(data?.getStringExtra(Intent.EXTRA_TEXT))
+                    binding.uaEditText.setText(data?.getStringExtra(Intent.EXTRA_TEXT))
                 }
             }
 
-            private fun setListeners() {
+            private fun setListeners() = binding.apply {
                 uaCheckBox.setOnCheckedChangeListener { _, b ->
                     uaEditText.isEnabled = b
                     uaButton.isEnabled = b
@@ -386,7 +388,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
         }
     }
 
-    class OpenOtherDialog : androidx.fragment.app.DialogFragment() {
+    class OpenOtherDialog : DialogFragment() {
 
         private var patternActivity: PatternUrlActivity? = null
         private lateinit var intent: Intent

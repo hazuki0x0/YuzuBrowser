@@ -31,11 +31,11 @@ import androidx.annotation.DrawableRes
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
+import jp.hazuki.yuzubrowser.legacy.databinding.FragmentMultiFingerEditBinding
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureItem
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.detector.MultiFingerGestureDetector
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.fragment_multi_finger_edit.*
 
 class MfsEditFragment : androidx.fragment.app.Fragment() {
 
@@ -44,9 +44,20 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
     private lateinit var nameArray: ActionNameArray
     private lateinit var adapter: MfsFingerAdapter
 
+    private var viewBinding: FragmentMultiFingerEditBinding? = null
+
+    private val binding: FragmentMultiFingerEditBinding
+        get() = viewBinding!!
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_multi_finger_edit, container, false)
+        viewBinding = FragmentMultiFingerEditBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,22 +69,22 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
         nameArray = ActionNameArray(activity)
 
         val text = item.action.toString(nameArray)
-        actionButton.text = text ?: getText(R.string.action_empty)
-        actionButton.setOnClickListener {
+        binding.actionButton.text = text ?: getText(R.string.action_empty)
+        binding.actionButton.setOnClickListener {
             val intent = ActionActivity.Builder(activity)
-                    .setDefaultAction(item.action)
-                    .setTitle(R.string.pref_multi_finger_gesture_settings)
-                    .create()
+                .setDefaultAction(item.action)
+                .setTitle(R.string.pref_multi_finger_gesture_settings)
+                .create()
             startActivityForResult(intent, REQUEST_ACTION)
         }
 
-        seekTextView.text = Integer.toString(item.fingers)
-        fingerSeekBar.run {
+        binding.seekTextView.text = item.fingers.toString()
+        binding.fingerSeekBar.run {
             progress = item.fingers - 1
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     item.fingers = progress + 1
-                    seekTextView.text = Integer.toString(progress + 1)
+                    binding.seekTextView.text = (progress + 1).toString()
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -82,28 +93,28 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
             })
         }
 
-        upButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_UP) }
+        binding.upButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_UP) }
 
-        downButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_DOWN) }
+        binding.downButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_DOWN) }
 
-        leftButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_LEFT) }
+        binding.leftButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_LEFT) }
 
-        rightButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_RIGHT) }
+        binding.rightButton.setOnClickListener { addFingerAction(MultiFingerGestureDetector.SWIPE_RIGHT) }
 
-        deleteButton.setOnClickListener {
+        binding.deleteButton.setOnClickListener {
             item.removeLastTrace()
             adapter.notifyDataSetChanged()
-            recyclerView.scrollToPosition(adapter.itemCount - 1)
+            binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
         }
 
-        cancelButton.setOnClickListener { fragmentManager.popBackStack() }
+        binding.cancelButton.setOnClickListener { fragmentManager.popBackStack() }
 
-        okButton.setOnClickListener {
+        binding.okButton.setOnClickListener {
             listener?.onEdited(arguments.getInt(ARG_INDEX, -1), item)
             fragmentManager.popBackStack()
         }
 
-        recyclerView.let {
+        binding.recyclerView.let {
             it.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             adapter = MfsFingerAdapter(activity, item.traces, null)
             it.adapter = adapter
@@ -115,7 +126,7 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
             REQUEST_ACTION -> if (resultCode == Activity.RESULT_OK && data != null) {
                 item.action = ActionActivity.getActionFromIntent(data)
                 val text = item.action.toString(nameArray)
-                actionButton.text = text ?: getText(R.string.action_empty)
+                binding.actionButton.text = text ?: getText(R.string.action_empty)
             }
         }
     }
@@ -124,7 +135,7 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
         if (item.checkTrace(action)) {
             item.addTrace(action)
             adapter.notifyDataSetChanged()
-            recyclerView.scrollToPosition(adapter.itemCount - 1)
+            binding.recyclerView.scrollToPosition(adapter.itemCount - 1)
         }
     }
 
@@ -148,7 +159,7 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
             return ViewHolder(inflater.inflate(R.layout.fragment_multi_finger_edit_item, parent, false), this)
         }
 
-        internal class ViewHolder(itemView: View, adapter: MfsFingerAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<Int>(itemView, adapter) {
+        class ViewHolder(itemView: View, adapter: MfsFingerAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<Int>(itemView, adapter) {
 
             val title: TextView = itemView.findViewById(R.id.numTextView)
             val icon: ImageView = itemView.findViewById(R.id.imageView)

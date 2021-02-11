@@ -20,25 +20,34 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import androidx.activity.viewModels
 
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.ScrollEditTextModel
+import jp.hazuki.yuzubrowser.legacy.databinding.ScrollEdittextBinding
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
-import kotlinx.android.synthetic.main.scroll_edittext.*
 
 class UserScriptEditActivity : ThemeActivity() {
 
     private lateinit var mUserScript: UserScriptInfo
 
+    private lateinit var binding: ScrollEdittextBinding
+
+    private val viewModel by viewModels<ScrollEditTextModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.scroll_edittext)
+        binding = ScrollEdittextBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.lifecycleOwner = this
+        binding.model = viewModel
 
         val intent = intent ?: throw NullPointerException("intent is null")
         val id = intent.getLongExtra(EXTRA_USERSCRIPT, -1)
         mUserScript = UserScriptDatabase.getInstance(applicationContext)[id] ?: UserScriptInfo()
 
         title = intent.getStringExtra(Intent.EXTRA_TITLE) ?: ""
-        editText.setText(mUserScript.data)
+        viewModel.text.value = mUserScript.data
     }
 
     override fun onBackPressed() {
@@ -58,7 +67,7 @@ class UserScriptEditActivity : ThemeActivity() {
                 .setTitle(R.string.confirm)
                 .setMessage(R.string.userjs_save_confirm)
                 .setPositiveButton(R.string.save) { _, _ ->
-                    mUserScript.data = editText.text.toString()
+                    mUserScript.data = viewModel.text.value ?: ""
                     UserScriptDatabase.getInstance(applicationContext).set(mUserScript)
                     setResult(RESULT_OK)
                     finish()

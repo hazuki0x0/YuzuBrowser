@@ -77,7 +77,7 @@ object AndroidX {
     const val roomCompiler = "androidx.room:room-compiler:${Versions.androidxRoom}"
     const val documentFile = "androidx.documentfile:documentfile:${Versions.documentFile}"
     const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
-    const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifeCycle}"
+    const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifeCycle}"
     const val print = "androidx.print:print:${Versions.print}"
 
 

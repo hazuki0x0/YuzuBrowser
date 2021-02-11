@@ -25,25 +25,32 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import jp.hazuki.yuzubrowser.core.utility.extensions.hideIme
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebView
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.find_onpage.*
 
 object WebViewFindDialogFactory {
     fun createInstance(context: Context, layout: View): WebViewFindDialog {
         return WebViewFind(context, layout)
     }
 
-    private class WebViewFind(private val mContext: Context, override val containerView: View) : WebViewFindDialog, LayoutContainer {
+    private class WebViewFind(private val mContext: Context, val containerView: View) : WebViewFindDialog {
         override var isAutoClose = true
 
         private var mCurrentWeb: CustomWebView? = null
 
         override val isVisible: Boolean
             get() = containerView.visibility == View.VISIBLE
+
+        private val howMatchTextView: TextView = containerView.findViewById(R.id.howMatchTextView)
+        private val findEditText: EditText = containerView.findViewById(R.id.findEditText)
+        private val buttonLeft: ImageButton = containerView.findViewById(R.id.buttonLeft)
+        private val buttonRight: ImageButton = containerView.findViewById(R.id.buttonRight)
+        private val buttonEnd: ImageButton = containerView.findViewById(R.id.buttonEnd)
 
         @SuppressLint("SetTextI18n")
         private val findListener = WebView.FindListener { activeMatchOrdinal, numberOfMatches, _ ->

@@ -27,22 +27,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.FragmentEditSpeeddialBinding
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDial
 import jp.hazuki.yuzubrowser.legacy.speeddial.WebIcon
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
-import kotlinx.android.synthetic.main.fragment_edit_speeddial.*
 import java.io.File
 
-class SpeedDialSettingActivityEditFragment : androidx.fragment.app.Fragment() {
+class SpeedDialSettingActivityEditFragment : Fragment() {
 
     private lateinit var speedDial: SpeedDial
     private var mCallBack: SpeedDialEditCallBack? = null
     private var goBack: GoBackController? = null
 
+    private var viewBinding: FragmentEditSpeeddialBinding? = null
+
+    private val binding: FragmentEditSpeeddialBinding
+        get() = viewBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_edit_speeddial, container, false)
+        viewBinding = FragmentEditSpeeddialBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,48 +57,52 @@ class SpeedDialSettingActivityEditFragment : androidx.fragment.app.Fragment() {
 
         speedDial = arguments.getSerializable(DATA) as? SpeedDial ?: SpeedDial()
 
+        binding.apply {
+            superFrameLayout.setOnImeShownListener { visible -> bottomBar.visibility = if (visible) View.GONE else View.VISIBLE }
 
-        superFrameLayout.setOnImeShownListener { visible -> bottomBar.visibility = if (visible) View.GONE else View.VISIBLE }
+            name.setText(speedDial.title)
+            url.setText(speedDial.url)
 
-        name.setText(speedDial.title)
-        url.setText(speedDial.url)
+            val iconBitmap = speedDial.icon
+                ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(activity, R.drawable.ic_public_white_24dp))
 
-        val iconBitmap = speedDial.icon ?: WebIcon.createIcon(ImageUtils.getBitmapFromVectorDrawable(activity, R.drawable.ic_public_white_24dp))
+            icon.setImageBitmap(iconBitmap.bitmap)
 
-        icon.setImageBitmap(iconBitmap.bitmap)
+            useFavicon.isChecked = speedDial.isFavicon
+            setIconEnable(!speedDial.isFavicon)
 
-        use_favicon.isChecked = speedDial.isFavicon
-        setIconEnable(!speedDial.isFavicon)
-
-        use_favicon.setOnCheckedChangeListener { _, isChecked ->
-            speedDial.isFavicon = isChecked
-            setIconEnable(!isChecked)
-        }
-
-        icon.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_PICK_IMAGE)
-        }
-
-        okButton.setOnClickListener {
-            mCallBack?.run {
-                speedDial.title = name.text.toString()
-                speedDial.url = url.text.toString()
-                onEdited(speedDial)
+            useFavicon.setOnCheckedChangeListener { _, isChecked ->
+                speedDial.isFavicon = isChecked
+                setIconEnable(!isChecked)
             }
-        }
 
-        cancelButton.setOnClickListener {
-            goBack?.run {
-                goBack()
+            icon.setOnClickListener {
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                intent.type = "image/*"
+                startActivityForResult(intent, REQUEST_PICK_IMAGE)
+            }
+
+            okButton.setOnClickListener {
+                mCallBack?.run {
+                    speedDial.title = name.text.toString()
+                    speedDial.url = url.text.toString()
+                    onEdited(speedDial)
+                }
+            }
+
+            cancelButton.setOnClickListener {
+                goBack?.run {
+                    goBack()
+                }
             }
         }
     }
 
     private fun setIconEnable(enable: Boolean) {
-        icon.isEnabled = enable
-        icon.alpha = if (enable) 1.0f else 0.6f
+        binding.icon.apply {
+            isEnabled = enable
+            alpha = if (enable) 1.0f else 0.6f
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -123,7 +134,7 @@ class SpeedDialSettingActivityEditFragment : androidx.fragment.app.Fragment() {
             REQUEST_CROP_IMAGE -> if (resultCode == Activity.RESULT_OK && data != null && data.extras != null) {
                 val bitmap = data.extras!!.getParcelable<Bitmap>("data")
                 speedDial.icon = WebIcon.createIconOrNull(bitmap)
-                icon.setImageBitmap(bitmap)
+                binding.icon.setImageBitmap(bitmap)
             }
         }
     }

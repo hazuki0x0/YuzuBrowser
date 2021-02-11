@@ -20,7 +20,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.WindowManager
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
@@ -50,7 +50,7 @@ class BookmarkActivity : DaggerLongPressFixActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         requestedOrientation = orientation
 
-        supportFragmentManager.transaction {
+        supportFragmentManager.commit {
             replace(R.id.container, BookmarkFragment(pickMode, itemId))
         }
     }

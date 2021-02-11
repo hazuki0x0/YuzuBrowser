@@ -54,7 +54,7 @@ class DebugActivity : ThemeActivity() {
             when (position) {
                 0 -> startActivity(Intent(activity, DebugFileListActivity::class.java))
                 1 -> {
-                    if (context!!.resources.getBoolean(R.bool.package_debug))
+                    if (requireActivity().resources.getBoolean(R.bool.package_debug))
                         startActivity(Intent(activity, ActivityListActivity::class.java))
                     else
                         Toast.makeText(activity, "This feature is only valid for debug builds", Toast.LENGTH_SHORT).show()

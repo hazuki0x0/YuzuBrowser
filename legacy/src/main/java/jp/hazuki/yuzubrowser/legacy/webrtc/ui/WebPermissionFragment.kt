@@ -20,17 +20,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDatabase
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebPermissions
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.extensions.CacheImplementation
-import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.synthetic.main.recycler_with_fab.*
 
-@ContainerOptions(CacheImplementation.NO_CACHE)
 class WebPermissionFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
 
     private lateinit var adapter: WebPermissionAdapter
@@ -43,11 +41,11 @@ class WebPermissionFragment : androidx.fragment.app.Fragment(), OnRecyclerListen
         val activity = activity ?: return
 
         adapter = WebPermissionAdapter(activity,
-                WebPermissionsDatabase.getInstance(activity.applicationContext).getList().toMutableList(),
-                this)
+            WebPermissionsDatabase.getInstance(activity.applicationContext).getList().toMutableList(),
+            this)
 
-        recyclerView.run {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        view.findViewById<RecyclerView>(R.id.recyclerView).run {
+            layoutManager = LinearLayoutManager(activity)
             addItemDecoration(DividerItemDecoration(activity))
             adapter = this@WebPermissionFragment.adapter
         }

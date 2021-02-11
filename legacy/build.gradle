@@ -16,7 +16,6 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -55,13 +54,14 @@ android {
     lintOptions {
         disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
     }
-    dataBinding {
+
+    buildFeatures {
+        dataBinding true
+    }
+
+    viewBinding {
         enabled = true
     }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 repositories {

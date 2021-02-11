@@ -29,12 +29,12 @@ import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.*
+import jp.hazuki.yuzubrowser.legacy.databinding.ActionActivityBinding
 import jp.hazuki.yuzubrowser.ui.app.OnActivityResultListener
 import jp.hazuki.yuzubrowser.ui.app.StartActivityInfo
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.action_activity.*
 
 class ActionActivity : ThemeActivity(), OnRecyclerListener {
 
@@ -46,9 +46,12 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
     private lateinit var mAction: Action
     private lateinit var adapter: ActionNameArrayAdapter
 
+    private lateinit var binding: ActionActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.action_activity)
+        binding = ActionActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val intent = intent ?: throw NullPointerException("intent is null")
 
@@ -61,11 +64,12 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
             requestedOrientation = orientation
         }
 
-        actionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA) ?: ActionNameArray(applicationContext)
+        actionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA)
+            ?: ActionNameArray(applicationContext)
 
         adapter = ActionNameArrayAdapter(this, actionNameArray, this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
 
         val mActionType = intent.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, 0)
         mActionId = intent.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_ID, 0)
@@ -100,9 +104,9 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
         adapter.notifyDataSetChanged()
 
         if (initialPosition != -1)
-            recyclerView.scrollToPosition(initialPosition)
+            binding.recyclerView.scrollToPosition(initialPosition)
 
-        okButton.setOnClickListener {
+        binding.okButton.setOnClickListener {
             when (mActionManager) {
                 null -> {
                     val intent1 = Intent()
@@ -126,17 +130,17 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
             finish()
         }
 
-        okButton.setOnLongClickListener {
+        binding.okButton.setOnLongClickListener {
             startJsonStringActivity()
             false
         }
 
-        resetButton.setOnClickListener {
+        binding.resetButton.setOnClickListener {
             mAction.clear()
             adapter.clearChoices()
         }
 
-        cancelButton.setOnClickListener { finish() }
+        binding.cancelButton.setOnClickListener { finish() }
 
         adapter.setListener(this::showSubPreference)
     }
@@ -221,7 +225,7 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
                 }
                 adapter.notifyDataSetChanged()
                 if (initialPosition != -1)
-                    recyclerView.scrollToPosition(initialPosition)
+                    binding.recyclerView.scrollToPosition(initialPosition)
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }

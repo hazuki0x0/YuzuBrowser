@@ -22,38 +22,51 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
-import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.RecyclerWithFabBinding
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
-import kotlinx.android.synthetic.main.recycler_with_fab.*
 
 abstract class RecyclerFabFragment : Fragment() {
 
+    private var viewBinding: RecyclerWithFabBinding? = null
+
+    private val binding: RecyclerWithFabBinding
+        get() = viewBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.recycler_with_fab, container, false)
+        setHasOptionsMenu(true)
+        viewBinding = RecyclerWithFabBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
 
-        fab.run {
-            setOnClickListener { onAddButtonClick() }
-            setOnLongClickListener { onAddButtonLongClick() }
-        }
-        recyclerView.run {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-            val helper = ItemTouchHelper(ListTouch())
-            helper.attachToRecyclerView(this)
-            addItemDecoration(helper)
-            addItemDecoration(DividerItemDecoration(activity))
+        binding.apply {
+            fab.run {
+                setOnClickListener { onAddButtonClick() }
+                setOnLongClickListener { onAddButtonLongClick() }
+            }
+            recyclerView.run {
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                val helper = ItemTouchHelper(ListTouch())
+                helper.attachToRecyclerView(this)
+                addItemDecoration(helper)
+                addItemDecoration(DividerItemDecoration(activity))
+            }
         }
     }
 
     protected fun setRecyclerViewAdapter(adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>) {
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     protected val rootView: View
-        get() = rootLayout
+        get() = binding.rootLayout
 
     protected open fun onAddButtonClick() {}
 
@@ -70,7 +83,7 @@ abstract class RecyclerFabFragment : Fragment() {
     open val isItemViewSwipeEnabled: Boolean = true
 
     fun setAddButtonEnabled(enabled: Boolean) {
-        fab.visibility = if (enabled) View.VISIBLE else View.GONE
+        binding.fab.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 
     private inner class ListTouch : ItemTouchHelper.Callback() {

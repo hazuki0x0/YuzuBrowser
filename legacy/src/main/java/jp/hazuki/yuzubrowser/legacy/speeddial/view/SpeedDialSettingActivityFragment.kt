@@ -25,12 +25,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.RecyclerWithFabBinding
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDial
 import jp.hazuki.yuzubrowser.legacy.speeddial.SpeedDialManager
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.recycler_with_fab.*
 import java.util.*
 
 
@@ -41,9 +41,20 @@ class SpeedDialSettingActivityFragment : androidx.fragment.app.Fragment(), OnRec
     private lateinit var adapter: SpeedDialRecyclerAdapter
     private var mListener: OnSpeedDialAddListener? = null
 
+    private var viewBinding: RecyclerWithFabBinding? = null
+
+    private val binding: RecyclerWithFabBinding
+        get() = viewBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.recycler_with_fab, container, false)
+        viewBinding = RecyclerWithFabBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,18 +63,20 @@ class SpeedDialSettingActivityFragment : androidx.fragment.app.Fragment(), OnRec
         manager = SpeedDialManager(activity.applicationContext)
         speedDialList = manager.all
 
-        recyclerView.apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-            val helper = ItemTouchHelper(ListTouch())
-            helper.attachToRecyclerView(this)
-            addItemDecoration(helper)
-            addItemDecoration(DividerItemDecoration(activity))
+        binding.apply {
+            recyclerView.apply {
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                val helper = ItemTouchHelper(ListTouch())
+                helper.attachToRecyclerView(this)
+                addItemDecoration(helper)
+                addItemDecoration(DividerItemDecoration(activity))
+            }
+
+            adapter = SpeedDialRecyclerAdapter(activity, speedDialList, this@SpeedDialSettingActivityFragment)
+            recyclerView.adapter = adapter
+
+            fab.setOnClickListener { FabActionDialog().show(childFragmentManager, "fab") }
         }
-
-        adapter = SpeedDialRecyclerAdapter(activity, speedDialList, this)
-        recyclerView.adapter = adapter
-
-        fab.setOnClickListener { FabActionDialog().show(childFragmentManager, "fab") }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +178,7 @@ class SpeedDialSettingActivityFragment : androidx.fragment.app.Fragment(), OnRec
             val speedDial = speedDialList.removeAt(position)
 
             adapter.notifyDataSetChanged()
-            Snackbar.make(rootLayout, R.string.deleted, Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.rootLayout, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo) {
                         speedDialList.add(position, speedDial)
                         adapter.notifyDataSetChanged()

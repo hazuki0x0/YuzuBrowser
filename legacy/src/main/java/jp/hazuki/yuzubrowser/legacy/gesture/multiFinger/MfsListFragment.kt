@@ -24,12 +24,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
+import jp.hazuki.yuzubrowser.legacy.databinding.RecyclerWithFabBinding
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureItem
 import jp.hazuki.yuzubrowser.legacy.gesture.multiFinger.data.MultiFingerGestureManager
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.recycler_with_fab.*
 
 class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {
 
@@ -37,15 +37,26 @@ class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, De
     private lateinit var adapter: MfsListAdapter
     private var listener: OnMfsListListener? = null
 
+    private var viewBinding: RecyclerWithFabBinding? = null
+
+    private val binding: RecyclerWithFabBinding
+        get() = viewBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.recycler_with_fab, container, false)
+        viewBinding = RecyclerWithFabBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
 
-        recyclerView.run {
+        binding.recyclerView.run {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
             val helper = ItemTouchHelper(ListTouch())
             helper.attachToRecyclerView(this)
@@ -56,9 +67,9 @@ class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, De
         manager = MultiFingerGestureManager(activity)
         adapter = MfsListAdapter(activity, manager.gestureItems, ActionNameArray(activity), this)
 
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             listener?.goEdit(-1, MultiFingerGestureItem())
         }
     }
@@ -135,7 +146,7 @@ class MfsListFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, De
             val position = viewHolder.adapterPosition
             val item = adapter.remove(position)
 
-            Snackbar.make(rootLayout, R.string.deleted, Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.rootLayout, R.string.deleted, Snackbar.LENGTH_SHORT)
                     .setAction(R.string.undo) {
                         manager.add(position, item)
                         adapter.notifyDataSetChanged()

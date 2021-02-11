@@ -30,7 +30,7 @@
         android:scaleType="fitCenter"
         android:visibility="gone" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/use_favicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

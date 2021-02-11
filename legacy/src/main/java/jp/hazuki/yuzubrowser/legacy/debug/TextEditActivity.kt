@@ -20,17 +20,25 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import jp.hazuki.yuzubrowser.legacy.R
+import androidx.activity.viewModels
+import jp.hazuki.yuzubrowser.legacy.databinding.ScrollEditTextModel
+import jp.hazuki.yuzubrowser.legacy.databinding.ScrollEdittextBinding
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
-import kotlinx.android.synthetic.main.scroll_edittext.*
 import java.io.*
 
 class TextEditActivity : ThemeActivity() {
     private lateinit var mFile: File
 
+    private lateinit var binding: ScrollEdittextBinding
+
+    private val viewModel by viewModels<ScrollEditTextModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.scroll_edittext)
+        binding = ScrollEdittextBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.lifecycleOwner = this
+        binding.model = viewModel
 
         val file = intent.getSerializableExtra(Intent.EXTRA_STREAM) as? File
         if (file == null) {
@@ -55,7 +63,7 @@ class TextEditActivity : ThemeActivity() {
             e.printStackTrace()
         }
 
-        editText.setText(builder)
+        viewModel.text.value = builder.toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,7 +73,7 @@ class TextEditActivity : ThemeActivity() {
                     .setMessage("Save?")
                     .setPositiveButton(android.R.string.yes) { _, _ ->
                         try {
-                            BufferedWriter(FileWriter(mFile)).use { os -> os.write(editText.text.toString()) }
+                            BufferedWriter(FileWriter(mFile)).use { os -> os.write(viewModel.text.value) }
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }

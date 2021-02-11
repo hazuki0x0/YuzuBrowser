@@ -145,6 +145,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
                 subBar.setExpanded(true, false)
                 true
             } else {
+                requireActivity().finish()
                 false
             }
         }

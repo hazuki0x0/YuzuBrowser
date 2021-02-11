@@ -22,45 +22,47 @@ import android.os.Environment
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolveDirectoryPath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.storage.getStorageList
-import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.databinding.EnvironmentActivityBinding
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
-import kotlinx.android.synthetic.main.environment_activity.*
 import java.io.IOException
 
 class EnvironmentActivity : ThemeActivity() {
 
+    private lateinit var binding: EnvironmentActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.environment_activity)
+        binding = EnvironmentActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         title = "Environment"
 
         try {
             val externalStorageDir = Environment.getExternalStorageDirectory()
-            externalStorageDirTextView.text = externalStorageDir?.canonicalPath ?: "null"
+            binding.externalStorageDirTextView.text = externalStorageDir?.canonicalPath ?: "null"
         } catch (e: IOException) {
             ErrorReport.printAndWriteLog(e)
         }
 
         val externalStorageState = Environment.getExternalStorageState()
-        externalStorageStateTextView.text = externalStorageState ?: "null"
+        binding.externalStorageStateTextView.text = externalStorageState ?: "null"
 
         try {
             val externalFilesDir = getExternalFilesDir(null)
-            externalFilesDirTextView.text = externalFilesDir?.canonicalPath ?: "null"
+            binding.externalFilesDirTextView.text = externalFilesDir?.canonicalPath ?: "null"
         } catch (e: IOException) {
             ErrorReport.printAndWriteLog(e)
         }
 
         getStorageList().forEach {
-            estimatedExternalFilesDirTextView.append(it.path)
-            estimatedExternalFilesDirTextView.append("\n")
+            binding.estimatedExternalFilesDirTextView.append(it.path)
+            binding.estimatedExternalFilesDirTextView.append("\n")
         }
 
         val dlUri = Uri.parse(AppPrefs.download_folder.get())
-        downloadUriTextView.text = dlUri.toString()
+        binding.downloadUriTextView.text = dlUri.toString()
 
-        downloadPathTextView.text = dlUri.resolveDirectoryPath(this)
+        binding.downloadPathTextView.text = dlUri.resolveDirectoryPath(this)
     }
 
 }

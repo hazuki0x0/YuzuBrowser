@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.userjs
+package jp.hazuki.yuzubrowser.legacy.databinding
 
-import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-interface OnUserJsItemClickListener : OnRecyclerListener {
-    fun onInfoButtonClick(index: Int)
+class ScrollEditTextModel : ViewModel() {
+    val text = MutableLiveData<String>()
 }

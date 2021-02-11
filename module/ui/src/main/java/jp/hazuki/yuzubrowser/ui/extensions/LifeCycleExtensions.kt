@@ -16,12 +16,9 @@
 
 package jp.hazuki.yuzubrowser.ui.extensions
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 inline fun <reified T : ViewModel> ViewModelProvider.get(): T {
     return get(T::class.java)
-}
-
-inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
-    observe(owner, Observer { observer(it) })
 }
