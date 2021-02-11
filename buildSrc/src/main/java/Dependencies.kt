@@ -31,7 +31,7 @@ object Versions {
     const val appCompat = "1.2.0"
     const val activityX = "1.1.0"
     const val androidKTX = "1.3.2"
-    const val fragmentKtx = "1.2.5"
+    const val fragmentKtx = "1.3.0-rc02"
     const val recyclerView = "1.1.0"
     const val androidxRoom = "2.2.6"
     const val lifeCycle = "2.2.0"

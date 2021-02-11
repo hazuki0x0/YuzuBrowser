@@ -120,7 +120,12 @@ class OkHttpDownloader(
             var downloadedFile: androidx.documentfile.provider.DocumentFile? = null
 
             if (abort) {
-                deleteTempIfNeed()
+                if (downloadRequest.isScopedStorageMode) {
+                    val file = info.root
+                    if (file.exists()) file.delete()
+                } else {
+                    deleteTempIfNeed()
+                }
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {

@@ -17,9 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.reader
 
 import android.graphics.Typeface
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Spanned
-import android.text.TextUtils
 import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -62,17 +63,28 @@ class ReaderFragment : DaggerFragment() {
         bodyTextView.textSize = AppPrefs.reader_text_size.get().toFloat()
 
         val fontPath = AppPrefs.reader_text_font.get()
-        if (!TextUtils.isEmpty(fontPath)) {
-            val font = File(fontPath)
-
-            if (font.exists() && font.isFile) {
-                try {
-                    bodyTextView.typeface = Typeface.createFromFile(fontPath)
-                } catch (e: RuntimeException) {
-                    Toast.makeText(activity, R.string.font_error, Toast.LENGTH_SHORT).show()
+        if (fontPath.isNotEmpty()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                && fontPath.startsWith("content")) {
+                val fd = requireContext().contentResolver.openFileDescriptor(Uri.parse(fontPath), "r")
+                if (fd != null) {
+                    bodyTextView.typeface = Typeface.Builder(fd.fileDescriptor).build()
+                } else {
+                    Toast.makeText(activity, R.string.font_not_found, Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(activity, R.string.font_not_found, Toast.LENGTH_SHORT).show()
+                val isPath = fontPath.startsWith('/')
+                val path = if (isPath) fontPath else Uri.parse(fontPath).path!!
+                val font = File(path)
+                if (font.exists() && font.isFile) {
+                    try {
+                        bodyTextView.typeface = Typeface.createFromFile(fontPath)
+                    } catch (e: RuntimeException) {
+                        Toast.makeText(activity, R.string.font_error, Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(activity, R.string.font_not_found, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

@@ -7,16 +7,19 @@
         android:entries="@array/pref_reader_theme_list"
         android:entryValues="@array/pref_reader_theme_values"
         android:key="reader_theme"
-        android:title="@string/pref_reader_theme"/>
+        android:title="@string/pref_reader_theme"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="reader_text_size"
         android:title="@string/pref_reader_text_size"
         app:seekMax="30"
-        app:seekMin="10"/>
+        app:seekMin="10"
+        app:iconSpaceReserved="false" />
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.FontListPreference
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.LongSummaryPreference
         android:key="reader_text_font"
-        android:title="@string/pref_reader_text_font"/>
+        android:title="@string/pref_reader_text_font"
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>
