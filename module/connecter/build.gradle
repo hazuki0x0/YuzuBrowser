@@ -16,10 +16,11 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion Build.compile_sdk_version
+    buildToolsVersion Build.build_tools_version
 
     defaultConfig {
         minSdkVersion Build.min_sdk_version
@@ -36,11 +37,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-}
-
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
