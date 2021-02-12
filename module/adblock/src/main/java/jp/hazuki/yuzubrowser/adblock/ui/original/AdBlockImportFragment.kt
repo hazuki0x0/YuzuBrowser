@@ -23,13 +23,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import jp.hazuki.yuzubrowser.adblock.R
+import jp.hazuki.yuzubrowser.adblock.databinding.FragmentAdBlockImportBinding
 import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.AdBlockDecoder
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlock
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.ContainerOptions
-import kotlinx.android.synthetic.main.fragment_ad_block_import.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -42,13 +43,33 @@ class AdBlockImportFragment : Fragment() {
 
     private var listener: OnImportListener? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_ad_block_import, container, false)
+    private val viewModel by viewModels<AdBlockImportViewModel>()
+
+    private var viewBinding: FragmentAdBlockImportBinding? = null
+
+    private val binding: FragmentAdBlockImportBinding
+        get() = viewBinding!!
+
+    private lateinit var okCallback: () -> Unit
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewBinding = FragmentAdBlockImportBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
-        val fragmentManager = fragmentManager ?: return
+        val fragmentManager = parentFragmentManager
         val uri = arguments?.getParcelable<Uri>(ARG_URI) ?: throw IllegalArgumentException()
+
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        viewModel.event.observe(viewLifecycleOwner, this::onButtonClick)
 
         var input: ByteArray? = null
         try {
@@ -58,33 +79,41 @@ class AdBlockImportFragment : Fragment() {
         }
 
         if (input != null && input.size > EDITABLE_SIZE) {
-            editText.setText(R.string.adblock_file_large_mes)
-            editText.keyListener = null
-            excludeCheckBox.isEnabled = false
+            viewModel.text *= getString(R.string.adblock_file_large_mes)
+            binding.editText.keyListener = null
+            viewModel.isExclude *= false
 
-            okButton.setOnClickListener {
+            okCallback = {
                 ui {
-                    editText.setText(R.string.now_loading)
-                    okButton.isEnabled = false
-                    cancelButton.isEnabled = false
+                    viewModel.text *= getString(R.string.now_loading)
+                    viewModel.isButtonEnable *= false
                     val adBlocks = withContext(Dispatchers.Default) {
                         AdBlockDecoder.decode(Scanner(ByteArrayInputStream(input)), true)
                     }
                     listener!!.onImport(adBlocks)
-                    fragmentManager.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }
             }
         } else {
-            editText.setText(input?.toString(StandardCharsets.UTF_8))
+            viewModel.text *= input?.toString(StandardCharsets.UTF_8) ?: ""
 
-            okButton.setOnClickListener {
-                val adBlocks = AdBlockDecoder.decode(editText.text.toString(), excludeCheckBox.isChecked)
+            okCallback = {
+                val adBlocks = AdBlockDecoder.decode(viewModel.text.value, viewModel.isExclude.value)
                 listener!!.onImport(adBlocks)
                 fragmentManager.popBackStack()
             }
         }
+    }
 
-        cancelButton.setOnClickListener { fragmentManager.popBackStack() }
+    private fun onButtonClick(event: Int) {
+        when (event) {
+            AdBlockImportViewModel.EVENT_OK -> {
+                okCallback()
+            }
+            AdBlockImportViewModel.EVENT_CANCEL -> {
+                parentFragmentManager.popBackStack()
+            }
+        }
     }
 
     override fun onAttach(context: Context) {

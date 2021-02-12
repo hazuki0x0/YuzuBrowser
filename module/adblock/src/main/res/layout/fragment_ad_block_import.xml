@@ -15,49 +15,64 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@android:string/ok"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+    <data>
 
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/okButton"
-        android:text="@android:string/cancel"/>
+        <variable
+            name="viewModel"
+            type="jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockImportViewModel" />
+    </data>
 
-    <CheckBox
-        android:id="@+id/excludeCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cancelButton"
-        android:layout_marginTop="7dp"
-        android:text="@string/exclude_comment"
-        android:checked="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/cancelButton"/>
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/cancelButton"/>
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/ok"
+            android:onClick="@{() -> viewModel.onOkClick()}"
+            android:enabled="@{viewModel.isButtonEnable()}"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/okButton"
+            android:onClick="@{() -> viewModel.onCancelClick()}"
+            android:enabled="@{viewModel.isButtonEnable()}"
+            android:text="@android:string/cancel" />
+
+        <CheckBox
+            android:id="@+id/excludeCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/cancelButton"
+            android:layout_marginTop="7dp"
+            android:text="@string/exclude_comment"
+            android:checked="@={viewModel.isExclude()}"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/cancelButton" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@={viewModel.text}"
+            android:ems="10"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/cancelButton" />
+
+    </RelativeLayout>
+</layout>

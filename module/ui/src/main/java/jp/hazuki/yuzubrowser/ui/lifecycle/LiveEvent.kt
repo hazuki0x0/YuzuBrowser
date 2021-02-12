@@ -17,20 +17,24 @@
 package jp.hazuki.yuzubrowser.ui.lifecycle
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 
-class LiveEvent<T> : DefaultLifecycleObserver {
+class LiveEvent<T> {
 
     private val mObserver = mutableSetOf<ObserverWrapper>()
 
     @MainThread
-    fun observe(owner: LifecycleOwner, observer: Observer<in T?>) {
+    fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         if (owner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
             // ignore
             return
         }
         val wrapper = ObserverWrapper(observer)
         owner.lifecycle.addObserver(wrapper)
+        mObserver += wrapper
     }
 
     private fun remove(observer: ObserverWrapper) {

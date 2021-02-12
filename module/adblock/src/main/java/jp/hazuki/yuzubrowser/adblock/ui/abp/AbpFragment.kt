@@ -20,6 +20,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpBlackListFile
@@ -32,7 +34,6 @@ import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.fragment_abp_list.*
 import javax.inject.Inject
 
 class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItemListener, AbpMenuDialog.OnAbpMenuListener, AbpItemDeleteDialog.OnAbpItemDeleteListener {
@@ -48,6 +49,8 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: throw IllegalStateException()
+        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
+        val fab: FloatingActionButton = view.findViewById(R.id.fab)
         adapter = AbpEntityAdapter(activity, mutableListOf(), this@AbpFragment)
         ui {
             adapter.items.addAll(abpDatabase.abpDao().getAll())
@@ -78,7 +81,7 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
         ui { abpDatabase.abpDao().update(entity) }
         adapter.notifyItemChanged(position)
         if (entity.enabled && entity.isNeedUpdate()) {
-            AbpUpdateService.update(activity!!, entity, result)
+            AbpUpdateService.update(requireContext(), entity, result)
         }
     }
 
@@ -95,7 +98,7 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
             } else {
                 entity.entityId = abpDatabase.abpDao().inset(entity).toInt()
             }
-            AbpUpdateService.update(activity!!, entity, result)
+            AbpUpdateService.update(requireContext(), entity, result)
         }
     }
 
@@ -108,13 +111,13 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
     }
 
     override fun onRefresh(index: Int, entity: AbpEntity) {
-        AbpUpdateService.update(activity!!, entity, result)
+        AbpUpdateService.update(requireContext(), entity, result)
     }
 
     override fun onDelete(index: Int, entity: AbpEntity) {
         ui {
             abpDatabase.abpDao().delete(entity)
-            val dir = activity!!.getFilterDir()
+            val dir = requireContext().getFilterDir()
             dir.getAbpBlackListFile(entity).delete()
             dir.getAbpWhiteListFile(entity).delete()
             dir.getAbpWhitePageListFile(entity).delete()
@@ -127,7 +130,7 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.update -> {
-                AbpUpdateService.updateAll(activity!!, true, result)
+                AbpUpdateService.updateAll(requireContext(), true, result)
                 return true
             }
         }

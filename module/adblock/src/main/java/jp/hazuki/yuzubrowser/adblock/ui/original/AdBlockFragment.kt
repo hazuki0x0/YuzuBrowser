@@ -28,12 +28,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.github.clans.fab.FloatingActionButton
+import com.github.clans.fab.FloatingActionMenu
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlock
 import jp.hazuki.yuzubrowser.adblock.repository.original.AdBlockManager
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import kotlinx.android.synthetic.main.fragment_ad_block_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -65,6 +67,11 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
         adapter = AdBlockArrayRecyclerAdapter(activity, provider.allItems, this)
         layoutManager = LinearLayoutManager(activity)
 
+        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
+        val fabMenu: FloatingActionMenu = view.findViewById(R.id.fabMenu)
+        val addByEditFab: FloatingActionButton = view.findViewById(R.id.addByEditFab)
+        val addFromFileFab: FloatingActionButton = view.findViewById(R.id.addFromFileFab)
+
         recyclerView.let {
             it.layoutManager = layoutManager
             it.addItemDecoration(DividerItemDecoration(activity))
@@ -73,7 +80,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
 
         addByEditFab.setOnClickListener {
             AdBlockEditDialog(getString(R.string.add))
-                    .show(childFragmentManager, "add")
+                .show(childFragmentManager, "add")
             fabMenu.close(true)
         }
 

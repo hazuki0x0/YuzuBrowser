@@ -16,15 +16,16 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion Build.compile_sdk_version
+    buildToolsVersion Build.build_tools_version
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion Build.min_sdk_version
+        targetSdkVersion Build.target_sdk_version
         versionCode 1
         versionName "1.0"
 
@@ -50,10 +51,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
-}
 
-androidExtensions {
-    experimental = true
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -75,6 +76,7 @@ dependencies {
     implementation AndroidX.roomKtx
     implementation AndroidX.fix_preference
     implementation AndroidX.localBroadcast
+    implementation AndroidX.fragmentKtx
     kapt AndroidX.roomCompiler
 
     implementation Libs.kotlin_stdlib
