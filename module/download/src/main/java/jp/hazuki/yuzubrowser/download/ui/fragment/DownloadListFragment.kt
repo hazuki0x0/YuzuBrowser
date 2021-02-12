@@ -74,7 +74,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         recyclerView.layoutManager = layoutManager
 
         database = DownloadDatabase.getInstance(activity)
-        adapter = DownloadListAdapter(activity, database, this)
+        adapter = DownloadListAdapter(activity, viewLifecycleOwner, database, this)
         val decoration = StickyHeaderDecoration(adapter)
         adapter.decoration = decoration
         recyclerView.addItemDecoration(decoration)

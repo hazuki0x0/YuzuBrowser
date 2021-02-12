@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.download.core.data
+package jp.hazuki.yuzubrowser.download.ui.fragment
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import android.annotation.SuppressLint
+import java.text.SimpleDateFormat
+import java.util.*
 
-@Parcelize
-internal class DownloadDialogRequest(
-    val url: String,
-    val request: DownloadRequest,
-    val resolver: NameResolver?
-) : Parcelable
+class TimeFormatter {
+    @SuppressLint("SimpleDateFormat")
+    private val timeFormat = SimpleDateFormat("kk:mm")
+
+    fun format(time: Long): String = timeFormat.format(Date(time))
+}

@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.download.ui.fragment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -29,6 +28,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.util.forEach
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
@@ -37,25 +37,23 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.utils.getNotificationString
+import jp.hazuki.yuzubrowser.download.databinding.FragmentDownloadListItemBinding
 import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_download_list_item.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DownloadListAdapter(
-        private val context: Context,
-        private val database: DownloadDatabase,
-        private val listener: OnRecyclerMenuListener
+    private val context: Context,
+    private val lifecycleOwner: LifecycleOwner,
+    private val database: DownloadDatabase,
+    private val listener: OnRecyclerMenuListener
 ) : RecyclerView.Adapter<DownloadListAdapter.InfoHolder>(),
         StickyHeaderAdapter<DownloadListAdapter.HeaderHolder> {
 
-    private val items = ArrayList<DownloadFileInfo>(database.getList(0, 100))
+    private val items = ArrayList(database.getList(0, 100))
     private val inflater = LayoutInflater.from(context)
     private val calendar = Calendar.getInstance()
     private val dateFormat = DateFormat.getLongDateFormat(context)
-    @SuppressLint("SimpleDateFormat")
-    private val timeFormat = SimpleDateFormat("kk:mm")
+    private val timeFormatter = TimeFormatter()
 
     var decoration: StickyHeaderDecoration? = null
 
@@ -79,7 +77,8 @@ class DownloadListAdapter(
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoHolder {
-        return InfoHolder(inflater.inflate(R.layout.fragment_download_list_item, parent, false))
+        val binding = FragmentDownloadListItemBinding.inflate(inflater, parent, false)
+        return InfoHolder(lifecycleOwner, binding)
     }
 
     override fun onBindViewHolder(holder: InfoHolder, position: Int, payloads: MutableList<Any>) {
@@ -90,13 +89,12 @@ class DownloadListAdapter(
     override fun onBindViewHolder(holder: InfoHolder, position: Int) {
         val item = items[position]
 
-        holder.filenameTextView.text = item.name
-        holder.urlTextView.text = item.url
-        holder.timeTextView.text = timeFormat.format(Date(item.startTime))
-        holder.foreground.background =
-                if (isMultiSelectMode && isSelected(position)) foregroundOverlay else null
+        holder.binding.formatter = timeFormatter
+        holder.binding.info = item
+        holder.binding.foreground.background =
+            if (isMultiSelectMode && isSelected(position)) foregroundOverlay else null
 
-        holder.urlTextView.text = if (item.url.startsWith("data:")) {
+        holder.binding.urlTextView.text = if (item.url.startsWith("data:")) {
             var end = item.url.indexOf(';')
             if (end < 0) {
                 end = item.url.indexOf(',')
@@ -115,7 +113,7 @@ class DownloadListAdapter(
                 listener.onRecyclerItemClicked(it, holder.adapterPosition)
             }
         }
-        holder.overflowButton.setOnClickListener {
+        holder.binding.overflowButton.setOnClickListener {
             if (isMultiSelectMode) {
                 toggle(holder.adapterPosition)
             } else {
@@ -131,8 +129,7 @@ class DownloadListAdapter(
     }
 
     private fun update(holder: InfoHolder, position: Int, payloads: MutableList<Any>) {
-        val payload = payloads[0] as? String
-        when (payload) {
+        when (payloads[0] as? String) {
             PAYLOAD_UPDATE_STATE -> {
                 updateState(holder, items[position])
             }
@@ -140,47 +137,49 @@ class DownloadListAdapter(
     }
 
     private fun updateState(holder: InfoHolder, info: DownloadFileInfo) {
-        when (info.state) {
-            DownloadFileInfo.STATE_DOWNLOADED -> {
-                holder.statusTextView.setText(R.string.download_success)
-                if (info.size < 0) {
-                    holder.sizeTextView.setText(R.string.unknown)
-                } else {
-                    holder.sizeTextView.text = Formatter.formatFileSize(context, info.size)
+        holder.binding.apply {
+            when (info.state) {
+                DownloadFileInfo.STATE_DOWNLOADED -> {
+                    statusTextView.setText(R.string.download_success)
+                    if (info.size < 0) {
+                        sizeTextView.setText(R.string.unknown)
+                    } else {
+                        sizeTextView.text = Formatter.formatFileSize(context, info.size)
+                    }
+                    sizeTextView.visibility = View.VISIBLE
+                    splitTextView.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
                 }
-                holder.sizeTextView.visibility = View.VISIBLE
-                holder.splitTextView.visibility = View.VISIBLE
-                holder.progressBar.visibility = View.GONE
-            }
-            DownloadFileInfo.STATE_CANCELED -> {
-                holder.statusTextView.setText(R.string.download_cancel)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-                holder.progressBar.visibility = View.GONE
-            }
-            DownloadFileInfo.STATE_DOWNLOADING -> {
-                holder.statusTextView.text = info.getNotificationString(context)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
+                DownloadFileInfo.STATE_CANCELED -> {
+                    statusTextView.setText(R.string.download_cancel)
+                    sizeTextView.visibility = View.GONE
+                    splitTextView.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                }
+                DownloadFileInfo.STATE_DOWNLOADING -> {
+                    statusTextView.text = info.getNotificationString(context)
+                    sizeTextView.visibility = View.GONE
+                    splitTextView.visibility = View.GONE
 
-                holder.progressBar.run {
-                    visibility = View.VISIBLE
-                    progress = info.currentSize.toInt()
-                    max = info.size.toInt()
-                    isIndeterminate = info.size <= 0
+                    progressBar.run {
+                        visibility = View.VISIBLE
+                        progress = info.currentSize.toInt()
+                        max = info.size.toInt()
+                        isIndeterminate = info.size <= 0
+                    }
                 }
-            }
-            DownloadFileInfo.STATE_PAUSED, DownloadFileInfo.STATE_UNKNOWN_ERROR or DownloadFileInfo.STATE_PAUSED -> {
-                holder.statusTextView.setText(R.string.download_paused)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-                holder.progressBar.visibility = View.GONE
-            }
-            else -> {
-                holder.statusTextView.setText(R.string.download_fail)
-                holder.sizeTextView.visibility = View.GONE
-                holder.splitTextView.visibility = View.GONE
-                holder.progressBar.visibility = View.GONE
+                DownloadFileInfo.STATE_PAUSED, DownloadFileInfo.STATE_UNKNOWN_ERROR or DownloadFileInfo.STATE_PAUSED -> {
+                    statusTextView.setText(R.string.download_paused)
+                    sizeTextView.visibility = View.GONE
+                    splitTextView.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                }
+                else -> {
+                    statusTextView.setText(R.string.download_fail)
+                    sizeTextView.visibility = View.GONE
+                    splitTextView.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                }
             }
         }
     }
@@ -193,7 +192,7 @@ class DownloadListAdapter(
         }
     }
 
-    operator fun get(position: Int) = items[position]
+    operator fun get(position: Int): DownloadFileInfo = items[position]
 
     fun remove(position: Int) {
         if (position >= 0) {
@@ -240,7 +239,7 @@ class DownloadListAdapter(
         }
     }
 
-    fun isSelected(position: Int): Boolean {
+    private fun isSelected(position: Int): Boolean {
         return itemSelected.get(position, false)
     }
 
@@ -254,7 +253,14 @@ class DownloadListAdapter(
 
     override fun getItemCount() = items.size
 
-    class InfoHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+    class InfoHolder(
+        val lifecycleOwner: LifecycleOwner,
+        val binding: FragmentDownloadListItemBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.lifecycleOwner = lifecycleOwner
+        }
+    }
 
     override fun getHeaderId(position: Int): Long {
         calendar.timeInMillis = items[position].startTime

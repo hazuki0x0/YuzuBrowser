@@ -15,115 +15,131 @@
   ~ limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:background="?attr/selectableItemBackground">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/filenameTextView"
-        android:layout_width="0dp"
+    <data>
+
+        <variable
+            name="formatter"
+            type="jp.hazuki.yuzubrowser.download.ui.fragment.TimeFormatter" />
+
+        <variable
+            name="info"
+            type="jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/progressBar"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_toStartOf="@+id/overflowButton"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.ListTitle"
-        app:layout_constraintEnd_toStartOf="@+id/overflowButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:orientation="vertical"
+        android:background="?attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/sizeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textAppearance="@style/TextAppearance.ListBody"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filenameTextView"/>
+        <TextView
+            android:id="@+id/filenameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/progressBar"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/overflowButton"
+            android:maxLines="1"
+            android:text="@{info.name}"
+            android:textAppearance="@style/TextAppearance.ListTitle"
+            app:layout_constraintEnd_toStartOf="@+id/overflowButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/splitTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="-"
-        android:textAppearance="@style/TextAppearance.ListBody"
-        app:layout_constraintStart_toEndOf="@+id/sizeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/filenameTextView"
-        tools:ignore="HardcodedText"/>
+        <TextView
+            android:id="@+id/sizeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.ListBody"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filenameTextView" />
 
-    <TextView
-        android:id="@+id/urlTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.ListBody"
-        app:layout_constraintEnd_toStartOf="@+id/overflowButton"
-        app:layout_constraintStart_toEndOf="@+id/splitTextView"
-        app:layout_constraintTop_toBottomOf="@+id/filenameTextView"/>
+        <TextView
+            android:id="@+id/splitTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="-"
+            android:textAppearance="@style/TextAppearance.ListBody"
+            app:layout_constraintStart_toEndOf="@+id/sizeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/filenameTextView"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/statusTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.ListBody"
-        app:layout_constraintEnd_toStartOf="@+id/timeTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/urlTextView"/>
+        <TextView
+            android:id="@+id/urlTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="1"
+            android:text="@{info.url}"
+            android:textAppearance="@style/TextAppearance.ListBody"
+            app:layout_constraintEnd_toStartOf="@+id/overflowButton"
+            app:layout_constraintStart_toEndOf="@+id/splitTextView"
+            app:layout_constraintTop_toBottomOf="@+id/filenameTextView" />
 
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:textAppearance="@style/TextAppearance.ListBody"
-        app:layout_constraintEnd_toStartOf="@+id/overflowButton"
-        app:layout_constraintTop_toBottomOf="@+id/urlTextView"/>
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.ListBody"
+            app:layout_constraintEnd_toStartOf="@+id/timeTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/urlTextView" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAppearance="@style/TextAppearance.ListBody"
-        app:layout_constraintEnd_toStartOf="@+id/overflowButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statusTextView"/>
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@{formatter.format(info.startTime)}"
+            android:textAppearance="@style/TextAppearance.ListBody"
+            app:layout_constraintEnd_toStartOf="@+id/overflowButton"
+            app:layout_constraintTop_toBottomOf="@+id/urlTextView" />
 
-    <ImageButton
-        android:id="@+id/overflowButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_more_vert_white_24dp"
-        android:tint="@color/iconColor"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.ListBody"
+            app:layout_constraintEnd_toStartOf="@+id/overflowButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/statusTextView" />
 
-    <FrameLayout
-        android:id="@+id/foreground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <ImageButton
+            android:id="@+id/overflowButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_more_vert_white_24dp"
+            android:tint="@color/iconColor"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/foreground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
