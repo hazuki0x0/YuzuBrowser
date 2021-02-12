@@ -65,7 +65,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
 
     override fun onCreate() {
         super.onCreate()
-        handler = Handler()
+        handler = Handler(Looper.getMainLooper())
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         database = DownloadDatabase.getInstance(this)

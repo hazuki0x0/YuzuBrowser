@@ -18,13 +18,14 @@ package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
 import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.ViewConfiguration
 
 @SuppressLint("Registered")
 open class LongPressFixActivity : ThemeActivity() {
     private val longPressTimeout = ViewConfiguration.getLongPressTimeout()
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     private var time: Long = 0
     private var waiting: Boolean = false

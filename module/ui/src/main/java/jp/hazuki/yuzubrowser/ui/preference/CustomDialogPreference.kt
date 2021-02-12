@@ -1,37 +1,24 @@
-package jp.hazuki.yuzubrowser.ui.preference;
+package jp.hazuki.yuzubrowser.ui.preference
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.content.Context
+import android.util.AttributeSet
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import androidx.preference.DialogPreference
+import androidx.preference.Preference
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.preference.DialogPreference;
-import androidx.preference.Preference;
-
-public abstract class CustomDialogPreference extends DialogPreference {
-    public CustomDialogPreference(Context context) {
-        this(context, null);
+abstract class CustomDialogPreference @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null) : DialogPreference(context, attrs) {
+    fun show(manager: FragmentManager?) {
+        crateCustomDialog().show(manager!!, key)
     }
 
-    public CustomDialogPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+    protected abstract fun crateCustomDialog(): CustomDialogFragment
+    open class CustomDialogFragment : DialogFragment(), TargetFragment {
 
-    public void show(FragmentManager manager) {
-        crateCustomDialog().show(manager, getKey());
-    }
 
-    @NonNull
-    protected abstract CustomDialogFragment crateCustomDialog();
-
-    public static class CustomDialogFragment extends DialogFragment implements TargetFragment {
-
-        @Override
-        public Preference findPreference(CharSequence key) {
-            DialogPreference.TargetFragment fragment =
-                    (DialogPreference.TargetFragment) getTargetFragment();
-            return fragment.findPreference(key);
+        override fun <T : Preference?> findPreference(key: CharSequence): T? {
+            val fragment = targetFragment as TargetFragment?
+            return fragment!!.findPreference(key)
         }
     }
 }

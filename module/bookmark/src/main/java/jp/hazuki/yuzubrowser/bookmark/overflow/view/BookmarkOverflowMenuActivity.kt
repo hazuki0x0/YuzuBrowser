@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.bookmark.overflow.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.overflow.HideMenuType
 import jp.hazuki.yuzubrowser.bookmark.overflow.MenuType
@@ -33,7 +33,7 @@ class BookmarkOverflowMenuActivity : ThemeActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.transaction {
+            supportFragmentManager.commit {
                 replace(R.id.container,
                     BookmarkOverflowMenuFragment.create(intent?.getIntExtra(EXTRA_MENU_TYPE, MenuType.SITE)
                         ?: MenuType.SITE))

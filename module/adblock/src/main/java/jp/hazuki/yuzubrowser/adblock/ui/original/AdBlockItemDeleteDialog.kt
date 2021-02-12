@@ -31,8 +31,8 @@ class AdBlockItemDeleteDialog : androidx.fragment.app.DialogFragment() {
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.pref_delete)
         builder.setMessage(getString(R.string.pref_ad_block_delete_confirm, arguments.getString(ARG_ITEM)))
-        builder.setPositiveButton(android.R.string.yes) { _, _ -> listener!!.onDelete(arguments.getInt(ARG_INDEX), arguments.getInt(ARG_ID)) }
-        builder.setNegativeButton(android.R.string.no, null)
+        builder.setPositiveButton(android.R.string.ok) { _, _ -> listener!!.onDelete(arguments.getInt(ARG_INDEX), arguments.getInt(ARG_ID)) }
+        builder.setNegativeButton(android.R.string.cancel, null)
         return builder.create()
     }
 

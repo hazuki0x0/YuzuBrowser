@@ -18,7 +18,6 @@ package jp.hazuki.yuzubrowser.search.presentation.settings
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -26,6 +25,8 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.FrameLayout
+import androidx.core.graphics.BlendModeColorFilterCompat.createBlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.DialogFragment
 import com.android.colorpicker.ColorPickerDialog
 import com.android.colorpicker.ColorPickerSwatch
@@ -120,7 +121,7 @@ class SearchSettingDialog : DialogFragment(), ColorPickerSwatch.OnColorSelectedL
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 if (urlEditText.text.contains("%s")) {
                     val target = when {
-                        targetFragment is OnUrlEditedListener -> targetFragment as OnUrlEditedListener
+                        parentFragmentManager is OnUrlEditedListener -> parentFragmentManager as OnUrlEditedListener
                         parentFragment is OnUrlEditedListener -> parentFragment as OnUrlEditedListener
                         activity is OnUrlEditedListener -> activity as OnUrlEditedListener
                         else -> null
@@ -155,7 +156,8 @@ class SearchSettingDialog : DialogFragment(), ColorPickerSwatch.OnColorSelectedL
 
     private fun setIconColor(color: Int) {
         nowColor = color
-        iconColorButton.background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        iconColorButton.background.colorFilter =
+            createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
     }
 
     interface OnUrlEditedListener {

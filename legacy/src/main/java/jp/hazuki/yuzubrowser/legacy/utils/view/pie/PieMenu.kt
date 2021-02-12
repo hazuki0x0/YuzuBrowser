@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.utils.view.pie
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -27,6 +28,10 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.dimension
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import java.util.*
+import kotlin.math.asin
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class PieMenu @JvmOverloads constructor(
         context: Context,
@@ -104,7 +109,7 @@ class PieMenu @JvmOverloads constructor(
         // add the item to the pie itself
         items.add(item)
         val l = item.level
-        levels = Math.max(levels, l)
+        levels = levels.coerceAtLeast(l)
         counts[l]++
     }
 
@@ -171,8 +176,8 @@ class PieMenu @JvmOverloads constructor(
                     val w = view.layoutParams.width
                     val h = view.layoutParams.height
                     val r = inner + (outer - inner) * 55 / 100
-                    var x = (r * Math.sin(angle.toDouble())).toInt()
-                    val y = center.y - (r * Math.cos(angle.toDouble())).toInt() - h / 2
+                    var x = (r * sin(angle.toDouble())).toInt()
+                    val y = center.y - (r * cos(angle.toDouble())).toInt() - h / 2
                     x = if (onTheLeft()) {
                         center.x + x - w / 2
                     } else {
@@ -181,8 +186,8 @@ class PieMenu @JvmOverloads constructor(
                     view.layout(x, y, x + w, y + h)
                     val itemstart = angle - sweep / 2
                     val slice = makeSlice(getDegrees(itemstart.toDouble()) - gap,
-                            getDegrees((itemstart + sweep).toDouble()) + gap,
-                            outer, inner, center)
+                        getDegrees((itemstart + sweep).toDouble()) + gap,
+                        outer, inner, center)
                     item.setGeometry(itemstart, sweep, inner, outer, slice)
                     angle += sweep
                 }
@@ -249,7 +254,7 @@ class PieMenu @JvmOverloads constructor(
     }
 
     // touch handling for pie
-
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(evt: MotionEvent): Boolean {
         val x = evt.x
         val y = evt.y
@@ -353,11 +358,11 @@ class PieMenu @JvmOverloads constructor(
             x = -x
         }
         y = center.y - y
-        res.y = Math.sqrt((x * x + y * y).toDouble()).toFloat()
+        res.y = sqrt((x * x + y * y).toDouble()).toFloat()
         if (y > 0) {
-            res.x = Math.asin((x / res.y).toDouble()).toFloat()
+            res.x = asin((x / res.y).toDouble()).toFloat()
         } else if (y < 0) {
-            res.x = (Math.PI - Math.asin((x / res.y).toDouble())).toFloat()
+            res.x = (Math.PI - asin((x / res.y).toDouble())).toFloat()
         }
         return res
     }

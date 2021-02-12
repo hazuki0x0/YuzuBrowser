@@ -17,11 +17,12 @@
 package jp.hazuki.yuzubrowser.download.service.connection
 
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import java.lang.ref.WeakReference
 
-class ActivityClient(listener: ActivityClientListener) : Handler() {
+class ActivityClient(listener: ActivityClientListener) : Handler(Looper.getMainLooper()) {
     private val ref = WeakReference<ActivityClientListener>(listener)
 
     override fun handleMessage(msg: Message) {

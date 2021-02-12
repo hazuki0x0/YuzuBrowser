@@ -71,8 +71,8 @@ class ReadItLaterProvider : DaggerContentProvider() {
             uriMatcher.addURI(AUTHORITY, "read/*", TYPE_READ)
             uriMatcher.addURI(AUTHORITY, "index/*", TYPE_EDIT)
             uriMatcher.addURI(AUTHORITY, "path/*", TYPE_PATH)
-            ITEM_COLUMNS = kotlin.arrayOf(TIME, URL, TITLE)
-            FILE_COLUMNS = kotlin.arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE)
+            ITEM_COLUMNS = arrayOf(TIME, URL, TITLE)
+            FILE_COLUMNS = arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE)
         }
 
         fun getReadUri(time: Long): Uri {
@@ -123,7 +123,7 @@ class ReadItLaterProvider : DaggerContentProvider() {
     private fun queryList(item: ReadItem?, projection: Array<out String>?): Cursor {
         if (item != null) {
             val cols = ArrayList<String>()
-            val values = ArrayList<kotlin.Any>()
+            val values = ArrayList<Any>()
             projection ?: ITEM_COLUMNS.forEach {
                 when (it) {
                     TIME -> {
@@ -198,7 +198,7 @@ class ReadItLaterProvider : DaggerContentProvider() {
 
     private fun queryFile(item: ReadItem, file: File, projection: Array<out String>?): Cursor {
         val cols = ArrayList<String>()
-        val values = ArrayList<kotlin.Any>()
+        val values = ArrayList<Any>()
         projection ?: FILE_COLUMNS.forEach { s ->
             if (OpenableColumns.DISPLAY_NAME == s) {
                 cols.add(OpenableColumns.DISPLAY_NAME)
@@ -215,8 +215,8 @@ class ReadItLaterProvider : DaggerContentProvider() {
     }
 
     private fun queryPath(file: File): Cursor {
-        val cursor = MatrixCursor(kotlin.arrayOf(PATH), 1)
-        cursor.addRow(kotlin.arrayOf(file.absolutePath))
+        val cursor = MatrixCursor(arrayOf(PATH), 1)
+        cursor.addRow(arrayOf(file.absolutePath))
         return cursor
     }
 
@@ -248,7 +248,7 @@ class ReadItLaterProvider : DaggerContentProvider() {
     }
 
     private fun getFileForUri(uri: Uri): File {
-        return File(directory, uri.lastPathSegment)
+        return File(directory, uri.lastPathSegment!!)
     }
 
     private fun getUriForFile(file: File): Uri {

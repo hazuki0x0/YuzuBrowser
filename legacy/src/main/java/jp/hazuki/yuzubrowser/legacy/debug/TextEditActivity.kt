@@ -51,11 +51,11 @@ class TextEditActivity : ThemeActivity() {
 
         val builder = StringBuilder()
         try {
-            BufferedReader(FileReader(file)).use {
+            BufferedReader(FileReader(file)).use { reader ->
 
                 val buf = CharArray(1024)
-                var n = 0
-                while (it.read(buf).let { n = it; it > 0 }) {
+                var n: Int
+                while (reader.read(buf).let { n = it; it > 0 }) {
                     builder.append(buf, 0, n)
                 }
             }

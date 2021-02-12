@@ -29,9 +29,9 @@ class AdBlockDeleteAllDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(activity)
-                .setTitle(R.string.pref_delete_all)
-                .setMessage(R.string.pref_delete_all_confirm)
-                .setPositiveButton(android.R.string.yes) { _, _ -> listener!!.onDeleteAll() }
+            .setTitle(R.string.pref_delete_all)
+            .setMessage(R.string.pref_delete_all_confirm)
+            .setPositiveButton(android.R.string.ok) { _, _ -> listener!!.onDeleteAll() }
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()
     }

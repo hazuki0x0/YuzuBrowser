@@ -19,7 +19,7 @@ package jp.hazuki.yuzubrowser.download.core.data
 import android.os.Parcelable
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.download.core.utils.guessDownloadFileName
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal class NameResolver(

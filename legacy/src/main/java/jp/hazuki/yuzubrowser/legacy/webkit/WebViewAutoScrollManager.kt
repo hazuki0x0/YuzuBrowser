@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.legacy.webkit
 
 import android.os.Handler
+import android.os.Looper
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class WebViewAutoScrollManager {
@@ -26,7 +27,7 @@ class WebViewAutoScrollManager {
     private var scrollSpeed: Double = 0.0
     private var scrollY: Double = 0.0
     private var scrollMax: Int = 0
-    private val handler: Handler = Handler()
+    private val handler: Handler = Handler(Looper.getMainLooper())
     private var onStopListener: (() -> Unit)? = null
 
     fun start(webView: CustomWebView, speed: Int) {

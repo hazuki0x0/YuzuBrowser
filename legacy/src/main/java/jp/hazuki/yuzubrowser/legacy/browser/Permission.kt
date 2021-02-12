@@ -53,13 +53,18 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
     val requests = if (checkNeed()) {
         setNoNeed(true)
         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     } else {
         if (supportFragmentManager.findFragmentByTag("permission") != null) return
         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    handleResult(asyncPermissions, asyncPermissions.request(*requests), true, true)
+    handleResult(
+        asyncPermissions,
+        asyncPermissions.request(*requests),
+        storage = true,
+        location = true
+    )
 }
 
 fun Activity.checkStoragePermission(): Boolean {
@@ -71,9 +76,14 @@ fun Activity.checkStoragePermission(): Boolean {
 }
 
 suspend fun AppCompatActivity.requestStoragePermission(asyncPermissions: AsyncPermissions) {
-    asyncPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE).let {
-        handleResult(asyncPermissions, it, true)
-    }
+    handleResult(
+        asyncPermissions,
+        asyncPermissions.request(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ),
+        true
+    )
 }
 
 fun Activity.checkLocationPermission(): Boolean {
@@ -85,9 +95,14 @@ fun Activity.checkLocationPermission(): Boolean {
 }
 
 suspend fun AppCompatActivity.requestLocationPermission(asyncPermissions: AsyncPermissions) {
-    asyncPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION).let {
-        handleResult(asyncPermissions, it, location = true)
-    }
+    handleResult(
+        asyncPermissions,
+        asyncPermissions.request(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ),
+        location = true
+    )
 }
 
 fun Context.openRequestPermissionSettings(text: CharSequence) {
@@ -108,7 +123,7 @@ private suspend fun AppCompatActivity.handleResult(asyncPermissions: AsyncPermis
                 requestStoragePermission(asyncPermissions)
             }
         }
-        is PermissionResult.ShouldShowRationale -> permissionResult.proceed().let { handleResult(asyncPermissions, it, true) }
+        is PermissionResult.ShouldShowRationale -> handleResult(asyncPermissions, permissionResult.proceed(), true)
         is PermissionResult.NeverAskAgain -> {
             if (storage && !checkStoragePermission() && supportFragmentManager.findFragmentByTag("permission") == null) {
                 PermissionDialog().show(supportFragmentManager, "permission")
@@ -123,9 +138,9 @@ class PermissionDialog : androidx.fragment.app.DialogFragment() {
 
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.permission_probrem)
-                .setMessage(R.string.confirm_permission_storage_app)
-                .setPositiveButton(android.R.string.ok) { _, _ -> activity.openRequestPermissionSettings(getString(R.string.request_permission_storage_setting)) }
-                .setNegativeButton(android.R.string.no) { _, _ -> activity.finish() }
+            .setMessage(R.string.confirm_permission_storage_app)
+            .setPositiveButton(android.R.string.ok) { _, _ -> activity.openRequestPermissionSettings(getString(R.string.request_permission_storage_setting)) }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> activity.finish() }
         isCancelable = false
         return builder.create()
     }

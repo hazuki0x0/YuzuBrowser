@@ -151,22 +151,23 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
             }
             REQUEST_ADD_FROM_FILE -> {
                 if (resultCode != RESULT_OK || data == null) return
-                val file = data.getSerializableExtra(FileListActivity.EXTRA_FILE) as? File ?: throw NullPointerException("file is null")
+                val file = data.getSerializableExtra(FileListActivity.EXTRA_FILE) as? File
+                    ?: throw NullPointerException("file is null")
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(String.format(getString(R.string.userjs_add_file_confirm), file.name))
-                        .setPositiveButton(android.R.string.yes) { _, _ ->
-                            try {
-                                val data1 = IOUtils.readFile(file, "UTF-8")
-                                mDb.add(UserScript(data1))
-                                reset()
-                            } catch (e: IOException) {
-                                ErrorReport.printAndWriteLog(e)
-                                Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
-                            }
+                    .setTitle(R.string.confirm)
+                    .setMessage(String.format(getString(R.string.userjs_add_file_confirm), file.name))
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        try {
+                            val data1 = IOUtils.readFile(file, "UTF-8")
+                            mDb.add(UserScript(data1))
+                            reset()
+                        } catch (e: IOException) {
+                            ErrorReport.printAndWriteLog(e)
+                            Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
                         }
-                        .setNegativeButton(android.R.string.no, null)
-                        .show()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
             }
         }
     }
@@ -191,7 +192,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
         override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int =
-                ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or ItemTouchHelper.Callback.makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
+            makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
 
         override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
@@ -209,7 +210,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
                     }
                     .addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                            if (event != DISMISS_EVENT_ACTION) {
                                 mDb.delete(js)
                             }
                         }

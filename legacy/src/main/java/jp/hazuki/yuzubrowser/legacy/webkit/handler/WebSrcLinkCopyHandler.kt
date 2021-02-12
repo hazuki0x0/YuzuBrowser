@@ -18,11 +18,12 @@ package jp.hazuki.yuzubrowser.legacy.webkit.handler
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import java.lang.ref.WeakReference
 
-class WebSrcLinkCopyHandler(context: Context) : Handler() {
+class WebSrcLinkCopyHandler(context: Context) : Handler(Looper.getMainLooper()) {
     private val mReference: WeakReference<Context> = WeakReference(context)
 
     override fun handleMessage(msg: Message) {

@@ -17,8 +17,10 @@
 package jp.hazuki.yuzubrowser.history.presenter
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowInsets
 import android.view.WindowManager
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
 import jp.hazuki.yuzubrowser.historyModel.R
@@ -48,8 +50,14 @@ class BrowserHistoryActivity : DaggerThemeActivity() {
             orientation = getIntExtra(INTENT_EXTRA_MODE_ORIENTATION, orientation)
         }
 
-        if (fullscreen)
-            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        if (fullscreen) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.insetsController?.hide(WindowInsets.Type.statusBars())
+            } else {
+                @Suppress("DEPRECATION")
+                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            }
+        }
 
         requestedOrientation = orientation
 

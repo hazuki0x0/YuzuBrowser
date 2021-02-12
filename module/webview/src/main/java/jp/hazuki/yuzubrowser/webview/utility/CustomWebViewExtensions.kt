@@ -17,14 +17,9 @@
 package jp.hazuki.yuzubrowser.webview.utility
 
 import android.graphics.Bitmap
-import android.webkit.ValueCallback
 import android.webkit.WebSettings
 import jp.hazuki.yuzubrowser.core.utility.utils.savePictureAsPng
 import jp.hazuki.yuzubrowser.webview.CustomWebView
-
-inline fun CustomWebView.evaluateJavascript(js: String, crossinline callback: ((String) -> Unit)) {
-    evaluateJavascript(js, ValueCallback { callback(it) })
-}
 
 fun CustomWebView.getUserAgent(): String {
     val ua = webSettings.userAgentString

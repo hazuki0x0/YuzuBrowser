@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.isInstanceOf
@@ -104,10 +105,10 @@ class ReaderFragment : DaggerFragment() {
 
         activity.title = url.decodePunyCodeUrlHost()
 
-        fragmentManager?.findFragmentByTag("loading").isInstanceOf<androidx.fragment.app.DialogFragment> {
+        parentFragmentManager.findFragmentByTag("loading").isInstanceOf<DialogFragment> {
             it.dismiss()
         }
-        val dialog = ProgressDialog(activity.getString(R.string.now_loading), true, false).also {
+        val dialog = ProgressDialog(activity.getString(R.string.now_loading), cancelable = true, cancelOnTouchOutside = false).also {
             it.show(childFragmentManager, "loading")
         }
 

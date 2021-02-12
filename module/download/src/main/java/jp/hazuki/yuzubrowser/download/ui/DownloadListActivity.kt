@@ -16,7 +16,9 @@
 
 package jp.hazuki.yuzubrowser.download.ui
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsets
 import android.view.WindowManager
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
@@ -41,8 +43,14 @@ class DownloadListActivity : DaggerThemeActivity(), ActivityClient.ActivityClien
             fullscreen = intent.getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, fullscreen)
             orientation = intent.getIntExtra(INTENT_EXTRA_MODE_ORIENTATION, orientation)
         }
-        if (fullscreen)
-            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        if (fullscreen) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.insetsController?.hide(WindowInsets.Type.statusBars())
+            } else {
+                @Suppress("DEPRECATION")
+                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            }
+        }
         requestedOrientation = orientation
 
         downloadService = ServiceSocket(this, this)

@@ -48,10 +48,10 @@ class JsAlertDialog(private val context: Context) {
         val checkBox = if (isShowCheckBox) addCheckBox(layout, context.getText(R.string.prevent_additional_dialogues)) else null
         builder.run {
             setTitle(url.getTitle())
-            setPositiveButton(android.R.string.yes) { _, _ ->
+            setPositiveButton(android.R.string.ok) { _, _ ->
                 callback(true, checkBox?.isChecked ?: false)
             }
-            setNegativeButton(android.R.string.no) { _, _ ->
+            setNegativeButton(android.R.string.cancel) { _, _ ->
                 callback(false, checkBox?.isChecked ?: false)
             }
             setOnCancelListener { callback(false, checkBox?.isChecked ?: false) }
@@ -67,10 +67,10 @@ class JsAlertDialog(private val context: Context) {
         val checkBox = if (isShowCheckBox) addCheckBox(layout, context.getText(R.string.prevent_additional_dialogues)) else null
         builder.run {
             setTitle(url.getTitle())
-            setPositiveButton(android.R.string.yes) { _, _ ->
+            setPositiveButton(android.R.string.ok) { _, _ ->
                 callback(editText.text.toString(), checkBox?.isChecked ?: false)
             }
-            setNegativeButton(android.R.string.no) { _, _ ->
+            setNegativeButton(android.R.string.cancel) { _, _ ->
                 callback(null, checkBox?.isChecked ?: false)
             }
             setOnCancelListener { callback(null, checkBox?.isChecked ?: false) }

@@ -113,7 +113,7 @@ class SpeedDialSettingActivityEditFragment : Fragment() {
                     val activity = activity ?: return
                     if ("file" == uri.scheme) {
                         val provider = (activity.applicationContext as BrowserApplication).providerManager.downloadFileProvider
-                        uri = provider.getUriForFile(File(uri.path))
+                        uri = provider.getUriForFile(File(uri.path!!))
                     }
                     val intent = Intent("com.android.camera.action.CROP").apply {
                         this.data = uri

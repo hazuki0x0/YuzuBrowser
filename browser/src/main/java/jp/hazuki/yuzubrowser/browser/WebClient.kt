@@ -94,10 +94,10 @@ import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.CustomWebViewClient
 import jp.hazuki.yuzubrowser.webview.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
-import jp.hazuki.yuzubrowser.webview.utility.evaluateJavascript
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
 import java.net.URISyntaxException
 import java.text.DateFormat
+import java.util.*
 import kotlin.concurrent.thread
 
 class WebClient(
@@ -246,9 +246,9 @@ class WebClient(
         web.setMyWebChromeClient(MyWebChromeClient())
         web.setMyWebViewClient(mWebViewClient)
 
-        web.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+        web.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             onDownloadStart(web, url, userAgent, contentDisposition, mimetype, contentLength)
-        })
+        }
 
         val setting = web.webSettings
         setting.setNeedInitialFocus(false)
@@ -474,10 +474,10 @@ class WebClient(
 
         override fun onFormResubmission(web: CustomWebView, dontResend: Message, resend: Message) {
             AlertDialog.Builder(activity)
-                    .setTitle(web.url)
-                    .setMessage(R.string.form_resubmit)
-                    .setPositiveButton(android.R.string.yes) { _, _ -> resend.sendToTarget() }
-                    .setNegativeButton(android.R.string.no) { _, _ -> dontResend.sendToTarget() }
+                .setTitle(web.url)
+                .setMessage(R.string.form_resubmit)
+                .setPositiveButton(android.R.string.ok) { _, _ -> resend.sendToTarget() }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> dontResend.sendToTarget() }
                     .setOnCancelListener { dontResend.sendToTarget() }
                     .show()
         }
@@ -516,10 +516,10 @@ class WebClient(
                 view.findViewById<TextView>(R.id.messageTextView).text = activity.getString(R.string.ssl_error_mes, error.getErrorMessages(activity))
 
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.ssl_error_title)
-                        .setView(view)
-                        .setPositiveButton(android.R.string.yes) { _, _ -> handler.proceed() }
-                        .setNegativeButton(android.R.string.no) { _, _ -> handler.cancel() }
+                    .setTitle(R.string.ssl_error_title)
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok) { _, _ -> handler.proceed() }
+                    .setNegativeButton(android.R.string.cancel) { _, _ -> handler.cancel() }
                         .setOnCancelListener { handler.cancel() }
                         .show()
             }
@@ -768,7 +768,7 @@ class WebClient(
                 controller.removeTab(i)
         }
 
-        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>?>, fileChooserParams: WebChromeClient.FileChooserParams): Boolean {
+        override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>?>, fileChooserParams: FileChooserParams): Boolean {
             if (webUploadHandler == null)
                 webUploadHandler = WebUploadHandler()
 
@@ -831,7 +831,7 @@ class WebClient(
         }
 
 
-        override fun onShowCustomView(view: View, callback: WebChromeClient.CustomViewCallback) {
+        override fun onShowCustomView(view: View, callback: CustomViewCallback) {
             controller.showCustomView(view, callback)
         }
 
@@ -887,7 +887,7 @@ class WebClient(
     private fun checkUrl(data: MainTabData, url: String, uri: Uri): Boolean {
         val scheme = uri.scheme ?: return false
 
-        when (scheme.toLowerCase()) {
+        when (scheme.toLowerCase(Locale.ENGLISH)) {
             "intent" -> {
                 try {
                     val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
@@ -928,74 +928,74 @@ class WebClient(
                     if (action.indexOf('/') > -1) {
                         action = action.substring(0, action.indexOf('/'))
                     }
-                    when (action.toLowerCase()) {
-                        "settings", "setting" -> intent = Intent(activity, MainSettingsActivity::class.java)
-                        "histories", "history" -> {
-                            intent = Intent(activity, BrowserHistoryActivity::class.java)
-                            intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
-                            intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
-                            controller.startActivity(intent, BrowserController.REQUEST_HISTORY)
-                            return true
+                when (action.toLowerCase(Locale.ENGLISH)) {
+                    "settings", "setting" -> intent = Intent(activity, MainSettingsActivity::class.java)
+                    "histories", "history" -> {
+                        intent = Intent(activity, BrowserHistoryActivity::class.java)
+                        intent.putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
+                        intent.putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
+                        controller.startActivity(intent, BrowserController.REQUEST_HISTORY)
+                        return true
+                    }
+                    "downloads", "download" -> {
+                        intent = Intent(activity, DownloadListActivity::class.java).apply {
+                            putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
+                            putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
                         }
-                        "downloads", "download" -> {
-                            intent = Intent(activity, DownloadListActivity::class.java).apply {
-                                putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
-                                putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
-                            }
+                    }
+                    "debug" -> intent = Intent(activity, DebugActivity::class.java)
+                    "bookmarks", "bookmark" -> {
+                        intent = Intent(activity, BookmarkActivity::class.java).apply {
+                            putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
+                            putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
                         }
-                        "debug" -> intent = Intent(activity, DebugActivity::class.java)
-                        "bookmarks", "bookmark" -> {
-                            intent = Intent(activity, BookmarkActivity::class.java).apply {
-                                putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, controller.isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
-                                putExtra(Constants.intent.EXTRA_MODE_ORIENTATION, controller.requestedOrientationByCtrl)
-                            }
-                            controller.startActivity(intent, BrowserController.REQUEST_BOOKMARK)
-                            return true
+                        controller.startActivity(intent, BrowserController.REQUEST_BOOKMARK)
+                        return true
+                    }
+                    "search" -> {
+                        controller.showSearchBox("", controller.indexOf(data.id), false, "reverse".equals(uri.fragment, ignoreCase = true))
+                        return true
+                    }
+                    "speeddial" -> return false
+                    "home" -> {
+                        if ("yuzu:home".equals(AppPrefs.home_page.get(), ignoreCase = true) || "yuzu://home".equals(AppPrefs.home_page.get(), ignoreCase = true)) {
+                            AppPrefs.home_page.set("about:blank")
+                            AppPrefs.commit(activity, AppPrefs.home_page)
                         }
-                        "search" -> {
-                            controller.showSearchBox("", controller.indexOf(data.id), false, "reverse".equals(uri.fragment, ignoreCase = true))
-                            return true
-                        }
-                        "speeddial" -> return false
-                        "home" -> {
-                            if ("yuzu:home".equals(AppPrefs.home_page.get(), ignoreCase = true) || "yuzu://home".equals(AppPrefs.home_page.get(), ignoreCase = true)) {
-                                AppPrefs.home_page.set("about:blank")
-                                AppPrefs.commit(activity, AppPrefs.home_page)
-                            }
-                            controller.loadUrl(data, AppPrefs.home_page.get())
-                            return true
-                        }
-                        "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
-                        "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
-                        "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
-                        "download-file" -> {
-                            val keyData = uri.schemeSpecificPart.substring(action.length + 1)
+                        controller.loadUrl(data, AppPrefs.home_page.get())
+                        return true
+                    }
+                    "resblock" -> intent = Intent(activity, ResourceBlockListActivity::class.java)
+                    "adblock" -> intent = Intent(activity, AdBlockActivity::class.java)
+                    "readitlater" -> intent = Intent(activity, ReadItLaterActivity::class.java)
+                    "download-file" -> {
+                        val keyData = uri.schemeSpecificPart.substring(action.length + 1)
 
-                            val items = keyData.split('&', limit = 3)
-                            if (items.size == 3 && items[0] == controller.secretKey) {
-                                when (items[1]) {
-                                    "0" -> onDownloadStart(data.mWebView, items[2], "", "", "", -1)
-                                    "1" -> DownloadDialog(items[2], data.mWebView.webSettings.userAgentString)//TODO referer
-                                            .show(controller.activity.supportFragmentManager, "download")
-                                    "2" -> {
-                                        val file = DownloadFile(items[2], null, DownloadRequest(null, data.mWebView.webSettings.userAgentString, null))
-                                        controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
-                                    }
-                                    "3" -> {
-                                        val downloader = FastDownloadActivity
-                                                .intent(controller.activity,
-                                                        items[2],
-                                                        data.mWebView.url,
-                                                        data.mWebView.getUserAgent(),
-                                                        ".jpg")
-                                        controller.startActivity(downloader, BrowserController.REQUEST_SHARE_IMAGE)
-                                    }
+                        val items = keyData.split('&', limit = 3)
+                        if (items.size == 3 && items[0] == controller.secretKey) {
+                            when (items[1]) {
+                                "0" -> onDownloadStart(data.mWebView, items[2], "", "", "", -1)
+                                "1" -> DownloadDialog(items[2], data.mWebView.webSettings.userAgentString)//TODO referer
+                                    .show(controller.activity.supportFragmentManager, "download")
+                                "2" -> {
+                                    val file = DownloadFile(items[2], null, DownloadRequest(null, data.mWebView.webSettings.userAgentString, null))
+                                    controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                                }
+                                "3" -> {
+                                    val downloader = FastDownloadActivity
+                                        .intent(controller.activity,
+                                            items[2],
+                                            data.mWebView.url,
+                                            data.mWebView.getUserAgent(),
+                                            ".jpg")
+                                    controller.startActivity(downloader, BrowserController.REQUEST_SHARE_IMAGE)
                                 }
                             }
-                            return true
                         }
-                        else -> return false
+                        return true
                     }
+                    else -> return false
+                }
                 activity.startActivity(intent)
                 return true
             }

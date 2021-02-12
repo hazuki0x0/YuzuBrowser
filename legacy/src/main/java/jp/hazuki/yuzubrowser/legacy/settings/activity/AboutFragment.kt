@@ -86,19 +86,19 @@ class AboutFragment : YuzuPreferenceFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val builder = AlertDialog.Builder(activity)
             builder.setTitle(R.string.pref_delete_all_logs)
-                    .setMessage(R.string.pref_delete_log_mes)
-                    .setPositiveButton(android.R.string.yes) { _, _ ->
-                        val activity = activity ?: return@setPositiveButton
-                        val file = File(activity.getExternalFilesDir(null), "./error_log/")
-                        if (!file.exists()) {
-                            Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
-                        } else if (FileUtils.deleteFile(file)) {
-                            Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(activity, R.string.failed, Toast.LENGTH_SHORT).show()
-                        }
+                .setMessage(R.string.pref_delete_log_mes)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val activity = activity ?: return@setPositiveButton
+                    val file = File(activity.getExternalFilesDir(null), "./error_log/")
+                    if (!file.exists()) {
+                        Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
+                    } else if (FileUtils.deleteFile(file)) {
+                        Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(activity, R.string.failed, Toast.LENGTH_SHORT).show()
                     }
-                    .setNegativeButton(android.R.string.no, null)
+                }
+                .setNegativeButton(android.R.string.cancel, null)
             return builder.create()
         }
     }

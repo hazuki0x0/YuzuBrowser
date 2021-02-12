@@ -37,7 +37,7 @@ fun String.makeUrlFromQuery(search_url: String, search_place_holder: String): St
 
     val matcher = URI_SCHEMA.matcher(query)
     if (matcher.matches()) {
-        val scheme = matcher.group(1)
+        val scheme = matcher.group(1)!!
         val lcScheme = scheme.toLowerCase(Locale.US)
         if (lcScheme != scheme) {
             query = lcScheme + matcher.group(2)
@@ -56,7 +56,7 @@ fun String.makeUrl(): String {
 
     val matcher = URI_SCHEMA.matcher(query)
     if (matcher.matches()) {
-        val scheme = matcher.group(1)
+        val scheme = matcher.group(1)!!
         val lcScheme = scheme.toLowerCase(Locale.US)
         if (lcScheme != scheme) {
             query = lcScheme + matcher.group(2)

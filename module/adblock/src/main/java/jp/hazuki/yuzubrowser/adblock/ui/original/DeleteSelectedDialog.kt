@@ -29,10 +29,10 @@ class DeleteSelectedDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(activity)
-                .setTitle(R.string.pref_delete)
-                .setMessage(R.string.pref_ad_block_delete_selected_confirm)
-                .setPositiveButton(android.R.string.yes) { _, _ -> listener!!.onDeleteSelected() }
-                .setNegativeButton(android.R.string.no, null)
+            .setTitle(R.string.pref_delete)
+            .setMessage(R.string.pref_ad_block_delete_selected_confirm)
+            .setPositiveButton(android.R.string.ok) { _, _ -> listener!!.onDeleteSelected() }
+            .setNegativeButton(android.R.string.cancel, null)
                 .create()
     }
 

@@ -49,8 +49,11 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
     private val binding: FragmentMultiFingerEditBinding
         get() = viewBinding!!
 
-    @SuppressLint("SetTextI18n")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         viewBinding = FragmentMultiFingerEditBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -62,7 +65,7 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
-        val fragmentManager = fragmentManager ?: return
+        val fragmentManager = parentFragmentManager
         val arguments = arguments ?: throw IllegalArgumentException()
 
         item = arguments.getParcelable(ARG_ITEM) ?: MultiFingerGestureItem()
@@ -164,9 +167,10 @@ class MfsEditFragment : androidx.fragment.app.Fragment() {
             val title: TextView = itemView.findViewById(R.id.numTextView)
             val icon: ImageView = itemView.findViewById(R.id.imageView)
 
+            @SuppressLint("SetTextI18n")
             override fun setUp(item: Int) {
                 super.setUp(item)
-                title.text = (adapterPosition + 1).toString() + "."
+                title.text = "${adapterPosition + 1}."
                 icon.setImageResource(getImage(item))
             }
 

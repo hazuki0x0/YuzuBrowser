@@ -42,8 +42,9 @@ class FileListFragment : ListFragment() {
     private var fileSelectedListener: OnFileSelectedListener? = null
     private var itemLongClick: OnFileItemLongClickListener? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val arguments = arguments ?: throw IllegalArgumentException()
         mShowParentMover = arguments.getBoolean(EXTRA_PARENT_MOVER)
         mShowDirectoryOnly = arguments.getBoolean(EXTRA_DIR_ONLY)
@@ -51,8 +52,8 @@ class FileListFragment : ListFragment() {
 
         setFilePath(file)
 
-        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, view, position, id ->
-            itemLongClick?.onListFileItemLongClick(listView, view, currentFileList!![position], position, id)
+        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, v, position, id ->
+            itemLongClick?.onListFileItemLongClick(listView, v, currentFileList!![position], position, id)
             false
         }
 
@@ -99,7 +100,7 @@ class FileListFragment : ListFragment() {
         currentFolder = file
         currentFileList = fileList
 
-        val adapter = FileAdapter(activity, fileList)
+        val adapter = FileAdapter(activity, fileList!!)
         listAdapter = adapter
         activity.title = file.name
         return true

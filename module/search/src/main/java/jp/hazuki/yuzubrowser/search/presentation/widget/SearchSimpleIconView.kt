@@ -17,13 +17,18 @@
 package jp.hazuki.yuzubrowser.search.presentation.widget
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.graphics.BlendModeColorFilterCompat.createBlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.search.R
 import jp.hazuki.yuzubrowser.search.domain.getIdentityColor
@@ -74,7 +79,7 @@ class SearchSimpleIconView @JvmOverloads constructor(
     }
 
     private fun setIconColor(color: Int) {
-        background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        background.colorFilter = createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
         if (isColorLight(color)) {
             setTextColor(Color.BLACK)
         } else {

@@ -23,7 +23,7 @@ import android.webkit.CookieManager
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.download.core.utils.*
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException

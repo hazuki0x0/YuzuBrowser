@@ -33,6 +33,8 @@ class SmallButtonDrawable(private val icon: Drawable, private val maxSize: Int) 
         icon.alpha = alpha
     }
 
+    @Deprecated("")
+    @Suppress("DEPRECATION")
     override fun getOpacity() = icon.opacity
 
     override fun setColorFilter(colorFilter: ColorFilter?) {

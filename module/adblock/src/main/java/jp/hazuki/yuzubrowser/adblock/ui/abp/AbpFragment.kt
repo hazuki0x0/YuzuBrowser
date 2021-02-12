@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.adblock.ui.abp
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -137,7 +138,7 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
         return super.onOptionsItemSelected(item)
     }
 
-    private val result = object : AbpUpdateService.UpdateResult(Handler()) {
+    private val result = object : AbpUpdateService.UpdateResult(Handler(Looper.getMainLooper())) {
         override fun onUpdated(entity: AbpEntity) {
             updateInternal(entity)
         }

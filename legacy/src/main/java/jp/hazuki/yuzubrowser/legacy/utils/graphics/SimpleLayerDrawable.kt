@@ -54,15 +54,15 @@ class SimpleLayerDrawable(private vararg val drawables: Drawable) : Drawable() {
 
     override fun getIntrinsicWidth(): Int {
         return drawables
-                .map { it.intrinsicWidth }
-                .max()
+            .map { it.intrinsicWidth }
+            .maxOrNull()
                 ?: -1
     }
 
     override fun getIntrinsicHeight(): Int {
         return drawables
-                .map { it.intrinsicHeight }
-                .max()
+            .map { it.intrinsicHeight }
+            .maxOrNull()
                 ?: -1
     }
 

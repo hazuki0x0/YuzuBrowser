@@ -54,8 +54,8 @@ internal fun importTheme(context: Context, uri: Uri):Result {
                 } else {
                     if (file.exists()) {
                         FileUtils.deleteFile(file)
-                    } else if (!file.parentFile.exists()) {
-                        if (!file.parentFile.mkdirs()) {
+                    } else if (!file.parentFile!!.exists()) {
+                        if (!file.parentFile!!.mkdirs()) {
                             FileUtils.deleteFile(tmpFolder)
                             return Result(false, context.getString(R.string.cant_create_folder))
                         }

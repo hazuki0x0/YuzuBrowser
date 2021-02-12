@@ -26,7 +26,10 @@ import android.os.Vibrator
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
-import android.webkit.*
+import android.webkit.CookieManager
+import android.webkit.URLUtil
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.print.PrintHelper
@@ -85,7 +88,6 @@ import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
-import jp.hazuki.yuzubrowser.ui.widget.toast
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
 import jp.hazuki.yuzubrowser.webview.utility.savePictureOverall
@@ -701,9 +703,7 @@ class ActionExecutor(
                 }
             }
             SingleAction.CLOSE_AUTO_SELECT -> {
-                val type = controller.getTab(actionTarget).tabType
-
-                when (type) {
+                when (controller.getTab(actionTarget).tabType) {
                     TabType.DEFAULT -> checkAndRun((action as CloseAutoSelectAction).defaultAction, target)
                     TabType.INTENT -> checkAndRun((action as CloseAutoSelectAction).intentAction, target)
                     TabType.WINDOW -> checkAndRun((action as CloseAutoSelectAction).windowAction, target)
@@ -806,10 +806,10 @@ class ActionExecutor(
             }
             SingleAction.ADD_TO_HOME -> {
                 val tab = controller.getTab(actionTarget)
-                tab.mWebView.evaluateJavascript(Scripts.GET_ICON_URL, ValueCallback {
+                tab.mWebView.evaluateJavascript(Scripts.GET_ICON_URL) {
                     val iconUrl = if (it.startsWith('"') && it.endsWith('"')) it.substring(1, it.length - 1) else it
                     createShortCut(tab, iconUrl)
-                })
+                }
             }
             SingleAction.SUB_GESTURE -> controller.showSubGesture()
             SingleAction.CLEAR_DATA -> ClearBrowserDataAlertDialog(controller.activity).show(controller.activity.supportFragmentManager)
@@ -1003,11 +1003,7 @@ class ActionExecutor(
                 if (TextUtils.isEmpty(jobName))
                     jobName = "about:blank"
                 val adapter = tab.mWebView.createPrintDocumentAdapter(title)
-                if (adapter == null) {
-                    controller.activity.toast(R.string.failed)
-                } else {
-                    controller.printManager.print(jobName, adapter, null)
-                }
+                controller.printManager.print(jobName, adapter, null)
             } else {
                 Toast.makeText(controller.activity, R.string.print_not_support, Toast.LENGTH_SHORT).show()
             }

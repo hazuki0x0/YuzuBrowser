@@ -17,9 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.toolbar.main
 
 import android.content.Context
-import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.graphics.BlendModeColorFilterCompat.createBlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.legacy.databinding.ToolbarProgressBinding
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
@@ -38,15 +39,20 @@ class ProgressToolBar(context: Context, request_callback: RequestCallback) : Too
 
     override fun applyTheme(themeData: ThemeData?) {
         super.applyTheme(themeData)
-        if (themeData != null && themeData.progressIndeterminateColor != 0)
-            binding.progressBar.indeterminateDrawable.setColorFilter(themeData.progressIndeterminateColor, PorterDuff.Mode.SRC_ATOP)
-        else
-            binding.progressBar.indeterminateDrawable.colorFilter = null
 
-        if (themeData != null && themeData.progressColor != 0)
-            binding.progressBar.progressDrawable.setColorFilter(themeData.progressColor, PorterDuff.Mode.SRC_ATOP)
-        else
+        if (themeData != null && themeData.progressIndeterminateColor != 0) {
+            binding.progressBar.indeterminateDrawable.colorFilter =
+                createBlendModeColorFilterCompat(themeData.progressIndeterminateColor, BlendModeCompat.SRC_ATOP)
+        } else {
+            binding.progressBar.indeterminateDrawable.colorFilter = null
+        }
+
+        if (themeData != null && themeData.progressColor != 0) {
+            binding.progressBar.progressDrawable.colorFilter =
+                createBlendModeColorFilterCompat(themeData.progressColor, BlendModeCompat.SRC_ATOP)
+        } else {
             binding.progressBar.progressDrawable.colorFilter = null
+        }
     }
 
     override fun notifyChangeWebState(data: MainTabData?) {

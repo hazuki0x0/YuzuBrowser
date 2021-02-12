@@ -151,10 +151,11 @@ class DownloadFileProvider : ContentProvider() {
     }
 
     private fun File.checkPath(): Boolean {
+        @Suppress("DEPRECATION")
         return isFile &&
-                path.startsWith("/storage/") ||
-                path.startsWith(Environment.getExternalStorageDirectory().absolutePath) ||
-                path.startsWith("/mnt/")
+            path.startsWith("/storage/") ||
+            path.startsWith(Environment.getExternalStorageDirectory().absolutePath) ||
+            path.startsWith("/mnt/")
     }
 
     companion object {

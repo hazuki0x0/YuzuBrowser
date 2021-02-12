@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.webview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -119,6 +120,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
                 if (view.parent != null) {
                     (view.parent as ViewGroup).removeView(view)
                 }
+                @Suppress("DEPRECATION")
                 addView(view, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0, 0))
                 view.translationX = scrollX.toFloat()//can move X
             }
@@ -164,6 +166,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
         scrollTo(x + scrollX, y + scrollY)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         val touchDetector = touchDetector
         if (touchDetector != null && ev != null && touchDetector.onTouchEvent(ev)) {

@@ -31,7 +31,7 @@ open class BrowserBaseActivity : DaggerLongPressFixActivity() {
         isResumed = true
 
         while (dialogQueue.size > 0 && isResumed) {
-            dialogQueue.poll().show(supportFragmentManager)
+            dialogQueue.poll()!!.show(supportFragmentManager)
         }
     }
 

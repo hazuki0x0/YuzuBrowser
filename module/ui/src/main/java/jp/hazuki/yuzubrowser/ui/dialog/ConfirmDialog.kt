@@ -31,9 +31,9 @@ class ConfirmDialog : DialogFragment() {
 
         val id = arguments.getInt(ID)
         return AlertDialog.Builder(activity)
-                .setTitle(arguments.getString(TITLE))
-                .setMessage(arguments.getString(MESSAGE))
-                .setPositiveButton(android.R.string.yes) { _, _ -> listener?.onConfirmed(id) }
+            .setTitle(arguments.getString(TITLE))
+            .setMessage(arguments.getString(MESSAGE))
+            .setPositiveButton(android.R.string.ok) { _, _ -> listener?.onConfirmed(id) }
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()
     }

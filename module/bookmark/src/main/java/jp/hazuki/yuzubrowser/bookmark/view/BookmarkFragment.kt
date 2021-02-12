@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.bookmark.view
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -85,7 +84,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
     private val binding: FragmentBookmarkBinding
         get() = viewBinding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setHasOptionsMenu(true)
         viewBinding = FragmentBookmarkBinding.inflate(inflater, container, false)
         return binding.root
@@ -283,8 +282,8 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
         when (item.itemId) {
             R.id.addFolder -> {
                 AddBookmarkFolderDialog(activity, mManager, getString(R.string.new_folder_name), mCurrentFolder)
-                        .setOnClickListener(DialogInterface.OnClickListener { _, _ -> adapter.notifyDataSetChanged() })
-                        .show()
+                    .setOnClickListener { _, _ -> adapter.notifyDataSetChanged() }
+                    .show()
                 return true
             }
             R.id.sort -> {
@@ -404,12 +403,12 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             }
             R.id.editBookmark -> if (item is BookmarkSite) {
                 AddBookmarkSiteDialog(activity, mManager, item)
-                        .setOnClickListener { _, _ -> adapter.notifyDataSetChanged() }
-                        .show()
+                    .setOnClickListener { _, _ -> adapter.notifyDataSetChanged() }
+                    .show()
             } else if (item is BookmarkFolder) {
                 AddBookmarkFolderDialog(activity, mManager, item)
-                        .setOnClickListener(DialogInterface.OnClickListener { _, _ -> adapter.notifyDataSetChanged() })
-                        .show()
+                    .setOnClickListener { _, _ -> adapter.notifyDataSetChanged() }
+                    .show()
             }
             R.id.moveBookmark -> BookmarkFoldersDialog(activity, mManager)
                     .setTitle(R.string.move_bookmark)

@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.fragment.app.ListFragment
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
@@ -50,14 +51,13 @@ class SoftButtonActionActivity : ThemeActivity() {
         }
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit()
+            .replace(R.id.container, fragment)
+            .commit()
     }
 
 
-    class ActionFragment : androidx.fragment.app.ListFragment() {
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+    class ActionFragment : ListFragment() {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             listAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1).apply {
                 add(getString(R.string.pref_btn_action_press))
                 add(getString(R.string.pref_btn_action_lpress))

@@ -436,8 +436,12 @@ public class ThemeData {
         }
     }
 
+    public static boolean isUseLightStatusBar() {
+        return sInstance != null && (sInstance.statusBarDarkIcon || sInstance.isLightStatusBar());
+    }
+
     public static int getSystemUiVisibilityFlag() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && sInstance != null && (sInstance.statusBarDarkIcon || sInstance.isLightStatusBar())) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isUseLightStatusBar()) {
             return View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         } else {
             return 0;

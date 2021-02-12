@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.search.presentation.search
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.*
@@ -36,6 +37,8 @@ import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSuggestAdapter.OnSearchSelectedListener, SuggestDeleteDialog.OnDeleteQuery {
 
@@ -60,8 +63,16 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
         barBinding.lifecycleOwner = this
 
         val intent = intent ?: throw IllegalStateException("Intent is null")
-        if (intent.getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, AppPrefs.fullscreen.get()))
-            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        val fullscreen = intent.getBooleanExtra(INTENT_EXTRA_MODE_FULLSCREEN, AppPrefs.fullscreen.get())
+        if (fullscreen) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.insetsController?.hide(WindowInsets.Type.statusBars())
+            } else {
+                @Suppress("DEPRECATION")
+                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            }
+        }
 
         val bottomBoxMode = intent.getBooleanExtra(EXTRA_REVERSE, false)
         if (bottomBoxMode) {
@@ -100,10 +111,25 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
                 searchButton.setColorFilter(themeData.toolbarImageColor)
             if (themeData.statusBarColor != 0) {
                 window.run {
-                    clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        val wic = decorView.windowInsetsController!!
+                        val appearance = if (ThemeData.isUseLightStatusBar()) {
+                            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                        } else {
+                            0
+                        }
+                        wic.setSystemBarsAppearance(
+                            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                            appearance
+                        )
+                    } else {
+                        @Suppress("DEPRECATION")
+                        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                        @Suppress("DEPRECATION")
+                        decorView.systemUiVisibility = ThemeData.getSystemUiVisibilityFlag()
+                    }
                     addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     statusBarColor = themeData.statusBarColor
-                    decorView.systemUiVisibility = ThemeData.getSystemUiVisibilityFlag()
                 }
             }
         }
@@ -125,8 +151,9 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
                     val selStart = editText.selectionStart
                     val selEnd = editText.selectionEnd
 
-                    min = Math.max(0, Math.min(selStart, selEnd))
-                    max = Math.max(0, Math.max(selStart, selEnd))
+
+                    min = max(0, min(selStart, selEnd))
+                    max = max(0, max(selStart, selEnd))
                 }
 
                 when (item.itemId) {

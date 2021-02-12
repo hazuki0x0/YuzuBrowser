@@ -20,12 +20,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreference
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.core.utility.extensions.canResolvePath
-import jp.hazuki.yuzubrowser.download.ui.FallbackFolderSelectActivity
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
@@ -66,7 +66,7 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
             try {
                 startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), REQUEST_FOLDER)
             } catch (e: Exception) {
-                startActivityForResult(Intent(activity, FallbackFolderSelectActivity::class.java), REQUEST_FOLDER)
+                Toast.makeText(requireContext(), R.string.failed, Toast.LENGTH_SHORT).show()
             }
             true
         }

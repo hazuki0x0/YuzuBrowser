@@ -34,6 +34,8 @@ class LauncherIconDrawable(private val icon: Drawable) : Drawable() {
 
     override fun setColorFilter(colorFilter: ColorFilter?) {}
 
+    @Suppress("DEPRECATION")
+    @Deprecated("")
     override fun getOpacity(): Int {
         return icon.opacity
     }

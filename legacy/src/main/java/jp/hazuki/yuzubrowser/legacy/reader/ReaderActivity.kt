@@ -16,8 +16,10 @@
 
 package jp.hazuki.yuzubrowser.legacy.reader
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.legacy.Constants
@@ -52,14 +54,20 @@ class ReaderActivity : ThemeActivity() {
             fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, fullscreen)
             orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, orientation)
 
-            if (fullscreen)
-                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            if (fullscreen) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.hide(WindowInsets.Type.statusBars())
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                }
+            }
             requestedOrientation = orientation
 
             if (savedInstanceState == null) {
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, ReaderFragment(url, ua))
-                        .commit()
+                    .replace(R.id.container, ReaderFragment(url, ua))
+                    .commit()
             }
         } else {
             finish()

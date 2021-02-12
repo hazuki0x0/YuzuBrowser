@@ -16,10 +16,10 @@
 
 package jp.hazuki.yuzubrowser.legacy.menuwindow
 
+import android.os.Build
 import android.os.Handler
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
+import android.os.Looper
+import android.view.*
 import android.widget.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
@@ -38,7 +38,7 @@ class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: Act
 
     private val windowMargin = context.convertDpToPx(4)
     private val window = PopupWindow(context)
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private var locking = false
     private var mListener: OnMenuCloseListener? = null
 
@@ -84,9 +84,20 @@ class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: Act
             name.text = action.toString(array)
             layout.addView(child)
         }
-
-        if (AppPrefs.fullscreen.get())
-            setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        if (AppPrefs.fullscreen.get()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.contentView.windowInsetsController?.apply {
+                    hide(
+                        WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars()
+                    )
+                    systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+            }
+        }
     }
 
     fun show(root: View, gravity: Int) {
@@ -114,6 +125,7 @@ class MenuWindow(context: ThemeActivity, actionList: ActionList, controller: Act
     }
 
     fun setSystemUiVisibility(flags: Int) {
+        @Suppress("DEPRECATION")
         window.contentView.systemUiVisibility = flags
     }
 

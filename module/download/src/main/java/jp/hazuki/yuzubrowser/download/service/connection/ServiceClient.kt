@@ -17,12 +17,13 @@
 package jp.hazuki.yuzubrowser.download.service.connection
 
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import java.lang.ref.WeakReference
 
-class ServiceClient(listener: ServiceClientListener) : Handler() {
-    private val ref = WeakReference<ServiceClientListener>(listener)
+class ServiceClient(listener: ServiceClientListener) : Handler(Looper.getMainLooper()) {
+    private val ref = WeakReference(listener)
 
     override fun handleMessage(msg: Message) {
         val listener = ref.get() ?: return

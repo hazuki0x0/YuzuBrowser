@@ -73,8 +73,8 @@ class BookmarkManager private constructor(context: Context) : Serializable {
     }
 
     fun save(): Boolean {
-        if (!file.parentFile.exists()) {
-            file.parentFile.mkdirs()
+        file.parentFile?.apply {
+            if (!exists()) mkdirs()
         }
 
         try {
@@ -108,10 +108,10 @@ class BookmarkManager private constructor(context: Context) : Serializable {
         folder.list.add(0, item)
     }
 
-    fun addAll(folder: BookmarkFolder, addlist: Collection<BookmarkItem>) {
-        folder.list.addAll(addlist)
-        addlist.filter { it is BookmarkSite }
-                .forEach { addToIndex(it as BookmarkSite) }
+    fun addAll(folder: BookmarkFolder, addList: Collection<BookmarkItem>) {
+        folder.list.addAll(addList)
+        addList.filterIsInstance<BookmarkSite>()
+            .forEach(this::addToIndex)
     }
 
     fun remove(folder: BookmarkFolder, item: BookmarkItem) {
@@ -128,8 +128,8 @@ class BookmarkManager private constructor(context: Context) : Serializable {
 
     fun removeAll(folder: BookmarkFolder, items: List<BookmarkItem>) {
         folder.list.removeAll(items)
-        items.filter { it is BookmarkSite }
-                .forEach { removeFromIndex(it as BookmarkSite) }
+        items.filterIsInstance<BookmarkSite>()
+            .forEach(this::removeFromIndex)
     }
 
     fun removeAll(url: String) {
@@ -187,7 +187,7 @@ class BookmarkManager private constructor(context: Context) : Serializable {
     private fun search(list: MutableList<BookmarkSite>, root: BookmarkFolder, pattern: Pattern) {
         root.list.forEach {
             if (it is BookmarkSite) {
-                if (pattern.matcher(it.url).find() || pattern.matcher(it.title).find()) {
+                if (pattern.matcher(it.url).find() || pattern.matcher(it.title ?: "").find()) {
                     list.add(it)
                 }
             }

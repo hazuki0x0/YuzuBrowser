@@ -26,8 +26,7 @@ import jp.hazuki.yuzubrowser.core.utility.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
 import java.nio.charset.Charset
-import com.google.re2j.PatternSyntaxException as Re2PatternSyntaxException
-import java.util.regex.PatternSyntaxException as JvmPatternSyntaxException
+import java.util.*
 
 class AbpFilterDecoder {
     private val contentRegex = Pattern.compile(CONTENT_FILTER_REGEX)
@@ -107,7 +106,6 @@ class AbpFilterDecoder {
                                     pageWhiteList: MutableList<UnifiedFilter>) {
         var contentType = 0
         var ignoreCase = false
-        var xmlHttpRequest = true
         var domain: String? = null
         var thirdParty = -1
         var filter = this
@@ -134,7 +132,7 @@ class AbpFilterDecoder {
                     option = option.substring(1)
                 }
 
-                option = option.toLowerCase()
+                option = option.toLowerCase(Locale.getDefault())
                 val type = option.getOptionBit()
                 if (type == -1) return@forEach
 
@@ -263,7 +261,7 @@ class AbpFilterDecoder {
         val comment = split(':')
         if (comment.size < 2) return null
 
-        when (comment[0].substring(1).trim().toLowerCase()) {
+        when (comment[0].substring(1).trim().toLowerCase(Locale.getDefault())) {
             "title" -> info.title = comment[1].trim()
             "homepage" -> info.homePage = comment[1].trim()
             "last updated" -> info.lastUpdate = comment[1].trim()

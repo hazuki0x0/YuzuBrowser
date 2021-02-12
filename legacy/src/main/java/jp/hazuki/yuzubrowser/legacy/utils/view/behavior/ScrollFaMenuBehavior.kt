@@ -23,6 +23,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.github.clans.fab.FloatingActionMenu
 
 class ScrollFaMenuBehavior(context: Context, attrs: AttributeSet) : FloatingActionMenu.Behavior(context, attrs) {
@@ -35,13 +36,13 @@ class ScrollFaMenuBehavior(context: Context, attrs: AttributeSet) : FloatingActi
     private var translationY = 0f
     private var isAnimating = false
 
-    override fun onStartNestedScroll(coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout, child: FloatingActionMenu, directTargetChild: View, target: View, axes: Int, type: Int): Boolean {
+    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout, child: FloatingActionMenu, directTargetChild: View, target: View, axes: Int, type: Int): Boolean {
         return axes == View.SCROLL_AXIS_VERTICAL ||
-                super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, axes, type)
+            super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, axes, type)
     }
 
-    override fun onNestedScroll(coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout, child: FloatingActionMenu, target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type)
+    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout, child: FloatingActionMenu, target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int, consumed: IntArray) {
+        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type, consumed)
 
         if (dyConsumed > 0 && !isAnimating) {
             animateOut(child)

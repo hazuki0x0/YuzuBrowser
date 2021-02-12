@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.browser
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -158,7 +159,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
     }
 
-    private val scrollChangedListener: OnScrollChangedListener = { webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int ->
+    private val scrollChangedListener: OnScrollChangedListener = { webView, _, t, _, _ ->
         binding.apply {
             webViewFastScroller.onPageScroll()
             webViewPageFastScroller?.onScrollWebView(webView)
@@ -222,6 +223,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     private lateinit var binding: BrowserActivityBinding
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -1099,8 +1101,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun finishAlert(clearTabNo: Int) {
         FinishAlertDialog(this)
-                .setPositiveButton(android.R.string.yes)
-                .setNegativeButton(android.R.string.no)
+            .setPositiveButton(android.R.string.ok)
+            .setNegativeButton(android.R.string.cancel)
                 .setNeutralButton(R.string.minimize)
                 .setClearTabNo(clearTabNo)
                 .show(supportFragmentManager)

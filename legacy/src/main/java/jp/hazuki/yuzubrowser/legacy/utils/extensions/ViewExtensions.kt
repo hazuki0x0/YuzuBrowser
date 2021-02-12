@@ -42,7 +42,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
     val outFile = root.uri.getWritableFileOrNull()
 
     if (outFile != null) {
-        val downloadedFile = File(outFile, file.name)
+        val downloadedFile = File(outFile, file.name!!)
         saveWebArchiveMethod(downloadedFile.toString())
         onDownload(webView.context, root, file, DocumentFile.fromFile(downloadedFile), true, downloadedFile.length())
         return
@@ -76,8 +76,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
 
             withContext(Dispatchers.IO) {
                 tmpFile.inputStream().use { input ->
-                    context.contentResolver.openOutputStream(saveTo.uri, "w").use { out ->
-                        checkNotNull(out)
+                    context.contentResolver.openOutputStream(saveTo.uri, "w")!!.use { out ->
                         input.copyTo(out)
                     }
                 }

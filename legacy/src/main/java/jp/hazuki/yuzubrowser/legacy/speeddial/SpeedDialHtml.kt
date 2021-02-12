@@ -103,18 +103,18 @@ class SpeedDialHtml(context: Context) {
             builder.append("<div class=\"box\"><a href=\"")
                     .append(url)
                     .append("\"><img src=\"yuzu:speeddial/img/")
-                    .append(id)
-                    .append("?")
-                    .append(updateTime)
-                    .append("\" /><div class=\"name\">")
-                    .append(HtmlUtils.sanitize(title))
-                    .append("</div></a></div>")
+                .append(id)
+                .append("?")
+                .append(updateTime)
+                .append("\" /><div class=\"name\">")
+                .append(HtmlUtils.sanitize(title))
+                .append("</div></a></div>")
         }
 
         builder.append(getResourceString(context, R.raw.speeddial_end))
 
-        if (!cache.parentFile.exists())
-            cache.parentFile.mkdirs()
+        if (!cache.parentFile!!.exists())
+            cache.parentFile!!.mkdirs()
 
         try {
             FileOutputStream(cache).use { fos -> fos.write(builder.toString().toByteArray(StandardCharsets.UTF_8)) }

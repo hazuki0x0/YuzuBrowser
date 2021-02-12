@@ -61,16 +61,16 @@ class DebugFileListActivity : FileListActivity(), FileListFragment.OnFileItemLon
                             mCopiedFile = file
                         }
                         1 -> AlertDialog.Builder(this@DebugFileListActivity)
-                                .setTitle("Confirm")
-                                .setMessage("Delete?")
-                                .setPositiveButton(android.R.string.yes) { _, _ ->
-                                    if (!FileUtils.deleteFile(file)) {
-                                        Toast.makeText(applicationContext, "Delete failed", Toast.LENGTH_SHORT).show()
-                                    }
-                                    notifyDataSetChanged()
+                            .setTitle("Confirm")
+                            .setMessage("Delete?")
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                if (!FileUtils.deleteFile(file)) {
+                                    Toast.makeText(applicationContext, "Delete failed", Toast.LENGTH_SHORT).show()
                                 }
-                                .setNegativeButton(android.R.string.no, null)
-                                .show()
+                                notifyDataSetChanged()
+                            }
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
                     }
                 }
                 .setNegativeButton(android.R.string.cancel, null)
@@ -87,16 +87,16 @@ class DebugFileListActivity : FileListActivity(), FileListFragment.OnFileItemLon
             }
 
             AlertDialog.Builder(this@DebugFileListActivity)
-                    .setTitle("Confirm")
-                    .setMessage("Paste?")
-                    .setPositiveButton(android.R.string.yes) { _, _ ->
-                        if (!FileUtils.copyFile(mCopiedFile, currentFolder)) {
-                            Toast.makeText(applicationContext, "failed", Toast.LENGTH_SHORT).show()
-                        }
-                        notifyDataSetChanged()
+                .setTitle("Confirm")
+                .setMessage("Paste?")
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    if (!FileUtils.copyFile(mCopiedFile, currentFolder)) {
+                        Toast.makeText(applicationContext, "failed", Toast.LENGTH_SHORT).show()
                     }
-                    .setNegativeButton(android.R.string.no, null)
-                    .show()
+                    notifyDataSetChanged()
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
             true
         })
         menu.add("Make folder").setOnMenuItemClickListener {

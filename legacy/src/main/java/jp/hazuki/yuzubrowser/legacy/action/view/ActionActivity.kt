@@ -19,10 +19,12 @@ package jp.hazuki.yuzubrowser.legacy.action.view
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.View
+import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
@@ -59,8 +61,14 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
             val fullscreen = intent.getBooleanExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, AppPrefs.fullscreen.get())
             val orientation = intent.getIntExtra(Constants.intent.EXTRA_MODE_ORIENTATION, AppPrefs.oritentation.get())
 
-            if (fullscreen)
-                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            if (fullscreen) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.hide(WindowInsets.Type.statusBars())
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                }
+            }
             requestedOrientation = orientation
         }
 

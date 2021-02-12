@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -161,8 +160,7 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                 listener!!.requestImport(data.data!!)
             }
             REQUEST_SELECT_EXPORT -> if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-                val handler = Handler()
-                Thread(Runnable {
+                GlobalScope.launch(Dispatchers.IO) {
                     try {
                         context?.run {
                             contentResolver.openOutputStream(data.data!!)!!.use { os ->
@@ -170,14 +168,16 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                                     val adBlockList = provider.enableItems
                                     for ((_, match) in adBlockList)
                                         pw.println(match)
-                                    handler.post { Toast.makeText(context, R.string.pref_exported, Toast.LENGTH_SHORT).show() }
+                                    launch(Dispatchers.Main) {
+                                        Toast.makeText(context, R.string.pref_exported, Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             }
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
-                }).run()
+                }
             }
         }
     }
@@ -278,25 +278,25 @@ class AdBlockFragment : Fragment(), OnRecyclerListener, AdBlockEditDialog.AdBloc
                 return true
             }
             R.id.sort_registration -> {
-                adapter.items.sortWith(Comparator { m1, m2 -> m1.id.compareTo(m2.id) })
+                adapter.items.sortWith { m1, m2 -> m1.id.compareTo(m2.id) }
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true
             }
             R.id.sort_registration_reverse -> {
-                adapter.items.sortWith(Comparator { m1, m2 -> m2.id.compareTo(m1.id) })
+                adapter.items.sortWith { m1, m2 -> m2.id.compareTo(m1.id) }
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true
             }
             R.id.sort_name -> {
-                adapter.items.sortWith(Comparator { m1, m2 -> m1.match.compareTo(m2.match) })
+                adapter.items.sortWith { m1, m2 -> m1.match.compareTo(m2.match) }
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true
             }
             R.id.sort_name_reverse -> {
-                adapter.items.sortWith(Comparator { m1, m2 -> m2.match.compareTo(m1.match) })
+                adapter.items.sortWith { m1, m2 -> m2.match.compareTo(m1.match) }
                 adapter.notifyDataSetChanged()
                 layoutManager.scrollToPosition(0)
                 return true

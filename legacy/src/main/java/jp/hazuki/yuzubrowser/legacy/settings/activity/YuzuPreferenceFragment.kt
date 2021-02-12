@@ -27,7 +27,7 @@ import jp.hazuki.yuzubrowser.ui.settings.fragment.YuzuBasePreferenceFragment
 abstract class YuzuPreferenceFragment : YuzuBasePreferenceFragment() {
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
-        val fragmentManager = fragmentManager ?: return
+        val fragmentManager = parentFragmentManager
 
         if (fragmentManager.findFragmentByTag(FRAGMENT_DIALOG_TAG) == null) {
             val dialog: androidx.fragment.app.DialogFragment

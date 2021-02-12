@@ -279,7 +279,7 @@ internal fun Uri.toDocumentFile(context: Context): DocumentFile {
         } else {
             DocumentFile.fromSingleUri(context, this)!!
         }
-        "file" -> DocumentFile.fromFile(File(path))
+        "file" -> DocumentFile.fromFile(File(path!!))
         else -> throw IllegalStateException("unknown scheme :$scheme, Uri:$this")
     }
 }
