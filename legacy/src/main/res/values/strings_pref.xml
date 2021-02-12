@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="copyright" translatable="false">©2017-2019 Hazuki</string>
+    <string name="copyright" translatable="false">©2017-2021 Hazuki</string>
 
     <integer-array name="pref_tab_type_values">
         <item>0</item>
