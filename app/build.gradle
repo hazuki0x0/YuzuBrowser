@@ -16,7 +16,6 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.cookpad.android.licensetools'
 
@@ -88,10 +87,6 @@ android {
     dataBinding {
         enabled = true
     }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 buildscript {
