@@ -170,7 +170,9 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 val charset = contentType()?.charset() ?: Charsets.UTF_8
                 source().inputStream().bufferedReader(charset).use { reader ->
                     if (decode(reader, charset, entity)) {
+                        entity.lastLocalUpdate = System.currentTimeMillis()
                         entity.lastModified = response.header("Last-Modified")
+                        abpDatabase.abpDao().update(entity)
                         return true
                     }
                 }
