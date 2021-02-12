@@ -14,32 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.ui.original
+package jp.hazuki.yuzubrowser.core.eventbus
 
-import androidx.lifecycle.ViewModel
-import jp.hazuki.yuzubrowser.core.lifecycle.KotlinLiveData
 import jp.hazuki.yuzubrowser.core.lifecycle.LiveEvent
 
-class AdBlockImportViewModel : ViewModel() {
-    val isExclude = KotlinLiveData(true)
+object LocalEventBus {
+    private var instance: LiveEvent<String>? = null
 
-    val isButtonEnable = KotlinLiveData(true)
-
-    val text = KotlinLiveData("")
-
-    val event = LiveEvent<Int>()
-
-    fun onOkClick() {
-        event.notify(EVENT_OK)
-    }
-
-    fun onCancelClick() {
-        event.notify(EVENT_CANCEL)
-    }
-
-    companion object {
-        const val EVENT_OK = 1
-
-        const val EVENT_CANCEL = 2
+    fun getDefault(): LiveEvent<String> {
+        if (instance == null) instance = LiveEvent()
+        return instance!!
     }
 }

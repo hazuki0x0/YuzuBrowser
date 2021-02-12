@@ -25,7 +25,6 @@ import android.os.Handler
 import android.os.ResultReceiver
 import androidx.core.app.JobIntentService
 import androidx.core.content.getSystemService
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.AndroidInjection
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
 import jp.hazuki.yuzubrowser.adblock.filter.abp.*
@@ -37,6 +36,7 @@ import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterWriter
 import jp.hazuki.yuzubrowser.adblock.repository.AdBlockPref
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
+import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.core.utility.extensions.isConnectedWifi
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.runBlocking
@@ -97,9 +97,7 @@ class AbpUpdateService : JobIntentService() {
             System.currentTimeMillis() + A_DAY
         }
         if (result) {
-            LocalBroadcastManager
-                    .getInstance(applicationContext)
-                    .sendBroadcast(Intent(BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA))
+            LocalEventBus.getDefault().notify(BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA)
         }
         resultReceiver?.send(RESULT_CODE_UPDATE_ALL, null)
     }
@@ -107,9 +105,7 @@ class AbpUpdateService : JobIntentService() {
     private fun updateAbpEntity(entity: AbpEntity, result: ResultReceiver?) = runBlocking {
         if (updateInternal(entity)) {
             result?.send(RESULT_CODE_UPDATED, Bundle().apply { putParcelable(EXTRA_ABP_ENTRY, entity) })
-            LocalBroadcastManager
-                    .getInstance(applicationContext)
-                    .sendBroadcast(Intent(BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA))
+            LocalEventBus.getDefault().notify(BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA)
         } else {
             result?.send(RESULT_CODE_FAILED, Bundle().apply { putParcelable(EXTRA_ABP_ENTRY, entity) })
         }

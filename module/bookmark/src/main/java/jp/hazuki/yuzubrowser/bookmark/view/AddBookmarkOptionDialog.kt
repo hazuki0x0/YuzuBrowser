@@ -18,12 +18,11 @@ package jp.hazuki.yuzubrowser.bookmark.view
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
+import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
 
 class AddBookmarkOptionDialog : DialogFragment() {
@@ -59,8 +58,7 @@ class AddBookmarkOptionDialog : DialogFragment() {
                             removeAll(arguments.getString(ARG_URL)!!)
                             save()
                         }
-                        LocalBroadcastManager.getInstance(requireActivity())
-                            .sendBroadcast(Intent(BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE))
+                        LocalEventBus.getDefault().notify(BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE)
                     }
                 }
             }

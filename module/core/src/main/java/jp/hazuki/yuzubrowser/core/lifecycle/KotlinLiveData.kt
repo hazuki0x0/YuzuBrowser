@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.core.livedata
+package jp.hazuki.yuzubrowser.core.lifecycle
 
 import androidx.lifecycle.MutableLiveData
 

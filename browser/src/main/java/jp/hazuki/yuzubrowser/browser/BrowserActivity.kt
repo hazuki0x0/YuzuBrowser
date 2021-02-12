@@ -36,7 +36,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
@@ -54,6 +53,7 @@ import jp.hazuki.yuzubrowser.browser.databinding.BrowserActivityBinding
 import jp.hazuki.yuzubrowser.browser.manager.UserActionManager
 import jp.hazuki.yuzubrowser.browser.tab.TabManagerFactory
 import jp.hazuki.yuzubrowser.browser.view.Toolbar
+import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
@@ -100,7 +100,6 @@ import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
 import jp.hazuki.yuzubrowser.ui.*
-import jp.hazuki.yuzubrowser.ui.extensions.createIntentFilter
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.utils.makeUrl
@@ -341,10 +340,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             setCurrentTab(tabManagerIn.currentTabNo)
         }
 
-        LocalBroadcastManager.getInstance(this)
-            .registerReceiver(localReceiver, createIntentFilter(
-                BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA,
-                BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE))
+        LocalEventBus.getDefault().observe(this, this::onNotifyEvent)
 
         delayAction?.let {
             actionController.run(it)
@@ -387,9 +383,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         tabManagerIn.saveData()
         handler.removeCallbacks(saveTabsRunnable)
         faviconManager.save()
-
-        LocalBroadcastManager.getInstance(this)
-            .unregisterReceiver(localReceiver)
 
         if (isActivityPaused) {
             Logger.w(TAG, "Activity is already stopped")
@@ -1648,6 +1641,13 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA -> webClient.updateAdBlockList()
                 BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE -> notifyChangeWebState()
             }
+        }
+    }
+
+    private fun onNotifyEvent(id: String) {
+        when (id) {
+            BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA -> webClient.updateAdBlockList()
+            BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE -> notifyChangeWebState()
         }
     }
 

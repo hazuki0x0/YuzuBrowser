@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.ui.lifecycle
+package jp.hazuki.yuzubrowser.core.lifecycle
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.Lifecycle

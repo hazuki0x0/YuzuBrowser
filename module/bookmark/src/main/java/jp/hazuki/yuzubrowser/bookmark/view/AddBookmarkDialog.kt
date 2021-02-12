@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.bookmark.view
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -27,11 +26,11 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkItem
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
+import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.ui.BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE
 import jp.hazuki.yuzubrowser.ui.extensions.toPunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
@@ -135,8 +134,7 @@ abstract class AddBookmarkDialog<S : BookmarkItem, T>(
             if (mManager.save()) {
                 Toast.makeText(mDialog.context, R.string.succeed, Toast.LENGTH_SHORT).show()
                 mOnClickListener?.onClick(mDialog, DialogInterface.BUTTON_POSITIVE)
-                LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(Intent(BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE))
+                LocalEventBus.getDefault().notify(BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE)
                 mDialog.dismiss()
             } else {
                 Toast.makeText(mDialog.context, R.string.failed, Toast.LENGTH_LONG).show()
