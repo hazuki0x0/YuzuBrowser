@@ -27,7 +27,9 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
+import com.turingtechnologies.materialscrollbar.TouchScrollBar
 import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
@@ -43,7 +45,6 @@ import jp.hazuki.yuzubrowser.ui.extensions.share
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
-import kotlinx.android.synthetic.main.fragment_history.*
 import java.util.*
 import javax.inject.Inject
 
@@ -70,6 +71,9 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = requireActivity()
         val arguments = arguments ?: throw IllegalArgumentException()
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val touchScrollBar = view.findViewById<TouchScrollBar>(R.id.touchScrollBar)
 
         pickMode = arguments.getBoolean(PICK_MODE)
 
