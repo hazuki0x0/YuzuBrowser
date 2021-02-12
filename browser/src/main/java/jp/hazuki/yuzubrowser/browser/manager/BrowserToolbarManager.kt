@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.google.android.material.appbar.AppBarLayout
+import jp.hazuki.yuzubrowser.browser.databinding.BrowserActivityBinding
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
@@ -49,10 +50,16 @@ import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.webview.CustomWebView
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.browser_activity.*
+import kotlin.math.max
+import kotlin.math.min
 
-open class BrowserToolbarManager(context: Context, override val containerView: View, controller: ActionController, iconManager: ActionIconManager, requestCallback: RequestCallback) : ToolbarManager, LayoutContainer {
+open class BrowserToolbarManager(
+    context: Context,
+    private val binding: BrowserActivityBinding,
+    controller: ActionController,
+    iconManager: ActionIconManager,
+    requestCallback: RequestCallback
+) : ToolbarManager {
     override val tabBar = TabBar(context, controller, iconManager, requestCallback)
     override val urlBar = if (AppPrefs.toolbar_url_box.get()) WhiteUrlBar(context, controller, iconManager, requestCallback) else UrlBar(context, controller, iconManager, requestCallback)
     override val progressBar = ProgressToolBar(context, requestCallback)
@@ -60,9 +67,9 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     private var mIsWebToolbarCombined = false
 
     override val findOnPage: View
-        get() = find
+        get() = binding.find.root
     override val bottomToolbarAlwaysLayout: LinearLayout
-        get() = bottomAlwaysToolbar
+        get() = binding.bottomAlwaysToolbar
 
 
     private val webToolbarLayout = LinearLayout(context).apply {
@@ -78,12 +85,15 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     init {
-        bottomAlwaysToolbar.background =
+        binding.apply {
+            bottomAlwaysToolbar.background =
                 ColorDrawable(context.getResColor(R.color.deep_gray))
 
-        bottomAlwaysOverlayToolbarPadding.addOnLayoutChangeListener { _, _, top, _, bottom, _, _, _, _ ->
-            bottomAlwaysOverlayToolbarPadding.height = bottom - top
+            bottomAlwaysOverlayToolbarPadding.addOnLayoutChangeListener { _, _, top, _, bottom, _, _, _, _ ->
+                bottomAlwaysOverlayToolbarPadding.height = bottom - top
+            }
         }
+
     }
 
     override fun addToolbarView(isPortrait: Boolean) {
@@ -118,21 +128,21 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
         }
 
         when (location) {
-            LOCATION_TOP -> topToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
-            LOCATION_BOTTOM, LOCATION_FLOAT_BOTTOM -> bottomOverlayToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
+            LOCATION_TOP -> binding.topToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
+            LOCATION_BOTTOM, LOCATION_FLOAT_BOTTOM -> binding.bottomOverlayToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             LOCATION_WEB -> webToolbarLayout.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             LOCATION_FIXED_WEB -> fixedWebToolbarLayout.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             LOCATION_LEFT -> {
                 (toolbar.findViewById<View>(R.id.linearLayout) as LinearLayout).orientation = LinearLayout.VERTICAL
-                leftToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
+                binding.leftToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             }
             LOCATION_RIGHT -> {
                 (toolbar.findViewById<View>(R.id.linearLayout) as LinearLayout).orientation = LinearLayout.VERTICAL
-                rightToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
+                binding.rightToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             }
-            LOCATION_TOP_ALWAYS -> topAlwaysToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
+            LOCATION_TOP_ALWAYS -> binding.topAlwaysToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             LOCATION_BOTTOM_ALWAYS -> bottomToolbarAlwaysLayout.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
-            LOCATION_BOTTOM_OVERLAY_ALWAYS -> bottomAlwaysOverlayToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
+            LOCATION_BOTTOM_OVERLAY_ALWAYS -> binding.bottomAlwaysOverlayToolbar.addView(toolbar, TOOLBAR_LAYOUT_PARAMS)
             else -> throw IllegalStateException("Unknown location:" + toolbar.toolbarPreferences.location.get())
         }
     }
@@ -159,16 +169,16 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
         progressBar.onPreferenceReset()
         customBar.onPreferenceReset()
 
-        val params = topToolbar.layoutParams as AppBarLayout.LayoutParams
+        val params = binding.topToolbar.layoutParams as AppBarLayout.LayoutParams
         params.scrollFlags = if (AppPrefs.snap_toolbar.get()) {
             (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                    or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-                    or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP)
+                or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+                or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP)
         } else {
             AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
         }
-        bottomOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
-        bottomAlwaysOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
+        binding.bottomOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
+        binding.bottomAlwaysOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
     }
 
     override fun onThemeChanged(themeData: ThemeData?) {
@@ -177,36 +187,39 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
         progressBar.onThemeChanged(themeData)
         customBar.onThemeChanged(themeData)
 
-        if (themeData != null && themeData.toolbarBackgroundColor != 0) {
-            topToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
-            bottomOverlayToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
-            bottomAlwaysOverlayToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
-            webToolbarLayout.setBackgroundColor(themeData.toolbarBackgroundColor)
-            fixedWebToolbarLayout.setBackgroundColor(themeData.toolbarBackgroundColor)
-            leftToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
-            rightToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
-            topAlwaysToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
-            bottomToolbarAlwaysLayout.setBackgroundColor(themeData.toolbarBackgroundColor)
-        } else {
-            topToolbar.setBackgroundResource(R.color.deep_gray)
-            bottomOverlayToolbar.setBackgroundResource(R.color.deep_gray)
-            bottomAlwaysOverlayToolbar.setBackgroundResource(R.color.deep_gray)
-            webToolbarLayout.setBackgroundResource(R.color.deep_gray)
-            fixedWebToolbarLayout.setBackgroundResource(R.color.deep_gray)
-            leftToolbar.setBackgroundResource(R.color.deep_gray)
-            rightToolbar.setBackgroundResource(R.color.deep_gray)
-            topAlwaysToolbar.setBackgroundResource(R.color.deep_gray)
-            bottomToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray)
-        }
+        binding.apply {
+            if (themeData != null && themeData.toolbarBackgroundColor != 0) {
+                topToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
+                bottomOverlayToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
+                bottomAlwaysOverlayToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
+                webToolbarLayout.setBackgroundColor(themeData.toolbarBackgroundColor)
+                fixedWebToolbarLayout.setBackgroundColor(themeData.toolbarBackgroundColor)
+                leftToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
+                rightToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
+                topAlwaysToolbar.setBackgroundColor(themeData.toolbarBackgroundColor)
+                bottomToolbarAlwaysLayout.setBackgroundColor(themeData.toolbarBackgroundColor)
+            } else {
+                topToolbar.setBackgroundResource(R.color.deep_gray)
+                bottomOverlayToolbar.setBackgroundResource(R.color.deep_gray)
+                bottomAlwaysOverlayToolbar.setBackgroundResource(R.color.deep_gray)
+                webToolbarLayout.setBackgroundResource(R.color.deep_gray)
+                fixedWebToolbarLayout.setBackgroundResource(R.color.deep_gray)
+                leftToolbar.setBackgroundResource(R.color.deep_gray)
+                rightToolbar.setBackgroundResource(R.color.deep_gray)
+                topAlwaysToolbar.setBackgroundResource(R.color.deep_gray)
+                bottomToolbarAlwaysLayout.setBackgroundResource(R.color.deep_gray)
+            }
 
-        bottomOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
-        bottomAlwaysOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
+            bottomOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
+            bottomAlwaysOverlayToolbar.background.alpha = AppPrefs.overlay_bottom_alpha.get()
 
-        for (i in 0 until bottomToolbarAlwaysLayout.childCount) {
-            (bottomOverlayToolbar.getChildAt(i) as? SubToolbar)?.run {
-                applyTheme(themeData)
+            for (i in 0 until bottomToolbarAlwaysLayout.childCount) {
+                (bottomOverlayToolbar.getChildAt(i) as? SubToolbar)?.run {
+                    applyTheme(themeData)
+                }
             }
         }
+
     }
 
     override fun onActivityConfigurationChanged(config: Configuration) {
@@ -220,7 +233,7 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
 
     private fun onActivityConfigurationChangedSingle(toolbar: ToolbarBase, config: Configuration) {
         val parent = toolbar.parent as? ViewGroup ?: throw NullPointerException()
-        if (parent === leftToolbar || parent === rightToolbar)
+        if (parent === binding.leftToolbar || parent === binding.rightToolbar)
             (toolbar.findViewById<View>(R.id.linearLayout) as LinearLayout).orientation = LinearLayout.HORIZONTAL
         parent.removeView(toolbar)
         toolbar.onActivityConfigurationChanged(config)
@@ -234,7 +247,7 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     override fun onImeChanged(isShown: Boolean) {
-        bottomOverlayLayout.visibility = if (isShown) View.GONE else View.VISIBLE
+        binding.bottomOverlayLayout.visibility = if (isShown) View.GONE else View.VISIBLE
     }
 
     override fun notifyChangeProgress(data: MainTabData) = progressBar.changeProgress(data)
@@ -275,14 +288,14 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
         }
         if (combine) {
             if (!mIsWebToolbarCombined) {
-                topToolbar.removeView(webToolbarLayout)
+                binding.topToolbar.removeView(webToolbarLayout)
                 fixedWebToolbarLayout.addView(webToolbarLayout, 0)
             }
             web.setEmbeddedTitleBarMethod(fixedWebToolbarLayout)
         } else {
             if (mIsWebToolbarCombined) {
                 fixedWebToolbarLayout.removeView(webToolbarLayout)
-                topToolbar.addView(webToolbarLayout)
+                binding.topToolbar.addView(webToolbarLayout)
             }
             web.setEmbeddedTitleBarMethod(fixedWebToolbarLayout)
         }
@@ -294,11 +307,11 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     override fun showGeolocationPermissionPrompt(view: View) {
-        bottomAlwaysOverlayToolbar.addView(view, 0)
+        binding.bottomAlwaysOverlayToolbar.addView(view, 0)
     }
 
     override fun hideGeolocationPermissionPrompt(view: View) {
-        bottomAlwaysOverlayToolbar.removeView(view)
+        binding.bottomAlwaysOverlayToolbar.removeView(view)
     }
 
     override fun isContainsWebToolbar(ev: MotionEvent): Boolean {
@@ -308,31 +321,30 @@ open class BrowserToolbarManager(context: Context, override val containerView: V
     }
 
     override fun onWebViewScroll(web: CustomWebView, e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float) {
-        if (topToolbar.height == 0 && web.isScrollable) {
-            val translationY = bottomOverlayLayout.translationY
-            val newTrans: Float
+        if (binding.topToolbar.height == 0 && web.isScrollable) {
+            val translationY = binding.bottomOverlayLayout.translationY
 
-            newTrans = when {
-                distanceY < 0 -> Math.max(0f, distanceY + translationY) //down
-                distanceY > 0 -> Math.min(bottomOverlayToolbar.height.toFloat(), distanceY + translationY) //up
+            val newTrans = when {
+                distanceY < 0 -> max(0f, distanceY + translationY) //down
+                distanceY > 0 -> min(binding.bottomOverlayToolbar.height.toFloat(), distanceY + translationY) //up
                 else -> return
             }
 
-            bottomOverlayLayout.translationY = newTrans
+            binding.bottomOverlayLayout.translationY = newTrans
         }
     }
 
     override fun onWebViewTapUp() {
-        if (topToolbar.height == 0 && AppPrefs.snap_toolbar.get()) {
-            val trans = bottomOverlayLayout.translationY
+        if (binding.topToolbar.height == 0 && AppPrefs.snap_toolbar.get()) {
+            val trans = binding.bottomOverlayLayout.translationY
             val animator: ObjectAnimator
             var duration: Int
-            val bottomBarHeight = bottomOverlayToolbar.height
+            val bottomBarHeight = binding.bottomOverlayToolbar.height
             if (trans > bottomBarHeight / 2) {
-                animator = ObjectAnimator.ofFloat(bottomOverlayLayout, "translationY", trans, bottomBarHeight.toFloat())
+                animator = ObjectAnimator.ofFloat(binding.bottomOverlayLayout, "translationY", trans, bottomBarHeight.toFloat())
                 duration = (((bottomBarHeight - trans) / bottomBarHeight + 1) * 150).toInt()
             } else {
-                animator = ObjectAnimator.ofFloat(bottomOverlayLayout, "translationY", trans, 0f)
+                animator = ObjectAnimator.ofFloat(binding.bottomOverlayLayout, "translationY", trans, 0f)
                 duration = ((trans / bottomBarHeight + 1) * 150).toInt()
             }
             if (duration < 0) {

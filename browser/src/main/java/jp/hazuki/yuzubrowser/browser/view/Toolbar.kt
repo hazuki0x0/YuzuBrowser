@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.MotionEvent
 import android.view.View
+import jp.hazuki.yuzubrowser.browser.databinding.BrowserActivityBinding
 import jp.hazuki.yuzubrowser.browser.manager.BrowserToolbarManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionController
 import jp.hazuki.yuzubrowser.legacy.action.manager.ActionIconManager
@@ -30,7 +31,13 @@ import jp.hazuki.yuzubrowser.legacy.toolbar.main.RequestCallback
 import jp.hazuki.yuzubrowser.legacy.utils.view.tab.TabLayout
 import jp.hazuki.yuzubrowser.ui.settings.container.ToolbarVisibilityContainer
 
-class Toolbar(context: Context, root: View, private val controller: BrowserController, private val actionController: ActionController, iconManager: ActionIconManager) : BrowserToolbarManager(context, root, actionController, iconManager, object : RequestCallback {
+class Toolbar(
+    context: Context,
+    binding: BrowserActivityBinding,
+    private val controller: BrowserController,
+    private val actionController: ActionController,
+    iconManager: ActionIconManager
+) : BrowserToolbarManager(context, binding, actionController, iconManager, object : RequestCallback {
     override fun shouldShowToolbar(visibility: ToolbarVisibilityContainer, tabData: MainTabData?, config: Configuration?): Boolean {
         if (!visibility.isVisible)
             return false

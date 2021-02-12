@@ -49,6 +49,7 @@ import jp.hazuki.yuzubrowser.browser.behavior.BottomBarBehavior
 import jp.hazuki.yuzubrowser.browser.behavior.WebViewBehavior
 import jp.hazuki.yuzubrowser.browser.connecter.openable.BrowserOpenable
 import jp.hazuki.yuzubrowser.browser.connecter.openable.forEach
+import jp.hazuki.yuzubrowser.browser.databinding.BrowserActivityBinding
 import jp.hazuki.yuzubrowser.browser.manager.UserActionManager
 import jp.hazuki.yuzubrowser.browser.tab.TabManagerFactory
 import jp.hazuki.yuzubrowser.browser.view.Toolbar
@@ -110,7 +111,6 @@ import jp.hazuki.yuzubrowser.webview.WebViewFactory
 import jp.hazuki.yuzubrowser.webview.WebViewType
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
-import kotlinx.android.synthetic.main.browser_activity.*
 import okhttp3.OkHttpClient
 import java.util.*
 import javax.inject.Inject
@@ -159,17 +159,19 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     private val scrollChangedListener: OnScrollChangedListener = { webView: CustomWebView, l: Int, t: Int, oldl: Int, oldt: Int ->
-        webViewFastScroller.onPageScroll()
-        webViewPageFastScroller?.onScrollWebView(webView)
-        if (!bottomAlwaysOverlayToolbarPadding.forceHide) {
-            val padding = if (bottomAlwaysOverlayToolbarPadding.visible) bottomAlwaysOverlayToolbar.height else 0
-            if (t + webView.computeVerticalScrollExtentMethod() + padding > webView.verticalScrollRange - bottomAlwaysOverlayToolbar.height - scrollSlop) {
-                if (!bottomAlwaysOverlayToolbarPadding.visible) {
-                    bottomAlwaysOverlayToolbarPadding.visible = true
-                    bottomAlwaysOverlayToolbarPadding.height = bottomAlwaysOverlayToolbar.height
+        binding.apply {
+            webViewFastScroller.onPageScroll()
+            webViewPageFastScroller?.onScrollWebView(webView)
+            if (!bottomAlwaysOverlayToolbarPadding.forceHide) {
+                val padding = if (bottomAlwaysOverlayToolbarPadding.visible) bottomAlwaysOverlayToolbar.height else 0
+                if (t + webView.computeVerticalScrollExtentMethod() + padding > webView.verticalScrollRange - bottomAlwaysOverlayToolbar.height - scrollSlop) {
+                    if (!bottomAlwaysOverlayToolbarPadding.visible) {
+                        bottomAlwaysOverlayToolbarPadding.visible = true
+                        bottomAlwaysOverlayToolbarPadding.height = bottomAlwaysOverlayToolbar.height
+                    }
+                } else {
+                    bottomAlwaysOverlayToolbarPadding.visible = false
                 }
-            } else {
-                bottomAlwaysOverlayToolbarPadding.visible = false
             }
         }
     }
@@ -205,21 +207,28 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     @Inject
     internal lateinit var webViewFactory: WebViewFactory
+
     @Inject
     internal lateinit var moshi: Moshi
+
     @Inject
     internal lateinit var abpDatabase: AbpDatabase
+
     @Inject
     internal lateinit var faviconManager: FaviconManager
+
     @Inject
     internal lateinit var okHttp: OkHttpClient
+
+    private lateinit var binding: BrowserActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.browser_activity)
+        binding = BrowserActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         //Crash workaround for pagePaddingHeight...
-        toolbarPadding.visibility = View.GONE
+        binding.toolbarPadding.visibility = View.GONE
 
         actionController = ActionExecutor(this, faviconManager)
         browserState = (applicationContext as BrowserApplication).browserState
@@ -233,12 +242,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory, faviconManager), this)
         webClient = WebClient(this, this, abpDatabase, faviconManager)
 
-        toolbar = Toolbar(this, superFrameLayoutInfo, this, actionController, iconManager)
+        toolbar = Toolbar(this, binding, this, actionController, iconManager)
         toolbar.addToolbarView(resources)
 
-        webViewBehavior = (webGestureOverlayView.layoutParams as CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
-        bottomBarBehavior = (bottomOverlayLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
-        superFrameLayout.setOnImeShownListener { visible ->
+        webViewBehavior = (binding.webGestureOverlayView.layoutParams as CoordinatorLayout.LayoutParams).behavior as WebViewBehavior
+        bottomBarBehavior = (binding.bottomOverlayLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBarBehavior
+        binding.superFrameLayout.setOnImeShownListener { visible ->
             if (isImeShown != visible) {
                 isImeShown = visible
                 webViewBehavior.isImeShown = visible
@@ -254,17 +263,17 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 }
             }
         }
-        topToolbar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        binding.topToolbar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                topToolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                coordinator.setToolbarHeight(topToolbar.height)
+                binding.topToolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                binding.coordinator.setToolbarHeight(binding.topToolbar.height)
                 tabManager.onLayoutCreated()
-                bottomAlwaysOverlayToolbarPadding.height = bottomAlwaysOverlayToolbar.height
+                binding.bottomAlwaysOverlayToolbarPadding.height = binding.bottomAlwaysOverlayToolbar.height
             }
         })
 
-        webViewFastScroller.attachAppBarLayout(coordinator, appbar)
-        webGestureOverlayView.setWebFrame(appbar)
+        binding.webViewFastScroller.attachAppBarLayout(binding.coordinator, binding.appbar)
+        binding.webGestureOverlayView.setWebFrame(binding.appbar)
 
         onPreferenceReset()
 
@@ -294,7 +303,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         window.decorView.setOnSystemUiVisibilityChangeListener { setFullscreenIfEnable() }
 
-        webGestureOverlayView.setOnTouchListener { _, event ->
+        binding.webGestureOverlayView.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP) {
                 requestAdjustWebView()
             }
@@ -416,8 +425,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             hideCustomView(this@BrowserActivity)
             webCustomViewHandler = null
         }
-        webFrameLayout.removeAllViews()
-        webGestureOverlayView.removeAllViews()
+        binding.webFrameLayout.removeAllViews()
+        binding.webGestureOverlayView.removeAllViews()
         tabManagerIn.destroy()
         webClient.destroy()
         isActivityDestroyed = true
@@ -626,11 +635,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         } else if (webCustomViewHandler?.isCustomViewShowing == true) {
             webCustomViewHandler!!.hideCustomView(this)
         } else if (subGestureView != null) {
-            superFrameLayout.removeView(subGestureView)
+            binding.superFrameLayout.removeView(subGestureView)
             subGestureView = null
         } else if (mouseCursorView?.backFinish == true) {
             mouseCursorView!!.setView(null)
-            webFrameLayout.removeView(mouseCursorView)
+            binding.webFrameLayout.removeView(mouseCursorView)
             mouseCursorView = null
         } else if (tabListView != null) {
             tabListView!!.close()
@@ -663,10 +672,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun adjustBrowserPadding(tab: MainTabData) {
         val mode = tab.mWebView.isInvertMode
-        toolbarPadding.setBlackColorMode(mode)
-        bottomAlwaysOverlayToolbarPadding.setBlackColorMode(mode)
+        binding.toolbarPadding.setBlackColorMode(mode)
+        binding.bottomAlwaysOverlayToolbarPadding.setBlackColorMode(mode)
 
-        webViewBehavior.adjustWebView(tab, topToolbar.height + bottomOverlayLayout.height)
+        webViewBehavior.adjustWebView(tab, binding.topToolbar.height + binding.bottomOverlayLayout.height)
     }
 
     private fun handleIntent(intent: Intent?): Boolean {
@@ -740,12 +749,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
 
             if (themeData.scrollbarAccentColor != 0) {
-                webViewFastScroller.handlePressedColor = themeData.scrollbarAccentColor
+                binding.webViewFastScroller.handlePressedColor = themeData.scrollbarAccentColor
             } else if (themeData.tabAccentColor != 0) {
-                webViewFastScroller.handlePressedColor = themeData.tabAccentColor
+                binding.webViewFastScroller.handlePressedColor = themeData.tabAccentColor
             }
         }
-        superFrameLayout.setWhiteBackgroundMode(AppPrefs.whiteBackground.get())
+        binding.superFrameLayout.setWhiteBackgroundMode(AppPrefs.whiteBackground.get())
 
         menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController, iconManager)
 
@@ -754,7 +763,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         requestedOrientation = AppPrefs.oritentation.get()
         isFullscreenMode = AppPrefs.fullscreen.get()
         isEnableMultiFingerGesture = AppPrefs.multi_finger_gesture.get()
-        userActionManager.setEnableGesture(webGestureOverlayView)
+        userActionManager.setEnableGesture(binding.webGestureOverlayView)
 
         if (AppPrefs.keep_screen_on.get())
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -763,10 +772,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         val touchScrollbar = AppPrefs.touch_scrollbar.get()
         if (touchScrollbar >= 0) {
-            webViewFastScroller.setScrollEnabled(true)
-            webViewFastScroller.isShowLeft = touchScrollbar == 1
+            binding.webViewFastScroller.setScrollEnabled(true)
+            binding.webViewFastScroller.isShowLeft = touchScrollbar == 1
         } else {
-            webViewFastScroller.setScrollEnabled(false)
+            binding.webViewFastScroller.setScrollEnabled(false)
         }
 
         ErrorReport.setDetailedLog(AppPrefs.detailed_log.get())
@@ -797,18 +806,18 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             mWebView.setOnMyCreateContextMenuListener(null)
             mWebView.setWebViewTouchDetector(null)
             mWebView.scrollableChangeListener = null
-            webFrameLayout.removeView(mWebView.view)
+            binding.webFrameLayout.removeView(mWebView.view)
             webViewBehavior.setWebView(null)
-            webViewFastScroller.detachWebView()
+            binding.webViewFastScroller.detachWebView()
         }
 
         newTab.mWebView.let {
             it.resumeTimers()
             it.onResume()
             (it.view.parent as? ViewGroup)?.removeView(it.view)
-            webFrameLayout.addView(it.view, 0)
+            binding.webFrameLayout.addView(it.view, 0)
             webViewBehavior.setWebView(it)
-            webViewFastScroller.attachWebView(it)
+            binding.webViewFastScroller.attachWebView(it)
 
             it.setOnMyCreateContextMenuListener(userActionManager.onCreateContextMenuListener)
             //TODO Rewrite
@@ -908,7 +917,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             setTabManager(tabManagerIn)
             setCallback(object : TabListLayout.Callback {
                 override fun requestTabListClose() {
-                    superFrameLayout.removeView(tabListView)
+                    binding.superFrameLayout.removeView(tabListView)
                     tabListView = null
                 }
 
@@ -953,7 +962,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 }
             })
         }
-        superFrameLayout.addView(tabListView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        binding.superFrameLayout.addView(tabListView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
     }
 
     override fun showTabHistory(target: Int) {
@@ -1042,26 +1051,26 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             addOnGesturePerformedListener { _, gesture ->
                 manager.recognize(gesture)?.let {
                     actionController.run(it)
-                    superFrameLayout.removeView(subGestureView)
+                    binding.superFrameLayout.removeView(subGestureView)
                     subGestureView = null
                 }
             }
         }
 
-        superFrameLayout.addView(subGestureView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        binding.superFrameLayout.addView(subGestureView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
     }
 
     override fun showMenu(button: View?, action: OpenOptionsMenuAction) {
         if (button != null) {
             menuWindow.showAsDropDown(button)
         } else {
-            menuWindow.show(superFrameLayout, action.gravity)
+            menuWindow.show(binding.superFrameLayout, action.gravity)
         }
     }
 
     override fun showCustomView(view: View, callback: WebChromeClient.CustomViewCallback) {
         if (webCustomViewHandler == null) {
-            webCustomViewHandler = WebCustomViewHandler(fullscreenLayout)
+            webCustomViewHandler = WebCustomViewHandler(binding.fullscreenLayout)
         }
         webCustomViewHandler!!.showCustomView(this, view, AppPrefs.web_customview_oritentation.get(), callback)
     }
@@ -1355,13 +1364,15 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun showActionName(text: String?) {
         if (text != null) {
-            actionNameTextView.visibility = View.VISIBLE
-            actionNameTextView.text = text
+            binding.actionNameTextView.also {
+                it.visibility = View.VISIBLE
+                it.text = text
+            }
         }
     }
 
     override fun hideActionName() {
-        actionNameTextView.visibility = View.GONE
+        binding.actionNameTextView.visibility = View.GONE
     }
 
     override val resourcesByInfo: Resources
@@ -1379,10 +1390,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         get() = tabManagerIn
 
     override val appBarLayout: AppBarLayout
-        get() = appbar
+        get() = binding.appbar
 
     override val superFrameLayoutInfo: CoordinatorLayout
-        get() = superFrameLayout
+        get() = binding.superFrameLayout
 
     override val activity: AppCompatActivity
         get() = this
@@ -1409,8 +1420,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     override val pagePaddingHeight: Int
-        get() = topAlwaysToolbar.height + bottomAlwaysToolbar.height +
+        get() = binding.run {
+            topAlwaysToolbar.height + bottomAlwaysToolbar.height +
                 (if (toolbarPadding.visibility == View.VISIBLE) toolbarPadding.height else 0)
+        }
 
     override var isFullscreenMode: Boolean = false
         set(enable) {
@@ -1513,7 +1526,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             mouseCursorView = PointerView(this).apply {
                 backFinish = isBackFinish
                 setView(tabManagerIn.currentTabData.mWebView.view)
-                webFrameLayout.addView(this, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                binding.webFrameLayout.addView(this, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             }
         }
     }
@@ -1521,7 +1534,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     override fun closeMousePointer() {
         mouseCursorView?.run {
             setView(null)
-            webFrameLayout.removeView(this)
+            binding.webFrameLayout.removeView(this)
             mouseCursorView = null
         }
     }
@@ -1595,7 +1608,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     override var isEnableQuickControl: Boolean
         get() = userActionManager.isPieEnabled
         set(value) {
-            userActionManager.setPieEnable(value, webFrameLayout)
+            userActionManager.setPieEnable(value, binding.webFrameLayout)
         }
 
     override var isEnableMultiFingerGesture: Boolean
@@ -1611,9 +1624,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
     override var isEnableGesture: Boolean
-        get() = webGestureOverlayView.isEnabled
+        get() = binding.webGestureOverlayView.isEnabled
         set(enable) {
-            webGestureOverlayView.isEnabled = enable
+            binding.webGestureOverlayView.isEnabled = enable
         }
 
     override val printManager: PrintManager
