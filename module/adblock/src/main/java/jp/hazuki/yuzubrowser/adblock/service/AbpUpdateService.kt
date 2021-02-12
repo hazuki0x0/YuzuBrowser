@@ -20,17 +20,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
-import androidx.core.app.NotificationCompat
+import androidx.core.app.JobIntentService
 import androidx.core.content.getSystemService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import dagger.android.DaggerIntentService
+import dagger.android.AndroidInjection
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
-import jp.hazuki.yuzubrowser.adblock.NOTIFICATION_CHANNEL_ADBLOCK_FILTER_UPDATE
-import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.filter.abp.*
 import jp.hazuki.yuzubrowser.adblock.filter.unified.UnifiedFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
@@ -51,7 +48,7 @@ import java.io.IOException
 import java.nio.charset.Charset
 import javax.inject.Inject
 
-class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
+class AbpUpdateService : JobIntentService() {
 
     @Inject
     internal lateinit var okHttpClient: OkHttpClient
@@ -59,8 +56,8 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
     @Inject
     internal lateinit var abpDatabase: AbpDatabase
 
-    override fun onHandleIntent(intent: Intent?) {
-        when (intent?.action) {
+    override fun onHandleWork(intent: Intent) {
+        when (intent.action) {
             ACTION_UPDATE_ABP -> {
                 val param1 = intent.getParcelableExtra<AbpEntity>(EXTRA_ABP_ENTRY)!!
                 val result = intent.getParcelableExtra<ResultReceiver?>(EXTRA_RESULT)
@@ -76,19 +73,7 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
 
     override fun onCreate() {
         super.onCreate()
-
-        val notify = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ADBLOCK_FILTER_UPDATE)
-            .setContentTitle(getText(R.string.updating_ad_filters))
-            .setSmallIcon(R.drawable.ic_yuzubrowser_white)
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .setProgress(0, 0, true)
-            .build()
-        startForeground(1, notify)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        stopForeground(true)
+        AndroidInjection.inject(this)
     }
 
     private fun updateAll(forceUpdate: Boolean, resultReceiver: ResultReceiver?) = runBlocking {
@@ -278,6 +263,8 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
         private const val AN_HOUR = 60 * 60 * 1000
         private const val A_DAY = 24 * AN_HOUR
 
+        private const val JOB_ID = 10
+
         fun updateAll(context: Context, forceUpdate: Boolean = false, result: UpdateResult? = null) {
             if (!forceUpdate) {
                 val prefs = AdBlockPref.get(context.applicationContext)
@@ -294,11 +281,8 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 putExtra(EXTRA_FORCE_UPDATE, forceUpdate)
                 putExtra(EXTRA_RESULT, result)
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
-            }
+
+            enqueueWork(context, AbpUpdateService::class.java, JOB_ID, intent)
         }
 
         fun update(context: Context, abpEntity: AbpEntity, result: UpdateResult? = null) {
@@ -307,11 +291,8 @@ class AbpUpdateService : DaggerIntentService("AbpUpdateService") {
                 putExtra(EXTRA_ABP_ENTRY, abpEntity)
                 putExtra(EXTRA_RESULT, result)
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
-            }
+
+            enqueueWork(context, AbpUpdateService::class.java, JOB_ID, intent)
         }
     }
 
