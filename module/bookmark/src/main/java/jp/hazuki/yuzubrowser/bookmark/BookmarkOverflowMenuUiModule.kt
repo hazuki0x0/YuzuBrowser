@@ -27,13 +27,11 @@ import jp.hazuki.yuzubrowser.bookmark.repository.HideMenuSource
 @Module
 object BookmarkOverflowMenuUiModule {
 
-    @JvmStatic
     @Provides
     fun provideHideMenuRepository(application: Application, moshi: Moshi): HideMenuRepository {
         return HideMenuSource(application, moshi)
     }
 
-    @JvmStatic
     @Provides
     fun provideOverflowMenuViewModelFactory(application: Application, hideMenuRepository: HideMenuRepository): OverflowMenuViewModel.Factory {
         return OverflowMenuViewModel.Factory(application, hideMenuRepository)

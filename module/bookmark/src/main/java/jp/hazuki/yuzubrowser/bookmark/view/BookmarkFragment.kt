@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
 import jp.hazuki.bookmark.R
+import jp.hazuki.bookmark.databinding.FragmentBookmarkBinding
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkItem
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkSite
@@ -51,7 +52,6 @@ import jp.hazuki.yuzubrowser.ui.utils.shareWeb
 import jp.hazuki.yuzubrowser.ui.widget.breadcrumbs.BreadcrumbsView
 import jp.hazuki.yuzubrowser.ui.widget.breadcrumbs.BreadcrumbsViewAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
-import kotlinx.android.synthetic.main.fragment_bookmark.*
 import java.util.*
 import javax.inject.Inject
 
@@ -76,12 +76,19 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
     @Inject
     internal lateinit var hideMenuRepository: HideMenuRepository
+
     @Inject
     internal lateinit var faviconManager: FaviconManager
 
+    private var viewBinding: FragmentBookmarkBinding? = null
+
+    private val binding: FragmentBookmarkBinding
+        get() = viewBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_bookmark, container, false)
+        viewBinding = FragmentBookmarkBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,12 +96,15 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
         val arguments = arguments ?: throw IllegalArgumentException()
 
         (activity as AppCompatActivity).run {
-            setSupportActionBar(tool_bar)
+            setSupportActionBar(binding.toolBar)
             supportActionBar?.run {
                 setDisplayHomeAsUpEnabled(true)
                 setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
             }
         }
+
+        val recyclerView = binding.recyclerView
+        val breadCrumbsView = binding.breadCrumbsView
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         val helper = ItemTouchHelper(Touch())
@@ -114,13 +124,13 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
         val firstPos = getFirstPosition(arguments)
 
-        toolbar_appbar.elevation = 0f
+        binding.toolbarAppbar.elevation = 0f
         addAllFolderCrumbs(firstPos)
         breadCrumbsView.listener = this
 
-        fastScroller.let {
+        binding.fastScroller.let {
             it.attachRecyclerView(recyclerView)
-            it.attachAppBarLayout(coordinator, subBar)
+            it.attachAppBarLayout(binding.coordinator, binding.subBar)
             it.isFixed = AppPrefs.touch_scrollbar_fixed_toolbar.get()
         }
 
@@ -142,7 +152,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             return@addCallback if (parent != null) {
                 setList(parent)
                 breadcrumbAdapter.select(breadcrumbAdapter.selectedIndex - 1)
-                subBar.setExpanded(true, false)
+                binding.subBar.setExpanded(true, false)
                 true
             } else {
                 requireActivity().finish()
@@ -153,10 +163,12 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
 
     override fun onResume() {
         super.onResume()
-        if (showBreadCrumb) {
-            toolbar_appbar.elevation = 0f
-        } else {
-            toolbar_appbar.elevation = subBar.elevation
+        binding.apply {
+            if (showBreadCrumb) {
+                toolbarAppbar.elevation = 0f
+            } else {
+                toolbarAppbar.elevation = subBar.elevation
+            }
         }
     }
 
@@ -176,7 +188,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             BookmarkFullAdapter(activity, folder.itemList, pickMode, AppPrefs.openBookmarkNewTab.get(), AppPrefs.fontSizeBookmark.get(), faviconManager, this)
         }
 
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
@@ -192,7 +204,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             is BookmarkFolder -> {
                 setList(item)
                 breadcrumbAdapter.addItem(getCrumb(item))
-                subBar.setExpanded(true, false)
+                binding.subBar.setExpanded(true, false)
             }
             else -> throw IllegalStateException("Unknown BookmarkItem type")
         }
@@ -556,6 +568,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             AppPrefs.saveBookmarkFolderId.set(mCurrentFolder.id)
             AppPrefs.commit(requireContext(), AppPrefs.saveBookmarkFolderId)
         }
+        viewBinding = null
     }
 
     private inner class Touch : ItemTouchHelper.Callback() {
@@ -578,21 +591,23 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
     }
 
     private fun showBreadCrumbs(show: Boolean) {
-        if (show) {
-            if (subBar.childCount == 0) {
-                subBar.addView(breadCrumbsView)
+        binding.apply {
+            if (show) {
+                if (subBar.childCount == 0) {
+                    subBar.addView(breadCrumbsView)
+                }
+            } else {
+                if (subBar.childCount == 1) {
+                    subBar.removeView(breadCrumbsView)
+                }
             }
-        } else {
-            if (subBar.childCount == 1) {
-                subBar.removeView(breadCrumbsView)
+            showBreadCrumb = show
+            setTitle(mCurrentFolder)
+            if (show) {
+                toolbarAppbar.elevation = 0f
+            } else {
+                toolbarAppbar.elevation = subBar.elevation
             }
-        }
-        showBreadCrumb = show
-        setTitle(mCurrentFolder)
-        if (show) {
-            toolbar_appbar.elevation = 0f
-        } else {
-            toolbar_appbar.elevation = subBar.elevation
         }
     }
 
