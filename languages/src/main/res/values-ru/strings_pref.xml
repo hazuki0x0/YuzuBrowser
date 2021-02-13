@@ -441,7 +441,6 @@
     <string name="pref_privacy_policy">Политика конфиденциальности</string>
     <string name="mining_protect">Без монетизации</string>
     <string name="mining_protect_summary">Защита от майнинга криптовалют</string>
-    <string name="pref_storage_location_warn">Это хранилище может не работать должным образом с другими приложениями.</string>
     <string name="pref_fake_chrome">Маскироваться под Chrome</string>
     <string name="pref_fake_chrome_summary">Использовать по умолчанию UserAgent как в Chrome</string>
     <string name="pref_toolbar_small_icon">Показывать значок при длительном нажатии</string>

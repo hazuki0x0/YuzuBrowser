@@ -445,7 +445,6 @@
     <string name="pref_privacy_policy">Політика конфіденційності</string>
     <string name="mining_protect">Блокування майнінгу</string>
     <string name="mining_protect_summary">Захист від видобутку криптовалюти</string>
-    <string name="pref_storage_location_warn">Це місце зберігання може працювати неправильно з іншими додатками.</string>
     <string name="pref_fake_chrome">Замаскований під Chrome</string>
     <string name="pref_fake_chrome_summary">За замовчуванням видавати агента користувача за Chrome</string>
     <string name="pref_toolbar_small_icon">Показувати піктограму дії тривалого натискання</string>

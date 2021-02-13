@@ -25,11 +25,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreference
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
-import jp.hazuki.yuzubrowser.core.utility.extensions.canResolvePath
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
-import jp.hazuki.yuzubrowser.ui.widget.longToast
 
 class BrowserSettingsFragment : YuzuPreferenceFragment() {
 
@@ -95,10 +93,6 @@ class BrowserSettingsFragment : YuzuPreferenceFragment() {
 
                 AppPrefs.download_folder.set(uri.toString())
                 AppPrefs.commit(activity, AppPrefs.download_folder)
-
-                if (!uri.canResolvePath(activity)) {
-                    activity.longToast(R.string.pref_storage_location_warn)
-                }
             }
         }
     }

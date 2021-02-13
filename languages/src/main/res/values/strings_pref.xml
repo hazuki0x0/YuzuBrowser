@@ -445,7 +445,6 @@
     <string name="pref_privacy_policy">Privacy Policy</string>
     <string name="mining_protect">No Coin</string>
     <string name="mining_protect_summary">Cryptocurrency mining protection</string>
-    <string name="pref_storage_location_warn">This storage location may not work properly with other apps.</string>
     <string name="pref_fake_chrome">Disguised as Chrome</string>
     <string name="pref_fake_chrome_summary">Impersonate default UserAgent as Chrome</string>
     <string name="pref_toolbar_small_icon">Show long pressed icon</string>

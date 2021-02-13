@@ -161,31 +161,6 @@ private fun Context.resolveFilePath(uuid: String, extPath: String): String? {
     return null
 }
 
-fun Uri.resolveDirectoryPath(context: Context): String? {
-    return if (isFileUri()) {
-        toString().substring(7) // trim "file://"
-    } else if (isDownloadsDocument()) {
-        "${Environment.getExternalStorageDirectory()}/Download"
-    } else if (isContentUri() && isExternalStorageDocument() && isTreeUri()) {
-        val split = pathSegments[1].split(':').dropLastWhile { it.isEmpty() }.toTypedArray()
-        if (split.size == 1) {
-            context.resolveStoragePath(split[0])
-        } else {
-            "${context.resolveStoragePath(split[0])}/${split[1]}"
-        }
-    } else {
-        null
-    }
-}
-
-fun Uri.canResolvePath(context: Context): Boolean {
-    val path = resolveDirectoryPath(context)
-    if (path != null) {
-        return File(path).exists()
-    }
-    return false
-}
-
 private fun Context.resolveStoragePath(uuid: String): String? {
     getStorageList().forEach {
         if (it.uuid == uuid) return it.path

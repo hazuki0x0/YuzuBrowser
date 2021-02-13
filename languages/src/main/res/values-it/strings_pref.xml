@@ -441,7 +441,6 @@
     <string name="pref_privacy_policy">politica sulla privacy</string>
     <string name="mining_protect">Nessuna moneta</string>
     <string name="mining_protect_summary">Protezione mineraria da criptovaluta</string>
-    <string name="pref_storage_location_warn">Questa posizione di archiviazione potrebbe non funzionare correttamente con altre app.</string>
     <string name="pref_fake_chrome">Travestito da Chrome</string>
     <string name="pref_fake_chrome_summary">Impersonare UserAgent predefinito come Chrome</string>
     <string name="pref_toolbar_small_icon">Mostra le icone per la pressione lunga</string>

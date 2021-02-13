@@ -441,7 +441,6 @@
     <string name="pref_privacy_policy">Datenschutzerklärung</string>
     <string name="mining_protect">ohne Münze</string>
     <string name="mining_protect_summary">Kryptowährung Mining-Schutz</string>
-    <string name="pref_storage_location_warn">Dieser Speicherort funktioniert möglicherweise nicht ordnungsgemäß mit anderen Anwendungen.</string>
     <string name="pref_fake_chrome">Als Chrome tarnen</string>
     <string name="pref_fake_chrome_summary">Standard UserAgent als Chrome ausgeben</string>
     <string name="pref_toolbar_small_icon">Symbol bei langem Drücken anzeigen</string>

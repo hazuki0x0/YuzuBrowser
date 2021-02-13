@@ -442,7 +442,6 @@
     <string name="pref_privacy_policy">隐私政策</string>
     <string name="mining_protect">拒绝挖币</string>
     <string name="mining_protect_summary">加密币挖掘脚本保护</string>
-    <string name="pref_storage_location_warn">此存储位置可能无法在其他应用之间正常工作。</string>
     <string name="pref_fake_chrome">伪装为 Chrome</string>
     <string name="pref_fake_chrome_summary">将默认 UserAgent 伪装为 Chrome</string>
     <string name="pref_toolbar_small_icon">显示长按图标</string>
