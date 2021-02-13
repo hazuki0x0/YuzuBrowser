@@ -75,7 +75,6 @@ dependencies {
     implementation AndroidX.room
     implementation AndroidX.roomKtx
     implementation AndroidX.fix_preference
-    implementation AndroidX.localBroadcast
     implementation AndroidX.fragmentKtx
     kapt AndroidX.roomCompiler
 

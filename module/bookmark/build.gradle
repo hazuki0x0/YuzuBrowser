@@ -75,7 +75,6 @@ dependencies {
     implementation AndroidX.KTX
     implementation AndroidX.fragmentKtx
     implementation AndroidX.lifecycle
-    implementation AndroidX.localBroadcast
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler

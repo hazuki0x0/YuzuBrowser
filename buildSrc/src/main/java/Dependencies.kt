@@ -79,9 +79,6 @@ object AndroidX {
     const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
     const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifeCycle}"
     const val print = "androidx.print:print:${Versions.print}"
-
-
-    const val localBroadcast = "androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01"
 }
 
 object Libs {
