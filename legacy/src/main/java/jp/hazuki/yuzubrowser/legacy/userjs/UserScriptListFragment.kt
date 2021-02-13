@@ -22,7 +22,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -33,16 +32,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.databinding.FragmentUserScriptListBinding
 import jp.hazuki.yuzubrowser.legacy.databinding.FragmentUserjsItemBinding
-import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.extensions.registerForStartActivityForResult
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import java.io.File
 import java.io.IOException
 
 class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDialogCompat.OnDelete {
@@ -75,14 +72,15 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
             }
 
             addByEditFab.setOnClickListener {
-                startActivityForResult(Intent(activity, UserScriptEditActivity::class.java), REQUEST_ADD_USERJS)
+                resetLauncher.launch(Intent(activity, UserScriptEditActivity::class.java))
                 fabMenu.close(false)
             }
 
             addFromFileFab.setOnClickListener {
-                val intent = Intent(activity, FileListActivity::class.java)
-                intent.putExtra(FileListActivity.EXTRA_FILE, Environment.getExternalStorageDirectory())
-                startActivityForResult(intent, REQUEST_ADD_FROM_FILE)
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    type = "application/javascript"
+                }
+                importFromFileLauncher.launch(intent)
                 fabMenu.close(false)
             }
 
@@ -119,7 +117,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
                     val item = adapter[position]
                     intent.putExtra(Intent.EXTRA_TITLE, item.name)
                     intent.putExtra(UserScriptEditActivity.EXTRA_USERSCRIPT, item.id)
-                    startActivityForResult(intent, REQUEST_EDIT_USERJS)
+                    resetLauncher.launch(intent)
                     false
                 }
 
@@ -143,33 +141,33 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
             .show(childFragmentManager, "info")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_ADD_USERJS, REQUEST_EDIT_USERJS -> {
-                if (resultCode != RESULT_OK) return
-                reset()
-            }
-            REQUEST_ADD_FROM_FILE -> {
-                if (resultCode != RESULT_OK || data == null) return
-                val file = data.getSerializableExtra(FileListActivity.EXTRA_FILE) as? File
-                    ?: throw NullPointerException("file is null")
-                AlertDialog.Builder(activity)
-                    .setTitle(R.string.confirm)
-                    .setMessage(String.format(getString(R.string.userjs_add_file_confirm), file.name))
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        try {
-                            val data1 = IOUtils.readFile(file, "UTF-8")
-                            mDb.add(UserScript(data1))
-                            reset()
-                        } catch (e: IOException) {
-                            ErrorReport.printAndWriteLog(e)
-                            Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
-            }
+    private val resetLauncher = registerForStartActivityForResult {
+        if (it.resultCode == RESULT_OK) reset()
+    }
+
+    private val importFromFileLauncher = registerForStartActivityForResult {
+        if (it.resultCode != RESULT_OK) return@registerForStartActivityForResult
+
+        val uri = it.data!!.data
+        if (uri == null) {
+            Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
+            return@registerForStartActivityForResult
         }
+
+        try {
+            requireContext().contentResolver.openInputStream(uri)?.apply {
+                reader().use { reader ->
+                    val data = reader.readText()
+                    mDb.add(UserScript(data))
+                    read()
+                    Toast.makeText(activity, R.string.succeed, Toast.LENGTH_LONG).show()
+                    return@registerForStartActivityForResult
+                }
+            }
+        } catch (e: IOException) {
+            ErrorReport.printAndWriteLog(e)
+        }
+        Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -302,11 +300,5 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
                 adapter.onInfoButtonClick(adapterPosition, item)
             }
         }
-    }
-
-    companion object {
-        private const val REQUEST_ADD_USERJS = 1
-        private const val REQUEST_EDIT_USERJS = 2
-        private const val REQUEST_ADD_FROM_FILE = 3
     }
 }
