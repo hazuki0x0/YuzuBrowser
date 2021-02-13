@@ -1,2 +1,13 @@
-<manifest
-    package="jp.hazuki.yuzubrowser.ui"/>
+<manifest package="jp.hazuki.yuzubrowser.ui"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".RestartActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:process=":restart_process"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
+</manifest>

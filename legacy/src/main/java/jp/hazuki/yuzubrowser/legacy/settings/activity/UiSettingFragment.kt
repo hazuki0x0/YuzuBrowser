@@ -13,37 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package jp.hazuki.yuzubrowser.legacy.settings.activity
 
-package jp.hazuki.yuzubrowser.legacy.settings.activity;
+import android.os.Bundle
+import androidx.fragment.app.commit
+import androidx.preference.Preference
+import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.ui.RestartActivity
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.utils.AppUtils;
-
-public class UiSettingFragment extends YuzuPreferenceFragment {
-
-    @Override
-    public void onCreateYuzuPreferences(@Nullable Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.pref_ui_settings);
-
-        findPreference("theme_setting").setOnPreferenceChangeListener((preference, newValue) -> {
-            AppUtils.restartApp(getActivity());
-            return true;
-        });
-
-        findPreference("restart").setOnPreferenceClickListener(preference -> {
-            AppUtils.restartApp(getActivity());
-            return true;
-        });
-
-        findPreference("reader_settings").setOnPreferenceClickListener(preference -> {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new ReaderSettingsFragment())
-                    .addToBackStack("reader_settings")
-                    .commit();
-            return true;
-        });
+class UiSettingFragment : YuzuPreferenceFragment() {
+    override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.pref_ui_settings)
+        findPreference<Preference>("theme_setting")!!.setOnPreferenceChangeListener { _, _ ->
+            startActivity(RestartActivity.createIntent(requireContext()))
+            true
+        }
+        findPreference<Preference>("restart")!!.setOnPreferenceClickListener {
+            startActivity(RestartActivity.createIntent(requireContext()))
+            true
+        }
+        findPreference<Preference>("reader_settings")!!.setOnPreferenceClickListener {
+            parentFragmentManager.commit {
+                replace(R.id.container, ReaderSettingsFragment())
+                addToBackStack("reader_settings")
+            }
+            true
+        }
     }
 }

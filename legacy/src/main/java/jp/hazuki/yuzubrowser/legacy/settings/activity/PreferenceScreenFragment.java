@@ -18,9 +18,8 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity;
 
 import android.os.Bundle;
 
-import com.takisoft.preferencex.PreferenceFragmentCompat;
-
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceFragmentCompat;
 
 public class PreferenceScreenFragment extends YuzuPreferenceFragment {
     private static final String ARG_ID = "id";

@@ -22,8 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
-import com.takisoft.preferencex.PreferenceFragmentCompat
 import jp.hazuki.yuzubrowser.ui.PREFERENCE_FILE_NAME
 import jp.hazuki.yuzubrowser.ui.R
 
@@ -34,7 +34,7 @@ abstract class YuzuBasePreferenceFragment : PreferenceFragmentCompat() {
 
     abstract fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?)
 
-    override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = PREFERENCE_FILE_NAME
         onCreateYuzuPreferences(savedInstanceState, rootKey)
     }

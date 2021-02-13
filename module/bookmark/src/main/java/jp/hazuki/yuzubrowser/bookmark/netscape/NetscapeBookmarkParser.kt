@@ -28,6 +28,7 @@ import org.jsoup.nodes.DocumentType
 import org.jsoup.nodes.Element
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 
 class NetscapeBookmarkParser(
     private val parent: BookmarkFolder,
@@ -38,7 +39,14 @@ class NetscapeBookmarkParser(
         if (!file.name.endsWith(".html", true) && !file.name.endsWith(".htm", true)) {
             throw NetscapeBookmarkException()
         }
-        val document = Jsoup.parse(file, "UTF-8")
+        parse(Jsoup.parse(file, "UTF-8"))
+    }
+
+    fun parse(inputStream: InputStream) {
+        parse(Jsoup.parse(inputStream, "UTF-8", ""))
+    }
+
+    private fun parse(document: Document) {
         document.getElementsByTag("p").remove()
         if (!checkDocType(document)) {
             throw NetscapeBookmarkException()
@@ -46,7 +54,8 @@ class NetscapeBookmarkParser(
 
         val itemRoot = document.body() ?: throw NetscapeBookmarkException()
 
-        parseItem(itemRoot.children().firstOrNull { it.tagName() == "dl" } ?: throw NetscapeBookmarkException(), parent)
+        parseItem(itemRoot.children().firstOrNull { it.tagName() == "dl" }
+            ?: throw NetscapeBookmarkException(), parent)
     }
 
     private fun parseItem(element: Element, parent: BookmarkFolder) {

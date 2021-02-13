@@ -44,15 +44,21 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInje
     override val providerManager = ProviderManager()
     override val context: Context
         get() = this
+
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
     @Inject
     override lateinit var moshi: Moshi
+
     @Inject
     lateinit var abpDatabase: AbpDatabase
 
+    private var isNeedInject = true
+
     override fun onCreate() {
         super.onCreate()
+        injectIfNeed()
         registerDownloadNotification()
         registerAdBlockNotification()
 
@@ -68,8 +74,15 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInje
     }
 
     override fun androidInjector(): AndroidInjector<Any> {
-        DaggerAppComponent.factory().create(this).inject(this)
+        injectIfNeed()
         return androidInjector
+    }
+
+    private fun injectIfNeed() {
+        if (isNeedInject) {
+            isNeedInject = false
+            DaggerAppComponent.factory().create(this).inject(this)
+        }
     }
 
     companion object {

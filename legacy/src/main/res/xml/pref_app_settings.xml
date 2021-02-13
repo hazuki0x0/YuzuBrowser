@@ -16,9 +16,11 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:title="@string/pref_app_settings">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_app_settings">
 
     <SwitchPreference
         android:key="enable_share"
-        android:title="@string/enable_share" />
+        android:title="@string/enable_share"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

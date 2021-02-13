@@ -20,125 +20,154 @@
                   android:title="@string/pref_operation_settings">
     <PreferenceScreen
         android:key="ps_hardware_button"
-        android:title="@string/pref_hardbtn_settings">
+        android:title="@string/pref_hardbtn_settings"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_back_press"
             app:actionGroup="h_btn"
-            app:actionId="btnBackPress" />
+            app:actionId="btnBackPress"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_back_lpress"
             app:actionGroup="h_btn"
-            app:actionId="btnBackLpress" />
+            app:actionId="btnBackLpress"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_serach_press"
             app:actionGroup="h_btn"
-            app:actionId="btnSearchPress" />
+            app:actionId="btnSearchPress"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_volume_up"
             app:actionGroup="h_btn"
-            app:actionId="btnVolumeUp" />
+            app:actionId="btnVolumeUp"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_volume_down"
             app:actionGroup="h_btn"
-            app:actionId="btnVolumeDown" />
+            app:actionId="btnVolumeDown"
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             android:key="volume_default_playing"
-            android:title="@string/pref_btn_volume_default_play" />
+            android:title="@string/pref_btn_volume_default_play"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_camera_press"
             app:actionGroup="h_btn"
-            app:actionId="btnCameraPress" />
+            app:actionId="btnCameraPress"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:key="menu_btn_list_mode"
             android:title="@string/pref_btn_menu_press"
             android:summary="@string/action_open_menu"
             android:entries="@array/action_open_menu_list"
-            android:entryValues="@array/action_open_menu_values" />
+            android:entryValues="@array/action_open_menu_values"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_software_button"
-        android:title="@string/pref_softbtn_settings">
+        android:title="@string/pref_softbtn_settings"
+        app:iconSpaceReserved="false">
         <PreferenceCategory
-            android:title="@string/pref_basic_settings">
+            android:title="@string/pref_basic_settings"
+            app:iconSpaceReserved="false">
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="swipebtn_sensitivity"
                 android:title="@string/pref_sensitivity_distance"
                 app:seekMax="500"
-                app:seekMin="10" />
+                app:seekMin="10"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
         <PreferenceCategory
-            android:title="@string/pref_action_settings">
+            android:title="@string/pref_action_settings"
+            app:iconSpaceReserved="false">
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ToolbarActionListPrerence
                 android:title="@string/pref_btn_tab_left"
                 app:actionGroup="s_btn_array"
-                app:actionId="btnTabLeft" />
+                app:actionId="btnTabLeft"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ToolbarActionListPrerence
                 android:title="@string/pref_btn_tab_right"
                 app:actionGroup="s_btn_array"
-                app:actionId="btnTabRight" />
+                app:actionId="btnTabRight"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ToolbarActionListPrerence
                 android:title="@string/pref_btn_url_left"
                 app:actionGroup="s_btn_array"
-                app:actionId="btnUrlLeft" />
+                app:actionId="btnUrlLeft"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.legacy.settings.preference.SoftButtonActionPreference
                 android:title="@string/pref_btn_url_center"
                 app:actionGroup="s_btn"
-                app:actionId="btnCenter" />
+                app:actionId="btnCenter"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ToolbarActionListPrerence
                 android:title="@string/pref_btn_url_right"
                 app:actionGroup="s_btn_array"
-                app:actionId="btnUrlRight" />
+                app:actionId="btnUrlRight"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ToolbarActionListPrerence
                 android:title="@string/pref_btn_custom"
                 app:actionGroup="s_btn_custombar"
-                app:actionId="custombar1" />
+                app:actionId="custombar1"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_tab_action"
-        android:title="@string/pref_tab_action">
+        android:title="@string/pref_tab_action"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="tab_action_sensitivity"
             android:title="@string/pref_sensitivity_distance"
             app:seekMax="500"
-            app:seekMin="10" />
+            app:seekMin="10"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_action_up"
             app:actionGroup="tab"
-            app:actionId="tabUp" />
+            app:actionId="tabUp"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_action_down"
             app:actionGroup="tab"
-            app:actionId="tabDown" />
+            app:actionId="tabDown"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_action_press"
             app:actionGroup="tab"
-            app:actionId="tabPress" />
+            app:actionId="tabPress"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_btn_action_lpress"
             app:actionGroup="tab"
-            app:actionId="tabLPress" />
+            app:actionId="tabLPress"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
 
     <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionListPreference
         android:title="@string/pref_menu_settings"
         app:actionGroup="menu"
-        app:actionId="menuBrowserActivity" />
+        app:actionId="menuBrowserActivity"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="ps_bookmark"
-        android:title="@string/pref_bookmark">
+        android:title="@string/pref_bookmark"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="save_bookmark_folder"
-            android:title="@string/save_bookmark_folder"/>
+            android:title="@string/save_bookmark_folder"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:key="open_bookmark_new_tab"
             android:title="@string/open_bookmark_new_tab"
-            android:summary="@string/open_bookmark_new_tab_info"/>
+            android:summary="@string/open_bookmark_new_tab_info"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:dependency="open_bookmark_new_tab"
@@ -146,243 +175,299 @@
             android:key="open_bookmark_icon_action"
             android:title="@string/open_bookmark_new_tab_action"
             android:entries="@array/pref_newtab_list"
-            android:entryValues="@array/pref_newtab_values"/>
+            android:entryValues="@array/pref_newtab_values"
+            app:iconSpaceReserved="false" />
 
-        <PreferenceCategory android:title="@string/pref_bookmark_overflow">
+        <PreferenceCategory
+            android:title="@string/pref_bookmark_overflow"
+            app:iconSpaceReserved="false">
             <Preference
                 android:key="bookmark_option_site"
-                android:title="@string/site"/>
+                android:title="@string/site"
+                app:iconSpaceReserved="false" />
             <Preference
                 android:key="bookmark_option_folder"
-                android:title="@string/folder"/>
+                android:title="@string/folder"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceScreen>
 
     <PreferenceScreen
         android:key="ps_web_gesture"
-        android:title="@string/pref_web_gesture_settings">
+        android:title="@string/pref_web_gesture_settings"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="gesture_enable_web"
-            android:title="@string/pref_gesture_enable" />
+            android:title="@string/pref_gesture_enable"
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             android:key="gesture_line_web"
-            android:title="@string/pref_gesture_line" />
+            android:title="@string/pref_gesture_line"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.FloatSeekbarPreference
             android:key="gesture_score_web"
             android:title="@string/pref_gesture_score"
             app:denominator="10"
             app:seekMax="200"
-            app:seekMin="10" />
+            app:seekMin="10"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.legacy.settings.preference.GestureListPreference
             android:title="@string/pref_gesture_settings"
             app:gestureId="web"
-            app:intentTitle="@string/pref_web_gesture_settings" />
+            app:intentTitle="@string/pref_web_gesture_settings"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_sub_gesture"
-        android:title="@string/pref_sub_gesture_settings">
+        android:title="@string/pref_sub_gesture_settings"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.ui.preference.FloatSeekbarPreference
             android:key="gesture_score_sub"
             android:title="@string/pref_gesture_score"
             app:denominator="10"
             app:seekMax="200"
-            app:seekMin="10" />
+            app:seekMin="10"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.legacy.settings.preference.GestureListPreference
             android:title="@string/pref_gesture_settings"
             app:gestureId="sub"
-            app:intentTitle="@string/pref_sub_gesture_settings" />
+            app:intentTitle="@string/pref_sub_gesture_settings"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
     <Preference
         android:key="mf_gesture"
-        android:title="@string/pref_multi_finger_gesture_settings" />
+        android:title="@string/pref_multi_finger_gesture_settings"
+        app:iconSpaceReserved="false" />
     <PreferenceScreen
         android:key="ps_flick"
-        android:title="@string/pref_flick_settings">
+        android:title="@string/pref_flick_settings"
+        app:iconSpaceReserved="false">
         <PreferenceCategory
-            android:title="@string/pref_basic_settings">
+            android:title="@string/pref_basic_settings"
+            app:iconSpaceReserved="false">
             <SwitchPreference
                 android:key="flick_enable"
-                android:title="@string/pref_flick_enable" />
+                android:title="@string/pref_flick_enable"
+                app:iconSpaceReserved="false" />
             <SwitchPreference
                 android:key="flick_edge"
-                android:title="@string/pref_flick_edge" />
+                android:title="@string/pref_flick_edge"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="flick_sensitivity_speed"
                 android:title="@string/pref_sensitivity_speed"
                 app:seekMax="100"
-                app:seekMin="0" />
+                app:seekMin="0"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="flick_sensitivity_distance"
                 android:title="@string/pref_sensitivity_distance"
                 app:seekMax="100"
-                app:seekMin="0" />
+                app:seekMin="0"
+                app:iconSpaceReserved="false" />
             <SwitchPreference
                 android:key="flick_disable_scroll"
-                android:title="@string/pref_flick_disable_scrolling" />
+                android:title="@string/pref_flick_disable_scrolling"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
         <PreferenceCategory
             android:title="@string/pref_action_settings">
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_flick_left"
                 app:actionGroup="flick"
-                app:actionId="flickLeft" />
+                app:actionId="flickLeft"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_flick_right"
                 app:actionGroup="flick"
-                app:actionId="flickRight" />
+                app:actionId="flickRight"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_two_finger_swipe"
-        android:title="@string/pref_web_swipe_settings">
+        android:title="@string/pref_web_swipe_settings"
+        app:iconSpaceReserved="false">
         <PreferenceCategory
-            android:title="@string/pref_basic_settings">
+            android:title="@string/pref_basic_settings"
+            app:iconSpaceReserved="false">
             <SwitchPreference
                 android:key="webswipe_enable"
-                android:title="@string/pref_web_swipe_enable" />
+                android:title="@string/pref_web_swipe_enable"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="webswipe_sensitivity_speed"
                 android:title="@string/pref_sensitivity_speed"
                 app:seekMax="100"
-                app:seekMin="0" />
+                app:seekMin="0"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="webswipe_sensitivity_distance"
                 android:title="@string/pref_sensitivity_distance"
                 app:seekMax="100"
-                app:seekMin="0" />
+                app:seekMin="0"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
         <PreferenceCategory
-            android:title="@string/pref_action_settings">
+            android:title="@string/pref_action_settings"
+            app:iconSpaceReserved="false">
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_btn_action_up"
                 app:actionGroup="web_swipe"
-                app:actionId="swipeUp" />
+                app:actionId="swipeUp"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_btn_action_down"
                 app:actionGroup="web_swipe"
-                app:actionId="swipeDown" />
+                app:actionId="swipeDown"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_btn_action_left"
                 app:actionGroup="web_swipe"
-                app:actionId="swipeLeft" />
+                app:actionId="swipeLeft"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_btn_action_right"
                 app:actionGroup="web_swipe"
-                app:actionId="swipeRight" />
+                app:actionId="swipeRight"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_double_tap_flick"
-        android:title="@string/pref_double_tap_flick_settings">
+        android:title="@string/pref_double_tap_flick_settings"
+        app:iconSpaceReserved="false">
         <PreferenceCategory
-            android:title="@string/pref_basic_settings">
+            android:title="@string/pref_basic_settings"
+            app:iconSpaceReserved="false">
             <SwitchPreference
                 android:key="double_tap_flick_enable"
-                android:title="@string/pref_double_tap_flick_enable" />
+                android:title="@string/pref_double_tap_flick_enable"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="double_tap_flick_sensitivity_speed"
                 android:title="@string/pref_sensitivity_speed"
                 app:seekMax="100"
-                app:seekMin="0" />
+                app:seekMin="0"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
                 android:key="double_tap_flick_sensitivity_distance"
                 android:title="@string/pref_sensitivity_distance"
                 app:seekMax="100"
-                app:seekMin="0" />
+                app:seekMin="0"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
         <PreferenceCategory
             android:title="@string/pref_action_settings">
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_flick_left"
                 app:actionGroup="double_tap_flick"
-                app:actionId="flickLeft" />
+                app:actionId="flickLeft"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_flick_right"
                 app:actionGroup="double_tap_flick"
-                app:actionId="flickRight" />
+                app:actionId="flickRight"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_flick_up"
                 app:actionGroup="double_tap_flick"
-                app:actionId="flickUp" />
+                app:actionId="flickUp"
+                app:iconSpaceReserved="false" />
             <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
                 android:title="@string/pref_flick_down"
                 app:actionGroup="double_tap_flick"
-                app:actionId="flickDown" />
+                app:actionId="flickDown"
+                app:iconSpaceReserved="false" />
 
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_qc"
-        android:title="@string/pref_qc_settings">
+        android:title="@string/pref_qc_settings"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="qc_enable"
-            android:title="@string/pref_qc_enable" />
+            android:title="@string/pref_qc_enable"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="qc_rad_start"
             android:title="@string/pref_qc_rad_start"
             app:seekMax="300"
-            app:seekMin="1" />
+            app:seekMin="1"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="qc_rad_inc"
             android:title="@string/pref_qc_rad_inc"
             app:seekMax="300"
-            app:seekMin="1" />
+            app:seekMin="1"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="qc_slop"
             android:title="@string/pref_qc_slop"
             app:seekMax="300"
-            app:seekMin="1" />
+            app:seekMin="1"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:key="qc_position"
             android:title="@string/pref_qc_r_pos"
             android:entries="@array/pref_qc_r_pos_list"
-            android:entryValues="@array/pref_qc_r_pos_values" />
+            android:entryValues="@array/pref_qc_r_pos_values"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionListPreference
             android:title="@string/pref_qc_level1"
             app:actionGroup="qc"
-            app:actionId="qcLevel1" />
+            app:actionId="qcLevel1"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionListPreference
             android:title="@string/pref_qc_level2"
             app:actionGroup="qc"
-            app:actionId="qcLevel2" />
+            app:actionId="qcLevel2"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionListPreference
             android:title="@string/pref_qc_level3"
             app:actionGroup="qc"
-            app:actionId="qcLevel3" />
+            app:actionId="qcLevel3"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="ps_long_press"
-        android:title="@string/pref_lpress_settings">
+        android:title="@string/pref_lpress_settings"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:entries="@array/pref_lpress_link_list"
             android:entryValues="@array/pref_lpress_link_values"
             android:title="@string/pref_lpress_link"
             app:actionGroup="longpress"
-            app:actionId="lpLink" />
+            app:actionId="lpLink"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:entries="@array/pref_lpress_image_list"
             android:entryValues="@array/pref_lpress_image_values"
             android:title="@string/pref_lpress_image"
             app:actionGroup="longpress"
-            app:actionId="lpImage" />
+            app:actionId="lpImage"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:entries="@array/pref_lpress_linkimage_list"
             android:entryValues="@array/pref_lpress_linkimage_values"
             android:title="@string/pref_lpress_linkimage"
             app:actionGroup="longpress"
-            app:actionId="lpImageLink" />
+            app:actionId="lpImageLink"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.legacy.settings.preference.ActionPreference
             android:title="@string/pref_lpress_others"
             app:actionGroup="longpress"
-            app:actionId="lpOthers" />
+            app:actionId="lpOthers"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
 
 </PreferenceScreen>

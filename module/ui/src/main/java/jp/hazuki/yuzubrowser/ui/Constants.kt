@@ -31,7 +31,6 @@ const val PREFERENCE_FILE_NAME = "main_preference"
 
 const val INTENT_EXTRA_OPENABLE = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_OPENABLE"
 const val INTENT_EXTRA_LOAD_URL_TAB = "jp.hazuki.yuzubrowser.BrowserActivity.extra.EXTRA_LOAD_URL_TAB"
-const val INTENT_EXTRA_RESTART = "jp.hazuki.yuzubrowser.BrowserActivity.extra.restart"
 
 const val BROWSER_LOAD_URL_TAB_CURRENT = 0
 const val BROWSER_LOAD_URL_TAB_NEW = 1

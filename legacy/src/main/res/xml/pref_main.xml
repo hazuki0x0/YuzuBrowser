@@ -15,45 +15,56 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
         android:key="fragment_browser"
-        android:title="@string/pref_browser_settings"/>
+        android:title="@string/pref_browser_settings"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_page"
-        android:title="@string/pref_page_settings"/>
+        android:title="@string/pref_page_settings"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_privacy"
-        android:title="@string/pref_privacy_settings"/>
+        android:title="@string/pref_privacy_settings"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_ui"
-        android:title="@string/pref_ui_settings"/>
+        android:title="@string/pref_ui_settings"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_action"
-        android:title="@string/pref_operation_settings"/>
+        android:title="@string/pref_operation_settings"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_speseddial"
-        android:title="@string/pref_speed_dial_setting"/>
+        android:title="@string/pref_speed_dial_setting"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_application"
-        android:title="@string/pref_app_settings"/>
+        android:title="@string/pref_app_settings"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_import_export"
-        android:title="@string/pref_import_export"/>
+        android:title="@string/pref_import_export"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="activity_help"
-        android:title="@string/pref_help"/>
+        android:title="@string/pref_help"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="fragment_about"
-        android:title="@string/pref_about"/>
+        android:title="@string/pref_about"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

@@ -16,55 +16,72 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto"
-                  android:title="@string/pref_page_settings">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_page_settings">
 
-    <PreferenceCategory android:title="@string/useragent">
+    <PreferenceCategory
+        android:title="@string/useragent"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.legacy.settings.preference.UserAgentListPreference
             android:key="user_agent"
-            android:title="@string/pref_user_agent" />
+            android:title="@string/pref_user_agent"
+            app:iconSpaceReserved="false" />
 
-        <jp.hazuki.yuzubrowser.legacy.settings.preference.UserAgentListSettingsPreference android:title="@string/action_useragent_setting" />
+        <jp.hazuki.yuzubrowser.legacy.settings.preference.UserAgentListSettingsPreference
+            android:title="@string/action_useragent_setting"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:key="fake_chrome"
             android:title="@string/pref_fake_chrome"
-            android:summary="@string/pref_fake_chrome_summary"/>
+            android:summary="@string/pref_fake_chrome_summary"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="@string/pref_text_encoding">
+    <PreferenceCategory
+        android:title="@string/pref_text_encoding"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.legacy.settings.preference.WebTextEncodeListPreference
             android:key="default_encoding"
-            android:title="@string/pref_default_encoding" />
+            android:title="@string/pref_default_encoding"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="web_encode_list"
-            android:title="@string/action_web_encode_setting" />
+            android:title="@string/action_web_encode_setting"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <SwitchPreference
         android:key="javascript"
-        android:title="@string/pref_javascript" />
+        android:title="@string/pref_javascript"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="load_overview"
-        android:title="@string/pref_load_overview" />
+        android:title="@string/pref_load_overview"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="web_wideview"
-        android:title="@string/pref_web_wideview" />
+        android:title="@string/pref_web_wideview"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="web_popup"
-        android:title="@string/pref_web_popup" />
+        android:title="@string/pref_web_popup"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="show_zoom_button"
-        android:title="@string/pref_show_zoom_button" />
+        android:title="@string/pref_show_zoom_button"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="block_web_images"
-        android:title="@string/pref_block_images" />
+        android:title="@string/pref_block_images"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="fast_back"
-        android:title="@string/pref_fast_back" />
+        android:title="@string/pref_fast_back"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:dependency="fast_back"
@@ -72,11 +89,13 @@
         android:title="@string/pref_fast_back_cache_size"
         app:comment="@string/pref_fast_back_cache_size_comment"
         app:seekMax="50"
-        app:seekMin="0" />
+        app:seekMin="0"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="pull_to_refresh"
-        android:title="@string/pref_pull_to_refresh" />
+        android:title="@string/pref_pull_to_refresh"
+        app:iconSpaceReserved="false" />
     <!--<CheckBoxPreference-->
     <!--android:enabled="false"-->
     <!--android:key="force_scalable"-->
@@ -85,22 +104,26 @@
         android:entries="@array/pref_rendering_list"
         android:entryValues="@array/pref_rendering_values"
         android:key="rendering"
-        android:title="@string/pref_rendering" />
+        android:title="@string/pref_rendering"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.legacy.settings.preference.NightModePreference
         android:key="night_mode"
-        android:title="@string/pref_night_mode_settings" />
+        android:title="@string/pref_night_mode_settings"
+        app:iconSpaceReserved="false" />
 
 
     <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="minimum_font"
         android:title="@string/pref_minimum_font"
         app:seekMax="72"
-        app:seekMin="1" />
+        app:seekMin="1"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.legacy.settings.preference.WebTextSizePreference
         android:key="text_size"
-        android:title="@string/pref_text_size" />
+        android:title="@string/pref_text_size"
+        app:iconSpaceReserved="false" />
 
     <!--<jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference-->
     <!--android:enabled="false"-->
@@ -113,10 +136,12 @@
         android:entries="@array/pref_layout_algorithm_list"
         android:entryValues="@array/pref_layout_algorithm_values"
         android:key="layout_algorithm"
-        android:title="@string/pref_layout_algorithm" />
+        android:title="@string/pref_layout_algorithm"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="white_background"
         android:title="@string/pref_page_background_white"
-        android:summary="@string/pref_page_background_white_info"/>
+        android:summary="@string/pref_page_background_white_info"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

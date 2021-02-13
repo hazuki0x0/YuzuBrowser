@@ -16,106 +16,132 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto"
-                  android:title="@string/pref_privacy_settings">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_privacy_settings">
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.ClearBrowserDataAlertDialog android:title="@string/pref_clear_browser_data" />
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.ClearBrowserDataAlertDialog
+        android:title="@string/pref_clear_browser_data"
+        app:iconSpaceReserved="false" />
 
-    <jp.hazuki.yuzubrowser.legacy.browser.FinishAlertDialog android:title="@string/pref_clear_data_at_finish" />
+    <jp.hazuki.yuzubrowser.legacy.browser.FinishAlertDialog
+        android:title="@string/pref_clear_data_at_finish"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="private_mode"
-        android:title="@string/pref_private_mode" />
+        android:title="@string/pref_private_mode"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="accept_cookie"
-        android:title="@string/pref_accept_cookie" />
+        android:title="@string/pref_accept_cookie"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:dependency="accept_cookie"
         android:key="accept_third_cookie"
-        android:title="@string/pref_accept_third_cookie" />
+        android:title="@string/pref_accept_third_cookie"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:dependency="accept_cookie"
         android:key="accept_cookie_private"
-        android:title="@string/pref_accept_cookie_private" />
+        android:title="@string/pref_accept_cookie_private"
+        app:iconSpaceReserved="false" />
 
 
     <SwitchPreference
         android:key="save_formdata"
-        android:title="@string/pref_save_formdata" />
+        android:title="@string/pref_save_formdata"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="web_db"
-        android:title="@string/pref_web_db" />
+        android:title="@string/pref_web_db"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="web_dom_db"
-        android:title="@string/pref_web_dom_db" />
+        android:title="@string/pref_web_dom_db"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="web_geolocation"
-        android:title="@string/pref_web_geolocation" />
+        android:title="@string/pref_web_geolocation"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="web_app_cache"
-        android:title="@string/pref_web_app_cache" />
+        android:title="@string/pref_web_app_cache"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="safe_browsing"
-        android:title="@string/pref_enable_safe_browsing" />
+        android:title="@string/pref_enable_safe_browsing"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="webRtc"
-        android:title="@string/pref_enable_web_rtc"/>
+        android:title="@string/pref_enable_web_rtc"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="contentSettings"
-        android:title="@string/pref_content_settings"/>
+        android:title="@string/pref_content_settings"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
         android:entries="@array/pref_web_cache_list"
         android:entryValues="@array/pref_web_cache_values"
         android:key="web_cache"
-        android:title="@string/pref_web_cache" />
+        android:title="@string/pref_web_cache"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="ps_history"
-        android:title="@string/pref_history_settings">
+        android:title="@string/pref_history_settings"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="save_history"
-            android:title="@string/pref_save_history" />
+            android:title="@string/pref_save_history"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="history_max_day"
             android:title="@string/pref_history_max_day"
             app:seekMax="3652"
-            app:seekMin="0" />
+            app:seekMin="0"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
             android:key="history_max_count"
             android:title="@string/pref_history_max_count"
             app:seekMax="9999"
-            app:seekMin="0" />
+            app:seekMin="0"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
 
     <PreferenceScreen
         android:key="ps_security"
-        android:title="@string/pref_security_settings">
+        android:title="@string/pref_security_settings"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="allow_content_access"
-            android:title="@string/pref_allow_content_access" />
+            android:title="@string/pref_allow_content_access"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_file_access_list"
             android:entryValues="@array/pref_file_access_values"
             android:key="file_access"
-            android:title="@string/pref_file_access" />
+            android:title="@string/pref_file_access"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_mixed_content_list"
             android:entryValues="@array/pref_mixed_contents_values"
             android:key="mixed_content"
-            android:title="@string/pref_mixed_content" />
+            android:title="@string/pref_mixed_content"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:key="ssl_error_alert"
-            android:title="@string/pref_ssl_error_alert" />
+            android:title="@string/pref_ssl_error_alert"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
 </PreferenceScreen>

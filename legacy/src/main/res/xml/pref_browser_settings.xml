@@ -21,174 +21,218 @@
 
     <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
         android:title="@string/pref_pattern_match"
-        app:intent="jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity" />
+        app:intent="jp.hazuki.yuzubrowser.legacy.pattern.url.PatternUrlActivity"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="ps_user_script"
-        android:title="@string/pref_userjs_settings">
+        android:title="@string/pref_userjs_settings"
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="userjs_enable"
-            android:title="@string/pref_userjs_enable" />
+            android:title="@string/pref_userjs_enable"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
             android:title="@string/pref_userjs_manage"
-            app:intent="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity" />
+            app:intent="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptListActivity"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
     <Preference
         android:key="ad_block_settings"
-        android:title="@string/pref_ad_block" />
+        android:title="@string/pref_ad_block"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="resblock_settings"
-        android:title="@string/pref_resblock_settings">
+        android:title="@string/pref_resblock_settings"
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="resblock_enable"
-            android:title="@string/pref_resblock_enable" />
+            android:title="@string/pref_resblock_enable"
+            app:iconSpaceReserved="false" />
 
         <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
             android:title="@string/pref_resblock_manage"
-            app:intent="jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity" />
+            app:intent="jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
 
     <EditTextPreference
         android:key="home_page"
         android:singleLine="true"
-        android:title="@string/pref_home_page" />
+        android:title="@string/pref_home_page"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
         android:entries="@array/pref_download_action_list"
         android:entryValues="@array/pref_download_action_values"
         android:key="download_action"
-        android:title="@string/pref_download_action" />
+        android:title="@string/pref_download_action"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="download_folder"
-        android:title="@string/pref_download_folder"/>
+        android:title="@string/pref_download_folder"
+        app:iconSpaceReserved="false" />
 
-    <jp.hazuki.yuzubrowser.legacy.settings.preference.ProxySettingDialog android:title="@string/pref_proxy_settings" />
+    <jp.hazuki.yuzubrowser.legacy.settings.preference.ProxySettingDialog
+        android:title="@string/pref_proxy_settings"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="ps_search"
-        android:title="@string/pref_search_settings">
+        android:title="@string/pref_search_settings"
+        app:iconSpaceReserved="false">
 
-        <PreferenceCategory android:title="@string/pref_search_cat_search">
+        <PreferenceCategory
+            android:title="@string/pref_search_cat_search"
+            app:iconSpaceReserved="false">
             <jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlPreference
                 android:key="search_url"
                 android:singleLine="true"
-                android:title="@string/pref_search_url_settings"/>
+                android:title="@string/pref_search_url_settings"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.ui.preference.IntentPreference
                 android:title="@string/pref_search_url"
-                app:intent="jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlListActivity"/>
+                app:intent="jp.hazuki.yuzubrowser.search.presentation.settings.SearchUrlListActivity"
+                app:iconSpaceReserved="false" />
 
             <SwitchPreference
                 android:key="search_url_show_icon"
-                android:title="@string/pref_search_url_show_icon"/>
+                android:title="@string/pref_search_url_show_icon"
+                app:iconSpaceReserved="false" />
 
             <SwitchPreference
                 android:key="search_url_save_switching"
                 android:dependency="search_url_show_icon"
-                android:title="@string/pref_search_url_save_switching"/>
+                android:title="@string/pref_search_url_save_switching"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
 
-        <PreferenceCategory android:title="@string/pref_search_cat_suggest">
+        <PreferenceCategory
+            android:title="@string/pref_search_cat_suggest"
+            app:iconSpaceReserved="false">
             <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
                 android:entries="@array/pref_search_suggest_list"
                 android:entryValues="@array/pref_search_suggest_values"
                 android:key="search_suggest"
-                android:title="@string/pref_search_suggest"/>
+                android:title="@string/pref_search_suggest"
+                app:iconSpaceReserved="false" />
 
             <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
                 android:entries="@array/pref_search_suggest_engine_list"
                 android:entryValues="@array/pref_search_suggest_engine_values"
                 android:key="search_suggest_engine"
-                android:title="@string/pref_search_suggest_engine"/>
+                android:title="@string/pref_search_suggest_engine"
+                app:iconSpaceReserved="false" />
 
             <SwitchPreference
                 android:key="search_suggest_histories"
-                android:title="@string/suggest_histories"/>
+                android:title="@string/suggest_histories"
+                app:iconSpaceReserved="false" />
             <SwitchPreference
                 android:key="search_suggest_bookmarks"
-                android:title="@string/suggest_bookmarks"/>
+                android:title="@string/suggest_bookmarks"
+                app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceScreen>
 
     <SwitchPreference
         android:key="save_tabs_for_crash"
-        android:title="@string/pref_save_tab_for_crash" />
+        android:title="@string/pref_save_tab_for_crash"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="save_last_tabs"
-        android:title="@string/pref_save_last_tabs" />
+        android:title="@string/pref_save_last_tabs"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="save_pinned_tabs"
-        android:title="@string/pref_save_pinned_tabs" />
+        android:title="@string/pref_save_pinned_tabs"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="save_closed_tab"
-        android:title="@string/pref_save_closed_tab" />
+        android:title="@string/pref_save_closed_tab"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="move_to_left_tab"
-        android:title="@string/pref_move_to_left_tab"/>
+        android:title="@string/pref_move_to_left_tab"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="move_to_parent"
-        android:title="@string/pref_move_to_parent" />
+        android:title="@string/pref_move_to_parent"
+        app:iconSpaceReserved="false" />
 
     <PreferenceScreen
         android:key="ps_new_tab_settings"
-        android:title="@string/pref_newtab_settings">
+        android:title="@string/pref_newtab_settings"
+        app:iconSpaceReserved="false">
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_link"
-            android:title="@string/pref_newtab_link" />
+            android:title="@string/pref_newtab_link"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_bookmark"
-            android:title="@string/pref_newtab_bookmark" />
+            android:title="@string/pref_newtab_bookmark"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_history"
-            android:title="@string/pref_newtab_history" />
+            android:title="@string/pref_newtab_history"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_speeddial"
-            android:title="@string/pref_speed_dial"/>
+            android:title="@string/pref_speed_dial"
+            app:iconSpaceReserved="false" />
         <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
             android:entries="@array/pref_newtab_list"
             android:entryValues="@array/pref_newtab_values"
             android:key="newtab_blank"
-            android:title="@string/pref_newtab_blank" />
+            android:title="@string/pref_newtab_blank"
+            app:iconSpaceReserved="false" />
     </PreferenceScreen>
 
     <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="tab_cache_number"
         android:title="@string/pref_number_of_tab_to_cache"
         app:seekMax="50"
-        app:seekMin="3" />
+        app:seekMin="3"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="pause_web_tab_change"
         android:title="@string/pref_pause_web_tab_change"
         android:summary="@string/pref_pause_web_tab_change_disable_summary"
-        android:enabled="false"/>
+        android:enabled="false"
+        app:iconSpaceReserved="false" />
     <SwitchPreference
         android:key="pause_web_background"
-        android:title="@string/pref_pause_web_background" />
+        android:title="@string/pref_pause_web_background"
+        app:iconSpaceReserved="false" />
 
     <SwitchPreference
         android:key="share_unknown_scheme"
         android:title="@string/pref_share_unkown_scheme"
-        android:summary="@string/pref_share_unkown_scheme_summary" />
+        android:summary="@string/pref_share_unkown_scheme_summary"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.ui.preference.SeekbarPreference
         android:key="auto_tab_save_delay"
         android:title="@string/pref_auto_tab_save_delay"
         app:seekMax="3600"
-        app:seekMin="0" />
+        app:seekMin="0"
+        app:iconSpaceReserved="false" />
 
     <jp.hazuki.yuzubrowser.legacy.settings.preference.SlowRenderingPreference
         android:key="slow_rendering"
-        android:title="@string/pref_slow_rendering"/>
+        android:title="@string/pref_slow_rendering"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

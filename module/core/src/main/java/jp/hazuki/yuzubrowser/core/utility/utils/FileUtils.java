@@ -42,7 +42,7 @@ public class FileUtils {
     @SuppressLint("SimpleDateFormat")
     public static String getTimeFileName() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
         return sdf.format(c.getTime());
     }
 

@@ -190,7 +190,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private var isResumed = false
     override var isActivityPaused: Boolean = true
         private set
-    private var forceDestroy: Boolean = false
 
     private var closedTabs: ArrayDeque<Bundle>? = null
     private var webViewFindDialog: WebViewFindDialog? = null
@@ -408,8 +407,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         Logger.d(TAG, "onDestroy()")
         super.onDestroy()
         destroy()
-        if (forceDestroy)
-            Process.killProcess(Process.myPid())
     }
 
     private fun destroy() {
@@ -507,13 +504,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 openable.forEach { loadUrl(it, openable.target) }
             }
             BrowserController.REQUEST_SETTING -> {
-                if (data?.getBooleanExtra(INTENT_EXTRA_RESTART, false) == true) {
-                    forceDestroy = data.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
-                    restartBrowser()
-                } else {
-                    AppData.init(applicationContext, moshi, abpDatabase)
-                    onPreferenceReset()
-                }
+                AppData.init(applicationContext, moshi, abpDatabase)
+                onPreferenceReset()
             }
             BrowserController.REQUEST_USERAGENT -> {
                 if (resultCode != RESULT_OK || data == null) return
@@ -680,7 +672,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         setIntent(Intent())
         if (action == null) return false
         if (Constants.intent.ACTION_FINISH == action) {
-            forceDestroy = intent.getBooleanExtra(Constants.intent.EXTRA_FORCE_DESTROY, false)
             restartBrowser()
             return false
         }

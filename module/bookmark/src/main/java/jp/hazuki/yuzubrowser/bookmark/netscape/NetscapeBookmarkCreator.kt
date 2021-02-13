@@ -24,7 +24,6 @@ import java.io.Writer
 class NetscapeBookmarkCreator(private val parentFolder: BookmarkFolder) {
     private var hierarchy: Int = 0
 
-    @Throws(IOException::class)
     fun create(writer: BufferedWriter) {
         writer.write("<!DOCTYPE NETSCAPE-Bookmark-file-1>\n" +
                 "<!-- This is an automatically generated file.\n" +

@@ -1,44 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:title="@string/pref_import_export">
-    <PreferenceCategory android:title="@string/bookmark">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_import_export">
+    <PreferenceCategory
+        android:title="@string/bookmark"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="import_sd_bookmark"
-            android:title="@string/pref_import_bookmark" />
-        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
-            android:dialogMessage="@string/pref_export_bookmark_confirm"
-            android:dialogTitle="@string/pref_export_bookmark"
+            android:title="@string/pref_import_bookmark"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:key="export_sd_bookmark"
-            android:title="@string/pref_export_bookmark" />
+            android:title="@string/pref_export_bookmark"
+            app:iconSpaceReserved="false" />
         <Preference
             android:key="import_html_bookmark"
-            android:title="@string/pref_import_html_bookmark" />
-        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:title="@string/pref_import_html_bookmark"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:dialogMessage="@string/pref_export_html_bookmark_confirm"
             android:dialogTitle="@string/pref_export_html_bookmark"
             android:key="export_html_bookmark"
-            android:title="@string/pref_export_html_bookmark" />
+            android:title="@string/pref_export_html_bookmark"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_speed_dial">
+    <PreferenceCategory
+        android:title="@string/pref_speed_dial"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="restore_speed_dial"
-            android:title="@string/pref_restore_speed_dial" />
-        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:title="@string/pref_restore_speed_dial"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:dialogMessage="@string/pref_backup_speed_dial_confirm"
             android:dialogTitle="@string/pref_backup_speed_dial"
             android:key="backup_speed_dial"
-            android:title="@string/pref_backup_speed_dial" />
+            android:title="@string/pref_backup_speed_dial"
+            app:iconSpaceReserved="false" />
 
 
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_settings">
+    <PreferenceCategory
+        android:title="@string/pref_settings"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="restore_settings"
-            android:title="@string/restore_settings" />
-        <jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+            android:title="@string/restore_settings"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:dialogMessage="@string/pref_backup_settings_confirm"
             android:dialogTitle="@string/backup_settings"
             android:key="backup_settings"
-            android:title="@string/backup_settings" />
+            android:title="@string/backup_settings"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

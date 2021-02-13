@@ -35,7 +35,6 @@ class Constants {
         const val ACTION_FINISH = "$INTENT_ACTION_PREFIX.finish"
         const val ACTION_NEW_TAB = "$INTENT_ACTION_PREFIX.newTab"
         const val EXTRA_ROOT_URI = "$INTENT_EXTRA_PREFIX.root"
-        const val EXTRA_FORCE_DESTROY = "$INTENT_EXTRA_PREFIX.force_destroy"
 
         /** res block */
         const val ACTION_BLOCK_IMAGE = "$INTENT_ACTION_PREFIX.action_block_image"

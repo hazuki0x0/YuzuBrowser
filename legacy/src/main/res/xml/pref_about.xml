@@ -16,36 +16,48 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:title="@string/pref_about">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_about">
     <Preference
         android:title="@string/browser_app_name"
-        android:summary="@string/copyright" />
+        android:summary="@string/copyright"
+        app:iconSpaceReserved="false" />
     <Preference
         android:key="version"
-        android:title="@string/version" />
+        android:title="@string/version"
+        app:iconSpaceReserved="false" />
     <Preference
         android:key="build"
-        android:title="@string/build" />
+        android:title="@string/build"
+        app:iconSpaceReserved="false" />
     <Preference
         android:key="build_time"
-        android:title="@string/build_time" />
+        android:title="@string/build_time"
+        app:iconSpaceReserved="false" />
     <Preference
         android:key="osl"
-        android:title="@string/open_source_license" />
+        android:title="@string/open_source_license"
+        app:iconSpaceReserved="false" />
     <Preference
         android:key="translation"
         android:title="@string/pref_translation"
-        android:summary="@string/pref_translators"/>
+        android:summary="@string/pref_translators"
+        app:iconSpaceReserved="false" />
     <Preference
         android:key="privacy_policy"
-        android:title="@string/pref_privacy_policy"/>
-    <PreferenceCategory android:title="@string/pref_log">
+        android:title="@string/pref_privacy_policy"
+        app:iconSpaceReserved="false" />
+    <PreferenceCategory
+        android:title="@string/pref_log"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="detailed_log"
-            android:title="@string/pref_detailed_log" />
+            android:title="@string/pref_detailed_log"
+            app:iconSpaceReserved="false" />
         <Preference
             android:key="delete_log"
-            android:title="@string/pref_delete_all_logs" />
+            android:title="@string/pref_delete_all_logs"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 </PreferenceScreen>

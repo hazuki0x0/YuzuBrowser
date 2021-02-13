@@ -62,6 +62,7 @@ dependencies {
     implementation AndroidX.appcompat
     implementation AndroidX.design
     implementation AndroidX.constraintLayout
+    implementation AndroidX.fragmentKtx
     implementation AndroidX.fix_preference
     implementation AndroidX.constraintLayout
     implementation AndroidX.activty

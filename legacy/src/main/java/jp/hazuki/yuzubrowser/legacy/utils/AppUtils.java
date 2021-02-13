@@ -17,26 +17,12 @@
 package jp.hazuki.yuzubrowser.legacy.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
-import jp.hazuki.yuzubrowser.legacy.Constants;
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 
 public class AppUtils {
-    public static void restartApp(Context context) {
-        restartApp(context, false);
-    }
-
-    public static void restartApp(Context context, boolean forceDestroy) {
-        Intent start = new Intent();
-        start.setClassName(context, Constants.activity.MAIN_BROWSER);
-        start.setAction(Constants.intent.ACTION_FINISH);
-        start.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        start.putExtra(Constants.intent.EXTRA_FORCE_DESTROY, forceDestroy);
-        context.startActivity(start);
-    }
 
     public static String getVersionDeviceInfo(Context context) {
         return "Yuzu " + ContextExtensionsKt.getVersionName(context) + "/" +

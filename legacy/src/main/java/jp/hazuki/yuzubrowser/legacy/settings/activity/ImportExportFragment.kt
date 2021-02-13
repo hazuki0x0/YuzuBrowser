@@ -16,391 +16,282 @@
 
 package jp.hazuki.yuzubrowser.legacy.settings.activity
 
-import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.DialogFragment
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
+import androidx.documentfile.provider.DocumentFile
 import androidx.preference.Preference
 import dagger.android.support.AndroidSupportInjection
-import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
-import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlExportTask
-import jp.hazuki.yuzubrowser.bookmark.netscape.BookmarkHtmlImportTask
+import jp.hazuki.yuzubrowser.bookmark.netscape.exportHtmlBookmark
+import jp.hazuki.yuzubrowser.bookmark.netscape.importHtmlBookmark
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.bookmark.util.BookmarkIdGenerator
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
-import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
-import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.backup.BackupTask
-import jp.hazuki.yuzubrowser.legacy.backup.RestoreTask
-import jp.hazuki.yuzubrowser.legacy.browser.checkStoragePermission
-import jp.hazuki.yuzubrowser.legacy.browser.openRequestPermissionSettings
-import jp.hazuki.yuzubrowser.legacy.browser.requestStoragePermission
-import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialBackupTask
-import jp.hazuki.yuzubrowser.legacy.speeddial.io.SpeedDialRestoreTask
-import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
-import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListDialog
-import jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListViewController
-import jp.hazuki.yuzubrowser.ui.ACTIVITY_MAIN_BROWSER
-import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_RESTART
-import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
-import jp.hazuki.yuzubrowser.ui.preference.AlertDialogPreference
+import jp.hazuki.yuzubrowser.legacy.backup.*
+import jp.hazuki.yuzubrowser.legacy.speeddial.io.backupSpeedDial
+import jp.hazuki.yuzubrowser.legacy.speeddial.io.restoreSpeedDial
+import jp.hazuki.yuzubrowser.ui.RestartActivity
+import jp.hazuki.yuzubrowser.ui.extensions.registerForStartActivityForResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.lang.ref.WeakReference
+import java.io.IOException
 import javax.inject.Inject
 
-class ImportExportFragment : YuzuPreferenceFragment(), LoaderManager.LoaderCallbacks<Boolean> {
-    private val asyncPermissions by lazy { AsyncPermissions(appCompatActivity) }
-
+class ImportExportFragment : YuzuPreferenceFragment() {
     @Inject
     internal lateinit var faviconManager: FaviconManager
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         AndroidSupportInjection.inject(this)
         addPreferencesFromResource(R.xml.pref_import_export)
-        val activity = activity ?: return
 
         findPreference<Preference>("import_sd_bookmark")!!.setOnPreferenceClickListener {
-            val manager = BookmarkManager.getInstance(activity)
-            val internalFile = manager.file
-
-            var defFolder = File(externalUserDirectory, internalFile.parentFile.name + File.separator)
-            if (!defFolder.exists())
-                defFolder = Environment.getExternalStorageDirectory()
-
-            FileListDialog(activity)
-                    .setFilePath(defFolder)
-                    .setOnFileSelectedListener(object : FileListViewController.OnFileSelectedListener {
-                        override fun onFileSelected(file: File) {
-                            AlertDialog.Builder(activity)
-                                    .setTitle(R.string.pref_import_bookmark)
-                                    .setMessage(R.string.pref_import_bookmark_confirm)
-                                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                                        if (file.exists())
-                                            if (FileUtils.copySingleFile(file, internalFile)) {
-                                                manager.load()
-                                                manager.save()
-                                                Toast.makeText(activity, R.string.succeed, Toast.LENGTH_LONG).show()
-                                                return@setPositiveButton
-                                            }
-                                        Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
-                                    }
-                                    .setNegativeButton(android.R.string.cancel, null)
-                                    .show()
-                        }
-
-                        override fun onDirectorySelected(file: File): Boolean {
-                            return false
-                        }
-                    })
-                    .show()
-
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "*/*"
+            }
+            importBookmarkLauncher.launch(intent)
             false
         }
 
-        findPreference<AlertDialogPreference>("export_sd_bookmark")!!.setOnPositiveButtonListener {
-            if (activity.checkStoragePermission()) {
-                val manager = BookmarkManager.getInstance(activity)
-                val internalFile = manager.file
-                val externalFile = File(externalUserDirectory, internalFile.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".dat")
-                if (!externalFile.parentFile.exists()) {
-                    if (!externalFile.parentFile.mkdirs()) {
-                        Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
-                        return@setOnPositiveButtonListener
-                    }
-                }
-                if (internalFile.exists())
-                    if (FileUtils.copySingleFile(internalFile, externalFile)) {
-                        Toast.makeText(activity, R.string.succeed, Toast.LENGTH_LONG).show()
-                        return@setOnPositiveButtonListener
-                    }
-                Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
-            } else {
-                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
-
+        findPreference<Preference>("export_sd_bookmark")!!.setOnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_TITLE, "bookmark_${FileUtils.getTimeFileName()}.dat")
             }
+            exportBookmarkLauncher.launch(intent)
+            false
         }
 
         findPreference<Preference>("import_html_bookmark")!!.setOnPreferenceClickListener {
-            val manager = BookmarkManager.getInstance(activity)
-            val defFolder = Environment.getExternalStorageDirectory()
-
-            FileListDialog(activity)
-                    .setFilePath(defFolder)
-                    .setOnFileSelectedListener(object : FileListViewController.OnFileSelectedListener {
-                        override fun onFileSelected(file: File) {
-                            AlertDialog.Builder(activity)
-                                    .setTitle(R.string.pref_import_html_bookmark)
-                                    .setMessage(R.string.pref_import_html_bookmark_confirm)
-                                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                                        if (file.exists()) {
-                                            val root = BookmarkFolder(file.name, manager.root, BookmarkIdGenerator.getNewId())
-                                            manager.add(manager.root, root)
-                                            val bundle = Bundle()
-                                            bundle.putSerializable("file", file)
-                                            bundle.putSerializable("manager", manager)
-                                            bundle.putSerializable("folder", root)
-                                            LoaderManager.getInstance(this@ImportExportFragment)
-                                                .restartLoader(2, bundle, this@ImportExportFragment)
-                                            ProgressDialog(getString(R.string.restoring)).also { dialog ->
-                                                dialog.show(childFragmentManager, "progress")
-                                                handler.setDialog(dialog)
-                                            }
-                                        }
-                                    }
-                                    .setNegativeButton(android.R.string.cancel, null)
-                                    .show()
-                        }
-
-                        override fun onDirectorySelected(file: File): Boolean {
-                            return false
-                        }
-                    })
-                    .show()
-
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "text/html"
+            }
+            importHtmlBookmarkLauncher.launch(intent)
             false
         }
 
-        findPreference<AlertDialogPreference>("export_html_bookmark")!!.setOnPositiveButtonListener {
-            if (activity.checkStoragePermission()) {
-                val manager = BookmarkManager.getInstance(activity)
-                val externalFile = File(externalUserDirectory, manager.file.parentFile.name + File.separator + FileUtils.getTimeFileName() + ".html")
-                if (!externalFile.parentFile.exists()) {
-                    if (!externalFile.parentFile.mkdirs()) {
-                        Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
-                        return@setOnPositiveButtonListener
-                    }
-                }
-
-                val bundle = Bundle()
-                bundle.putSerializable("file", externalFile)
-                bundle.putSerializable("folder", manager.root)
-                LoaderManager.getInstance(this@ImportExportFragment)
-                    .restartLoader(3, bundle, this@ImportExportFragment)
-                ProgressDialog(getString(R.string.exporting)).also {
-                    it.show(childFragmentManager, "progress")
-                    handler.setDialog(it)
-                }
-            } else {
-                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
+        findPreference<Preference>("export_html_bookmark")!!.setOnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                type = "text/html"
+                putExtra(Intent.EXTRA_TITLE, "bookmark_${FileUtils.getTimeFileName()}.html")
             }
+            exportHtmlBookmarkLauncher.launch(intent)
+            false
         }
 
         findPreference<Preference>("restore_speed_dial")!!.setOnPreferenceClickListener {
-            val dir = File(externalUserDirectory, "speedDial")
-            if (!dir.exists())
-                dir.mkdirs()
-            FileListDialog(activity)
-                    .setFilePath(dir)
-                    .setShowExtensionOnly(EXT_SPEED_DIAL)
-                    .setOnFileSelectedListener(object : FileListViewController.OnFileSelectedListener {
-                        override fun onFileSelected(file: File) {
-                            if (file.exists()) {
-                                val bundle = Bundle()
-                                bundle.putSerializable("file", file)
-                                LoaderManager.getInstance(this@ImportExportFragment)
-                                    .restartLoader(4, bundle, this@ImportExportFragment)
-                                ProgressDialog(getString(R.string.restoring)).also { dialog ->
-                                    dialog.show(childFragmentManager, "progress")
-                                    handler.setDialog(dialog)
-                                }
-                            }
-                        }
-
-                        override fun onDirectorySelected(file: File): Boolean {
-                            return false
-                        }
-                    })
-                    .show()
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "*/*"
+            }
+            restoreSpeeddialLauncher.launch(intent)
             true
         }
 
-        findPreference<AlertDialogPreference>("backup_speed_dial")!!.setOnPositiveButtonListener {
-            if (activity.checkStoragePermission()) {
-                val file = File(externalUserDirectory, "speedDial" + File.separator + FileUtils.getTimeFileName() + EXT_SPEED_DIAL)
-                val bundle = Bundle()
-                bundle.putSerializable("file", file)
-                LoaderManager.getInstance(this@ImportExportFragment)
-                    .restartLoader(5, bundle, this@ImportExportFragment)
-                ProgressDialog(getString(R.string.backing_up)).also {
-                    it.show(childFragmentManager, "progress")
-                    handler.setDialog(it)
-                }
-            } else {
-                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
+        findPreference<Preference>("backup_speed_dial")!!.setOnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_TITLE, "bookmark_${FileUtils.getTimeFileName()}.dat")
             }
+            backupSpeeddialLauncher.launch(intent)
+            false
         }
 
         findPreference<Preference>("restore_settings")!!.setOnPreferenceClickListener {
-            val dir = File(externalUserDirectory, "backup")
-            if (!dir.exists())
-                dir.mkdirs()
-            FileListDialog(activity)
-                    .setFilePath(dir)
-                    .setShowExtensionOnly(EXT)
-                    .setOnFileSelectedListener(object : FileListViewController.OnFileSelectedListener {
-                        override fun onFileSelected(file: File) {
-                            AlertDialog.Builder(activity)
-                                    .setTitle(R.string.restore_settings)
-                                    .setMessage(R.string.pref_restore_settings_confirm)
-                                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                                        if (file.exists()) {
-                                            val bundle = Bundle()
-                                            bundle.putSerializable("file", file)
-                                            LoaderManager.getInstance(this@ImportExportFragment)
-                                                .restartLoader(0, bundle, this@ImportExportFragment)
-                                            ProgressDialog(getString(R.string.restoring)).also { dialog ->
-                                                dialog.show(childFragmentManager, "progress")
-                                                handler.setDialog(dialog)
-                                            }
-                                        }
-
-                                    }
-                                    .setNegativeButton(android.R.string.cancel, null)
-                                    .show()
-                        }
-
-                        override fun onDirectorySelected(file: File): Boolean {
-                            return false
-                        }
-                    })
-                    .show()
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "*/*"
+            }
+            restoreSettingsLauncher.launch(intent)
             true
         }
 
-        findPreference<AlertDialogPreference>("backup_settings")!!.setOnPositiveButtonListener {
-            if (activity.checkStoragePermission()) {
-                val file = File(externalUserDirectory, "backup" + File.separator + FileUtils.getTimeFileName() + EXT)
-                val bundle = Bundle()
-                bundle.putSerializable("file", file)
-                LoaderManager.getInstance(this@ImportExportFragment)
-                    .restartLoader(1, bundle, this@ImportExportFragment)
-                ProgressDialog(getString(R.string.backing_up)).also {
-                    it.show(childFragmentManager, "progress")
-                    handler.setDialog(it)
+        findPreference<Preference>("backup_settings")!!.setOnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_TITLE, "yuzu_backup_${FileUtils.getTimeFileName()}$EXT")
+            }
+            backupSettingsLauncher.launch(intent)
+            false
+        }
+    }
+
+    private val importBookmarkLauncher = registerForStartActivityForResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val uri = it.data!!.data ?: return@registerForStartActivityForResult
+            val file = DocumentFile.fromSingleUri(requireContext(), uri)!!
+            if (file.exists() && file.name?.endsWith(".dat") == true) {
+                val manager = BookmarkManager.getInstance(requireContext())
+                val internalFile = manager.file
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    val result = withContext(Dispatchers.IO) { uri.copyTo(internalFile) }
+                    if (result) {
+                        manager.load()
+                        manager.save()
+                        Toast.makeText(activity, R.string.succeed, Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
+                    }
                 }
             } else {
-                ui { appCompatActivity.requestStoragePermission(asyncPermissions) }
+                Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val activity = activity ?: return
+    private val exportBookmarkLauncher = registerForStartActivityForResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val uri = it.data!!.data ?: return@registerForStartActivityForResult
+            val manager = BookmarkManager.getInstance(requireContext())
+            val internalFile = manager.file
 
-        if (!activity.checkStoragePermission()) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                PermissionDialog().show(childFragmentManager, "permission")
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-                }
-            }
-        }
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Boolean> {
-        if (args == null) throw IllegalArgumentException("args must not be null")
-
-        return when (id) {
-            0 -> RestoreTask(activity, args.getSerializable("file") as File)
-            1 -> BackupTask(activity, args.getSerializable("file") as File)
-            2 -> BookmarkHtmlImportTask(requireActivity(),
-                args.getSerializable("file") as File,
-                args.getSerializable("manager") as BookmarkManager,
-                faviconManager,
-                args.getSerializable("folder") as BookmarkFolder,
-                Handler())
-            3 -> BookmarkHtmlExportTask(activity,
-                args.getSerializable("file") as File,
-                args.getSerializable("folder") as BookmarkFolder)
-            4 -> SpeedDialRestoreTask(activity, args.getSerializable("file") as File)
-            5 -> SpeedDialBackupTask(activity, args.getSerializable("file") as File)
-            else -> throw IllegalArgumentException("unknown id:$id")
-        }
-    }
-
-    override fun onLoadFinished(loader: Loader<Boolean>, data: Boolean) {
-        handler.sendEmptyMessage(0)
-        val activity = requireActivity()
-
-        if (data) {
-            Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
-            if (loader is RestoreTask) {
-                if (activity.callingActivity?.className == ACTIVITY_MAIN_BROWSER) {
-                    activity.setResult(Activity.RESULT_OK, Intent().apply {
-                        putExtra(INTENT_EXTRA_RESTART, true)
-                        putExtra(Constants.intent.EXTRA_FORCE_DESTROY, true)
-                    })
-                    activity.finish()
-                } else {
-                    AppUtils.restartApp(activity, true)
-                }
+            GlobalScope.launch(Dispatchers.Main) {
+                val result = withContext(Dispatchers.IO) { internalFile.copyTo(uri) }
+                requireContext().actionMessage(result)
             }
         } else {
-            Toast.makeText(activity, R.string.failed, Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, R.string.failed, Toast.LENGTH_LONG).show()
         }
     }
 
-    override fun onLoaderReset(loader: Loader<Boolean>) {
+    private val importHtmlBookmarkLauncher = registerForStartActivityForResult {
+        if (it.resultCode != Activity.RESULT_OK) return@registerForStartActivityForResult
+        val uri = it.data!!.data ?: return@registerForStartActivityForResult
+        val file = DocumentFile.fromSingleUri(requireContext(), uri)!!
+        val manager = BookmarkManager.getInstance(requireContext())
 
+        val root = BookmarkFolder(file.name, manager.root, BookmarkIdGenerator.getNewId())
+        manager.add(manager.root, root)
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val context = requireContext()
+            val message = when (manager.importHtmlBookmark(context, uri, faviconManager, root)) {
+                0 -> R.string.failed
+                1 -> R.string.succeed
+                -1 -> R.string.not_bookmark_file
+                else -> throw IllegalStateException("Html bookmark result state error")
+            }
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
     }
 
-    private val appCompatActivity: AppCompatActivity
-        get() = activity as AppCompatActivity
+    private val exportHtmlBookmarkLauncher = registerForStartActivityForResult {
+        if (it.resultCode != Activity.RESULT_OK) return@registerForStartActivityForResult
+        val uri = it.data!!.data ?: return@registerForStartActivityForResult
+        val manager = BookmarkManager.getInstance(requireContext())
 
-    private class DialogHandler : Handler() {
-        private var dialogRef: WeakReference<DialogFragment>? = null
+        GlobalScope.launch(Dispatchers.Main) {
+            val context = requireContext()
+            val result = manager.exportHtmlBookmark(context, uri)
+            context.actionMessage(result)
+        }
+    }
 
-        override fun handleMessage(msg: Message) {
-            if (dialogRef == null) return
+    private val backupSpeeddialLauncher = registerForStartActivityForResult {
+        if (it.resultCode != Activity.RESULT_OK) return@registerForStartActivityForResult
+        val uri = it.data!!.data ?: return@registerForStartActivityForResult
 
-            dialogRef!!.get()?.run {
-                dismiss()
-                dialogRef!!.clear()
+        GlobalScope.launch(Dispatchers.Main) {
+            val context = requireContext()
+            val result = withContext(Dispatchers.IO) { context.backupSpeedDial(uri) }
+            context.actionMessage(result)
+        }
+    }
+
+    private val restoreSpeeddialLauncher = registerForStartActivityForResult {
+        if (it.resultCode != Activity.RESULT_OK) return@registerForStartActivityForResult
+        val uri = it.data!!.data ?: return@registerForStartActivityForResult
+        val file = DocumentFile.fromSingleUri(requireContext(), uri)!!
+        val name = file.name
+        if (name == null || !name.endsWith(EXT_SPEED_DIAL)) {
+            requireContext().actionMessage(false)
+            return@registerForStartActivityForResult
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val context = requireContext()
+            val result = withContext(Dispatchers.IO) { context.restoreSpeedDial(uri) }
+            context.actionMessage(result)
+        }
+    }
+
+    private val backupSettingsLauncher = registerForStartActivityForResult {
+        if (it.resultCode != Activity.RESULT_OK) return@registerForStartActivityForResult
+        val uri = it.data!!.data ?: return@registerForStartActivityForResult
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val context = requireContext()
+            val manager = BackupManager(context)
+            val result = withContext(Dispatchers.IO) { manager.backup(context, uri) }
+            context.actionMessage(result)
+        }
+    }
+
+    private val restoreSettingsLauncher = registerForStartActivityForResult {
+        if (it.resultCode != Activity.RESULT_OK) return@registerForStartActivityForResult
+        val uri = it.data!!.data ?: return@registerForStartActivityForResult
+        val file = DocumentFile.fromSingleUri(requireContext(), uri)!!
+        val name = file.name
+        if (name == null || !name.endsWith(EXT)) {
+            requireContext().actionMessage(false)
+            return@registerForStartActivityForResult
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val context = requireContext()
+            val manager = BackupManager(context)
+            val result = withContext(Dispatchers.IO) { manager.restore(context, uri) }
+            context.actionMessage(result)
+            if (result) {
+                startActivity(RestartActivity.createIntent(context))
             }
         }
-
-        internal fun setDialog(dialog: DialogFragment) {
-            dialogRef = WeakReference<DialogFragment>(dialog)
-        }
     }
 
-    class PermissionDialog : androidx.fragment.app.DialogFragment() {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val activity = activity ?: throw IllegalStateException()
-
-            val builder = AlertDialog.Builder(activity)
-            builder.setTitle(R.string.permission_probrem)
-                    .setMessage(R.string.confirm_permission_storage)
-                    .setPositiveButton(android.R.string.ok
-                    ) { _, _ ->
-                        activity.openRequestPermissionSettings(getString(R.string.request_permission_storage_setting))
-                    }
-                    .setNegativeButton(android.R.string.cancel) { _, _ -> activity.onBackPressed() }
-            isCancelable = false
-            return builder.create()
+    private fun Uri.copyTo(file: File): Boolean {
+        try {
+            requireContext().contentResolver.openInputStream(this)?.use { input ->
+                file.outputStream().use { os ->
+                    input.copyTo(os)
+                    return true
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
+        return false
+    }
+
+    private fun File.copyTo(uri: Uri): Boolean {
+        try {
+            requireContext().contentResolver.openOutputStream(uri)?.use { os ->
+                inputStream().use { input ->
+                    input.copyTo(os)
+                    return true
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return false
+    }
+
+    private fun Context.actionMessage(state: Boolean) {
+        val message = if (state) R.string.succeed else R.string.failed
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     companion object {
         private const val EXT = ".yuzubackup"
         private const val EXT_SPEED_DIAL = ".yuzudial"
-
-        private val handler = DialogHandler()
     }
 
 }
