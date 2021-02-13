@@ -30,6 +30,7 @@
     <color name="yuzu_orange">#FFF6BC1E</color>
     <color name="action_mode_background">#0d87c6</color>
     <color name="browser_primary_dark">#101010</color>
+    <color name="default_nav_color">#000000</color>
 
     <color name="deep_gray">#222222</color>
     <color name="white">#FFFFFF</color>

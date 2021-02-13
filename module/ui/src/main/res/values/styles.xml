@@ -47,6 +47,7 @@
         <item name="urlBarBoxColor">@color/urlBarBoxColor</item>
         <item name="urlBarBoxBorderColor">@color/urlBarBoxBorderColor</item>
         <item name="actionModeStyle">@style/ActionModeStyle</item>
+        <item name="android:navigationBarColor">@color/default_nav_color</item>
     </style>
 
     <style name="BrowserThemeDayNight.NoTitle" parent="@style/BrowserThemeDayNight">
@@ -57,6 +58,7 @@
 
     <style name="BrowserThemeDayNight.Browser" parent="BrowserThemeDayNight.NoTitle">
         <item name="colorPrimaryDark">@color/browser_primary_dark</item>
+        <item name="android:navigationBarColor">@color/deep_gray</item>
     </style>
 
     <style name="BrowserThemeDayNight.CustomToolbar" parent="BrowserThemeDayNight.NoTitle">

@@ -100,6 +100,7 @@ import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
 import jp.hazuki.yuzubrowser.ui.*
+import jp.hazuki.yuzubrowser.ui.app.SystemUiController
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.utils.makeUrl
@@ -184,6 +185,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     private lateinit var bottomBarBehavior: BottomBarBehavior
     private lateinit var webClient: WebClient
     private lateinit var menuWindow: MenuWindow
+    private lateinit var uiController: SystemUiController
     private var scrollSlop: Int = 0
 
     private var isActivityDestroyed = false
@@ -227,6 +229,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         binding = BrowserActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        uiController = SystemUiController.create(window)
         //Crash workaround for pagePaddingHeight...
         binding.toolbarPadding.visibility = View.GONE
 
@@ -258,8 +261,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 }
                 toolbar.onImeChanged(visible)
 
-                if (!visible && isFullscreenMode) {
-                    window.decorView.systemUiVisibility = DisplayUtils.getFullScreenVisibility()
+                if (!visible) {
+                    uiController.apply {
+                        barState = getScreenState()
+                        updateConfigure()
+                    }
                 }
             }
         }
@@ -300,8 +306,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         toolbar.notifyChangeWebState()
 
         webViewBehavior.setController(this)
-
-        window.decorView.setOnSystemUiVisibilityChangeListener { setFullscreenIfEnable() }
 
         binding.webGestureOverlayView.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP) {
@@ -431,8 +435,19 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     private fun setFullscreenIfEnable() {
-        if (isFullscreenMode) {
-            window.decorView.systemUiVisibility = DisplayUtils.getFullScreenVisibility()
+        uiController.barState = getScreenState()
+        uiController.updateConfigure()
+    }
+
+    private fun getScreenState(): SystemUiController.State {
+        return if (isFullscreenMode) {
+            when (AppPrefs.fullscreen_hide_mode.get()) {
+                1 -> SystemUiController.State.HIDE_NAVIGATION_BAR
+                2 -> SystemUiController.State.HIDE_ALL_BAR
+                else -> SystemUiController.State.HIDE_STATUS_BAR
+            }
+        } else {
+            SystemUiController.State.NORMAL
         }
     }
 
@@ -715,11 +730,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
     }
 
-    private fun onPreferenceReset() {
-        toolbar.onPreferenceReset()
-        tabManagerIn.onPreferenceReset()
-        userActionManager.onPreferenceReset()
-
+    private fun initTheme() {
         ThemeData.createInstanceIfNeed(applicationContext, AppPrefs.theme_setting.get())?.let { themeData ->
             toolbar.onThemeChanged(themeData)
             userActionManager.onThemeChanged(themeData)
@@ -729,8 +740,8 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 window.run {
                     clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                     addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    statusBarColor = themeData.statusBarColor
-                    decorView.systemUiVisibility = ThemeData.getSystemUiVisibilityFlag()
+                    uiController.statusBarColor = themeData.statusBarColor
+                    uiController.isLightStatusBar = themeData.isLightStatusBar
                 }
             }
 
@@ -739,7 +750,21 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             } else if (themeData.tabAccentColor != 0) {
                 binding.webViewFastScroller.handlePressedColor = themeData.tabAccentColor
             }
+
+            uiController.navigationBarColor = themeData.statusBarColor
+            uiController.isLightNavigationBar = themeData.isLightStatusBar
         }
+
+        uiController.updateConfigure()
+    }
+
+    private fun onPreferenceReset() {
+        toolbar.onPreferenceReset()
+        tabManagerIn.onPreferenceReset()
+        userActionManager.onPreferenceReset()
+
+        initTheme()
+
         binding.superFrameLayout.setWhiteBackgroundMode(AppPrefs.whiteBackground.get())
 
         menuWindow = MenuWindow(this, MenuActionManager.getInstance(applicationContext).browser_activity.list, actionController, iconManager)
@@ -1333,7 +1358,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun addBookmark(tab: MainTabData) {
         showAddBookmarkDialog(this, supportFragmentManager, tab.title,
-                tab.url ?: tab.mWebView.url ?: "")
+            tab.url ?: tab.mWebView.url ?: "")
     }
 
     override fun savePage(tab: MainTabData) {
@@ -1420,17 +1445,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             toolbar.onFullscreenChanged(enable)
 
             if (enable) {
-                val visibility = DisplayUtils.getFullScreenVisibility()
-                window.decorView.systemUiVisibility = visibility
-                menuWindow.setSystemUiVisibility(visibility)
-                if (DisplayUtils.isNeedFullScreenFlag())
-                    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                uiController.barState = getScreenState()
             } else {
-                val flag = ThemeData.getSystemUiVisibilityFlag()
-                window.decorView.systemUiVisibility = flag
-                menuWindow.setSystemUiVisibility(flag)
-                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                uiController.barState = SystemUiController.State.NORMAL
             }
+            uiController.updateConfigureIfNeed()
         }
 
     override var isPrivateMode: Boolean = false

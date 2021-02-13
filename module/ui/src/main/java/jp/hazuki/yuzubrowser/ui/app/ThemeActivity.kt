@@ -36,9 +36,9 @@ open class ThemeActivity : AppCompatActivity() {
             ThemeData.createInstance(application, PrefPool.getSharedPref(application).getString(theme_setting, ThemeData.THEME_LIGHT))
         }
 
+        val isLightMode = isLightMode()
         val config = newBase.createLanguageConfig(PrefPool.getSharedPref(application).getString(language, ""))
 
-        val isLightMode = isLightMode()
         applyThemeMode(isLightMode)
         config.updateTheme(isLightMode)
 
