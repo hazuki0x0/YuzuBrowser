@@ -323,7 +323,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
             if (request.isScopedStorageMode) {
                 val file = info.root
                 if (file.exists()) {
-                    file.delete()
+                    contentResolver.delete(file.uri, null, null)
                 }
             }
 

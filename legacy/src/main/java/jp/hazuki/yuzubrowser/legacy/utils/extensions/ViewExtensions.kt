@@ -18,11 +18,16 @@ package jp.hazuki.yuzubrowser.legacy.utils.extensions
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
+import android.os.Build
+import android.provider.MediaStore
 import androidx.core.app.NotificationCompat
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_MHTML
 import jp.hazuki.yuzubrowser.core.utility.extensions.getWritableFileOrNull
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.NOTIFICATION_CHANNEL_DOWNLOAD_NOTIFY
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
@@ -37,15 +42,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.IOException
 
 fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
-    val outFile = root.uri.getWritableFileOrNull()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        val outFile = root.uri.getWritableFileOrNull()
 
-    if (outFile != null) {
-        val downloadedFile = File(outFile, file.name!!)
-        saveWebArchiveMethod(downloadedFile.toString())
-        onDownload(webView.context, root, file, DocumentFile.fromFile(downloadedFile), true, downloadedFile.length())
-        return
+        if (outFile != null && outFile.exists()) {
+            val downloadedFile = File(outFile, file.name!!)
+            saveWebArchiveMethod(downloadedFile.toString())
+            onDownload(webView.context, root, file, DocumentFile.fromFile(downloadedFile), true, downloadedFile.length())
+            return
+        }
     }
 
     ui {
@@ -59,7 +67,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
             val size = withContext(Dispatchers.IO) {
                 var size = 0L
                 do {
-                    delay(200)
+                    delay(500)
                     val oldSize = size
                     size = tmpFile.length()
                 } while (size == 0L || oldSize != size)
@@ -68,6 +76,10 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
 
             val name = file.name!!
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && root.uri.scheme == "file") {
+                context.copyArchive(tmpFile, name)
+                return@ui
+            }
             val saveTo = root.createFile(MIME_TYPE_MHTML, name)
             if (saveTo == null) {
                 context.toast(R.string.failed)
@@ -88,6 +100,43 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
             onDownload(context, root, file, saveTo, success, size)
         }
     }
+}
+
+private fun Context.copyArchive(tmpFile: File, name: String) {
+    val values = ContentValues().apply {
+        put(MediaStore.Downloads.DISPLAY_NAME, name)
+        put(MediaStore.Downloads.MIME_TYPE, getMimeType(name))
+        put(MediaStore.Downloads.IS_DOWNLOAD, 1)
+        put(MediaStore.Downloads.IS_PENDING, 1)
+    }
+
+    val collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    val uri = contentResolver.insert(collection, values)
+
+    if (uri == null) {
+        tmpFile.delete()
+        return
+    }
+
+    try {
+        contentResolver.openOutputStream(uri)?.use { os ->
+            tmpFile.inputStream().use {
+                it.copyTo(os)
+                values.apply {
+                    clear()
+                    put(MediaStore.Downloads.IS_PENDING, 0)
+                }
+                contentResolver.update(uri, values, null, null)
+                return
+            }
+        }
+    } catch (e: IOException) {
+        ErrorReport.printAndWriteLog(e)
+    } finally {
+        tmpFile.delete()
+    }
+
+    contentResolver.delete(uri, null, null)
 }
 
 private fun onDownload(context: Context, root: DocumentFile, file: DownloadFile, downloadedFile: DocumentFile, success: Boolean, size: Long) {

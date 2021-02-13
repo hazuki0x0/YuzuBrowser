@@ -122,7 +122,9 @@ class OkHttpDownloader(
             if (abort) {
                 if (downloadRequest.isScopedStorageMode) {
                     val file = info.root
-                    if (file.exists()) file.delete()
+                    if (file.exists()) {
+                        context.contentResolver.delete(file.uri, null, null)
+                    }
                 } else {
                     deleteTempIfNeed()
                 }
