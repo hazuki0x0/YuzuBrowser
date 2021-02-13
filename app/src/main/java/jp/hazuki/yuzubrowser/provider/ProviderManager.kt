@@ -23,7 +23,5 @@ class ProviderManager : IProviderManager {
 
     override val readItLaterProvider = ReadItLaterProviderBridge()
 
-    override val safeFileProvider = SafeFileProviderBridge()
-
     override val suggestProvider = SuggestProviderBridge()
 }

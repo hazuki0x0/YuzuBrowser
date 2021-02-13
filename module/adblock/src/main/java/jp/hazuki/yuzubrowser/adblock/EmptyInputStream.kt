@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.provider
+package jp.hazuki.yuzubrowser.adblock
 
-import jp.hazuki.yuzubrowser.ui.provider.ISafeFileProvider
+import java.io.IOException
+import java.io.InputStream
 
-class SafeFileProviderBridge : ISafeFileProvider {
-    override fun convertToSaferUrl(url: String) = SafeFileProvider.convertToSaferUrl(url)
+class EmptyInputStream : InputStream() {
+    @Throws(IOException::class)
+    override fun read(): Int = -1
 }

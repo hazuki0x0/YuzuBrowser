@@ -177,13 +177,6 @@
     <string name="pref_lpress_others">Altri</string>
     <string name="pref_clear_data_at_finish">Cancella i dati al termine</string>
     <string name="pref_security_settings">Impostazioni di sicurezza</string>
-    <string name="pref_file_access">Impostazioni di accesso ai file locali</string>
-
-    <string-array name="pref_file_access_list">
-        <item>Disabilita (più sicuro)</item>
-        <item>Abilita nella sandbox (sicuro)</item>
-        <item>Abilita (non sicuro)</item>
-    </string-array>
 
     <string name="pref_mixed_content">Impostazioni di contenuto non protetto su https</string>
 

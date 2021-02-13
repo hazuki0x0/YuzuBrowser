@@ -199,13 +199,6 @@
             android:label="@string/download"/>
 
         <provider
-            android:name=".provider.SafeFileProvider"
-            android:authorities="${applicationId}.browser.SafeFileProvider"
-            android:exported="false"
-            android:permission="${applicationId}.permission.myapp.signature"
-            android:readPermission="jp.hazuki.yuzubrowser.permission.myapp.signature"
-            android:writePermission="jp.hazuki.yuzubrowser.permission.myapp.signature" />
-        <provider
             android:name="jp.hazuki.yuzubrowser.provider.DownloadFileProvider"
             android:authorities="${applicationId}.downloadFileProvider"
             android:exported="true"

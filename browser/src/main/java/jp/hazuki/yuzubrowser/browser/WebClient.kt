@@ -32,6 +32,7 @@ import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
 import jp.hazuki.yuzubrowser.adblock.AdBlockController
+import jp.hazuki.yuzubrowser.adblock.EmptyInputStream
 import jp.hazuki.yuzubrowser.adblock.convertToAdBlockContentType
 import jp.hazuki.yuzubrowser.adblock.filter.mining.MiningProtector
 import jp.hazuki.yuzubrowser.adblock.isThirdParty
@@ -83,7 +84,6 @@ import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
-import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants
@@ -112,7 +112,6 @@ class WebClient(
     private val faviconManager = FaviconAsyncManager(faviconManager)
     private val webViewRenderingManager = WebViewRenderingManager()
     private val scrollableToolbarHeight = { controller.appBarLayout.totalScrollRange + controller.pagePaddingHeight }
-    private val safeFileProvider = (activity.applicationContext as BrowserApplication).providerManager.safeFileProvider
     private var browserHistoryManager: BrowserHistoryAsyncManager? = null
     private var resourceCheckerList: ArrayList<ResourceChecker>? = null
     private var adBlockController: AdBlockController? = null
@@ -264,7 +263,6 @@ class WebClient(
 
 
         setting.allowContentAccess = AppPrefs.allow_content_access.get()
-        setting.allowFileAccess = AppPrefs.file_access.get() == PreferenceConstants.FILE_ACCESS_ENABLE
         setting.defaultTextEncodingName = AppPrefs.default_encoding.get()
         if (AppPrefs.user_agent.get().isNullOrEmpty()) {
             if (AppPrefs.fake_chrome.get()) {
@@ -314,13 +312,9 @@ class WebClient(
             controller.performNewTabLink(BrowserManager.LOAD_URL_TAB_NEW_RIGHT, tab, url, TabType.WINDOW)
             return
         }
-        val newUrl = if (AppPrefs.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url))
-            safeFileProvider.convertToSaferUrl(url)
-        else
-            url
-        if (!checkUrl(tab, newUrl, Uri.parse(newUrl))) {
+        if (!checkUrl(tab, url, Uri.parse(url))) {
             if (!checkLoadPagePatternMatch(tab, url, handleOpenInBrowser))
-                tab.mWebView.loadUrl(newUrl)
+                tab.mWebView.loadUrl(url)
         }
     }
 
@@ -343,10 +337,6 @@ class WebClient(
         override fun shouldOverrideUrlLoading(web: CustomWebView, url: String, uri: Uri): Boolean {
             val data = controller.getTabOrNull(web) ?: return true
 
-            if (AppPrefs.file_access.get() == PreferenceConstants.FILE_ACCESS_SAFER && URLUtil.isFileUrl(url)) {
-                controller.loadUrl(data, safeFileProvider.convertToSaferUrl(url))
-                return true
-            }
             val patternResult = checkLoadPagePatternMatch(data, url, false)
 
             if (patternResult || checkNewTabLinkAuto(getNewTabPerformType(data), data, url)) {
@@ -540,6 +530,10 @@ class WebClient(
                         action.startsWith("speeddial/img/") -> return speedDialHtml.getImage(action)
                     }
                 }
+            }
+
+            if ("file".equals(request.url.scheme, ignoreCase = true)) {
+                return WebResourceResponse("text/text", "UTF-8", EmptyInputStream())
             }
 
             val tabIndexData = controller.tabManager.getIndexData(web.identityId) ?: return null

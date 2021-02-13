@@ -106,9 +106,13 @@ fun WebResourceRequest.isThirdParty(documentHost: String): Boolean {
     if (hostName == documentHost) return false
 
     if (Patterns.IP_ADDRESS.matcher(documentHost).matches() ||
-            Patterns.IP_ADDRESS.matcher(hostName).matches()) return true
+        Patterns.IP_ADDRESS.matcher(hostName).matches()) return true
 
     val db = PublicSuffixDatabase.get()
 
-    return db.getEffectiveTldPlusOne(documentHost) != db.getEffectiveTldPlusOne(hostName)
+    return try {
+        db.getEffectiveTldPlusOne(documentHost) != db.getEffectiveTldPlusOne(hostName)
+    } catch (e: IllegalArgumentException) {
+        true
+    }
 }

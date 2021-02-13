@@ -177,13 +177,6 @@
     <string name="pref_lpress_others">其他</string>
     <string name="pref_clear_data_at_finish">结束时清除数据</string>
     <string name="pref_security_settings">安全设置</string>
-    <string name="pref_file_access">本地文件访问设置</string>
-
-    <string-array name="pref_file_access_list">
-        <item>禁用（最安全）</item>
-        <item>在沙箱中启用（较安全）</item>
-        <item>启用（不安全）</item>
-    </string-array>
 
     <string name="pref_mixed_content">Https 中的不安全内容设置</string>
 

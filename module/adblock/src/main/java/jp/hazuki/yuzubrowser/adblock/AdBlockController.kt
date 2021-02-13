@@ -32,8 +32,6 @@ import jp.hazuki.yuzubrowser.core.utility.utils.IOUtils
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.*
 import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.InputStream
 
 class AdBlockController(private val context: Context, private val abpDao: AbpDao) {
     private val dummyImage: ByteArray = IOUtils.readByte(context.resources.assets.open("blank.png"))
@@ -132,11 +130,6 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
                 return getNoCacheResponse("text/css", it.getStyleSheet(host, isAbpIgnoreGenericElement))
         }
         return null
-    }
-
-    private class EmptyInputStream : InputStream() {
-        @Throws(IOException::class)
-        override fun read(): Int = -1
     }
 
     companion object {

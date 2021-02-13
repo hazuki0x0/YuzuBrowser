@@ -177,13 +177,6 @@
     <string name="pref_lpress_others">Bestelakoak</string>
     <string name="pref_clear_data_at_finish">Garbitu datuak amaitzean</string>
     <string name="pref_security_settings">Segurtasun-ezarpenak</string>
-    <string name="pref_file_access">Fitxategi lokalak atzitzeko ezarpenak</string>
-
-    <string-array name="pref_file_access_list">
-        <item>Desgaitu (seguruena)</item>
-        <item>Enable in sandbox (safer)</item>
-        <item>Enable (unsafe)</item>
-    </string-array>
 
     <string name="pref_mixed_content">Insecure content settings on https</string>
 

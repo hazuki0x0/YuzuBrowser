@@ -177,13 +177,6 @@
     <string name="pref_lpress_others">Others</string>
     <string name="pref_clear_data_at_finish">Clear data at finish</string>
     <string name="pref_security_settings">Security settings</string>
-    <string name="pref_file_access">Local file access settings</string>
-
-    <string-array name="pref_file_access_list">
-        <item>Disable (safest)</item>
-        <item>Enable in sandbox (safer)</item>
-        <item>Enable (unsafe)</item>
-    </string-array>
 
     <string name="pref_mixed_content">Insecure content settings on https</string>
 

@@ -501,7 +501,6 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         toSetting.domStorageEnabled = fromSetting.domStorageEnabled
 
         toSetting.allowContentAccess = fromSetting.allowContentAccess
-        toSetting.allowFileAccess = fromSetting.allowFileAccess
         toSetting.mixedContentMode = fromSetting.mixedContentMode
         toSetting.defaultTextEncodingName = fromSetting.defaultTextEncodingName
         toSetting.userAgentString = fromSetting.userAgentString

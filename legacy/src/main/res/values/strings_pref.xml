@@ -317,18 +317,6 @@
         <item>4</item>
     </integer-array>
 
-    <string-array name="pref_file_access_list">
-        <item>Disable (safest)</item>
-        <item>Enable in sandbox (safer)</item>
-        <item>Enable (unsafe)</item>
-    </string-array>
-
-    <integer-array name="pref_file_access_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </integer-array>
-
     <integer-array name="pref_mixed_contents_values">
         <item>1</item>
         <item>2</item>

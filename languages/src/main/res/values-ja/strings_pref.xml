@@ -177,13 +177,6 @@
     <string name="pref_lpress_others">その他</string>
     <string name="pref_clear_data_at_finish">終了時に削除するデータ</string>
     <string name="pref_security_settings">セキュリティ設定</string>
-    <string name="pref_file_access">ローカルアクセス設定</string>
-
-    <string-array name="pref_file_access_list">
-        <item>無効 (安全)</item>
-        <item>サンドボックス内で有効 (微妙)</item>
-        <item>有効 (論外)</item>
-    </string-array>
 
     <string name="pref_mixed_content">https上の安全でないコンテンツ設定</string>
 

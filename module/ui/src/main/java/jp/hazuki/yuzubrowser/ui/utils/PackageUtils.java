@@ -29,7 +29,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.webkit.URLUtil;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -40,10 +39,8 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
-import jp.hazuki.yuzubrowser.ui.BrowserApplication;
 import jp.hazuki.yuzubrowser.ui.ConstantsKt;
 import jp.hazuki.yuzubrowser.ui.R;
-import jp.hazuki.yuzubrowser.ui.provider.ISafeFileProvider;
 
 public class PackageUtils {
     private PackageUtils() {
@@ -110,10 +107,6 @@ public class PackageUtils {
             Intent target = new Intent();
             target.setClassName(context, ConstantsKt.ACTIVITY_MAIN_BROWSER);
             target.setAction(Intent.ACTION_VIEW);
-            if (URLUtil.isFileUrl(url)) {
-                ISafeFileProvider provider = ((BrowserApplication)context.getApplicationContext()).getProviderManager().getSafeFileProvider();
-                url = provider.convertToSaferUrl(url);
-            }
             target.setData(Uri.parse(url));
 
             IconCompat icon;
