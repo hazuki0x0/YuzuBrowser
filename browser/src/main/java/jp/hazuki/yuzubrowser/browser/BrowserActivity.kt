@@ -36,6 +36,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
+import androidx.webkit.WebViewCompat
+import androidx.webkit.WebViewFeature
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
@@ -92,10 +94,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.DisplayUtils
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.legacy.utils.network.ConnectionStateMonitor
-import jp.hazuki.yuzubrowser.legacy.webkit.TabType
-import jp.hazuki.yuzubrowser.legacy.webkit.WebCustomViewHandler
-import jp.hazuki.yuzubrowser.legacy.webkit.WebViewAutoScrollManager
-import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
+import jp.hazuki.yuzubrowser.legacy.webkit.*
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
@@ -241,6 +240,11 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             browserState.isNeedLoad = false
         }
 
+        if (AppPrefs.safe_browsing.get() &&
+            WebViewFeature.isFeatureSupported(WebViewFeature.START_SAFE_BROWSING)) {
+            WebViewCompat.startSafeBrowsing(applicationContext, null)
+        }
+
         userActionManager = UserActionManager(this, this, actionController, iconManager)
         tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory, faviconManager), this)
         webClient = WebClient(this, this, abpDatabase, faviconManager)
@@ -333,8 +337,13 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
 
-        WebViewProxy.setProxy(applicationContext, AppPrefs.proxy_set.get(), AppPrefs.proxy_address.get(),
-            AppPrefs.proxy_https_set.get(), AppPrefs.proxy_https_address.get())
+        if (AppPrefs.proxy_set.get()) {
+            val http = AppPrefs.proxy_address.get()
+            val https = if (AppPrefs.proxy_https_set.get()) AppPrefs.proxy_https_address.get() else null
+            WebViewProxy.setProxy(http, https)
+        } else {
+            WebViewProxy.clearProxy()
+        }
 
         connectionStateMonitor.enable(this)
 
@@ -402,7 +411,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
         }
 
-        WebViewProxy.resetProxy(applicationContext)
+        WebViewProxy.clearProxy()
 
         connectionStateMonitor.disable(this)
     }

@@ -399,4 +399,18 @@
         <item>0</item>
         <item>1</item>
     </integer-array>
+
+    <string-array name="pref_web_theme_entries">
+        <item>@string/pref_light_theme</item>
+        <item>@string/pref_dark_theme</item>
+        <item>@string/pref_force_web_dark_mode</item>
+        <item>@string/pref_force_dark_mode</item>
+    </string-array>
+
+    <integer-array name="pref_web_theme_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
 </resources>

@@ -319,6 +319,11 @@
     <string name="pref_number_of_tab_to_cache">Number of tabs to cache</string>
     <string name="pref_dark_theme">Dark theme</string>
     <string name="pref_light_theme">Light theme</string>
+    <string name="pref_web_theme_mode">Web theme</string>
+    <string name="pref_force_dark_mode">Force dark mode</string>
+    <string name="pref_force_web_dark_mode">Prefer web theme over force dark mode</string>
+    <string name="pref_dark_mode">Dark mode</string>
+    <string name="pref_light_mode">Light mode</string>
 
     <string-array name="pref_rendering_list">
         <item>Normal</item>

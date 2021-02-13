@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.browser
 
-import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -32,6 +31,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.print.PrintHelper
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.adblock.ui.original.AddAdBlockDialog
@@ -1032,6 +1032,16 @@ class ActionExecutor(
             }
             SingleAction.READ_IT_LATER -> controller.savePage(controller.getTab(actionTarget))
             SingleAction.READ_IT_LATER_LIST -> startActivity(Intent(controller.activity, ReadItLaterActivity::class.java))
+            SingleAction.WEB_THEME -> {
+                val settings = controller.getTab(actionTarget).mWebView.webSettings
+                AlertDialog.Builder(controller.activity)
+                    .setSingleChoiceItems(R.array.pref_web_theme_entries, settings.webTheme) { dialog, which ->
+                        settings.webTheme = which
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            }
             else -> {
                 Toast.makeText(controller.applicationContextInfo, "Unknown action:" + action.id, Toast.LENGTH_LONG).show()
                 return false

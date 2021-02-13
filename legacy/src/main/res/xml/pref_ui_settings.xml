@@ -35,6 +35,14 @@
         android:title="@string/theme_management"
         app:iconSpaceReserved="false" />
 
+    <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
+        android:key="web_theme"
+        android:title="@string/pref_web_theme_mode"
+        android:entries="@array/pref_web_theme_entries"
+        android:entryValues="@array/pref_web_theme_values"
+        android:defaultValue="0"
+        app:iconSpaceReserved="false" />
+
     <PreferenceScreen
         android:key="ps_toolbar"
         android:title="@string/pref_toolbar_settings"

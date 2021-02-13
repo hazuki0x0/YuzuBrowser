@@ -29,7 +29,10 @@ import jp.hazuki.yuzubrowser.legacy.webkit.WebViewProxy
 import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
-class ProxySettingDialog @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : CustomDialogPreference(context, attrs) {
+class ProxySettingDialog @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : CustomDialogPreference(context, attrs) {
     private var mSaveSettings = true
 
     fun setSaveSettings(save: Boolean): ProxySettingDialog {
@@ -37,7 +40,7 @@ class ProxySettingDialog @JvmOverloads constructor(context: Context, attrs: Attr
         return this
     }
 
-    override fun crateCustomDialog(): CustomDialogPreference.CustomDialogFragment {
+    override fun crateCustomDialog(): CustomDialogFragment {
         return SettingDialog.newInstance(mSaveSettings)
     }
 
@@ -70,9 +73,14 @@ class ProxySettingDialog @JvmOverloads constructor(context: Context, attrs: Attr
                         val enableHttps = httpsCheckBox.isChecked
                         val httpsProxyAddress = httpsText.text.toString()
 
-                        WebViewProxy.setProxy(context, enable, proxyAddress, enableHttps, httpsProxyAddress)
+                        if (enable) {
+                            val https = if (enableHttps) httpsProxyAddress else null
+                            WebViewProxy.setProxy(proxyAddress, https)
+                        } else {
+                            WebViewProxy.clearProxy()
+                        }
 
-                        if (arguments!!.getBoolean(SAVE)) {
+                        if (requireArguments().getBoolean(SAVE)) {
                             AppPrefs.proxy_set.set(enable)
                             AppPrefs.proxy_address.set(proxyAddress)
                             AppPrefs.proxy_https_set.set(enableHttps)

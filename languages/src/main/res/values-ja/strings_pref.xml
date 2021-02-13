@@ -319,6 +319,11 @@
     <string name="pref_number_of_tab_to_cache">メモリに保持するタブ数</string>
     <string name="pref_dark_theme">ダークテーマ</string>
     <string name="pref_light_theme">ライトテーマ</string>
+    <string name="pref_web_theme_mode">Webテーマ</string>
+    <string name="pref_force_dark_mode">強制ダークモード</string>
+    <string name="pref_force_web_dark_mode">Webテーマ優先強制ダークモード</string>
+    <string name="pref_dark_mode">ダークモード</string>
+    <string name="pref_light_mode">ライトモード</string>
 
     <string-array name="pref_rendering_list">
         <item>標準</item>

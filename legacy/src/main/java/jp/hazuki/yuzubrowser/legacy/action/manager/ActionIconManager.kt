@@ -243,10 +243,12 @@ class ActionIconManager(val info: BrowserInfo) {
             SingleAction.READER_MODE -> return info.resourcesByInfo.getDrawable(R.drawable.ic_chrome_reader_mode_white_24dp, info.themeByInfo)
             SingleAction.READ_IT_LATER -> return info.resourcesByInfo.getDrawable(R.drawable.ic_watch_later_white_24dp, info.themeByInfo)
             SingleAction.READ_IT_LATER_LIST -> return info.resourcesByInfo.getDrawable(R.drawable.ic_read_it_list_white_24px, info.themeByInfo)
+            SingleAction.WEB_THEME -> return info.resourcesByInfo.getDrawable(R.drawable.ic_baseline_dark_mode_24, info.themeByInfo)
             else -> {
                 Toast.makeText(info.applicationContextInfo, "Unknown action:" + action.id, Toast.LENGTH_LONG).show()
                 return null
             }
+
         }
     }
 }

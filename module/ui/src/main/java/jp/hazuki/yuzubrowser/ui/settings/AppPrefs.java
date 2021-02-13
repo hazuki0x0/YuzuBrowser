@@ -202,6 +202,7 @@ public class AppPrefs {
     //WebView
     public static final IntContainer fast_back_cache_size = new IntContainer("fast_back_cache_size", 5);
     public static final BooleanContainer fast_back = new BooleanContainer("fast_back", false);
+    public static final IntContainer webTheme = new IntContainer("web_theme", 0);
     //AdBlock
     public static final BooleanContainer isAbpIgnoreGenericElement = new BooleanContainer("abpIgnoreGenericElement", false);
     public static final BooleanContainer isAbpUseElementHide = new BooleanContainer("abpUseElementHide", true);

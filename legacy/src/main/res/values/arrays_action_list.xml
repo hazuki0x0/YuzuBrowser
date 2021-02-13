@@ -125,5 +125,6 @@
         <item>@string/action_reader_mode</item>
         <item>@string/action_read_it_later</item>
         <item>@string/action_read_it_later_list</item>
+        <item>@string/pref_web_theme_mode</item>
     </string-array>
 </resources>

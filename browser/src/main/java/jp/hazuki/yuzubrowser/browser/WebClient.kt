@@ -284,6 +284,7 @@ class WebClient(
         setting.domStorageEnabled = noPrivate && AppPrefs.web_dom_db.get()
         setting.geolocationEnabled = noPrivate && AppPrefs.web_geolocation.get()
         setting.appCacheEnabled = noPrivate && AppPrefs.web_app_cache.get()
+        setting.webTheme = AppPrefs.webTheme.get()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setting.safeBrowsingEnabled = AppPrefs.safe_browsing.get()

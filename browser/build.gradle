@@ -66,7 +66,7 @@ dependencies {
     implementation AndroidX.room
     implementation AndroidX.print
     implementation AndroidX.documentFile
-    implementation AndroidX.localBroadcast
+    implementation AndroidX.webkit
 
     implementation Libs.okhttp
     implementation Libs.okio

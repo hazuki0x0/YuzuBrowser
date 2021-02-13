@@ -60,6 +60,7 @@ object Versions {
     const val powermock = "2.0.9"
     const val jsoup = "1.13.1"
     const val re2j = "1.5"
+    const val webkit = "1.4.0"
 }
 
 object AndroidX {
@@ -79,6 +80,7 @@ object AndroidX {
     const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
     const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifeCycle}"
     const val print = "androidx.print:print:${Versions.print}"
+    const val webkit = "androidx.webkit:webkit:${Versions.webkit}"
 }
 
 object Libs {

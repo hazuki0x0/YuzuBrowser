@@ -185,6 +185,7 @@ open class SingleAction : Parcelable {
         const val READER_MODE = 101040
         const val READ_IT_LATER = 101050
         const val READ_IT_LATER_LIST = 101051
+        const val WEB_THEME = 101060
         const val LPRESS_OPEN = -10
         const val LPRESS_OPEN_NEW = -11
         const val LPRESS_OPEN_BG = -12

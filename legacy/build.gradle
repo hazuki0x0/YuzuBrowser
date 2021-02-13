@@ -90,6 +90,7 @@ dependencies {
     implementation AndroidX.fragmentKtx
     implementation AndroidX.room
     implementation AndroidX.documentFile
+    implementation AndroidX.webkit
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
