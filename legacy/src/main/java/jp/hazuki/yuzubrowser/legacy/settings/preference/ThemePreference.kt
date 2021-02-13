@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.settings.preference
 import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.ListPreference
-import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import jp.hazuki.yuzubrowser.ui.theme.ThemeManifest
@@ -29,11 +28,11 @@ import java.util.*
 
 class ThemePreference(context: Context, attrs: AttributeSet) : ListPreference(context, attrs) {
     init {
-        init()
+        load()
     }
 
-    private fun init() {
-        val dir = File(externalUserDirectory, "theme")
+    fun load() {
+        val dir = context.getExternalFilesDir("theme")!!
 
         if (!dir.isDirectory) {
             dir.delete()

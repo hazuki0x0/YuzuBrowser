@@ -22,3 +22,5 @@ const val MIME_TYPE_MHTML = "multipart/related"
 const val MIME_TYPE_HTML = "text/html"
 
 const val READER_FONT_NAME = "reader_font.bin"
+
+const val THEME_DIR = "theme"

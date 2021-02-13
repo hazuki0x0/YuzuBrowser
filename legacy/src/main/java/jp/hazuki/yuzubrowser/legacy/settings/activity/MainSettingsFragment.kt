@@ -20,7 +20,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.help.BROWSER_HELP_URL
@@ -75,12 +74,4 @@ class MainSettingsFragment : YuzuPreferenceFragment() {
             true
         }
     }
-
-    private fun openFragment(fragment: PreferenceFragmentCompat) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
 }

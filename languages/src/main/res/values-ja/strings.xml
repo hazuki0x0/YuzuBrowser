@@ -202,6 +202,8 @@
     <string name="cannot_access_folder">ディレクトリにアクセスできません</string>
     <string name="add_by_edit">直接入力で追加</string>
     <string name="add_from_file">ファイルから追加</string>
+    <string name="from_theme_file">テーマファイル</string>
+    <string name="from_theme_folder">テーマフォルダ</string>
     <string name="set_folder_path">パスの直接入力</string>
     <string name="go_data_folder">データフォルダへ移動</string>
     <string name="go_sd_folder">外部ストレージフォルダへ移動</string>
@@ -263,6 +265,9 @@
     <string name="unknown">不明</string>
     <string name="delete_mf_gesture">マルチタッチジェスチャを削除</string>
     <string name="confirm_delete_mf_gesture">このジェスチャを削除しますか？</string>
+    <string name="theme_import">テーマをインポート</string>
+    <string name="theme_management">テーマ管理</string>
+    <string name="delete_theme">テーマを削除</string>
     <string name="theme_importer">Yuzu Browserテーマ インポート</string>
     <string name="theme_imported">\"%1$s\"をインポートしました</string>
     <string name="theme_installed_version">このバージョンのテーマはインポート済みです</string>

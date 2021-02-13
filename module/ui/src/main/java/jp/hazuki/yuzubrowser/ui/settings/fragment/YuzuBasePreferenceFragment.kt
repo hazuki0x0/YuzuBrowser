@@ -76,4 +76,11 @@ abstract class YuzuBasePreferenceFragment : PreferenceFragmentCompat() {
     }
 
     open fun onPreferenceStartScreen(pref: PreferenceScreen): Boolean = false
+
+    protected fun openFragment(fragment: PreferenceFragmentCompat) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 }

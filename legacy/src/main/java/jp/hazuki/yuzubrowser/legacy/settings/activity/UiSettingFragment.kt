@@ -22,16 +22,24 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.RestartActivity
 
 class UiSettingFragment : YuzuPreferenceFragment() {
+
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_ui_settings)
         findPreference<Preference>("theme_setting")!!.setOnPreferenceChangeListener { _, _ ->
             startActivity(RestartActivity.createIntent(requireContext()))
             true
         }
+
+        findPreference<Preference>("theme_management")!!.setOnPreferenceClickListener {
+            openFragment(ThemeManagementFragment())
+            true
+        }
+
         findPreference<Preference>("restart")!!.setOnPreferenceClickListener {
             startActivity(RestartActivity.createIntent(requireContext()))
             true
         }
+
         findPreference<Preference>("reader_settings")!!.setOnPreferenceClickListener {
             parentFragmentManager.commit {
                 replace(R.id.container, ReaderSettingsFragment())

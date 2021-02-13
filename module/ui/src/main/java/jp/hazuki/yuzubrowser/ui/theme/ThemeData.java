@@ -50,8 +50,6 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils;
 import jp.hazuki.yuzubrowser.ui.R;
 import okio.Okio;
 
-import static jp.hazuki.yuzubrowser.core.utility.utils.FileUtilsKt.getExternalUserDirectory;
-
 public class ThemeData {
     public static final String THEME_LIGHT = "theme://internal/light";
 
@@ -395,7 +393,7 @@ public class ThemeData {
             sInstance = createLightTheme(context);
             loadedTheme = folder;
         } else {
-            File file = new File(getExternalUserDirectory(), "theme" + File.separator + folder);
+            File file = new File(context.getExternalFilesDir("theme"), folder);
             if (!file.exists() || !file.isDirectory()) {
                 sInstance = null;
                 loadedTheme = null;

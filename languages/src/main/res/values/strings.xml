@@ -203,6 +203,8 @@
     <string name="cannot_access_folder">Access denied</string>
     <string name="add_by_edit">Add by direct input</string>
     <string name="add_from_file">Add from file</string>
+    <string name="from_theme_file">Theme file</string>
+    <string name="from_theme_folder">Theme directory</string>
     <string name="set_folder_path">Set current path</string>
     <string name="go_data_folder">Go to data directory</string>
     <string name="go_sd_folder">Go to external storage</string>
@@ -264,6 +266,9 @@
     <string name="unknown">Unknown</string>
     <string name="delete_mf_gesture">Delete multi touch gesture</string>
     <string name="confirm_delete_mf_gesture">Delete this gesture?</string>
+    <string name="theme_import">Import theme</string>
+    <string name="theme_management">Theme management</string>
+    <string name="delete_theme">Delete themes</string>
     <string name="theme_importer">Yuzu Browser theme importer</string>
     <string name="theme_imported">%1$s is imported.</string>
     <string name="theme_installed_version">This version of theme is already installed.</string>

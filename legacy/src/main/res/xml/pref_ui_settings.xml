@@ -30,6 +30,11 @@
         android:title="@string/theme_setting"
         app:iconSpaceReserved="false" />
 
+    <Preference
+        android:key="theme_management"
+        android:title="@string/theme_management"
+        app:iconSpaceReserved="false" />
+
     <PreferenceScreen
         android:key="ps_toolbar"
         android:title="@string/pref_toolbar_settings"

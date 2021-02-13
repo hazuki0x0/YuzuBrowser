@@ -18,10 +18,11 @@ package jp.hazuki.yuzubrowser.legacy.theme
 
 import android.content.Context
 import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.THEME_DIR
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEach
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
-import jp.hazuki.yuzubrowser.core.utility.utils.externalUserDirectory
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.theme.ThemeManifest
 import java.io.File
@@ -30,9 +31,9 @@ import java.io.IOException
 import java.util.zip.ZipInputStream
 
 internal fun importTheme(context: Context, uri: Uri):Result {
-    val root = File(externalUserDirectory, "theme")
+    val root = context.getExternalFilesDir(THEME_DIR)!!
     val tmpFolder = File(root, System.currentTimeMillis().toString())
-    val tmpFolderPath = tmpFolder.canonicalPath
+    val tmpFolderPath = tmpFolder.absolutePath
 
     try {
         ZipInputStream(context.contentResolver.openInputStream(uri)).use { zis ->
@@ -75,6 +76,43 @@ internal fun importTheme(context: Context, uri: Uri):Result {
         return Result(false, context.getString(R.string.theme_unknown_error))
     }
 
+    return importThemeDirectory(context, root, tmpFolder)
+}
+
+fun importThemeDirectory(context: Context, uri: Uri): Result {
+    val root = context.getExternalFilesDir(THEME_DIR)!!
+    val tmpFolder = File(root, System.currentTimeMillis().toString())
+
+    val fromRoot = DocumentFile.fromTreeUri(context, uri)!!
+
+    tmpFolder.mkdirs()
+
+    copyTo(context, fromRoot, tmpFolder)
+
+    return importThemeDirectory(context, root, tmpFolder)
+}
+
+private fun copyTo(context: Context, from: DocumentFile, to: File) {
+    from.listFiles().forEach {
+        if (it.isDirectory) {
+            val next = File(to, it.name!!)
+            next.mkdirs()
+            copyTo(context, it, next)
+        } else {
+            try {
+                context.contentResolver.openInputStream(it.uri)?.use { ins ->
+                    File(to, it.name!!).outputStream().use { os ->
+                        ins.copyTo(os)
+                    }
+                }
+            } catch (e: IOException) {
+                ErrorReport.printAndWriteLog(e)
+            }
+        }
+    }
+}
+
+private fun importThemeDirectory(context: Context, root: File, tmpFolder: File): Result {
     val manifestFile = File(tmpFolder, ThemeManifest.MANIFEST)
     val manifest: ThemeManifest?
 
