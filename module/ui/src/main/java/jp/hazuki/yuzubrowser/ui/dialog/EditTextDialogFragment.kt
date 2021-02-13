@@ -1,0 +1,83 @@
+/*
+ * Copyright 2020 Hazuki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package jp.hazuki.yuzubrowser.ui.dialog
+
+import android.app.Dialog
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import jp.hazuki.yuzubrowser.ui.R
+
+class EditTextDialogFragment : DialogFragment() {
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val layout = LayoutInflater.from(context).inflate(R.layout.dialog_edittext, null)
+        val editText = layout.findViewById<EditText>(R.id.editText)
+        val arguments = requireArguments()
+
+        arguments.getString(HINT)?.let { editText.hint = it }
+        arguments.getString(TEXT)?.let { editText.setText(it) }
+
+        val title = arguments.getString(TITLE)
+
+        return AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setView(layout)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                val parent = parentFragment
+                if (parent is OnTextChangeCallback) {
+                    val id = arguments.getInt(ID)
+                    val data = arguments.getBundle(DATA)
+                    parent.onTextApply(id, editText.text.toString(), data)
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+    }
+
+    fun interface OnTextChangeCallback {
+        fun onTextApply(id: Int, text: String, data: Bundle?)
+    }
+
+    companion object {
+        const val ID = "id"
+        const val TITLE = "title"
+        const val HINT = "hint"
+        const val TEXT = "text"
+        const val DATA = "data"
+
+        operator fun invoke(
+            id: Int,
+            title: String,
+            text: String = "",
+            hint: String = "",
+            data: Bundle? = null
+        ): EditTextDialogFragment {
+            return EditTextDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ID, id)
+                    putString(TITLE, title)
+                    putString(TEXT, text)
+                    putString(HINT, hint)
+                    putBundle(DATA, data)
+                }
+            }
+        }
+    }
+}

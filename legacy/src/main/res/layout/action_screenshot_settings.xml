@@ -17,14 +17,6 @@
         android:layout_height="wrap_content"
         android:text="@string/action_screenshot_full_error"/>
 
-    <!--
-    <jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListButton
-        android:id="@+id/folderButton"
-        style="@android:style/Widget.Spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    -->
-
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

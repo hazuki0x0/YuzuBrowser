@@ -161,12 +161,7 @@
             android:name="jp.hazuki.yuzubrowser.legacy.debug.DebugActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />
-        <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.debug.DebugFileListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.debug.TextEditActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name="jp.hazuki.yuzubrowser.legacy.debug.DebugFileListActivity" />
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.debug.ActivityListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -245,9 +240,6 @@
             android:name="jp.hazuki.yuzubrowser.legacy.userjs.UserScriptEditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/userjs_edit" />
-        <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.utils.view.filelist.FileListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

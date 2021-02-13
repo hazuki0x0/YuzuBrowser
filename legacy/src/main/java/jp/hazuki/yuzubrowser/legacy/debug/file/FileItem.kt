@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright 2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,11 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.debug
+package jp.hazuki.yuzubrowser.legacy.debug.file
 
-import android.os.Bundle
-import androidx.fragment.app.commit
-import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import java.io.File
 
-class DebugFileListActivity : ThemeActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_base)
-
-        supportFragmentManager.commit {
-            replace(R.id.container, FileBrowserFragment())
-        }
-    }
-}
+class FileItem(
+    val name: String,
+    val path: File,
+)
