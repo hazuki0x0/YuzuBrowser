@@ -34,6 +34,7 @@ import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.ImageUtils
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
+import jp.hazuki.yuzubrowser.legacy.action.item.startactivity.StartActivityPreferenceActivity.Companion.EXTRA_ICON
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionActivity
 import jp.hazuki.yuzubrowser.legacy.tab.manager.MainTabData
 import jp.hazuki.yuzubrowser.legacy.utils.graphics.LauncherIconDrawable
@@ -124,19 +125,27 @@ class StartActivitySingleAction : SingleAction, Parcelable {
         mIcon = source.readParcelable(Bitmap::class.java.classLoader)
     }
 
-    override fun showMainPreference(context: ActionActivity): StartActivityInfo? {
+    override fun showMainPreference(context: ActionActivity): StartActivityInfo {
         return showSubPreference(context)
     }
 
-    @Suppress("DEPRECATION")
-    override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
+    override fun showSubPreference(context: ActionActivity): StartActivityInfo {
         val intent = Intent(context.applicationContext, StartActivityPreferenceActivity::class.java)
         intent.putExtra(Intent.EXTRA_INTENT, mIntent)
         return StartActivityInfo(intent) { _, resultCode, data ->
             if (resultCode != Activity.RESULT_OK || data == null)
                 return@StartActivityInfo
+
+            val sIntent = data.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)
+                ?: return@StartActivityInfo
+            mIntent = sIntent
+
+            if (data.getBooleanExtra(StartActivityPreferenceActivity.EXTRA_UPDATE_INTENT, false)) {
+                return@StartActivityInfo
+            }
+
             val name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)
-            var icon: Bitmap? = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON)
+            var icon: Bitmap? = data.getParcelableExtra(EXTRA_ICON)
             if (icon == null) {
                 val iconRes = data.getParcelableExtra<ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
                 if (iconRes != null) {
@@ -150,12 +159,10 @@ class StartActivitySingleAction : SingleAction, Parcelable {
 
                 }
             }
-            val sIntent = data.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)
-                    ?: return@StartActivityInfo
+
             mName = name
             mIcon?.recycle()
             mIcon = icon
-            mIntent = sIntent
             mIconCache = null
         }
     }
@@ -205,6 +212,15 @@ class StartActivitySingleAction : SingleAction, Parcelable {
         return icon
     }
 
+    private fun replaceString(tab: MainTabData, data: String): String {
+        var result = data
+        if (tab.url != null)
+            result = result.replace(REPLACE_URI, tab.url)
+        if (tab.title != null)
+            result = result.replace(REPLACE_TITLE, tab.title)
+        return result
+    }
+
     companion object {
         private const val TAG = "StartActivitySingleAction"
         private const val FIELD_NAME_INTENT = "0"
@@ -222,15 +238,6 @@ class StartActivitySingleAction : SingleAction, Parcelable {
             override fun newArray(size: Int): Array<StartActivitySingleAction?> {
                 return arrayOfNulls(size)
             }
-        }
-
-        private fun replaceString(tab: MainTabData, data: String): String {
-            var result = data
-            if (tab.url != null)
-                result = result.replace(REPLACE_URI, tab.url)
-            if (tab.title != null)
-                result = result.replace(REPLACE_TITLE, tab.title)
-            return result
         }
     }
 }

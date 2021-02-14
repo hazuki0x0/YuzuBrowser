@@ -41,8 +41,9 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
         setContentView(R.layout.fragment_base)
 
         val intent = intent
-        if (intent != null)
+        if (intent != null) {
             mCurrentIntent = intent.getParcelableExtra(Intent.EXTRA_INTENT)
+        }
 
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, StartActivityPreferenceFragment())
@@ -52,7 +53,7 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(R.string.action_start_activity_edit_url).setOnMenuItemClickListener {
             val editText = EditText(this@StartActivityPreferenceActivity)
-            editText.setSingleLine(true)
+            editText.isSingleLine = true
             editText.setText(mUrl)
 
             AlertDialog.Builder(this@StartActivityPreferenceActivity)
@@ -65,7 +66,7 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
         }
         menu.add(R.string.action_start_activity_edit_intent).setOnMenuItemClickListener {
             val editText = EditText(this@StartActivityPreferenceActivity)
-            editText.setSingleLine(true)
+            editText.isSingleLine = true
             if (mCurrentIntent != null)
                 editText.setText(mCurrentIntent!!.toUri(0))
 
@@ -76,7 +77,11 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
                         try {
                             val str = editText.text.toString()
                             val intent = Intent.parseUri(str, 0)
-                            setResult(RESULT_OK, intent)
+                            val payload = Intent().apply {
+                                putExtra(EXTRA_UPDATE_INTENT, true)
+                                putExtra(Intent.EXTRA_INTENT, intent)
+                            }
+                            setResult(RESULT_OK, payload)
                             finish()
                         } catch (e: URISyntaxException) {
                             ErrorReport.printAndWriteLog(e)
@@ -139,10 +144,9 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
             RESULT_REQUEST_OPEN_OTHER -> WebUtils.createOpenInOtherAppIntent(intent, StartActivitySingleAction.REPLACE_URI)
         }
 
-        @Suppress("DEPRECATION")
         val result = Intent().apply {
-            putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent)
-            putExtra(Intent.EXTRA_SHORTCUT_ICON, info.icon.getBitmap())
+            putExtra(Intent.EXTRA_INTENT, intent)
+            putExtra(EXTRA_ICON, info.icon.getBitmap())
         }
         setResult(RESULT_OK, result)
         finish()
@@ -152,5 +156,8 @@ class StartActivityPreferenceActivity : ThemeActivity(), StartActivityPreference
         private const val RESULT_REQUEST_APP = 0
         private const val RESULT_REQUEST_SHARE = 1
         private const val RESULT_REQUEST_OPEN_OTHER = 2
+
+        const val EXTRA_ICON = "extra_icon"
+        const val EXTRA_UPDATE_INTENT = "extra_update_intent"
     }
 }
