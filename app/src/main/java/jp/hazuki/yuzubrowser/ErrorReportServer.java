@@ -54,7 +54,7 @@ public class ErrorReportServer implements UncaughtExceptionHandler, IErrorReport
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        writeErrorLog(ex, "UCE");
+        if (detailedLog) writeErrorLog(ex, "UCE");
         sDefHandler.uncaughtException(thread, ex);
     }
 

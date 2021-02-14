@@ -17,9 +17,11 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.os.Bundle
 import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.settings.preference.ThemePreference
 import jp.hazuki.yuzubrowser.ui.RestartActivity
 import kotlinx.coroutines.delay
 
@@ -51,6 +53,12 @@ class UiSettingFragment : YuzuPreferenceFragment() {
                 addToBackStack("reader_settings")
             }
             true
+        }
+
+        setFragmentResultListener(ThemeManagementFragment.REQUEST_THEME_LIST_UPDATE) { _, bundle ->
+            if (bundle.getBoolean(ThemeManagementFragment.REQUEST_THEME_LIST_UPDATE)) {
+                findPreference<ThemePreference>("theme_setting")!!.load()
+            }
         }
     }
 }

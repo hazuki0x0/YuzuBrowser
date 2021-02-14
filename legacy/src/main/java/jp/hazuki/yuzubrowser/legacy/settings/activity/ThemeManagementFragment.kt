@@ -22,23 +22,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.preference.Preference
-import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.core.THEME_DIR
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.settings.preference.ThemePreference
 import jp.hazuki.yuzubrowser.legacy.theme.Result
 import jp.hazuki.yuzubrowser.legacy.theme.importTheme
 import jp.hazuki.yuzubrowser.legacy.theme.importThemeDirectory
+import jp.hazuki.yuzubrowser.ui.dialog.ConfirmDialog
 import jp.hazuki.yuzubrowser.ui.extensions.registerForStartActivityForResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class ThemeManagementFragment : YuzuPreferenceFragment() {
-    private var snackbar: Snackbar? = null
+class ThemeManagementFragment : YuzuPreferenceFragment(), ConfirmDialog.OnConfirmedListener {
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_theme_managment)
@@ -49,7 +49,6 @@ class ThemeManagementFragment : YuzuPreferenceFragment() {
         }
 
         findPreference<Preference>("delete_theme")!!.setOnPreferenceClickListener {
-            snackbar?.dismiss()
             ManageThemeDialog().show(childFragmentManager, "")
             true
         }
@@ -94,27 +93,37 @@ class ThemeManagementFragment : YuzuPreferenceFragment() {
     private fun showImportResult(result: Result) {
         if (result.isSuccess) {
             Toast.makeText(requireContext(), getString(R.string.theme_imported, result.message), Toast.LENGTH_SHORT).show()
-            findPreference<ThemePreference>("theme_setting")!!.load()
+            setFragmentResult(REQUEST_THEME_LIST_UPDATE, bundleOf(REQUEST_THEME_LIST_UPDATE to true))
         } else {
             Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun deleteThemes(themes: List<File>) {
+    private fun deleteThemes(themes: List<String>) {
         if (themes.isEmpty()) return
 
-        snackbar = Snackbar.make(requireView(), R.string.deleted, Snackbar.LENGTH_LONG).apply {
-            setAction(R.string.undo) {}
-            addCallback(object : Snackbar.Callback() {
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    if (event == DISMISS_EVENT_ACTION) return
+        val title = getString(R.string.delete_theme)
+        val message = resources.getQuantityString(R.plurals.confirm_delete_multiple, themes.size)
+        val data = Bundle().apply {
+            putStringArray(CONFIRM_DATA, themes.toTypedArray())
+        }
+        ConfirmDialog(DELETE_THEME_CONFIRM, title, message, data)
+            .show(childFragmentManager, "")
+    }
 
-                    themes.forEach {
-                        it.deleteRecursively()
-                    }
+    override fun onConfirmed(id: Int, data: Bundle?) {
+        if (data == null) return
+        when (id) {
+            DELETE_THEME_CONFIRM -> {
+                val root = requireContext().getExternalFilesDir(THEME_DIR)!!
+                val themes = data.getStringArray(CONFIRM_DATA)!!
+                    .map { File(root, it) }
+                themes.forEach {
+                    it.deleteRecursively()
                 }
-            })
-            show()
+                Toast.makeText(requireContext(), R.string.deleted, Toast.LENGTH_SHORT).show()
+                setFragmentResult(REQUEST_THEME_LIST_UPDATE, bundleOf(REQUEST_THEME_LIST_UPDATE to true))
+            }
         }
     }
 
@@ -153,15 +162,20 @@ class ThemeManagementFragment : YuzuPreferenceFragment() {
                     checked[which] = isChecked
                 }
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val root = requireContext().getExternalFilesDir(THEME_DIR)!!
                     val files = items.asSequence()
                         .filterIndexed { index, _ -> checked[index] }
-                        .map { File(root, it) }
                         .toList()
                     (parentFragment as ThemeManagementFragment).deleteThemes(files)
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()
         }
+    }
+
+    companion object {
+        private const val DELETE_THEME_CONFIRM = 1
+        private const val CONFIRM_DATA = "data"
+
+        const val REQUEST_THEME_LIST_UPDATE = "request_theme_list_update"
     }
 }

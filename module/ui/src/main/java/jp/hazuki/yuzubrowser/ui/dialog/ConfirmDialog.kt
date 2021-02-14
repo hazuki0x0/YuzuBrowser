@@ -33,7 +33,9 @@ class ConfirmDialog : DialogFragment() {
         return AlertDialog.Builder(activity)
             .setTitle(arguments.getString(TITLE))
             .setMessage(arguments.getString(MESSAGE))
-            .setPositiveButton(android.R.string.ok) { _, _ -> listener?.onConfirmed(id) }
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                listener?.onConfirmed(id, arguments.getBundle(DATA))
+            }
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()
     }
@@ -49,20 +51,27 @@ class ConfirmDialog : DialogFragment() {
     }
 
     interface OnConfirmedListener {
-        fun onConfirmed(id: Int)
+        fun onConfirmed(id: Int, data: Bundle?)
     }
 
     companion object {
         private const val ID = "id"
         private const val TITLE = "title"
         private const val MESSAGE = "mes"
+        private const val DATA = "data"
 
-        operator fun invoke(id: Int, title: String, message: String): ConfirmDialog {
+        operator fun invoke(
+            id: Int,
+            title: String,
+            message: String,
+            data: Bundle? = null
+        ): ConfirmDialog {
             return ConfirmDialog().apply {
                 arguments = Bundle().apply {
                     putInt(ID, id)
                     putString(TITLE, title)
                     putString(MESSAGE, message)
+                    putBundle(DATA, data)
                 }
             }
         }
