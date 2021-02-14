@@ -47,17 +47,5 @@
         android:key="privacy_policy"
         android:title="@string/pref_privacy_policy"
         app:iconSpaceReserved="false" />
-    <PreferenceCategory
-        android:title="@string/pref_log"
-        app:iconSpaceReserved="false">
-        <SwitchPreference
-            android:key="detailed_log"
-            android:title="@string/pref_detailed_log"
-            app:iconSpaceReserved="false" />
-        <Preference
-            android:key="delete_log"
-            android:title="@string/pref_delete_all_logs"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
 
 </PreferenceScreen>

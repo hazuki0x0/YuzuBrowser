@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2017-2021 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="file_list"
+        android:title="File browser"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="activity_list"
+        android:title="Activity list"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="action_json_string"
+        android:title="Action json string"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="action_list_json_string"
+        android:title="Action list json string"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="language"
+        android:title="Language"
+        app:iconSpaceReserved="false" />
+
+
+    <PreferenceCategory
+        android:title="@string/pref_log"
+        app:iconSpaceReserved="false">
+        <SwitchPreference
+            android:key="detailed_log"
+            android:title="@string/pref_detailed_log"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="log_list"
+            android:title="Log list"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="delete_log"
+            android:title="@string/pref_delete_all_logs"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

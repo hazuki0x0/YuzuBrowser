@@ -21,17 +21,15 @@ import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebView
-import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import jp.hazuki.yuzubrowser.core.utility.extensions.getVersionName
-import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.licenses.LicensesActivity
 import jp.hazuki.yuzubrowser.legacy.utils.AppUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.ui.extensions.intentFor
-import java.io.File
 
 class AboutFragment : YuzuPreferenceFragment() {
 
@@ -65,41 +63,15 @@ class AboutFragment : YuzuPreferenceFragment() {
             })
             true
         }
-
-        findPreference<Preference>("delete_log")!!.setOnPreferenceClickListener {
-            DeleteLogDialog().show(childFragmentManager, "delete")
-            true
-        }
     }
 
-    class TranslationDialog : androidx.fragment.app.DialogFragment() {
+    class TranslationDialog : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val activity = requireActivity()
             return AlertDialog.Builder(activity)
-                    .setTitle(R.string.pref_translation)
-                    .setView(WebView(activity).apply { loadUrl("file:///android_asset/translators.html") })
-                    .create()
-        }
-    }
-
-    class DeleteLogDialog : androidx.fragment.app.DialogFragment() {
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val builder = AlertDialog.Builder(activity)
-            builder.setTitle(R.string.pref_delete_all_logs)
-                .setMessage(R.string.pref_delete_log_mes)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val activity = activity ?: return@setPositiveButton
-                    val file = File(activity.getExternalFilesDir(null), "./error_log/")
-                    if (!file.exists()) {
-                        Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
-                    } else if (FileUtils.deleteFile(file)) {
-                        Toast.makeText(activity, R.string.succeed, Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(activity, R.string.failed, Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-            return builder.create()
+                .setTitle(R.string.pref_translation)
+                .setView(WebView(activity).apply { loadUrl("file:///android_asset/translators.html") })
+                .create()
         }
     }
 }
