@@ -142,20 +142,19 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             if (adapter.isSortMode) {
                 adapter.isSortMode = false
                 Toast.makeText(activity, R.string.end_sort, Toast.LENGTH_SHORT).show()
-                return@addCallback true
+                return@addCallback
             } else if (adapter.isMultiSelectMode) {
                 adapter.isMultiSelectMode = false
-                return@addCallback true
+                return@addCallback
             }
+
             val parent = mCurrentFolder.parent
-            return@addCallback if (parent != null) {
+            if (parent != null) {
                 setList(parent)
                 breadcrumbAdapter.select(breadcrumbAdapter.selectedIndex - 1)
                 binding.subBar.setExpanded(true, false)
-                true
             } else {
                 requireActivity().finish()
-                false
             }
         }
     }

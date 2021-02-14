@@ -102,11 +102,10 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
         super.onActivityCreated(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             val searchView = searchView
-            return@addCallback if (searchView != null && !searchView.isIconified) {
+            if (searchView != null && !searchView.isIconified) {
                 searchView.isIconified = true
-                true
             } else {
-                false
+                requireActivity().finish()
             }
         }
     }

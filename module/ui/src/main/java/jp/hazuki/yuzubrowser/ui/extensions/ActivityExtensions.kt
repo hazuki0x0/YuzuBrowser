@@ -20,7 +20,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.LifecycleOwner
 
-inline fun OnBackPressedDispatcher.addCallback(owner: LifecycleOwner, crossinline callback: () -> Boolean) {
+inline fun OnBackPressedDispatcher.addCallback(owner: LifecycleOwner, crossinline callback: () -> Unit) {
     addCallback(owner, object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             callback()

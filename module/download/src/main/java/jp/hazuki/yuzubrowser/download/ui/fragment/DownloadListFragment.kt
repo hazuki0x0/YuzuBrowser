@@ -79,17 +79,12 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         adapter.decoration = decoration
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
+        activity.onBackPressedDispatcher.addCallback(this) {
             return@addCallback if (adapter.isMultiSelectMode) {
                 adapter.isMultiSelectMode = false
-                true
             } else {
-                false
+                requireActivity().finish()
             }
         }
     }
