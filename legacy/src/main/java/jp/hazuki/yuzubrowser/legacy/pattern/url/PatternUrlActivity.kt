@@ -239,7 +239,20 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                         renderingMode = renderingModeSpinner.selectedItemPosition
                     }
 
-                    return WebSettingPatternAction(ua, js, navLock, image, cookie, thirdCookie, renderingMode)
+                    var webTheme = WebSettingPatternAction.UNDEFINED_RENDERING
+                    if (webThemeCheckBox.isChecked) {
+                        webTheme = webThemeSpinner.selectedItemPosition
+                    }
+
+                    return WebSettingPatternAction(
+                        ua,
+                        js,
+                        navLock,
+                        image, cookie,
+                        thirdCookie,
+                        renderingMode,
+                        webTheme,
+                    )
                 }
             }
 
@@ -253,6 +266,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     cookieSwitch.isEnabled = false
                     thirdCookieSwitch.isEnabled = false
                     renderingModeSpinner.isEnabled = false
+                    webThemeSpinner.isEnabled = false
                 } else {
                     val action = checker.action as WebSettingPatternAction
                     val ua = action.userAgentString
@@ -352,6 +366,16 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                         renderingModeSpinner.isEnabled = true
                         renderingModeSpinner.setSelection(action.renderingMode)
                     }
+
+                    if (action.webTheme < 0) {
+                        webThemeCheckBox.isChecked = false
+                        webThemeSpinner.isEnabled = false
+                        webThemeSpinner.setSelection(0)
+                    } else {
+                        webThemeCheckBox.isChecked = true
+                        webThemeSpinner.isEnabled = true
+                        webThemeSpinner.setSelection(action.webTheme)
+                    }
                 }
             }
 
@@ -384,6 +408,8 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                 thirdCookieCheckBox.setOnCheckedChangeListener { _, b -> thirdCookieSwitch.isEnabled = b }
 
                 renderingModeCheckBox.setOnCheckedChangeListener { _, b -> renderingModeSpinner.isEnabled = b }
+
+                webThemeCheckBox.setOnFocusChangeListener { _, b -> webThemeSpinner.isEnabled = b }
             }
         }
     }

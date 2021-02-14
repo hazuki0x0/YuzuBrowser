@@ -26,6 +26,7 @@ class WebSettingResetAction(tabData: MainTabData) {
     private val loadImage: Boolean
     private val thirdCookie: Boolean
     private val renderingMode: Int
+    private val webTheme: Int
     var patternAction: WebSettingPatternAction? = null
 
     init {
@@ -36,6 +37,7 @@ class WebSettingResetAction(tabData: MainTabData) {
         loadImage = settings.loadsImagesAutomatically
         thirdCookie = CookieManager.getInstance().acceptThirdPartyCookies(tabData.mWebView.webView)
         renderingMode = tabData.mWebView.renderingMode
+        webTheme = settings.webTheme
     }
 
     fun reset(tab: MainTabData) {
@@ -51,5 +53,6 @@ class WebSettingResetAction(tabData: MainTabData) {
             setAcceptThirdPartyCookies(tab.mWebView.webView, thirdCookie)
         }
         tab.renderingMode = renderingMode
+        settings.webTheme = webTheme
     }
 }

@@ -42,8 +42,18 @@ class WebSettingPatternAction : PatternAction {
         private set
     var renderingMode = UNDEFINED_RENDERING
         private set
+    var webTheme = UNDEFINED_RENDERING
 
-    constructor(ua: String?, js: Int, navLock: Int, image: Int, cookie: Int, thirdCookie: Int, renderingMode: Int) {
+    constructor(
+        ua: String?,
+        js: Int,
+        navLock: Int,
+        image: Int,
+        cookie: Int,
+        thirdCookie: Int,
+        renderingMode: Int,
+        webTheme: Int,
+    ) {
         userAgentString = ua
         javaScriptSetting = js
         this.navLock = navLock
@@ -51,6 +61,7 @@ class WebSettingPatternAction : PatternAction {
         this.cookie = cookie
         this.thirdCookie = thirdCookie
         this.renderingMode = renderingMode
+        this.webTheme = webTheme
     }
 
     @Throws(IOException::class)
@@ -87,6 +98,10 @@ class WebSettingPatternAction : PatternAction {
                     if (reader.peek() != JsonReader.Token.NUMBER) return
                     renderingMode = reader.nextInt()
                 }
+                FIELD_WEB_THEME -> {
+                    if (reader.peek() != JsonReader.Token.NUMBER) return
+                    webTheme = reader.nextInt()
+                }
                 else -> {
                     reader.skipValue()
                 }
@@ -121,6 +136,8 @@ class WebSettingPatternAction : PatternAction {
         writer.value(cookie)
         writer.name(FIELD_NAME_RENDERING_MODE)
         writer.value(renderingMode)
+        writer.name(FIELD_WEB_THEME)
+        writer.value(webTheme)
         writer.endObject()
         return true
     }
@@ -161,6 +178,10 @@ class WebSettingPatternAction : PatternAction {
         if (renderingMode >= 0) {
             tab.renderingMode = renderingMode
         }
+
+        if (webTheme >= 0) {
+            settings.webTheme = webTheme
+        }
         return false
     }
 
@@ -178,5 +199,6 @@ class WebSettingPatternAction : PatternAction {
         private const val FIELD_NAME_THIRD_COOKIE = "4"
         private const val FIELD_NAME_COOKIE = "5"
         private const val FIELD_NAME_RENDERING_MODE = "6"
+        private const val FIELD_WEB_THEME = "7"
     }
 }
