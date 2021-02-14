@@ -45,7 +45,7 @@ class DebugActivity : ThemeActivity() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             val activity = activity ?: throw IllegalStateException()
-            val list = arrayOf("file list", "activity list", "action json string", "action list json string", "language")
+            val list = arrayOf("file list", "activity list", "action json string", "action list json string", "logs", "language")
             listAdapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, list)
         }
 
@@ -65,7 +65,12 @@ class DebugActivity : ThemeActivity() {
                 3 -> startActivity(Intent(activity, ActionStringActivity::class.java).apply {
                     putExtra(ActionStringActivity.EXTRA_ACTIVITY, ActionStringActivity.ACTION_LIST_ACTIVITY)
                 })
-                4 -> LanguageFragment().show(childFragmentManager, "language")
+                4 -> {
+                    val context = requireContext()
+                    val path = context.getExternalFilesDir("error_log")!!
+                    startActivity(DebugFileListActivity.createIntent(context, path))
+                }
+                5 -> LanguageFragment().show(childFragmentManager, "language")
             }
         }
 

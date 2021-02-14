@@ -38,8 +38,9 @@ public class ErrorReportServer implements UncaughtExceptionHandler, IErrorReport
 
     public static void initialize(Context context) {
         filesDir = context.getExternalFilesDir("");
-        ErrorReport.INSTANCE.init(new ErrorReportServer());
-        //Thread.setDefaultUncaughtExceptionHandler(new ErrorReportServer());
+        ErrorReportServer server = new ErrorReportServer();
+        ErrorReport.INSTANCE.init(server);
+        Thread.setDefaultUncaughtExceptionHandler(server);
     }
 
     public static void setDetailedLog(boolean enable) {

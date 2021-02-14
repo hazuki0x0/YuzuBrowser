@@ -16,10 +16,13 @@
 
 package jp.hazuki.yuzubrowser.legacy.debug
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.commit
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
+import java.io.File
 
 class DebugFileListActivity : ThemeActivity() {
 
@@ -27,8 +30,19 @@ class DebugFileListActivity : ThemeActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
 
+        val file = intent.getSerializableExtra(EXTRA_PATH) as File?
+
         supportFragmentManager.commit {
-            replace(R.id.container, FileBrowserFragment())
+            replace(R.id.container, FileBrowserFragment(file))
         }
+    }
+
+    companion object {
+        private const val EXTRA_PATH = "path_file"
+
+        fun createIntent(context: Context, file: File?) =
+            Intent(context, DebugFileListActivity::class.java).apply {
+                putExtra(EXTRA_PATH, file)
+            }
     }
 }
