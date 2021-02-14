@@ -381,18 +381,14 @@ class WebClient(
             controller.tabManager.removeThumbnailCache(url)
         }
 
-        override fun onPageCommitVisible(web: CustomWebView, url: String) {
+        override fun onDomContentLoaded(web: CustomWebView) {
             val data = controller.getTabOrNull(web) ?: return
-            applyJavascriptInjection(data, web, url)
+            applyJavascriptInjection(data, web, data.url ?: web.url ?: "")
         }
 
         override fun onPageFinished(web: CustomWebView, url: String) {
             controller.onPageFinished()
             val data = controller.getTabOrNull(web) ?: return
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                applyJavascriptInjection(data, web, url)
-            }
             applyUserScript(web, url, UserScript.RunAt.IDLE)
 
             if (controller.isActivityPaused) {
@@ -448,6 +444,7 @@ class WebClient(
             }
 
             applyUserScript(web, url, UserScript.RunAt.END)
+            web.evaluateJavascript("document.body.innerText=''", null)
         }
 
         override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {
@@ -716,10 +713,9 @@ class WebClient(
                     controller.notifyChangeWebState(data)
             }
 
-            if (data.isStartDocument && newProgress > 35) {
-                val url = data.url
-                if (url != null) applyUserScript(web, url, UserScript.RunAt.START)
+            if (data.isStartDocument) {
                 data.isStartDocument = false
+                web.onPageDocumentStart()
             }
         }
 

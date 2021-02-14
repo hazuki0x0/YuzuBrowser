@@ -229,5 +229,7 @@ interface CustomWebView {
 
     fun setScrollableHeight(listener: (() -> Int)?)
 
+    fun onPageDocumentStart()
+
     data class WebViewTheme(val progressColor: Int, val backGroundColor: Int)
 }

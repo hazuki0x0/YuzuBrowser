@@ -30,7 +30,11 @@ import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 import kotlin.math.abs
 
-internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = android.R.attr.webViewStyle, id: Long = -1) : JvmWebViewBridge(context, attrs, defStyle) {
+internal class NormalWebView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = android.R.attr.webViewStyle, id: Long = -1
+) : JvmWebViewBridge(context, attrs, defStyle), WebViewCallback.OnWebViewListener {
 
     private var titleBar: View? = null
     private var nestedOffsetY = 0
@@ -44,6 +48,8 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     private var nestedScrolled = false
     private var firstScroll = true
     override var swipeEnable = false
+    private val webViewCallback = WebViewCallback(this)
+    private var customWebViewClient: CustomWebViewClient? = null
     override val webSettings = YuzuWebSettings(settings)
     override var theme: CustomWebView.WebViewTheme? = null
         private set
@@ -58,6 +64,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
 
     init {
         isNestedScrollingEnabled = true
+        addJavascriptInterface(webViewCallback, WebViewCallback.INTERFACE_KEY)
     }
 
     override val isBackForwardListEmpty: Boolean
@@ -99,6 +106,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     }
 
     override fun setMyWebViewClient(client: CustomWebViewClient) {
+        customWebViewClient = client
         webViewClient = client
     }
 
@@ -316,5 +324,13 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
 
     override fun setScrollableHeight(listener: (() -> Int)?) {
         scrollableHeight = listener
+    }
+
+    override fun onPageDocumentStart() {
+        evaluateJavascript(webViewCallback.createInjectScript(), null)
+    }
+
+    override fun onDomContentLoaded() {
+        customWebViewClient?.onDomContentLoaded(this)
     }
 }

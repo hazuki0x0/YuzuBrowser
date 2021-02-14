@@ -65,6 +65,8 @@ open class CustomWebViewClient : WebViewClient() {
             onPageStarted(view as CustomWebView, url, favicon)
     }
 
+    open fun onDomContentLoaded(web: CustomWebView) {}
+
     open fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {}
 
     open fun onReceivedHttpAuthRequest(web: CustomWebView, handler: HttpAuthHandler, host: String, realm: String) {

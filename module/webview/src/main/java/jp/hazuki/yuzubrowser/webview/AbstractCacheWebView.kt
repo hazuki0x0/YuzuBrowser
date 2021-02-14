@@ -611,8 +611,15 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         return referrerMap
     }
 
+
+    override fun onPageDocumentStart() {
+        currentPage.webView.onPageDocumentStart()
+    }
+
+
     companion object {
         private val mutableEmptyMap = ArrayMap<String, String>()
+
         @JvmStatic
         protected val emptyMap: Map<String, String>
             get() = mutableEmptyMap
