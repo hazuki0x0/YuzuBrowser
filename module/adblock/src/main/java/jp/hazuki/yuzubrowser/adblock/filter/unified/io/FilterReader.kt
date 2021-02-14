@@ -31,12 +31,11 @@ class FilterReader(private val input: InputStream) {
         return header contentEquals data
     }
 
-    fun readAll(): List<UnifiedFilter> {
+    fun readAll() = sequence {
         val intBuf = ByteArray(4)
         val shortBuf = ByteArray(2)
         input.read(intBuf)
         val size = intBuf.toInt()
-        val list = ArrayList<UnifiedFilter>(size)
         var patternBuffer = ByteArray(32)
 
         loop@ for (loop in 0 until size) {
@@ -127,8 +126,7 @@ class FilterReader(private val input: InputStream) {
                 FILTER_TYPE_PATTERN -> PatternMatchFilter(pattern, contentType, ignoreCase, domains, thirdParty)
                 else -> break@loop
             }
-            list.add(filter)
+            yield(filter)
         }
-        return list
     }
 }

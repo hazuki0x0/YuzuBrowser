@@ -16,9 +16,7 @@
 
 package jp.hazuki.yuzubrowser.adblock.core
 
-import jp.hazuki.yuzubrowser.adblock.filter.Filter
 import jp.hazuki.yuzubrowser.adblock.filter.abp.ABP_PREFIX_ELEMENT
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.io.ElementReader
 import jp.hazuki.yuzubrowser.adblock.filter.unified.io.FilterReader
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
@@ -28,59 +26,41 @@ import java.io.IOException
 
 class AbpLoader(private val abpDir: File, private val entityList: List<AbpEntity>) {
 
-    fun loadAll(prefix: String, filterMatcher: FilterMatcher) {
+    fun loadAll(prefix: String) = sequence {
         entityList.forEach {
-            if (it.enabled) {
-                try {
-                    val file = File(abpDir, prefix + it.entityId)
-                    if (!file.exists()) return@forEach
-                    val reader = FilterReader(file.inputStream().buffered())
-                    if (reader.checkHeader()) {
-                        filterMatcher.addAll(reader.readAll())
-                    }
-                } catch (e: IOException) {
-                    ErrorReport.printAndWriteLog(e)
-                }
-            }
+            if (!it.enabled) return@forEach
 
+            try {
+                val file = File(abpDir, prefix + it.entityId)
+                if (!file.exists()) return@forEach
+                file.inputStream().buffered().use { ins ->
+                    val reader = FilterReader(ins)
+                    if (reader.checkHeader()) {
+                        yieldAll(reader.readAll())
+                    }
+                }
+            } catch (e: IOException) {
+                ErrorReport.printAndWriteLog(e)
+            }
         }
     }
 
-    fun loadAllList(prefix: String): List<Filter> {
-        val list = mutableListOf<Filter>()
+    fun loadAllElementFilter() = sequence {
         entityList.forEach {
-            if (it.enabled) {
-                try {
-                    val file = File(abpDir, prefix + it.entityId)
-                    if (!file.exists()) return@forEach
-                    val reader = FilterReader(file.inputStream().buffered())
-                    if (reader.checkHeader()) {
-                        list.addAll(reader.readAll())
-                    }
-                } catch (e: IOException) {
-                    ErrorReport.printAndWriteLog(e)
-                }
-            }
-        }
-        return list
-    }
+            if (!it.enabled) return@forEach
 
-    fun loadAllElementFilter(): List<ElementFilter> {
-        val list = mutableListOf<ElementFilter>()
-        entityList.forEach {
-            if (it.enabled) {
-                try {
-                    val file = File(abpDir, ABP_PREFIX_ELEMENT + it.entityId)
-                    if (!file.exists()) return@forEach
-                    val reader = ElementReader(file.inputStream().buffered())
+            try {
+                val file = File(abpDir, ABP_PREFIX_ELEMENT + it.entityId)
+                if (!file.exists()) return@forEach
+                file.inputStream().buffered().use { ins ->
+                    val reader = ElementReader(ins)
                     if (reader.checkHeader()) {
-                        list.addAll(reader.readAll())
+                        yieldAll(reader.readAll())
                     }
-                } catch (e: IOException) {
-                    ErrorReport.printAndWriteLog(e)
                 }
+            } catch (e: IOException) {
+                ErrorReport.printAndWriteLog(e)
             }
         }
-        return list
     }
 }

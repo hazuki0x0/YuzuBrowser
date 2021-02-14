@@ -25,7 +25,7 @@ class StartEndFilter(
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_START_END
 
     override fun check(url: Uri): Boolean {

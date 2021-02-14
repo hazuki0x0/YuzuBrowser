@@ -18,9 +18,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   android:title="@string/pref_ad_block">
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="ad_block"
-        android:title="@string/pref_ad_block_enable"/>
+        android:title="@string/pref_ad_block_enable" />
 
     <Preference
         android:key="abp_list"
@@ -40,15 +40,19 @@
     <Preference
         android:key="white_page_list"
         android:dependency="ad_block"
-        android:title="@string/pref_ad_block_white_page"/>
+        android:title="@string/pref_ad_block_white_page" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="mining_protect"
         android:title="@string/mining_protect"
-        android:summary="@string/mining_protect_summary"/>
+        android:summary="@string/mining_protect_summary" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
+        android:key="abpUseElementHide"
+        android:title="@string/pref_ad_block_disable_cosmetic_filtering" />
+
+    <SwitchPreferenceCompat
         android:key="abpUpdateWifiOnly"
-        android:title="@string/pref_abp_update_wifi_only"/>
+        android:title="@string/pref_abp_update_wifi_only" />
 
 </PreferenceScreen>

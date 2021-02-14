@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright 2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,25 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter
 
-import android.net.Uri
+import jp.hazuki.yuzubrowser.adblock.core.ContentRequest
+import jp.hazuki.yuzubrowser.adblock.filter.unified.DomainMap
 
-class ArrayFilter : ArrayList<Filter>(2), Filter {
-    override val pattern: String
-        get() = throw IllegalStateException()
+interface ContentFilter {
+    val filterType: Int
 
-    override fun match(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Boolean {
-        return find(url, pageUrl, contentType, isThirdParty) != null
-    }
+    val contentType: Int
 
-    override fun find(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
-        return firstOrNull { it.find(url, pageUrl, contentType, isThirdParty) != null }
-    }
+    val ignoreCase: Boolean
+
+    val domains: DomainMap?
+
+    val thirdParty: Int
+
+    val pattern: String
+
+    val isRegex: Boolean
+
+    var next: ContentFilter?
+
+    fun isMatch(request: ContentRequest): Boolean
 }

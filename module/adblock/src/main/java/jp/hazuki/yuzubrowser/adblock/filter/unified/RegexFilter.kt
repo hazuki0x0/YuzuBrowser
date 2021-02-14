@@ -27,7 +27,7 @@ class RegexFilter(
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
     private val regex = if (ignoreCase) filter.toRegex(RegexOption.IGNORE_CASE) else filter.toRegex()
 
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_JVM_REGEX
 
     override fun check(url: Uri): Boolean {

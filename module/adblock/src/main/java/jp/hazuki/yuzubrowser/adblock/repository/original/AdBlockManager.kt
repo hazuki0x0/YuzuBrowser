@@ -149,7 +149,7 @@ class AdBlockManager internal constructor(private val context: Context) {
         db.delete(table, null, null)
     }
 
-    fun getCachedMatcherList(table: String): List<UnifiedFilter> {
+    fun getCachedMatcherList(table: String): Sequence<UnifiedFilter> {
         if (getListUpdateTime(table) <= getCacheUpdateTime(table)) {
             try {
                 getFilterFile(table).inputStream().use {
@@ -164,7 +164,7 @@ class AdBlockManager internal constructor(private val context: Context) {
         }
         val list = getMatcherList(table)
         GlobalScope.launch(Dispatchers.IO) { writeFilter(getFilterFile(table), list) }
-        return list
+        return list.asSequence()
     }
 
     private fun getMatcherList(table: String): List<UnifiedFilter> {
@@ -175,8 +175,9 @@ class AdBlockManager internal constructor(private val context: Context) {
             val match = c.getColumnIndex(COLUMN_MATCH)
             while (c.moveToNext()) {
                 val matcher = decoder.singleDecode(c.getString(match))
-                if (matcher != null)
-                    list.add(matcher)
+                if (matcher != null) {
+                    list += matcher
+                }
             }
             return list
         }
@@ -220,10 +221,10 @@ class AdBlockManager internal constructor(private val context: Context) {
         try {
             BufferedInputStream(context.assets.open("adblock/whitelist.txt")).use {
                 val adBlocks = AdBlockDecoder.decode(Scanner(it), false)
-                addAll(WHITE_TABLE_NAME, adBlocks)
+                addAll(ALLOW_TABLE_NAME, adBlocks)
             }
             GlobalScope.launch(Dispatchers.IO) {
-                createCache(WHITE_TABLE_NAME)
+                createCache(ALLOW_TABLE_NAME)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -232,10 +233,10 @@ class AdBlockManager internal constructor(private val context: Context) {
         try {
             BufferedInputStream(context.assets.open("adblock/whitepagelist.txt")).use {
                 val adBlocks = AdBlockDecoder.decode(Scanner(it), false)
-                addAll(WHITE_PAGE_TABLE_NAME, adBlocks)
+                addAll(ALLOW_PAGE_TABLE_NAME, adBlocks)
             }
             GlobalScope.launch(Dispatchers.IO) {
-                createCache(WHITE_PAGE_TABLE_NAME)
+                createCache(ALLOW_PAGE_TABLE_NAME)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -302,37 +303,37 @@ class AdBlockManager internal constructor(private val context: Context) {
             db.beginTransaction()
             try {
                 db.execSQL("CREATE TABLE " + INFO_TABLE_NAME + " (" +
-                        COLUMN_ID + " INTEGER PRIMARY KEY" +
-                        ", " + INFO_COLUMN_NAME + " TEXT NOT NULL" +
-                        ", " + INFO_COLUMN_LAST_TIME + " INTEGER DEFAULT 0" +
-                        ")")
-                db.execSQL("CREATE TABLE " + BLACK_TABLE_NAME + " (" +
-                        COLUMN_ID + " INTEGER PRIMARY KEY" +
-                        ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
-                        ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
-                        ")")
-                db.execSQL("CREATE TABLE " + WHITE_TABLE_NAME + " (" +
-                        COLUMN_ID + " INTEGER PRIMARY KEY" +
-                        ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
-                        ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
-                        ")")
-                db.execSQL("CREATE TABLE " + WHITE_PAGE_TABLE_NAME + " (" +
-                        COLUMN_ID + " INTEGER PRIMARY KEY" +
-                        ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
-                        ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
-                        ")")
+                    COLUMN_ID + " INTEGER PRIMARY KEY" +
+                    ", " + INFO_COLUMN_NAME + " TEXT NOT NULL" +
+                    ", " + INFO_COLUMN_LAST_TIME + " INTEGER DEFAULT 0" +
+                    ")")
+                db.execSQL("CREATE TABLE " + DENY_TABLE_NAME + " (" +
+                    COLUMN_ID + " INTEGER PRIMARY KEY" +
+                    ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
+                    ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
+                    ")")
+                db.execSQL("CREATE TABLE " + ALLOW_TABLE_NAME + " (" +
+                    COLUMN_ID + " INTEGER PRIMARY KEY" +
+                    ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
+                    ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
+                    ")")
+                db.execSQL("CREATE TABLE " + ALLOW_PAGE_TABLE_NAME + " (" +
+                    COLUMN_ID + " INTEGER PRIMARY KEY" +
+                    ", " + COLUMN_MATCH + " TEXT NOT NULL UNIQUE" +
+                    ", " + COLUMN_ENABLE + " INTEGER DEFAULT 0" +
+                    ")")
 
                 // init info table
                 val values = ContentValues()
                 values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis())
 
-                values.put(INFO_COLUMN_NAME, BLACK_TABLE_NAME)
+                values.put(INFO_COLUMN_NAME, DENY_TABLE_NAME)
                 db.insert(INFO_TABLE_NAME, null, values)
 
-                values.put(INFO_COLUMN_NAME, WHITE_TABLE_NAME)
+                values.put(INFO_COLUMN_NAME, ALLOW_TABLE_NAME)
                 db.insert(INFO_TABLE_NAME, null, values)
 
-                values.put(INFO_COLUMN_NAME, WHITE_PAGE_TABLE_NAME)
+                values.put(INFO_COLUMN_NAME, ALLOW_PAGE_TABLE_NAME)
                 db.insert(INFO_TABLE_NAME, null, values)
 
                 db.setTransactionSuccessful()
@@ -342,9 +343,9 @@ class AdBlockManager internal constructor(private val context: Context) {
         }
 
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            db.execSQL("DROP TABLE IF EXISTS $BLACK_TABLE_NAME")
-            db.execSQL("DROP TABLE IF EXISTS $WHITE_TABLE_NAME")
-            db.execSQL("DROP TABLE IF EXISTS $WHITE_PAGE_TABLE_NAME")
+            db.execSQL("DROP TABLE IF EXISTS $DENY_TABLE_NAME")
+            db.execSQL("DROP TABLE IF EXISTS $ALLOW_TABLE_NAME")
+            db.execSQL("DROP TABLE IF EXISTS $ALLOW_PAGE_TABLE_NAME")
             db.execSQL("DROP TABLE IF EXISTS $INFO_TABLE_NAME")
             onCreate(db)
         }
@@ -364,13 +365,13 @@ class AdBlockManager internal constructor(private val context: Context) {
         private const val DB_NAME = "adblock.db"
         private const val DB_VERSION = 1
 
-        internal const val BLACK_TABLE_NAME = "black"
-        internal const val WHITE_TABLE_NAME = "white"
-        internal const val WHITE_PAGE_TABLE_NAME = "white_page"
+        internal const val DENY_TABLE_NAME = "black"
+        internal const val ALLOW_TABLE_NAME = "white"
+        internal const val ALLOW_PAGE_TABLE_NAME = "white_page"
 
-        const val TYPE_BLACK_TABLE = 1
-        const val TYPE_WHITE_TABLE = 2
-        const val TYPE_WHITE_PAGE_TABLE = 3
+        const val TYPE_DENY_TABLE = 1
+        const val TYPE_ALLOW_TABLE = 2
+        const val TYPE_ALLOW_PAGE_TABLE = 3
 
         private const val INFO_TABLE_NAME = "info"
 
@@ -383,9 +384,9 @@ class AdBlockManager internal constructor(private val context: Context) {
 
         @JvmStatic
         fun getProvider(context: Context, type: Int): AdBlockItemProvider = when (type) {
-            TYPE_BLACK_TABLE -> AdBlockItemProvider(context, BLACK_TABLE_NAME)
-            TYPE_WHITE_TABLE -> AdBlockItemProvider(context, WHITE_TABLE_NAME)
-            TYPE_WHITE_PAGE_TABLE -> AdBlockItemProvider(context, WHITE_PAGE_TABLE_NAME)
+            TYPE_DENY_TABLE -> AdBlockItemProvider(context, DENY_TABLE_NAME)
+            TYPE_ALLOW_TABLE -> AdBlockItemProvider(context, ALLOW_TABLE_NAME)
+            TYPE_ALLOW_PAGE_TABLE -> AdBlockItemProvider(context, ALLOW_PAGE_TABLE_NAME)
             else -> throw IllegalArgumentException("unknown type")
         }
     }

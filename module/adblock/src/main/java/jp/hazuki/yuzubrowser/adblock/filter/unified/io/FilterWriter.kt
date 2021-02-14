@@ -41,7 +41,7 @@ class FilterWriter {
         os.write(filters.size.toByteArray(intBuf))
 
         filters.forEach {
-            os.write(it.type and 0xff)
+            os.write(it.filterType and 0xff)
             os.write(it.contentType.toShortByteArray(shortBuf))
             os.write(if (it.ignoreCase) 1 else 0)
             os.write(it.thirdParty and 0xff)

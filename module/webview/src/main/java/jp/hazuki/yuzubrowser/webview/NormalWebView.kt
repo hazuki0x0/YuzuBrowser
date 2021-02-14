@@ -28,6 +28,7 @@ import androidx.core.view.ViewCompat
 import jp.hazuki.yuzubrowser.core.utility.common.listener.OnTouchEventListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
+import kotlin.math.abs
 
 internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = android.R.attr.webViewStyle, id: Long = -1) : JvmWebViewBridge(context, attrs, defStyle) {
 
@@ -84,6 +85,8 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
         private set
     override var isToolbarShowing: Boolean = false
     override var renderingMode = 0
+
+    override var isBlock = false
 
     override fun copyMyBackForwardList(): CustomWebBackForwardList = CustomWebBackForwardList(copyBackForwardList())
 
@@ -194,7 +197,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
         when (action) {
             MotionEvent.ACTION_MOVE -> if (event.pointerCount != 1) {
                 returnValue = super.onTouchEvent(event)
-            } else if (scrollExcessPlay && Math.abs(firstY - eventY) < scrollSlop || downScrollY != 0 && downScrollY == scrollY) {
+            } else if (scrollExcessPlay && abs(firstY - eventY) < scrollSlop || downScrollY != 0 && downScrollY == scrollY) {
                 returnValue = super.onTouchEvent(ev)
                 lastY = eventY
             } else {

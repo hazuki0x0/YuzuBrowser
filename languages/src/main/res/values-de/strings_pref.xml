@@ -348,9 +348,9 @@
 
     <string name="pref_ad_block">Werbeblocker-Einstellungen</string>
     <string name="pref_ad_block_enable">Werbeblocker aktivieren</string>
-    <string name="pref_ad_block_black">Black List</string>
-    <string name="pref_ad_block_white">White List</string>
-    <string name="pref_ad_block_white_page">White Page List</string>
+    <string name="pref_ad_block_black">Liste verweigern</string>
+    <string name="pref_ad_block_white">Liste zulassen</string>
+    <string name="pref_ad_block_white_page">Seitenliste zulassen</string>
     <string name="exclude_comment">Kommentarzeilen ausschließen</string>
     <string name="pref_edit">Bearbeiten</string>
     <string name="pref_delete">Löschen</string>

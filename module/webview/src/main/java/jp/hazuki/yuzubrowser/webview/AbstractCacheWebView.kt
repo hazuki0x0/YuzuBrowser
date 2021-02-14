@@ -51,6 +51,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
     private var webLayerType: Int = 0
     private var webLayerPaint: Paint? = null
     override var renderingMode = 0
+    override var isBlock = false
     private var acceptThirdPartyCookies: Boolean = false
     private var verticalScrollBarEnabled: Boolean = false
     private var onScrollChangedListener: OnScrollChangedListener? = null

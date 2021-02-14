@@ -25,7 +25,7 @@ class PatternMatchFilter(
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_PATTERN
 
     private val isStartWith = filter.startsWith("||")

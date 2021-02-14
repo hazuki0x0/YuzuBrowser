@@ -22,6 +22,6 @@ class UnifiedFilterSet(
     val filterInfo: UnifiedFilterInfo,
     val blackList: List<UnifiedFilter>,
     val whiteList: List<UnifiedFilter>,
-    val whitePageList: List<UnifiedFilter>,
+    val elementDisableFilter: List<UnifiedFilter>,
     val elementList: List<ElementFilter>
 )

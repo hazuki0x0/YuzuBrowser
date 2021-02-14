@@ -353,9 +353,9 @@
 
     <string name="pref_ad_block">Ad block settings</string>
     <string name="pref_ad_block_enable">Enable ad block</string>
-    <string name="pref_ad_block_black">Black list</string>
-    <string name="pref_ad_block_white">White list</string>
-    <string name="pref_ad_block_white_page">White page list</string>
+    <string name="pref_ad_block_black">Deny list</string>
+    <string name="pref_ad_block_white">Allow list</string>
+    <string name="pref_ad_block_white_page">Allow page list</string>
     <string name="exclude_comment">Exclude comment lines</string>
     <string name="pref_edit">Edit</string>
     <string name="pref_delete">Delete</string>
@@ -465,4 +465,5 @@
     <string name="pref_page_background_white">Make the browser background white</string>
     <string name="pref_page_background_white_info">If you have flickers when open a new tab or switching between tabs, disable it.</string>
     <string name="pref_abp_update_wifi_only">Auto-update filters over Wi-Fi only</string>
+    <string name="pref_ad_block_disable_cosmetic_filtering">Disable cosmetic filtering</string>
 </resources>

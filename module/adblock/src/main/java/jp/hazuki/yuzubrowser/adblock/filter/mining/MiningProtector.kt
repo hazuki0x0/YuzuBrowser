@@ -16,8 +16,8 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter.mining
 
-import android.net.Uri
 import android.webkit.WebResourceResponse
+import jp.hazuki.yuzubrowser.adblock.core.ContentRequest
 import jp.hazuki.yuzubrowser.adblock.filter.unified.ContainsFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.ContainsHostFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.HostFilter
@@ -84,10 +84,10 @@ class MiningProtector {
         StartsWithFilter("baiduccdn1.com/lib/", 0xffff, true, null, 1)
     )
 
-    fun isBlock(pageUri: Uri, uri: Uri): Boolean {
-        if (pageUri.host == pageUri.host) return false
+    fun isBlock(contentRequest: ContentRequest): Boolean {
+        if (contentRequest.url.host == contentRequest.pageUrl.host) return false
 
-        return blackList.any { it.match(uri, pageUri, 0xffff, true) }
+        return blackList.any { it.isMatch(contentRequest) }
     }
 
     private class EmptyInputStream : InputStream() {

@@ -18,10 +18,9 @@ package jp.hazuki.yuzubrowser.adblock.filter.abp
 
 import com.google.re2j.Pattern
 import jp.hazuki.yuzubrowser.adblock.*
+import jp.hazuki.yuzubrowser.adblock.core.ContentRequest
 import jp.hazuki.yuzubrowser.adblock.filter.unified.*
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementHideFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ExcludeElementFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.forEachLine
 import java.io.BufferedReader
 import java.io.IOException
@@ -54,12 +53,11 @@ class AbpFilterDecoder {
         return false
     }
 
-    @Throws(OnRedirectException::class)
     fun decode(reader: BufferedReader, url: String?): UnifiedFilterSet {
         val info = DecoderInfo()
         val black = mutableListOf<UnifiedFilter>()
         val white = mutableListOf<UnifiedFilter>()
-        val whitePage = mutableListOf<UnifiedFilter>()
+        val elementDisableFilter = mutableListOf<UnifiedFilter>()
         val elementFilter = mutableListOf<ElementFilter>()
         reader.forEachLine { line ->
             if (line.isEmpty()) return@forEachLine
@@ -71,44 +69,90 @@ class AbpFilterDecoder {
                 else -> {
                     val matcher = contentRegex.matcher(trimmedLine)
                     if (matcher.matches()) {
-                        decodeContentFilter(matcher.group(1), matcher.group(2), matcher.group(3), elementFilter)
+                        decodeContentFilter(
+                            matcher.group(1),
+                            matcher.group(2),
+                            matcher.group(3),
+                            elementFilter,
+                        )
                     } else {
-                        trimmedLine.decodeFilter(black, white, whitePage)
+                        trimmedLine.decodeFilter(black, white, elementDisableFilter)
                     }
                 }
             }
         }
-        return UnifiedFilterSet(info, black, white, whitePage, elementFilter)
+        return UnifiedFilterSet(info, black, white, elementDisableFilter, elementFilter)
     }
 
     private fun decodeContentFilter(
         domains: String?,
         type: String?,
         body: String,
-        elementFilterList: MutableList<ElementFilter>) {
+        elementFilterList: MutableList<ElementFilter>,
+    ) {
+        if (body.startsWith("+js")) return
 
-        if (type == "@") {
-            if (domains == null) return
+        if (domains == null && type == "@") return
 
-            val domainList = domains.splitToSequence(',')
+        var domainList = domains?.run {
+            splitToSequence(',')
                 .map { it.trim() }
-                .filterNot { it.startsWith('~') }
                 .toList()
-            elementFilterList.add(ExcludeElementFilter(body.trim(), domainList))
-        }
-        if (type != null && type.isNotEmpty()) return
+        } ?: emptyList()
 
-        elementFilterList.add(ElementHideFilter(body, domains?.domainsToDomainMap(',')))
+        if (domainList.size >= 2) {
+            domainList.forEach {
+                if (it.startsWith('~')) return
+            }
+        }
+
+        if (domainList.isEmpty()) {
+            domainList = listOf("")
+        } else {
+            var starIndex = domainList.indexOf("*")
+            while (starIndex != -1) {
+                domainList = domainList.subList(0, starIndex) + "" +
+                    domainList.subList(starIndex, domainList.size)
+
+                starIndex = domainList.indexOf("*")
+            }
+        }
+
+        val isHide = when (type) {
+            "@" -> false
+            null -> true
+            else -> return
+        }
+
+        domainList.forEach {
+            var domain = it
+            val isNot = domain.startsWith('~')
+            if (isNot) {
+                domain = domain.substring(1)
+            }
+
+            elementFilterList += if (domain.endsWith('*')) {
+                domain = domain.substring(0, it.length - 1)
+                TldRemovedElementFilter(domain, isHide, isNot, body.sanitizeSelector())
+            } else {
+                PlaneElementFilter(domain, isHide, isNot, body.sanitizeSelector())
+            }
+        }
     }
 
-    private fun String.decodeFilter(blackList: MutableList<UnifiedFilter>,
-                                    whiteList: MutableList<UnifiedFilter>,
-                                    pageWhiteList: MutableList<UnifiedFilter>) {
+    private fun String.sanitizeSelector() = trim().replace("\\", "\\\\").replace("'", "\'")
+
+    private fun String.decodeFilter(
+        blackList: MutableList<UnifiedFilter>,
+        whiteList: MutableList<UnifiedFilter>,
+        elementFilterList: MutableList<UnifiedFilter>,
+    ) {
         var contentType = 0
         var ignoreCase = false
         var domain: String? = null
         var thirdParty = -1
         var filter = this
+        var elementFilter = false
         val blocking = if (filter.startsWith("@@")) {
             filter = substring(2)
             false
@@ -132,27 +176,33 @@ class AbpFilterDecoder {
                     option = option.substring(1)
                 }
 
-                option = option.toLowerCase(Locale.getDefault())
+                option = option.toLowerCase(Locale.ENGLISH)
                 val type = option.getOptionBit()
-                if (type == -1) return@forEach
+                if (type == -1) return
 
-                if (type > 0) {
-                    contentType = if (inverse) {
-                        if (contentType == 0) contentType = 0xffff
-                        contentType and (type.inv())
-                    } else {
-                        contentType or type
+                when {
+                    type > 0x00ff_ffff -> {
+                        elementFilter = true
                     }
-                } else {
-                    when (option) {
-                        "match-case" -> ignoreCase = inverse
-                        "domain" -> {
-                            if (value == null) return
-                            domain = value
+                    type > 0 -> {
+                        contentType = if (inverse) {
+                            if (contentType == 0) contentType = 0xffff
+                            contentType and (type.inv())
+                        } else {
+                            contentType or type
                         }
-                        "third-party" -> thirdParty = if (inverse) 0 else 1
-                        "sitekey" -> Unit
-                        else -> return
+                    }
+                    type == 0 -> {
+                        when (option) {
+                            "match-case" -> ignoreCase = inverse
+                            "domain" -> {
+                                if (value == null) return
+                                domain = value
+                            }
+                            "third-party" -> thirdParty = if (inverse) 0 else 1
+                            "sitekey" -> Unit
+                            else -> return
+                        }
                     }
                 }
             }
@@ -162,45 +212,67 @@ class AbpFilterDecoder {
         val domains = domain?.domainsToDomainMap('|')
         if (contentType == 0) contentType = 0xffff
 
-        val abpFilter = if (filter.length >= 2 && filter[0] == '/' && filter[filter.lastIndex] == '/') {
-            createRegexFilter(filter, contentType, ignoreCase, domains, thirdParty) ?: return
-        } else {
-            val isStartsWith = filter.startsWith("||")
-            val isEndWith = filter.endsWith('^')
-            val content = filter.substring(if (isStartsWith) 2 else 0, if (isEndWith) filter.length - 1 else filter.length)
-            val isLiteral = content.isLiteralFilter()
-            if (isLiteral) {
-                when {
-                    isStartsWith && isEndWith -> StartEndFilter(content, contentType, ignoreCase, domains, thirdParty)
-                    isStartsWith -> StartsWithFilter(content, contentType, ignoreCase, domains, thirdParty)
-                    isEndWith -> {
-                        if (ignoreCase) {
-                            PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
-                        } else {
-                            EndWithFilter(content, contentType, domains, thirdParty)
-                        }
-                    }
-                    else -> {
-                        if (ignoreCase) {
-                            PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
-                        } else {
-                            ContainsFilter(content, contentType, domains, thirdParty)
-                        }
-                    }
-                }
-            } else {
-                PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
-            }
+        if (elementFilter) {
+            return
         }
 
-        if (blocking) {
-            blackList.add(abpFilter)
-        } else {
-            if (contentType.and(AD_BLOCK_DOCUMENT) > 0) {
-                pageWhiteList.add(abpFilter)
+        val abpFilter =
+            if (filter.length >= 2 && filter[0] == '/' && filter[filter.lastIndex] == '/') {
+                createRegexFilter(filter, contentType, ignoreCase, domains, thirdParty) ?: return
             } else {
-                whiteList.add(abpFilter)
+                val isStartsWith = filter.startsWith("||")
+                val isEndWith = filter.endsWith('^')
+                val content = filter.substring(
+                    if (isStartsWith) 2 else 0,
+                    if (isEndWith) filter.length - 1 else filter.length
+                )
+                val isLiteral = content.isLiteralFilter()
+                if (isLiteral) {
+                    when {
+                        isStartsWith && isEndWith -> StartEndFilter(
+                            content,
+                            contentType,
+                            ignoreCase,
+                            domains,
+                            thirdParty
+                        )
+                        isStartsWith -> StartsWithFilter(content, contentType, ignoreCase, domains, thirdParty)
+                        isEndWith -> {
+                            if (ignoreCase) {
+                                PatternMatchFilter(
+                                    filter,
+                                    contentType,
+                                    ignoreCase,
+                                    domains,
+                                    thirdParty
+                                )
+                            } else {
+                                EndWithFilter(content, contentType, domains, thirdParty)
+                            }
+                        }
+                        else -> {
+                            if (ignoreCase) {
+                                PatternMatchFilter(
+                                    filter,
+                                    contentType,
+                                    ignoreCase,
+                                    domains,
+                                    thirdParty
+                                )
+                            } else {
+                                ContainsFilter(content, contentType, domains, thirdParty)
+                            }
+                        }
+                    }
+                } else {
+                    PatternMatchFilter(filter, contentType, ignoreCase, domains, thirdParty)
+                }
             }
+
+        when {
+            elementFilter -> elementFilterList += abpFilter
+            blocking -> blackList += abpFilter
+            else -> whiteList += abpFilter
         }
     }
 
@@ -240,19 +312,21 @@ class AbpFilterDecoder {
 
     private fun String.getOptionBit(): Int {
         return when (this) {
-            "other", "xbl", "dtd" -> AD_BLOCK_OTHER
-            "script" -> AD_BLOCK_SCRIPT
-            "image", "background" -> AD_BLOCK_IMAGE
-            "stylesheet" -> AD_BLOCK_STYLE_SHEET
-            "subdocument" -> AD_BLOCK_SUB_DOCUMENT
-            "document" -> AD_BLOCK_DOCUMENT
-            "websocket" -> AD_BLOCK_WEBSOCKET
-            "media" -> AD_BLOCK_MEDIA
-            "font" -> AD_BLOCK_FONT
-            "popup" -> AD_BLOCK_POPUP
-            "xmlhttprequest" -> AD_BLOCK_XML_HTTP_REQUEST
+            "other", "xbl", "dtd" -> ContentRequest.TYPE_OTHER
+            "script" -> ContentRequest.TYPE_SCRIPT
+            "image", "background" -> ContentRequest.TYPE_IMAGE
+            "stylesheet" -> ContentRequest.TYPE_STYLE_SHEET
+            "subdocument" -> ContentRequest.TYPE_SUB_DOCUMENT
+            "document" -> ContentRequest.TYPE_DOCUMENT
+            "websocket" -> ContentRequest.TYPE_WEB_SOCKET
+            "media" -> ContentRequest.TYPE_MEDIA
+            "font" -> ContentRequest.TYPE_FONT
+            "popup" -> ContentRequest.TYPE_POPUP
+            "xmlhttprequest" -> ContentRequest.TYPE_XHR
             "object", "webrtc", "csp", "ping",
-            "object-subrequest", "genericblock", "elemhide", "generichide" -> -1
+            "object-subrequest", "genericblock" -> -1
+            "elemhide", "ehide" -> ContentRequest.TYPE_ELEMENT_HIDE
+            "generichide" -> ContentRequest.TYPE_ELEMENT_GENERIC_HIDE
             else -> 0
         }
     }

@@ -19,15 +19,10 @@ package jp.hazuki.yuzubrowser.adblock.filter.unified.io
 import jp.hazuki.yuzubrowser.adblock.filter.toByteArray
 import jp.hazuki.yuzubrowser.adblock.filter.unified.ELEMENT_FILTER_CACHE_HEADER
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementHideFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ExcludeElementFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.writeVariableInt
 import java.io.OutputStream
-import kotlin.math.min
 
 class ElementWriter {
-    private val intBuf = ByteArray(4)
-    private val shortBuf = ByteArray(2)
 
     fun write(os: OutputStream, filters: List<ElementFilter>) {
         writeHeader(os)
@@ -39,35 +34,21 @@ class ElementWriter {
     }
 
     private fun writeAll(os: OutputStream, filters: List<ElementFilter>) {
+        val intBuf = ByteArray(4)
+        val shortBuf = ByteArray(2)
+
         os.write(filters.size.toByteArray(intBuf))
 
         filters.forEach {
             os.write(it.type and 0xff)
-            os.writeVariableInt(it.selector.length, shortBuf, intBuf)
-            os.write(it.selector.toByteArray())
-            when (it) {
-                is ElementHideFilter -> {
-                    val domains = it.domains
-                    os.write(min(domains?.size ?: 0, 255))
-                    if (domains != null) {
-                        for (i in 0 until min(domains.size, 255)) {
-                            val key = domains.getKey(i).toByteArray()
-                            os.writeVariableInt(key.size, shortBuf, intBuf)
-                            os.write(key)
-                            os.write(if (domains.getValue(i)) 1 else 0)
-                        }
-                    }
-                }
-                is ExcludeElementFilter -> {
-                    val domains = it.domains
-                    os.write(min(domains.size, 255))
-                    for (i in 0 until min(domains.size, 255)) {
-                        val key = domains[i].toByteArray()
-                        os.writeVariableInt(key.size, shortBuf, intBuf)
-                        os.write(key)
-                    }
-                }
-            }
+            os.write(if (it.isHide) 1 else 0)
+            os.write(if (it.isNot) 1 else 0)
+            val patternBytes = it.domain.toByteArray()
+            os.writeVariableInt(patternBytes.size, shortBuf, intBuf)
+            os.write(patternBytes)
+            val selectorBytes = it.selector.toByteArray()
+            os.writeVariableInt(selectorBytes.size, shortBuf, intBuf)
+            os.write(selectorBytes)
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright 2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.filter
+package jp.hazuki.yuzubrowser.adblock.filter.unified.element
 
-import android.net.Uri
+class PlaneElementFilter(domain: String, isHide: Boolean, isNot: Boolean, selector: String) :
+    ElementFilter(domain, isHide, isNot, selector) {
 
-abstract class SingleFilter : Filter {
-    override val size: Int
-        get() = 1
+    override val type: Int
+        get() = TYPE_PLANE
 
-    override fun match(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Boolean {
-        return find(url, pageUrl, contentType, isThirdParty) != null
+    override fun isMatch(domain: String, tldRemoved: String?): Boolean {
+        return this.domain.isEmpty() || domain.endsWith(this.domain)
     }
 }

@@ -16,13 +16,20 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter.unified.element
 
-interface ElementFilter {
-    val selector: String
+abstract class ElementFilter(
+    val domain: String,
+    val isHide: Boolean,
+    val isNot: Boolean,
+    val selector: String,
+) {
+    abstract val type: Int
 
-    val type: Int
+    var next: ElementFilter? = null
+
+    abstract fun isMatch(domain: String, tldRemoved: String?): Boolean
 
     companion object {
-        const val TYPE_HIDE = 1
-        const val TYPE_EXCLUDE = 2
+        const val TYPE_PLANE = 1
+        const val TYPE_TLD_REMOVED = 2
     }
 }

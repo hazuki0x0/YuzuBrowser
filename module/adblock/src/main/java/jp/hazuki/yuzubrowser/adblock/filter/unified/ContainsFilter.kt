@@ -24,7 +24,7 @@ class ContainsFilter(
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, false, domains, thirdParty) {
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_CONTAINS
 
     override fun check(url: Uri): Boolean {

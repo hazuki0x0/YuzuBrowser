@@ -28,7 +28,7 @@ class Re2HostFilter(
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
 
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_RE2_REGEX_HOST
 
     override fun check(url: Uri): Boolean {

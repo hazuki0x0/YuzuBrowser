@@ -17,26 +17,29 @@
 package jp.hazuki.yuzubrowser.adblock.filter.unified
 
 import android.net.Uri
-import jp.hazuki.yuzubrowser.adblock.filter.Filter
-import jp.hazuki.yuzubrowser.adblock.filter.SingleFilter
+import jp.hazuki.yuzubrowser.adblock.core.ContentRequest
+import jp.hazuki.yuzubrowser.adblock.filter.ContentFilter
 
 abstract class UnifiedFilter(
     override val pattern: String,
-    val contentType: Int,
-    val ignoreCase: Boolean,
-    val domains: DomainMap?,
-    val thirdParty: Int
-) : SingleFilter() {
-    abstract val type: Int
+    override val contentType: Int,
+    override val ignoreCase: Boolean,
+    override val domains: DomainMap?,
+    override val thirdParty: Int
+) : ContentFilter {
+
+    override fun isMatch(request: ContentRequest): Boolean {
+        return if ((contentType and request.type) != 0
+            && checkThird(request.isThirdParty)
+            && checkDomain(request.pageUrl.host)
+        ) {
+            check(request.url)
+        } else {
+            false
+        }
+    }
 
     internal abstract fun check(url: Uri): Boolean
-
-    override fun find(url: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Filter? {
-        if ((this.contentType and contentType) != 0 && checkThird(isThirdParty) && checkDomain(pageUrl.host!!.toLowerCase())) {
-            if (check(url)) return this
-        }
-        return null
-    }
 
     private fun checkThird(isThirdParty: Boolean): Boolean {
         if (thirdParty == -1) return true
@@ -47,8 +50,10 @@ abstract class UnifiedFilter(
         }
     }
 
-    private fun checkDomain(domain: String): Boolean {
-        if (domains == null) return true
+    private fun checkDomain(domain: String?): Boolean {
+        if (domain == null) return true
+
+        val domains = domains ?: return true
         return if (domains.include) {
             domains[domain] == true
         } else {
@@ -72,6 +77,11 @@ abstract class UnifiedFilter(
         return this[end - 1] == '.'
     }
 
+    override val isRegex: Boolean
+        get() = false
+
+    override var next: ContentFilter? = null
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -83,7 +93,7 @@ abstract class UnifiedFilter(
         if (ignoreCase != other.ignoreCase) return false
         if (domains != other.domains) return false
         if (thirdParty != other.thirdParty) return false
-        if (type != other.type) return false
+        if (filterType != other.filterType) return false
 
         return true
     }
@@ -94,7 +104,7 @@ abstract class UnifiedFilter(
         result = 31 * result + ignoreCase.hashCode()
         result = 31 * result + (domains?.hashCode() ?: 0)
         result = 31 * result + thirdParty
-        result = 31 * result + type
+        result = 31 * result + filterType
         return result
     }
 }

@@ -46,15 +46,15 @@ class AdBlockActivity : ThemeActivity(), AdBlockMainFragment.OnAdBlockMainListen
     }
 
     override fun openBlackList() {
-        openList(AdBlockManager.TYPE_BLACK_TABLE)
+        openList(AdBlockManager.TYPE_DENY_TABLE)
     }
 
     override fun openWhiteList() {
-        openList(AdBlockManager.TYPE_WHITE_TABLE)
+        openList(AdBlockManager.TYPE_ALLOW_TABLE)
     }
 
     override fun openWhitePageList() {
-        openList(AdBlockManager.TYPE_WHITE_PAGE_TABLE)
+        openList(AdBlockManager.TYPE_ALLOW_PAGE_TABLE)
     }
 
     private fun openList(type: Int) {
@@ -72,9 +72,9 @@ class AdBlockActivity : ThemeActivity(), AdBlockMainFragment.OnAdBlockMainListen
 
     override fun setFragmentTitle(type: Int) {
         when (type) {
-            AdBlockManager.TYPE_BLACK_TABLE -> setTitle(R.string.pref_ad_block_black)
-            AdBlockManager.TYPE_WHITE_TABLE -> setTitle(R.string.pref_ad_block_white)
-            AdBlockManager.TYPE_WHITE_PAGE_TABLE -> setTitle(R.string.pref_ad_block_white_page)
+            AdBlockManager.TYPE_DENY_TABLE -> setTitle(R.string.pref_ad_block_black)
+            AdBlockManager.TYPE_ALLOW_TABLE -> setTitle(R.string.pref_ad_block_white)
+            AdBlockManager.TYPE_ALLOW_PAGE_TABLE -> setTitle(R.string.pref_ad_block_white_page)
         }
     }
 
@@ -86,9 +86,9 @@ class AdBlockActivity : ThemeActivity(), AdBlockMainFragment.OnAdBlockMainListen
     }
 
     override fun getExportFileName(type: Int) = when (type) {
-        AdBlockManager.TYPE_BLACK_TABLE -> "black_list.txt"
-        AdBlockManager.TYPE_WHITE_TABLE -> "white_list.txt"
-        AdBlockManager.TYPE_WHITE_PAGE_TABLE -> "white_page_list.txt"
+        AdBlockManager.TYPE_DENY_TABLE -> "black_list.txt"
+        AdBlockManager.TYPE_ALLOW_TABLE -> "white_list.txt"
+        AdBlockManager.TYPE_ALLOW_PAGE_TABLE -> "white_page_list.txt"
         else -> throw IllegalArgumentException()
     }
 

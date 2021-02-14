@@ -281,12 +281,10 @@ public class AppData {
                     AppPrefs.download_folder.set("file://" + AppPrefs.download_folder.get());
                 }
 
-                if (lastLaunch < 410010) {
-                    AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
-                    AdBlockInitSupportKt.disableYuzuList(abpDatabase);
-                }
+                AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
+                AdBlockInitSupportKt.disableYuzuList(abpDatabase);
             }
-            if (lastLaunch == 410010) {
+            if (lastLaunch <= 410013) {
                 AbpUpdateService.Companion.updateAll(context, true, null);
             }
 

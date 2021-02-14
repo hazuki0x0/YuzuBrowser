@@ -353,9 +353,9 @@
 
     <string name="pref_ad_block">広告ブロック設定</string>
     <string name="pref_ad_block_enable">広告ブロックを有効</string>
-    <string name="pref_ad_block_black">ブラックリスト</string>
-    <string name="pref_ad_block_white">ホワイトリスト</string>
-    <string name="pref_ad_block_white_page">ホワイトページリスト</string>
+    <string name="pref_ad_block_black">ブロックリスト</string>
+    <string name="pref_ad_block_white">許可リスト</string>
+    <string name="pref_ad_block_white_page">信頼するページ</string>
     <string name="exclude_comment">コメント行を除外</string>
     <string name="pref_edit">編集</string>
     <string name="pref_delete">削除</string>
@@ -465,4 +465,5 @@
     <string name="pref_page_background_white">ブラウザの背景を白にする</string>
     <string name="pref_page_background_white_info">新しいタブを開くとき、またはタブを切り替えるときにちらつく時は、無効にして下さい。</string>
     <string name="pref_abp_update_wifi_only">Wi-Fi接続時のみフィルタを更新</string>
+    <string name="pref_ad_block_disable_cosmetic_filtering">要素隠蔽フィルタを無効にする</string>
 </resources>

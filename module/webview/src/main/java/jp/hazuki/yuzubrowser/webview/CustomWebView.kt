@@ -90,6 +90,8 @@ interface CustomWebView {
     val isInvertMode: Boolean
         get() = renderingMode == RENDERING_INVERT || renderingMode == RENDERING_INVERT_GRAY
 
+    var isBlock: Boolean
+
     fun canGoBack(): Boolean
 
     fun canGoBackOrForward(steps: Int): Boolean

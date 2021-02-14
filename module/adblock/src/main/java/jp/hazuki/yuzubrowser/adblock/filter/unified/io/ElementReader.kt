@@ -17,12 +17,10 @@
 package jp.hazuki.yuzubrowser.adblock.filter.unified.io
 
 import jp.hazuki.yuzubrowser.adblock.filter.toInt
-import jp.hazuki.yuzubrowser.adblock.filter.unified.ArrayDomainMap
 import jp.hazuki.yuzubrowser.adblock.filter.unified.ELEMENT_FILTER_CACHE_HEADER
-import jp.hazuki.yuzubrowser.adblock.filter.unified.SingleDomainMap
 import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ElementHideFilter
-import jp.hazuki.yuzubrowser.adblock.filter.unified.element.ExcludeElementFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.PlaneElementFilter
+import jp.hazuki.yuzubrowser.adblock.filter.unified.element.TldRemovedElementFilter
 import jp.hazuki.yuzubrowser.adblock.filter.unified.readVariableInt
 import java.io.InputStream
 
@@ -35,86 +33,64 @@ class ElementReader(private val input: InputStream) {
         return header contentEquals data
     }
 
-    fun readAll(): List<ElementFilter> {
+    fun readAll() = sequence {
         val intBuf = ByteArray(4)
         val shortBuf = ByteArray(2)
+
         input.read(intBuf)
+
         val size = intBuf.toInt()
         val list = ArrayList<ElementFilter>(size)
         var patternBuffer = ByteArray(32)
 
         loop@ for (loop in 0 until size) {
-            val type = input.read()
-            if (type < 0) break
+            val filterType = input.read()
+            if (filterType < 0) break
 
-            val selectorLength = input.readVariableInt(shortBuf, intBuf)
-            if (selectorLength < 0) break
-            if (patternBuffer.size < selectorLength) {
-                patternBuffer = ByteArray(selectorLength)
-            }
-            if (input.read(patternBuffer, 0, selectorLength) != selectorLength) break
-            val selector = String(patternBuffer, 0, selectorLength)
-
-            val domainsSize = input.read()
-            if (domainsSize < 0) break
-
-            when (type) {
-                ElementFilter.TYPE_HIDE -> {
-                    val domains = when (domainsSize) {
-                        0 -> null
-                        1 -> {
-                            val textSize = input.readVariableInt(shortBuf, intBuf)
-                            if (textSize == -1) break@loop
-                            if (patternBuffer.size < textSize) {
-                                patternBuffer = ByteArray(textSize)
-                            }
-                            if (input.read(patternBuffer, 0, textSize) != textSize) break@loop
-                            val domain = String(patternBuffer, 0, textSize)
-                            val include = when (input.read()) {
-                                0 -> false
-                                1 -> true
-                                else -> break@loop
-                            }
-                            SingleDomainMap(include, domain)
-                        }
-                        else -> {
-                            val map = ArrayDomainMap(domainsSize)
-                            for (i in 0 until domainsSize) {
-                                val textSize = input.readVariableInt(shortBuf, intBuf)
-                                if (textSize == -1) break@loop
-                                if (patternBuffer.size < textSize) {
-                                    patternBuffer = ByteArray(textSize)
-                                }
-                                if (input.read(patternBuffer, 0, textSize) != textSize) break@loop
-                                val domain = String(patternBuffer, 0, textSize)
-                                val include = when (input.read()) {
-                                    0 -> false
-                                    1 -> true
-                                    else -> break@loop
-                                }
-                                map[domain] = include
-                            }
-                            map
-                        }
-                    }
-                    list.add(ElementHideFilter(selector, domains))
-                }
-                ElementFilter.TYPE_EXCLUDE -> {
-                    val domains = mutableListOf<String>()
-                    for (i in 0 until domainsSize) {
-                        val textSize = input.readVariableInt(shortBuf, intBuf)
-                        if (textSize == -1) break@loop
-                        if (patternBuffer.size < textSize) {
-                            patternBuffer = ByteArray(textSize)
-                        }
-                        if (input.read(patternBuffer, 0, textSize) != textSize) break@loop
-                        domains.add(String(patternBuffer, 0, textSize))
-                    }
-                    list.add(ExcludeElementFilter(selector, domains))
-                }
+            val isHide = when (input.read()) {
+                0 -> false
+                1 -> true
                 else -> break@loop
             }
+
+            val isNot = when (input.read()) {
+                0 -> false
+                1 -> true
+                else -> break@loop
+            }
+
+            val patternSize = input.readVariableInt(shortBuf, intBuf)
+            if (patternSize == -1) break
+            if (patternBuffer.size < patternSize) {
+                patternBuffer = ByteArray(patternSize)
+            }
+            if (input.read(patternBuffer, 0, patternSize) != patternSize) break
+            val pattern = String(patternBuffer, 0, patternSize)
+
+            val selectorSize = input.readVariableInt(shortBuf, intBuf)
+            if (selectorSize == -1) break
+            if (patternBuffer.size < selectorSize) {
+                patternBuffer = ByteArray(selectorSize)
+            }
+            if (input.read(patternBuffer, 0, selectorSize) != selectorSize) break
+            val selector = String(patternBuffer, 0, selectorSize)
+
+            val filter = when (filterType) {
+                ElementFilter.TYPE_PLANE -> PlaneElementFilter(
+                    pattern,
+                    isHide,
+                    isNot,
+                    selector,
+                )
+                ElementFilter.TYPE_TLD_REMOVED -> TldRemovedElementFilter(
+                    pattern,
+                    isHide,
+                    isNot,
+                    selector,
+                )
+                else -> break@loop
+            }
+            yield(filter)
         }
-        return list
     }
 }

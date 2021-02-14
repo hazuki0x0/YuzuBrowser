@@ -38,6 +38,7 @@ import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.core.utility.extensions.isConnectedWifi
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
@@ -82,7 +83,7 @@ class AbpUpdateService : JobIntentService() {
         val now = System.currentTimeMillis()
         abpDatabase.abpDao().getAll().forEach {
             if (forceUpdate || it.isNeedUpdate()) {
-                val localResult = updateInternal(it)
+                val localResult = updateInternal(it, forceUpdate)
                 if (localResult && it.expires > 0) {
                     val nextTime = it.expires * AN_HOUR + now
                     if (nextTime < nextUpdateTime) nextUpdateTime = nextTime
@@ -111,16 +112,16 @@ class AbpUpdateService : JobIntentService() {
         }
     }
 
-    private suspend fun updateInternal(entity: AbpEntity): Boolean {
+    private suspend fun updateInternal(entity: AbpEntity, forceUpdate: Boolean = false): Boolean {
         return when {
             entity.url == "yuzu://adblock/filter" -> updateAssets(entity)
-            entity.url.startsWith("http") -> updateHttp(entity)
+            entity.url.startsWith("http") -> updateHttp(entity, forceUpdate)
             entity.url.startsWith("file") -> updateFile(entity)
             else -> false
         }
     }
 
-    private suspend fun updateHttp(entity: AbpEntity): Boolean {
+    private suspend fun updateHttp(entity: AbpEntity, forceUpdate: Boolean): Boolean {
 
         val request = try {
             Request.Builder()
@@ -130,14 +131,17 @@ class AbpUpdateService : JobIntentService() {
             return false
         }
 
-        entity.lastModified?.let {
-            val dir = getFilterDir()
+        if (!forceUpdate) {
+            entity.lastModified?.let {
+                val dir = getFilterDir()
 
-            if (dir.getAbpBlackListFile(entity).exists() ||
-                dir.getAbpWhiteListFile(entity).exists() ||
-                dir.getAbpWhitePageListFile(entity).exists())
-                request.addHeader("If-Modified-Since", it)
+                if (dir.getAbpBlackListFile(entity).exists() ||
+                    dir.getAbpWhiteListFile(entity).exists() ||
+                    dir.getAbpWhitePageListFile(entity).exists())
+                    request.addHeader("If-Modified-Since", it)
+            }
         }
+
         val call = okHttpClient.newCall(request.build())
         try {
             val response = call.execute()
@@ -208,26 +212,26 @@ class AbpUpdateService : JobIntentService() {
         entity.lastLocalUpdate = System.currentTimeMillis()
         val dir = getFilterDir()
 
-        try {
-            val writer = FilterWriter()
-            writer.write(dir.getAbpBlackListFile(entity), set.blackList)
-            writer.write(dir.getAbpWhiteListFile(entity), set.whiteList)
-            writer.write(dir.getAbpWhitePageListFile(entity), set.whitePageList)
+        val writer = FilterWriter()
+        writer.write(dir.getAbpBlackListFile(entity), set.blackList)
+        writer.write(dir.getAbpWhiteListFile(entity), set.whiteList)
+        writer.write(dir.getAbpWhitePageListFile(entity), set.elementDisableFilter)
 
-            val elementWriter = ElementWriter()
-            elementWriter.write(dir.getAbpElementListFile(entity), set.elementList)
+        val elementWriter = ElementWriter()
+        elementWriter.write(dir.getAbpElementListFile(entity), set.elementList)
 
-            abpDatabase.abpDao().update(entity)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        abpDatabase.abpDao().update(entity)
         return true
     }
 
     private fun FilterWriter.write(file: File, list: List<UnifiedFilter>) {
         if (list.isNotEmpty()) {
-            file.outputStream().buffered().use {
-                write(it, list)
+            try {
+                file.outputStream().buffered().use {
+                    write(it, list)
+                }
+            } catch (e: IOException) {
+                ErrorReport.printAndWriteLog(e)
             }
         } else {
             if (file.exists()) file.delete()
@@ -236,8 +240,12 @@ class AbpUpdateService : JobIntentService() {
 
     private fun ElementWriter.write(file: File, list: List<ElementFilter>) {
         if (list.isNotEmpty()) {
-            file.outputStream().buffered().use {
-                write(it, list)
+            try {
+                file.outputStream().buffered().use {
+                    write(it, list)
+                }
+            } catch (e: IOException) {
+                ErrorReport.printAndWriteLog(e)
             }
         } else {
             if (file.exists()) file.delete()

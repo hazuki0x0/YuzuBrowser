@@ -28,7 +28,7 @@ class RegexHostFilter(
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
     private val regex: Pattern = Pattern.compile("//$pattern")
 
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_JVM_REGEX_HOST
 
     override fun check(url: Uri): Boolean {

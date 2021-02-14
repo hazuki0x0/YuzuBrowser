@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright 2020 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.adblock.core
+package jp.hazuki.yuzubrowser.adblock.filter.unified.element
 
-import android.net.Uri
-import jp.hazuki.yuzubrowser.adblock.filter.Filter
+class TldRemovedElementFilter(domain: String, isHide: Boolean, isNot: Boolean, selector: String) :
+    ElementFilter(domain, isHide, isNot, selector) {
 
-class FilterMatcherList(
-        private val customData: List<Filter>
-) {
+    override val type: Int
+        get() = TYPE_TLD_REMOVED
 
-    fun match(uri: Uri, pageUrl: Uri, contentType: Int, isThirdParty: Boolean): Boolean =
-        customData.any { it.match(uri, pageUrl, contentType, isThirdParty) }
+    override fun isMatch(domain: String, tldRemoved: String?): Boolean {
+        if (tldRemoved == null) return false
+
+        return domain.endsWith(this.domain)
+    }
 }

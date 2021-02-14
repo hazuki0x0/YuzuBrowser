@@ -31,11 +31,8 @@ import android.view.View
 import android.webkit.*
 import android.widget.TextView
 import android.widget.Toast
-import jp.hazuki.yuzubrowser.adblock.AdBlockController
-import jp.hazuki.yuzubrowser.adblock.EmptyInputStream
-import jp.hazuki.yuzubrowser.adblock.convertToAdBlockContentType
+import jp.hazuki.yuzubrowser.adblock.*
 import jp.hazuki.yuzubrowser.adblock.filter.mining.MiningProtector
-import jp.hazuki.yuzubrowser.adblock.isThirdParty
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
@@ -443,8 +440,10 @@ class WebClient(
                 web.evaluateJavascript(invertEnableJs, null)
             }
             val adBlockController = adBlockController
-            if (adBlockController != null && adBlockController.isElementHideEnabled) {
-                web.evaluateJavascript(AdBlockController.INJECT_HIDE_STYLE, null)
+            if (adBlockController != null) {
+                adBlockController.loadScript(Uri.parse(url))?.let {
+                    web.evaluateJavascript(it, null)
+                }
             }
 
             applyUserScript(web, url, UserScript.RunAt.END)
@@ -543,30 +542,25 @@ class WebClient(
             adBlockController?.run {
                 val host = uri.host
                 if (host != null) {
-                    val isThird = request.isThirdParty(host)
-                    val contentType = request.convertToAdBlockContentType(uri.toString())
-                    if (!isWhitePage(uri, contentType, isThird)) {
-                        if (request.url.host == "adblock" && request.url.path == "/hideElement.css") {
-                            return createElementHideStyle(uri)
-                        }
-                        try {
-                            val result = isBlock(uri, request.url, contentType, isThird)
-                            if (result != null) {
-                                return if (request.isForMainFrame) {
-                                    createMainFrameDummy(activity, request.url, result.pattern)
-                                } else {
-                                    createDummy(request.url)
-                                }
+                    if (request.isForMainFrame) {
+                        web.isBlock = !isWhitePage(request.url)
+                    }
+
+                    if (web.isBlock) {
+                        val filter = isBlock(request.getContentRequest(uri ?: Uri.parse("")))
+                        if (filter != null) {
+                            return if (request.isForMainFrame) {
+                                createMainFrameDummy(activity, request.url, filter.pattern)
+                            } else {
+                                createDummy(request.url)
                             }
-                        } catch (e: Exception) {
-                            throw e
                         }
                     }
                 }
             }
 
             miningProtector?.run {
-                if (isBlock(uri, request.url)) {
+                if (isBlock(request.getContentRequest(uri ?: Uri.parse("")))) {
                     return dummy
                 }
             }

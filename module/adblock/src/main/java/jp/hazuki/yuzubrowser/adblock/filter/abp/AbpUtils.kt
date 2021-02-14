@@ -19,21 +19,21 @@ package jp.hazuki.yuzubrowser.adblock.filter.abp
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import java.io.File
 
-internal const val ABP_PREFIX_BLACK = "b_"
-internal const val ABP_PREFIX_WHITE = "w_"
-internal const val ABP_PREFIX_WHITE_PAGE = "wp_"
+internal const val ABP_PREFIX_DENY = "b_"
+internal const val ABP_PREFIX_ALLOW = "w_"
+internal const val ABP_PREFIX_DISABLE_ELEMENT_PAGE = "wp_"
 internal const val ABP_PREFIX_ELEMENT = "e_"
 
 internal fun File.getAbpBlackListFile(entity: AbpEntity): File {
-    return File(this, ABP_PREFIX_BLACK + entity.entityId)
+    return File(this, ABP_PREFIX_DENY + entity.entityId)
 }
 
 internal fun File.getAbpWhiteListFile(entity: AbpEntity): File {
-    return File(this, ABP_PREFIX_WHITE + entity.entityId)
+    return File(this, ABP_PREFIX_ALLOW + entity.entityId)
 }
 
 internal fun File.getAbpWhitePageListFile(entity: AbpEntity): File {
-    return File(this, ABP_PREFIX_WHITE_PAGE + entity.entityId)
+    return File(this, ABP_PREFIX_DISABLE_ELEMENT_PAGE + entity.entityId)
 }
 
 internal fun File.getAbpElementListFile(entity: AbpEntity): File {

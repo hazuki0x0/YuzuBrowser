@@ -24,7 +24,7 @@ class EndWithFilter(
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, false, domains, thirdParty) {
-    override val type: Int
+    override val filterType: Int
         get() = FILTER_TYPE_END
 
     override fun check(url: Uri): Boolean {
