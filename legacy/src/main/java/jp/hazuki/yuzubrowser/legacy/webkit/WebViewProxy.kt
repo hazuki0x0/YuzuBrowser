@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.legacy.webkit
 import androidx.webkit.ProxyConfig
 import androidx.webkit.ProxyController
 import androidx.webkit.WebViewFeature
+import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import java.util.concurrent.Executor
 
 class WebViewProxy private constructor() : Executor, Runnable {
@@ -46,19 +47,23 @@ class WebViewProxy private constructor() : Executor, Runnable {
         }
 
         fun setProxy(host: String, httpsHost: String?) {
-            if (WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE)) {
-                val config = ProxyConfig.Builder().apply {
-                    if (httpsHost != null) {
-                        addProxyRule(host, ProxyConfig.MATCH_HTTP)
-                        addProxyRule(httpsHost, ProxyConfig.MATCH_HTTPS)
-                    } else {
-                        addProxyRule(host)
-                    }
-                }.build()
+            try {
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE)) {
+                    val config = ProxyConfig.Builder().apply {
+                        if (httpsHost != null && httpsHost.isNotEmpty()) {
+                            addProxyRule(host, ProxyConfig.MATCH_HTTP)
+                            addProxyRule(httpsHost, ProxyConfig.MATCH_HTTPS)
+                        } else {
+                            addProxyRule(host)
+                        }
+                    }.build()
 
-                val instance = getInstance()
-                instance.requestState = 1
-                ProxyController.getInstance().setProxyOverride(config, instance, instance)
+                    val instance = getInstance()
+                    instance.requestState = 1
+                    ProxyController.getInstance().setProxyOverride(config, instance, instance)
+                }
+            } catch (e: IllegalArgumentException) {
+                ErrorReport.printAndWriteLog(e)
             }
         }
 
