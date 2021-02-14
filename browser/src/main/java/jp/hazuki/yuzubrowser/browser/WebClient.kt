@@ -444,7 +444,6 @@ class WebClient(
             }
 
             applyUserScript(web, url, UserScript.RunAt.END)
-            web.evaluateJavascript("document.body.innerText=''", null)
         }
 
         override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {
