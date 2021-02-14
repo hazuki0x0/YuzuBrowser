@@ -81,6 +81,7 @@ interface BrowserController : BrowserInfo {
     fun requestAdjustWebView()
     fun expandToolbar()
     fun adjustBrowserPadding(tab: MainTabData)
+    fun onPageFinished()
 
     val secretKey: String
     val tabManager: TabManager

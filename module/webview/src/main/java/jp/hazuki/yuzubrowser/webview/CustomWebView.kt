@@ -92,6 +92,8 @@ interface CustomWebView {
 
     var isBlock: Boolean
 
+    val canPullToRefresh: Boolean
+
     fun canGoBack(): Boolean
 
     fun canGoBackOrForward(steps: Int): Boolean
@@ -224,8 +226,6 @@ interface CustomWebView {
     fun setDoubleTapFling(fling: Boolean)
 
     fun setVerticalScrollBarEnabled(enabled: Boolean)
-
-    fun setSwipeable(swipeable: Boolean)
 
     fun setScrollableHeight(listener: (() -> Int)?)
 

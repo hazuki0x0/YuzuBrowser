@@ -35,7 +35,6 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     private var titleBar: View? = null
     private var nestedOffsetY = 0
     private var doubleTapFling = false
-    private var isSwipeable = true
     private var firstY = 0
     private var lastY = 0
     private var downScrollY = 0
@@ -44,6 +43,7 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     private var scrollExcessPlay = false
     private var nestedScrolled = false
     private var firstScroll = true
+    override var swipeEnable = false
     override val webSettings = YuzuWebSettings(settings)
     override var theme: CustomWebView.WebViewTheme? = null
         private set
@@ -87,6 +87,10 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     override var renderingMode = 0
 
     override var isBlock = false
+    private var isOverScrolling = false
+
+    override val canPullToRefresh: Boolean
+        get() = swipeEnable && isOverScrolling
 
     override fun copyMyBackForwardList(): CustomWebBackForwardList = CustomWebBackForwardList(copyBackForwardList())
 
@@ -169,6 +173,11 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
         scrollTo(x + scrollX, y + scrollY)
     }
 
+    override fun onOverScrolled(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY)
+        isOverScrolling = scrollY <= 0
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         val touchDetector = touchDetector
@@ -208,17 +217,12 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
                     startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
                 }
 
-                if (scrollY > scrollSlop) {
-                    setSwipeable(false)
-                }
-
                 // NestedPreScroll
                 if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset)) {
                     deltaY -= mScrollConsumed[1]
                     lastY = eventY - mScrollOffset[1]
                     event.offsetLocation(0f, (-mScrollOffset[1]).toFloat())
                     nestedOffsetY = mScrollOffset[1]
-                    setSwipeable(false)
                 }
                 returnValue = super.onTouchEvent(event)
 
@@ -228,7 +232,6 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
                     nestedOffsetY = mScrollOffset[1]
                     lastY -= deltaY
                     nestedScrolled = true
-                    setSwipeable(false)
                 } else {
                     nestedScrolled = false
                 }
@@ -244,19 +247,15 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
                 }
                 firstY = eventY
                 downScrollY = scrollY
-                if (downScrollY < scrollSlop && isToolbarShowing) {
-                    setSwipeable(true)
-                }
             }
-            else -> {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isTouching = false
+                isOverScrolling = false
                 returnValue = super.onTouchEvent(ev)
                 // end NestedScroll
                 stopNestedScroll()
-                if (scrollY < scrollSlop && isToolbarShowing) {
-                    setSwipeable(true)
-                }
             }
+            else -> returnValue = super.onTouchEvent(ev)
         }
         return returnValue
     }
@@ -299,24 +298,13 @@ internal class NormalWebView @JvmOverloads constructor(context: Context, attrs: 
     override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean =
             childHelper.dispatchNestedPreFling(velocityX, velocityY)
 
-    override fun setSwipeable(swipeable: Boolean) {
-        if (isSwipeable != swipeable) {
-            isSwipeable = swipeable
-            scrollableChangeListener?.onScrollableChanged(isScrollable && isSwipeable)
-        }
-    }
-
-    fun isSwipeable(): Boolean {
-        return isSwipeable
-    }
-
     override fun computeVerticalScrollRange(): Int {
         val scrollRange = super.computeVerticalScrollRange()
         verticalScrollRange = scrollRange
         val old = isScrollable
         isScrollable = scrollRange > height + scrollSlop + (scrollableHeight?.invoke() ?: 0)
         if (old != isScrollable) {
-            scrollableChangeListener?.onScrollableChanged(isScrollable && isSwipeable)
+            scrollableChangeListener?.onScrollableChanged(isScrollable)
         }
 
         if (isScrollable && !isNestedScrollingEnabled) {

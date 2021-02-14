@@ -81,11 +81,17 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <FrameLayout
-                            android:id="@+id/webFrameLayout"
+                        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                            android:id="@+id/pullToRefresh"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1" />
+                            android:layout_weight="1">
+
+                            <FrameLayout
+                                android:id="@+id/webFrameLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
                         <jp.hazuki.yuzubrowser.ui.widget.PaddingFrameLayout
                             android:id="@+id/toolbarPadding"

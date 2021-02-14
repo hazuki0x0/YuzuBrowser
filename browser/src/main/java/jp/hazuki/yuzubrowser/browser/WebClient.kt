@@ -387,6 +387,7 @@ class WebClient(
         }
 
         override fun onPageFinished(web: CustomWebView, url: String) {
+            controller.onPageFinished()
             val data = controller.getTabOrNull(web) ?: return
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

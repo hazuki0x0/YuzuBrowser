@@ -67,6 +67,7 @@ dependencies {
     implementation AndroidX.print
     implementation AndroidX.documentFile
     implementation AndroidX.webkit
+    implementation AndroidX.swipeRefreshLayout
 
     implementation Libs.okhttp
     implementation Libs.okio

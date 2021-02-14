@@ -241,6 +241,9 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
     override val url: String?
         get() = currentPage.webView.url
 
+    override val canPullToRefresh: Boolean
+        get() = currentPage.webView.canPullToRefresh
+
     override fun evaluateJavascript(js: String, callback: ValueCallback<String>?) {
         currentPage.webView.evaluateJavascript(js, callback)
     }
@@ -574,10 +577,6 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         for (web in tabs) {
             web.webView.setVerticalScrollBarEnabled(enabled)
         }
-    }
-
-    override fun setSwipeable(swipeable: Boolean) {
-        currentPage.webView.setSwipeable(swipeable)
     }
 
     override fun setScrollableHeight(listener: (() -> Int)?) {

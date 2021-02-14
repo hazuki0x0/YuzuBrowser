@@ -38,7 +38,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
     private val tabIndexList = ArrayList<Page>()
     private val tabSaveData = LongSparseArray<Bundle>()
     private val tabCache: LRUCache<Long, WebViewPage> = LRUCache(AppPrefs.fast_back_cache_size.get(), this)
-    override var currentPage: WebViewPage = SwipeWebView(context).let { web ->
+    override var currentPage: WebViewPage = NormalWebView(context).let { web ->
         val data = WebViewPage(web)
         tabIndexList.add(data.page)
         tabCache[data.id] = data
@@ -143,7 +143,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
     }
 
     private fun makeWebView(): WebViewPage {
-        val to = WebViewPage(SwipeWebView(context))
+        val to = WebViewPage(NormalWebView(context))
         currentPage.webView.copySettingsTo(to.webView)
         return to
     }
@@ -158,7 +158,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
         val now = tabIndexList[index]
         var data: WebViewPage? = tabCache[now.id]
         if (data == null) {
-            data = WebViewPage(SwipeWebView(context, now.id), now)
+            data = WebViewPage(NormalWebView(context, id = now.id), now)
             currentPage.webView.copySettingsTo(data.webView)
             val state = tabSaveData.get(now.id)
             if (state != null) {
@@ -221,7 +221,7 @@ internal class LimitCacheWebView(context: Context, private val moshi: Moshi) : A
             tabSaveData.put(indexData.id, state)
 
             if (inState.getBoolean(BUNDLE_LOADED + indexData.id, false)) {
-                val web = WebViewPage(SwipeWebView(context, indexData.id), indexData)
+                val web = WebViewPage(NormalWebView(context, id = indexData.id), indexData)
                 web.webView.onPause()
                 tabCache[identityId] = web
                 if (i == current) {

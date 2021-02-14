@@ -111,7 +111,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
     }
 
     init {
-        val web = SwipeWebView(context)
+        val web = NormalWebView(context)
         mList.add(WebViewPage(web))
         addView(web)
     }
@@ -120,7 +120,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
 
     override fun createTab(url: String, additionalHttpHeaders: Map<String, String>) {
         val from = mList[current]
-        val to = WebViewPage(SwipeWebView(context))
+        val to = WebViewPage(NormalWebView(context))
         for (i in mList.size - 1 downTo current + 1) {
             mList[i].webView.destroy()
             mList.removeAt(i)
@@ -174,7 +174,7 @@ internal class CacheWebView(context: Context) : AbstractCacheWebView(context), W
         current = inState.getInt("CacheWebView.WEB_CURRENT_COUNT")
 
         for (i in 0 until all) {
-            val web = WebViewPage(SwipeWebView(context))
+            val web = WebViewPage(NormalWebView(context))
             web.webView.onPause()
             mList.add(web)
             if (i == current)

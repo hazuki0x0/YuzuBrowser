@@ -111,6 +111,7 @@ import jp.hazuki.yuzubrowser.webview.WebViewFactory
 import jp.hazuki.yuzubrowser.webview.WebViewType
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
+import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import java.util.*
 import javax.inject.Inject
@@ -281,6 +282,20 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 binding.bottomAlwaysOverlayToolbarPadding.height = binding.bottomAlwaysOverlayToolbar.height
             }
         })
+
+        binding.pullToRefresh.apply {
+            setOnChildScrollUpCallback { _, _ ->
+                val tab = tabManagerIn.currentTabData
+                !tab.mWebView.canPullToRefresh || !tab.isFinished
+            }
+            setOnRefreshListener {
+                ui {
+                    tabManagerIn.currentTabData.mWebView.reload()
+                    delay(RELOAD_ICON_TIME_LIMIT)
+                    binding.pullToRefresh.isRefreshing = false
+                }
+            }
+        }
 
         binding.webViewFastScroller.attachAppBarLayout(binding.coordinator, binding.appbar)
         binding.webGestureOverlayView.setWebFrame(binding.appbar)
@@ -687,6 +702,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         binding.bottomAlwaysOverlayToolbarPadding.setBlackColorMode(mode)
 
         webViewBehavior.adjustWebView(tab, binding.topToolbar.height + binding.bottomOverlayLayout.height)
+    }
+
+    override fun onPageFinished() {
+        binding.pullToRefresh.isRefreshing = false
     }
 
     private fun handleIntent(intent: Intent?): Boolean {
@@ -1676,5 +1695,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         private const val EXTRA_DATA_TARGET = "BrowserActivity.target"
         const val EXTRA_WINDOW_MODE = "window_mode"
         const val EXTRA_SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
+
+        private const val RELOAD_ICON_TIME_LIMIT = 2000L
     }
 }

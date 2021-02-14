@@ -39,10 +39,10 @@ class WebViewFactory(private val moshi: Moshi) {
 
     fun create(context: Context, @WebViewType mode: Int): CustomWebView {
         return when (mode) {
-            MODE_NORMAL -> SwipeWebView(context)
+            MODE_NORMAL -> NormalWebView(context)
             MODE_CACHE -> CacheWebView(context)
             MODE_LIMIT_CACHE -> LimitCacheWebView(context, moshi)
-            else -> SwipeWebView(context)
+            else -> NormalWebView(context)
         }
     }
 
