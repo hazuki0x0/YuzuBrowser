@@ -18,15 +18,20 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 import android.os.Bundle
 import androidx.fragment.app.commit
 import androidx.preference.Preference
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.RestartActivity
+import kotlinx.coroutines.delay
 
 class UiSettingFragment : YuzuPreferenceFragment() {
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_ui_settings)
         findPreference<Preference>("theme_setting")!!.setOnPreferenceChangeListener { _, _ ->
-            startActivity(RestartActivity.createIntent(requireContext()))
+            ui {
+                delay(100L)
+                startActivity(RestartActivity.createIntent(requireContext()))
+            }
             true
         }
 
