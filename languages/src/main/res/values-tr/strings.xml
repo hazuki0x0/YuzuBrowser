@@ -1,0 +1,331 @@
+<!--
+  ~ Copyright (C) 2017-2019 Hazuki
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="browser_app_name">Yuzu Tarayıcı</string>
+    <string name="add">Ekle</string>
+    <string name="cancel">İptal et</string>
+    <string name="reset">Sıfırla</string>
+    <string name="app_notfound">Kabul edilebilir uygulama bulunamadı</string>
+    <string name="form_resubmit">Veri gönderilmedikçe bu sayfa yenilenemez. GÖNDERİ VERİSİ\'ni tekrar göndermek ister misiniz?</string>
+    <string name="pattern_edittext_info">Joker karakterleri kullanabilirsiniz. Daha fazla bilgi için Yardım\'a bakın.</string>
+    <string name="pattern_edittext_hint">URL</string>
+    <string name="pattern_open_others">Diğer uygulamada aç</string>
+    <string name="pattern_change_websettings">Web ayarını değiştir</string>
+    <string name="pattern_block">Engelle</string>
+    <string name="useragent">Kullanıcı Aracısı</string>
+    <string name="javascript">JavaScript</string>
+    <string name="confirm">Onayla</string>
+    <string name="confirm_delete_action">Bu eylem silinsin mi?</string>
+    <string name="confirm_delete_history">Bu geçmiş silinsin mi?</string>
+    <string name="confirm_delete_all_history">Tüm geçmiş silinsin mi?</string>
+    <string name="confirm_delete_all_displayed_item">Görüntülenen tüm öğeler silinsin mi?</string>
+    <string name="confirm_delete_all_favicon">Tüm faviconlar silinsin mi?</string>
+    <string name="confirm_delete_bookmark">Bu yer imi silinsin mi?</string>
+    <string name="confirm_delete_button">Bu düğme silinsin mi?</string>
+    <string name="confirm_delete_speedDial">Bu hızlı arama silinsin mi?</string>
+    <string name="confirm_delete_gesture">Bu hareket silinsin mi?</string>
+    <string name="confirm_delete_search_url">Bu arama URL\'si silinsin mi?</string>
+    <string name="delete_history">Geçmişi sil</string>
+    <string name="delete_all_history">Tüm geçmişi sil</string>
+    <string name="delete_all_displayed_item">Görüntülenen tüm öğeleri sil</string>
+    <string name="delete_all_favicon">Tüm faviconları sil</string>
+    <string name="delete_bookmark">Yer imini sil</string>
+    <string name="delete_speedDial">Hızlı aramayı sil</string>
+    <string name="delete_search_query">Arama sorgularını sil</string>
+    <string name="remove_geo_permission">Tüm Coğrafi Konum İzinlerini Kaldır</string>
+    <string name="pattern_open_app_list">Uygulama listesini göster</string>
+    <string name="pattern_open_app_chooser">Uygulama seçiciyi göster</string>
+    <string name="now_loading">Şimdi yükleniyor</string>
+    <string name="now_downloading">Şimdi indiriliyor...</string>
+    <string name="finish_mes">Bu uygulamadan çıkmak ister misiniz?</string>
+    <string name="minimize">Küçült</string>
+    <string name="open">Aç</string>
+    <string name="open_new">Yeni sekmede aç</string>
+    <string name="open_bg">Arka plan sekmesinde aç</string>
+    <string name="open_new_right">Sağ yeni sekmede aç</string>
+    <string name="open_bg_right">Sağ arka plan sekmesinde aç</string>
+    <string name="share">Paylaş</string>
+    <string name="open_other_app">Başka bir uygulamada aç</string>
+    <string name="copy_url">URL\'yi kopyala</string>
+    <string name="share_link">Bağlantıyı paylaş</string>
+    <string name="open_link_other_app">Bağlantıyı başka bir uygulamada aç</string>
+    <string name="copy_link_url">Bağlantı URL’sini kopyala</string>
+    <string name="copy_link_text">Bağlantı metnini kopyala</string>
+    <string name="save_link">Bağlantıyı kaydet</string>
+    <string name="save_link_as">Bağlantıyı Farklı kaydet...</string>
+    <string name="open_image">Resmi aç</string>
+    <string name="open_image_new">Resmi yeni sekmede aç</string>
+    <string name="open_image_bg">Resmi arka plan sekmesinde aç</string>
+    <string name="open_image_new_right">Resmi sağ yeni sekmede aç</string>
+    <string name="open_image_bg_right">Resmi sağ arka plan sekmesinde aç</string>
+    <string name="share_image">Resmi paylaş</string>
+    <string name="share_image_url">Resim URL\'sini paylaş</string>
+    <string name="open_image_other_app">Resmi başka bir uygulamada aç</string>
+    <string name="copy_image_url">Resim URL’sini kopyala</string>
+    <string name="save_image">Resmi kaydet</string>
+    <string name="save_image_as">Resmi Farklı Kaydet...</string>
+    <string name="search_image">Resim ara</string>
+    <string name="block_image">Kaynak engellemeye ekle</string>
+    <string name="add_image_pattern">Resmi desen eşleşmesine ekle</string>
+    <string name="add_url_pattern">Bağlantıyı desen eşleşmesine ekle</string>
+    <string name="add_image_black_list">Resmi kara listeye ekle</string>
+    <string name="add_image_white_list">Resmi beyaz listeye ekle</string>
+    <string name="add_link_black_list">Bağlantıyı kara listeye ekle</string>
+    <string name="add_link_white_list">Bağlantıyı beyaz listeye ekle</string>
+    <string name="open_all_new">Tümünü yeni sekmede aç</string>
+    <string name="open_all_bg">Tümünü arka plan sekmesinde aç</string>
+    <string name="copy_clipboard_mes_before">Kopyalanan :</string>
+    <string name="dial">Tuşla</string>
+    <string name="add_contact">Kişilere ekle</string>
+    <string name="copy_phone_num">Telefon numarasını kopyala</string>
+    <string name="email">E-posta gönder</string>
+    <string name="copy_email_address">E-posta adresini kopyala</string>
+    <string name="open_map">Harita aç</string>
+    <string name="copy_map_address">Harita adresini kopyala</string>
+    <string name="download_success">İndirme başarılı.</string>
+    <string name="download_paused">İndirme duraklatıldı.</string>
+    <string name="download_fail">İndirme başarısız.</string>
+    <string name="download_cancel">İndirme iptal edildi.</string>
+    <string name="download">İndir</string>
+    <string name="filename">Dosya adı</string>
+    <string name="download_file_overwrite">Dosya zaten var. Üzerine yazılsın mı?</string>
+    <string name="search_editText_hint">Url\'yi arayın veya yazın</string>
+    <string name="history">Geçmiş</string>
+    <string name="bookmark">Yer imi</string>
+    <string name="agree">Kabul ediyorum</string>
+    <string name="disagree">Kabul etmiyorum</string>
+    <string name="location_mes">Sitelerin bulunduğunuz yere erişim istemesine izin ver</string>
+    <string name="remember">Hatırla</string>
+    <string name="clear_cache">Önbelleği temizle</string>
+    <string name="clear_cookie">Çerezleri temizle</string>
+    <string name="clear_database">HTML5 veritabanını temizle</string>
+    <string name="clear_password">Şifreleri temizle</string>
+    <string name="clear_formdata">Form verilerini temizle</string>
+    <string name="clear_favicon">Favicon önbelleğini temizle</string>
+    <string name="close_all_tabs">Tüm sekmeleri kapat</string>
+    <string name="search">Ara</string>
+    <string name="previous">Önceki</string>
+    <string name="next">Sonraki</string>
+    <string name="title">Başlık</string>
+    <string name="url">URL</string>
+    <string name="title_empty_mes">Başlık boş olamaz.</string>
+    <string name="url_empty_mes">URL boş olamaz.</string>
+    <string name="succeed">Başarılı!</string>
+    <string name="failed">Bilinmeyen hata nedeniyle başarısız oldu</string>
+    <string name="add_bookmark">Yer imi ekle</string>
+    <string name="add_folder">Dizin ekle</string>
+    <string name="new_folder_name">Yeni dizin</string>
+    <string name="folder">Dizin</string>
+    <string name="sort">Sırala</string>
+    <string name="end_sort_label">Sıralamayı bitir</string>
+    <string name="start_sort">Haydi sırala\u266a</string>
+    <string name="end_sort">Sıralama tamamlandı!</string>
+    <string name="edit_bookmark">Yer imini düzenle</string>
+    <string name="move_bookmark">Şuraya taşı\u2026</string>
+    <string name="proxy_enable">Vekili etkinleştir</string>
+    <string name="proxy_mes">Vekil adresi</string>
+    <string name="proxy_edittext_hint">127.0.0.1:8000</string>
+    <string name="proxy_address_error">Vekil adres biçimi yanlış</string>
+    <string name="open_file">Dosya aç</string>
+    <string name="open_url">URL aç</string>
+    <string name="pause">Duraklat</string>
+    <string name="pause_download">İndirmeyi duraklat</string>
+    <string name="resume_download">İndirmeyi devam ettir</string>
+    <string name="cancel_download">İndirmeyi iptal et</string>
+    <string name="clear_download">Listeden kaldır</string>
+    <string name="delete_download">Dosyayı sil</string>
+    <string name="ssl_error_title">Güvenlik uyarısı</string>
+    <string name="ssl_error_mes">Bu sitenin güvenlik sertifikasıyla ilgili sorunları var.\n%1$s\nDevam edilsin mi?</string>
+    <string name="ssl_error_certificate_date_invalid">Sertifikanın tarihi geçersiz</string>
+    <string name="ssl_error_certificate_expired">Sertifikanın süresi doldu</string>
+    <string name="ssl_error_certificate_expired_info">Geçerlilik süresi sonu=</string>
+    <string name="ssl_error_certificate_domain_mismatch">Ana bilgisayar adı uyuşmazlığı</string>
+    <string name="ssl_error_certificate_domain_mismatch_info">CN=</string>
+    <string name="ssl_error_certificate_invalid">Genel bir hata oluştu</string>
+    <string name="ssl_error_certificate_not_yet_valid">Sertifika henüz geçerli değil</string>
+    <string name="ssl_error_certificate_not_yet_valid_info">Geçerlilik süresi başlangıcı=</string>
+    <string name="ssl_error_certificate_untrusted">Sertifika yetkilisi güvenilir değil</string>
+    <string name="ssl_error_certificate_untrusted_info">CA:</string>
+    <string name="ssl_error_dont_ask_again">Bu tarayıcı oturumu için tekrar sorma.</string>
+    <string name="username">Kullanıcı adı</string>
+    <string name="password">Şifre</string>
+    <string name="show_password">Şifreyi göster</string>
+    <string name="login">Giriş</string>
+    <string name="edit_action">Eylemi düzenle</string>
+    <string name="action_cant_empty">Eylem boş olamaz.</string>
+    <string name="action_empty">Boş eylem</string>
+    <string name="gesture_test">Hareket testi</string>
+    <string name="move_up">Yukarı taşı</string>
+    <string name="move_down">Aşağı taşı</string>
+    <string name="page_info">Sayfa bilgisi</string>
+    <string name="tab_history">Sekme geçmişi</string>
+    <string name="tab_restored_succeed">Sekme geri yüklendi!</string>
+    <string name="tab_restored_failed">Kapalı sekme yok</string>
+    <string name="tab_restored_setting_error">Lütfen açın [Tarayıcı ayarları]-[Kapalı sekmeleri kaydet]</string>
+    <string name="toggle_enable">Etkin!</string>
+    <string name="toggle_disable">Devre dışı!</string>
+    <string name="name">Ad</string>
+    <string name="delete_ua">Kullanıcı Aracısını Sil</string>
+    <string name="delete_ua_confirm">Bu Kullanıcı Aracısı silinsin mi?</string>
+    <string name="delete_web_encode">Bu öğeyi sil</string>
+    <string name="delete_web_encode_confirm">Bu öğe silinsin mi?</string>
+    <string name="web_encode">Metin kodlama</string>
+    <string name="userjs_save">Kullanıcı Betiğini Kaydet</string>
+    <string name="userjs_save_confirm">Bu Kullanıcı Betiği kaydedilsin mi?</string>
+    <string name="userjs_edit">Kullanıcı Betiğini Düzenle</string>
+    <string name="userjs_delete">Kullanıcı Betiğini Sil</string>
+    <string name="userjs_delete_confirm">Bu Kullanıcı Betiği silinsin mi?</string>
+    <string name="userjs_info">Kullanıcı Betiği Bilgisi</string>
+    <string name="userjs_info_name">Ad</string>
+    <string name="userjs_info_version">Sürüm</string>
+    <string name="userjs_info_author">Yazar</string>
+    <string name="userjs_info_description">Tanım</string>
+    <string name="userjs_info_include">Dahil et</string>
+    <string name="userjs_info_exclude">Hariç tut</string>
+    <string name="userjs_add_file_confirm">\"%s\" dosyası eklensin mi?</string>
+    <string name="save">Kaydet</string>
+    <string name="not_save">Kaydetme</string>
+    <string name="pattern_syntax_error">Desen sözdizimi hatası</string>
+    <string name="cannot_access_folder">Erişim reddedildi</string>
+    <string name="add_by_edit">Doğrudan girdiyle ekle</string>
+    <string name="add_from_file">Dosyadan ekle</string>
+    <string name="set_folder_path">Geçerli yolu ayarla</string>
+    <string name="go_data_folder">Veri dizinine git</string>
+    <string name="go_sd_folder">Harici depolamaya git</string>
+    <string name="quit">Çık</string>
+    <string name="clipboard_empty">Pano boş</string>
+    <string name="action_to_json">JSON dizesini göster</string>
+    <string name="json_to_action">Eyleme dönüştür</string>
+    <string name="invalid_json_format">Geçersin JSON biçimi</string>
+    <string name="multi_select">Çoklu seçim</string>
+    <string name="select_this_item">Bu öğeyi seç</string>
+    <string name="save_to">Şuraya kaydet</string>
+    <string name="saved_file">Kaydedildi :</string>
+    <string name="savepage_save_archive">Web Arşivi MHTML Olarak Kaydet</string>
+    <string name="action_easy_add">Kolay ekleme</string>
+    <string name="resblock_is_white">Engel yok</string>
+    <string name="resblock_edit">Düzenle</string>
+    <string name="resblock_confirm_delete">Bu öğe silinsin mi?</string>
+    <string name="resblock_res_type">Alternatif tür</string>
+
+    <string name="go_forward">İleri git</string>
+    <string name="go_back">Geri git</string>
+    <string name="refresh">Yenile</string>
+
+    <string name="default_text">Varsayılan</string>
+    <string name="delete">Sil</string>
+
+    <string name="find_on_page">Sayfada bul</string>
+
+    <string name="undo">Geri al</string>
+
+    <string name="restoring">Geri yükleme</string>
+    <string name="backing_up">Yedekleme</string>
+    <string name="importing">İçe aktarma</string>
+    <string name="exporting">Dışa aktarma</string>
+
+    <string name="new_tab">Yeni sekme</string>
+
+    <string name="print_not_support">Bu aygıt yazdırmayı desteklemiyor</string>
+
+    <string name="new_speed_dial">Yeni Hızlı Arama</string>
+    <string name="use_favicon">Simge için favicon kullan</string>
+
+    <string name="deleted">Silindi</string>
+
+    <string name="download_service">indirme hizmeti</string>
+    <string name="download_notify">İndirme durumu</string>
+
+    <string name="permission_probrem">Yetersiz izin</string>
+    <string name="request_permission_storage_setting">Lütfen [erişim hakkı] üzerine dokunun ve depolamayı etkinleştirin</string>
+    <string name="confirm_permission_storage">Bu işlevi kullanmak için depolama erişimine ihtiyacınız var.</string>
+    <string name="confirm_permission_storage_app">Bu uygulamayı kullanmak için depolama erişimine ihtiyacınız var.</string>
+
+    <string name="not_bookmark_file">Bu dosya yer imi html dosyası değil.</string>
+
+    <string name="open_in_browser">Yuzu Tarayıcısında Aç</string>
+    <string name="enable_share">Diğer uygulamalardan paylaşımı etkinleştir</string>
+
+    <string name="closed_tab">%1$s kapalı</string>
+    <string name="unknown">Bilinmeyen</string>
+    <string name="delete_mf_gesture">Çoklu dokunma hareketini sil</string>
+    <string name="confirm_delete_mf_gesture">Bu hareket silinsin mi?</string>
+    <string name="theme_importer">Yuzu Tarayıcı tema aktarıcı</string>
+    <string name="theme_imported">%1$s aktarıldı.</string>
+    <string name="theme_installed_version">Temanın bu sürümü zaten kurulu.</string>
+    <string name="theme_unknown_error">Bilinmeyen hata</string>
+    <string name="theme_manifest_not_found">Manifest yok</string>
+    <string name="cant_create_folder">Dizin oluşturulamadı</string>
+    <string name="theme_broken_manifest">Kırık manifest dosyası</string>
+    <string name="theme_same_name">\"%1$s\" ile aynı adı taşıyan bir tema zaten var</string>
+    <string name="theme_unknown_version">Bu sürümün biçimi temayı desteklemiyor.</string>
+    <string name="page_not_found">Sayfa yok</string>
+    <string name="pinned_tab_warning">Bu sekme sabitlendi.</string>
+    <string name="select_file">Dosya seç</string>
+    <string name="action_list">Eylem listesi</string>
+    <string name="add_to_home">Ana ekrana ekle</string>
+
+    <string name="caches">Önbellekler</string>
+    <string name="cookies">Çerezler</string>
+    <string name="passwords">Şifreler</string>
+    <string name="formData">Form verisi</string>
+    <string name="html5Database">HTML5 Veritabanları</string>
+    <string name="geolocation_permissions">Coğrafi konum izinleri</string>
+    <string name="recent_search_queries">Son arama sorguları</string>
+    <string name="favicon_cache">Favicon önbellekleri</string>
+    <string name="untitled">Başlıksız</string>
+    <string name="loading_failed">Sayfadan hiçbir şey yüklenemedi.</string>
+    <string name="font_not_found">Yazıtipi dosyası yok</string>
+    <string name="font_error">Bu dosya bir yazı tipi değil</string>
+    <string name="read_it_later">Sonra oku</string>
+    <string name="navigate_lock">Gezinti kilidi</string>
+    <string name="add_to_top">En üste ekle</string>
+    <string name="load_image">Resmi yükle</string>
+    <string name="suggest_histories">Geçmişi göster</string>
+    <string name="suggest_bookmarks">Yer imini göster</string>
+    <string name="search_engine_error">Arama motoru yok</string>
+    <string name="permission_request">İzin isteği</string>
+    <string name="permission_request_mes">%1$s\n\nkullanmak istiyor:\n\n%2$s</string>
+    <string name="camera">Kamera</string>
+    <string name="mic">Mikrofon</string>
+    <string name="midi_device">MIDI aygıtı</string>
+    <string name="protected_media_id">Korumalı içerik</string>
+    <string name="permission_request_toast">Lütfen [erişim hakkı] üzerine dokunun ve %1$s etkinleştirin</string>
+    <string name="permission_ask">Sor</string>
+    <string name="allow">İzin ver</string>
+    <string name="block">Engelle</string>
+    <string name="ad_block">Reklam engelleme</string>
+    <string name="ad_block_blocked_page">Reklam engelleme aşağıdaki sayfayı engelledi:</string>
+    <string name="ad_block_blocked_filter">Aşağıdaki süzgeç nedeniyle:</string>
+    <string name="breadcrumb">Kırıklar</string>
+    <string name="download_failed_root_not_exists">İndirme hedefi dizini bulunamadığından indirilemiyor</string>
+    <string name="download_failed_root_not_writable">İndirme hedef dizini yazılamadığı için indirilemiyor</string>
+    <string name="js_download_cross_origin">Aynı menşe politikası nedeniyle bu tarayıcı ile indirilemiyor.</string>
+    <string name="this_page_says">Bu sayfa diyor ki</string>
+    <string name="host_page_says">%1$s diyor ki</string>
+    <string name="prevent_additional_dialogues">Bu sayfanın ek iletişim pencereleri oluşturmasını önleyin.</string>
+    <string name="bookmarklet">Yer imi</string>
+    <string name="accessibility_toolbar_multi_select">%1$d seçili</string>
+    <string name="proxy_use_https_address">Https için başka bir vekil kullan</string>
+    <string name="proxy_https_mes">Https vekil adresi (Boş ise vekil kullanılmaz)</string>
+    <string name="simple_display">basit ekran</string>
+    <string name="last_update">Son güncelleme: %1$s</string>
+    <string name="update_all">Tümünü güncelle</string>
+    <string name="add_filter">Süzgeç ekle</string>
+    <string name="site">Site</string>
+    <string name="updating_ad_filters">Reklam engelleme süzgeçleri güncellemesi</string>
+</resources>
