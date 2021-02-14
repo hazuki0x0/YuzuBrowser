@@ -99,10 +99,10 @@
     <string name="action_toggle_qc">Toggle quick control</string>
     <string name="action_toggle_multi_touch_gesture">Toggle multi touch gesture</string>
     <string name="action_toggle_ad_block">Toggle ad block</string>
-    <string name="action_black_list">Open black list</string>
-    <string name="action_white_list">Open white list</string>
-    <string name="action_white_page_list">Open white page list</string>
-    <string name="action_add_white_page_list">Add to white page list</string>
+    <string name="action_black_list">Open deny list</string>
+    <string name="action_white_list">Open allow list</string>
+    <string name="action_white_page_list">Open allow page list</string>
+    <string name="action_add_white_page_list">Add to allow page list</string>
     <string name="action_share">Share page</string>
     <string name="action_open_in_another">Open in other app</string>
     <string name="action_intent">Start activity</string>

@@ -99,10 +99,10 @@
     <string name="action_toggle_qc">クイックコントロールの切替</string>
     <string name="action_toggle_multi_touch_gesture">マルチタッチジェスチャの切替</string>
     <string name="action_toggle_ad_block">広告ブロックの切替</string>
-    <string name="action_black_list">ブラックリストを開く</string>
-    <string name="action_white_list">ホワイトリストを開く</string>
-    <string name="action_white_page_list">ホワイトページリストを開く</string>
-    <string name="action_add_white_page_list">ホワイトページリストに追加</string>
+    <string name="action_black_list">ブロックリストを開く</string>
+    <string name="action_white_list">許可リストを開く</string>
+    <string name="action_white_page_list">信頼するページ一覧を開く</string>
+    <string name="action_add_white_page_list">信頼するページに追加</string>
     <string name="action_share">ページの共有</string>
     <string name="action_open_in_another">他のアプリで開く</string>
     <string name="action_intent">Activityを開く</string>
