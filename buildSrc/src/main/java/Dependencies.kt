@@ -23,7 +23,7 @@ object Build {
 
 object AppVersions {
     const val version_name = "6.0.0-nightly"
-    const val version_code = 410014
+    const val version_code = 410015
 }
 
 object Versions {
