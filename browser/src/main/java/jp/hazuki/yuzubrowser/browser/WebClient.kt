@@ -835,7 +835,7 @@ class WebClient(
 
         override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {
             if (geoView == null) {
-                geoView = object : GeolocationPermissionToolbar(activity) {
+                geoView = object : GeolocationPermissionToolbar(activity, controller) {
                     override fun onHideToolbar() {
                         controller.toolbarManager.hideGeolocationPermissionPrompt(geoView!!)
                         geoView = null

@@ -82,6 +82,7 @@ interface BrowserController : BrowserInfo {
     fun expandToolbar()
     fun adjustBrowserPadding(tab: MainTabData)
     fun onPageFinished()
+    suspend fun requestLocationPermission(): Boolean
 
     val secretKey: String
     val tabManager: TabManager

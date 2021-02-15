@@ -18,36 +18,18 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import jp.hazuki.asyncpermissions.AsyncPermissions
-import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
-import jp.hazuki.yuzubrowser.legacy.browser.requestLocationPermission
 import jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionActivity
 import jp.hazuki.yuzubrowser.ui.extensions.startActivity
 
 class PrivacyFragment : YuzuPreferenceFragment() {
-    private val asyncPermissions by lazy { AsyncPermissions(activity as AppCompatActivity) }
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_privacy)
 
-        findPreference<Preference>("web_geolocation")?.setOnPreferenceClickListener {
-            val activity = activity ?: return@setOnPreferenceClickListener false
-
-            if (activity.checkLocationPermission()) {
-                return@setOnPreferenceClickListener true
-            } else {
-                ui { (activity as AppCompatActivity).requestLocationPermission(asyncPermissions) }
-                return@setOnPreferenceClickListener false
-            }
-        }
-
         val privateMode: SwitchPreference = findPreference("private_mode")!!
-
         val formData = findPreference<Preference>("save_formdata")!!
         val webDB = findPreference<Preference>("web_db")!!
         val webDom = findPreference<Preference>("web_dom_db")!!

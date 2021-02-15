@@ -258,9 +258,10 @@
     <string name="download_notify">ダウンロードの状態</string>
 
     <string name="permission_probrem">パーミッション不足</string>
-    <string name="request_permission_storage_setting">[アクセス権]をタップしてからストレージを有効にしてください</string>
+    <string name="request_permission_storage_setting">[権限]をタップしてからストレージを有効にしてください</string>
     <string name="confirm_permission_storage">この機能を利用するにはストレージのアクセス権が必要です</string>
     <string name="confirm_permission_storage_app">このアプリを利用するにはストレージのアクセス権が必要です</string>
+    <string name="request_permission_location_setting">[権限]をタップしてから位置情報を有効にしてください</string>
 
     <string name="not_bookmark_file">このファイルはHTMLブックマークファイルではありません。</string>
 

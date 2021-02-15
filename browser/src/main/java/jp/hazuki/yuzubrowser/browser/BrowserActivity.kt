@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.browser
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.res.AssetManager
@@ -42,6 +42,7 @@ import androidx.webkit.WebViewFeature
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
 import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
 import jp.hazuki.yuzubrowser.adblock.filter.abp.checkNeedUpdate
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
@@ -1704,19 +1705,30 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         return resources.assets
     }
 
-    private val localReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            when (intent.action) {
-                BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA -> webClient.updateAdBlockList()
-                BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE -> notifyChangeWebState()
-            }
-        }
-    }
-
     private fun onNotifyEvent(id: String) {
         when (id) {
             BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA -> webClient.updateAdBlockList()
             BROADCAST_ACTION_NOTIFY_CHANGE_WEB_STATE -> notifyChangeWebState()
+        }
+    }
+
+    override suspend fun requestLocationPermission(): Boolean {
+        return handleLocationPermissionResult(
+            asyncPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
+        )
+    }
+
+    private suspend fun handleLocationPermissionResult(result: PermissionResult): Boolean {
+        return when (result) {
+            is PermissionResult.Granted -> true
+            is PermissionResult.ShouldShowRationale -> {
+                return handleLocationPermissionResult(result.proceed())
+            }
+            is PermissionResult.NeverAskAgain -> {
+                openRequestPermissionSettings(getString(R.string.request_permission_location_setting))
+                false
+            }
+            else -> false
         }
     }
 

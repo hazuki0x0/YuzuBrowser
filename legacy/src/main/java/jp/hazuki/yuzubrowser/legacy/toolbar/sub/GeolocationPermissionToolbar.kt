@@ -22,11 +22,17 @@ import android.view.View
 import android.webkit.GeolocationPermissions
 import android.widget.CheckBox
 import android.widget.TextView
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
+import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.legacy.toolbar.SubToolbar
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
-open class GeolocationPermissionToolbar(context: Context) : SubToolbar(context), View.OnClickListener {
+open class GeolocationPermissionToolbar(
+    context: Context,
+    private val controller: BrowserController,
+) : SubToolbar(context), View.OnClickListener {
     private var mOrigin: String? = null
     private var mCallback: GeolocationPermissions.Callback? = null
 
@@ -49,8 +55,25 @@ open class GeolocationPermissionToolbar(context: Context) : SubToolbar(context),
     }
 
     override fun onClick(v: View) {
-        mCallback?.invoke(mOrigin, v.id == R.id.okButton, findViewById<CheckBox>(R.id.rememberCheckBox).isChecked)
-        onHideToolbar()
+        val isRemember = findViewById<CheckBox>(R.id.rememberCheckBox).isChecked
+        if (v.id == R.id.okButton) {
+            if (context.checkLocationPermission()) {
+                mCallback?.invoke(mOrigin, true, isRemember)
+                onHideToolbar()
+            } else {
+                ui {
+                    if (controller.requestLocationPermission()) {
+                        mCallback?.invoke(mOrigin, true, isRemember)
+                        onHideToolbar()
+                    } else {
+                        mCallback?.invoke(mOrigin, true, false)
+                    }
+                }
+            }
+        } else {
+            mCallback?.invoke(mOrigin, false, isRemember)
+            onHideToolbar()
+        }
     }
 
     open fun onHideToolbar() {}

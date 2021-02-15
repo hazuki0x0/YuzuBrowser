@@ -29,6 +29,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.legacy.R
@@ -37,6 +38,7 @@ import jp.hazuki.yuzubrowser.ui.widget.longToast
 import java.lang.ref.SoftReference
 
 fun Activity.checkBrowserPermission(): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true
     if (checkNeed()) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return false
@@ -50,14 +52,17 @@ fun Activity.checkBrowserPermission(): Boolean {
 }
 
 suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncPermissions) {
-    val requests = if (checkNeed()) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return
+    if (checkNeed()) {
         setNoNeed(true)
-        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     } else {
         if (supportFragmentManager.findFragmentByTag("permission") != null) return
-        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
+
+    val requests = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
     handleResult(
         asyncPermissions,
@@ -68,7 +73,8 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
 }
 
 fun Activity.checkStoragePermission(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     } else {
         true
@@ -86,23 +92,12 @@ suspend fun AppCompatActivity.requestStoragePermission(asyncPermissions: AsyncPe
     )
 }
 
-fun Activity.checkLocationPermission(): Boolean {
+fun Context.checkLocationPermission(): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     } else {
         true
     }
-}
-
-suspend fun AppCompatActivity.requestLocationPermission(asyncPermissions: AsyncPermissions) {
-    handleResult(
-        asyncPermissions,
-        asyncPermissions.request(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ),
-        location = true
-    )
 }
 
 fun Context.openRequestPermissionSettings(text: CharSequence) {
@@ -132,7 +127,7 @@ private suspend fun AppCompatActivity.handleResult(asyncPermissions: AsyncPermis
     }
 }
 
-class PermissionDialog : androidx.fragment.app.DialogFragment() {
+class PermissionDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()
 
