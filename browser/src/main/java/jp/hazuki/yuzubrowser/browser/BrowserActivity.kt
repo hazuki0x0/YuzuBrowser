@@ -920,6 +920,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
 
         val oldWeb = oldData.mWebView
+        oldWeb.onPause()
 
         if (AppPrefs.save_closed_tab.get()) {
             val outState = Bundle()
