@@ -47,13 +47,11 @@ class RootLayout @JvmOverloads constructor(
     }
 
     fun setWhiteBackgroundMode(whiteMode: Boolean) {
-        if (isWhiteMode != whiteMode) {
-            isWhiteMode = whiteMode
-            if (whiteMode) {
-                setBackgroundColor(Color.WHITE)
-            } else {
-                setBackgroundColor(context.getResColor(R.color.browserBackground))
-            }
+        isWhiteMode = whiteMode
+        if (whiteMode) {
+            setBackgroundColor(Color.WHITE)
+        } else {
+            setBackgroundColor(context.getResColor(R.color.browserBackground))
         }
     }
 }

@@ -143,5 +143,6 @@
         android:key="white_background"
         android:title="@string/pref_page_background_white"
         android:summary="@string/pref_page_background_white_info"
+        android:defaultValue="true"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>
