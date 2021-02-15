@@ -208,44 +208,44 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         return when (item.itemId) {
             R.id.delete -> {
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(R.string.confirm_delete_bookmark)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            val roots = ArrayMap<String, HashMap<String, DocumentFile>>()
-                            val selectedItems = adapter.getSelectedItems()
-                            selectedItems.forEach {
-                                var items = roots[it.root.uri.toString()]
-                                if (items == null) {
-                                    val files = it.root.listFiles()
-                                    items = HashMap(files.size)
-                                    files.forEach { file -> file.name?.also { name -> items[name] = file } }
-                                    roots[it.root.uri.toString()] = items
-                                }
-                                items[it.name]?.delete()
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_download)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        val roots = ArrayMap<String, HashMap<String, DocumentFile>>()
+                        val selectedItems = adapter.getSelectedItems()
+                        selectedItems.forEach {
+                            var items = roots[it.root.uri.toString()]
+                            if (items == null) {
+                                val files = it.root.listFiles()
+                                items = HashMap(files.size)
+                                files.forEach { file -> file.name?.also { name -> items[name] = file } }
+                                roots[it.root.uri.toString()] = items
                             }
-                            database.delete(selectedItems)
-                            adapter.reload()
-
-                            adapter.notifyDataSetChanged()
-
-                            mode.finish()
+                            items[it.name]?.delete()
                         }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                        database.delete(selectedItems)
+                        adapter.reload()
+
+                        adapter.notifyDataSetChanged()
+
+                        mode.finish()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
                 true
             }
             R.id.deleteFromList -> {
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.confirm)
-                        .setMessage(R.string.confirm_delete_bookmark)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            database.delete(adapter.getSelectedItems())
-                            adapter.reload()
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_download_list)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        database.delete(adapter.getSelectedItems())
+                        adapter.reload()
 
-                            mode.finish()
-                        }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                        mode.finish()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
 
                 true
             }

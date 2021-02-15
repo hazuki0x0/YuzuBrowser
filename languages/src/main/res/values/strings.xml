@@ -35,6 +35,8 @@
     <string name="confirm_delete_all_displayed_item">Delete all displayed items?</string>
     <string name="confirm_delete_all_favicon">Delete all favicon?</string>
     <string name="confirm_delete_bookmark">Delete this bookmark?</string>
+    <string name="confirm_delete_download">Delete this file from device?</string>
+    <string name="confirm_delete_download_list">Delete this file from list?</string>
     <string name="confirm_delete_button">Delete this button?</string>
     <string name="confirm_delete_speedDial">Delete this speed dial?</string>
     <string name="confirm_delete_gesture">Delete this gesture?</string>

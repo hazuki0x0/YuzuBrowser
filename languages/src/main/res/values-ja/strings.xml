@@ -34,6 +34,8 @@
     <string name="confirm_delete_all_displayed_item">表示中の履歴を全て削除しますか？</string>
     <string name="confirm_delete_all_favicon">ファビコンを全て削除しますか？</string>
     <string name="confirm_delete_bookmark">このブックマークを削除しますか？</string>
+    <string name="confirm_delete_download">このファイルをデバイスから削除しますか?</string>
+    <string name="confirm_delete_download_list">このファイルをリストから削除しますか?</string>
     <string name="confirm_delete_button">このボタンを削除しますか？</string>
     <string name="confirm_delete_speedDial">このスピードダイアルを削除しますか？</string>
     <string name="confirm_delete_gesture">このジェスチャーを削除しますか？</string>
