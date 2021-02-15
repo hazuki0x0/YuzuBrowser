@@ -90,4 +90,9 @@
     <string name="action_bottom_search_bar">Show Search bar at bottom</string>
     <string name="show_toast">Show toast</string>
     <string name="auto_close">Close automatically</string>
+    <string-array name="action_show_search_list">
+        <item>@string/open_current</item>
+        <item>@string/open_new</item>
+        <item>@string/open_new_right</item>
+    </string-array>
 </resources>

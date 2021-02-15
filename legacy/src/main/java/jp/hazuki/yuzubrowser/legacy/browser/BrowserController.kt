@@ -55,7 +55,7 @@ interface BrowserController : BrowserInfo {
     fun showTabList(action: TabListSingleAction)
     fun showTabHistory(target: Int)
     fun restoreTab()
-    fun showSearchBox(query: String, target: Int, openNewTab: Boolean, reverse: Boolean)
+    fun showSearchBox(query: String, target: Int, openTabType: Int, reverse: Boolean)
     fun showSubGesture()
     fun showMenu(button: View?, action: OpenOptionsMenuAction)
     fun finishAlert(clearTabNo: Int)

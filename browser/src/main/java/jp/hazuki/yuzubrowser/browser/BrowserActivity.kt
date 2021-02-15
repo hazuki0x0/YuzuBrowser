@@ -533,10 +533,15 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 val appdata = data.getBundleExtra(SearchActivity.EXTRA_APP_DATA)!!
                 val target = appdata.getInt(EXTRA_DATA_TARGET, -1)
                 val tab = tabManagerIn.get(target)
-                if (data.getBooleanExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, false) || tab == null)
+                if (tab == null) {
                     openInNewTab(url, TabType.DEFAULT)
-                else
-                    loadUrl(tab, url)
+                } else {
+                    when (data.getIntExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, 0)) {
+                        SearchActivity.TAB_TYPE_CURRENT -> loadUrl(tab, url)
+                        SearchActivity.TAB_TYPE_NEW_TAB -> openInNewTab(url, TabType.DEFAULT)
+                        SearchActivity.TAB_TYPE_NEW_RIGHT_TAB -> openInRightNewTab(url, TabType.WINDOW)
+                    }
+                }
             }
             BrowserController.REQUEST_BOOKMARK, BrowserController.REQUEST_HISTORY -> {
                 if (resultCode != RESULT_OK || data == null) return
@@ -1088,7 +1093,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         }
     }
 
-    override fun showSearchBox(query: String, target: Int, openNewTab: Boolean, reverse: Boolean) {
+    override fun showSearchBox(query: String, target: Int, openTabType: Int, reverse: Boolean) {
         val data = Bundle().apply {
             putInt(EXTRA_DATA_TARGET, target)
         }
@@ -1099,7 +1104,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             putExtra(Constants.intent.EXTRA_MODE_FULLSCREEN, isFullscreenMode && DisplayUtils.isNeedFullScreenFlag())
             putExtra(SearchActivity.EXTRA_REVERSE, reverse)
             putExtra(SearchActivity.EXTRA_APP_DATA, data)
-            putExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, openNewTab)
+            putExtra(SearchActivity.EXTRA_OPEN_NEW_TAB, openTabType)
         }
 
         startActivity(intent, BrowserController.REQUEST_SEARCHBOX)

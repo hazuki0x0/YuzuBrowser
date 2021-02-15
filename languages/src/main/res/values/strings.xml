@@ -61,6 +61,7 @@
     <string name="minimize">Minimize</string>
     <string name="open">Open</string>
     <string name="open_new">Open in new tab</string>
+    <string name="open_current">Open in current tab</string>
     <string name="open_bg">Open in background tab</string>
     <string name="open_new_right">Open in right new tab</string>
     <string name="open_bg_right">Open in right background tab</string>

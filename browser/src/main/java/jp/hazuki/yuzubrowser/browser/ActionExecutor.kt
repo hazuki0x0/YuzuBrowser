@@ -749,14 +749,14 @@ class ActionExecutor(
             SingleAction.RESTORE_TAB -> controller.restoreTab()
             SingleAction.REPLICATE_TAB -> controller.openInNewTab(controller.getTab(actionTarget))
             SingleAction.SHOW_SEARCHBOX -> controller.showSearchBox(
-                    controller.getTab(actionTarget).url ?: "",
-                    actionTarget,
-                    (action as ShowSearchBoxAction).isOpenNewTab,
-                    action.isReverse)
+                controller.getTab(actionTarget).url ?: "",
+                actionTarget,
+                (action as ShowSearchBoxAction).openNewTabMode,
+                action.isReverse)
             SingleAction.PASTE_SEARCHBOX -> controller.showSearchBox(controller.applicationContextInfo.clipboardText,
-                    actionTarget,
-                    (action as PasteSearchBoxAction).isOpenNewTab,
-                    action.isReverse)
+                actionTarget,
+                (action as PasteSearchBoxAction).openNewTabMode,
+                action.isReverse)
             SingleAction.PASTE_GO -> {
                 val text = controller.applicationContextInfo.clipboardText
                 if (TextUtils.isEmpty(text)) {

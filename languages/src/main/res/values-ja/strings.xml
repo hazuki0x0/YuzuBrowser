@@ -59,6 +59,7 @@
     <string name="minimize">最小化</string>
     <string name="open">開く</string>
     <string name="open_new">新しいタブで開く</string>
+    <string name="open_current">現在のタブで開く</string>
     <string name="open_bg">バックグラウンドで開く</string>
     <string name="open_new_right">新しいタブで右に開く</string>
     <string name="open_bg_right">バックグラウンドで右に開く</string>

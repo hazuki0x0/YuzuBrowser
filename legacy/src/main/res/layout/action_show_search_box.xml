@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    android:paddingStart="22dp"
+    android:paddingEnd="16dp">
 
-
-    <CheckBox
-        android:id="@+id/checkBox"
+    <Spinner
+        android:id="@+id/tabTypeSpinner"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="@string/open_new" />
+        android:layout_height="48dp" />
 
     <CheckBox
         android:id="@+id/checkBox2"

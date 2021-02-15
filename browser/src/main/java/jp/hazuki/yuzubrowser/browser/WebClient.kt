@@ -938,7 +938,7 @@ class WebClient(
                         return true
                     }
                     "search" -> {
-                        controller.showSearchBox("", controller.indexOf(data.id), false, "reverse".equals(uri.fragment, ignoreCase = true))
+                        controller.showSearchBox("", controller.indexOf(data.id), 0, "reverse".equals(uri.fragment, ignoreCase = true))
                         return true
                     }
                     "speeddial" -> return false

@@ -52,7 +52,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
     private lateinit var barBinding: SearchSeachBarBinding
 
     private var appData: Bundle? = null
-    private var openNewTab: Boolean = false
+    private var openNewTab: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -176,7 +176,7 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
         }
 
         appData = intent.getBundleExtra(EXTRA_APP_DATA)
-        openNewTab = intent.getBooleanExtra(EXTRA_OPEN_NEW_TAB, false)
+        openNewTab = intent.getIntExtra(EXTRA_OPEN_NEW_TAB, 0)
 
         recyclerView.layoutManager = LinearLayoutManager(this).apply {
             if (bottomBoxMode) reverseLayout = true
@@ -312,6 +312,10 @@ class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSugge
         const val SEARCH_MODE_AUTO = SearchViewModel.SEARCH_MODE_AUTO
         const val SEARCH_MODE_URL = SearchViewModel.SEARCH_MODE_URL
         const val SEARCH_MODE_WORD = SearchViewModel.SEARCH_MODE_WORD
+
+        const val TAB_TYPE_CURRENT = 0
+        const val TAB_TYPE_NEW_TAB = 1
+        const val TAB_TYPE_NEW_RIGHT_TAB = 2
 
         private const val RESULT_REQUEST_SPEECH = 1
     }

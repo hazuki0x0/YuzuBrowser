@@ -20,7 +20,9 @@ import android.app.AlertDialog
 import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import android.widget.Spinner
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.R
@@ -31,7 +33,7 @@ import java.io.IOException
 
 class ShowSearchBoxAction : SingleAction, Parcelable {
 
-    var isOpenNewTab: Boolean = false
+    var openNewTabMode = 0
         private set
     var isReverse: Boolean = false
         private set
@@ -46,11 +48,16 @@ class ShowSearchBoxAction : SingleAction, Parcelable {
                 when (reader.nextName()) {
                     FIELD_OPEN_NEW_TAB -> {
                         if (reader.peek() != JsonReader.Token.BOOLEAN) return
-                        isOpenNewTab = reader.nextBoolean()
+                        openNewTabMode =
+                            if (reader.nextBoolean()) TAB_TYPE_NEW_TAB else TAB_TYPE_CURRENT
                     }
                     FIELD_REVERSE -> {
                         if (reader.peek() != JsonReader.Token.BOOLEAN) return
                         isReverse = reader.nextBoolean()
+                    }
+                    FIELD_TAB_TYPE -> {
+                        if (reader.peek() != JsonReader.Token.NUMBER) return
+                        openNewTabMode = reader.nextInt()
                     }
                     else -> reader.skipValue()
                 }
@@ -63,8 +70,8 @@ class ShowSearchBoxAction : SingleAction, Parcelable {
     override fun writeIdAndData(writer: JsonWriter) {
         writer.value(id)
         writer.beginObject()
-        writer.name(FIELD_OPEN_NEW_TAB)
-        writer.value(isOpenNewTab)
+        writer.name(FIELD_TAB_TYPE)
+        writer.value(openNewTabMode)
         writer.name(FIELD_REVERSE)
         writer.value(isReverse)
         writer.endObject()
@@ -72,29 +79,38 @@ class ShowSearchBoxAction : SingleAction, Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id)
-        dest.writeInt(if (isOpenNewTab) 1 else 0)
+        dest.writeInt(openNewTabMode)
         dest.writeInt(if (isReverse) 1 else 0)
     }
 
     private constructor(source: Parcel) : super(source) {
-        isOpenNewTab = source.readInt() != 0
+        openNewTabMode = source.readInt()
         isReverse = source.readInt() != 0
     }
 
     override fun showSubPreference(context: ActionActivity): StartActivityInfo? {
         val view = View.inflate(context, R.layout.action_show_search_box, null)
-        val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
+        val spinner: Spinner = view.findViewById(R.id.tabTypeSpinner)
         val bottom = view.findViewById<CheckBox>(R.id.checkBox2)
-        checkBox.isChecked = isOpenNewTab
+        ArrayAdapter.createFromResource(
+            context,
+            R.array.action_show_search_list,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+            spinner.setSelection(openNewTabMode)
+        }
+
         bottom.isChecked = isReverse
         AlertDialog.Builder(context)
-                .setTitle(R.string.action_settings)
-                .setView(view)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    isOpenNewTab = checkBox.isChecked
-                    isReverse = bottom.isChecked
-                }
-                .setNegativeButton(android.R.string.cancel, null)
+            .setTitle(R.string.action_settings)
+            .setView(view)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                openNewTabMode = spinner.selectedItemPosition
+                isReverse = bottom.isChecked
+            }
+            .setNegativeButton(android.R.string.cancel, null)
                 .show()
         return null
     }
@@ -102,6 +118,11 @@ class ShowSearchBoxAction : SingleAction, Parcelable {
     companion object {
         private const val FIELD_OPEN_NEW_TAB = "0"
         private const val FIELD_REVERSE = "1"
+        private const val FIELD_TAB_TYPE = "2"
+
+        const val TAB_TYPE_CURRENT = 0
+        const val TAB_TYPE_NEW_TAB = 1
+        const val TAB_TYPE_NEW_RIGHT_TAB = 2
 
         @JvmField
         val CREATOR: Parcelable.Creator<ShowSearchBoxAction> = object : Parcelable.Creator<ShowSearchBoxAction> {
