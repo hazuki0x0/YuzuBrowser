@@ -25,6 +25,7 @@ import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.gesture.GestureOverlayView
+import android.graphics.Color
 import android.media.AudioManager
 import android.os.*
 import android.print.PrintManager
@@ -58,6 +59,7 @@ import jp.hazuki.yuzubrowser.browser.view.Toolbar
 import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
@@ -766,11 +768,37 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
             if (themeData.statusBarColor != 0) {
                 window.run {
-                    clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                        @Suppress("DEPRECATION")
+                        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                    }
                     addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     uiController.statusBarColor = themeData.statusBarColor
                     uiController.isLightStatusBar = themeData.isLightStatusBar
                 }
+            }
+
+            val navigationColorType = AppPrefs.navigationBarColorType.get()
+
+            val navigationBarColor = when (navigationColorType) {
+                0 -> {
+                    if (themeData.toolbarBackgroundColor != 0) {
+                        themeData.toolbarBackgroundColor
+                    } else {
+                        getResColor(R.color.deep_gray)
+                    }
+                }
+                1 -> if (themeData.statusBarColor != 0) themeData.statusBarColor else Color.BLACK
+                2 -> Color.BLACK
+                else -> throw IllegalStateException("navigation color type is invalid")
+            }
+
+            uiController.navigationBarColor = navigationBarColor
+            uiController.isLightNavigationBar = when (navigationColorType) {
+                0 -> ThemeData.isColorLight(navigationBarColor)
+                1 -> themeData.isLightStatusBar
+                2 -> false
+                else -> throw IllegalStateException("navigation color type is invalid")
             }
 
             if (themeData.scrollbarAccentColor != 0) {
@@ -778,9 +806,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             } else if (themeData.tabAccentColor != 0) {
                 binding.webViewFastScroller.handlePressedColor = themeData.tabAccentColor
             }
-
-            uiController.navigationBarColor = themeData.statusBarColor
-            uiController.isLightNavigationBar = themeData.isLightStatusBar
         }
 
         uiController.updateConfigure()

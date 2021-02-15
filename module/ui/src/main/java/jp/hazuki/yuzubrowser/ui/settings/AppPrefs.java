@@ -178,6 +178,7 @@ public class AppPrefs {
     public static final IntContainer oritentation = new IntContainer("oritentation", ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     public static final IntContainer swipebtn_sensitivity = new IntContainer("swipebtn_sensitivity", 150);
     public static final BooleanContainer touch_scrollbar_fixed_toolbar = new BooleanContainer("touch_scrollbar_fixed_toolbar", false);
+    public static final IntContainer navigationBarColorType = new IntContainer("navigation_bar_color_type", 0);
     //Bookmark
     public static final BooleanContainer bookmarkSimpleDisplay = new BooleanContainer("bookmark_simpleDisplay", false);
     public static final BooleanContainer openBookmarkNewTab = new BooleanContainer("open_bookmark_new_tab", true);

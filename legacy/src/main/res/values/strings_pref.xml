@@ -413,4 +413,16 @@
         <item>2</item>
         <item>3</item>
     </integer-array>
+
+    <string-array name="pref_navigation_bar_entries">
+        <item>@string/pref_same_as_toolbar</item>
+        <item>@string/pref_same_as_status_bar</item>
+        <item>@string/black</item>
+    </string-array>
+
+    <integer-array name="pref_navigation_bar_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 </resources>

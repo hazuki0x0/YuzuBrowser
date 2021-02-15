@@ -320,6 +320,10 @@
     <string name="pref_dark_theme">ダークテーマ</string>
     <string name="pref_light_theme">ライトテーマ</string>
     <string name="pref_web_theme_mode">Webテーマ</string>
+    <string name="pref_navigation_bar_color">ナビゲーションバーの色</string>
+    <string name="pref_same_as_toolbar">ツールバーと同じ色</string>
+    <string name="pref_same_as_status_bar">ステータスバーと同じ色</string>
+    <string name="black">黒</string>
     <string name="pref_force_dark_mode">強制ダークモード</string>
     <string name="pref_force_web_dark_mode">Webテーマ優先強制ダークモード</string>
     <string name="pref_dark_mode">ダークモード</string>

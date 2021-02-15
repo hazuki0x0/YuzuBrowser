@@ -320,6 +320,11 @@
     <string name="pref_dark_theme">Dark theme</string>
     <string name="pref_light_theme">Light theme</string>
     <string name="pref_web_theme_mode">Web theme</string>
+    <string name="pref_navigation_bar_color">Navigation bar color</string>
+    <string name="pref_same_as_toolbar">Same color as the toolbar</string>
+    <string name="pref_same_as_status_bar">Same color as the status bar</string>
+    <string name="black">Black</string>
+
     <string name="pref_force_dark_mode">Force dark mode</string>
     <string name="pref_force_web_dark_mode">Prefer web theme over force dark mode</string>
     <string name="pref_dark_mode">Dark mode</string>

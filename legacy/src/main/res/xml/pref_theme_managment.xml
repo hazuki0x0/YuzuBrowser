@@ -26,4 +26,11 @@
         android:key="delete_theme"
         android:title="@string/delete_theme"
         app:iconSpaceReserved="false" />
+
+    <jp.hazuki.yuzubrowser.ui.preference.StrToIntListPreference
+        android:key="navigation_bar_color_type"
+        android:title="@string/pref_navigation_bar_color"
+        android:entryValues="@array/pref_navigation_bar_values"
+        android:entries="@array/pref_navigation_bar_entries"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

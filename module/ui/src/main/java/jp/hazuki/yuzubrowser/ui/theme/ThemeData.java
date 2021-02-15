@@ -450,9 +450,9 @@ public class ThemeData {
         return isColorLight(statusBarColor);
     }
 
-    private boolean isColorLight(int color) {
+    public static boolean isColorLight(int color) {
         double lightness = (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
-        return lightness > 0.8;
+        return lightness > 0.7;
     }
 
     private void scaleRect(Rect rect, float scale) {
@@ -476,7 +476,7 @@ public class ThemeData {
         data.toolbarTextColor = 0xFF222222;
         data.toolbarImageColor = 0xFF444444;
 
-        data.statusBarColor = 0xFFAAAAAA;
+        data.statusBarColor = 0xFF888888;
 
         int padding = context.getResources().getDimensionPixelOffset(R.dimen.dimen_theme_padding);
         Rect paddingRect = new Rect(padding, padding, padding, padding);
