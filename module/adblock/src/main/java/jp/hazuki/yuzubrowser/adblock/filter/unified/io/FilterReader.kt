@@ -72,6 +72,11 @@ class FilterReader(private val input: InputStream) {
             val domains = when (domainsSize) {
                 0 -> null
                 1 -> {
+                    val containerInclude = when (input.read()) {
+                        0 -> false
+                        1 -> true
+                        else -> break@loop
+                    }
                     val textSize = input.readVariableInt(shortBuf, intBuf)
                     if (textSize == -1) break@loop
                     if (patternBuffer.size < textSize) {
@@ -84,6 +89,9 @@ class FilterReader(private val input: InputStream) {
                         1 -> true
                         else -> break@loop
                     }
+
+                    if (containerInclude != include) break@loop
+
                     SingleDomainMap(include, domain)
                 }
                 else -> {
