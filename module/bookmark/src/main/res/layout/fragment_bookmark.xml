@@ -33,6 +33,7 @@
                 android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/primary"
                 android:theme="?attr/actionBarTheme"
                 android:minHeight="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -55,7 +56,8 @@
                     android:id="@+id/breadCrumbsView"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:background="@color/primary"
+                    android:theme="?attr/actionBarTheme"
                     app:crumbsCurrentItemTextColor="?android:attr/textColorPrimary"
                     app:crumbsOtherItemTextColor="?android:attr/textColorSecondary"
                     app:crumbsArrowColor="?android:attr/textColorSecondary"

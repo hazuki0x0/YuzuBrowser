@@ -20,13 +20,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import androidx.fragment.app.ListFragment
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
+import jp.hazuki.yuzubrowser.legacy.databinding.FragmentSoftButtonDetailBinding
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
 class SoftButtonActionActivity : ThemeActivity() {
@@ -55,38 +57,42 @@ class SoftButtonActionActivity : ThemeActivity() {
             .commit()
     }
 
+    class ActionFragment : Fragment() {
+        private val viewModel by viewModels<SoftButtonDetailViewModel>()
 
-    class ActionFragment : ListFragment() {
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            listAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1).apply {
-                add(getString(R.string.pref_btn_action_press))
-                add(getString(R.string.pref_btn_action_lpress))
-                add(getString(R.string.pref_btn_action_up))
-                add(getString(R.string.pref_btn_action_down))
-                add(getString(R.string.pref_btn_action_left))
-                add(getString(R.string.pref_btn_action_right))
-            }
+        private lateinit var binding: FragmentSoftButtonDetailBinding
+
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            binding = FragmentSoftButtonDetailBinding.inflate(inflater, container, false)
+            return binding.root
         }
 
-        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-            val activity = activity ?: return
-            val arguments = arguments ?: throw IllegalArgumentException()
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            binding.lifecycleOwner = viewLifecycleOwner
+            binding.viewModel = viewModel
+
+            viewModel.buttonEvent.observe(viewLifecycleOwner, this::onClickButton)
+        }
+
+        private fun onClickButton(type: Int) {
+            val activity = requireActivity()
+            val arguments = requireArguments()
 
             var actionId = arguments.getInt(ActionManager.INTENT_EXTRA_ACTION_ID)
-            actionId = when (position) {
+            actionId = when (type) {
                 0 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_PRESS
                 1 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_LPRESS
                 2 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_UP
                 3 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_DOWN
                 4 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_LEFT
                 5 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_RIGHT
-                else -> throw IllegalArgumentException("Unknown position:$position")
+                else -> throw IllegalArgumentException("Unknown type:$type")
             }
 
             ActionActivity.Builder(activity)
-                    .setTitle(activity.title)
-                    .setActionManager(arguments.getInt(ActionManager.INTENT_EXTRA_ACTION_TYPE), actionId)
-                    .show()
+                .setTitle(activity.title)
+                .setActionManager(arguments.getInt(ActionManager.INTENT_EXTRA_ACTION_TYPE), actionId)
+                .show()
         }
     }
 

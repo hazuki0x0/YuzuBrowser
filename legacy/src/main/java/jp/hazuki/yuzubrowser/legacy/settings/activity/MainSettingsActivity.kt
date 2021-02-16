@@ -18,11 +18,13 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.debug.DebugActivity
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
@@ -56,7 +58,10 @@ class MainSettingsActivity : ThemeActivity(), PreferenceFragmentCompat.OnPrefere
      * Set up the [android.app.ActionBar], if the API is available.
      */
     private fun setupActionBar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setBackgroundDrawable(ColorDrawable(getResColor(R.color.primary)))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

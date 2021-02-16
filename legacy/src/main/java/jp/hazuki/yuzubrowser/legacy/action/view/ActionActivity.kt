@@ -115,7 +115,7 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
             binding.recyclerView.scrollToPosition(initialPosition)
 
         binding.okButton.setOnClickListener {
-            when (mActionManager) {
+            when (val actionManager = mActionManager) {
                 null -> {
                     val intent1 = Intent()
                     intent1.putExtra(EXTRA_ACTION, mAction as Parcelable?)
@@ -123,14 +123,14 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
                     setResult(Activity.RESULT_OK, intent1)
                 }
                 is SingleActionManager -> {
-                    val list = (mActionManager as SingleActionManager).getAction(mActionId)
+                    val list = actionManager.getAction(mActionId)
                     list.clear()
                     list.addAll(mAction)
                     mActionManager!!.save(applicationContext)
                     setResult(Activity.RESULT_OK)
                 }
                 is ListActionManager -> {
-                    (mActionManager as ListActionManager).addAction(mActionId, mAction)
+                    actionManager.addAction(mActionId, mAction)
                     mActionManager!!.save(applicationContext)
                     setResult(Activity.RESULT_OK)
                 }

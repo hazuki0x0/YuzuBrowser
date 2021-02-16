@@ -32,8 +32,9 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="BrowserThemeDayNight" parent="@style/Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
+    <style name="BrowserThemeDayNight" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="android:colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
@@ -48,6 +49,7 @@
         <item name="urlBarBoxBorderColor">@color/urlBarBoxBorderColor</item>
         <item name="actionModeStyle">@style/ActionModeStyle</item>
         <item name="android:navigationBarColor">@color/default_nav_color</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.ActionBar</item>
     </style>
 
     <style name="BrowserThemeDayNight.NoTitle" parent="@style/BrowserThemeDayNight">
@@ -76,6 +78,11 @@
     <style name="BrowserThemeDayNight.Pref" parent="BrowserThemeDayNight">
         <item name="android:textColorPrimary">@color/pref_text_color</item>
         <item name="android:textColorSecondary">@color/pref_text_secondary_color</item>
+    </style>
+
+    <style name="ThemeOverlay.ActionBar" parent="">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:colorPrimary">@color/primary</item>
     </style>
 
     <style name="Widget.Yuzu.SpinnerButton" parent="Widget.AppCompat.Spinner">

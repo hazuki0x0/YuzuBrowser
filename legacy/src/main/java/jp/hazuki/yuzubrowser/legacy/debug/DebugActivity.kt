@@ -19,11 +19,13 @@ package jp.hazuki.yuzubrowser.legacy.debug
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.view.ActionStringActivity
@@ -40,6 +42,8 @@ class DebugActivity : ThemeActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, DebugFragment())
             .commit()
+
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(getResColor(R.color.primary)))
     }
 
     class DebugFragment : PreferenceFragmentCompat() {

@@ -35,7 +35,7 @@ object Versions {
     const val recyclerView = "1.1.0"
     const val androidxRoom = "2.2.6"
     const val lifeCycle = "2.2.0"
-    const val material = "1.2.1"
+    const val material = "1.3.0"
     const val support_fix_lib = "1.1.1"
     const val support_constraint_lib = "2.0.4"
     const val documentFile = "1.0.1"
