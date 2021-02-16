@@ -59,7 +59,7 @@ import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
 
 public class AppData {
-    private static final int PREF_VERSION = 1;
+    private static final int PREF_VERSION = 2;
 
     private static final String TAG = "AppData";
 
@@ -287,22 +287,20 @@ public class AppData {
                 AdBlockInitSupportKt.disableYuzuList(abpDatabase);
             }
 
+            if (lastLaunch <= 410013) {
+                AbpUpdateService.Companion.updateAll(context, true, null);
+            }
+
+            if (lastLaunch <= 410015) {
+                //noinspection deprecation
+                String classicDownloadUri = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+                if (AppPrefs.download_folder.get().equals(classicDownloadUri)) {
+                    AppPrefs.download_folder.set(DocumentFileKt.DEFAULT_DOWNLOAD_PATH);
+                }
+            }
+
             AppPrefs.lastLaunchPrefVersion.set(PREF_VERSION);
             modified = true;
-        }
-
-        if (lastLaunch <= 410013) {
-            AbpUpdateService.Companion.updateAll(context, true, null);
-            modified = true;
-        }
-
-        if (lastLaunch <= 410015) {
-            //noinspection deprecation
-            String classicDownloadUri = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-            if (AppPrefs.download_folder.get().equals(classicDownloadUri)) {
-                AppPrefs.download_folder.set(DocumentFileKt.DEFAULT_DOWNLOAD_PATH);
-                modified = true;
-            }
         }
 
         int versionCode = ContextExtensionsKt.getVersionCode(context);
