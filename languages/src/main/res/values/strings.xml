@@ -236,6 +236,7 @@
     <string name="refresh">Refresh</string>
 
     <string name="default_text">Default</string>
+    <string name="custom">Custom</string>
     <string name="delete">Delete</string>
 
     <string name="find_on_page">Find on page</string>

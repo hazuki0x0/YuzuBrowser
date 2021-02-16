@@ -26,6 +26,7 @@ import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.BuildConfig
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import java.io.File
@@ -118,11 +119,7 @@ class DownloadFileProvider : ContentProvider() {
 
     private fun getDocumentFileFromFileUri(uri: Uri): DocumentFile {
         val fileUri = getUriFromUri(uri)
-        return if (DocumentFile.isDocumentUri(context!!, fileUri)) {
-            DocumentFile.fromTreeUri(context!!, fileUri)!!
-        } else {
-            DocumentFile.fromSingleUri(context!!, fileUri)!!
-        }
+        return fileUri.toDocumentFile(context!!)
     }
 
     private fun getFileForUri(uri: Uri): File {

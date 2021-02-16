@@ -20,10 +20,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.compatible.ConvertDownloadInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
-import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
-import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import org.jetbrains.anko.db.*
 
 class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpenHelper(context, NAME, null, VERSION) {
@@ -130,19 +129,15 @@ class DownloadDatabase private constructor(context: Context) : ManagedSQLiteOpen
     private class InfoParser(val context: Context) : MapRowParser<DownloadFileInfo> {
         override fun parseRow(columns: Map<String, Any?>): DownloadFileInfo {
             return DownloadFileInfo(
-                    columns[COL_ID] as Long,
-                    columns[COL_URL] as String,
-                    columns[COL_MIME_TYPE] as String,
-                    Uri.parse(
-                            (columns[COL_ROOT] as String?).let {
-                                if (it.isNullOrEmpty()) AppPrefs.download_folder.get() else it
-                            }
-                    ).toDocumentFile(context),
-                    columns[COL_NAME] as String,
-                    columns[COL_SIZE] as Long,
-                    (columns[COL_RESUMABLE] as Long) != 0L,
-                    columns[COL_START_TIME] as Long,
-                    (columns[COL_STATE] as Long).toInt())
+                columns[COL_ID] as Long,
+                columns[COL_URL] as String,
+                columns[COL_MIME_TYPE] as String,
+                Uri.parse(columns[COL_ROOT] as String).toDocumentFile(context),
+                columns[COL_NAME] as String,
+                columns[COL_SIZE] as Long,
+                (columns[COL_RESUMABLE] as Long) != 0L,
+                columns[COL_START_TIME] as Long,
+                (columns[COL_STATE] as Long).toInt())
         }
     }
 

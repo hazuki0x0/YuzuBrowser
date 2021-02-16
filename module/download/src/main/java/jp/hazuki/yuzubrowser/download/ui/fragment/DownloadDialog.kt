@@ -20,7 +20,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -29,15 +28,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
 import dagger.android.support.DaggerAppCompatDialogFragment
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
-import jp.hazuki.yuzubrowser.download.R
-import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
+import jp.hazuki.yuzubrowser.download.*
 import jp.hazuki.yuzubrowser.download.core.data.*
-import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
-import jp.hazuki.yuzubrowser.download.download
-import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -70,7 +66,7 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
                 val name: String
                 if (request.resolver != null) {
                     val resolver = request.resolver
-                    name = resolver.resolveName(Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(activity))
+                    name = resolver.resolveName(activity.getDownloadDocumentFile())
 
                     if (resolver.mimeType.isNullOrEmpty()) {
                         val newType = getMimeType(name)
@@ -93,7 +89,7 @@ class DownloadDialog : DaggerAppCompatDialogFragment() {
             view.findViewById<View>(R.id.loading).visibility = View.GONE
         }
 
-        root = Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(activity)
+        root = activity.getDownloadDocumentFile()
 
         folderButton.text = if (root.name.isNullOrBlank())
             getText(R.string.pref_download_folder) else root.name

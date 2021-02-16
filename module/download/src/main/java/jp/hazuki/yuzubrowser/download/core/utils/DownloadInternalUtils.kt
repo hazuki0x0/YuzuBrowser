@@ -20,8 +20,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
-import android.provider.DocumentsContract
 import android.text.format.Formatter
 import android.util.Base64
 import androidx.documentfile.provider.DocumentFile
@@ -31,7 +29,6 @@ import jp.hazuki.yuzubrowser.core.utility.utils.getExtensionFromMimeType
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
-import java.io.File
 import java.io.IOException
 import java.net.URLDecoder
 import java.util.*
@@ -273,29 +270,6 @@ internal fun DownloadFileInfo.getFile(): DocumentFile? {
 }
 
 internal fun DownloadFileInfo.checkFlag(flag: Int): Boolean = (state and flag) == flag
-
-internal fun Uri.toDocumentFile(context: Context): DocumentFile {
-    return when (scheme) {
-        ContentResolver.SCHEME_CONTENT -> if (isTreeUri()) {
-            DocumentFile.fromTreeUri(context, this)!!
-        } else {
-            DocumentFile.fromSingleUri(context, this)!!
-        }
-        "file" -> DocumentFile.fromFile(File(path!!))
-        else -> throw IllegalStateException("unknown scheme :$scheme, Uri:$this")
-    }
-}
-
-private const val PATH_TREE = "tree"
-
-private fun Uri.isTreeUri(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        DocumentsContract.isTreeUri(this)
-    } else {
-        val paths = pathSegments
-        paths.size >= 2 && PATH_TREE == paths[0]
-    }
-}
 
 internal fun Context.registerMediaScanner(vararg path: String) {
     MediaScannerConnection.scanFile(applicationContext, path, null, null)

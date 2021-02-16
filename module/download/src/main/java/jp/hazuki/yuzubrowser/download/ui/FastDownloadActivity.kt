@@ -16,24 +16,27 @@
 
 package jp.hazuki.yuzubrowser.download.ui
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.R
+import jp.hazuki.yuzubrowser.download.checkValidRootDir
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.downloader.Downloader
-import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
+import jp.hazuki.yuzubrowser.download.getDownloadDocumentFile
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
-import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -92,13 +95,47 @@ class FastDownloadActivity : DaggerThemeActivity() {
     }
 
     private fun download(url: String, referrer: String?, ua: String, defExt: String): Uri? {
-        val root = Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(applicationContext)
+        val root = applicationContext.getDownloadDocumentFile()
         val file = DownloadFile(url, null, DownloadRequest(referrer, ua, defExt))
         val meta = MetaData(applicationContext, okHttpClient, root, file.url, file.request)
         val info = DownloadFileInfo(root, file, meta)
+
+        if (!checkValidRootDir(root.uri)) {
+            file.request.isScopedStorageMode = true
+            info.resumable = false
+
+            val values = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, info.name)
+                put(MediaStore.Downloads.MIME_TYPE, info.mimeType)
+                put(MediaStore.Downloads.IS_PENDING, 1)
+                put(MediaStore.Downloads.IS_DOWNLOAD, 1)
+            }
+
+            val collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+            val itemUri = contentResolver.insert(collection, values) ?: return null
+            info.root = DocumentFile.fromSingleUri(applicationContext, itemUri)!!
+        }
+
         val downloader = Downloader.getDownloader(applicationContext, okHttpClient, info, file.request)
 
         val result = downloader.download()
+
+        if (file.request.isScopedStorageMode) {
+            return if (result) {
+                val values = ContentValues().apply {
+                    put(MediaStore.Downloads.IS_PENDING, 0)
+                }
+                contentResolver.update(info.root.uri, values, null, null)
+
+                info.root.uri
+            } else {
+                val failedFile = info.root
+                if (failedFile.exists()) {
+                    contentResolver.delete(failedFile.uri, null, null)
+                }
+                null
+            }
+        }
 
         return if (result) info.root.findFile(info.name)?.uri else null
     }

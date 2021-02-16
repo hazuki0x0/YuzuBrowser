@@ -77,7 +77,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
             val name = file.name!!
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && root.uri.scheme == "file") {
-                context.copyArchive(tmpFile, name)
+                context.copyArchive(tmpFile, name, file)
                 return@ui
             }
             val saveTo = root.createFile(MIME_TYPE_MHTML, name)
@@ -102,7 +102,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
     }
 }
 
-private fun Context.copyArchive(tmpFile: File, name: String) {
+private fun Context.copyArchive(tmpFile: File, name: String, file: DownloadFile) {
     val values = ContentValues().apply {
         put(MediaStore.Downloads.DISPLAY_NAME, name)
         put(MediaStore.Downloads.MIME_TYPE, getMimeType(name))
@@ -126,6 +126,11 @@ private fun Context.copyArchive(tmpFile: File, name: String) {
                     clear()
                     put(MediaStore.Downloads.IS_PENDING, 0)
                 }
+                val dFile = DocumentFile.fromSingleUri(this, uri)!!
+                val size = dFile.length()
+                val info = DownloadFileInfo(dFile, file, MetaData(name, MIME_TYPE_MHTML, size, false))
+                info.state = DownloadFileInfo.STATE_DOWNLOADED
+                DownloadDatabase.getInstance(this).insert(info)
                 contentResolver.update(uri, values, null, null)
                 return
             }

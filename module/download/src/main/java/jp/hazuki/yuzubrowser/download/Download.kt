@@ -20,11 +20,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.utils.guessDownloadFileName
-import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.service.DownloadService
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers

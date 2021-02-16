@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.ui.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.os.Environment;
 import android.webkit.WebSettings;
 
 import java.lang.ref.SoftReference;
@@ -37,6 +36,7 @@ import jp.hazuki.yuzubrowser.ui.settings.container.StringContainer;
 import jp.hazuki.yuzubrowser.ui.settings.container.ToolbarContainer;
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData;
 
+import static jp.hazuki.yuzubrowser.core.utility.storage.DocumentFileKt.DEFAULT_DOWNLOAD_PATH;
 import static jp.hazuki.yuzubrowser.ui.ConstantsKt.BROWSER_LOAD_URL_TAB_CURRENT;
 import static jp.hazuki.yuzubrowser.ui.ConstantsKt.BROWSER_LOAD_URL_TAB_NEW_RIGHT;
 
@@ -82,7 +82,7 @@ public class AppPrefs {
     public static final IntContainer web_cache = new IntContainer("web_cache", WebSettings.LOAD_DEFAULT);
     public static final BooleanContainer web_popup = new BooleanContainer("web_popup", true);
     public static final IntContainer download_action = new IntContainer("download_action", PreferenceConstants.DOWNLOAD_AUTO);
-    public static final StringContainer download_folder = new StringContainer("download_folder", "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+    public static final StringContainer download_folder = new StringContainer("download_folder", DEFAULT_DOWNLOAD_PATH);
     public static final BooleanContainer pause_web_background = new BooleanContainer("pause_web_background", true);
     public static final BooleanContainer save_formdata = new BooleanContainer("save_formdata", true);
     //TODO: Restore this when Google fixes the bug where the WebView is blank after calling onPause followed by onResume.

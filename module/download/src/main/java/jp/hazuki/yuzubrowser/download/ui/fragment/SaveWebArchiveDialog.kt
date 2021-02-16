@@ -20,25 +20,25 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.DialogFragment
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_HTML
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_MHTML
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.utils.guessDownloadFileName
-import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.download
-import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
+import jp.hazuki.yuzubrowser.download.getDownloadDocumentFile
 import jp.hazuki.yuzubrowser.webview.CustomWebView
 
 class SaveWebArchiveDialog : DialogFragment() {
@@ -59,12 +59,15 @@ class SaveWebArchiveDialog : DialogFragment() {
 
         saveArchiveCheckBox.visibility = View.VISIBLE
 
-        val file = arguments.getParcelable<DownloadFile>(ARG_FILE) ?: throw IllegalArgumentException()
+        val file = arguments.getParcelable<DownloadFile>(ARG_FILE)
+            ?: throw IllegalArgumentException()
 
-        root = Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(activity)
+        root = activity.getDownloadDocumentFile()
 
         val name = file.name ?: "index$EXT_HTML"
         filenameEditText.setText(name)
+        view.findViewById<View>(R.id.editor).visibility = View.VISIBLE
+        view.findViewById<View>(R.id.loading).visibility = View.GONE
 
         folderButton.text = root.name
         folderButton.setOnClickListener {
@@ -146,8 +149,8 @@ class SaveWebArchiveDialog : DialogFragment() {
 
 
         operator fun invoke(context: Context, url: String, webView: CustomWebView, webViewNo: Int): SaveWebArchiveDialog {
-            val name = guessDownloadFileName(Uri.parse(AppPrefs.download_folder.get()).toDocumentFile(context),
-                    url, null, MIME_TYPE_HTML, null)
+            val name = guessDownloadFileName(context.getDownloadDocumentFile(),
+                url, null, MIME_TYPE_HTML, null)
 
             return SaveWebArchiveDialog().apply {
                 arguments = Bundle().apply {
@@ -160,6 +163,6 @@ class SaveWebArchiveDialog : DialogFragment() {
     }
 
     interface OnSaveWebViewListener {
-        fun onSaveWebViewToFile(root: androidx.documentfile.provider.DocumentFile, file: DownloadFile, webViewNo: Int)
+        fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int)
     }
 }

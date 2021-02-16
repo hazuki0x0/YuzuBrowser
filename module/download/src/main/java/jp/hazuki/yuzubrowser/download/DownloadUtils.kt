@@ -26,6 +26,7 @@ import android.os.Build
 import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeType
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
@@ -64,6 +65,10 @@ fun createFileOpenIntent(context: Context, uri: Uri, mimeType: String, name: Str
     }
 }
 
+fun Context.getDownloadDocumentFile(): DocumentFile {
+    return getDownloadFolderUri(this).toDocumentFile(this)
+}
+
 fun getDownloadFolderUri(context: Context): Uri {
     return Uri.parse(AppPrefs.download_folder.get())
 }
@@ -73,9 +78,9 @@ fun Context.registerDownloadNotification() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val service = NotificationChannel(
-                NOTIFICATION_CHANNEL_DOWNLOAD_SERVICE,
-                getString(R.string.download_service),
-                NotificationManager.IMPORTANCE_MIN)
+            NOTIFICATION_CHANNEL_DOWNLOAD_SERVICE,
+            getString(R.string.download_service),
+            NotificationManager.IMPORTANCE_MIN)
 
         service.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 

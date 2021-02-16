@@ -234,6 +234,7 @@
     <string name="refresh">更新</string>
 
     <string name="default_text">デフォルト</string>
+    <string name="custom">カスタム</string>
     <string name="delete">削除</string>
 
     <string name="find_on_page">ページ内検索</string>

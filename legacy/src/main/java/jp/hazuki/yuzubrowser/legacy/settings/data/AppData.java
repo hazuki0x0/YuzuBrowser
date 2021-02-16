@@ -20,6 +20,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Environment;
 
 import com.squareup.moshi.Moshi;
 
@@ -29,6 +30,7 @@ import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase;
 import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
+import jp.hazuki.yuzubrowser.core.utility.storage.DocumentFileKt;
 import jp.hazuki.yuzubrowser.download.compatible.DownloadInfoDatabase;
 import jp.hazuki.yuzubrowser.download.service.DownloadDatabase;
 import jp.hazuki.yuzubrowser.legacy.R;
@@ -284,12 +286,23 @@ public class AppData {
                 AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
                 AdBlockInitSupportKt.disableYuzuList(abpDatabase);
             }
-            if (lastLaunch <= 410013) {
-                AbpUpdateService.Companion.updateAll(context, true, null);
-            }
 
             AppPrefs.lastLaunchPrefVersion.set(PREF_VERSION);
             modified = true;
+        }
+
+        if (lastLaunch <= 410013) {
+            AbpUpdateService.Companion.updateAll(context, true, null);
+            modified = true;
+        }
+
+        if (lastLaunch <= 410015) {
+            //noinspection deprecation
+            String classicDownloadUri = "file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+            if (AppPrefs.download_folder.get().equals(classicDownloadUri)) {
+                AppPrefs.download_folder.set(DocumentFileKt.DEFAULT_DOWNLOAD_PATH);
+                modified = true;
+            }
         }
 
         int versionCode = ContextExtensionsKt.getVersionCode(context);

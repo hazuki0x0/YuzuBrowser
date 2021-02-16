@@ -30,6 +30,7 @@ import dagger.android.DaggerService
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.*
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
@@ -38,7 +39,6 @@ import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.download.core.utils.getNotificationString
 import jp.hazuki.yuzubrowser.download.core.utils.registerMediaScanner
-import jp.hazuki.yuzubrowser.download.core.utils.toDocumentFile
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceClient
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceCommand
 import jp.hazuki.yuzubrowser.download.service.connection.ServiceSocket
