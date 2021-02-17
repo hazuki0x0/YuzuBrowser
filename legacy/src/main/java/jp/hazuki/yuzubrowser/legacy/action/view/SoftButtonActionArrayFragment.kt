@@ -30,6 +30,7 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayFile
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerFabFragment
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.SimpleViewHolder
@@ -127,6 +128,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort, menu)
+        applyIconColor(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -160,7 +162,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         mActionArray = actionManager.getActionArrayFile(mActionId)
     }
 
-    private class ActionListAdapter internal constructor(context: Context, list: MutableList<SoftButtonActionFile>, private val actionNameArray: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder<SoftButtonActionFile>>(context, list, listener) {
+    private class ActionListAdapter(context: Context, list: MutableList<SoftButtonActionFile>, private val actionNameArray: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder<SoftButtonActionFile>>(context, list, listener) {
 
         override fun onBindViewHolder(holder: SimpleViewHolder<SoftButtonActionFile>, item: SoftButtonActionFile, position: Int) {
             holder.textView.text = item.press.toString(actionNameArray)
@@ -168,7 +170,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<SoftButtonActionFile> {
             return SimpleViewHolder(
-                    inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), android.R.id.text1, this)
+                inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), android.R.id.text1, this)
         }
 
 

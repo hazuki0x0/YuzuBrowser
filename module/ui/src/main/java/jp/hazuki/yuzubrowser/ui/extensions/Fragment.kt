@@ -16,10 +16,24 @@
 
 package jp.hazuki.yuzubrowser.ui.extensions
 
+import android.view.Menu
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
+import jp.hazuki.yuzubrowser.ui.R
 
 fun Fragment.registerForStartActivityForResult(callback: ActivityResultCallback<ActivityResult>) =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult(), callback)
+
+fun Fragment.applyIconColor(menu: Menu) {
+    val color = requireContext().getResColor(R.color.actionBarIconColor)
+    menu.forEach {
+        it.icon?.colorFilter =
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
+    }
+}

@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryModel
 import jp.hazuki.yuzubrowser.historyModel.R
 import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
+import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import jp.hazuki.yuzubrowser.ui.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.ui.extensions.share
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
@@ -230,6 +231,7 @@ class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistory
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.history, menu)
+        applyIconColor(menu)
 
         val menuItem = menu.findItem(R.id.search_history)
 

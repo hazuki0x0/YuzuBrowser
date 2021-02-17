@@ -23,6 +23,7 @@ import androidx.fragment.app.viewModels
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.databinding.FragmentDebugFileEditBinding
 import jp.hazuki.yuzubrowser.legacy.debug.file.FileEditViewModel
+import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import java.io.File
 
 class FileEditFragment : Fragment() {
@@ -54,6 +55,7 @@ class FileEditFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.debug_file_edit, menu)
+        applyIconColor(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

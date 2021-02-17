@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
 import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
+import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
@@ -74,6 +75,7 @@ class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItem
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.abp_fragment, menu)
+        applyIconColor(menu)
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {

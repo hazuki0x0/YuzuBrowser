@@ -25,6 +25,7 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.resblock.checker.NormalChecker
 import jp.hazuki.yuzubrowser.legacy.utils.view.recycler.RecyclerFabFragment
 import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
+import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import jp.hazuki.yuzubrowser.ui.widget.recycler.SimpleViewHolder
@@ -56,13 +57,13 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
     }
 
     public override fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
-        manager.save(context!!.applicationContext)
+        manager.save(requireContext().applicationContext)
     }
 
     override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int) {
         val checker = manager.remove(index)
         adapter.notifyItemRemoved(index)
-        val context = context!!.applicationContext
+        val context = requireContext().applicationContext
         Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.undo) {
                     manager.add(index, checker)
@@ -115,11 +116,12 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
             manager.add(checker)
             adapter.notifyItemInserted(adapter.itemCount - 1)
         }
-        manager.save(context!!.applicationContext)
+        manager.save(requireContext().applicationContext)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.sort, menu)
+        applyIconColor(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -138,7 +140,7 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
     override val isLongPressDragEnabled: Boolean
         get() = adapter.isSortMode
 
-    private class ResBlockAdapter internal constructor(private val context: Context, list: MutableList<ResourceChecker>, listener: OnRecyclerListener) : ArrayRecyclerAdapter<ResourceChecker, SimpleViewHolder<ResourceChecker>>(context, list, listener) {
+    private class ResBlockAdapter(private val context: Context, list: MutableList<ResourceChecker>, listener: OnRecyclerListener) : ArrayRecyclerAdapter<ResourceChecker, SimpleViewHolder<ResourceChecker>>(context, list, listener) {
 
         override fun onBindViewHolder(holder: SimpleViewHolder<ResourceChecker>, item: ResourceChecker, position: Int) {
             holder.textView.text = item.getTitle(context)
@@ -146,9 +148,9 @@ class ResourceBlockListFragment : RecyclerFabFragment(), OnRecyclerListener, Che
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<ResourceChecker> {
             return SimpleViewHolder(
-                    inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
-                    android.R.id.text1,
-                    this)
+                inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false),
+                android.R.id.text1,
+                this)
         }
     }
 
