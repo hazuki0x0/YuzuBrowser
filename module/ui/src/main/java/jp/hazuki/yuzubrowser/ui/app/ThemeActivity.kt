@@ -23,6 +23,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageConfig
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 
 @SuppressLint("Registered")
@@ -35,7 +36,7 @@ open class ThemeActivity : AppCompatActivity() {
         }
 
         val isLightMode = isLightMode()
-        val config = newBase.createLanguageConfig(PrefPool.getSharedPref(application).getString(language, ""))
+        val config = newBase.createLanguageConfig(AppPrefs.language.get())
 
         applyThemeMode(isLightMode)
         config.updateTheme(isLightMode)

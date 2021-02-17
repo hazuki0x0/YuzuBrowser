@@ -24,10 +24,12 @@
         <item>Hungarian</item>
         <item>Italian</item>
         <item>Japanese</item>
+        <item>Korean</item>
         <item>Persian</item>
         <item>Polish</item>
         <item>Portuguese (Brazil)</item>
         <item>Russian</item>
+        <item>Turkish</item>
         <item>Ukrainian</item>
     </string-array>
 
@@ -39,10 +41,12 @@
         <item>hu</item>
         <item>it</item>
         <item>ja</item>
+        <item>ko</item>
         <item>fa</item>
         <item>pl</item>
         <item>pt-BR</item>
         <item>ru</item>
+        <item>tr</item>
         <item>uk</item>
     </string-array>
 </resources>

@@ -17,24 +17,20 @@
 package jp.hazuki.yuzubrowser.core.utility.utils
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.os.Build
+import android.os.LocaleList
 import java.util.*
 
-fun Context.createLanguageContext(lang: String?): Context {
-    val config = applicationContext.resources.configuration
-    config.getLocaleIfNeed(lang)?.let {
-        config.setLocale(it)
-        return ContextWrapper(createConfigurationContext(config))
-    }
-    return this
-}
-
 fun Context.createLanguageConfig(lang: String?): Configuration {
-    val config = applicationContext.resources.configuration
+    val config = resources.configuration
     config.getLocaleIfNeed(lang)?.let {
         config.setLocale(it)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val list = LocaleList(it)
+            LocaleList.setDefault(list)
+            config.setLocales(list)
+        }
     }
     return config
 }

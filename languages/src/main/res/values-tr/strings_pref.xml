@@ -177,13 +177,6 @@
     <string name="pref_lpress_others">Diğer</string>
     <string name="pref_clear_data_at_finish">Tamamlanan veriyi temizle</string>
     <string name="pref_security_settings">Güvenlik ayarları</string>
-    <string name="pref_file_access">Yerel dosya erişim ayarları</string>
-
-    <string-array name="pref_file_access_list">
-        <item>Devre dışı (en güvenli)</item>
-        <item>Sanal alanda etkin (daha güvenli)</item>
-        <item>Etkinleştir (güvenli değil)</item>
-    </string-array>
 
     <string name="pref_mixed_content">Https\'de güvensiz içerik ayarları</string>
 
@@ -452,13 +445,12 @@
     <string name="pref_privacy_policy">Gizlilik Politikası</string>
     <string name="mining_protect">Bozuk Para Yok</string>
     <string name="mining_protect_summary">Kripto para madenciliği koruması</string>
-    <string name="pref_storage_location_warn">Bu depolama konumu diğer uygulamalarla düzgün çalışmayabilir.</string>
     <string name="pref_fake_chrome">Chrome olarak gizlenmiş</string>
     <string name="pref_fake_chrome_summary">Varsayılan Kullanıcı Aracısını Chrome olarak taklit etme</string>
     <string name="pref_toolbar_small_icon">Uzun basılmış simgeyi göster</string>
     <string name="pref_show_icon">Simgeyi göster</string>
     <string name="pref_translation">Çeviri</string>
-    <string name="pref_translators">Hazuki</string>
+    <string name="pref_translators">Yaşar Çiv</string>
     <string name="adblock_file_large_mes">Dosya boyutu 1 MB’den büyük olduğundan önizlenemez veya düzenlenemez.\nAlmak ister misiniz?</string>
     <string name="pref_abp_filter">Reklam engelleme süzgeçleri</string>
     <string name="pref_abp_use_element_filter">Sayfa öğesi gizleme süzgeci kullan</string>
