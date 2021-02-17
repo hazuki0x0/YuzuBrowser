@@ -17,11 +17,9 @@
 package jp.hazuki.yuzubrowser.ui.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageConfig
@@ -77,7 +75,6 @@ open class ThemeActivity : AppCompatActivity() {
             return baseActivityContext.getSystemService(name)
         }
 
-        @TargetApi(Build.VERSION_CODES.M)
         override fun getSystemServiceName(serviceClass: Class<*>): String? {
             return baseActivityContext.getSystemServiceName(serviceClass)
         }

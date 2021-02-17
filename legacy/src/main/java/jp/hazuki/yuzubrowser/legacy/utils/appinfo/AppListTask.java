@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +30,8 @@ import androidx.loader.content.AsyncTaskLoader;
 
 public class AppListTask extends AsyncTaskLoader<ArrayList<AppInfo>> {
 
-    private PackageManager pm;
-    private Intent mIntent;
+    private final PackageManager pm;
+    private final Intent mIntent;
     private boolean allApp = false;
 
     public AppListTask(Context context, Intent search, boolean all) {
@@ -59,10 +58,7 @@ public class AppListTask extends AsyncTaskLoader<ArrayList<AppInfo>> {
                 appInfoList.add(appInfo);
             }
         } else {
-            int flag = 0;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                flag = PackageManager.MATCH_ALL;
-            List<ResolveInfo> list = pm.queryIntentActivities(mIntent, flag);
+            List<ResolveInfo> list = pm.queryIntentActivities(mIntent, PackageManager.MATCH_ALL);
 
             AppInfo appInfo;
             for (ResolveInfo info : list) {

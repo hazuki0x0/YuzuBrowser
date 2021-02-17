@@ -26,7 +26,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -64,14 +63,8 @@ public class PackageUtils {
 
     public static Intent createChooser(Context context, Intent query, CharSequence title) {
         PackageManager manager = context.getPackageManager();
-        int flag;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            flag = PackageManager.MATCH_ALL;
-        } else {
-            flag = PackageManager.MATCH_DEFAULT_ONLY;
-        }
 
-        List<ResolveInfo> infoList = manager.queryIntentActivities(query, flag);
+        List<ResolveInfo> infoList = manager.queryIntentActivities(query, PackageManager.MATCH_ALL);
         List<Intent> intents = new ArrayList<>();
         String appId = context.getPackageName();
 
@@ -92,12 +85,7 @@ public class PackageUtils {
             intents.add(intent);
         }
 
-        Intent chooser;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || intents.size() == 0) {
-            chooser = Intent.createChooser(new Intent(), title);
-        } else {
-            chooser = Intent.createChooser(intents.remove(0), title);
-        }
+        Intent chooser = Intent.createChooser(new Intent(), title);
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[intents.size()]));
         return chooser;
     }

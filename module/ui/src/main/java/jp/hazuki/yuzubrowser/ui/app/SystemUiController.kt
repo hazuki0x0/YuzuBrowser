@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.ui.app
 
-import android.graphics.Color
 import android.os.Build
 import android.view.*
 import androidx.annotation.CallSuper
@@ -90,8 +89,7 @@ sealed class SystemUiController(
             return when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> ControllerApi30(window)
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> ControllerApi26(window)
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> ControllerApi23(window)
-                else -> ControllerDefault(window)
+                else -> ControllerApi23(window)
             }
         }
     }
@@ -175,24 +173,8 @@ sealed class SystemUiController(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     @Suppress("DEPRECATION")
-    private open class ControllerApi23(window: Window) : ControllerDefault(window) {
-        override fun getFlags(): Int {
-            return if (isLightStatusBar) {
-                super.getFlags() or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            } else {
-                super.getFlags()
-            }
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private open class ControllerDefault(window: Window) : SystemUiController(window) {
-        override var navigationBarColor = Color.BLACK
-            set(value) {
-                field = Color.BLACK
-            }
+    private open class ControllerApi23(window: Window) : SystemUiController(window) {
 
         override fun updateConfigure() {
             super.updateConfigure()
@@ -208,6 +190,14 @@ sealed class SystemUiController(
         }
 
         open fun getFlags(): Int {
+            return if (isLightStatusBar) {
+                getWindowTypeFlags() or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                getWindowTypeFlags()
+            }
+        }
+
+        private fun getWindowTypeFlags(): Int {
             return when (barState) {
                 State.NORMAL -> 0
                 State.HIDE_STATUS_BAR ->

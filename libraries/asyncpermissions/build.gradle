@@ -31,5 +31,7 @@ dependencies {
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation Libs.support_appcompat_v7
+
+    implementation AndroidX.activty
+    implementation AndroidX.appcompat
 }

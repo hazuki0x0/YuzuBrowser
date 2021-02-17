@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.legacy.webrtc.core
 
-import android.os.Build
 import android.webkit.PermissionRequest
 import java.io.Serializable
 
@@ -37,7 +36,7 @@ data class WebPermissions(
             if (microphone === PermissionState.GRANTED) {
                 list.add(PermissionRequest.RESOURCE_AUDIO_CAPTURE)
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && midi === PermissionState.GRANTED) {
+            if (midi === PermissionState.GRANTED) {
                 list.add(PermissionRequest.RESOURCE_MIDI_SYSEX)
             }
             if (mediaId === PermissionState.GRANTED) {

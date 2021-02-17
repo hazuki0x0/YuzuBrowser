@@ -17,7 +17,7 @@
 
 <resources>
     <color name="primary">#FFFFFF</color>
-    <color name="primary_dark">#A0A0A8</color>
+    <color name="primary_dark">#fff</color>
     <bool name="isLightStatusBar">true</bool>
     <color name="primary_light">#3c3f41</color>
     <color name="accent">#33b5e5</color>

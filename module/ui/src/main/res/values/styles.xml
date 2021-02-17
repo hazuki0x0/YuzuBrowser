@@ -32,9 +32,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="BrowserBaseTheme" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar" />
-
-    <style name="BrowserThemeDayNight" parent="BrowserBaseTheme">
+    <style name="BrowserThemeDayNight" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="android:colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -52,6 +50,7 @@
         <item name="actionModeStyle">@style/ActionModeStyle</item>
         <item name="android:navigationBarColor">@color/default_nav_color</item>
         <item name="actionBarTheme">@style/ThemeOverlay.ActionBar</item>
+        <item name="android:windowLightStatusBar">@bool/isLightStatusBar</item>
     </style>
 
     <style name="BrowserThemeDayNight.NoTitle" parent="@style/BrowserThemeDayNight">

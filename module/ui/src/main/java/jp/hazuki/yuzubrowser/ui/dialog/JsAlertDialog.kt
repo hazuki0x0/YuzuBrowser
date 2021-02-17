@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import android.widget.*
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.ui.R
-import jp.hazuki.yuzubrowser.ui.extensions.setTextAppearanceCompat
 
 class JsAlertDialog(private val context: Context) {
     private val builder = AlertDialog.Builder(context)
@@ -141,7 +140,7 @@ class JsAlertDialog(private val context: Context) {
         if (message.isNotEmpty()) {
             val textView = TextView(context)
             textView.text = message
-            textView.setTextAppearanceCompat(R.style.TextAppearance_AppCompat_Subhead)
+            textView.setTextAppearance(R.style.TextAppearance_AppCompat_Subhead)
 
             container.addView(textView)
         }

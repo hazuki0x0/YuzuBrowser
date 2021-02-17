@@ -18,16 +18,9 @@ package jp.hazuki.yuzubrowser.core.utility.extensions
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 
 fun ConnectivityManager.isConnectedWifi(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val capabilities = getNetworkCapabilities(activeNetwork)
-        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
-    } else {
-        @Suppress("DEPRECATION")
-        val info = activeNetworkInfo!!
-        @Suppress("DEPRECATION")
-        info.isConnected && info.type == ConnectivityManager.TYPE_WIFI
-    }
+    val capabilities = getNetworkCapabilities(activeNetwork)
+
+    return capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
 }

@@ -40,9 +40,7 @@ import java.lang.ref.SoftReference
 fun Activity.checkBrowserPermission(): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true
     if (checkNeed()) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return false
-        }
+        return false
     } else {
         if (!checkStoragePermission()) {
             return false
@@ -73,8 +71,7 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
 }
 
 fun Activity.checkStoragePermission(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     } else {
         true
@@ -93,11 +90,7 @@ suspend fun AppCompatActivity.requestStoragePermission(asyncPermissions: AsyncPe
 }
 
 fun Context.checkLocationPermission(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    } else {
-        true
-    }
+    return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
 fun Context.openRequestPermissionSettings(text: CharSequence) {

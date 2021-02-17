@@ -255,9 +255,7 @@ class YuzuWebSettings(private val origin: WebSettings) {
         }
 
     var offscreenPreRaster: Boolean
-        @RequiresApi(api = Build.VERSION_CODES.M)
         get() = origin.offscreenPreRaster
-        @RequiresApi(api = Build.VERSION_CODES.M)
         set(enabled) {
             origin.offscreenPreRaster = enabled
         }

@@ -29,7 +29,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -439,7 +438,7 @@ public class ThemeData {
     }
 
     public static int getSystemUiVisibilityFlag() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isUseLightStatusBar()) {
+        if (isUseLightStatusBar()) {
             return View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         } else {
             return 0;

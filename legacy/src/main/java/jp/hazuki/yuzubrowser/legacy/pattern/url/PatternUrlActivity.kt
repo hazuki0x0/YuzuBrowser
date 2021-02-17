@@ -24,7 +24,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -444,12 +443,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
             val intentUrl = url.replace("*", "")
             intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(if (WebUtils.maybeContainsUrlScheme(intentUrl)) intentUrl else "http://$intentUrl"))
-            val flag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PackageManager.MATCH_ALL
-            } else {
-                PackageManager.MATCH_DEFAULT_ONLY
-            }
-            val openAppList = pm.queryIntentActivities(intent, flag)
+            val openAppList = pm.queryIntentActivities(intent, PackageManager.MATCH_ALL)
             Collections.sort(openAppList, ResolveInfo.DisplayNameComparator(pm))
 
             val arrayAdapter = object : ArrayAdapter<ResolveInfo>(activity, 0, openAppList) {
@@ -538,7 +532,7 @@ class PatternUrlActivity : PatternActivity<PatternUrlChecker>() {
                     activity.hideIme(urlEditText)
                     val url1 = urlEditText.text.toString()
                     intent = Intent(Intent.ACTION_VIEW, Uri.parse(if (WebUtils.maybeContainsUrlScheme(url1)) url1 else "http://$url1"))
-                    val newOpenAppList = pm.queryIntentActivities(intent, flag)
+                    val newOpenAppList = pm.queryIntentActivities(intent, PackageManager.MATCH_ALL)
                     Collections.sort(newOpenAppList, ResolveInfo.DisplayNameComparator(pm))
                     arrayAdapter.clear()
                     arrayAdapter.addAll(newOpenAppList)

@@ -16,10 +16,8 @@
 
 package jp.hazuki.asyncpermissions
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.PermissionChecker
@@ -36,7 +34,6 @@ class AsyncPermissionsFragment : androidx.fragment.app.Fragment() {
         queue = PermissionsContinuationQueue()
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode != REQUEST_CODE) return

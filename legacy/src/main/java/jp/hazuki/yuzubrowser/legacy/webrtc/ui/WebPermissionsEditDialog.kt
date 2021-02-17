@@ -19,7 +19,6 @@ package jp.hazuki.yuzubrowser.legacy.webrtc.ui
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Spinner
@@ -39,11 +38,6 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
         val mic: Spinner = view.findViewById(R.id.micSpinner)
         val midi: Spinner = view.findViewById(R.id.midiSpinner)
         val mediaId: Spinner = view.findViewById(R.id.mediaIdSpinner)
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            midi.visibility = View.GONE
-            view.findViewById<View>(R.id.midiTextView).visibility = View.GONE
-        }
 
         val permissions = arguments.getSerializable(ARG_PERMISSION) as WebPermissions
         val host = arguments.getString(ARG_HOST)!!
