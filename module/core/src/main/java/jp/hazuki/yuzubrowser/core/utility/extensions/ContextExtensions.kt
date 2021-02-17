@@ -35,7 +35,7 @@ import java.io.File
 
 @ColorInt
 fun Context.getResColor(@ColorRes id: Int): Int {
-    return if (Build.VERSION.SDK_INT >= 23) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         resources.getColor(id, theme)
     } else {
         @Suppress("DEPRECATION")

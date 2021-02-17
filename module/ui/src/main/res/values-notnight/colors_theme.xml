@@ -16,8 +16,9 @@
   -->
 
 <resources>
-    <color name="primary">#DADADE</color>
+    <color name="primary">#FFFFFF</color>
     <color name="primary_dark">#A0A0A8</color>
+    <bool name="isLightStatusBar">true</bool>
     <color name="primary_light">#3c3f41</color>
     <color name="accent">#33b5e5</color>
     <color name="primary_text">#DE000000</color>
@@ -31,4 +32,5 @@
     <color name="progressBarBackground">#47272727</color>
     <color name="background">#FFFFFF</color>
     <color name="browserBackground">#FFFFFF</color>
+    <color name="actionBarIconColor">#757575</color>
 </resources>

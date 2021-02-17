@@ -32,7 +32,9 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="BrowserThemeDayNight" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="BrowserBaseTheme" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar" />
+
+    <style name="BrowserThemeDayNight" parent="BrowserBaseTheme">
         <item name="colorPrimary">@color/accent</item>
         <item name="android:colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>

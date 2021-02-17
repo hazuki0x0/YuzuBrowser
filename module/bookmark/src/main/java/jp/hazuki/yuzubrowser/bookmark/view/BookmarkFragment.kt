@@ -43,11 +43,11 @@ import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.bookmark.repository.HideMenuRepository
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
+import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.ui.extensions.addCallback
-import jp.hazuki.yuzubrowser.ui.extensions.getColorFromAttrRes
 import jp.hazuki.yuzubrowser.ui.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils.createShortcut
@@ -276,7 +276,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
             menu.findItem(R.id.simpleDisplay).isChecked = AppPrefs.bookmarkSimpleDisplay.get()
             showBreadCrumbs(show)
 
-            val color = requireContext().getColorFromAttrRes(android.R.attr.textColorSecondary, 0)
+            val color = requireContext().getResColor(R.color.actionBarIconColor)
             menu.forEach {
                 it.icon?.colorFilter =
                     BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
@@ -669,6 +669,7 @@ class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecycle
     companion object {
         private const val MODE_PICK = "pick"
         private const val ITEM_ID = "id"
+        private const val ICON_ALPHA = 190
 
         operator fun invoke(pickMode: Boolean, id: Long): BookmarkFragment {
             val fragment = BookmarkFragment()
