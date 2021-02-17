@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser
 
 import android.app.Application
 import android.content.Context
+import android.content.ContextWrapper
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.moshi.Moshi
@@ -27,6 +28,7 @@ import dagger.android.HasAndroidInjector
 import jp.hazuki.yuzubrowser.adblock.registerAdBlockNotification
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageConfig
 import jp.hazuki.yuzubrowser.di.DaggerAppComponent
 import jp.hazuki.yuzubrowser.download.registerDownloadNotification
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
@@ -82,6 +84,32 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInje
         if (isNeedInject) {
             isNeedInject = false
             DaggerAppComponent.factory().create(this).inject(this)
+        }
+    }
+
+    override fun attachBaseContext(base: Context) {
+        val lang = AppPrefs.language.get()
+        val context = if (lang != "") {
+            val config = base.createLanguageConfig(lang)
+            ContextCompat(base.createConfigurationContext(config), base)
+        } else {
+            base
+        }
+
+        super.attachBaseContext(context)
+    }
+
+    private class ContextCompat(
+        configContext: Context,
+        private val baseActivityContext: Context
+    ) : ContextWrapper(configContext) {
+
+        override fun getSystemService(name: String): Any? {
+            return baseActivityContext.getSystemService(name)
+        }
+
+        override fun getSystemServiceName(serviceClass: Class<*>): String? {
+            return baseActivityContext.getSystemServiceName(serviceClass)
         }
     }
 
