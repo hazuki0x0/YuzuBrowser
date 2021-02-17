@@ -26,7 +26,10 @@ import android.webkit.WebSettings
 import androidx.fragment.app.DialogFragment
 import com.squareup.moshi.Moshi
 import dagger.android.support.AndroidSupportInjection
+import jp.hazuki.yuzubrowser.core.USER_AGENT_PC
+import jp.hazuki.yuzubrowser.core.utility.extensions.getChromePcUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.core.utility.extensions.getPcUserAgent
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import javax.inject.Inject
@@ -45,12 +48,17 @@ class UserAgentListDialog : DialogFragment() {
         val entries = arrayOfNulls<String>(mUserAgentList.size + 1)
         val entryValues = arrayOfNulls<String>(mUserAgentList.size + 1)
 
-        val ua = arguments!!.getString(UA)
-        val defaultUserAgent = if (AppPrefs.fake_chrome.get()) activity.getFakeChromeUserAgent() else WebSettings.getDefaultUserAgent(activity)
+        var ua = requireArguments().getString(UA)
+        val isChrome = AppPrefs.fake_chrome.get()
+        val defaultUserAgent = if (isChrome) activity.getFakeChromeUserAgent() else WebSettings.getDefaultUserAgent(activity)
+        val pcUserAgent = if (isChrome) activity.getChromePcUserAgent() else activity.getPcUserAgent()
 
         var pos = if (ua.isNullOrEmpty() || defaultUserAgent == ua) 0 else -1
+        if (ua == pcUserAgent) {
+            ua = USER_AGENT_PC
+        }
 
-        entries[0] = context!!.getString(R.string.default_text)
+        entries[0] = activity.getString(R.string.default_text)
         entryValues[0] = defaultUserAgent
 
         var userAgent: UserAgent

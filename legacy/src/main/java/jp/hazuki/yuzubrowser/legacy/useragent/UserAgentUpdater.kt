@@ -16,6 +16,8 @@
 
 package jp.hazuki.yuzubrowser.legacy.useragent
 
+import jp.hazuki.yuzubrowser.core.USER_AGENT_PC
+
 fun UserAgentList.init() {
     add(UserAgent("android", USER_AGENT_ANDROID))
     add(UserAgent("android Tablet", USER_AGENT_ANDROID_TAB))
@@ -51,4 +53,4 @@ private const val USER_AGENT_ANDROID = "Mozilla/5.0 (Linux; Android 9; Pixel 3) 
 private const val USER_AGENT_ANDROID_TAB = "Mozilla/5.0 (Linux; Android 7.1.1; Nexus 9 Build/N4F26M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.90 Safari/537.36"
 private const val USER_AGENT_IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
 private const val USER_AGENT_IPAD = "Mozilla/5.0 (iPad; CPU OS 12_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
-private const val USER_AGENT_PC = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
+

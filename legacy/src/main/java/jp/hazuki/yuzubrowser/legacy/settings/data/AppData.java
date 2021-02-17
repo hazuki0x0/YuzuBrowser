@@ -303,7 +303,7 @@ public class AppData {
             modified = true;
         }
 
-        int versionCode = ContextExtensionsKt.getVersionCode(context);
+        int versionCode = (int) ContextExtensionsKt.getVersionCode(context);
 
         if (versionCode > lastLaunch) {
             if (lastLaunch > -1) {

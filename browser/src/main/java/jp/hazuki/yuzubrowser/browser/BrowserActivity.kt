@@ -59,7 +59,7 @@ import jp.hazuki.yuzubrowser.browser.tab.TabManagerFactory
 import jp.hazuki.yuzubrowser.browser.view.Toolbar
 import jp.hazuki.yuzubrowser.core.eventbus.LocalEventBus
 import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
-import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
+import jp.hazuki.yuzubrowser.core.utility.extensions.getRealUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
@@ -558,14 +558,14 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
                 if (resultCode != RESULT_OK || data == null) return
                 val ua = data.getStringExtra(Intent.EXTRA_TEXT)
                 val tab = tabManagerIn.currentTabData
-                tab.mWebView.webSettings.userAgentString = if (ua.isNullOrEmpty() && AppPrefs.fake_chrome.get()) getFakeChromeUserAgent() else ua
+                tab.mWebView.webSettings.userAgentString = getRealUserAgent(ua, AppPrefs.fake_chrome.get())
                 tab.mWebView.reload()
             }
             BrowserController.REQUEST_DEFAULT_USERAGENT -> {
                 if (resultCode != RESULT_OK || data == null) return
                 val ua = data.getStringExtra(Intent.EXTRA_TEXT)
                 AppPrefs.user_agent.set(ua)
-                val browserUA = if (ua.isNullOrEmpty() && AppPrefs.fake_chrome.get()) getFakeChromeUserAgent() else ua
+                val browserUA = getRealUserAgent(ua, AppPrefs.fake_chrome.get())
                 AppPrefs.commit(this, AppPrefs.user_agent)
                 for (tabData in tabManagerIn.loadedData) {
                     tabData.mWebView.webSettings.userAgentString = browserUA

@@ -38,10 +38,7 @@ import jp.hazuki.yuzubrowser.adblock.ui.abp.AbpFilterSubscribeDialog
 import jp.hazuki.yuzubrowser.adblock.ui.original.AdBlockActivity
 import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.cache.SoftCache
-import jp.hazuki.yuzubrowser.core.utility.extensions.appCacheFilePath
-import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
-import jp.hazuki.yuzubrowser.core.utility.extensions.getResColor
-import jp.hazuki.yuzubrowser.core.utility.extensions.readAssetsText
+import jp.hazuki.yuzubrowser.core.utility.extensions.*
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.download.*
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
@@ -261,13 +258,8 @@ class WebClient(
 
         setting.allowContentAccess = AppPrefs.allow_content_access.get()
         setting.defaultTextEncodingName = AppPrefs.default_encoding.get()
-        if (AppPrefs.user_agent.get().isNullOrEmpty()) {
-            if (AppPrefs.fake_chrome.get()) {
-                setting.userAgentString = activity.getFakeChromeUserAgent()
-            }
-        } else {
-            setting.userAgentString = AppPrefs.user_agent.get()
-        }
+        setting.userAgentString =
+            activity.getRealUserAgent(AppPrefs.user_agent.get(), AppPrefs.fake_chrome.get())
         setting.loadWithOverviewMode = AppPrefs.load_overview.get()
         setting.useWideViewPort = AppPrefs.web_wideview.get()
         setting.displayZoomButtons = AppPrefs.show_zoom_button.get()
@@ -465,8 +457,8 @@ class WebClient(
                 .setMessage(R.string.form_resubmit)
                 .setPositiveButton(android.R.string.ok) { _, _ -> resend.sendToTarget() }
                 .setNegativeButton(android.R.string.cancel) { _, _ -> dontResend.sendToTarget() }
-                    .setOnCancelListener { dontResend.sendToTarget() }
-                    .show()
+                .setOnCancelListener { dontResend.sendToTarget() }
+                .show()
         }
 
         override fun doUpdateVisitedHistory(web: CustomWebView, url: String, isReload: Boolean) {
@@ -507,8 +499,8 @@ class WebClient(
                     .setView(view)
                     .setPositiveButton(android.R.string.ok) { _, _ -> handler.proceed() }
                     .setNegativeButton(android.R.string.cancel) { _, _ -> handler.cancel() }
-                        .setOnCancelListener { handler.cancel() }
-                        .show()
+                    .setOnCancelListener { handler.cancel() }
+                    .show()
             }
         }
 
@@ -658,18 +650,18 @@ class WebClient(
             PreferenceConstants.DOWNLOAD_SELECT -> {
 
                 AlertDialog.Builder(activity)
-                        .setTitle(R.string.download)
-                        .setItems(
-                                arrayOf(getString(R.string.download), getString(R.string.open), getString(R.string.share))
-                        ) { _, which ->
-                            when (which) {
-                                0 -> actionDownload(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
-                                1 -> actionOpen(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
-                                2 -> actionShare(url)
-                            }
+                    .setTitle(R.string.download)
+                    .setItems(
+                        arrayOf(getString(R.string.download), getString(R.string.open), getString(R.string.share))
+                    ) { _, which ->
+                        when (which) {
+                            0 -> actionDownload(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
+                            1 -> actionOpen(url, referrer, userAgent, contentDisposition, mimetype, contentLength)
+                            2 -> actionShare(url)
                         }
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
             }
         }
 
@@ -771,11 +763,11 @@ class WebClient(
             val tab = controller.getTabOrNull(view) ?: return true
             if (tab.isAlertAllowed && !activity.isFinishing) {
                 JsAlertDialog(activity)
-                        .setAlertMode(url, message, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
-                            if (dialogResult) result.confirm() else result.cancel()
-                            if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
-                        }
-                        .show()
+                    .setAlertMode(url, message, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
+                        if (dialogResult) result.confirm() else result.cancel()
+                        if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
+                    }
+                    .show()
                 tab.alertMode = MainTabData.ALERT_MULTIPULE
             } else {
                 result.cancel()
@@ -787,11 +779,11 @@ class WebClient(
             val tab = controller.getTabOrNull(view) ?: return true
             if (tab.isAlertAllowed && !activity.isFinishing) {
                 JsAlertDialog(activity)
-                        .setConfirmMode(url, message, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
-                            if (dialogResult) result.confirm() else result.cancel()
-                            if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
-                        }
-                        .show()
+                    .setConfirmMode(url, message, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
+                        if (dialogResult) result.confirm() else result.cancel()
+                        if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
+                    }
+                    .show()
                 tab.alertMode = MainTabData.ALERT_MULTIPULE
             } else {
                 result.cancel()
@@ -803,11 +795,11 @@ class WebClient(
             val tab = controller.getTabOrNull(view) ?: return true
             if (tab.isAlertAllowed && !activity.isFinishing) {
                 JsAlertDialog(activity)
-                        .setPromptMode(url, message, defaultValue, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
-                            if (dialogResult != null) result.confirm(dialogResult) else result.cancel()
-                            if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
-                        }
-                        .show()
+                    .setPromptMode(url, message, defaultValue, tab.alertMode == MainTabData.ALERT_MULTIPULE) { dialogResult, blockAlert ->
+                        if (dialogResult != null) result.confirm(dialogResult) else result.cancel()
+                        if (blockAlert) tab.alertMode = MainTabData.ALERT_BLOCKED
+                    }
+                    .show()
                 tab.alertMode = MainTabData.ALERT_MULTIPULE
             } else {
                 result.cancel()
@@ -1141,19 +1133,19 @@ class WebClient(
         }
         if (hasError(SslError.SSL_EXPIRED)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_expired))
-                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_expired_info), DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT).format(certificate.validNotAfterDate))
+                .appendErrorInfo(context.getText(R.string.ssl_error_certificate_expired_info), DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT).format(certificate.validNotAfterDate))
         }
         if (hasError(SslError.SSL_IDMISMATCH)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_domain_mismatch))
-                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_domain_mismatch_info), certificate.issuedTo.cName)
+                .appendErrorInfo(context.getText(R.string.ssl_error_certificate_domain_mismatch_info), certificate.issuedTo.cName)
         }
         if (hasError(SslError.SSL_NOTYETVALID)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_not_yet_valid))
-                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_not_yet_valid_info), DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT).format(certificate.validNotBeforeDate))
+                .appendErrorInfo(context.getText(R.string.ssl_error_certificate_not_yet_valid_info), DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT).format(certificate.validNotBeforeDate))
         }
         if (hasError(SslError.SSL_UNTRUSTED)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_untrusted))
-                    .appendErrorInfo(context.getText(R.string.ssl_error_certificate_untrusted_info), certificate.issuedBy.dName)
+                .appendErrorInfo(context.getText(R.string.ssl_error_certificate_untrusted_info), certificate.issuedBy.dName)
         }
         if (hasError(SslError.SSL_INVALID)) {
             builder.appendError(context.getText(R.string.ssl_error_certificate_invalid))
