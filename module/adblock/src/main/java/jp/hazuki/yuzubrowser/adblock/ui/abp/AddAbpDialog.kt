@@ -31,12 +31,12 @@ class AddAbpDialog : DialogFragment() {
     private var listener: OnAddItemListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = activity ?: throw IllegalStateException()
-        val arguments = arguments ?: throw IllegalArgumentException()
+        val activity = requireActivity()
+        val arguments = requireArguments()
 
         val view = View.inflate(activity, R.layout.add_abp_dialog, null)
         val editText = view.findViewById<EditText>(R.id.urlEditText)
-        editText.setSingleLine(true)
+        editText.isSingleLine = true
         editText.inputType = EditorInfo.TYPE_TEXT_VARIATION_URI
 
         val entity = arguments.getParcelable<AbpEntity?>(ARG_ENTITY)

@@ -30,12 +30,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:boxBackgroundColor="@android:color/transparent">
 
         <EditText
             android:id="@+id/urlEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="URL"/>
+            android:hint="URL" />
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
