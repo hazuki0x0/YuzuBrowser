@@ -16,9 +16,9 @@
 
 package jp.hazuki.yuzubrowser.webview.page
 
-import se.ansman.kotshi.JsonSerializable
+import com.squareup.moshi.JsonClass
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 internal data class Page(
         override val id: Long,
         override var title: String? = null,

@@ -17,10 +17,10 @@
 package jp.hazuki.yuzubrowser.search.model.provider
 
 import com.squareup.moshi.Json
-import se.ansman.kotshi.JsonSerializable
+import com.squareup.moshi.JsonClass
 import java.io.Serializable
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 data class SearchUrl constructor(
     @Json(name = "3") var id: Int,
     @Json(name = "0") var title: String,

@@ -102,8 +102,8 @@ dependencies {
 
     implementation Libs.okhttp
     implementation Libs.okio
-    implementation Libs.kotshi
-    kapt Libs.kotshi_compiler
+    implementation Libs.moshi
+    kapt Libs.moshiCodeGen
 
     implementation Libs.header_decor
     implementation Libs.jsoup

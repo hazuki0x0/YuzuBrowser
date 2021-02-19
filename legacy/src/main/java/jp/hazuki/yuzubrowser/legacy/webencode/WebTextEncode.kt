@@ -17,11 +17,10 @@
 package jp.hazuki.yuzubrowser.legacy.webencode
 
 import com.squareup.moshi.Json
-import se.ansman.kotshi.JsonSerializable
-
+import com.squareup.moshi.JsonClass
 import java.io.Serializable
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 data class WebTextEncode(
         @Json(name = "0") var encoding: String
 ) : Serializable

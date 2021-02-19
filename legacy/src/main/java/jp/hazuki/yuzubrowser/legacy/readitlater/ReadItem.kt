@@ -16,7 +16,7 @@
 
 package jp.hazuki.yuzubrowser.legacy.readitlater
 
-import se.ansman.kotshi.JsonSerializable
+import com.squareup.moshi.JsonClass
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 data class ReadItem(var time: Long, var url: String, var title: String)

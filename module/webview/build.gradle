@@ -56,9 +56,9 @@ dependencies {
     implementation project(':module:core')
     implementation project(':module:ui')
 
-    implementation Libs.kotshi
-    kapt Libs.kotshi_compiler
-    kaptTest Libs.kotshi_compiler
+    implementation Libs.moshi
+    kapt Libs.moshiCodeGen
+    kaptTest Libs.moshiCodeGen
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler

@@ -89,8 +89,8 @@ dependencies {implementation fileTree(dir: 'libs', include: ['*.jar'])
     kapt Libs.dagger_android_processor
 
     implementation Libs.okio
-    implementation Libs.kotshi
-    kapt Libs.kotshi_compiler
+    implementation Libs.moshi
+    kapt Libs.moshiCodeGen
 
     implementation project(':module:ui')
     implementation project(':module:core')

@@ -24,13 +24,9 @@ import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
-import jp.hazuki.yuzubrowser.kotshi.ApplicationJsonAdapterFactory
-import jp.hazuki.yuzubrowser.legacy.kotshi.LegacyJsonAdapterFactory
 import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
-import jp.hazuki.yuzubrowser.search.di.SearchJsonAdapterFactory
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
-import jp.hazuki.yuzubrowser.webview.kotshi.WebViewJsonAdapterFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -62,10 +58,6 @@ object AppModule {
     @JvmStatic
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
-            .add(ApplicationJsonAdapterFactory.INSTANCE)
-            .add(LegacyJsonAdapterFactory.INSTANCE)
-            .add(WebViewJsonAdapterFactory.INSTANCE)
-            .add(SearchJsonAdapterFactory.INSTANCE)
             .build()
     }
 

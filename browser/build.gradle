@@ -71,8 +71,8 @@ dependencies {
 
     implementation Libs.okhttp
     implementation Libs.okio
-    implementation Libs.kotshi
-    kapt Libs.kotshi_compiler
+    implementation Libs.moshi
+    kapt Libs.moshiCodeGen
 
     implementation 'com.github.turing-tech:MaterialScrollBar:13.3.4'
     implementation project(':libraries:asyncpermissions')

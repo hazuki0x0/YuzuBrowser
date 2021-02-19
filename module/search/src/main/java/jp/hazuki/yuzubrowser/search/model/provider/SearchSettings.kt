@@ -17,9 +17,9 @@
 package jp.hazuki.yuzubrowser.search.model.provider
 
 import com.squareup.moshi.Json
-import se.ansman.kotshi.JsonSerializable
+import com.squareup.moshi.JsonClass
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 data class SearchSettings(
     @Json(name = "sel") val selectedId: Int,
     @Json(name = "idc") val idCount: Int,

@@ -121,8 +121,8 @@ dependencies {
     testImplementation Libs.junit
     androidTestImplementation Libs.espressoCore
 
-    implementation Libs.kotshi
-    kapt Libs.kotshi_compiler
+    implementation Libs.moshi
+    kapt Libs.moshiCodeGen
     implementation Libs.okhttp
 
     implementation AndroidX.appcompat

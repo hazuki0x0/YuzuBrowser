@@ -42,7 +42,7 @@ object Versions {
     const val print = "1.0.0"
     const val swipeRefreshLayout = "1.1.0"
     const val dagger = "2.31.2"
-    const val kotshi = "2.4.0"
+    const val moshi = "1.11.0"
     const val okhttp = "4.9.1"
     const val okio = "2.10.0"
     const val kvs_schema = "5.1.0"
@@ -94,8 +94,8 @@ object Libs {
     const val androidKTX = AndroidX.KTX
 
     //JSON
-    const val kotshi = "se.ansman.kotshi:api:${Versions.kotshi}"
-    const val kotshi_compiler = "se.ansman.kotshi:compiler:${Versions.kotshi}"
+    const val moshi = "com.squareup.moshi:moshi:${Versions.moshi}"
+    const val moshiCodeGen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
     const val okio = "com.squareup.okio:okio:${Versions.okio}"
 
     //Kotlin
