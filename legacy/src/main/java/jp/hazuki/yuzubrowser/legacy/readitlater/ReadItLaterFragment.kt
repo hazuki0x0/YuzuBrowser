@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.readitlater
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.*
@@ -27,7 +28,6 @@ import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
-import jp.hazuki.yuzubrowser.ui.extensions.intentFor
 import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
@@ -62,7 +62,9 @@ class ReadItLaterFragment : androidx.fragment.app.Fragment(), OnRecyclerListener
     override fun onRecyclerItemClicked(v: View, position: Int) {
         val activity = activity ?: return
 
-        startActivity(intentFor(Constants.activity.MAIN_BROWSER).apply {
+
+        startActivity(Intent().apply {
+            setClassName(activity, Constants.activity.MAIN_BROWSER)
             action = Constants.intent.ACTION_OPEN_DEFAULT
             data = readItLaterProvider.getReadUri(adapter[position].time)
         })
