@@ -196,6 +196,9 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
         }
     }
 
+    override val isNeedDivider: Boolean
+        get() = false
+
     override val isLongPressDragEnabled
         get() = adapter.isSortMode
 

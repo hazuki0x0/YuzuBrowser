@@ -56,7 +56,9 @@ abstract class RecyclerFabFragment : Fragment() {
                 val helper = ItemTouchHelper(ListTouch())
                 helper.attachToRecyclerView(this)
                 addItemDecoration(helper)
-                addItemDecoration(DividerItemDecoration(activity))
+                if (isNeedDivider) {
+                    addItemDecoration(DividerItemDecoration(activity))
+                }
             }
         }
     }
@@ -71,6 +73,9 @@ abstract class RecyclerFabFragment : Fragment() {
     protected open fun onAddButtonClick() {}
 
     protected open fun onAddButtonLongClick() = false
+
+    protected open val isNeedDivider: Boolean
+        get() = true
 
     abstract fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean
 

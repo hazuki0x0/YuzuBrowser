@@ -212,6 +212,9 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         }
     }
 
+    override val isNeedDivider: Boolean
+        get() = false
+
     companion object {
         private const val ACTION_TYPE = "type"
         private const val ACTION_ID = "id"
