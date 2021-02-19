@@ -514,6 +514,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
         toSetting.cacheMode = fromSetting.cacheMode
         toSetting.javaScriptCanOpenWindowsAutomatically = fromSetting.javaScriptCanOpenWindowsAutomatically
         toSetting.layoutAlgorithm = fromSetting.layoutAlgorithm
+        toSetting.webTheme = fromSetting.webTheme
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             toSetting.safeBrowsingEnabled = fromSetting.safeBrowsingEnabled
         } else {
