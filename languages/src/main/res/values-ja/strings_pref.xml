@@ -470,4 +470,6 @@
     <string name="pref_page_background_white_info">新しいタブを開くとき、またはタブを切り替えるときにちらつく時は、無効にして下さい。</string>
     <string name="pref_abp_update_wifi_only">Wi-Fi接続時のみフィルタを更新</string>
     <string name="pref_ad_block_disable_cosmetic_filtering">要素隠蔽フィルタを無効にする</string>
+    <string name="pref_send_usage">使用統計情報の送信</string>
+    <string name="pref_send_usage_summary">匿名の使用統計情報とクラッシュログの送信を停止するには無効にしてください</string>
 </resources>

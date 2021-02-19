@@ -471,4 +471,6 @@
     <string name="pref_page_background_white_info">If you have flickers when open a new tab or switching between tabs, disable it.</string>
     <string name="pref_abp_update_wifi_only">Auto-update filters over Wi-Fi only</string>
     <string name="pref_ad_block_disable_cosmetic_filtering">Disable cosmetic filtering</string>
+    <string name="pref_send_usage">Send usage statistics</string>
+    <string name="pref_send_usage_summary">Disable to stop sending anonymous usage data and crash reports</string>
 </resources>

@@ -47,5 +47,11 @@
         android:key="privacy_policy"
         android:title="@string/pref_privacy_policy"
         app:iconSpaceReserved="false" />
+    <SwitchPreferenceCompat
+        android:key="send_usage"
+        android:title="@string/pref_send_usage"
+        android:summary="@string/pref_send_usage_summary"
+        android:defaultValue="true"
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

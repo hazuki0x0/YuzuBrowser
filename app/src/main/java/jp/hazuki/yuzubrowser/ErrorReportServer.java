@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,14 +33,16 @@ import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 
 public class ErrorReportServer implements UncaughtExceptionHandler, IErrorReport {
     private static final String TAG = "ErrorReportServer";
-    private static final UncaughtExceptionHandler sDefHandler = Thread.getDefaultUncaughtExceptionHandler();
     private static boolean detailedLog = true;
     private static File filesDir;
+
+    final UncaughtExceptionHandler sDefHandler = Thread.getDefaultUncaughtExceptionHandler();
 
     public static void initialize(Context context) {
         filesDir = context.getExternalFilesDir("");
         ErrorReportServer server = new ErrorReportServer();
         ErrorReport.INSTANCE.init(server);
+        Log.d("handler", server.sDefHandler.getClass().getName());
         Thread.setDefaultUncaughtExceptionHandler(server);
     }
 

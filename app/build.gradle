@@ -18,6 +18,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.cookpad.android.licensetools'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 def gitHash = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX")
@@ -53,6 +55,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
             lintOptions {
                 disable 'MissingTranslation', 'GoogleAppIndexingWarning', 'ClickableViewAccessibility'
             }
@@ -62,6 +65,7 @@ android {
             ext.alwaysUpdateBuildId = false
             applicationIdSuffix ".debug"
             resValue "string", "package_name", "${defaultConfig.applicationId}.debug"
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"false"]
         }
     }
     packagingOptions {
@@ -87,6 +91,12 @@ android {
     buildFeatures {
         dataBinding true
     }
+}
+
+// must be after the plugin is applied otherwise no tasks will be found
+android.applicationVariants.all { variant ->
+    def googleTask = tasks.findByName("process${variant.name.capitalize()}GoogleServices")
+    googleTask.enabled = "debug" != variant.name
 }
 
 buildscript {
@@ -142,4 +152,12 @@ dependencies {
     implementation Libs.dagger_android
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.5.0')
+
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
