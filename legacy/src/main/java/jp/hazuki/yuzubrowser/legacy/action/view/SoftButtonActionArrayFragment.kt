@@ -20,11 +20,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResultListener
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.action.ActionIconMap
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager
-import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
+import jp.hazuki.yuzubrowser.legacy.action.ActionNameMap
 import jp.hazuki.yuzubrowser.legacy.action.SoftButtonActionArrayManagerBase
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionArrayFile
 import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
@@ -33,15 +40,30 @@ import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
-import jp.hazuki.yuzubrowser.ui.widget.recycler.SimpleViewHolder
 
 class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDialogCompat.OnDelete {
 
+    private val activityViewModel by activityViewModels<SoftButtonActionViewModel> {
+        SoftButtonActionViewModel.Factory(
+            ActionNameMap(resources),
+            ActionIconMap(resources)
+        )
+    }
+
     private var mActionType: Int = 0
     private var mActionId: Int = 0
-    private lateinit var mActionArray: SoftButtonActionArrayFile
+    private lateinit var actionArray: SoftButtonActionArrayFile
     private lateinit var actionManager: SoftButtonActionArrayManagerBase
     private lateinit var adapter: ActionListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(SoftButtonActionDetailFragment.RESTART) { _, _ ->
+            adapter.notifyDataSetChanged()
+            checkMax()
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,19 +71,21 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
 
         setHasOptionsMenu(true)
         initData()
-        val mActionNameArray = ActionNameArray(activity)
-        adapter = ActionListAdapter(activity, mActionArray.list, mActionNameArray, this)
+        val actionNames = activityViewModel.actionNames
+        val actionIcons = activityViewModel.actionIcons
+        val list = actionArray.list
+        adapter = ActionListAdapter(activity, list, actionNames, actionIcons, this)
         setRecyclerViewAdapter(adapter)
         checkMax()
     }
 
-    override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
+    override fun onMove(recyclerView: RecyclerView, fromIndex: Int, toIndex: Int): Boolean {
         adapter.move(fromIndex, toIndex)
         return true
     }
 
-    override fun onMoved(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, fromPos: Int, target: androidx.recyclerview.widget.RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
-        mActionArray.write(context!!.applicationContext)
+    override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
+        actionArray.write(requireContext().applicationContext)
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
@@ -70,50 +94,47 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
 
     override fun onRecyclerItemLongClicked(v: View, position: Int): Boolean {
         DeleteDialogCompat.newInstance(activity, R.string.confirm, R.string.confirm_delete_button, position)
-                .show(childFragmentManager, "delete")
+            .show(childFragmentManager, "delete")
         return true
     }
 
     override fun onDelete(position: Int) {
-        mActionArray.list.removeAt(position)
-        mActionArray.write(context!!)
+        actionArray.list.removeAt(position)
+        actionArray.write(requireContext())
         adapter.notifyDataSetChanged()
     }
 
     override fun onAddButtonClick() {
-        mActionArray.list.add(SoftButtonActionFile())
-        mActionArray.write(context!!)
-        onListItemClick(mActionArray.list.size - 1)
+        actionArray.list.add(SoftButtonActionFile())
+        actionArray.write(requireContext())
+        onListItemClick(actionArray.list.size - 1)
     }
 
     private fun onListItemClick(position: Int) {
-        val activity = activity ?: return
-
-        val intent = SoftButtonActionActivity.Builder(activity)
-                .setActionManager(mActionType, actionManager.makeActionIdFromPosition(mActionId, position))
-                .setTitle(activity.title.toString() + " - " + (position + 1).toString())
-                .create()
-        startActivityForResult(intent, RESULT_REQUEST_ADD)
+        parentFragmentManager.commit {
+            replace(R.id.container, SoftButtonActionDetailFragment(mActionType, mActionId, position))
+            addToBackStack(null)
+        }
     }
 
-    override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, index: Int) {
-        val file = mActionArray.list.removeAt(index)
-        val context = context!!.applicationContext
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, index: Int) {
+        val file = actionArray.list.removeAt(index)
+        val context = requireActivity().applicationContext
         adapter.notifyDataSetChanged()
         checkMax()
         Snackbar.make(rootView, R.string.deleted, Snackbar.LENGTH_SHORT)
-                .setAction(R.string.undo) {
-                    mActionArray.list.add(index, file)
-                    adapter.notifyDataSetChanged()
-                    checkMax()
-                }
-                .addCallback(object : Snackbar.Callback() {
-                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                            mActionArray.write(context)
-                        }
+            .setAction(R.string.undo) {
+                actionArray.list.add(index, file)
+                adapter.notifyDataSetChanged()
+                checkMax()
+            }
+            .addCallback(object : Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    if (event != DISMISS_EVENT_ACTION) {
+                        actionArray.write(context)
                     }
-                })
+                }
+            })
                 .show()
     }
 
@@ -153,27 +174,42 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
 
     private fun initData() {
         val arguments = arguments ?: throw IllegalArgumentException()
+        val context = requireContext().applicationContext
 
         mActionType = arguments.getInt(ACTION_TYPE)
         mActionId = arguments.getInt(ACTION_ID)
 
-        actionManager = ActionManager.getActionManager(context!!.applicationContext, mActionType) as? SoftButtonActionArrayManagerBase ?: throw IllegalArgumentException()
+        actionManager = ActionManager.getActionManager(context, mActionType) as SoftButtonActionArrayManagerBase
 
-        mActionArray = actionManager.getActionArrayFile(mActionId)
+        actionArray = actionManager.getActionArrayFile(mActionId)
     }
 
-    private class ActionListAdapter(context: Context, list: MutableList<SoftButtonActionFile>, private val actionNameArray: ActionNameArray, listener: OnRecyclerListener) : ArrayRecyclerAdapter<SoftButtonActionFile, SimpleViewHolder<SoftButtonActionFile>>(context, list, listener) {
+    private class ActionListAdapter(
+        context: Context,
+        list: MutableList<SoftButtonActionFile>,
+        private val actionNames: ActionNameMap,
+        private val actionIcons: ActionIconMap,
+        listener: OnRecyclerListener
+    ) : ArrayRecyclerAdapter<SoftButtonActionFile, ActionListAdapter.ViewHolder>(context, list, listener) {
 
-        override fun onBindViewHolder(holder: SimpleViewHolder<SoftButtonActionFile>, item: SoftButtonActionFile, position: Int) {
-            holder.textView.text = item.press.toString(actionNameArray)
+        override fun onBindViewHolder(holder: ViewHolder, item: SoftButtonActionFile, position: Int) {
+            holder.apply {
+                textView.text = actionNames[item.press]
+                imageView.setImageDrawable(actionIcons[item.press])
+            }
         }
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): SimpleViewHolder<SoftButtonActionFile> {
-            return SimpleViewHolder(
-                inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), android.R.id.text1, this)
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): ViewHolder {
+            return ViewHolder(
+                inflater.inflate(R.layout.action_list_item, parent, false), this)
         }
 
-
+        private class ViewHolder(
+            view: View, adapter: ActionListAdapter
+        ) : ArrayViewHolder<SoftButtonActionFile>(view, adapter) {
+            val textView: TextView = view.findViewById(R.id.textView)
+            val imageView: ImageView = view.findViewById(R.id.imageView)
+        }
     }
 
     companion object {
@@ -181,7 +217,7 @@ class SoftButtonActionArrayFragment : RecyclerFabFragment(), OnRecyclerListener,
         private const val ACTION_ID = "id"
         private const val RESULT_REQUEST_ADD = 1
 
-        fun newInstance(actionType: Int, actionId: Int): androidx.fragment.app.Fragment {
+        operator fun invoke(actionType: Int, actionId: Int): androidx.fragment.app.Fragment {
             return SoftButtonActionArrayFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ACTION_TYPE, actionType)

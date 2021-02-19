@@ -340,4 +340,5 @@
     <string name="add_filter">フィルタの追加</string>
     <string name="site">サイト</string>
     <string name="updating_ad_filters">広告ブロックフィルタを更新中</string>
+    <string name="do_nothing">なにもしない</string>
 </resources>

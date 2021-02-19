@@ -52,6 +52,10 @@ class SoftButtonActionArrayFile(private val FOLDER_NAME: String, private val id:
         list.add(array)
     }
 
+    operator fun get(no: Int): SoftButtonActionFile {
+        return list[no]
+    }
+
     fun getActionList(no: Int): SoftButtonActionFile {
         if (no < 0)
             throw IllegalArgumentException("no < 0")

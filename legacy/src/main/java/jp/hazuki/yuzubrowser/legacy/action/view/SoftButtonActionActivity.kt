@@ -16,19 +16,12 @@
 
 package jp.hazuki.yuzubrowser.legacy.action.view
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.commit
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager
-import jp.hazuki.yuzubrowser.legacy.action.manager.SoftButtonActionFile
-import jp.hazuki.yuzubrowser.legacy.databinding.FragmentSoftButtonDetailBinding
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
 class SoftButtonActionActivity : ThemeActivity() {
@@ -37,97 +30,43 @@ class SoftButtonActionActivity : ThemeActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_base)
 
-        val intent = intent
-        val mActionType = intent.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, 0)
-        val mActionId = intent.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_ID, 0)
-        title = intent.getStringExtra(Intent.EXTRA_TITLE)
+        intent?.let {
+            val title = it.getStringExtra(Intent.EXTRA_TITLE)
+            setTitle(title)
+        }
 
-        if (mActionType == 0)
-            throw IllegalArgumentException("actiontype is 0")
+        if (savedInstanceState == null) {
+            intent?.let {
+                val isDetail = it.getBooleanExtra(MODE_DETAIL, false)
+                val actionType = it.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, 0)
+                val actionId = it.getIntExtra(ActionManager.INTENT_EXTRA_ACTION_ID, 0)
+                val fragment = if (isDetail) {
+                    val position = it.getIntExtra(EXTRA_ACTION_POSITION, 0)
+                    SoftButtonActionDetailFragment(actionType, actionId, position)
+                } else {
+                    SoftButtonActionArrayFragment(actionType, actionId)
+                }
 
-        val fragment = ActionFragment().apply {
-            arguments = Bundle().apply {
-                putInt(ActionManager.INTENT_EXTRA_ACTION_ID, mActionId)
-                putInt(ActionManager.INTENT_EXTRA_ACTION_TYPE, mActionType)
+                supportFragmentManager.commit {
+                    replace(R.id.container, fragment)
+                }
             }
-        }
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commit()
-    }
-
-    class ActionFragment : Fragment() {
-        private val viewModel by viewModels<SoftButtonDetailViewModel>()
-
-        private lateinit var binding: FragmentSoftButtonDetailBinding
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            binding = FragmentSoftButtonDetailBinding.inflate(inflater, container, false)
-            return binding.root
-        }
-
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            binding.lifecycleOwner = viewLifecycleOwner
-            binding.viewModel = viewModel
-
-            viewModel.buttonEvent.observe(viewLifecycleOwner, this::onClickButton)
-        }
-
-        private fun onClickButton(type: Int) {
-            val activity = requireActivity()
-            val arguments = requireArguments()
-
-            var actionId = arguments.getInt(ActionManager.INTENT_EXTRA_ACTION_ID)
-            actionId = when (type) {
-                0 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_PRESS
-                1 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_LPRESS
-                2 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_UP
-                3 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_DOWN
-                4 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_LEFT
-                5 -> actionId or SoftButtonActionFile.BUTTON_SWIPE_RIGHT
-                else -> throw IllegalArgumentException("Unknown type:$type")
-            }
-
-            ActionActivity.Builder(activity)
-                .setTitle(activity.title)
-                .setActionManager(arguments.getInt(ActionManager.INTENT_EXTRA_ACTION_TYPE), actionId)
-                .show()
         }
     }
 
-    class Builder(private val context: Context) {
-        private val intent = Intent(context.applicationContext, SoftButtonActionActivity::class.java)
 
-        fun setTitle(title: Int): Builder {
-            intent.putExtra(Intent.EXTRA_TITLE, context.getString(title))
-            return this
-        }
+    companion object {
+        const val MODE_DETAIL = "detail"
+        const val EXTRA_ACTION_POSITION = "pos"
 
-        fun setTitle(title: CharSequence): Builder {
-            intent.putExtra(Intent.EXTRA_TITLE, title)
-            return this
-        }
-
-        fun setActionManager(actionType: Int, actionId: Int): Builder {
-            intent.putExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, actionType)
-            intent.putExtra(ActionManager.INTENT_EXTRA_ACTION_ID, actionId)
-            return this
-        }
-
-        fun show() {
-            context.startActivity(intent)
-        }
-
-        fun create(): Intent {
-            return intent
-        }
-
-        fun show(requestCode: Int) {
-            if (context is Activity)
-                context.startActivityForResult(intent, requestCode)
-            else
-                throw IllegalArgumentException("Context is not instanceof Activity")
+        fun createIntent(context: Context, title: String, actionType: Int, actionId: Int, position: Int): Intent {
+            return Intent(context, SoftButtonActionActivity::class.java).apply {
+                putExtra(MODE_DETAIL, true)
+                putExtra(Intent.EXTRA_TITLE, title)
+                putExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, actionType)
+                putExtra(ActionManager.INTENT_EXTRA_ACTION_ID, actionId)
+                putExtra(EXTRA_ACTION_POSITION, position)
+            }
         }
     }
 }

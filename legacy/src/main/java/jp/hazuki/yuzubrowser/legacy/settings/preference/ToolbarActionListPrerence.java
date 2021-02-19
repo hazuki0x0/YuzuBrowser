@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import androidx.preference.Preference;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.action.ActionManager;
-import jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionArrayActivity;
+import jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionActivity;
 
 public class ToolbarActionListPrerence extends Preference {
     private final int mActionId;
@@ -35,7 +35,7 @@ public class ToolbarActionListPrerence extends Preference {
         super.onClick();
 
         Context context = getContext();
-        Intent intent = new Intent(context.getApplicationContext(), SoftButtonActionArrayActivity.class);
+        Intent intent = new Intent(context, SoftButtonActionActivity.class);
         if (mTitle != null) intent.putExtra(Intent.EXTRA_TITLE, mTitle);
         intent.putExtra(ActionManager.INTENT_EXTRA_ACTION_ID, mActionId);
         intent.putExtra(ActionManager.INTENT_EXTRA_ACTION_TYPE, mActionType);

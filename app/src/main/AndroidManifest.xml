@@ -244,12 +244,7 @@
             android:name="jp.hazuki.yuzubrowser.legacy.resblock.ResourceBlockListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/pref_resblock_manage" />
-        <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionArrayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name="jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name=".legacy.action.view.SoftButtonActionActivity" />
         <activity
             android:name="jp.hazuki.yuzubrowser.legacy.useragent.UserAgentSettingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

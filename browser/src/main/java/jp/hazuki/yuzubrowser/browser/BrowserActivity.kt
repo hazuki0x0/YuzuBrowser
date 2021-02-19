@@ -71,7 +71,7 @@ import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.action.Action
-import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
+import jp.hazuki.yuzubrowser.legacy.action.ActionNameMap
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
 import jp.hazuki.yuzubrowser.legacy.action.item.OpenOptionsMenuAction
 import jp.hazuki.yuzubrowser.legacy.action.item.TabListSingleAction
@@ -1472,7 +1472,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     override val toolbarManager: ToolbarManager
         get() = toolbar
 
-    override val actionNameArray: ActionNameArray by lazy { ActionNameArray(this) }
+    override val actionNameArray by lazy { ActionNameMap(resources) }
 
     override var requestedOrientationByCtrl: Int
         get() = requestedOrientation

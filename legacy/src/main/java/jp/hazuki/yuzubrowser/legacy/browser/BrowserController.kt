@@ -25,7 +25,7 @@ import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.appbar.AppBarLayout
-import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
+import jp.hazuki.yuzubrowser.legacy.action.ActionNameMap
 import jp.hazuki.yuzubrowser.legacy.action.item.AutoPageScrollAction
 import jp.hazuki.yuzubrowser.legacy.action.item.OpenOptionsMenuAction
 import jp.hazuki.yuzubrowser.legacy.action.item.TabListSingleAction
@@ -97,7 +97,7 @@ interface BrowserController : BrowserInfo {
     override val currentTabData: MainTabData?
         get() = tabManager.currentTabData
     val pagePaddingHeight: Int
-    val actionNameArray: ActionNameArray
+    val actionNameArray: ActionNameMap
     val webRtcRequest: WebRtcRequest
     val printManager: PrintManager
     val okHttpClient: OkHttpClient

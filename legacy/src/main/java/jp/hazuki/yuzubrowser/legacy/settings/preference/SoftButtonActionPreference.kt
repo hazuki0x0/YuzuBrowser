@@ -1,41 +1,30 @@
-package jp.hazuki.yuzubrowser.legacy.settings.preference;
+package jp.hazuki.yuzubrowser.legacy.settings.preference
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.util.AttributeSet;
+import android.content.Context
+import android.util.AttributeSet
+import androidx.preference.Preference
+import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionActivity
 
-import androidx.preference.Preference;
-import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.action.view.SoftButtonActionActivity;
+class SoftButtonActionPreference(context: Context, attrs: AttributeSet?) : Preference(context, attrs) {
+    private val actionId: Int
+    private val actionType: Int
+    private val title: String
 
-public class SoftButtonActionPreference extends Preference {
-    private final int mActionId;
-    private final int mActionType;
-    private final String mTitle;
-
-    public SoftButtonActionPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ActionListPreference);
-        mActionType = a.getInt(R.styleable.ActionListPreference_actionGroup, 0);
-        mActionId = a.getInt(R.styleable.ActionListPreference_actionId, 0);
-        mTitle = a.getString(R.styleable.ActionListPreference_android_title);
-
-        if (mActionType == 0)
-            throw new IllegalArgumentException("mActionType is zero");
-
-        if (mActionId == 0)
-            throw new IllegalArgumentException("actionId is zero");
-
-        a.recycle();
+    init {
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ActionListPreference)
+        actionType = a.getInt(R.styleable.ActionListPreference_actionGroup, 0)
+        actionId = a.getInt(R.styleable.ActionListPreference_actionId, 0)
+        title = a.getString(R.styleable.ActionListPreference_android_title)!!
+        require(actionType != 0) { "mActionType is zero" }
+        require(actionId != 0) { "actionId is zero" }
+        a.recycle()
     }
 
-    @Override
-    protected void onClick() {
-        super.onClick();
+    override fun onClick() {
+        super.onClick()
 
-        new SoftButtonActionActivity.Builder(getContext())
-                .setTitle(mTitle)
-                .setActionManager(mActionType, mActionId)
-                .show();
+        val intent = SoftButtonActionActivity.createIntent(context, title, actionType, actionId, 0)
+        context.startActivity(intent)
     }
 }

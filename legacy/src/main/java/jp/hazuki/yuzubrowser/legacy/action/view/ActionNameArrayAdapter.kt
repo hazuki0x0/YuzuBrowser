@@ -27,6 +27,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.action.ActionIconMap
 import jp.hazuki.yuzubrowser.legacy.action.ActionNameArray
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
@@ -38,8 +39,7 @@ class ActionNameArrayAdapter(
 ) : RecyclerView.Adapter<ActionNameArrayAdapter.ViewHolder>() {
     private val checked = BooleanArray(itemCount)
     private val inflater = LayoutInflater.from(context)
-    private val iconPosDB = context.resources.getIntArray(R.array.action_values)
-    private val icons = context.resources.obtainTypedArray(R.array.action_icons)
+    private val icons = ActionIconMap(context.resources)
     private var mListener: OnSettingButtonListener? = null
 
     override fun getItemCount(): Int {
@@ -59,9 +59,7 @@ class ActionNameArrayAdapter(
     }
 
     private fun getIcon(position: Int): Drawable? {
-        val iconPos = iconPosDB.indexOf(nameArray.actionValues[position])
-
-        return if (iconPos >= 0) icons.getDrawable(iconPos) else null
+        return icons[nameArray.actionValues[position]]
     }
 
     fun isChecked(position: Int): Boolean {

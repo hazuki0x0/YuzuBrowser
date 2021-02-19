@@ -200,7 +200,7 @@ class UserActionManager(private val context: Context, private val browser: Brows
             gestureItems.forEach {
                 if (info.match(it)) {
                     isShowActionName = true
-                    browser.showActionName(it.action.toString(browser.actionNameArray))
+                    browser.showActionName(browser.actionNameArray[it.action])
                     return
                 }
             }
