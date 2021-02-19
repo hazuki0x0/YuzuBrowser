@@ -86,8 +86,10 @@ import jp.hazuki.yuzubrowser.ui.dialog.SeekBarDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrl
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
+import jp.hazuki.yuzubrowser.ui.utils.checkStoragePermission
 import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
 import jp.hazuki.yuzubrowser.ui.widget.ContextMenuTitleView
+import jp.hazuki.yuzubrowser.webview.CustomWebView
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtils
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
 import jp.hazuki.yuzubrowser.webview.utility.savePictureOverall
@@ -142,19 +144,19 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 1), null)
+                            target.webView.saveBlob(url, 1)
                         } else {
                             DownloadDialog(url, target.webView.webSettings.userAgentString)//TODO referer
-                                    .show(controller.activity.supportFragmentManager, "download")
+                                .show()
                         }
                         return true
                     }
                     SingleAction.LPRESS_SAVE_PAGE -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 2), null)
+                            target.webView.saveBlob(url, 2)
                         } else {
                             val file = DownloadFile(url, null, DownloadRequest(null, target.webView.webSettings.userAgentString, null))
-                            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                            file.download()
                         }
                         return true
                     }
@@ -170,12 +172,12 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_ADD_BLACK_LIST -> {
                         AddAdBlockDialog.addBackListInstance(result.extra)
-                                .show(controller.activity.supportFragmentManager, "add black")
+                            .show(controller.activity.supportFragmentManager, "add black")
                         return true
                     }
                     SingleAction.LPRESS_ADD_WHITE_LIST -> {
                         AddAdBlockDialog.addWhiteListInstance(result.extra)
-                                .show(controller.activity.supportFragmentManager, "add white")
+                            .show(controller.activity.supportFragmentManager, "add white")
                         return true
                     }
                     else -> return run(action, target, null)
@@ -217,10 +219,10 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 1), null)
+                            target.webView.saveBlob(url, 1)
                         } else {
                             DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
-                                    .show(controller.activity.supportFragmentManager, "download")
+                                .show()
                         }
                         return true
                     }
@@ -243,35 +245,35 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_SHARE_IMAGE -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 3), null)
+                            target.webView.saveBlob(url, 3)
                         } else {
                             val intent = FastDownloadActivity.intent(
-                                    controller.activity,
-                                    url, target.webView.url,
-                                    target.webView.getUserAgent(),
-                                    ".jpg")
+                                controller.activity,
+                                url, target.webView.url,
+                                target.webView.getUserAgent(),
+                                ".jpg")
                             controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
                         }
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 2), null)
+                            target.webView.saveBlob(url, 2)
                         } else {
                             val file = DownloadFile(url, null,
-                                    DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
-                            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                                DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
+                            file.download()
                         }
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
                         AddAdBlockDialog.addBackListInstance(url)
-                                .show(controller.activity.supportFragmentManager, "add black")
+                            .show(controller.activity.supportFragmentManager, "add black")
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST -> {
                         AddAdBlockDialog.addWhiteListInstance(url)
-                                .show(controller.activity.supportFragmentManager, "add white")
+                            .show(controller.activity.supportFragmentManager, "add white")
                         return true
                     }
                     else -> return run(action, target, null)
@@ -313,8 +315,8 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_SAVE_PAGE_AS -> {
                         target.webView.requestFocusNodeHref(WebImageHandler(controller.activity,
-                                target.webView.webSettings.userAgentString
-                                        ?: WebSettings.getDefaultUserAgent(controller.applicationContextInfo)).obtainMessage())
+                            target.webView.webSettings.userAgentString
+                                ?: WebSettings.getDefaultUserAgent(controller.applicationContextInfo)).obtainMessage())
                         return true
                     }
                     SingleAction.LPRESS_OPEN_IMAGE -> {
@@ -351,10 +353,10 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_SAVE_IMAGE_AS -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 1), null)
+                            target.webView.saveBlob(url, 1)
                         } else {
                             DownloadDialog(url, target.webView.webSettings.userAgentString, target.webView.url, ".jpg")
-                                    .show(controller.activity.supportFragmentManager, "download")
+                                .show()
                         }
                         return true
                     }
@@ -377,26 +379,26 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_SHARE_IMAGE -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 3), null)
+                            target.webView.saveBlob(url, 3)
                         } else {
                             val webView = target.webView
                             val intent = FastDownloadActivity.intent(
-                                    controller.activity,
-                                    url,
-                                    webView.url,
-                                    webView.getUserAgent(),
-                                    ".jpg")
+                                controller.activity,
+                                url,
+                                webView.url,
+                                webView.getUserAgent(),
+                                ".jpg")
                             controller.startActivity(intent, BrowserController.REQUEST_SHARE_IMAGE)
                         }
                         return true
                     }
                     SingleAction.LPRESS_SAVE_IMAGE -> {
                         if (url.startsWith("blob:")) {
-                            target.webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, 2), null)
+                            target.webView.saveBlob(url, 2)
                         } else {
                             val file = DownloadFile(url, null,
-                                    DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
-                            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), file, null)
+                                DownloadRequest(target.webView.url, target.webView.webView.settings.userAgentString, ".jpg"))
+                            file.download()
                         }
                         return true
                     }
@@ -406,13 +408,13 @@ class ActionExecutor(
                     }
                     SingleAction.LPRESS_ADD_IMAGE_BLACK_LIST -> {
                         AddAdBlockDialog.addBackListInstance(url)
-                                .show(controller.activity.supportFragmentManager, "add black")
+                            .show(controller.activity.supportFragmentManager, "add black")
                         return true
                     }
                     SingleAction.LPRESS_ADD_WHITE_LIST -> {
                         target.webView.requestFocusNodeHref(WebSrcImageWhiteListHandler(controller.activity).obtainMessage())
                         AddAdBlockDialog.addWhiteListInstance(url)
-                                .show(controller.activity.supportFragmentManager, "add white")
+                            .show(controller.activity.supportFragmentManager, "add white")
                         return true
                     }
                     SingleAction.LPRESS_ADD_IMAGE_WHITE_LIST -> {
@@ -1048,6 +1050,36 @@ class ActionExecutor(
             }
         }
         return true
+    }
+
+    private fun CustomWebView.saveBlob(url: String, type: Int) {
+        requireStoragePermission {
+            webView.evaluateJavascript(controller.activity.getBlobDownloadJavaScript(url, controller.secretKey, type), null)
+        }
+    }
+
+    private fun DownloadDialog.show() {
+        requireStoragePermission {
+            show(controller.activity.supportFragmentManager, "")
+        }
+    }
+
+    private fun DownloadFile.download() {
+        requireStoragePermission {
+            controller.activity.download(getDownloadFolderUri(controller.applicationContextInfo), this, null)
+        }
+    }
+
+    private inline fun requireStoragePermission(crossinline block: () -> Unit) {
+        if (controller.applicationContextInfo.checkStoragePermission()) {
+            block()
+        } else {
+            ui {
+                if (controller.requestStoragePermission()) {
+                    block()
+                }
+            }
+        }
     }
 
     private fun performNewTabLink(perform: Int, tab: MainTabData, url: String, @TabType type: Int): Boolean {

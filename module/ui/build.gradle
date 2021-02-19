@@ -86,5 +86,6 @@ dependencies {
     implementation Libs.kotlin_coroutines_android
     implementation project(':module:core')
     implementation project(':languages')
+    implementation project(':libraries:asyncpermissions')
     implementation project(':libraries:floatingactionbutton')
 }

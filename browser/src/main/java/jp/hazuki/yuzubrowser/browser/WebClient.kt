@@ -40,6 +40,7 @@ import jp.hazuki.yuzubrowser.bookmark.view.BookmarkActivity
 import jp.hazuki.yuzubrowser.core.cache.SoftCache
 import jp.hazuki.yuzubrowser.core.utility.extensions.*
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.*
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
@@ -82,6 +83,7 @@ import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.settings.PreferenceConstants
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.utils.checkStoragePermission
 import jp.hazuki.yuzubrowser.ui.widget.longToast
 import jp.hazuki.yuzubrowser.webview.CustomWebChromeClient
 import jp.hazuki.yuzubrowser.webview.CustomWebView
@@ -632,7 +634,15 @@ class WebClient(
     private fun onDownloadStart(web: CustomWebView, url: String, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
         val referrer = web.url
         if (url.startsWith("blob")) {
-            web.evaluateJavascript(activity.getBlobDownloadJavaScript(url, controller.secretKey), null)
+            if (controller.applicationContextInfo.checkStoragePermission()) {
+                web.evaluateJavascript(activity.getBlobDownloadJavaScript(url, controller.secretKey), null)
+            } else {
+                ui {
+                    if (controller.requestStoragePermission()) {
+                        web.evaluateJavascript(activity.getBlobDownloadJavaScript(url, controller.secretKey), null)
+                    }
+                }
+            }
             return
         }
 
@@ -671,7 +681,15 @@ class WebClient(
     }
 
     private fun actionDownload(url: String, referrer: String?, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {
-        activity.showDialog(DownloadDialog(url, userAgent, contentDisposition, mimetype, contentLength, referrer), "download")
+        if (controller.applicationContextInfo.checkStoragePermission()) {
+            activity.showDialog(DownloadDialog(url, userAgent, contentDisposition, mimetype, contentLength, referrer), "download")
+        } else {
+            ui {
+                if (controller.requestStoragePermission()) {
+                    activity.showDialog(DownloadDialog(url, userAgent, contentDisposition, mimetype, contentLength, referrer), "download")
+                }
+            }
+        }
     }
 
     private fun actionOpen(url: String, referrer: String?, userAgent: String, contentDisposition: String, mimetype: String, contentLength: Long) {

@@ -25,9 +25,9 @@ import android.widget.TextView
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.browser.BrowserController
-import jp.hazuki.yuzubrowser.legacy.browser.checkLocationPermission
 import jp.hazuki.yuzubrowser.legacy.toolbar.SubToolbar
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
+import jp.hazuki.yuzubrowser.ui.utils.checkLocationPermission
 
 open class GeolocationPermissionToolbar(
     context: Context,

@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.download.ui
 
+import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -24,6 +25,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.asyncpermissions.AsyncPermissions
+import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
@@ -37,6 +40,8 @@ import jp.hazuki.yuzubrowser.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.download.getDownloadDocumentFile
 import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
+import jp.hazuki.yuzubrowser.ui.utils.checkStoragePermission
+import jp.hazuki.yuzubrowser.ui.utils.openRequestPermissionSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -63,6 +68,14 @@ class FastDownloadActivity : DaggerThemeActivity() {
         }
 
         ui {
+            if (!checkStoragePermission()) {
+                val permissions = AsyncPermissions(this@FastDownloadActivity)
+                if (!requestStoragePermission(permissions)) {
+                    finish()
+                    return@ui
+                }
+            }
+
             val dialog = ProgressDialog(getString(R.string.now_downloading))
             dialog.show(supportFragmentManager, "dialog")
             val uri = withContext(Dispatchers.Default) {
@@ -138,6 +151,26 @@ class FastDownloadActivity : DaggerThemeActivity() {
         }
 
         return if (result) info.root.findFile(info.name)?.uri else null
+    }
+
+    private suspend fun requestStoragePermission(asyncPermissions: AsyncPermissions): Boolean {
+        return handleStoragePermissionResult(
+            asyncPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        )
+    }
+
+    private suspend fun handleStoragePermissionResult(result: PermissionResult): Boolean {
+        return when (result) {
+            is PermissionResult.Granted -> true
+            is PermissionResult.ShouldShowRationale -> {
+                return handleStoragePermissionResult(result.proceed())
+            }
+            is PermissionResult.NeverAskAgain -> {
+                openRequestPermissionSettings(getString(R.string.request_permission_storage_setting))
+                false
+            }
+            else -> false
+        }
     }
 
     companion object {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.browser
+package jp.hazuki.yuzubrowser.ui.utils
 
 import android.Manifest
 import android.app.Activity
@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
-import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.ui.R
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.widget.longToast
 import java.lang.ref.SoftReference
@@ -41,10 +41,6 @@ fun Activity.checkBrowserPermission(): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true
     if (checkNeed()) {
         return false
-    } else {
-        if (!checkStoragePermission()) {
-            return false
-        }
     }
     return true
 }
@@ -53,8 +49,6 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return
     if (checkNeed()) {
         setNoNeed(true)
-    } else {
-        if (supportFragmentManager.findFragmentByTag("permission") != null) return
     }
 
     val requests = arrayOf(
@@ -70,7 +64,7 @@ suspend fun AppCompatActivity.requestBrowserPermissions(asyncPermissions: AsyncP
     )
 }
 
-fun Activity.checkStoragePermission(): Boolean {
+fun Context.checkStoragePermission(): Boolean {
     return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     } else {

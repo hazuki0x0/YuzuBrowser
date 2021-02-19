@@ -36,6 +36,7 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import jp.hazuki.yuzubrowser.ui.extensions.decodePunyCodeUrlHost
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
+import jp.hazuki.yuzubrowser.ui.utils.checkStoragePermission
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -74,6 +75,10 @@ class ReaderFragment : DaggerFragment() {
                     Toast.makeText(activity, R.string.font_not_found, Toast.LENGTH_SHORT).show()
                 }
             } else {
+                if (!activity.checkStoragePermission()) {
+                    Toast.makeText(activity, R.string.font_not_found, Toast.LENGTH_SHORT).show()
+                    return
+                }
                 val isPath = fontPath.startsWith('/')
                 val path = if (isPath) fontPath else Uri.parse(fontPath).path!!
                 val font = File(path)

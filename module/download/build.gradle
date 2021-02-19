@@ -75,6 +75,7 @@ dependencies {
     implementation project(':module:ui')
     implementation project(':languages')
     implementation project(':module:webview')
+    implementation project(':libraries:asyncpermissions')
 
     implementation Libs.okhttp
     implementation Libs.header_decor

@@ -21,7 +21,7 @@ import android.content.Context
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.browser.openRequestPermissionSettings
+import jp.hazuki.yuzubrowser.ui.utils.openRequestPermissionSettings
 
 class WebRtcPermissionHandler(private val context: Context, private val asyncPermissions: AsyncPermissions) {
 

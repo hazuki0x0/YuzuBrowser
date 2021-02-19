@@ -105,8 +105,7 @@ import jp.hazuki.yuzubrowser.ui.*
 import jp.hazuki.yuzubrowser.ui.app.SystemUiController
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
-import jp.hazuki.yuzubrowser.ui.utils.makeUrl
-import jp.hazuki.yuzubrowser.ui.utils.makeUrlFromQuery
+import jp.hazuki.yuzubrowser.ui.utils.*
 import jp.hazuki.yuzubrowser.ui.widget.PointerView
 import jp.hazuki.yuzubrowser.webview.CustomWebHistoryItem
 import jp.hazuki.yuzubrowser.webview.CustomWebView
@@ -1726,6 +1725,26 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
             }
             is PermissionResult.NeverAskAgain -> {
                 openRequestPermissionSettings(getString(R.string.request_permission_location_setting))
+                false
+            }
+            else -> false
+        }
+    }
+
+    override suspend fun requestStoragePermission(): Boolean {
+        return handleStoragePermissionResult(
+            asyncPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        )
+    }
+
+    private suspend fun handleStoragePermissionResult(result: PermissionResult): Boolean {
+        return when (result) {
+            is PermissionResult.Granted -> true
+            is PermissionResult.ShouldShowRationale -> {
+                return handleStoragePermissionResult(result.proceed())
+            }
+            is PermissionResult.NeverAskAgain -> {
+                openRequestPermissionSettings(getString(R.string.request_permission_storage_setting))
                 false
             }
             else -> false

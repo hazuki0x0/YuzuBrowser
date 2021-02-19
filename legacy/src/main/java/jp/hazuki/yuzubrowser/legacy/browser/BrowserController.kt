@@ -83,6 +83,7 @@ interface BrowserController : BrowserInfo {
     fun adjustBrowserPadding(tab: MainTabData)
     fun onPageFinished()
     suspend fun requestLocationPermission(): Boolean
+    suspend fun requestStoragePermission(): Boolean
 
     val secretKey: String
     val tabManager: TabManager
