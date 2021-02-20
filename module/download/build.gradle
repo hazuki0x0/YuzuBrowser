@@ -69,7 +69,6 @@ dependencies {
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation Libs.kotlin_anko_sql
 
     implementation project(':module:core')
     implementation project(':module:ui')
