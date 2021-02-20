@@ -26,6 +26,9 @@ interface DownloadsDao {
     @Insert
     fun insert(info: DownloadFileInfo): Long
 
+    @Insert
+    suspend fun insertAsync(info: DownloadFileInfo): Long
+
     @Update
     fun update(info: DownloadFileInfo)
 
@@ -44,9 +47,6 @@ interface DownloadsDao {
 
     @Delete
     suspend fun delete(list: List<DownloadFileInfo>)
-
-    @Query("delete from downloads where id = :id")
-    suspend fun delete(id: Long)
 
     @Query("update downloads set state = ${(DownloadFileInfo.STATE_UNKNOWN_ERROR or DownloadFileInfo.STATE_PAUSED)} where state = ${DownloadFileInfo.STATE_DOWNLOADING}")
     fun cleanUp()

@@ -42,7 +42,6 @@ import jp.hazuki.yuzubrowser.download.repository.DownloadsDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
 class DownloadListAdapter(
@@ -65,11 +64,9 @@ class DownloadListAdapter(
         private set
 
     init {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.Main) {
             items.addAll(dao.getList(0, 100))
-            withContext(Dispatchers.Main) {
-                notifyDataSetChanged()
-            }
+            notifyDataSetChanged()
         }
     }
 
@@ -225,20 +222,16 @@ class DownloadListAdapter(
             items.clear()
             notifyDataSetChanged()
             decoration?.clearHeaderCache()
-            withContext(Dispatchers.IO) {
-                items.addAll(dao.getList(itemCount, 100))
-            }
+            items.addAll(dao.getList(itemCount, 100))
             notifyDataSetChanged()
         }
     }
 
     fun loadMore() {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.Main) {
             items.addAll(dao.getList(itemCount, 100))
-            withContext(Dispatchers.Main) {
-                decoration?.clearHeaderCache()
-                notifyDataSetChanged()
-            }
+            decoration?.clearHeaderCache()
+            notifyDataSetChanged()
         }
     }
 

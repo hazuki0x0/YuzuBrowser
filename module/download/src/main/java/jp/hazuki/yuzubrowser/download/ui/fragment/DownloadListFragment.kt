@@ -174,7 +174,7 @@ class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientList
 
         if (info.state != DownloadFileInfo.STATE_DOWNLOADING) {
             menu.add(R.string.clear_download).setOnMenuItemClickListener {
-                GlobalScope.launch(Dispatchers.IO) {
+                GlobalScope.launch(Dispatchers.Main) {
                     downloadsDao.delete(info)
                 }
                 val index = adapter.indexOf(info)
@@ -187,7 +187,8 @@ class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientList
 
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED && file != null) {
             menu.add(R.string.delete_download).setOnMenuItemClickListener {
-                GlobalScope.launch(Dispatchers.IO) {
+                deleteFile(info)
+                GlobalScope.launch(Dispatchers.Main) {
                     downloadsDao.delete(info)
                 }
                 val index = adapter.indexOf(info)
@@ -196,6 +197,14 @@ class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientList
                 }
                 false
             }
+        }
+    }
+
+    private fun deleteFile(info: DownloadFileInfo) {
+        val file = info.root.toDocumentFile(requireContext())
+        when {
+            file.isFile -> file.delete()
+            file.isDirectory -> file.findFile(info.name)?.delete()
         }
     }
 
@@ -240,7 +249,7 @@ class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientList
                                 items[it.name]?.delete()
                             }
                         }
-                        GlobalScope.launch(Dispatchers.IO) {
+                        GlobalScope.launch(Dispatchers.Main) {
                             downloadsDao.delete(selectedItems)
                             adapter.reload()
                         }
@@ -256,7 +265,7 @@ class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientList
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_download_list)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
-                        GlobalScope.launch(Dispatchers.IO) {
+                        GlobalScope.launch(Dispatchers.Main) {
                             downloadsDao.delete(adapter.getSelectedItems())
                             adapter.reload()
                         }

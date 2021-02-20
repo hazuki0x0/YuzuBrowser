@@ -160,15 +160,13 @@ private suspend fun onDownload(
 ) {
     val name = file.name!!
 
-    val info = withContext(Dispatchers.IO) {
-        DownloadFileInfo(root.uri, file, MetaData(name, MIME_TYPE_MHTML, size, false)).also {
-            it.state = if (success) {
-                DownloadFileInfo.STATE_DOWNLOADED
-            } else {
-                DownloadFileInfo.STATE_UNKNOWN_ERROR
-            }
-            it.id = dao.insert(it)
+    val info = DownloadFileInfo(root.uri, file, MetaData(name, MIME_TYPE_MHTML, size, false)).also {
+        it.state = if (success) {
+            DownloadFileInfo.STATE_DOWNLOADED
+        } else {
+            DownloadFileInfo.STATE_UNKNOWN_ERROR
         }
+        it.id = dao.insertAsync(it)
     }
 
     if (success) {
