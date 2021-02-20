@@ -22,6 +22,7 @@ import android.webkit.WebSettings
 import androidx.annotation.RequiresApi
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+import jp.hazuki.yuzubrowser.webview.utility.trimForHttpHeader
 
 class YuzuWebSettings(private val origin: WebSettings) {
 
@@ -239,7 +240,7 @@ class YuzuWebSettings(private val origin: WebSettings) {
     var userAgentString: String?
         get() = origin.userAgentString
         set(ua) {
-            origin.userAgentString = ua
+            origin.userAgentString = trimForHttpHeader(ua)
         }
 
     var cacheMode: Int

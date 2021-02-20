@@ -54,3 +54,7 @@ fun CustomWebView.savePicturePart(fileName: String): Boolean {
         bitmap?.recycle()
     }
 }
+
+internal fun trimForHttpHeader(str: String?): String? {
+    return str?.replace(Regex("[\r\n]"), "")
+}

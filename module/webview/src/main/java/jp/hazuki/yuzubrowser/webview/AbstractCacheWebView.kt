@@ -37,6 +37,7 @@ import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
 import jp.hazuki.yuzubrowser.webview.page.WebViewPage
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
+import jp.hazuki.yuzubrowser.webview.utility.trimForHttpHeader
 
 internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(context), CustomWebView, WebViewUtility {
     protected var id = System.currentTimeMillis()
@@ -597,7 +598,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
             cachedMap.putAll(this)
         }
 
-        if (referrer != null) cachedMap["Referer"] = referrer
+        if (referrer != null) cachedMap["Referer"] = trimForHttpHeader(referrer)
         return cachedMap
     }
 
@@ -607,7 +608,7 @@ internal abstract class AbstractCacheWebView(context: Context) : FrameLayout(con
 
     protected fun getReferrerMap(referrer: String?): MutableMap<String, String> {
         if (referrer == null) return mutableEmptyMap
-        referrerMap["Referer"] = referrer
+        referrerMap["Referer"] = trimForHttpHeader(referrer)
 
         return referrerMap
     }
