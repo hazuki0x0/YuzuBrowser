@@ -23,6 +23,7 @@ import android.net.Uri
 import android.text.format.Formatter
 import android.util.Base64
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.FileUtils
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
 import jp.hazuki.yuzubrowser.core.utility.utils.getExtensionFromMimeType
@@ -256,12 +257,12 @@ internal fun DownloadFileInfo.getNotificationString(context: Context): String {
     }
 }
 
-internal fun DownloadFileInfo.getFile(): DocumentFile? {
-
+internal fun DownloadFileInfo.getFile(context: Context): DocumentFile? {
     return if (state == DownloadFileInfo.STATE_DOWNLOADED) {
+        val file = root.toDocumentFile(context)
         when {
-            root.isFile -> root
-            root.isDirectory -> root.findFile(name)
+            file.isFile -> file
+            file.isDirectory -> file.findFile(name)
             else -> null
         }
     } else {

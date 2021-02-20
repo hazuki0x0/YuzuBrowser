@@ -38,18 +38,22 @@ import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.utils.getNotificationString
 import jp.hazuki.yuzubrowser.download.databinding.FragmentDownloadListItemBinding
-import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
+import jp.hazuki.yuzubrowser.download.repository.DownloadsDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class DownloadListAdapter(
     private val context: Context,
     private val lifecycleOwner: LifecycleOwner,
-    private val database: DownloadDatabase,
+    private val dao: DownloadsDao,
     private val listener: OnRecyclerMenuListener
 ) : RecyclerView.Adapter<DownloadListAdapter.InfoHolder>(),
         StickyHeaderAdapter<DownloadListAdapter.HeaderHolder> {
 
-    private val items = ArrayList(database.getList(0, 100))
+    private val items = mutableListOf<DownloadFileInfo>()
     private val inflater = LayoutInflater.from(context)
     private val calendar = Calendar.getInstance()
     private val dateFormat = DateFormat.getLongDateFormat(context)
@@ -59,6 +63,15 @@ class DownloadListAdapter(
 
     var selectedItemCount: Int = 0
         private set
+
+    init {
+        GlobalScope.launch(Dispatchers.IO) {
+            items.addAll(dao.getList(0, 100))
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
+        }
+    }
 
     private val itemSelected = SparseBooleanArray()
     private val foregroundOverlay = ColorDrawable(context.getResColor(R.color.selected_overlay))
@@ -208,16 +221,25 @@ class DownloadListAdapter(
     }
 
     fun reload() {
-        items.clear()
-        items.addAll(database.getList(itemCount, 100))
-        decoration?.clearHeaderCache()
-        notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.Main) {
+            items.clear()
+            notifyDataSetChanged()
+            decoration?.clearHeaderCache()
+            withContext(Dispatchers.IO) {
+                items.addAll(dao.getList(itemCount, 100))
+            }
+            notifyDataSetChanged()
+        }
     }
 
     fun loadMore() {
-        items.addAll(database.getList(itemCount, 100))
-        decoration?.clearHeaderCache()
-        notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.IO) {
+            items.addAll(dao.getList(itemCount, 100))
+            withContext(Dispatchers.Main) {
+                decoration?.clearHeaderCache()
+                notifyDataSetChanged()
+            }
+        }
     }
 
     fun toggle(position: Int) {

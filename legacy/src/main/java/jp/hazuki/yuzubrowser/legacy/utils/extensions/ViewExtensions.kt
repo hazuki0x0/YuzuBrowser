@@ -34,7 +34,7 @@ import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.createFileOpenIntent
-import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
+import jp.hazuki.yuzubrowser.download.repository.DownloadsDao
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.widget.toast
 import jp.hazuki.yuzubrowser.webview.CustomWebView
@@ -44,19 +44,19 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
-fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        val outFile = root.uri.getWritableFileOrNull()
-
-        if (outFile != null && outFile.exists()) {
-            val downloadedFile = File(outFile, file.name!!)
-            saveWebArchiveMethod(downloadedFile.toString())
-            onDownload(webView.context, root, file, DocumentFile.fromFile(downloadedFile), true, downloadedFile.length())
-            return
-        }
-    }
-
+fun CustomWebView.saveArchive(downloadsDao: DownloadsDao, root: DocumentFile, file: DownloadFile) {
     ui {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            val outFile = root.uri.getWritableFileOrNull()
+
+            if (outFile != null && outFile.exists()) {
+                val downloadedFile = File(outFile, file.name!!)
+                saveWebArchiveMethod(downloadedFile.toString())
+                onDownload(webView.context, downloadsDao, root, file, DocumentFile.fromFile(downloadedFile), true, downloadedFile.length())
+                return@ui
+            }
+        }
+
         val context = webView.context
         val tmpFile = File(context.cacheDir, "page.tmp")
         saveWebArchiveMethod(tmpFile.absolutePath)
@@ -77,7 +77,7 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
             val name = file.name!!
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && root.uri.scheme == "file") {
-                context.copyArchive(tmpFile, name, file)
+                context.copyArchive(downloadsDao, tmpFile, name, file)
                 return@ui
             }
             val saveTo = root.createFile(MIME_TYPE_MHTML, name)
@@ -97,12 +97,12 @@ fun CustomWebView.saveArchive(root: DocumentFile, file: DownloadFile) {
 
             success = saveTo.exists()
 
-            onDownload(context, root, file, saveTo, success, size)
+            onDownload(context, downloadsDao, root, file, saveTo, success, size)
         }
     }
 }
 
-private fun Context.copyArchive(tmpFile: File, name: String, file: DownloadFile) {
+private suspend fun Context.copyArchive(downloadsDao: DownloadsDao, tmpFile: File, name: String, file: DownloadFile) {
     val values = ContentValues().apply {
         put(MediaStore.Downloads.DISPLAY_NAME, name)
         put(MediaStore.Downloads.MIME_TYPE, getMimeType(name))
@@ -118,50 +118,70 @@ private fun Context.copyArchive(tmpFile: File, name: String, file: DownloadFile)
         return
     }
 
-    try {
-        contentResolver.openOutputStream(uri)?.use { os ->
-            tmpFile.inputStream().use {
-                it.copyTo(os)
-                values.apply {
-                    clear()
-                    put(MediaStore.Downloads.IS_PENDING, 0)
+    val result = withContext(Dispatchers.IO) {
+        try {
+            contentResolver.openOutputStream(uri)?.use { os ->
+                tmpFile.inputStream().use {
+                    it.copyTo(os)
+                    values.apply {
+                        clear()
+                        put(MediaStore.Downloads.IS_PENDING, 0)
+                    }
+                    val dFile = DocumentFile.fromSingleUri(this@copyArchive, uri)!!
+                    val size = dFile.length()
+                    val info = DownloadFileInfo(uri, file, MetaData(name, MIME_TYPE_MHTML, size, false))
+                    info.state = DownloadFileInfo.STATE_DOWNLOADED
+                    downloadsDao.insert(info)
+                    contentResolver.update(uri, values, null, null)
+                    return@withContext true
                 }
-                val dFile = DocumentFile.fromSingleUri(this, uri)!!
-                val size = dFile.length()
-                val info = DownloadFileInfo(dFile, file, MetaData(name, MIME_TYPE_MHTML, size, false))
-                info.state = DownloadFileInfo.STATE_DOWNLOADED
-                DownloadDatabase.getInstance(this).insert(info)
-                contentResolver.update(uri, values, null, null)
-                return
             }
+        } catch (e: IOException) {
+            ErrorReport.printAndWriteLog(e)
+        } finally {
+            tmpFile.delete()
         }
-    } catch (e: IOException) {
-        ErrorReport.printAndWriteLog(e)
-    } finally {
-        tmpFile.delete()
+        return@withContext false
     }
 
-    contentResolver.delete(uri, null, null)
+    if (!result) {
+        contentResolver.delete(uri, null, null)
+    }
 }
 
-private fun onDownload(context: Context, root: DocumentFile, file: DownloadFile, downloadedFile: DocumentFile, success: Boolean, size: Long) {
+private suspend fun onDownload(
+    context: Context,
+    dao: DownloadsDao,
+    root: DocumentFile,
+    file: DownloadFile,
+    downloadedFile: DocumentFile,
+    success: Boolean,
+    size: Long
+) {
     val name = file.name!!
 
-    val info = DownloadFileInfo(root, file, MetaData(name, MIME_TYPE_MHTML, size, false))
-    info.state = if (success) DownloadFileInfo.STATE_DOWNLOADED else DownloadFileInfo.STATE_UNKNOWN_ERROR
-    DownloadDatabase.getInstance(context).insert(info)
+    val info = withContext(Dispatchers.IO) {
+        DownloadFileInfo(root.uri, file, MetaData(name, MIME_TYPE_MHTML, size, false)).also {
+            it.state = if (success) {
+                DownloadFileInfo.STATE_DOWNLOADED
+            } else {
+                DownloadFileInfo.STATE_UNKNOWN_ERROR
+            }
+            it.id = dao.insert(it)
+        }
+    }
 
     if (success) {
         context.toast(context.getString(R.string.saved_file) + name)
 
         val notify = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DOWNLOAD_NOTIFY)
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true)
-                .setContentTitle(name)
-                .setContentText(context.getText(R.string.download_success))
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                .setContentIntent(PendingIntent.getActivity(context.applicationContext, 0, info.createFileOpenIntent(context, downloadedFile), 0))
-                .build()
+            .setWhen(System.currentTimeMillis())
+            .setAutoCancel(true)
+            .setContentTitle(name)
+            .setContentText(context.getText(R.string.download_success))
+            .setSmallIcon(android.R.drawable.stat_sys_download_done)
+            .setContentIntent(PendingIntent.getActivity(context.applicationContext, 0, info.createFileOpenIntent(context, downloadedFile), 0))
+            .build()
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.notify(info.id.toInt(), notify)

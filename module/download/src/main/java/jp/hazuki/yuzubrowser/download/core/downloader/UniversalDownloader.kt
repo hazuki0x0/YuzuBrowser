@@ -19,7 +19,9 @@ package jp.hazuki.yuzubrowser.download.core.downloader
 import android.content.Context
 import android.webkit.CookieManager
 import android.webkit.WebSettings
+import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
@@ -58,17 +60,18 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
             conn.setRequestProperty("User-Agent", request.userAgent)
         }
 
+        val rootFile = info.root.toDocumentFile(context)
         val downloadFile = if (request.isScopedStorageMode) {
-            info.root
+            rootFile
         } else {
-            val existTmp = info.root.findFile("${info.name}$TMP_FILE_SUFFIX")
+            val existTmp = rootFile.findFile("${info.name}$TMP_FILE_SUFFIX")
 
             if (info.resumable) {
                 info.resumable = false
             }
 
             existTmp
-                ?: info.root.createFile(info.mimeType, "${info.name}$TMP_FILE_SUFFIX")
+                ?: rootFile.createFile(info.mimeType, "${info.name}$TMP_FILE_SUFFIX")
                 ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX")
         }
 
@@ -111,25 +114,25 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                 }
             }
 
-            var downloadedFile: androidx.documentfile.provider.DocumentFile? = null
+            var downloadedFile: DocumentFile? = null
 
             if (abort) {
-                deleteTempIfNeed()
+                deleteTempIfNeed(rootFile)
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
                 if (request.isScopedStorageMode) {
-                    downloadedFile = info.root
+                    downloadedFile = rootFile
                 } else {
                     if (!downloadFile.renameTo(info.name)) {
-                        downloadedFile = info.root.findFile(info.name)
+                        downloadedFile = rootFile.findFile(info.name)
                         if (downloadedFile == null)
-                            throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                            throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${rootFile.uri}, mimetype:${info.mimeType}, exists:${rootFile.findFile(info.name) != null}")
                     }
 
-                    downloadedFile = downloadedFile ?: info.root.findFile(info.name)
+                    downloadedFile = downloadedFile ?: rootFile.findFile(info.name)
                     if (downloadedFile == null) {
-                        throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                        throw DownloadException("File not found. name:\"${info.name}\", download path:${rootFile.uri}")
                     }
                 }
             }
@@ -163,9 +166,9 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
         abort = true
     }
 
-    private fun deleteTempIfNeed() {
+    private fun deleteTempIfNeed(rootFile: DocumentFile) {
         if (info.state == DownloadFileInfo.STATE_UNKNOWN_ERROR || info.state == DownloadFileInfo.STATE_CANCELED) {
-            info.root.findFile("${info.name}$TMP_FILE_SUFFIX")?.delete()
+            rootFile.findFile("${info.name}$TMP_FILE_SUFFIX")?.delete()
         }
     }
 

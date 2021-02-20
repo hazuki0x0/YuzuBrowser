@@ -24,10 +24,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
-import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.getMimeTypeFromExtension
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.R
@@ -111,7 +111,7 @@ class FastDownloadActivity : DaggerThemeActivity() {
         val root = applicationContext.getDownloadDocumentFile()
         val file = DownloadFile(url, null, DownloadRequest(referrer, ua, defExt))
         val meta = MetaData(applicationContext, okHttpClient, root, file.url, file.request)
-        val info = DownloadFileInfo(root, file, meta)
+        val info = DownloadFileInfo(root.uri, file, meta)
 
         if (!checkValidRootDir(root.uri)) {
             file.request.isScopedStorageMode = true
@@ -126,7 +126,7 @@ class FastDownloadActivity : DaggerThemeActivity() {
 
             val collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
             val itemUri = contentResolver.insert(collection, values) ?: return null
-            info.root = DocumentFile.fromSingleUri(applicationContext, itemUri)!!
+            info.root = itemUri
         }
 
         val downloader = Downloader.getDownloader(applicationContext, okHttpClient, info, file.request)
@@ -138,11 +138,11 @@ class FastDownloadActivity : DaggerThemeActivity() {
                 val values = ContentValues().apply {
                     put(MediaStore.Downloads.IS_PENDING, 0)
                 }
-                contentResolver.update(info.root.uri, values, null, null)
+                contentResolver.update(info.root, values, null, null)
 
-                info.root.uri
+                info.root
             } else {
-                val failedFile = info.root
+                val failedFile = info.root.toDocumentFile(this)
                 if (failedFile.exists()) {
                     contentResolver.delete(failedFile.uri, null, null)
                 }
@@ -150,7 +150,7 @@ class FastDownloadActivity : DaggerThemeActivity() {
             }
         }
 
-        return if (result) info.root.findFile(info.name)?.uri else null
+        return if (result) info.root.toDocumentFile(this).findFile(info.name)?.uri else null
     }
 
     private suspend fun requestStoragePermission(asyncPermissions: AsyncPermissions): Boolean {

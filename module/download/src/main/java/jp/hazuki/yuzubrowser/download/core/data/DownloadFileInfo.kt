@@ -16,13 +16,18 @@
 
 package jp.hazuki.yuzubrowser.download.core.data
 
-import androidx.documentfile.provider.DocumentFile
+import android.net.Uri
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
-class DownloadFileInfo(
+@Entity(tableName = "downloads")
+data class DownloadFileInfo(
+    @PrimaryKey(autoGenerate = true)
     var id: Long,
     val url: String,
     val mimeType: String,
-    var root: DocumentFile,
+    var root: Uri,
     val name: String,
     var size: Long,
     var resumable: Boolean = false,
@@ -31,22 +36,25 @@ class DownloadFileInfo(
 ) {
 
     constructor (
-            url: String,
-            mimeType: String,
-            root: DocumentFile,
-            name: String,
-            size: Long,
-            resumable: Boolean = false,
-            startTime: Long = System.currentTimeMillis()
-    ) : this(-1, url, mimeType, root, name, size, resumable, startTime, STATE_DOWNLOADING)
+        url: String,
+        mimeType: String,
+        root: Uri,
+        name: String,
+        size: Long,
+        resumable: Boolean = false,
+        startTime: Long = System.currentTimeMillis()
+    ) : this(0, url, mimeType, root, name, size, resumable, startTime, STATE_DOWNLOADING)
 
     constructor(
-            root: DocumentFile,
-            file: DownloadFile,
-            meta: MetaData
+        root: Uri,
+        file: DownloadFile,
+        meta: MetaData
     ) : this(file.url, meta.mineType, root, file.name ?: meta.name, meta.size, meta.resumable)
 
+    @Ignore
     var currentSize = 0L
+
+    @Ignore
     var transferSpeed = 0L
 
     companion object {

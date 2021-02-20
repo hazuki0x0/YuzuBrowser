@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.download.compatible
+package jp.hazuki.yuzubrowser.download.core.utils
 
-import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
-import java.io.File
+import android.net.Uri
+import androidx.core.net.toUri
+import androidx.room.TypeConverter
 
-class ConvertDownloadInfo(val url: String, path: String, val time: Long, state: Int) {
-    val root: String
-    val name: String
-    val state = if (state == 100) DownloadFileInfo.STATE_UNKNOWN_ERROR else state
+class UriConverter {
+    @TypeConverter
+    fun fromString(value: String?): Uri? {
+        return value?.toUri()
+    }
 
-    init {
-        val file = File(path)
-        root = "file://${file.parent}"
-        name = file.name
+    @TypeConverter
+    fun uriToString(uri: Uri?): String? {
+        return uri?.toString()
     }
 }

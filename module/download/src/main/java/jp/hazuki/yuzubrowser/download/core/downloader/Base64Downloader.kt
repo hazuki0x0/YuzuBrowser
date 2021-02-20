@@ -16,14 +16,15 @@
 
 package jp.hazuki.yuzubrowser.download.core.downloader
 
-import android.content.ContentResolver
+import android.content.Context
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.utils.decodeBase64Image
 import jp.hazuki.yuzubrowser.download.core.utils.saveBase64Image
 
 class Base64Downloader(
-    private val contentResolver: ContentResolver,
+    private val context: Context,
     private val info: DownloadFileInfo,
     private val request: DownloadRequest,
 ) : Downloader {
@@ -32,12 +33,13 @@ class Base64Downloader(
     override fun download(): Boolean {
         downloadListener?.onStartDownload(info)
         val image = decodeBase64Image(info.url)
+        val rootFile = info.root.toDocumentFile(context)
         val file = if (request.isScopedStorageMode) {
-            info.root
+            rootFile
         } else {
-            info.root.createFile(image.mimeType, info.name)
+            rootFile.createFile(image.mimeType, info.name)
         }
-        return if (file != null && contentResolver.saveBase64Image(image, file)) {
+        return if (file != null && context.contentResolver.saveBase64Image(image, file)) {
             info.state = DownloadFileInfo.STATE_DOWNLOADED
             info.size = file.length()
             downloadListener?.onFileDownloaded(info, file)

@@ -26,18 +26,19 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
+import dagger.android.support.DaggerFragment
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.utils.checkFlag
 import jp.hazuki.yuzubrowser.download.core.utils.getFile
 import jp.hazuki.yuzubrowser.download.createFileOpenIntent
 import jp.hazuki.yuzubrowser.download.reDownload
-import jp.hazuki.yuzubrowser.download.service.DownloadDatabase
+import jp.hazuki.yuzubrowser.download.repository.DownloadsDao
 import jp.hazuki.yuzubrowser.download.service.connection.ActivityClient
 import jp.hazuki.yuzubrowser.download.ui.DownloadCommandController
 import jp.hazuki.yuzubrowser.ui.ACTIVITY_MAIN_BROWSER
@@ -47,14 +48,20 @@ import jp.hazuki.yuzubrowser.ui.extensions.intentFor
 import jp.hazuki.yuzubrowser.ui.widget.longToast
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.LoadMoreListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener, ActionMode.Callback {
+class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener, ActionMode.Callback {
 
     private var commandController: DownloadCommandController? = null
     private lateinit var adapter: DownloadListAdapter
-    private lateinit var database: DownloadDatabase
 
     private var actionMode: ActionMode? = null
+
+    @Inject
+    lateinit var downloadsDao: DownloadsDao
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.recycler_view, container, false)
@@ -73,8 +80,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         recyclerView.addItemDecoration(DividerItemDecoration(activity))
         recyclerView.layoutManager = layoutManager
 
-        database = DownloadDatabase.getInstance(activity)
-        adapter = DownloadListAdapter(activity, viewLifecycleOwner, database, this)
+        adapter = DownloadListAdapter(activity, viewLifecycleOwner, downloadsDao, this)
         val decoration = StickyHeaderDecoration(adapter)
         adapter.decoration = decoration
         recyclerView.addItemDecoration(decoration)
@@ -94,7 +100,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
 
         val info = adapter[position]
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED) {
-            info.getFile()?.let {
+            info.getFile(activity)?.let {
                 try {
                     startActivity(createFileOpenIntent(activity, it.uri, info.mimeType, info.name))
                 } catch (e: ActivityNotFoundException) {
@@ -118,7 +124,7 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
         val activity = activity ?: return
 
         val info = adapter[position]
-        val file = info.getFile()
+        val file = info.getFile(activity)
 
         when (info.state) {
             DownloadFileInfo.STATE_DOWNLOADED -> if (file != null) {
@@ -168,11 +174,12 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
 
         if (info.state != DownloadFileInfo.STATE_DOWNLOADING) {
             menu.add(R.string.clear_download).setOnMenuItemClickListener {
-                if (database.delete(info.id)) {
-                    val index = adapter.indexOf(info)
-                    if (index >= 0) {
-                        adapter.remove(index)
-                    }
+                GlobalScope.launch(Dispatchers.IO) {
+                    downloadsDao.delete(info)
+                }
+                val index = adapter.indexOf(info)
+                if (index >= 0) {
+                    adapter.remove(index)
                 }
                 false
             }
@@ -180,9 +187,11 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
 
         if (info.state == DownloadFileInfo.STATE_DOWNLOADED && file != null) {
             menu.add(R.string.delete_download).setOnMenuItemClickListener {
-                if (file.delete()) {
-                    database.delete(info.id)
-                    val index = adapter.indexOf(info)
+                GlobalScope.launch(Dispatchers.IO) {
+                    downloadsDao.delete(info)
+                }
+                val index = adapter.indexOf(info)
+                if (index >= 0) {
                     adapter.remove(index)
                 }
                 false
@@ -213,20 +222,28 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                     .setPositiveButton(android.R.string.ok) { _, _ ->
                         val roots = ArrayMap<String, HashMap<String, DocumentFile>>()
                         val selectedItems = adapter.getSelectedItems()
+                        val context = requireContext()
                         selectedItems.forEach {
-                            var items = roots[it.root.uri.toString()]
-                            if (items == null) {
-                                val files = it.root.listFiles()
-                                items = HashMap(files.size)
-                                files.forEach { file -> file.name?.also { name -> items[name] = file } }
-                                roots[it.root.uri.toString()] = items
+                            val root = it.root.toDocumentFile(context)
+                            if (root.isFile) {
+                                root.delete()
+                            } else if (root.isDirectory) {
+                                var items = roots[it.root.toString()]
+                                if (items == null) {
+                                    val files = root.listFiles()
+                                    items = HashMap(files.size)
+                                    files.forEach { file ->
+                                        file.name?.also { name -> items[name] = file }
+                                    }
+                                    roots[root.uri.toString()] = items
+                                }
+                                items[it.name]?.delete()
                             }
-                            items[it.name]?.delete()
                         }
-                        database.delete(selectedItems)
-                        adapter.reload()
-
-                        adapter.notifyDataSetChanged()
+                        GlobalScope.launch(Dispatchers.IO) {
+                            downloadsDao.delete(selectedItems)
+                            adapter.reload()
+                        }
 
                         mode.finish()
                     }
@@ -239,8 +256,10 @@ class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, 
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_download_list)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
-                        database.delete(adapter.getSelectedItems())
-                        adapter.reload()
+                        GlobalScope.launch(Dispatchers.IO) {
+                            downloadsDao.delete(adapter.getSelectedItems())
+                            adapter.reload()
+                        }
 
                         mode.finish()
                     }

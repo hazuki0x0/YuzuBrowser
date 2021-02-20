@@ -41,7 +41,7 @@ interface Downloader {
                 if (info.url.startsWith(DOWNLOAD_TMP_TYPE, semicolon)) {
                     Base64TmpDownloader(context, info, request)
                 } else {
-                    Base64Downloader(context.contentResolver, info, request)
+                    Base64Downloader(context, info, request)
                 }
 
             } else if (info.url.startsWith("http:", true) || info.url.startsWith("https:", true)) {

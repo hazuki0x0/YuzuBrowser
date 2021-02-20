@@ -25,6 +25,7 @@ import jp.hazuki.yuzubrowser.adblock.AdBlockModule
 import jp.hazuki.yuzubrowser.adblock.AdBlockUiModule
 import jp.hazuki.yuzubrowser.bookmark.BookmarkUiModule
 import jp.hazuki.yuzubrowser.browser.di.ActivityModule
+import jp.hazuki.yuzubrowser.download.DownloadAndroidModule
 import jp.hazuki.yuzubrowser.download.DownloadModule
 import jp.hazuki.yuzubrowser.history.di.HistoryModule
 import jp.hazuki.yuzubrowser.legacy.di.LegacyUiModule
@@ -44,6 +45,7 @@ import javax.inject.Singleton
     WebEncodeModule::class,
     UserAgentModule::class,
     DownloadModule::class,
+    DownloadAndroidModule::class,
     AdBlockModule::class,
     AdBlockUiModule::class,
     BookmarkUiModule::class,

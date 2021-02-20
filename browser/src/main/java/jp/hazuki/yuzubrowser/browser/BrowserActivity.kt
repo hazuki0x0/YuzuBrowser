@@ -65,6 +65,7 @@ import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
+import jp.hazuki.yuzubrowser.download.repository.DownloadsDao
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.SaveWebArchiveDialog
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
@@ -222,6 +223,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     @Inject
     internal lateinit var okHttp: OkHttpClient
+
+    @Inject
+    internal lateinit var downloadsDao: DownloadsDao
 
     private lateinit var binding: BrowserActivityBinding
 
@@ -1425,7 +1429,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     }
 
     override fun onSaveWebViewToFile(root: DocumentFile, file: DownloadFile, webViewNo: Int) {
-        tabManagerIn[webViewNo].mWebView.saveArchive(root, file)
+        tabManagerIn[webViewNo].mWebView.saveArchive(downloadsDao, root, file)
     }
 
     override fun startActivity(intent: Intent, @RequestCause cause: Int) {

@@ -16,10 +16,8 @@
 
 package jp.hazuki.yuzubrowser.legacy.settings.data;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Environment;
 
 import com.squareup.moshi.Moshi;
@@ -31,8 +29,6 @@ import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService;
 import jp.hazuki.yuzubrowser.core.utility.extensions.ContextExtensionsKt;
 import jp.hazuki.yuzubrowser.core.utility.log.Logger;
 import jp.hazuki.yuzubrowser.core.utility.storage.DocumentFileKt;
-import jp.hazuki.yuzubrowser.download.compatible.DownloadInfoDatabase;
-import jp.hazuki.yuzubrowser.download.service.DownloadDatabase;
 import jp.hazuki.yuzubrowser.legacy.R;
 import jp.hazuki.yuzubrowser.legacy.action.ActionList;
 import jp.hazuki.yuzubrowser.legacy.action.SingleAction;
@@ -48,7 +44,6 @@ import jp.hazuki.yuzubrowser.legacy.action.manager.ToolbarActionManager;
 import jp.hazuki.yuzubrowser.legacy.toolbar.ToolbarManager;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentList;
 import jp.hazuki.yuzubrowser.legacy.useragent.UserAgentUpdaterKt;
-import jp.hazuki.yuzubrowser.legacy.utils.converter.PatternUrlConverter;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncode;
 import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeList;
 import jp.hazuki.yuzubrowser.search.model.provider.SearchSuggestProviders;
@@ -229,60 +224,6 @@ public class AppData {
         if (lastLaunch >= 0 && (lastLaunch < 410010 || prefVersionCode < PREF_VERSION)) {
             //version up code
             if (lastLaunch < 410010) {
-
-                if (lastLaunch < 300000) {
-                    PatternUrlConverter converter = new PatternUrlConverter();
-                    converter.convert(context);
-                }
-
-                if (lastLaunch <= 300100 && "NORMAL>".equals(AppPrefs.layout_algorithm.get())) {
-                    AppPrefs.layout_algorithm.set("NORMAL");
-                }
-
-                if (lastLaunch <= 300103 && "SINGLE_COLUMN>".equals(AppPrefs.layout_algorithm.get())) {
-                    AppPrefs.layout_algorithm.set("SINGLE_COLUMN");
-                }
-
-                if (lastLaunch < 300200) {
-                    SearchUrlManager urlManager = new SearchUrlManager(context, moshi);
-                    String[] urls = context.getResources().getStringArray(R.array.default_search_url);
-                    String[] titles = context.getResources().getStringArray(R.array.default_search_url_name);
-                    int[] colors = context.getResources().getIntArray(R.array.default_search_url_color);
-                    SearchSuggestProviders providers = new SearchSuggestProviders(urlManager.load());
-
-                    for (int i = 0; i < urls.length; i++) {
-                        providers.add(new SearchUrl(titles[i], urls[i], colors[i]));
-                    }
-
-                    if (!"http://www.google.com/m?q=%s".equals(AppPrefs.search_url.get())) {
-                        providers.add(new SearchUrl("Custom", AppPrefs.search_url.get(), 0));
-                        providers.setSelectedId(providers.get(providers.getSize() - 1).getId());
-                    }
-
-                    urlManager.save(providers.toSettings());
-                    AppPrefs.search_url.set(providers.get(providers.getSelectedIndex()).getUrl());
-
-                    AppPrefs.fullscreen_hide_mode.set(shared_preference.getBoolean("fullscreen_hide_nav", false) ? 2 : 0);
-
-                    shared_preference.edit().remove("fullscreen_hide_nav").apply();
-                }
-
-                if (lastLaunch < 300303 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationManager manager = (NotificationManager)
-                            context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.deleteNotificationChannel("jp.hazuki.yuzubrowser.channel.dl.notify");
-                }
-
-                if (lastLaunch < 400100) {
-                    DownloadInfoDatabase from = new DownloadInfoDatabase(context);
-                    DownloadDatabase to = DownloadDatabase.Companion.getInstance(context);
-
-                    to.convert(from.getConvertData());
-
-                    from.deleteDatabase(context);
-                    AppPrefs.download_folder.set("file://" + AppPrefs.download_folder.get());
-                }
-
                 AdBlockInitSupportKt.initAbpFilter(context, abpDatabase);
                 AdBlockInitSupportKt.disableYuzuList(abpDatabase);
             }

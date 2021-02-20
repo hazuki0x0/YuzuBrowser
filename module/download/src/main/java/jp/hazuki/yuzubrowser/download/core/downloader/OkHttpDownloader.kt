@@ -18,8 +18,10 @@ package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.Context
 import android.webkit.CookieManager
+import androidx.documentfile.provider.DocumentFile
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
@@ -48,10 +50,11 @@ class OkHttpDownloader(
             .setReferrer(downloadRequest.referrer)
             .setUserAgent(context, downloadRequest.userAgent)
 
+        val rootFile = info.root.toDocumentFile(context)
         val downloadFile = if (downloadRequest.isScopedStorageMode) {
-            info.root
+            rootFile
         } else {
-            val existTmp = info.root.findFile("${info.name}$TMP_FILE_SUFFIX")
+            val existTmp = rootFile.findFile("${info.name}$TMP_FILE_SUFFIX")
 
             if (info.resumable && info.checkFlag(DownloadFileInfo.STATE_PAUSED) && existTmp != null) {
                 info.currentSize = existTmp.length()
@@ -61,8 +64,8 @@ class OkHttpDownloader(
             val mimeType = if (info.mimeType.isNotEmpty()) info.mimeType else MIME_TYPE_UNKNOWN
 
             existTmp
-                ?: info.root.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX")
-                ?: throw DownloadException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
+                ?: rootFile.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX")
+                ?: throw DownloadException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${rootFile.exists()}, Writable:${rootFile.canWrite()}, Uri:${rootFile.uri}")
         }
 
         val call = okHttpClient.newCall(requestBuilder.build())
@@ -85,7 +88,7 @@ class OkHttpDownloader(
                 info.resumable = response.isResumable
             }
             val os = context.contentResolver.openOutputStream(downloadFile.uri, mode)
-                ?: throw DownloadException("Can not open file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${info.root.exists()}, Writable:${info.root.canWrite()}, Uri:${info.root.uri}")
+                ?: throw DownloadException("Can not open file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${rootFile.exists()}, Writable:${rootFile.canWrite()}, Uri:${rootFile.uri}")
 
             BufferedOutputStream(os).use { out ->
                 response.body!!.source().use { source ->
@@ -117,32 +120,31 @@ class OkHttpDownloader(
                 }
             }
 
-            var downloadedFile: androidx.documentfile.provider.DocumentFile? = null
+            var downloadedFile: DocumentFile? = null
 
             if (abort) {
                 if (downloadRequest.isScopedStorageMode) {
-                    val file = info.root
-                    if (file.exists()) {
-                        context.contentResolver.delete(file.uri, null, null)
+                    if (rootFile.exists()) {
+                        context.contentResolver.delete(rootFile.uri, null, null)
                     }
                 } else {
-                    deleteTempIfNeed()
+                    deleteTempIfNeed(rootFile)
                 }
                 downloadListener?.onFileDownloadAbort(info)
                 return false
             } else {
                 if (downloadRequest.isScopedStorageMode) {
-                    downloadedFile = info.root
+                    downloadedFile = rootFile
                 } else {
                     if (!downloadFile.renameTo(info.name)) {
-                        downloadedFile = info.root.findFile(info.name)
+                        downloadedFile = rootFile.findFile(info.name)
                         if (downloadedFile == null)
-                            throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${info.root.uri}, mimetype:${info.mimeType}, exists:${info.root.findFile(info.name) != null}")
+                            throw DownloadException("Rename is failed. name:\"${info.name}\", download path:${rootFile.uri}, mimetype:${info.mimeType}, exists:${rootFile.findFile(info.name) != null}")
                     }
 
-                    downloadedFile = downloadedFile ?: info.root.findFile(info.name)
+                    downloadedFile = downloadedFile ?: rootFile.findFile(info.name)
                     if (downloadedFile == null) {
-                        throw DownloadException("File not found. name:\"${info.name}\", download path:${info.root.uri}")
+                        throw DownloadException("File not found. name:\"${info.name}\", download path:${rootFile.uri}")
                     }
                 }
             }
@@ -189,9 +191,9 @@ class OkHttpDownloader(
         abort = true
     }
 
-    private fun deleteTempIfNeed() {
+    private fun deleteTempIfNeed(rootFile: DocumentFile) {
         if (info.state == DownloadFileInfo.STATE_UNKNOWN_ERROR || info.state == DownloadFileInfo.STATE_CANCELED) {
-            info.root.findFile("${info.name}$TMP_FILE_SUFFIX")?.delete()
+            rootFile.findFile("${info.name}$TMP_FILE_SUFFIX")?.delete()
         }
     }
 

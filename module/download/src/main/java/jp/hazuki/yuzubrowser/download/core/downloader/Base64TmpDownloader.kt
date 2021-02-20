@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.download.core.downloader
 
 import android.content.Context
+import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.DOWNLOAD_TMP_FILENAME
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
@@ -39,10 +40,11 @@ class Base64TmpDownloader(
         try {
             val base64 = base64File.inputStream().use { it.readBytes().toString(StandardCharsets.UTF_8) }
             val image = decodeBase64Image(base64)
+            val rootFile = info.root.toDocumentFile(context)
             val file = if (request.isScopedStorageMode) {
-                info.root
+                rootFile
             } else {
-                info.root.createFile(image.mimeType, info.name)
+                rootFile.createFile(image.mimeType, info.name)
             }
             if (file != null && context.contentResolver.saveBase64Image(image, file)) {
                 info.state = DownloadFileInfo.STATE_DOWNLOADED
