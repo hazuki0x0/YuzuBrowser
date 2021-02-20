@@ -48,7 +48,6 @@ object Versions {
     const val kvs_schema = "5.1.0"
     const val kotlin = "1.4.30"
     const val kotlin_coroutines = "1.4.2"
-    const val kotlin_anko = "0.10.8"
     const val junit = "4.13.1"
     const val assertk = "0.23"
     const val espresso = "3.3.0"
@@ -103,7 +102,6 @@ object Libs {
     const val kotlin_android_extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
     const val kotlin_coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlin_coroutines}"
     const val kotlin_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlin_coroutines}"
-    const val kotlin_anko_sql = "org.jetbrains.anko:anko-sqlite:${Versions.kotlin_anko}"
 
     const val kvs_schema = "com.rejasupotaro:kvs-schema:${Versions.kvs_schema}"
     const val kvs_schema_compiler = "com.rejasupotaro:kvs-schema-compiler:${Versions.kvs_schema}"

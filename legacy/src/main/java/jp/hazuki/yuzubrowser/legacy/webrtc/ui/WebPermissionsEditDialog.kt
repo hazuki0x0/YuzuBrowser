@@ -40,7 +40,6 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
         val mediaId: Spinner = view.findViewById(R.id.mediaIdSpinner)
 
         val permissions = arguments.getSerializable(ARG_PERMISSION) as WebPermissions
-        val host = arguments.getString(ARG_HOST)!!
 
         camera.setSelection(permissions.camera.state)
         mic.setSelection(permissions.microphone.state)
@@ -48,7 +47,7 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
         mediaId.setSelection(permissions.mediaId.state)
 
         return AlertDialog.Builder(activity)
-                .setTitle(host)
+            .setTitle(permissions.host)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     permissions.camera = PermissionState.from(camera.selectedItemPosition)
@@ -56,7 +55,7 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
                     permissions.midi = PermissionState.from(midi.selectedItemPosition)
                     permissions.mediaId = PermissionState.from(mediaId.selectedItemPosition)
 
-                    listener?.onPermissionEdited(arguments.getInt(ARG_POSITION), host, permissions)
+                    listener?.onPermissionEdited(arguments.getInt(ARG_POSITION), permissions)
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()
@@ -84,14 +83,12 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
 
     companion object {
         private const val ARG_POSITION = "pos"
-        private const val ARG_HOST = "host"
         private const val ARG_PERMISSION = "permission"
 
-        operator fun invoke(position: Int, host: String, webPermissions: WebPermissions): WebPermissionsEditDialog {
+        operator fun invoke(position: Int, webPermissions: WebPermissions): WebPermissionsEditDialog {
             return WebPermissionsEditDialog().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_POSITION, position)
-                    putString(ARG_HOST, host)
                     putSerializable(ARG_PERMISSION, webPermissions)
                 }
             }
@@ -99,6 +96,6 @@ class WebPermissionsEditDialog : androidx.fragment.app.DialogFragment() {
     }
 
     interface OnPermissionEditedListener {
-        fun onPermissionEdited(position: Int, host: String, permissions: WebPermissions)
+        fun onPermissionEdited(position: Int, permissions: WebPermissions)
     }
 }

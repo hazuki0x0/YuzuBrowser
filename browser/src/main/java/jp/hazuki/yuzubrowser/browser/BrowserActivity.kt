@@ -99,6 +99,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.saveArchive
 import jp.hazuki.yuzubrowser.legacy.utils.network.ConnectionStateMonitor
 import jp.hazuki.yuzubrowser.legacy.webkit.*
+import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDao
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermissionHandler
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 import jp.hazuki.yuzubrowser.search.presentation.search.SearchActivity
@@ -227,6 +228,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
     @Inject
     internal lateinit var downloadsDao: DownloadsDao
 
+    @Inject
+    internal lateinit var webPermissionsDao: WebPermissionsDao
+
     private lateinit var binding: BrowserActivityBinding
 
     @SuppressLint("ClickableViewAccessibility")
@@ -254,7 +258,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         userActionManager = UserActionManager(this, this, actionController, iconManager)
         tabManagerIn = BrowserTabManager(TabManagerFactory.newInstance(this, webViewFactory, faviconManager), this)
-        webClient = WebClient(this, this, abpDatabase, faviconManager)
+        webClient = WebClient(this, this, abpDatabase, webPermissionsDao, faviconManager)
 
         toolbar = Toolbar(this, binding, this, actionController, iconManager)
         toolbar.addToolbarView(resources)

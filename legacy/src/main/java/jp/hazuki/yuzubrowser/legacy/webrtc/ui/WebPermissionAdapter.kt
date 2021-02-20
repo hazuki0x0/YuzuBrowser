@@ -27,23 +27,22 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.ArrayRecyclerAdapter
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 
 class WebPermissionAdapter(
-        context: Context,
-        list: MutableList<Pair<String, WebPermissions>>,
-        listener: OnRecyclerListener
-) : ArrayRecyclerAdapter<Pair<String, WebPermissions>, WebPermissionAdapter.WebPermissionHandler>(context, list, listener) {
+    context: Context,
+    listener: OnRecyclerListener
+) : ArrayRecyclerAdapter<WebPermissions, WebPermissionAdapter.WebPermissionHandler>(context, emptyList<WebPermissions>().toMutableList(), listener) {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup?, viewType: Int): WebPermissionHandler {
         return WebPermissionHandler(inflater.inflate(R.layout.simple_recycler_list_item_1, parent, false), this)
     }
 
 
-    class WebPermissionHandler(itemView: View, adapter: WebPermissionAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<Pair<String, WebPermissions>>(itemView, adapter) {
+    class WebPermissionHandler(itemView: View, adapter: WebPermissionAdapter) : ArrayRecyclerAdapter.ArrayViewHolder<WebPermissions>(itemView, adapter) {
         val textView: TextView = itemView.findViewById(android.R.id.text1)
 
-        override fun setUp(item: Pair<String, WebPermissions>) {
+        override fun setUp(item: WebPermissions) {
             super.setUp(item)
 
-            textView.text = item.first
+            textView.text = item.host
         }
     }
 }

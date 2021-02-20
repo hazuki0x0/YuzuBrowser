@@ -24,6 +24,8 @@ import dagger.Module
 import dagger.Provides
 import jp.hazuki.yuzubrowser.YuzuBrowserApplication
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
+import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDao
+import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDatabase
 import jp.hazuki.yuzubrowser.provider.SuggestProviderBridge
 import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
@@ -36,26 +38,22 @@ object AppModule {
     private const val PREFERENCE_NAME = "main_preference"
 
     @Provides
-    @JvmStatic
     fun provideContext(app: YuzuBrowserApplication): Context {
         return app
     }
 
     @Provides
-    @JvmStatic
     fun provideBrowserApplication(app: YuzuBrowserApplication): BrowserApplication {
         return app
     }
 
     @Provides
-    @JvmStatic
     fun provideApplication(app: YuzuBrowserApplication): Application {
         return app
     }
 
     @Provides
     @Singleton
-    @JvmStatic
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
             .build()
@@ -63,7 +61,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    @JvmStatic
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
@@ -74,21 +71,24 @@ object AppModule {
 
     @Provides
     @Singleton
-    @JvmStatic
     fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
     @Provides
-    @JvmStatic
     fun provideSuggestProvider(): ISuggestProvider {
         return SuggestProviderBridge()
     }
 
     @Provides
     @Singleton
-    @JvmStatic
     fun provideFaviconManager(context: Context): FaviconManager {
         return FaviconManager(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebPermissionsDao(context: Context): WebPermissionsDao {
+        return WebPermissionsDatabase.newInstance(context).webPermissionsDao()
     }
 }

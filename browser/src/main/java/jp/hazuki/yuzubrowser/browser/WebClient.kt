@@ -78,6 +78,7 @@ import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
 import jp.hazuki.yuzubrowser.legacy.utils.extensions.setClipboardWithToast
 import jp.hazuki.yuzubrowser.legacy.webkit.TabType
 import jp.hazuki.yuzubrowser.legacy.webkit.WebUploadHandler
+import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDao
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.ui.dialog.JsAlertDialog
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
@@ -100,6 +101,7 @@ class WebClient(
     private val activity: BrowserBaseActivity,
     private val controller: BrowserController,
     private val abpDatabase: AbpDatabase,
+    private val webPermissionsDao: WebPermissionsDao,
     faviconManager: FaviconManager
 ) : WebViewUtility {
     private val patternManager = PatternUrlManager(activity.applicationContext)
@@ -865,12 +867,10 @@ class WebClient(
         }
 
         override fun onPermissionRequest(request: PermissionRequest) {
-            controller.activity.runOnUiThread {
-                if (AppPrefs.webRtc.get()) {
-                    WebRtcPermission.getInstance(controller.applicationContextInfo).requestPermission(request, controller.webRtcRequest)
-                } else {
-                    request.deny()
-                }
+            if (AppPrefs.webRtc.get()) {
+                WebRtcPermission.getInstance(webPermissionsDao).requestPermission(request, controller.webRtcRequest)
+            } else {
+                ui { request.deny() }
             }
         }
 

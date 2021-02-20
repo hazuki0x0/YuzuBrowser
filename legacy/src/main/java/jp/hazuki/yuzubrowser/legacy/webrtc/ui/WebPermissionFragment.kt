@@ -22,14 +22,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.android.support.DaggerFragment
+import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
-import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDatabase
+import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDao
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebRtcPermission
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebPermissions
 import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
+import javax.inject.Inject
 
-class WebPermissionFragment : androidx.fragment.app.Fragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
+class WebPermissionFragment : DaggerFragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
+
+    @Inject
+    internal lateinit var webPermissionsDao: WebPermissionsDao
 
     private lateinit var adapter: WebPermissionAdapter
 
@@ -40,9 +46,11 @@ class WebPermissionFragment : androidx.fragment.app.Fragment(), OnRecyclerListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val activity = activity ?: return
 
-        adapter = WebPermissionAdapter(activity,
-            WebPermissionsDatabase.getInstance(activity.applicationContext).getList().toMutableList(),
-            this)
+        adapter = WebPermissionAdapter(activity, this)
+        ui {
+            adapter.addAll(webPermissionsDao.getList())
+            adapter.notifyDataSetChanged()
+        }
 
         view.findViewById<RecyclerView>(R.id.recyclerView).run {
             layoutManager = LinearLayoutManager(activity)
@@ -52,18 +60,19 @@ class WebPermissionFragment : androidx.fragment.app.Fragment(), OnRecyclerListen
     }
 
     override fun onRecyclerItemClicked(v: View, position: Int) {
-        val (host, permissions) = adapter[position]
-        WebPermissionsEditDialog(position, host, permissions)
-                .show(childFragmentManager, "edit")
+        val permissions = adapter[position]
+        WebPermissionsEditDialog(position, permissions)
+            .show(childFragmentManager, "edit")
     }
 
-    override fun onPermissionEdited(position: Int, host: String, permissions: WebPermissions) {
-        val activity = activity ?: return
-
-        adapter[position] = Pair(host, permissions)
+    override fun onPermissionEdited(position: Int, permissions: WebPermissions) {
+        adapter[position] = permissions
         adapter.notifyItemChanged(position)
 
-        WebPermissionsDatabase.getInstance(activity.applicationContext).update(host, permissions)
+        ui {
+            webPermissionsDao.update(permissions)
+        }
+
         WebRtcPermission.clearCache()
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package jp.hazuki.yuzubrowser.legacy.di
+package jp.hazuki.yuzubrowser.legacy.webrtc.database
 
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
-import jp.hazuki.yuzubrowser.legacy.reader.ReaderFragment
-import jp.hazuki.yuzubrowser.legacy.webrtc.ui.WebPermissionFragment
+import androidx.room.TypeConverter
+import jp.hazuki.yuzubrowser.legacy.webrtc.core.PermissionState
 
-@Module
-abstract class LegacyUiModule {
+internal class PermissionStateConverter {
+    @TypeConverter
+    fun intToState(state: Int): PermissionState {
+        return PermissionState.from(state)
+    }
 
-    @ContributesAndroidInjector
-    abstract fun contributeReaderFragment(): ReaderFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeWebPermissionsFragment(): WebPermissionFragment
+    @TypeConverter
+    fun stateToInt(state: PermissionState): Int {
+        return state.state
+    }
 }

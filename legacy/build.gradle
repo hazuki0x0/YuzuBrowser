@@ -125,7 +125,6 @@ dependencies {
     implementation Libs.kotlin_stdlib
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
-    implementation Libs.kotlin_anko_sql
 
     implementation Libs.dagger2
     annotationProcessor Libs.dagger2_compiler
@@ -134,6 +133,10 @@ dependencies {
     implementation Libs.dagger_android
     implementation Libs.dagger_android_support
     kapt Libs.dagger_android_processor
+
+    implementation AndroidX.room
+    implementation AndroidX.roomKtx
+    kapt AndroidX.roomCompiler
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:26.5.0')

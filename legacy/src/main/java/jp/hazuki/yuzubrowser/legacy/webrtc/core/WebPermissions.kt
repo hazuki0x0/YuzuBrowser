@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Hazuki
+ * Copyright (C) 2017-2021 Hazuki
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,19 @@
 package jp.hazuki.yuzubrowser.legacy.webrtc.core
 
 import android.webkit.PermissionRequest
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
-data class WebPermissions(
-        var id: Long = -1,
-        var camera: PermissionState = PermissionState.UNCONFIGURED,
-        var microphone: PermissionState = PermissionState.UNCONFIGURED,
-        var midi: PermissionState = PermissionState.UNCONFIGURED,
-        var mediaId: PermissionState = PermissionState.UNCONFIGURED
+@Entity(tableName = "permissions")
+class WebPermissions(
+    @PrimaryKey
+    val host: String,
+    var camera: PermissionState = PermissionState.UNCONFIGURED,
+    var microphone: PermissionState = PermissionState.UNCONFIGURED,
+    var midi: PermissionState = PermissionState.UNCONFIGURED,
+    var mediaId: PermissionState = PermissionState.UNCONFIGURED,
 ) : Serializable {
-
     val resources: Array<String>
         get() {
             val list = mutableListOf<String>()
@@ -46,11 +49,11 @@ data class WebPermissions(
         }
 
     fun grantAll(resources: Array<String>) {
-        setPermissions(this, resources, PermissionState.GRANTED)
+        setPermissions(resources, PermissionState.GRANTED)
     }
 
     fun denyAll(resources: Array<String>) {
-        setPermissions(this, resources, PermissionState.DENIED)
+        setPermissions(resources, PermissionState.DENIED)
     }
 
     fun match(resources: Array<String>): Boolean {
@@ -77,36 +80,20 @@ data class WebPermissions(
         return false
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (other == this) return true
-
-        if (other is WebPermissions) {
-            return camera === other.camera && microphone === other.microphone && midi === other.midi && mediaId === other.mediaId
+    private fun setPermissions(resources: Array<String>, state: PermissionState) {
+        for (item in resources) {
+            when (item) {
+                PermissionRequest.RESOURCE_VIDEO_CAPTURE -> camera = state
+                PermissionRequest.RESOURCE_AUDIO_CAPTURE -> microphone = state
+                PermissionRequest.RESOURCE_MIDI_SYSEX -> midi = state
+                PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> mediaId = state
+            }
         }
-        return false
-    }
-
-    override fun hashCode(): Int {
-        return (camera.state) +
-                (microphone.state shl 2) +
-                (midi.state shl 4) +
-                (mediaId.state shl 6)
     }
 
     companion object {
-        operator fun invoke(resources: Array<String>, state: PermissionState = PermissionState.GRANTED): WebPermissions {
-            return WebPermissions().also { setPermissions(it, resources, state) }
-        }
-
-        private fun setPermissions(permissions: WebPermissions, resources: Array<String>, state: PermissionState) {
-            for (item in resources) {
-                when (item) {
-                    PermissionRequest.RESOURCE_VIDEO_CAPTURE -> permissions.camera = state
-                    PermissionRequest.RESOURCE_AUDIO_CAPTURE -> permissions.microphone = state
-                    PermissionRequest.RESOURCE_MIDI_SYSEX -> permissions.midi = state
-                    PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> permissions.mediaId = state
-                }
-            }
+        operator fun invoke(host: String, resources: Array<String>, state: PermissionState = PermissionState.GRANTED): WebPermissions {
+            return WebPermissions(host).also { it.setPermissions(resources, state) }
         }
     }
 }

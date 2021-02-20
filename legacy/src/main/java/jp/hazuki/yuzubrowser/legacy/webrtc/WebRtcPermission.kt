@@ -16,7 +16,6 @@
 
 package jp.hazuki.yuzubrowser.legacy.webrtc
 
-import android.content.Context
 import android.webkit.PermissionRequest
 import jp.hazuki.yuzubrowser.core.utility.extensions.permissions
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
@@ -24,58 +23,70 @@ import jp.hazuki.yuzubrowser.legacy.webrtc.core.PermissionState
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebPermissions
 import jp.hazuki.yuzubrowser.legacy.webrtc.core.WebRtcRequest
 
-class WebRtcPermission(private val database: WebPermissionsDatabase) {
+class WebRtcPermission(private val permissionsDao: WebPermissionsDao) {
 
     private val sitePermissions = hashMapOf<String, WebPermissions>()
 
     fun requestPermission(permissionRequest: PermissionRequest, webRtcRequest: WebRtcRequest) {
-        val host = permissionRequest.origin.host
-        checkNotNull(host)
-        val resources = permissionRequest.resources
-        val permissions = permissionRequest.permissions
-        val site = sitePermissions[host] ?: database[host]?.also { sitePermissions[host] = it }
+        ui {
+            val host = permissionRequest.origin.host
+            checkNotNull(host)
+            val resources = permissionRequest.resources
+            val permissions = permissionRequest.permissions
+            val site = sitePermissions[host]
+                ?: permissionsDao.get(host)?.also { sitePermissions[host] = it }
 
-        if (site?.match(resources) == true) {
-            ui {
+            if (site?.match(resources) == true) {
                 if (webRtcRequest.requestPermissions(permissions)) {
                     permissionRequest.grant(resources)
                 } else {
                     permissionRequest.deny()
                 }
-            }
-        } else {
-            if (site == null || site.needRequest(resources)) {
-                webRtcRequest.requestPagePermission(host, resources) { resGranted ->
-                    if (resGranted) {
-                        ui {
-                            if (webRtcRequest.requestPermissions(permissions)) {
-                                if (site != null) {
-                                    site.grantAll(resources)
+            } else {
+                if (site == null || site.needRequest(resources)) {
+                    webRtcRequest.requestPagePermission(host, resources) { resGranted ->
+                        if (resGranted) {
+                            ui {
+                                if (webRtcRequest.requestPermissions(permissions)) {
+                                    val current = if (site != null) {
+                                        site.grantAll(resources)
+                                        site
+                                    } else {
+                                        val new = WebPermissions(host, resources)
+                                        sitePermissions[host] = new
+                                        new
+                                    }
+
+                                    permissionsDao.update(current)
+                                    permissionRequest.grant(resources)
                                 } else {
-                                    sitePermissions[host] = WebPermissions(resources)
+                                    permissionRequest.deny()
                                 }
-                                database.update(host, sitePermissions[host])
-                                permissionRequest.grant(resources)
-                            } else {
+                            }
+                        } else {
+                            ui {
+                                val current = if (site != null) {
+                                    site.denyAll(resources)
+                                    site
+                                } else {
+                                    val new = WebPermissions(host, resources, PermissionState.DENIED)
+                                    sitePermissions[host] = new
+                                    new
+                                }
+
+                                permissionsDao.update(current)
                                 permissionRequest.deny()
                             }
+
                         }
-                    } else {
-                        if (site != null) {
-                            site.denyAll(resources)
-                        } else {
-                            sitePermissions[host] = WebPermissions(resources, PermissionState.DENIED)
-                        }
-                        database.update(host, sitePermissions[host])
-                        permissionRequest.deny()
                     }
-                }
-            } else {
-                val result = site.resources
-                if (result.isEmpty()) {
-                    permissionRequest.deny()
                 } else {
-                    permissionRequest.grant(result)
+                    val result = site.resources
+                    if (result.isEmpty()) {
+                        permissionRequest.deny()
+                    } else {
+                        permissionRequest.grant(result)
+                    }
                 }
             }
         }
@@ -84,9 +95,9 @@ class WebRtcPermission(private val database: WebPermissionsDatabase) {
     companion object {
         var instance: WebRtcPermission? = null
 
-        fun getInstance(context: Context): WebRtcPermission {
+        fun getInstance(webPermissionsDao: WebPermissionsDao): WebRtcPermission {
             if (instance == null) {
-                instance = WebRtcPermission(WebPermissionsDatabase.getInstance(context))
+                instance = WebRtcPermission(webPermissionsDao)
             }
             return instance!!
         }
