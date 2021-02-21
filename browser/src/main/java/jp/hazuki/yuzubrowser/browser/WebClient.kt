@@ -44,6 +44,7 @@ import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.download.*
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFile
 import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
+import jp.hazuki.yuzubrowser.download.core.data.EncodedImage
 import jp.hazuki.yuzubrowser.download.ui.DownloadListActivity
 import jp.hazuki.yuzubrowser.download.ui.FastDownloadActivity
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadDialog
@@ -92,6 +93,9 @@ import jp.hazuki.yuzubrowser.webview.CustomWebViewClient
 import jp.hazuki.yuzubrowser.webview.WebViewRenderingManager
 import jp.hazuki.yuzubrowser.webview.utility.WebViewUtility
 import jp.hazuki.yuzubrowser.webview.utility.getUserAgent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.net.URISyntaxException
 import java.text.DateFormat
 import java.util.*
@@ -413,11 +417,18 @@ class WebClient(
                     if (iconUrl.isEmpty() || iconUrl == "null") {
                         speedDialManager.updateAsync(data.originalUrl, faviconManager[data.originalUrl])
                     } else {
-                        val userAgent = data.mWebView.getUserAgent()
-                        thread {
-                            speedDialManager.updateAsync(data.originalUrl,
-                                controller.okHttpClient
-                                    .getImage(iconUrl, userAgent, url, CookieManager.getInstance().getCookie(url)))
+                        if (iconUrl.startsWith("data", ignoreCase = true)) {
+                            EncodedImage(iconUrl)?.let { image ->
+                                speedDialManager.updateAsync(data.originalUrl, image.image)
+                            }
+                        } else {
+                            val userAgent = data.mWebView.getUserAgent()
+                            GlobalScope.launch(Dispatchers.IO) {
+                                val cookie = CookieManager.getInstance().getCookie(url)
+                                val icon = controller.okHttpClient
+                                    .getImage(iconUrl, userAgent, url, cookie)
+                                speedDialManager.updateAsync(data.originalUrl, icon)
+                            }
                         }
                     }
                 }
