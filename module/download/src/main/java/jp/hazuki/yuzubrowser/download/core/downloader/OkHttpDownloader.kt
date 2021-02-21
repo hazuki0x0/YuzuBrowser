@@ -63,6 +63,15 @@ class OkHttpDownloader(
 
             val mimeType = if (info.mimeType.isNotEmpty()) info.mimeType else MIME_TYPE_UNKNOWN
 
+            if (existTmp != null) {
+                existTmp
+            } else {
+                rootFile.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX") ?: apply {
+                    info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
+                    downloadListener?.onFileDownloadFailed(info, "Unable to create file, file name:${info.name}")
+                    return false
+                }
+            }
             existTmp
                 ?: rootFile.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX")
                 ?: throw DownloadException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX, Exists:${rootFile.exists()}, Writable:${rootFile.canWrite()}, Uri:${rootFile.uri}")
