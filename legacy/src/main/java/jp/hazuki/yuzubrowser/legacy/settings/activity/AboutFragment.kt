@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebView
@@ -60,7 +61,8 @@ class AboutFragment : YuzuPreferenceFragment() {
         }
 
         findPreference<Preference>("privacy_policy")!!.setOnPreferenceClickListener {
-            startActivity(intentFor(Constants.activity.MAIN_BROWSER).apply {
+            startActivity(Intent().apply {
+                setClassName(requireContext(), Constants.activity.MAIN_BROWSER)
                 action = Constants.intent.ACTION_OPEN_DEFAULT
                 data = Uri.parse("https://github.com/hazuki0x0/YuzuBrowser/wiki/Privacy-policy")
             })
