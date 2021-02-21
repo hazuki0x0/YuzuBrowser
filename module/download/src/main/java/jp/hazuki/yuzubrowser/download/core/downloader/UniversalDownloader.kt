@@ -20,6 +20,7 @@ import android.content.Context
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import androidx.documentfile.provider.DocumentFile
+import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.TMP_FILE_SUFFIX
@@ -70,9 +71,17 @@ class UniversalDownloader(private val context: Context, private val info: Downlo
                 info.resumable = false
             }
 
-            existTmp
-                ?: rootFile.createFile(info.mimeType, "${info.name}$TMP_FILE_SUFFIX")
-                ?: throw IllegalStateException("Can not create file. mimetype:${info.mimeType}, filename:${info.name}$TMP_FILE_SUFFIX")
+            val mimeType = if (info.mimeType.isNotEmpty()) info.mimeType else MIME_TYPE_UNKNOWN
+
+            val tmpFile = existTmp ?: rootFile.createFile(mimeType, "${info.name}$TMP_FILE_SUFFIX")
+
+            if (tmpFile == null) {
+                info.state = DownloadFileInfo.STATE_UNKNOWN_ERROR
+                downloadListener?.onFileDownloadFailed(info, "Unable to create file, file name:${info.name}")
+                return false
+            }
+
+            tmpFile
         }
 
 
