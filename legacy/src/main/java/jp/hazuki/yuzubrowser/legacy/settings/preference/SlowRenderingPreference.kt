@@ -21,8 +21,9 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
-import androidx.preference.DialogPreference
+import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import jp.hazuki.yuzubrowser.legacy.R
 
@@ -36,7 +37,7 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
         }
     }
 
-    class WarningDialog : androidx.fragment.app.DialogFragment() {
+    class WarningDialog : DialogFragment() {
 
         companion object {
             private const val ARG_KEY = "key"
@@ -52,18 +53,20 @@ class SlowRenderingPreference(context: Context, attrs: AttributeSet) : SwitchPre
         }
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val fragment = parentFragmentManager as? DialogPreference.TargetFragment
-                ?: throw IllegalStateException("Target fragment must implement TargetFragment" + " interface")
-
-            val key = requireArguments().getString(ARG_KEY)!!
-
-            val preference: SlowRenderingPreference = fragment.findPreference(key)!!
-
             return AlertDialog.Builder(context).run {
-                setTitle(preference.title)
+                setTitle(R.string.pref_slow_rendering)
                 setMessage(R.string.pref_slow_rendering_alert)
                 setPositiveButton(android.R.string.ok)
-                { _, _ -> if (preference.callChangeListener(true)) preference.isChecked = true }
+                { _, _ ->
+                    val fragment = parentFragment as? PreferenceFragmentCompat
+                        ?: throw IllegalStateException("This dialog is valid only for preference fragments.")
+
+                    val key = requireArguments().getString(ARG_KEY)!!
+
+                    val preference: SlowRenderingPreference = fragment.findPreference(key)!!
+
+                    if (preference.callChangeListener(true)) preference.isChecked = true
+                }
                 setNegativeButton(android.R.string.cancel, null)
                 create()
             }

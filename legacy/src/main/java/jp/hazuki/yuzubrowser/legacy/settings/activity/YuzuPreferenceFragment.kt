@@ -42,7 +42,11 @@ abstract class YuzuPreferenceFragment : YuzuBasePreferenceFragment() {
                 is SearchUrlPreference -> dialog = SearchUrlPreference.PreferenceDialog.newInstance(preference)
                 is NightModePreference -> dialog = NightModePreference.SettingDialog.newInstance(preference)
                 is WebTextSizePreference -> dialog = WebTextSizePreference.SizeDialog.newInstance(preference)
-                is SlowRenderingPreference -> dialog = SlowRenderingPreference.WarningDialog.newInstance(preference)
+                is SlowRenderingPreference -> {
+                    SlowRenderingPreference.WarningDialog.newInstance(preference)
+                        .show(childFragmentManager, "")
+                    return
+                }
                 is CustomDialogPreference -> {
                     preference.show(childFragmentManager)
                     return
