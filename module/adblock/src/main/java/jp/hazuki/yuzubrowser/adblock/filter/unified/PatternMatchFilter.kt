@@ -83,9 +83,7 @@ class PatternMatchFilter(
                         if (pPtr == pattern.length) return true
                         when {
                             start < 0 -> return false
-                            url.length == start + 1 -> {
-                                return pPtr == pattern.lastIndex
-                            }
+                            url.length == start + 1 -> return pPtr == pattern.lastIndex
                             else -> start + 1
                         }
                     }
@@ -97,7 +95,10 @@ class PatternMatchFilter(
             for (k in pPtr + 1 until pattern.length) {
                 val np = pattern[k]
                 if (np == '|' && j == max && k == pattern.length - 1) return true
-                if (j >= end || j >= max) break
+                if (j >= end || j >= max) {
+                    i++
+                    continue@loop
+                }
                 val nu = url[j]
                 if (nu != np) {
                     when (np) {

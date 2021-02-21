@@ -71,6 +71,10 @@ class PatternMatchFilterTest {
         assertThat(firstSeparator.check("browser.test.com/adsite")).isEqualTo(true)
         assertThat(firstSeparator.check("browser.test.com/ads")).isEqualTo(false)
 
+        val secondSeparator = PatternMatchFilter("p^adsite", 0xffff, false, null, -1)
+        assertThat(secondSeparator.check("browser.test.jp.adsite")).isEqualTo(false)
+        assertThat(secondSeparator.check("browser.test.jp/adsite")).isEqualTo(true)
+
         val endSeparator = PatternMatchFilter("adsite^", 0xffff, false, null, -1)
         assertThat(endSeparator.check("browser.test.com/adsite/ad")).isEqualTo(true)
         assertThat(endSeparator.check("ads.test.com/adsite.ad/")).isEqualTo(false)
@@ -83,5 +87,9 @@ class PatternMatchFilterTest {
 
         val fT2 = PatternMatchFilter("||ad-stir.com^", 0, false, null, -1)
         assertThat(fT2.check("http://js.ad-stir.com/js/nativeapi.js")).isEqualTo(true)
+
+        /** real pattern test */
+        val realJandan = PatternMatchFilter("||jandan.net^*/moyu.png", 65535, false, null, -1)
+        assertThat(realJandan.check("https://i.jandan.net/")).isEqualTo(false)
     }
 }
