@@ -10,6 +10,7 @@
         android:layout_height="wrap_content" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,7 +20,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="numberSigned"
-            android:hint="@string/action_web_scroll_x_coordinate">
+            android:hint="@string/action_web_scroll_x_coordinate"
+            android:importantForAutofill="no">
 
             <requestFocus />
         </EditText>
@@ -27,6 +29,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -36,7 +39,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="numberSigned"
-            android:hint="@string/action_web_scroll_y_coordinate" />
+            android:hint="@string/action_web_scroll_y_coordinate"
+            android:importantForAutofill="no" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
