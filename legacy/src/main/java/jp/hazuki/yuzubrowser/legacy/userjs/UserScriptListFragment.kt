@@ -26,9 +26,12 @@ import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
@@ -65,7 +68,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
 
         binding.apply {
             recyclerView.run {
-                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+                layoutManager = LinearLayoutManager(activity)
                 addItemDecoration(DividerItemDecoration(activity))
                 val helper = ItemTouchHelper(ListTouch())
                 helper.attachToRecyclerView(this)
@@ -191,37 +194,37 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
 
     private inner class ListTouch : ItemTouchHelper.Callback() {
 
-        override fun getMovementFlags(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder): Int =
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
             makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) or makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
 
-        override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             adapter.move(viewHolder.adapterPosition, target.adapterPosition)
             mDb.saveAll(adapter.items)
             return true
         }
 
-        override fun onSwiped(viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val index = viewHolder.adapterPosition
             val js = adapter.remove(index)
             Snackbar.make(binding.linear, R.string.deleted, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.undo) {
-                        adapter.add(index, js)
-                        adapter.notifyDataSetChanged()
-                    }
-                    .addCallback(object : Snackbar.Callback() {
-                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            if (event != DISMISS_EVENT_ACTION) {
-                                mDb.delete(js)
-                            }
+                .setAction(R.string.undo) {
+                    adapter.add(index, js)
+                    adapter.notifyDataSetChanged()
+                }
+                .addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        if (event != DISMISS_EVENT_ACTION) {
+                            mDb.delete(js)
                         }
-                    })
+                    }
+                })
                     .show()
         }
 
         override fun isLongPressDragEnabled(): Boolean = adapter.isSortMode
     }
 
-    class InfoDialog : androidx.fragment.app.DialogFragment() {
+    class InfoDialog : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val view = View.inflate(activity, R.layout.userjs_info_dialog, null)
@@ -296,6 +299,7 @@ class UserScriptListFragment : Fragment(), OnUserJsItemClickListener, DeleteDial
             override fun setUp(item: UserScript) {
                 super.setUp(item)
                 binding.script = item
+                binding.viewHolder = this
             }
 
             fun onClick() {

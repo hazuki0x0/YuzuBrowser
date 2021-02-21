@@ -21,7 +21,6 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:gravity="center_vertical"
-        android:onClick="@{() -> viewHolder.onClick()}"
         android:descendantFocusability="blocksDescendants">
 
         <TextView
@@ -40,6 +39,7 @@
             android:src="@drawable/ic_info_white_24dp"
             android:id="@+id/infoButton"
             android:tint="?attr/iconColor"
+            android:onClick="@{() -> viewHolder.onClick()}"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:padding="10dp"
             android:layout_weight="0"
