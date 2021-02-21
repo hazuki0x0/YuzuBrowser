@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.legacy.gesture;
 
 import android.content.Intent;
-import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -53,19 +52,16 @@ public class GestureTestActivity extends ThemeActivity {
 
         mActionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA);
         if (mActionNameArray == null)
-            mActionNameArray = new ActionNameArray(getApplicationContext());
+            mActionNameArray = new ActionNameArray(this);
 
-        gestureOverlayView.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
-            @Override
-            public void onGesturePerformed(GestureOverlayView overlay, final Gesture gesture) {
-                overlay.clear(false);
-                if (gesture.getStrokesCount() == 0)
-                    return;
-                GestureScore score = manager.getScore(gesture);
-                if (score == null || score.action == null)
-                    return;
-                Toast.makeText(getApplicationContext(), score.score + " : " + score.action.toString(mActionNameArray), Toast.LENGTH_SHORT).show();
-            }
+        gestureOverlayView.addOnGesturePerformedListener((overlay, gesture) -> {
+            overlay.clear(false);
+            if (gesture.getStrokesCount() == 0)
+                return;
+            GestureScore score = manager.getScore(gesture);
+            if (score == null || score.action == null)
+                return;
+            Toast.makeText(getApplicationContext(), score.score + " : " + score.action.toString(mActionNameArray), Toast.LENGTH_SHORT).show();
         });
     }
 }

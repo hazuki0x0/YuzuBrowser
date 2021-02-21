@@ -73,7 +73,7 @@ class ActionActivity : ThemeActivity(), OnRecyclerListener {
         }
 
         actionNameArray = intent.getParcelableExtra(ActionNameArray.INTENT_EXTRA)
-            ?: ActionNameArray(applicationContext)
+            ?: ActionNameArray(this)
 
         adapter = ActionNameArrayAdapter(this, actionNameArray, this)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
