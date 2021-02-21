@@ -107,11 +107,16 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
     override fun onBind(intent: Intent?): IBinder = messenger.binder
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null) {
+        if (intent == null) {
+            stopSelf()
+            return START_NOT_STICKY
+        }
+        GlobalScope.launch(Dispatchers.IO) {
             var thread: DownloadThread? = null
             when (intent.action) {
                 INTENT_ACTION_START_DOWNLOAD -> {
-                    val root = intent.getParcelableExtra<Uri>(INTENT_EXTRA_DOWNLOAD_ROOT_URI)!!.toDocumentFile(this)
+                    val root = intent.getParcelableExtra<Uri>(INTENT_EXTRA_DOWNLOAD_ROOT_URI)!!
+                        .toDocumentFile(this@DownloadService)
                     val file = intent.getParcelableExtra<DownloadFile>(INTENT_EXTRA_DOWNLOAD_REQUEST)
                     val metadata = intent.getParcelableExtra<MetaData?>(INTENT_EXTRA_DOWNLOAD_METADATA)
                     if (file != null) {
@@ -121,7 +126,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                 INTENT_ACTION_RESTART_DOWNLOAD -> {
                     val id = intent.getLongExtra(INTENT_EXTRA_DOWNLOAD_ID, -1)
                     val info = downloadsDao[id]
-                    val root = info.root.toDocumentFile(this)
+                    val root = info.root.toDocumentFile(this@DownloadService)
                     thread = ReDownloadThread(root, info, DownloadRequest(null, null, null))
                 }
             }
@@ -131,6 +136,8 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                     threadList.add(thread)
                 }
                 thread.start()
+            } else {
+                stopSelf()
             }
         }
         return START_NOT_STICKY
@@ -381,7 +388,7 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                         putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id)
                     }
                     addAction(R.drawable.ic_start_white_24dp, getText(R.string.resume_download),
-                            PendingIntent.getService(this@DownloadService, info.id.toInt(), resume, 0))
+                        PendingIntent.getService(this@DownloadService, info.id.toInt(), resume, 0))
                     notificationManager.notify(info.id.toInt(), build())
                 }
             } else {
@@ -411,12 +418,12 @@ class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
                     if (info.resumable) {
                         val pause = Intent(INTENT_ACTION_PAUSE_DOWNLOAD).apply { putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id) }
                         addAction(R.drawable.ic_pause_white_24dp, getText(R.string.pause_download),
-                                PendingIntent.getBroadcast(this@DownloadService, info.id.toInt(), pause, PendingIntent.FLAG_UPDATE_CURRENT))
+                            PendingIntent.getBroadcast(this@DownloadService, info.id.toInt(), pause, PendingIntent.FLAG_UPDATE_CURRENT))
                     }
 
                     val cancel = Intent(INTENT_ACTION_CANCEL_DOWNLOAD).apply { putExtra(INTENT_EXTRA_DOWNLOAD_ID, info.id) }
                     addAction(R.drawable.ic_cancel_white_24dp, getText(android.R.string.cancel),
-                            PendingIntent.getBroadcast(this@DownloadService, info.id.toInt(), cancel, PendingIntent.FLAG_UPDATE_CURRENT))
+                        PendingIntent.getBroadcast(this@DownloadService, info.id.toInt(), cancel, PendingIntent.FLAG_UPDATE_CURRENT))
                 }
             }
         }
