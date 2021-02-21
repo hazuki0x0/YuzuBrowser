@@ -296,7 +296,7 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         binding.pullToRefresh.apply {
             setOnChildScrollUpCallback { _, _ ->
                 val tab = tabManagerIn.currentTabData
-                !tab.mWebView.canPullToRefresh || !tab.isFinished
+                !(tab.mWebView?.canPullToRefresh ?: false) || !tab.isFinished
             }
             setOnRefreshListener {
                 ui {
