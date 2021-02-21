@@ -18,6 +18,7 @@ package jp.hazuki.yuzubrowser.legacy.settings.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -58,14 +59,22 @@ class ThemeManagementFragment : YuzuPreferenceFragment(), ConfirmDialog.OnConfir
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             type = "*/*"
         }
-        importThemeFromFileLauncher.launch(intent)
+        try {
+            importThemeFromFileLauncher.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun importThemeFromDirectory() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
-        importThemeFromDirectoryLauncher.launch(intent)
+        try {
+            importThemeFromDirectoryLauncher.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(context, R.string.failed, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private val importThemeFromFileLauncher = registerForStartActivityForResult {
