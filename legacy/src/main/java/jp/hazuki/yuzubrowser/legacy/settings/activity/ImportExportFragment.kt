@@ -99,7 +99,7 @@ class ImportExportFragment : YuzuPreferenceFragment() {
         findPreference<Preference>("backup_speed_dial")!!.setOnPreferenceClickListener {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 type = "*/*"
-                putExtra(Intent.EXTRA_TITLE, "bookmark_${FileUtils.getTimeFileName()}.dat")
+                putExtra(Intent.EXTRA_TITLE, "speedDial_${FileUtils.getTimeFileName()}$EXT_SPEED_DIAL")
             }
             backupSpeeddialLauncher.launch(intent)
             false
