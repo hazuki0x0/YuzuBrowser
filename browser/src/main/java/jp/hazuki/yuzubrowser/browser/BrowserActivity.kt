@@ -414,7 +414,6 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun onStop() {
         super.onStop()
-        webClient.onStop()
         tabListView?.closeSnackBar()
 
         tabManagerIn.saveData()

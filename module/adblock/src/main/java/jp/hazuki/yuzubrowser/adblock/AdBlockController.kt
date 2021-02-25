@@ -47,7 +47,6 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
     private var adBlocker: Blocker? = null
     private var elementBlocker: CosmeticFiltering? = null
     private var isAbpIgnoreGenericElement = false
-    private var updating = false
     private var waitForLoading: CountDownLatch? = null
 
     init {
@@ -55,47 +54,48 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
     }
 
     fun update() {
-        updating = true
         waitForLoading = CountDownLatch(1)
         GlobalScope.launch(Dispatchers.IO) {
-            val abpLoader = AbpLoader(context.getFilterDir(), abpDao.getAll())
-            val deny = async {
-                FilterContainer().also {
-                    abpLoader.loadAll(ABP_PREFIX_DENY).forEach(it::plusAssign)
-                }
-            }
-            val allow = async {
-                FilterContainer().also {
-                    abpLoader.loadAll(ABP_PREFIX_ALLOW).forEach(it::plusAssign)
-                }
-            }
-            val allowPage = async {
-                FilterContainer().also {
-                    manager.getCachedMatcherList(AdBlockManager.ALLOW_PAGE_TABLE_NAME).forEach(it::plusAssign)
-                }
-            }
-
-            if (AppPrefs.isAbpUseElementHide.get()) {
-                val disableCosmetic = async {
+            try {
+                val abpLoader = AbpLoader(context.getFilterDir(), abpDao.getAll())
+                val deny = async {
                     FilterContainer().also {
-                        abpLoader.loadAll(ABP_PREFIX_DISABLE_ELEMENT_PAGE).forEach(it::plusAssign)
+                        abpLoader.loadAll(ABP_PREFIX_DENY).forEach(it::plusAssign)
                     }
                 }
-                val elementFilter = async {
-                    ElementContainer().also {
-                        abpLoader.loadAllElementFilter().forEach(it::plusAssign)
+                val allow = async {
+                    FilterContainer().also {
+                        abpLoader.loadAll(ABP_PREFIX_ALLOW).forEach(it::plusAssign)
+                    }
+                }
+                val allowPage = async {
+                    FilterContainer().also {
+                        manager.getCachedMatcherList(AdBlockManager.ALLOW_PAGE_TABLE_NAME).forEach(it::plusAssign)
                     }
                 }
 
-                elementBlocker = CosmeticFiltering(disableCosmetic.await(), elementFilter.await())
+                if (AppPrefs.isAbpUseElementHide.get()) {
+                    val disableCosmetic = async {
+                        FilterContainer().also {
+                            abpLoader.loadAll(ABP_PREFIX_DISABLE_ELEMENT_PAGE).forEach(it::plusAssign)
+                        }
+                    }
+                    val elementFilter = async {
+                        ElementContainer().also {
+                            abpLoader.loadAllElementFilter().forEach(it::plusAssign)
+                        }
+                    }
+
+                    elementBlocker = CosmeticFiltering(disableCosmetic.await(), elementFilter.await())
+                }
+
+                adBlocker = Blocker(allowPage.await(), allow.await(), deny.await())
+
+                isAbpIgnoreGenericElement = AppPrefs.isAbpIgnoreGenericElement.get()
+            } finally {
+                waitForLoading?.countDown()
+                waitForLoading = null
             }
-
-            adBlocker = Blocker(allowPage.await(), allow.await(), deny.await())
-
-            isAbpIgnoreGenericElement = AppPrefs.isAbpIgnoreGenericElement.get()
-            updating = false
-            waitForLoading?.countDown()
-            waitForLoading = null
         }
     }
 
@@ -109,10 +109,6 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
         return adBlocker?.isBlock(contentRequest)
     }
 
-    fun onResume() {
-        if (updating) return
-    }
-
     fun createDummy(uri: Uri): WebResourceResponse {
         val mimeType = getMimeType(uri.toString())
         return if (mimeType.startsWith("image/")) {
@@ -124,13 +120,13 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
 
     fun createMainFrameDummy(context: Context, uri: Uri, pattern: String): WebResourceResponse {
         val builder = StringBuilder("<meta charset=utf-8>" +
-                "<meta content=\"width=device-width,initial-scale=1,minimum-scale=1\"name=viewport>" +
-                "<style>body{padding:5px 15px;background:#fafafa}body,p{text-align:center}p{margin:20px 0 0}" +
-                "pre{margin:5px 0;padding:5px;background:#ddd}</style><title>")
-                .append(context.getText(R.string.pref_ad_block))
-                .append("</title><p>")
-                .append(context.getText(R.string.ad_block_blocked_page))
-                .append("<pre>")
+            "<meta content=\"width=device-width,initial-scale=1,minimum-scale=1\"name=viewport>" +
+            "<style>body{padding:5px 15px;background:#fafafa}body,p{text-align:center}p{margin:20px 0 0}" +
+            "pre{margin:5px 0;padding:5px;background:#ddd}</style><title>")
+            .append(context.getText(R.string.pref_ad_block))
+            .append("</title><p>")
+            .append(context.getText(R.string.ad_block_blocked_page))
+            .append("<pre>")
             .append(uri)
             .append("</pre><p>")
             .append(context.getText(R.string.ad_block_blocked_filter))

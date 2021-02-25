@@ -160,10 +160,6 @@ class WebClient(
         adBlockController?.update()
     }
 
-    fun onStop() {
-        adBlockController?.onResume()
-    }
-
     fun destroy() {
         browserHistoryManager?.destroy()
         browserHistoryManager = null
