@@ -37,6 +37,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
+import java.util.concurrent.CountDownLatch
 
 class AdBlockController(private val context: Context, private val abpDao: AbpDao) {
     private val dummyImage: ByteArray = IOUtils.readByte(context.resources.assets.open("blank.png"))
@@ -47,6 +48,7 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
     private var elementBlocker: CosmeticFiltering? = null
     private var isAbpIgnoreGenericElement = false
     private var updating = false
+    private var waitForLoading: CountDownLatch? = null
 
     init {
         update()
@@ -54,6 +56,7 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
 
     fun update() {
         updating = true
+        waitForLoading = CountDownLatch(1)
         GlobalScope.launch(Dispatchers.IO) {
             val abpLoader = AbpLoader(context.getFilterDir(), abpDao.getAll())
             val deny = async {
@@ -91,14 +94,18 @@ class AdBlockController(private val context: Context, private val abpDao: AbpDao
 
             isAbpIgnoreGenericElement = AppPrefs.isAbpIgnoreGenericElement.get()
             updating = false
+            waitForLoading?.countDown()
+            waitForLoading = null
         }
     }
 
     fun isWhitePage(pageUrl: Uri): Boolean {
+        waitForLoading?.await()
         return adBlocker?.isWhitePage(pageUrl) ?: false
     }
 
     fun isBlock(contentRequest: ContentRequest): ContentFilter? {
+        waitForLoading?.await()
         return adBlocker?.isBlock(contentRequest)
     }
 
