@@ -16,18 +16,11 @@
 
 package jp.hazuki.yuzubrowser.adblock.filter.unified
 
-import com.google.re2j.Pattern
+import java.util.*
 
 object Tag {
-    private val pattern = Pattern.compile("[a-z0-9%]{3,}")
-
     fun create(url: String) = sequence {
-        val m = pattern.matcher(url)
-        while (m.find()) {
-            val tag = url.substring(m.start(), m.end())
-            if (isPrevent(tag)) continue
-            yield(tag)
-        }
+        yieldAll(url.toLowerCase(Locale.ENGLISH).getTagCandidates())
         yield("")
     }
 
@@ -35,10 +28,8 @@ object Tag {
         var maxLength = 0
         var tag = ""
 
-        val m = Tag.pattern.matcher(pattern)
-        while (m.find()) {
-            val candidate = pattern.substring(m.start(), m.end())
-            if (isPrevent(candidate)) continue
+        pattern.toLowerCase(Locale.ENGLISH).getTagCandidates().forEach { candidate ->
+            if (isPrevent(candidate)) return@forEach
 
             if (candidate.length > maxLength) {
                 maxLength = candidate.length
@@ -47,6 +38,24 @@ object Tag {
         }
 
         return tag
+    }
+
+    private fun String.getTagCandidates() = sequence {
+        var start = 0
+        for (i in 0 until length) {
+            when (get(i)) {
+                in 'a'..'z', in '0'..'9', '%' -> continue
+                else -> {
+                    if (i != start && i - start >= 3) {
+                        yield(substring(start, i))
+                    }
+                    start = i + 1
+                }
+            }
+        }
+        if (length != start && length - start >= 3) {
+            yield(substring(start, length))
+        }
     }
 
     private fun isPrevent(tag: String): Boolean {

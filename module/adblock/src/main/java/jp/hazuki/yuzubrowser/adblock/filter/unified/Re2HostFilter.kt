@@ -20,22 +20,26 @@ import android.net.Uri
 import com.google.re2j.Pattern
 
 class Re2HostFilter(
-    private val regex: Pattern,
     filter: String,
     contentType: Int,
     ignoreCase: Boolean,
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+    var regex: Pattern? = null
 
     override val filterType: Int
         get() = FILTER_TYPE_RE2_REGEX_HOST
 
     override fun check(url: Uri): Boolean {
+        val regex = regex ?: createRegex().also { regex = it }
         val host = url.host
         return if (host != null)
             regex.matches(host)
         else
             regex.matches(url.toString())
     }
+
+    private fun createRegex() =
+        Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
 }

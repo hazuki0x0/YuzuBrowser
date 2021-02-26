@@ -26,16 +26,19 @@ class RegexHostFilter(
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
-    private val regex: Pattern = Pattern.compile("//$pattern")
+    private var regex: Pattern? = null
 
     override val filterType: Int
         get() = FILTER_TYPE_JVM_REGEX_HOST
 
     override fun check(url: Uri): Boolean {
+        val regex = regex ?: createRegex().also { regex = it }
         val host = url.host
         return if (host != null)
             regex.matcher(host).find()
         else
             regex.matcher(url.toString()).find()
     }
+
+    private fun createRegex() = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
 }

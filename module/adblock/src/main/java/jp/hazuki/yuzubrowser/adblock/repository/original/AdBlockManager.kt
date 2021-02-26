@@ -150,7 +150,9 @@ class AdBlockManager internal constructor(private val context: Context) {
     }
 
     fun getCachedMatcherList(table: String): Sequence<UnifiedFilter> {
-        if (getListUpdateTime(table) <= getCacheUpdateTime(table)) {
+        val listTime = getListUpdateTime(table)
+        val cacheTime = getCacheUpdateTime(table)
+        if (listTime <= cacheTime) {
             try {
                 getFilterFile(table).inputStream().use {
                     val reader = FilterReader(it)
@@ -163,7 +165,10 @@ class AdBlockManager internal constructor(private val context: Context) {
             }
         }
         val list = getMatcherList(table)
-        GlobalScope.launch(Dispatchers.IO) { writeFilter(getFilterFile(table), list) }
+        GlobalScope.launch(Dispatchers.IO) {
+            writeFilter(getFilterFile(table), list)
+            updateCacheTime(table)
+        }
         return list.asSequence()
     }
 
@@ -200,7 +205,7 @@ class AdBlockManager internal constructor(private val context: Context) {
         db.update(INFO_TABLE_NAME, values, "$INFO_COLUMN_NAME = ?", arrayOf(table))
     }
 
-    fun getCacheUpdateTime(table: String): Long {
+    private fun getCacheUpdateTime(table: String): Long {
         val db = mOpenHelper.readableDatabase
         db.query(INFO_TABLE_NAME, null, "$INFO_COLUMN_NAME = ?", arrayOf("${table}_cache"), null, null, null, "1").use { c ->
             var time: Long = -1
@@ -210,7 +215,7 @@ class AdBlockManager internal constructor(private val context: Context) {
         }
     }
 
-    fun updateCacheTime(table: String) {
+    private fun updateCacheTime(table: String) {
         val db = mOpenHelper.writableDatabase
         val values = ContentValues()
         values.put(INFO_COLUMN_LAST_TIME, System.currentTimeMillis())
