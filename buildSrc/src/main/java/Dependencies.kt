@@ -16,7 +16,7 @@
 
 object Build {
     const val compile_sdk_version = 30
-    const val build_tools_version = "30.0.2"
+    const val build_tools_version = "30.0.3"
     const val min_sdk_version = 23
     const val target_sdk_version = 30
 }
@@ -41,12 +41,12 @@ object Versions {
     const val documentFile = "1.0.1"
     const val print = "1.0.0"
     const val swipeRefreshLayout = "1.1.0"
-    const val dagger = "2.32"
+    const val dagger = "2.33"
     const val moshi = "1.11.0"
     const val okhttp = "4.9.1"
     const val okio = "2.10.0"
     const val kvs_schema = "5.1.0"
-    const val kotlin = "1.4.30"
+    const val kotlin = "1.4.31"
     const val kotlin_coroutines = "1.4.2"
     const val junit = "4.13.2"
     const val assertk = "0.23.1"
@@ -55,7 +55,7 @@ object Versions {
     const val runner = "1.1.2"
     const val header_decor = "0.2.8"
     const val materialprogressbar = "1.6.1"
-    const val mockito = "3.7.7"
+    const val mockito = "3.8.0"
     const val powermock = "2.0.9"
     const val jsoup = "1.13.1"
     const val re2j = "1.5"
