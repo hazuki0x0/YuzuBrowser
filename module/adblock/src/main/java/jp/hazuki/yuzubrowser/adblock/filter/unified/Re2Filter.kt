@@ -39,6 +39,9 @@ class Re2Filter(
     private fun createPattern() =
         Pattern.compile(pattern, if (ignoreCase) Pattern.CASE_INSENSITIVE else 0)
 
+    override val isRegex: Boolean
+        get() = true
+
     companion object {
         fun createNow(
             filter: String,

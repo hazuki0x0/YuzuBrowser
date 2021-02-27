@@ -40,5 +40,8 @@ class RegexHostFilter(
             regex.matcher(url.toString()).find()
     }
 
+    override val isRegex: Boolean
+        get() = true
+
     private fun createRegex() = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
 }

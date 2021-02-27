@@ -38,6 +38,9 @@ class RegexFilter(
     private fun createRegex() =
         if (ignoreCase) pattern.toRegex(RegexOption.IGNORE_CASE) else pattern.toRegex()
 
+    override val isRegex: Boolean
+        get() = true
+
     companion object {
         fun createNow(
             filter: String,

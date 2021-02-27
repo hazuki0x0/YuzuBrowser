@@ -40,6 +40,9 @@ class Re2HostFilter(
             regex.matches(url.toString())
     }
 
+    override val isRegex: Boolean
+        get() = true
+
     private fun createRegex() =
         Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
 }
