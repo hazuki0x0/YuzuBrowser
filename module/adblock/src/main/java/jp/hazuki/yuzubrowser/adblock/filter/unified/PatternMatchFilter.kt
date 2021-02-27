@@ -28,6 +28,8 @@ class PatternMatchFilter(
     override val filterType: Int
         get() = FILTER_TYPE_PATTERN
 
+    override val isRegex = filter.contains('*')
+
     private val isStartWith = filter.startsWith("||")
 
     override fun check(url: Uri): Boolean {
