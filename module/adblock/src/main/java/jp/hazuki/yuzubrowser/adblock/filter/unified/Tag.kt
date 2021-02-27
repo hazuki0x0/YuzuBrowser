@@ -19,18 +19,19 @@ package jp.hazuki.yuzubrowser.adblock.filter.unified
 import java.util.*
 
 object Tag {
-    fun create(url: String) = sequence {
-        yieldAll(url.toLowerCase(Locale.ENGLISH).getTagCandidates())
-        yield("")
+    fun create(url: String): List<String> {
+        return url.toLowerCase(Locale.ENGLISH).getTagCandidates().also {
+            it += ""
+        }
     }
 
     fun createBest(pattern: String): String {
         var maxLength = 0
         var tag = ""
 
-        pattern.toLowerCase(Locale.ENGLISH).getTagCandidates().forEach { candidate ->
-            if (isPrevent(candidate)) return@forEach
-
+        val candidates = pattern.toLowerCase(Locale.ENGLISH).getTagCandidates()
+        for (i in 0 until candidates.size) {
+            val candidate = candidates[i]
             if (candidate.length > maxLength) {
                 maxLength = candidate.length
                 tag = candidate
@@ -40,22 +41,30 @@ object Tag {
         return tag
     }
 
-    private fun String.getTagCandidates() = sequence {
+    private fun String.getTagCandidates(): MutableList<String> {
         var start = 0
+        val list = mutableListOf<String>()
         for (i in 0 until length) {
             when (get(i)) {
                 in 'a'..'z', in '0'..'9', '%' -> continue
                 else -> {
                     if (i != start && i - start >= 3) {
-                        yield(substring(start, i))
+                        val tag = substring(start, i)
+                        if (!isPrevent(tag)) {
+                            list += tag
+                        }
                     }
                     start = i + 1
                 }
             }
         }
         if (length != start && length - start >= 3) {
-            yield(substring(start, length))
+            val tag = substring(start, length)
+            if (!isPrevent(tag)) {
+                list += tag
+            }
         }
+        return list
     }
 
     private fun isPrevent(tag: String): Boolean {
