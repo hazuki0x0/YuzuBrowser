@@ -24,39 +24,16 @@ class RegexFilter(
     ignoreCase: Boolean,
     domains: DomainMap?,
     thirdParty: Int,
-    private var regex: Regex? = null,
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+    private val regex = if (ignoreCase) pattern.toRegex(RegexOption.IGNORE_CASE) else pattern.toRegex()
 
     override val filterType: Int
         get() = FILTER_TYPE_JVM_REGEX
 
     override fun check(url: Uri): Boolean {
-        val regex = regex ?: createRegex().also { regex = it }
         return regex.matches(url.toString())
     }
 
-    private fun createRegex() =
-        if (ignoreCase) pattern.toRegex(RegexOption.IGNORE_CASE) else pattern.toRegex()
-
     override val isRegex: Boolean
         get() = true
-
-    companion object {
-        fun createNow(
-            filter: String,
-            contentType: Int,
-            ignoreCase: Boolean,
-            domains: DomainMap?,
-            thirdParty: Int,
-        ): RegexFilter {
-            return RegexFilter(
-                filter,
-                contentType,
-                ignoreCase,
-                domains,
-                thirdParty,
-                if (ignoreCase) filter.toRegex(RegexOption.IGNORE_CASE) else filter.toRegex()
-            )
-        }
-    }
 }

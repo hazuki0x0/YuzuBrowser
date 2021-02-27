@@ -25,39 +25,16 @@ class Re2Filter(
     ignoreCase: Boolean,
     domains: DomainMap?,
     thirdParty: Int,
-    var regex: Pattern? = null,
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
+    private val regex = Pattern.compile(pattern, if (ignoreCase) Pattern.CASE_INSENSITIVE else 0)
 
     override val filterType: Int
         get() = FILTER_TYPE_RE2_REGEX
 
     override fun check(url: Uri): Boolean {
-        val regex = regex ?: createPattern().also { regex = it }
         return regex.matches(url.toString())
     }
 
-    private fun createPattern() =
-        Pattern.compile(pattern, if (ignoreCase) Pattern.CASE_INSENSITIVE else 0)
-
     override val isRegex: Boolean
         get() = true
-
-    companion object {
-        fun createNow(
-            filter: String,
-            contentType: Int,
-            ignoreCase: Boolean,
-            domains: DomainMap?,
-            thirdParty: Int,
-        ): Re2Filter {
-            return Re2Filter(
-                filter,
-                contentType,
-                ignoreCase,
-                domains,
-                thirdParty,
-                Pattern.compile(filter, if (ignoreCase) Pattern.CASE_INSENSITIVE else 0)
-            )
-        }
-    }
 }

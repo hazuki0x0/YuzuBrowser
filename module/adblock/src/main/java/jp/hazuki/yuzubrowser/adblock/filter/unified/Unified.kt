@@ -43,10 +43,10 @@ internal const val ELEMENT_FILTER_CACHE_HEADER = "YZBABPEF\u0000\u0001\u0001"
 
 fun createRegexFilter(filter: String, contentType: Int, ignoreCase: Boolean, domains: DomainMap?, thirdParty: Int): UnifiedFilter? {
     try {
-        Re2Filter.createNow(filter, contentType, ignoreCase, domains, thirdParty)
+        Re2Filter(filter, contentType, ignoreCase, domains, thirdParty)
     } catch (e: PatternSyntaxException) {
         try {
-            RegexFilter.createNow(filter, contentType, ignoreCase, domains, thirdParty)
+            RegexFilter(filter, contentType, ignoreCase, domains, thirdParty)
         } catch (e: java.util.regex.PatternSyntaxException) {
         }
     }

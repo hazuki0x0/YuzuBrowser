@@ -26,13 +26,12 @@ class Re2HostFilter(
     domains: DomainMap?,
     thirdParty: Int
 ) : UnifiedFilter(filter, contentType, ignoreCase, domains, thirdParty) {
-    var regex: Pattern? = null
+    private val regex = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
 
     override val filterType: Int
         get() = FILTER_TYPE_RE2_REGEX_HOST
 
     override fun check(url: Uri): Boolean {
-        val regex = regex ?: createRegex().also { regex = it }
         val host = url.host
         return if (host != null)
             regex.matches(host)
@@ -42,7 +41,4 @@ class Re2HostFilter(
 
     override val isRegex: Boolean
         get() = true
-
-    private fun createRegex() =
-        Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
 }
