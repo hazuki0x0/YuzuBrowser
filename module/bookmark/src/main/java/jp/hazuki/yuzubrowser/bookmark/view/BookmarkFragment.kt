@@ -26,10 +26,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.bookmark.R
 import jp.hazuki.bookmark.databinding.FragmentBookmarkBinding
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
@@ -55,7 +56,8 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import java.util.*
 import javax.inject.Inject
 
-class BookmarkFragment : DaggerFragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback, BreadcrumbsView.OnBreadcrumbsViewClickListener {
+@AndroidEntryPoint
+class BookmarkFragment : Fragment(), BookmarkItemAdapter.OnBookmarkRecyclerListener, ActionMode.Callback, BreadcrumbsView.OnBreadcrumbsViewClickListener {
 
     private var pickMode: Boolean = false
 

@@ -19,13 +19,15 @@ package jp.hazuki.yuzubrowser.legacy.di
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import jp.hazuki.yuzubrowser.webview.WebViewFactory
 
 @Module
+@InstallIn(ActivityComponent::class)
 object WebViewModule {
 
     @Provides
-    @JvmStatic
     fun provideWebViewFactory(moshi: Moshi): WebViewFactory {
         return WebViewFactory(moshi)
     }

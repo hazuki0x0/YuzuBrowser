@@ -20,13 +20,15 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.clans.fab.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.moshi.Moshi
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.webencode.SelectActionDialog.DELETE
 import jp.hazuki.yuzubrowser.legacy.webencode.SelectActionDialog.EDIT
@@ -36,14 +38,17 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
-class WebTextEncodeSettingFragment : DaggerFragment(), OnRecyclerListener, EditWebTextEncodeDialog.OnEditedWebTextEncode, SelectActionDialog.OnActionSelect, DeleteDialogCompat.OnDelete {
+@AndroidEntryPoint
+class WebTextEncodeSettingFragment : Fragment(), OnRecyclerListener, EditWebTextEncodeDialog.OnEditedWebTextEncode, SelectActionDialog.OnActionSelect, DeleteDialogCompat.OnDelete {
     private lateinit var mEncodeList: WebTextEncodeList
     private lateinit var mAdapter: WebTextEncodeRecyclerAdapter
     private var rootView: View? = null
 
     @Inject
     lateinit var moshi: Moshi
+
     @Inject
+    @ApplicationContext
     lateinit var applicationContext: Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

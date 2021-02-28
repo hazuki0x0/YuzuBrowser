@@ -26,6 +26,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.utility.extensions.clipboardText
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.search.R
@@ -33,21 +34,20 @@ import jp.hazuki.yuzubrowser.search.databinding.SearchActivityBinding
 import jp.hazuki.yuzubrowser.search.databinding.SearchSeachBarBinding
 import jp.hazuki.yuzubrowser.search.presentation.widget.SearchButton
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
-import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import jp.hazuki.yuzubrowser.ui.theme.ThemeData
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 
-class SearchActivity : DaggerThemeActivity(), SearchButton.Callback, SearchSuggestAdapter.OnSearchSelectedListener, SuggestDeleteDialog.OnDeleteQuery {
+@AndroidEntryPoint
+class SearchActivity : ThemeActivity(), SearchButton.Callback, SearchSuggestAdapter.OnSearchSelectedListener, SuggestDeleteDialog.OnDeleteQuery {
 
-    @Inject
-    internal lateinit var factory: SearchViewModel.Factory
     @Inject
     internal lateinit var faviconManager: FaviconManager
 
-    private val viewModel by viewModels<SearchViewModel>(factoryProducer = { factory })
+    private val viewModel by viewModels<SearchViewModel>()
     private lateinit var binding: SearchActivityBinding
     private lateinit var barBinding: SearchSeachBarBinding
 

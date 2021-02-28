@@ -17,11 +17,13 @@
 package jp.hazuki.yuzubrowser.legacy.browser
 
 import android.annotation.SuppressLint
-import jp.hazuki.yuzubrowser.ui.app.DaggerLongPressFixActivity
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import jp.hazuki.yuzubrowser.ui.app.LongPressFixActivity
 import java.util.*
 
 @SuppressLint("Registered")
-open class BrowserBaseActivity : DaggerLongPressFixActivity() {
+open class BrowserBaseActivity : LongPressFixActivity() {
 
     private val dialogQueue = ArrayDeque<DialogNode>(4)
     private var isResumed = false
@@ -40,7 +42,7 @@ open class BrowserBaseActivity : DaggerLongPressFixActivity() {
         isResumed = false
     }
 
-    fun showDialog(dialog: androidx.fragment.app.DialogFragment, tag: String) {
+    fun showDialog(dialog: DialogFragment, tag: String) {
         if (isResumed) {
             dialog.show(supportFragmentManager, tag)
         } else {
@@ -48,7 +50,7 @@ open class BrowserBaseActivity : DaggerLongPressFixActivity() {
         }
     }
 
-    private class DialogNode(val dialog: androidx.fragment.app.DialogFragment, val tag: String) {
-        fun show(fragmentManager: androidx.fragment.app.FragmentManager) = dialog.show(fragmentManager, tag)
+    private class DialogNode(val dialog: DialogFragment, val tag: String) {
+        fun show(fragmentManager: FragmentManager) = dialog.show(fragmentManager, tag)
     }
 }

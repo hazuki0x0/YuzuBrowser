@@ -22,14 +22,11 @@ import android.content.ContextWrapper
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.moshi.Moshi
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
+import dagger.hilt.android.HiltAndroidApp
 import jp.hazuki.yuzubrowser.adblock.registerAdBlockNotification
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
 import jp.hazuki.yuzubrowser.core.utility.utils.createLanguageConfig
-import jp.hazuki.yuzubrowser.di.DaggerAppComponent
 import jp.hazuki.yuzubrowser.download.registerDownloadNotification
 import jp.hazuki.yuzubrowser.legacy.settings.data.AppData
 import jp.hazuki.yuzubrowser.provider.ProviderManager
@@ -37,8 +34,8 @@ import jp.hazuki.yuzubrowser.ui.BrowserApplication
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import javax.inject.Inject
 
-
-class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInjector {
+@HiltAndroidApp
+class YuzuBrowserApplication : Application(), BrowserApplication {
 
     override val applicationId = BuildConfig.APPLICATION_ID
     override val permissionAppSignature = PERMISSION_MYAPP_SIGNATURE
@@ -48,19 +45,13 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInje
         get() = this
 
     @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
     override lateinit var moshi: Moshi
 
     @Inject
     lateinit var abpDatabase: AbpDatabase
 
-    private var isNeedInject = true
-
     override fun onCreate() {
         super.onCreate()
-        injectIfNeed()
         registerDownloadNotification()
         registerAdBlockNotification()
 
@@ -73,18 +64,6 @@ class YuzuBrowserApplication : Application(), BrowserApplication, HasAndroidInje
             WebView.enableSlowWholeDocumentDraw()
         }
         Logger.isDebug = BuildConfig.DEBUG
-    }
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        injectIfNeed()
-        return androidInjector
-    }
-
-    private fun injectIfNeed() {
-        if (isNeedInject) {
-            isNeedInject = false
-            DaggerAppComponent.factory().create(this).inject(this)
-        }
     }
 
     override fun attachBaseContext(base: Context) {

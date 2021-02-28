@@ -28,7 +28,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import dagger.android.support.DaggerFragment
+import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToPx
 import jp.hazuki.yuzubrowser.core.utility.extensions.isInstanceOf
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
@@ -43,7 +44,8 @@ import okhttp3.OkHttpClient
 import java.io.File
 import javax.inject.Inject
 
-class ReaderFragment : DaggerFragment() {
+@AndroidEntryPoint
+class ReaderFragment : Fragment() {
 
     private lateinit var titleTextView: TextView
     private lateinit var bodyTextView: TextView

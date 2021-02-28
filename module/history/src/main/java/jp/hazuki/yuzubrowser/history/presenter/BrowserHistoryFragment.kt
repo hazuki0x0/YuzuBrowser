@@ -26,11 +26,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
 import com.turingtechnologies.materialscrollbar.TouchScrollBar
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.bookmark.view.showAddBookmarkDialog
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrl
 import jp.hazuki.yuzubrowser.browser.connecter.openable.OpenUrlList
@@ -49,8 +50,8 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerTouchLocationDetector
 import java.util.*
 import javax.inject.Inject
 
-
-class BrowserHistoryFragment : DaggerFragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
+@AndroidEntryPoint
+class BrowserHistoryFragment : Fragment(), BrowserHistoryAdapter.OnHistoryRecyclerListener, ActionMode.Callback {
 
     private var pickMode: Boolean = false
     private lateinit var adapter: BrowserHistoryAdapter

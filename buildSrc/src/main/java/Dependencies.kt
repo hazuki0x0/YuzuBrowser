@@ -41,7 +41,6 @@ object Versions {
     const val documentFile = "1.0.1"
     const val print = "1.0.0"
     const val swipeRefreshLayout = "1.1.0"
-    const val dagger = "2.33"
     const val moshi = "1.11.0"
     const val okhttp = "4.9.1"
     const val okio = "2.10.0"
@@ -106,13 +105,6 @@ object Libs {
     const val kvs_schema = "com.rejasupotaro:kvs-schema:${Versions.kvs_schema}"
     const val kvs_schema_compiler = "com.rejasupotaro:kvs-schema-compiler:${Versions.kvs_schema}"
 
-    //Dagger DI
-    const val dagger2 = "com.google.dagger:dagger:${Versions.dagger}"
-    const val dagger2_compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
-    const val dagger_android = "com.google.dagger:dagger-android:${Versions.dagger}"
-    const val dagger_android_support = "com.google.dagger:dagger-android-support:${Versions.dagger}"
-    const val dagger_android_processor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
-
     //Test
     const val junit = "junit:junit:${Versions.junit}"
     const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso}"
@@ -133,4 +125,12 @@ object Libs {
 
 object Dependencies {
     const val kotlin_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+}
+
+object Dagger {
+    private const val hiltVersion = "2.33-beta"
+
+    const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+    const val hilt = "com.google.dagger:hilt-android:$hiltVersion"
+    const val hiltCompiler = "com.google.dagger:hilt-compiler:$hiltVersion"
 }

@@ -22,11 +22,13 @@ import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.legacy.Constants
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
+@AndroidEntryPoint
 class ReaderActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

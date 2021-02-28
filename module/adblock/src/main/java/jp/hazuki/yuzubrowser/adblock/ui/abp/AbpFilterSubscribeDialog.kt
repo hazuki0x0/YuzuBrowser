@@ -20,7 +20,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import dagger.android.support.DaggerDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpEntity
@@ -28,7 +28,8 @@ import jp.hazuki.yuzubrowser.adblock.service.AbpUpdateService
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import javax.inject.Inject
 
-class AbpFilterSubscribeDialog : DaggerDialogFragment() {
+@AndroidEntryPoint
+class AbpFilterSubscribeDialog : DialogFragment() {
 
     @Inject
     internal lateinit var abpDatabase: AbpDatabase

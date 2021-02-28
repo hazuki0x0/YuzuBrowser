@@ -29,7 +29,7 @@ import androidx.preference.Preference
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.moshi.Moshi
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.search.R
 import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
@@ -46,12 +46,15 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
         setNegativeButtonText(android.R.string.cancel)
     }
 
+    @AndroidEntryPoint
     class PreferenceDialog : YuzuPreferenceDialog(), OnRecyclerListener {
 
         @Inject
         lateinit var manager: ISearchUrlRepository
+
         @Inject
         lateinit var moshi: Moshi
+
         @Inject
         internal lateinit var faviconManager: FaviconManager
 
@@ -66,7 +69,6 @@ class SearchUrlPreference(context: Context, attrs: AttributeSet) : DialogPrefere
 
         override fun onCreateDialogView(context: Context?): View {
             val activity = activity ?: throw IllegalStateException()
-            AndroidSupportInjection.inject(this)
 
             provider = SearchSuggestProviders(manager.load())
 

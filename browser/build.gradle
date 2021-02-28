@@ -17,6 +17,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion Build.compile_sdk_version
@@ -93,10 +94,6 @@ dependencies {
     implementation Libs.kotlin_coroutines
     implementation Libs.kotlin_coroutines_android
 
-    implementation Libs.dagger2
-    annotationProcessor Libs.dagger2_compiler
-    kapt Libs.dagger2_compiler
-    implementation Libs.dagger_android
-    implementation Libs.dagger_android_support
-    kapt Libs.dagger_android_processor
+    implementation Dagger.hilt
+    kapt Dagger.hiltCompiler
 }

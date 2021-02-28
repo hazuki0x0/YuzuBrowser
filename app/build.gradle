@@ -17,6 +17,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.cookpad.android.plugin.license-tools'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
@@ -147,12 +148,8 @@ dependencies {
 
     implementation Libs.kotlin_stdlib
 
-    implementation Libs.dagger2
-    annotationProcessor Libs.dagger2_compiler
-    kapt Libs.dagger2_compiler
-    implementation Libs.dagger_android
-    implementation Libs.dagger_android_support
-    kapt Libs.dagger_android_processor
+    implementation Dagger.hilt
+    kapt Dagger.hiltCompiler
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:26.5.0')

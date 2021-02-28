@@ -13,145 +13,97 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package jp.hazuki.yuzubrowser.legacy.settings.preference
 
-package jp.hazuki.yuzubrowser.legacy.settings.preference;
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
+import android.os.Bundle
+import android.util.AttributeSet
+import android.webkit.CookieManager
+import android.webkit.WebViewDatabase
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import dagger.hilt.android.AndroidEntryPoint
+import jp.hazuki.yuzubrowser.favicon.FaviconManager
+import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
+import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager
+import jp.hazuki.yuzubrowser.ui.BrowserApplication
+import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference
+import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
+import javax.inject.Inject
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.AttributeSet;
-import android.webkit.CookieManager;
-import android.webkit.WebViewDatabase;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+class ClearBrowserDataAlertDialog @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null) : CustomDialogPreference(context, attrs) {
+    override fun crateCustomDialog(): CustomDialogFragment = ClearDialog()
 
-import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import dagger.android.support.AndroidSupportInjection;
-import jp.hazuki.yuzubrowser.favicon.FaviconManager;
-import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager;
-import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.legacy.browser.BrowserManager;
-import jp.hazuki.yuzubrowser.ui.BrowserApplication;
-import jp.hazuki.yuzubrowser.ui.preference.CustomDialogPreference;
-import jp.hazuki.yuzubrowser.ui.settings.AppPrefs;
-
-public class ClearBrowserDataAlertDialog extends CustomDialogPreference {
-
-
-    public ClearBrowserDataAlertDialog(Context context) {
-        this(context, null);
-    }
-
-    public ClearBrowserDataAlertDialog(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    @NonNull
-    @Override
-    protected CustomDialogFragment crateCustomDialog() {
-        return new ClearDialog();
-    }
-
-    public static class ClearDialog extends CustomDialogFragment {
-        private int mSelected = 0;
-        private int mArrayMax;
-
-        private int[] ids;
+    @AndroidEntryPoint
+    class ClearDialog : CustomDialogFragment() {
+        private var mSelected = 0
+        private var mArrayMax = 0
+        private lateinit var ids: IntArray
 
         @Inject
-        FaviconManager faviconManager;
+        lateinit var faviconManager: FaviconManager
 
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AndroidSupportInjection.inject(this);
-            mSelected = AppPrefs.clear_data_default.get();
-
-            final Context context = requireContext();
-
-            String[] arrays = context.getResources().getStringArray(R.array.clear_browser_data);
-            ids = context.getResources().getIntArray(R.array.clear_browser_data_id);
-
-            if (arrays.length != ids.length) {
-                throw new RuntimeException();
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            mSelected = AppPrefs.clear_data_default.get()
+            val context = requireContext()
+            val arrays = context.resources.getStringArray(R.array.clear_browser_data)
+            ids = context.resources.getIntArray(R.array.clear_browser_data_id)
+            if (arrays.size != ids.size) {
+                throw RuntimeException()
             }
-
-            mArrayMax = arrays.length;
-
-            final ListView listView = new ListView(context);
-            listView.setAdapter(new ArrayAdapter<>(context, R.layout.select_dialog_multichoice, arrays));
-            listView.setItemsCanFocus(false);
-            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-            for (int i = 0; i < mArrayMax; ++i) {
-                int shifted = 1 << i;
-                listView.setItemChecked(i, ((mSelected & shifted) == shifted));
+            mArrayMax = arrays.size
+            val listView = ListView(context)
+            listView.adapter = ArrayAdapter(context, R.layout.select_dialog_multichoice, arrays)
+            listView.itemsCanFocus = false
+            listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+            for (i in 0 until mArrayMax) {
+                val shifted = 1 shl i
+                listView.setItemChecked(i, mSelected and shifted == shifted)
             }
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                if (listView.isItemChecked(position))
-                    mSelected |= 1 << position;
-                else
-                    mSelected &= ~(1 << position);
-            });
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            builder
-                    .setTitle(R.string.pref_clear_browser_data)
-                    .setView(listView)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) -> onClickPositiveButton())
-                    .setNegativeButton(android.R.string.cancel, null);
-
-            return builder.create();
+            listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+                mSelected = if (listView.isItemChecked(position)) {
+                    mSelected or (1 shl position)
+                } else {
+                    mSelected and (1 shl position).inv()
+                }
+            }
+            return AlertDialog.Builder(activity)
+                .setTitle(R.string.pref_clear_browser_data)
+                .setView(listView)
+                .setPositiveButton(android.R.string.ok) { _, _ -> onClickPositiveButton() }
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
         }
 
-        private void onClickPositiveButton() {
-            for (int i = 0; i < mArrayMax; ++i) {
-                int shifted = 1 << i;
-                if ((mSelected & shifted) == shifted)
-                    runAction(ids[i]);
+        private fun onClickPositiveButton() {
+            for (i in 0 until mArrayMax) {
+                val shifted = 1 shl i
+                if (mSelected and shifted == shifted) runAction(ids[i])
             }
-
-            AppPrefs.clear_data_default.set(mSelected);
-            AppPrefs.commit(requireContext().getApplicationContext(), AppPrefs.clear_data_default);
+            AppPrefs.clear_data_default.set(mSelected)
+            AppPrefs.commit(requireContext().applicationContext, AppPrefs.clear_data_default)
         }
 
-        private void runAction(int i) {
-            Context con = requireContext();
-            switch (i) {
-                case 0:
-                    BrowserManager.clearAppCacheFile(con.getApplicationContext());
-                    BrowserManager.clearCache(con.getApplicationContext());
-                    break;
-                case 1:
-                    CookieManager.getInstance().removeAllCookies(null);
-                    break;
-                case 2:
-                    WebViewDatabase.getInstance(con.getApplicationContext()).clearHttpAuthUsernamePassword();
-                    break;
-                case 3:
-                    WebViewDatabase.getInstance(con).clearFormData();
-                    break;
-                case 4:
-                    BrowserManager.clearWebDatabase();
-                    break;
-                case 5:
-                    BrowserManager.clearGeolocation();
-                    break;
-                case 6:
-                    BrowserHistoryManager.getInstance(con.getApplicationContext()).deleteAll();
-                    break;
-                case 7:
-                    con.getApplicationContext().getContentResolver().delete(
-                            ((BrowserApplication)con.getApplicationContext()).getProviderManager().getSuggestProvider().getUriLocal()
-                            , null, null);
-                    break;
-                case 8:
-                    faviconManager.clear();
-                    break;
+        private fun runAction(i: Int) {
+            val con = requireContext()
+            when (i) {
+                0 -> {
+                    BrowserManager.clearAppCacheFile(con.applicationContext)
+                    BrowserManager.clearCache(con.applicationContext)
+                }
+                1 -> CookieManager.getInstance().removeAllCookies(null)
+                2 -> WebViewDatabase.getInstance(con.applicationContext).clearHttpAuthUsernamePassword()
+                3 -> WebViewDatabase.getInstance(con).clearFormData()
+                4 -> BrowserManager.clearWebDatabase()
+                5 -> BrowserManager.clearGeolocation()
+                6 -> BrowserHistoryManager.getInstance(con.applicationContext).deleteAll()
+                7 -> con.applicationContext.contentResolver.delete(
+                    (con.applicationContext as BrowserApplication).providerManager.suggestProvider.uriLocal, null, null)
+                8 -> faviconManager.clear()
             }
         }
     }

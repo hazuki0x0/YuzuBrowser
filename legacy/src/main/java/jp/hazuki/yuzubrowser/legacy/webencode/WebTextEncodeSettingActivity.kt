@@ -13,39 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package jp.hazuki.yuzubrowser.legacy.webencode
 
-package jp.hazuki.yuzubrowser.legacy.webencode;
+import android.os.Bundle
+import android.view.MenuItem
+import dagger.hilt.android.AndroidEntryPoint
+import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
-import android.os.Bundle;
-import android.view.MenuItem;
-
-import androidx.appcompat.app.ActionBar;
-import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.ui.app.ThemeActivity;
-
-public class WebTextEncodeSettingActivity extends ThemeActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_base);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new WebTextEncodeSettingFragment()).commit();
-
+@AndroidEntryPoint
+class WebTextEncodeSettingActivity : ThemeActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_base)
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, WebTextEncodeSettingFragment()).commit()
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

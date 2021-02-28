@@ -19,22 +19,20 @@ package jp.hazuki.yuzubrowser.download
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import jp.hazuki.yuzubrowser.download.repository.DownloadsDao
 import jp.hazuki.yuzubrowser.download.repository.DownloadsDatabase
 import javax.inject.Singleton
 
 @Module
-object DownloadModule {
+@InstallIn(SingletonComponent::class)
+class DownloadModule {
 
     @Singleton
     @Provides
-    fun provideDownloadsDatabase(context: Context): DownloadsDatabase {
-        return DownloadsDatabase.createInstance(context)
-    }
-
-    @Singleton
-    @Provides
-    fun provideDownloadsDao(context: Context): DownloadsDao {
+    fun provideDownloadsDao(@ApplicationContext context: Context): DownloadsDao {
         return DownloadsDatabase.createInstance(context).downloadsDao()
     }
 }

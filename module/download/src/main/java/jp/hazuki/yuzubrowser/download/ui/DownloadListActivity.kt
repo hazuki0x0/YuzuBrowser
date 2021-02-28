@@ -20,6 +20,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.download.R
 import jp.hazuki.yuzubrowser.download.core.data.DownloadFileInfo
 import jp.hazuki.yuzubrowser.download.service.connection.ActivityClient
@@ -27,10 +28,11 @@ import jp.hazuki.yuzubrowser.download.service.connection.ServiceSocket
 import jp.hazuki.yuzubrowser.download.ui.fragment.DownloadListFragment
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
-import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
-class DownloadListActivity : DaggerThemeActivity(), ActivityClient.ActivityClientListener, DownloadCommandController {
+@AndroidEntryPoint
+class DownloadListActivity : ThemeActivity(), ActivityClient.ActivityClientListener, DownloadCommandController {
 
     private lateinit var downloadService: ServiceSocket
 

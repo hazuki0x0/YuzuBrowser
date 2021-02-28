@@ -25,7 +25,7 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import androidx.fragment.app.DialogFragment
 import com.squareup.moshi.Moshi
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.USER_AGENT_PC
 import jp.hazuki.yuzubrowser.core.utility.extensions.getChromePcUserAgent
 import jp.hazuki.yuzubrowser.core.utility.extensions.getFakeChromeUserAgent
@@ -34,6 +34,7 @@ import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class UserAgentListDialog : DialogFragment() {
 
     @Inject
@@ -41,7 +42,6 @@ class UserAgentListDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()
-        AndroidSupportInjection.inject(this)
         val mUserAgentList = UserAgentList()
         mUserAgentList.read(activity, moshi)
 
@@ -76,13 +76,13 @@ class UserAgentListDialog : DialogFragment() {
 
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.useragent)
-                .setSingleChoiceItems(entries, pos) { _, which ->
-                    val intent = Intent()
-                    intent.putExtra(Intent.EXTRA_TEXT, if (which == 0) "" else entryValues[which])
-                    activity.setResult(RESULT_OK, intent)
-                    dismiss()
-                }
-                .setNegativeButton(R.string.cancel, null)
+            .setSingleChoiceItems(entries, pos) { _, which ->
+                val intent = Intent()
+                intent.putExtra(Intent.EXTRA_TEXT, if (which == 0) "" else entryValues[which])
+                activity.setResult(RESULT_OK, intent)
+                dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
         return builder.create()
     }
 

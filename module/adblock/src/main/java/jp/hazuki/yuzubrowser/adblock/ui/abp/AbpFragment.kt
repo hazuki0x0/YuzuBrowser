@@ -20,10 +20,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpBlackListFile
 import jp.hazuki.yuzubrowser.adblock.filter.abp.getAbpWhiteListFile
@@ -38,7 +39,8 @@ import jp.hazuki.yuzubrowser.ui.extensions.applyIconColor
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
-class AbpFragment : DaggerFragment(), OnRecyclerListener, AddAbpDialog.OnAddItemListener, AbpMenuDialog.OnAbpMenuListener, AbpItemDeleteDialog.OnAbpItemDeleteListener {
+@AndroidEntryPoint
+class AbpFragment : Fragment(), OnRecyclerListener, AddAbpDialog.OnAddItemListener, AbpMenuDialog.OnAbpMenuListener, AbpItemDeleteDialog.OnAbpItemDeleteListener {
 
     @Inject
     internal lateinit var abpDatabase: AbpDatabase

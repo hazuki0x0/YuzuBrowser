@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package jp.hazuki.yuzubrowser.legacy.webencode
 
-package jp.hazuki.yuzubrowser.legacy.webencode;
+import android.content.Intent
+import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
+import jp.hazuki.yuzubrowser.legacy.webencode.WebTextEncodeListDialog.Companion.newInstance
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import jp.hazuki.yuzubrowser.ui.app.ThemeActivity;
-
-public class WebTextEncodeListActivity extends ThemeActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        WebTextEncodeListDialog.Companion
-                .newInstance(getIntent().getStringExtra(Intent.EXTRA_TEXT))
-                .show(getSupportFragmentManager(), "list");
+@AndroidEntryPoint
+class WebTextEncodeListActivity : ThemeActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        newInstance(intent.getStringExtra(Intent.EXTRA_TEXT)!!)
+            .show(supportFragmentManager, "list")
     }
-
 }

@@ -21,36 +21,43 @@ import android.content.Context
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.hazuki.yuzubrowser.bookmark.repository.BookmarkManager
 import jp.hazuki.yuzubrowser.history.repository.BrowserHistoryManager
 import jp.hazuki.yuzubrowser.search.domain.ISearchUrlRepository
 import jp.hazuki.yuzubrowser.search.domain.ISuggestRepository
 import jp.hazuki.yuzubrowser.search.domain.usecase.SearchSettingsViewUseCase
 import jp.hazuki.yuzubrowser.search.domain.usecase.SearchViewUseCase
-import jp.hazuki.yuzubrowser.search.presentation.search.SearchViewModel
 import jp.hazuki.yuzubrowser.search.presentation.settings.SearchSettingsViewModel
 import jp.hazuki.yuzubrowser.search.repository.SearchUrlManager
 import jp.hazuki.yuzubrowser.search.repository.SuggestRepository
 import jp.hazuki.yuzubrowser.ui.provider.ISuggestProvider
 
 @Module
-object SearchSubModule {
+@InstallIn(ActivityRetainedComponent::class)
+class SearchSubModule {
 
     @Provides
-    @JvmStatic
     fun provideSuggestRepository(application: Application, suggestProvider: ISuggestProvider): ISuggestRepository {
         return SuggestRepository(application, suggestProvider)
     }
 
     @Provides
-    @JvmStatic
-    fun provideSearchUrlRepository(context: Context, moshi: Moshi): ISearchUrlRepository {
+    fun provideSearchUrlRepository(
+        @ApplicationContext context: Context,
+        moshi: Moshi
+    ): ISearchUrlRepository {
         return SearchUrlManager(context, moshi)
     }
 
     @Provides
-    @JvmStatic
-    internal fun provideSearchViewUseCase(context: Context, suggestRepository: ISuggestRepository, searchUrlRepository: ISearchUrlRepository): SearchViewUseCase {
+    internal fun provideSearchViewUseCase(
+        @ApplicationContext context: Context,
+        suggestRepository: ISuggestRepository,
+        searchUrlRepository: ISearchUrlRepository,
+    ): SearchViewUseCase {
         return SearchViewUseCase(
             BookmarkManager.getInstance(context),
             BrowserHistoryManager.getInstance(context),
@@ -60,20 +67,17 @@ object SearchSubModule {
     }
 
     @Provides
-    @JvmStatic
-    internal fun provideSearchViewModelFactory(application: Application, useCase: SearchViewUseCase): SearchViewModel.Factory {
-        return SearchViewModel.Factory(application, useCase)
-    }
-
-    @Provides
-    @JvmStatic
-    internal fun provideSearchSettingsViewUseCase(searchUrlRepository: ISearchUrlRepository): SearchSettingsViewUseCase {
+    internal fun provideSearchSettingsViewUseCase(
+        searchUrlRepository: ISearchUrlRepository
+    ): SearchSettingsViewUseCase {
         return SearchSettingsViewUseCase(searchUrlRepository)
     }
 
     @Provides
-    @JvmStatic
-    internal fun provideSearchSettingsViewModelFactory(application: Application, useCase: SearchSettingsViewUseCase): SearchSettingsViewModel.Factory {
+    internal fun provideSearchSettingsViewModelFactory(
+        application: Application,
+        useCase: SearchSettingsViewUseCase,
+    ): SearchSettingsViewModel.Factory {
         return SearchSettingsViewModel.Factory(application, useCase)
     }
 }

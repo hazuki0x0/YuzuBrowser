@@ -20,9 +20,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.forEach
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.bookmark.R
 import jp.hazuki.bookmark.databinding.FragmentBookmarkOverflowBinding
 import jp.hazuki.yuzubrowser.bookmark.overflow.HideMenuType
@@ -30,7 +31,8 @@ import jp.hazuki.yuzubrowser.bookmark.overflow.MenuType
 import jp.hazuki.yuzubrowser.bookmark.overflow.viewmodel.OverflowMenuViewModel
 import javax.inject.Inject
 
-class BookmarkOverflowMenuFragment : DaggerFragment() {
+@AndroidEntryPoint
+class BookmarkOverflowMenuFragment : Fragment() {
     @Inject
     internal lateinit var factory: OverflowMenuViewModel.Factory
 

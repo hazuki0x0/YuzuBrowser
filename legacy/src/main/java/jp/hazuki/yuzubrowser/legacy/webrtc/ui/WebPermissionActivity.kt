@@ -18,9 +18,11 @@ package jp.hazuki.yuzubrowser.legacy.webrtc.ui
 
 import android.os.Bundle
 import android.view.MenuItem
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
+@AndroidEntryPoint
 class WebPermissionActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +32,8 @@ class WebPermissionActivity : ThemeActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, WebPermissionFragment())
-                    .commit()
+                .replace(R.id.container, WebPermissionFragment())
+                .commit()
         }
     }
 

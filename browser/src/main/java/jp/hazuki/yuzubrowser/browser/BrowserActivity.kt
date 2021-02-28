@@ -41,6 +41,7 @@ import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.moshi.Moshi
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
@@ -121,6 +122,7 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
 
+@AndroidEntryPoint
 class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDialog.OnFinishDialogCallBack, AddAdBlockDialog.OnAdBlockListUpdateListener, WebRtcRequest, SaveWebArchiveDialog.OnSaveWebViewListener, WebViewProvider {
 
     private lateinit var asyncPermissions: AsyncPermissions
@@ -1063,9 +1065,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         val listView = ListView(this).also { it.adapter = adapter }
 
         val dialog = AlertDialog.Builder(this)
-                .setTitle(R.string.tab_history)
-                .setView(listView)
-                .create()
+            .setTitle(R.string.tab_history)
+            .setView(listView)
+            .create()
 
         listView.setOnItemClickListener { _, _, position, _ ->
             val next = position - historyList.current
@@ -1178,9 +1180,9 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         FinishAlertDialog(this)
             .setPositiveButton(android.R.string.ok)
             .setNegativeButton(android.R.string.cancel)
-                .setNeutralButton(R.string.minimize)
-                .setClearTabNo(clearTabNo)
-                .show(supportFragmentManager)
+            .setNeutralButton(R.string.minimize)
+            .setClearTabNo(clearTabNo)
+            .show(supportFragmentManager)
     }
 
     override fun onFinishPositiveButtonClicked(clearTabNo: Int, newSetting: Int) {
@@ -1618,12 +1620,12 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
     override fun requestPagePermission(host: String, resources: Array<String>, onGrant: (Boolean) -> Unit) {
         AlertDialog.Builder(this)
-                .setTitle(R.string.permission_request)
-                .setMessage(getRequestRtcList(host, resources))
-                .setPositiveButton(R.string.allow) { _, _ -> onGrant(true) }
-                .setNegativeButton(R.string.block) { _, _ -> onGrant(false) }
-                .setOnCancelListener { onGrant(false) }
-                .show()
+            .setTitle(R.string.permission_request)
+            .setMessage(getRequestRtcList(host, resources))
+            .setPositiveButton(R.string.allow) { _, _ -> onGrant(true) }
+            .setNegativeButton(R.string.block) { _, _ -> onGrant(false) }
+            .setOnCancelListener { onGrant(false) }
+            .show()
     }
 
     private fun getRequestRtcList(host: String, resources: Array<String>): String {

@@ -26,10 +26,11 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.download.R
@@ -53,7 +54,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DownloadListFragment : DaggerFragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener, ActionMode.Callback {
+@AndroidEntryPoint
+class DownloadListFragment : Fragment(), ActivityClient.ActivityClientListener, OnRecyclerMenuListener, ActionMode.Callback {
 
     private var commandController: DownloadCommandController? = null
     private lateinit var adapter: DownloadListAdapter

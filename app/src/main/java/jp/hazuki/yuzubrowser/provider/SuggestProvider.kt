@@ -17,6 +17,7 @@
 package jp.hazuki.yuzubrowser.provider
 
 import android.app.SearchManager
+import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.content.UriMatcher
@@ -29,7 +30,10 @@ import android.provider.BaseColumns
 import android.text.TextUtils
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
-import dagger.android.DaggerContentProvider
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.ErrorReportServer
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
@@ -45,19 +49,21 @@ import java.io.IOException
 import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class SuggestProvider : DaggerContentProvider() {
+class SuggestProvider : ContentProvider() {
 
     private lateinit var mOpenHelper: DatabaseHelper
     private lateinit var mSuggestEngine: ISuggest
-    @Inject
-    lateinit var okHttpClient: OkHttpClient
+    private val okHttpClient: OkHttpClient by lazy {
+        EntryPointAccessors.fromApplication(
+            context!!,
+            SuggestProviderEntryPoint::class.java
+        ).okHttpClient()
+    }
 
     private var mSuggestType: Int = 0
 
     override fun onCreate(): Boolean {
-        super.onCreate()
         val context = context ?: throw IllegalStateException()
         mOpenHelper = DatabaseHelper(context)
         mSuggestType = AppPrefs.search_suggest_engine.get()
@@ -308,15 +314,15 @@ class SuggestProvider : DaggerContentProvider() {
         throw UnsupportedOperationException()
     }
 
-    private class DatabaseHelper internal constructor(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+    private class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
         override fun onCreate(db: SQLiteDatabase) {
             db.beginTransaction()
             try {
                 db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                        BaseColumns._ID + " INTEGER PRIMARY KEY" +
-                        ", " + SearchManager.SUGGEST_COLUMN_QUERY + " TEXT UNIQUE ON CONFLICT REPLACE" +
-                        ")")
+                    BaseColumns._ID + " INTEGER PRIMARY KEY" +
+                    ", " + SearchManager.SUGGEST_COLUMN_QUERY + " TEXT UNIQUE ON CONFLICT REPLACE" +
+                    ")")
                 db.setTransactionSuccessful()
             } finally {
                 db.endTransaction()
@@ -327,6 +333,12 @@ class SuggestProvider : DaggerContentProvider() {
             db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
             onCreate(db)
         }
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface SuggestProviderEntryPoint {
+        fun okHttpClient(): OkHttpClient
     }
 
     companion object {

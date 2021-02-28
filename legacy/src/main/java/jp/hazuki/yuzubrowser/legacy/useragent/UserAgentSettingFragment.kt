@@ -20,10 +20,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.moshi.Moshi
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.databinding.RecyclerWithFabBinding
 import jp.hazuki.yuzubrowser.legacy.useragent.SelectActionDialog.DELETE
@@ -33,7 +35,8 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
-class UserAgentSettingFragment : DaggerFragment(), DeleteUserAgentDialog.OnDelete, EditUserAgentDialog.OnEditedUserAgent, SelectActionDialog.OnActionSelect, OnRecyclerListener {
+@AndroidEntryPoint
+class UserAgentSettingFragment : Fragment(), DeleteUserAgentDialog.OnDelete, EditUserAgentDialog.OnEditedUserAgent, SelectActionDialog.OnActionSelect, OnRecyclerListener {
     private lateinit var mUserAgentList: UserAgentList
     private lateinit var mAdapter: UserAgentRecyclerAdapter
 
@@ -41,6 +44,7 @@ class UserAgentSettingFragment : DaggerFragment(), DeleteUserAgentDialog.OnDelet
     lateinit var moshi: Moshi
 
     @Inject
+    @ApplicationContext
     lateinit var applicationContext: Context
 
     private var viewBinding: RecyclerWithFabBinding? = null

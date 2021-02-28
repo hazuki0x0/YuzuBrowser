@@ -23,13 +23,15 @@ import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.bookmark.R
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
-import jp.hazuki.yuzubrowser.ui.app.DaggerLongPressFixActivity
+import jp.hazuki.yuzubrowser.ui.app.LongPressFixActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
-class BookmarkActivity : DaggerLongPressFixActivity() {
+@AndroidEntryPoint
+class BookmarkActivity : LongPressFixActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

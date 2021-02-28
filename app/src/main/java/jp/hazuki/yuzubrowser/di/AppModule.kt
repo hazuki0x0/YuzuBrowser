@@ -16,13 +16,14 @@
 
 package jp.hazuki.yuzubrowser.di
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import jp.hazuki.yuzubrowser.YuzuBrowserApplication
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDao
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDatabase
@@ -34,22 +35,13 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
     private const val PREFERENCE_NAME = "main_preference"
 
     @Provides
-    fun provideContext(app: YuzuBrowserApplication): Context {
-        return app
-    }
-
-    @Provides
-    fun provideBrowserApplication(app: YuzuBrowserApplication): BrowserApplication {
-        return app
-    }
-
-    @Provides
-    fun provideApplication(app: YuzuBrowserApplication): Application {
-        return app
+    fun provideBrowserApplication(@ApplicationContext context: Context): BrowserApplication {
+        return context as BrowserApplication
     }
 
     @Provides
@@ -71,7 +63,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(context: Context): SharedPreferences {
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
@@ -82,13 +74,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFaviconManager(context: Context): FaviconManager {
+    fun provideFaviconManager(@ApplicationContext context: Context): FaviconManager {
         return FaviconManager(context)
     }
 
     @Provides
     @Singleton
-    fun provideWebPermissionsDao(context: Context): WebPermissionsDao {
+    fun provideWebPermissionsDao(@ApplicationContext context: Context): WebPermissionsDao {
         return WebPermissionsDatabase.newInstance(context).webPermissionsDao()
     }
 }

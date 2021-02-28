@@ -16,6 +16,7 @@
 
 package jp.hazuki.yuzubrowser.provider
 
+import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.content.UriMatcher
@@ -26,20 +27,27 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
 import com.squareup.moshi.Moshi
-import dagger.android.DaggerContentProvider
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import jp.hazuki.yuzubrowser.BuildConfig
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItLaterIndex
 import jp.hazuki.yuzubrowser.legacy.readitlater.ReadItem
 import jp.hazuki.yuzubrowser.ui.provider.IReadItLaterProvider
 import java.io.File
-import javax.inject.Inject
 
-class ReadItLaterProvider : DaggerContentProvider() {
+class ReadItLaterProvider : ContentProvider() {
 
     private lateinit var directory: File
-    private lateinit var index: ReadItLaterIndex
-    @Inject
-    lateinit var moshi: Moshi
+
+    private val index: ReadItLaterIndex by lazy {
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context!!,
+            ReadItLaterProviderEntryPoint::class.java
+        )
+        ReadItLaterIndex(entryPoint.moshi(), directory)
+    }
 
     companion object {
         const val TIME = IReadItLaterProvider.TIME
@@ -89,9 +97,7 @@ class ReadItLaterProvider : DaggerContentProvider() {
     }
 
     override fun onCreate(): Boolean {
-        super.onCreate()
         directory = context!!.getDir("readItLater", Context.MODE_PRIVATE)
-        index = ReadItLaterIndex(moshi, directory)
         return true
     }
 
@@ -256,4 +262,10 @@ class ReadItLaterProvider : DaggerContentProvider() {
     }
 
     private fun getUri(time: Long) = URI.buildUpon().appendPath("path").appendPath(time.toString()).build()
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ReadItLaterProviderEntryPoint {
+        fun moshi(): Moshi
+    }
 }

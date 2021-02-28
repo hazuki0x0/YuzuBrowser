@@ -26,6 +26,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
         classpath Dependencies.kotlin_plugin
+        classpath Dagger.hiltPlugin
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.36.0'
         classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta10'
         classpath 'com.google.gms:google-services:4.3.5'

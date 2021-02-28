@@ -24,10 +24,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.squareup.moshi.Moshi
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.legacy.R
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class WebTextEncodeListDialog : DialogFragment() {
 
     @Inject
@@ -35,14 +36,13 @@ class WebTextEncodeListDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity ?: throw IllegalStateException()
-        AndroidSupportInjection.inject(this)
 
         val encodes = WebTextEncodeList()
         encodes.read(activity, moshi)
 
         val entries = arrayOfNulls<String>(encodes.size)
 
-        var now = arguments!!.getString(ENCODING)
+        var now = requireArguments().getString(ENCODING)
 
         if (now == null) now = ""
 
@@ -61,13 +61,13 @@ class WebTextEncodeListDialog : DialogFragment() {
 
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.web_encode)
-                .setSingleChoiceItems(entries, pos) { _, which ->
-                    val intent = Intent()
-                    intent.putExtra(Intent.EXTRA_TEXT, entries[which])
-                    activity.setResult(RESULT_OK, intent)
-                    dismiss()
-                }
-                .setNegativeButton(R.string.cancel, null)
+            .setSingleChoiceItems(entries, pos) { _, which ->
+                val intent = Intent()
+                intent.putExtra(Intent.EXTRA_TEXT, entries[which])
+                activity.setResult(RESULT_OK, intent)
+                dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
         return builder.create()
     }
 

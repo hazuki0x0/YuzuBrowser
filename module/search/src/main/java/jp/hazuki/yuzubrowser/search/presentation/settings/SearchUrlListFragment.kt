@@ -20,11 +20,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.favicon.FaviconManager
 import jp.hazuki.yuzubrowser.search.R
 import jp.hazuki.yuzubrowser.search.databinding.SearchSettingsFragmentBinding
@@ -33,13 +34,15 @@ import jp.hazuki.yuzubrowser.ui.dialog.DeleteDialogCompat
 import jp.hazuki.yuzubrowser.ui.widget.recycler.RecyclerMenu
 import javax.inject.Inject
 
-class SearchUrlListFragment : DaggerFragment(), SearchSettingDialog.OnUrlEditedListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete, SearchUrlAdapter.OnSearchUrlClickListener {
+@AndroidEntryPoint
+class SearchUrlListFragment : Fragment(), SearchSettingDialog.OnUrlEditedListener, RecyclerMenu.OnRecyclerMenuListener, DeleteDialogCompat.OnDelete, SearchUrlAdapter.OnSearchUrlClickListener {
 
     private lateinit var binding: SearchSettingsFragmentBinding
     private val viewModel by viewModels<SearchSettingsViewModel>(factoryProducer = { factory })
 
     @Inject
     internal lateinit var factory: SearchSettingsViewModel.Factory
+
     @Inject
     internal lateinit var faviconManager: FaviconManager
 

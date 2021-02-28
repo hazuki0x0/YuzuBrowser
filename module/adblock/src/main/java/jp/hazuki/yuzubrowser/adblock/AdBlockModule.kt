@@ -19,16 +19,19 @@ package jp.hazuki.yuzubrowser.adblock
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import jp.hazuki.yuzubrowser.adblock.repository.abp.AbpDatabase
 import javax.inject.Singleton
 
 @Module
-object AdBlockModule {
+@InstallIn(SingletonComponent::class)
+class AdBlockModule {
 
     @Provides
     @Singleton
-    @JvmStatic
-    fun provideAbpDatabase(context: Context): AbpDatabase {
+    fun provideAbpDatabase(@ApplicationContext context: Context): AbpDatabase {
         return AbpDatabase.createInstance(context)
     }
 }

@@ -22,6 +22,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.search.domain.usecase.SearchViewUseCase
 import jp.hazuki.yuzubrowser.search.model.SearchSuggestModel
@@ -31,8 +32,10 @@ import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import javax.inject.Inject
 
-internal class SearchViewModel(
+@HiltViewModel
+internal class SearchViewModel @Inject constructor(
     application: Application,
     private val useCase: SearchViewUseCase
 ) : AndroidViewModel(application) {

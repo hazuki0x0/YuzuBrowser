@@ -20,9 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.utility.utils.ui
 import jp.hazuki.yuzubrowser.legacy.R
 import jp.hazuki.yuzubrowser.legacy.webrtc.WebPermissionsDao
@@ -32,7 +33,8 @@ import jp.hazuki.yuzubrowser.ui.widget.recycler.DividerItemDecoration
 import jp.hazuki.yuzubrowser.ui.widget.recycler.OnRecyclerListener
 import javax.inject.Inject
 
-class WebPermissionFragment : DaggerFragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
+@AndroidEntryPoint
+class WebPermissionFragment : Fragment(), OnRecyclerListener, WebPermissionsEditDialog.OnPermissionEditedListener {
 
     @Inject
     internal lateinit var webPermissionsDao: WebPermissionsDao

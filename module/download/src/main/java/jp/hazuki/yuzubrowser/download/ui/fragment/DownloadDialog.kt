@@ -26,7 +26,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
-import dagger.android.support.DaggerAppCompatDialogFragment
+import androidx.fragment.app.DialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
 import jp.hazuki.yuzubrowser.core.utility.storage.toDocumentFile
 import jp.hazuki.yuzubrowser.core.utility.utils.createUniqueFileName
@@ -39,7 +40,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-class DownloadDialog : DaggerAppCompatDialogFragment() {
+@AndroidEntryPoint
+class DownloadDialog : DialogFragment() {
 
     private lateinit var root: DocumentFile
     private lateinit var folderButton: Button

@@ -24,7 +24,7 @@ import android.os.*
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.Preference
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.bookmark.item.BookmarkFolder
 import jp.hazuki.yuzubrowser.bookmark.netscape.exportHtmlBookmark
 import jp.hazuki.yuzubrowser.bookmark.netscape.importHtmlBookmark
@@ -46,12 +46,12 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ImportExportFragment : YuzuPreferenceFragment() {
     @Inject
     internal lateinit var faviconManager: FaviconManager
 
     override fun onCreateYuzuPreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        AndroidSupportInjection.inject(this)
         addPreferencesFromResource(R.xml.pref_import_export)
 
         findPreference<Preference>("import_sd_bookmark")!!.setOnPreferenceClickListener {

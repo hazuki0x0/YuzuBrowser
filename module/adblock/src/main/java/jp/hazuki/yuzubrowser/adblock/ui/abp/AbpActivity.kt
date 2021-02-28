@@ -17,9 +17,11 @@
 package jp.hazuki.yuzubrowser.adblock.ui.abp
 
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.adblock.R
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
+@AndroidEntryPoint
 class AbpActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ class AbpActivity : ThemeActivity() {
         setContentView(R.layout.fragment_base)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, AbpFragment())
-                .commit()
+            .replace(R.id.container, AbpFragment())
+            .commit()
     }
 }

@@ -19,6 +19,7 @@ package jp.hazuki.yuzubrowser.download.service
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.*
 import android.net.Uri
 import android.os.*
@@ -26,7 +27,7 @@ import android.provider.MediaStore
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.documentfile.provider.DocumentFile
-import dagger.android.DaggerService
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.utility.extensions.resolvePath
 import jp.hazuki.yuzubrowser.core.utility.log.ErrorReport
 import jp.hazuki.yuzubrowser.core.utility.log.Logger
@@ -53,7 +54,8 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-class DownloadService : DaggerService(), ServiceClient.ServiceClientListener {
+@AndroidEntryPoint
+class DownloadService : Service(), ServiceClient.ServiceClientListener {
 
     private lateinit var handler: Handler
     private lateinit var powerManager: PowerManager

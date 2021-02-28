@@ -25,7 +25,7 @@ import android.os.Handler
 import android.os.ResultReceiver
 import androidx.core.app.JobIntentService
 import androidx.core.content.getSystemService
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.adblock.BROADCAST_ACTION_UPDATE_AD_BLOCK_DATA
 import jp.hazuki.yuzubrowser.adblock.filter.abp.*
 import jp.hazuki.yuzubrowser.adblock.filter.unified.UnifiedFilter
@@ -49,6 +49,7 @@ import java.io.IOException
 import java.nio.charset.Charset
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AbpUpdateService : JobIntentService() {
 
     @Inject
@@ -70,11 +71,6 @@ class AbpUpdateService : JobIntentService() {
                 updateAll(forceUpdate, result)
             }
         }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        AndroidInjection.inject(this)
     }
 
     private fun updateAll(forceUpdate: Boolean, resultReceiver: ResultReceiver?) = runBlocking {

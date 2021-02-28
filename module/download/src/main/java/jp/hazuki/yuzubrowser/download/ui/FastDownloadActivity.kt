@@ -24,6 +24,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.asyncpermissions.AsyncPermissions
 import jp.hazuki.asyncpermissions.PermissionResult
 import jp.hazuki.yuzubrowser.core.MIME_TYPE_UNKNOWN
@@ -38,7 +39,7 @@ import jp.hazuki.yuzubrowser.download.core.data.DownloadRequest
 import jp.hazuki.yuzubrowser.download.core.data.MetaData
 import jp.hazuki.yuzubrowser.download.core.downloader.Downloader
 import jp.hazuki.yuzubrowser.download.getDownloadDocumentFile
-import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.dialog.ProgressDialog
 import jp.hazuki.yuzubrowser.ui.utils.checkStoragePermission
 import jp.hazuki.yuzubrowser.ui.utils.openRequestPermissionSettings
@@ -47,7 +48,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-class FastDownloadActivity : DaggerThemeActivity() {
+@AndroidEntryPoint
+class FastDownloadActivity : ThemeActivity() {
 
     @Inject
     lateinit var okHttpClient: OkHttpClient

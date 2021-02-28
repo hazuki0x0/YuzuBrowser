@@ -69,13 +69,6 @@ dependencies {
     implementation AndroidX.KTX
     implementation AndroidX.lifecycle
 
-    implementation Libs.dagger2
-    annotationProcessor Libs.dagger2_compiler
-    kapt Libs.dagger2_compiler
-    implementation Libs.dagger_android
-    implementation Libs.dagger_android_support
-    kapt Libs.dagger_android_processor
-
     implementation Libs.okhttp
     implementation Libs.okio
     implementation Libs.moshi

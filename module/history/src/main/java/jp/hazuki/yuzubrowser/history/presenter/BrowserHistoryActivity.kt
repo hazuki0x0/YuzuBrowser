@@ -22,14 +22,16 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.core.utility.extensions.convertDpToFloatPx
 import jp.hazuki.yuzubrowser.historyModel.R
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_FULLSCREEN
 import jp.hazuki.yuzubrowser.ui.INTENT_EXTRA_MODE_ORIENTATION
-import jp.hazuki.yuzubrowser.ui.app.DaggerThemeActivity
+import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 import jp.hazuki.yuzubrowser.ui.settings.AppPrefs
 
-class BrowserHistoryActivity : DaggerThemeActivity() {
+@AndroidEntryPoint
+class BrowserHistoryActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

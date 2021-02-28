@@ -18,14 +18,16 @@ package jp.hazuki.yuzubrowser.legacy.useragent
 
 import android.content.Intent
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import jp.hazuki.yuzubrowser.ui.app.ThemeActivity
 
+@AndroidEntryPoint
 class UserAgentListActivity : ThemeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UserAgentListDialog
             .newInstance(intent.getStringExtra(Intent.EXTRA_TEXT)!!)
-                .show(supportFragmentManager, "ua")
+            .show(supportFragmentManager, "ua")
     }
 }
