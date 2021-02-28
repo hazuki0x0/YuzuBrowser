@@ -58,6 +58,10 @@ open class CustomWebViewClientWrapper(private val customWebView: CustomWebView) 
         webViewClient?.onPageStarted(customWebView, url, favicon)
     }
 
+    override fun onDomContentLoaded(web: CustomWebView) {
+        webViewClient?.onDomContentLoaded(customWebView)
+    }
+
     override fun onPageChanged(web: CustomWebView, url: String, originalUrl: String, progress: Int, isLoading: Boolean) {
         webViewClient?.onPageChanged(web, url, originalUrl, progress, isLoading)
     }
@@ -79,7 +83,6 @@ open class CustomWebViewClientWrapper(private val customWebView: CustomWebView) 
     override fun onPageCommitVisible(web: CustomWebView, url: String) {
         webViewClient?.onPageCommitVisible(customWebView, url)
     }
-
 
     fun setWebViewClient(webViewClient: CustomWebViewClient?) {
         this.webViewClient = webViewClient
