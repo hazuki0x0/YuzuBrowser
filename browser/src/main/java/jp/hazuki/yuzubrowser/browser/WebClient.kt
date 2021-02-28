@@ -720,9 +720,6 @@ class WebClient(
             val data = controller.getTabOrNull(web) ?: return
 
             data.onProgressChanged(newProgress)
-            if (newProgress == 100) {
-                CookieManager.getInstance().flush()
-            }
 
             if (data === controller.currentTabData) {
                 if (data.isInPageLoad)

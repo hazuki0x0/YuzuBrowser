@@ -116,7 +116,10 @@ import jp.hazuki.yuzubrowser.webview.WebViewFactory
 import jp.hazuki.yuzubrowser.webview.WebViewType
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollChangedListener
 import jp.hazuki.yuzubrowser.webview.listener.OnScrollableChangeListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import java.util.*
 import javax.inject.Inject
@@ -423,6 +426,10 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
         tabManagerIn.saveData()
         handler.removeCallbacks(saveTabsRunnable)
         faviconManager.save()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            CookieManager.getInstance().flush()
+        }
 
         if (isActivityPaused) {
             Logger.w(TAG, "Activity is already stopped")
