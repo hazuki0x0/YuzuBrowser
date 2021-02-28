@@ -71,6 +71,8 @@ class PublicSuffix {
         val unicodeDomain = IDN.toUnicode(domain)
         val domainLabels = splitDomain(unicodeDomain)
 
+        if (domainLabels.size < 2 || domainLabels.contains("")) return null
+
         val rule = findMatchingRule(domainLabels)
         if (domainLabels.size == rule.size && rule[0][0] != EXCEPTION_MARKER) {
             return null // The domain is a public suffix.

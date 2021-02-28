@@ -36,6 +36,8 @@ class DownloadListActivity : DaggerThemeActivity(), ActivityClient.ActivityClien
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_base)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         var fullscreen = AppPrefs.fullscreen.get()
         var orientation = AppPrefs.oritentation.get()
@@ -54,10 +56,6 @@ class DownloadListActivity : DaggerThemeActivity(), ActivityClient.ActivityClien
         requestedOrientation = orientation
 
         downloadService = ServiceSocket(this, this)
-
-
-        setContentView(R.layout.fragment_base)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

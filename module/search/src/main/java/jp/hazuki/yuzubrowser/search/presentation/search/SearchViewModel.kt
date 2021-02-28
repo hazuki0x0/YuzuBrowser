@@ -80,7 +80,9 @@ internal class SearchViewModel(
         }
     }
 
-    fun getFinishResult(mode: Int): FinishResult {
+    fun getFinishResult(mode: Int): FinishResult? {
+        if (suggestProviders.size == 0) return null
+
         if (!AppPrefs.private_mode.get() && mode != SEARCH_MODE_URL) {
             useCase.saveQuery(query)
         }

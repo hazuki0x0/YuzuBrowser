@@ -17,7 +17,6 @@
 package jp.hazuki.yuzubrowser.bookmark.util;
 
 public final class BookmarkIdGenerator {
-    private static BookmarkIdGenerator generator;
 
     private long lastId = getNow();
 
@@ -54,10 +53,11 @@ public final class BookmarkIdGenerator {
         return time * 1000;
     }
 
+    private static class InstanceHolder {
+        static final BookmarkIdGenerator INSTANCE = new BookmarkIdGenerator();
+    }
+
     public static long getNewId() {
-        if (generator == null) {
-            generator = new BookmarkIdGenerator();
-        }
-        return generator.createId();
+        return InstanceHolder.INSTANCE.createId();
     }
 }
