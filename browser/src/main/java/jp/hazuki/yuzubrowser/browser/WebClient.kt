@@ -1019,12 +1019,16 @@ class WebClient(
             }
             "abp" -> {
                 if (uri.host == "subscribe") {
-                    val title = uri.getQueryParameter("title")
-                    val filterUrl = uri.getQueryParameter("location")
-                    if (title != null && filterUrl != null)
-                        AbpFilterSubscribeDialog.create(title, filterUrl)
-                            .show(controller.activity.supportFragmentManager, "subscribe")
-                    return true
+                    if (subscribeAdBlockFilter(uri)) {
+                        return true
+                    }
+                }
+            }
+            "http", "https" -> {
+                if (uri.host == "subscribe.adblockplus.org" && uri.path == "/") {
+                    if (subscribeAdBlockFilter(uri)) {
+                        return true
+                    }
                 }
             }
         }
@@ -1084,6 +1088,16 @@ class WebClient(
                 }
             }
         }
+    }
+
+    private fun subscribeAdBlockFilter(uri: Uri): Boolean {
+        val url = uri.getQueryParameter("location") ?: return false
+        val title = uri.getQueryParameter("title") ?: url
+
+        AbpFilterSubscribeDialog.create(title, url)
+            .show(controller.activity.supportFragmentManager, "subscribe")
+
+        return true
     }
 
     private fun checkNewTabLinkAuto(perform: Int, tab: MainTabData, url: String): Boolean {
