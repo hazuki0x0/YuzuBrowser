@@ -170,10 +170,14 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data != null) {
-            val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)!!
+
             when (requestCode) {
-                RESULT_REQUEST_ADD -> mList.add(action)
+                RESULT_REQUEST_ADD -> {
+                    val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)!!
+                    mList.add(action)
+                }
                 RESULT_REQUEST_EDIT -> {
+                    val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)!!
                     if (action.isEmpty()) {
                         Snackbar.make(rootView, R.string.action_cant_empty, Snackbar.LENGTH_SHORT).show()
                         return
@@ -181,8 +185,11 @@ class ActionListFragment : RecyclerFabFragment(), OnRecyclerListener, DeleteDial
                     val position = data.getBundleExtra(ActionActivity.EXTRA_RETURN)!!.getInt(EXTRA_POSITION)
                     mList[position] = action
                 }
-                RESULT_REQUEST_ADD_EASY -> action.forEach {
-                    mList.add(Action(it))
+                RESULT_REQUEST_ADD_EASY -> {
+                    val action = data.getParcelableExtra<Action>(ActionActivity.EXTRA_ACTION)!!
+                    action.forEach {
+                        mList.add(Action(it))
+                    }
                 }
                 RESULT_REQUEST_JSON -> {
                     val actionList = data.getParcelableExtra<ActionList>(ActionStringActivity.EXTRA_ACTION)!!

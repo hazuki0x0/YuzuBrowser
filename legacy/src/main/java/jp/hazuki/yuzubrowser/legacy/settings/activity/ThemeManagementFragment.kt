@@ -100,11 +100,12 @@ class ThemeManagementFragment : YuzuPreferenceFragment(), ConfirmDialog.OnConfir
     }
 
     private fun showImportResult(result: Result) {
+        val context = context ?: return
         if (result.isSuccess) {
-            Toast.makeText(requireContext(), getString(R.string.theme_imported, result.message), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.theme_imported, result.message), Toast.LENGTH_SHORT).show()
             setFragmentResult(REQUEST_THEME_LIST_UPDATE, bundleOf(REQUEST_THEME_LIST_UPDATE to true))
         } else {
-            Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
         }
     }
 

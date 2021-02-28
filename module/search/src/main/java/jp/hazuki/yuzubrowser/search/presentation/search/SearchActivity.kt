@@ -226,13 +226,17 @@ class SearchActivity : ThemeActivity(), SearchButton.Callback, SearchSuggestAdap
 
     private fun finish(mode: Int) {
         val result = viewModel.getFinishResult(mode)
-        setResult(RESULT_OK, Intent().apply {
-            putExtra(EXTRA_QUERY, result.query)
-            putExtra(EXTRA_SEARCH_MODE, mode)
-            putExtra(EXTRA_SEARCH_URL, result.url)
-            putExtra(EXTRA_OPEN_NEW_TAB, openNewTab)
-            appData?.let { putExtra(EXTRA_APP_DATA, it) }
-        })
+        if (result != null) {
+            setResult(RESULT_OK, Intent().apply {
+                putExtra(EXTRA_QUERY, result.query)
+                putExtra(EXTRA_SEARCH_MODE, mode)
+                putExtra(EXTRA_SEARCH_URL, result.url)
+                putExtra(EXTRA_OPEN_NEW_TAB, openNewTab)
+                appData?.let { putExtra(EXTRA_APP_DATA, it) }
+            })
+        } else {
+            setResult(RESULT_CANCELED)
+        }
         finish()
     }
 

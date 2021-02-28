@@ -23,7 +23,6 @@ import android.os.BadParcelableException
 import android.os.Bundle
 import android.provider.Browser
 import android.speech.RecognizerResultsIntent
-import android.text.TextUtils
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import jp.hazuki.yuzubrowser.browser.BrowserActivity
@@ -57,7 +56,7 @@ class HandleIntentActivity : FragmentActivity() {
                     val openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false)
                     startBrowser(url, openInNewTab, openInNewTab)
                 } catch (e: BadParcelableException) {
-                    startBrowser(url, false, false)
+                    startBrowser(url, window = false, openInNewTab = false)
                 }
 
                 return
@@ -66,29 +65,29 @@ class HandleIntentActivity : FragmentActivity() {
             val query = intent.getStringExtra(SearchManager.QUERY)
             if (query != null) {
                 val url = WebUtils.makeSearchUrlFromQuery(query, AppPrefs.search_url.get(), "%s")
-                if (!TextUtils.isEmpty(url)) {
+                if (url.isNotEmpty()) {
                     startBrowser(url, packageName == intent.getStringExtra(Browser.EXTRA_APPLICATION_ID), false)
                     return
                 }
             }
         } else if (Intent.ACTION_SEND == action) {
-            val query = getIntent().getStringExtra(Intent.EXTRA_TEXT)!!
-            if (!TextUtils.isEmpty(query)) {
+            val query = intent.getStringExtra(Intent.EXTRA_TEXT)
+            if (!query.isNullOrEmpty()) {
                 if (query.isUrl()) {
-                    startBrowser(query, false, false)
+                    startBrowser(query, window = false, openInNewTab = false)
                 } else {
                     var text = WebUtils.extractionUrl(query)
                     if (query == text) {
                         text = query.makeUrlFromQuery(AppPrefs.search_url.get(), "%s")
                     }
-                    startBrowser(text, false, false)
+                    startBrowser(text, window = false, openInNewTab = false)
                 }
                 return
             }
         } else if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS == action) {
             val urls = intent.getStringArrayListExtra(RecognizerResultsIntent.EXTRA_VOICE_SEARCH_RESULT_URLS)
             if (!urls.isNullOrEmpty()) {
-                startBrowser(urls[0], false, false)
+                startBrowser(urls[0], window = false, openInNewTab = false)
                 return
             }
         }

@@ -297,13 +297,15 @@ class BrowserActivity : BrowserBaseActivity(), BrowserController, FinishAlertDia
 
         binding.pullToRefresh.apply {
             setOnChildScrollUpCallback { _, _ ->
-                val tab = tabManagerIn.currentTabData
+                val tab = tabManagerIn.currentTabData ?: return@setOnChildScrollUpCallback true
                 !(tab.mWebView?.canPullToRefresh ?: false) || !tab.isFinished
             }
             setOnRefreshListener {
                 ui {
-                    tabManagerIn.currentTabData.mWebView.reload()
-                    delay(RELOAD_ICON_TIME_LIMIT)
+                    tabManagerIn.currentTabData?.apply {
+                        mWebView.reload()
+                        delay(RELOAD_ICON_TIME_LIMIT)
+                    }
                     binding.pullToRefresh.isRefreshing = false
                 }
             }

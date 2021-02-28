@@ -47,7 +47,7 @@ fun CustomWebView.savePictureOverall(fileName: String): Boolean {
 fun CustomWebView.savePicturePart(fileName: String): Boolean {
     var bitmap: Bitmap? = null
     return try {
-        bitmap = WebViewUtils.capturePicturePart(this.webView)
+        bitmap = WebViewUtils.capturePicturePart(this.webView) ?: return false
         val resolver = webView.context.contentResolver
         resolver.savePictureAsPng("$fileName.png", bitmap)
     } finally {

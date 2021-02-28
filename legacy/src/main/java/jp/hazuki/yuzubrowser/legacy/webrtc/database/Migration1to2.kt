@@ -25,7 +25,7 @@ internal class Migration1to2 : Migration(1, 2) {
             execSQL(CREATE_TABLE)
 
             execSQL("""
-                insert into $NEW_TABLE (`host`,`camera`,`microphone`,`midi`,`mediaId`)
+                insert or ignore into $NEW_TABLE (`host`,`camera`,`microphone`,`midi`,`mediaId`)
                 select `host`, `camera`, `mic`, `midi`, `media_id` from $TABLE
             """.trimIndent())
 
