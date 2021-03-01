@@ -21,7 +21,6 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.core.utility.utils.ArrayUtils
 import jp.hazuki.yuzubrowser.legacy.action.Action
-import okio.Okio
 import okio.buffer
 import okio.sink
 import okio.source
@@ -83,6 +82,7 @@ class MultiFingerGestureManager(context: Context) {
                             reader.beginObject()
                             val item = MultiFingerGestureItem()
                             while (reader.hasNext()) {
+                                if (reader.peek() != JsonReader.Token.NAME) return
                                 when (reader.nextName()) {
                                     JSON_FINGERS -> {
                                         item.fingers = reader.nextInt()
