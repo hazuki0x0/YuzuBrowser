@@ -38,13 +38,11 @@ class WebViewRenderingManager {
     }
 
     private val negativeGrayFilter by lazy(LazyThreadSafetyMode.NONE) {
-        val negative = ColorMatrix()
-        negative.set(NEGATIVE_COLOR)
+        val matrix = ColorMatrix(NEGATIVE_COLOR)
         val grayScale = ColorMatrix()
         grayScale.setSaturation(0f)
-        val matrix = ColorMatrix()
-        matrix.setConcat(negative, grayScale)
-        Paint().apply { ColorMatrixColorFilter(matrix) }
+        matrix.postConcat(grayScale)
+        Paint().apply { colorFilter = ColorMatrixColorFilter(matrix) }
     }
 
     private val temperaturePaintDelegate = lazy(LazyThreadSafetyMode.NONE) {
