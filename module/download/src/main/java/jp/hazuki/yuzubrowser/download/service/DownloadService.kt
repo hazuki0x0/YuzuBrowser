@@ -326,7 +326,12 @@ class DownloadService : Service(), ServiceClient.ServiceClientListener {
                 val values = ContentValues().apply {
                     put(MediaStore.Downloads.IS_PENDING, 0)
                 }
-                contentResolver.update(info.root, values, null, null)
+                // Workaround for samsung device in Android 11
+                try {
+                    contentResolver.update(info.root, values, null, null)
+                } catch (e: IllegalStateException) {
+                    if (Build.MANUFACTURER != "samsung") throw e
+                }
             } else {
                 root.findFile(info.name)?.uri?.resolvePath(this@DownloadService)
                     ?.let { registerMediaScanner(it) }

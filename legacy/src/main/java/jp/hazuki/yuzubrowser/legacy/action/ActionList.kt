@@ -18,10 +18,12 @@ package jp.hazuki.yuzubrowser.legacy.action
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import jp.hazuki.yuzubrowser.legacy.utils.util.JsonConvertable
 import okio.Buffer
+import java.io.EOFException
 import java.io.IOException
 import java.util.*
 
@@ -87,8 +89,14 @@ class ActionList : ArrayList<Action>, Parcelable, JsonConvertable {
     override fun fromJsonString(str: String): Boolean {
         clear()
 
-        JsonReader.of(Buffer().writeUtf8(str)).use {
-            return loadAction(it)
+        try {
+            JsonReader.of(Buffer().writeUtf8(str)).use {
+                return loadAction(it)
+            }
+        } catch (e: EOFException) {
+            return false
+        } catch (e: JsonEncodingException) {
+            return false
         }
     }
 
