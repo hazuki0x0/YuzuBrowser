@@ -18,6 +18,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion Build.compile_sdk_version
@@ -96,4 +97,9 @@ dependencies {
 
     implementation Dagger.hilt
     kapt Dagger.hiltCompiler
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+
+
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx'
 }

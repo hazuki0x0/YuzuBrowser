@@ -13,127 +13,121 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package jp.hazuki.yuzubrowser.legacy.utils
 
-package jp.hazuki.yuzubrowser.legacy.utils;
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
+import android.webkit.URLUtil
+import com.google.firebase.FirebaseApp
+import com.google.firebase.dynamiclinks.ktx.*
+import com.google.firebase.ktx.Firebase
+import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory
+import jp.hazuki.yuzubrowser.legacy.R
+import jp.hazuki.yuzubrowser.ui.utils.PackageUtils
+import java.util.*
+import java.util.regex.Pattern
 
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.webkit.URLUtil;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory;
-import jp.hazuki.yuzubrowser.legacy.R;
-import jp.hazuki.yuzubrowser.ui.utils.PackageUtils;
-
-public class WebUtils {
-    private WebUtils() {
-        throw new UnsupportedOperationException();
-    }
-
-    private static final Pattern URL_EXTRACTION = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu|blob):)(\\S*)", Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern URL_SUB_DOMAIN = Pattern.compile("://.*\\.", Pattern.LITERAL);
-
-    public static String extractionUrl(String text) {
-        if (text == null) return null;
-        Matcher matcher = URL_EXTRACTION.matcher(text);
-        if (matcher.find()) {
-            return matcher.group();
+object WebUtils {
+    private val URL_EXTRACTION = Pattern.compile("((?:http|https|file|market)://|(?:inline|data|about|content|javascript|mailto|view-source|yuzu|blob):)(\\S*)", Pattern.CASE_INSENSITIVE)
+    private val URL_SUB_DOMAIN = Pattern.compile("://.*\\.", Pattern.LITERAL)
+    fun extractionUrl(text: String?): String? {
+        if (text == null) return null
+        val matcher = URL_EXTRACTION.matcher(text)
+        return if (matcher.find()) {
+            matcher.group()
         } else {
-            return text;
+            text
         }
     }
 
-    public static boolean isOverrideScheme(Uri uri) {
-        switch (uri.getScheme().toLowerCase()) {
-            case "http":
-            case "https":
-            case "file":
-            case "inline":
-            case "data":
-            case "about":
-            case "content":
-            case "javascript":
-            case "view-source":
-            case "blob":
-                return false;
-            default:
-                return true;
+    fun isOverrideScheme(uri: Uri): Boolean {
+        return when (uri.scheme!!.toLowerCase(Locale.ROOT)) {
+            "http", "https", "file", "inline", "data", "about", "content", "javascript", "view-source", "blob" -> false
+            else -> true
         }
     }
 
-    public static String makeSearchUrlFromQuery(String query, String search_url, String search_place_holder) {
-        return URLUtil.composeSearchUrl(query.trim(), search_url, search_place_holder);
+    fun makeSearchUrlFromQuery(query: String, search_url: String?, search_place_holder: String?): String {
+        return URLUtil.composeSearchUrl(query.trim { it <= ' ' }, search_url, search_place_holder)
     }
 
-    public static Intent createShareWebIntent(String url, String title) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        if (title != null)
-            intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        return intent;
+    fun createShareWebIntent(url: String?, title: String?): Intent {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        if (title != null) intent.putExtra(Intent.EXTRA_SUBJECT, title)
+        return intent
     }
 
-    public static void shareWeb(Context context, String url, String title) {
-        if (url == null) return;
+    fun shareWeb(context: Context, url: String?, title: String?) {
+        if (url == null) return
+        val deepLinkUrl = Uri.parse("https://yuzu.share").buildUpon().appendQueryParameter("aURL", url).build()
+        FirebaseApp.initializeApp(context)
+        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+            link = deepLinkUrl
+            domainUriPrefix = "https://hazuki.page.link/share"
+            androidParameters { }
+            socialMetaTagParameters {
+                this.title = "Download Yuzu App"
+                description = "Try YuzuBrowser today!"
+                imageUrl = Uri.parse("https://dl3.cbsistatic.com/catalog/2020/03/25/cd7de15c-73e1-46ff-bae9-e53b464b1278/imgingest-5193827876681925843.png6")
+            }
 
-        Intent intent = createShareWebIntent(url, title);
+        }
+        val intent = createShareWebIntent(dynamicLink.uri.toString(), title)
+
         try {
-            context.startActivity(Intent.createChooser(intent, context.getText(R.string.share)));
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
+            context.startActivity(Intent.createChooser(intent, context.getText(R.string.share)))
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
         }
+
     }
 
-    public static Intent createOpenInOtherAppIntent(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intent;
+    fun createOpenInOtherAppIntent(url: String?): Intent {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        return intent
     }
 
-    public static Intent createOpenInOtherAppIntent(Intent intent, String url) {
-        intent.setData(Uri.parse(url));
-        return intent;
+    fun createOpenInOtherAppIntent(intent: Intent, url: String?): Intent {
+        intent.data = Uri.parse(url)
+        return intent
     }
 
-    public static void openInOtherApp(Context context, String url) {
-        if (url == null) return;
+    fun openInOtherApp(context: Context, url: String?) {
+        if (url == null) return
         try {
-            context.startActivity(PackageUtils.createChooser(context, url, context.getText(R.string.open_other_app)));
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
+            context.startActivity(PackageUtils.createChooser(context, url, context.getText(R.string.open_other_app)))
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
         }
     }
 
-    public static Pattern makeUrlPatternWithThrow(FastMatcherFactory factory, String pattern_url) {
-        if (pattern_url == null || pattern_url.length() == 0) return null;
-        if (pattern_url.charAt(0) == '[' && pattern_url.charAt(pattern_url.length() - 1) == ']') {
-            return Pattern.compile(pattern_url.substring(1, pattern_url.length() - 1));
+    fun makeUrlPatternWithThrow(factory: FastMatcherFactory, pattern: String?): Pattern? {
+        var pattern_url = pattern
+        if (pattern_url == null || pattern_url.isEmpty()) return null
+        return if (pattern_url[0] == '[' && pattern_url[pattern_url.length - 1] == ']') {
+            Pattern.compile(pattern_url.substring(1, pattern_url.length - 1))
         } else {
-            pattern_url = factory.fastCompile(pattern_url);
+            pattern_url = factory.fastCompile(pattern_url)
             if (pattern_url.startsWith(".*\\.")) {
-                pattern_url = "((?![./]).)*" + pattern_url.substring(3);
+                pattern_url = "((?![./]).)*" + pattern_url.substring(3)
             } else if (pattern_url.contains("://.*\\.")) {
-                pattern_url = URL_SUB_DOMAIN.matcher(pattern_url).replaceFirst("://((?![\\./]).)*\\.");
+                pattern_url = URL_SUB_DOMAIN.matcher(pattern_url).replaceFirst("://((?![\\./]).)*\\.")
             }
-            if (pattern_url.startsWith("http.*://") && pattern_url.length() >= 10) {
-                pattern_url = "https?://" + pattern_url.substring(9);
+            if (pattern_url!!.startsWith("http.*://") && pattern_url.length >= 10) {
+                pattern_url = "https?://" + pattern_url.substring(9)
             }
-            if (maybeContainsUrlScheme(pattern_url))
-                return Pattern.compile("^" + pattern_url);
-            else
-                return Pattern.compile("^\\w+://" + pattern_url);
+            if (maybeContainsUrlScheme(pattern_url)) Pattern.compile("^$pattern_url") else Pattern.compile("^\\w+://$pattern_url")
         }
     }
 
-    private static final Pattern sSchemeContainsPattern = Pattern.compile("^\\w+:", Pattern.CASE_INSENSITIVE);
-
-    public static boolean maybeContainsUrlScheme(String url) {
-        return url != null && sSchemeContainsPattern.matcher(url).find();
+    private val sSchemeContainsPattern = Pattern.compile("^\\w+:", Pattern.CASE_INSENSITIVE)
+    fun maybeContainsUrlScheme(url: String?): Boolean {
+        return url != null && sSchemeContainsPattern.matcher(url).find()
     }
 }

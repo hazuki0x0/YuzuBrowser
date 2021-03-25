@@ -95,7 +95,7 @@ class HandleIntentActivity : FragmentActivity() {
         Toast.makeText(applicationContext, R.string.page_not_found, Toast.LENGTH_SHORT).show()
     }
 
-    private fun startBrowser(url: String, window: Boolean, openInNewTab: Boolean) {
+    private fun startBrowser(url: String?, window: Boolean, openInNewTab: Boolean) {
         val send = Intent(this, BrowserActivity::class.java)
         send.action = Intent.ACTION_VIEW
         send.data = Uri.parse(url)
