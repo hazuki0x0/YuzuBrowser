@@ -22,6 +22,7 @@ import android.net.Uri
 import android.util.Log
 import android.webkit.URLUtil
 import com.google.firebase.FirebaseApp
+import com.google.firebase.dynamiclinks.ShortDynamicLink
 import com.google.firebase.dynamiclinks.ktx.*
 import com.google.firebase.ktx.Firebase
 import jp.hazuki.yuzubrowser.adblock.filter.fastmatch.FastMatcherFactory
@@ -64,27 +65,35 @@ object WebUtils {
 
     fun shareWeb(context: Context, url: String?, title: String?) {
         if (url == null) return
-        val deepLinkUrl = Uri.parse("https://yuzu.share").buildUpon().appendQueryParameter("aURL", url).build()
+        val deepLinkUrl = Uri.parse("https://yuzu.share/").buildUpon().appendQueryParameter("aURL", url).build()
         FirebaseApp.initializeApp(context)
-        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+        val dynamicLinkTask = Firebase.dynamicLinks.shortLinkAsync(ShortDynamicLink.Suffix.SHORT) {
             link = deepLinkUrl
-            domainUriPrefix = "https://hazuki.page.link/share"
+            domainUriPrefix = "https://hazuki.page.link/"
             androidParameters { }
             socialMetaTagParameters {
                 this.title = "Download Yuzu App"
                 description = "Try YuzuBrowser today!"
-                imageUrl = Uri.parse("https://dl3.cbsistatic.com/catalog/2020/03/25/cd7de15c-73e1-46ff-bae9-e53b464b1278/imgingest-5193827876681925843.png6")
+                imageUrl = Uri.parse("https://dl3.cbsistatic.com/catalog/2020/03/25/cd7de15c-73e1-46ff-bae9-e53b464b1278/imgingest-5193827876681925843.png")
             }
-
         }
-        val intent = createShareWebIntent(dynamicLink.uri.toString(), title)
-
-        try {
-            context.startActivity(Intent.createChooser(intent, context.getText(R.string.share)))
-        } catch (e: ActivityNotFoundException) {
-            e.printStackTrace()
+        dynamicLinkTask.addOnSuccessListener {
+            val intent = createShareWebIntent(it.shortLink.toString(), title)
+            try {
+                context.startActivity(Intent.createChooser(intent, context.getText(R.string.share)))
+            } catch (e: ActivityNotFoundException) {
+                e.printStackTrace()
+            }
         }
 
+        dynamicLinkTask.addOnFailureListener {
+            val intent = createShareWebIntent(url, title)
+            try {
+                context.startActivity(Intent.createChooser(intent, context.getText(R.string.share)))
+            } catch (e: ActivityNotFoundException) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun createOpenInOtherAppIntent(url: String?): Intent {

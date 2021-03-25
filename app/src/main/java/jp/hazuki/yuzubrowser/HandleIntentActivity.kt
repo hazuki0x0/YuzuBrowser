@@ -17,14 +17,18 @@
 package jp.hazuki.yuzubrowser
 
 import android.app.SearchManager
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
 import android.os.BadParcelableException
 import android.os.Bundle
 import android.provider.Browser
 import android.speech.RecognizerResultsIntent
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import jp.hazuki.yuzubrowser.browser.BrowserActivity
 import jp.hazuki.yuzubrowser.legacy.Constants.intent.EXTRA_OPEN_FROM_YUZU
 import jp.hazuki.yuzubrowser.legacy.utils.WebUtils
@@ -48,19 +52,35 @@ class HandleIntentActivity : FragmentActivity() {
         val action = intent.action
 
         if (Intent.ACTION_VIEW == action) {
-            var url = intent.dataString
-            if (url.isNullOrEmpty())
-                url = intent.getStringExtra(Intent.EXTRA_TEXT)
-            if (!url.isNullOrEmpty()) {
-                try {
-                    val openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false)
-                    startBrowser(url, openInNewTab, openInNewTab)
-                } catch (e: BadParcelableException) {
-                    startBrowser(url, window = false, openInNewTab = false)
-                }
+            Firebase.dynamicLinks
+                .getDynamicLink(intent)
+                .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                    // Get deep link from result (may be null if no link is found)
+                    var deepLink: Uri? = null
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.link
+                    }
 
-                return
-            }
+                    val actualURL = deepLink?.getQueryParameter("aURL")
+                    if(actualURL.isNullOrEmpty()) {
+                        startBrowser(deepLink.toString(), window = false, openInNewTab = false)
+                        return@addOnSuccessListener
+                    }
+                    startBrowser(actualURL, window = false, openInNewTab = false)
+                }
+                .addOnFailureListener(this) { e ->
+                    var url = intent.dataString
+                    if (url.isNullOrEmpty())
+                        url = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    if (!url.isNullOrEmpty()) {
+                        try {
+                            val openInNewTab = intent.getBooleanExtra(EXTRA_OPEN_FROM_YUZU, false)
+                            startBrowser(url, openInNewTab, openInNewTab)
+                        } catch (e: BadParcelableException) {
+                            startBrowser(url, window = false, openInNewTab = false)
+                        }
+                    }
+                }
         } else if (Intent.ACTION_WEB_SEARCH == action) {
             val query = intent.getStringExtra(SearchManager.QUERY)
             if (query != null) {
