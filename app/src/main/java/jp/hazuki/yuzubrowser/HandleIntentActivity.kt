@@ -68,7 +68,7 @@ class HandleIntentActivity : FragmentActivity() {
                     }
                     startBrowser(actualURL, window = false, openInNewTab = false)
                 }
-                .addOnFailureListener(this) { e ->
+                .addOnFailureListener(this) {
                     var url = intent.dataString
                     if (url.isNullOrEmpty())
                         url = intent.getStringExtra(Intent.EXTRA_TEXT)
@@ -81,6 +81,7 @@ class HandleIntentActivity : FragmentActivity() {
                         }
                     }
                 }
+            return
         } else if (Intent.ACTION_WEB_SEARCH == action) {
             val query = intent.getStringExtra(SearchManager.QUERY)
             if (query != null) {
